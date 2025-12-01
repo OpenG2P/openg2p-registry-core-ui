@@ -19,7 +19,13 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@/components/*": ["./src/components/*"],
+      "@/features/*": ["./src/features/*"],
+      "@/shared/*": ["./src/shared/*"],
+      "@/context/*": ["./src/context/*"],
+      "@/i18n/*": ["./src/i18n/*"],
+      "@/commons/*": ["./src/commons/*"]
     }
   },
   "include": [
