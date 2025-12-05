@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 export default function FilterDropdown({
-    filters = ["Date", "Name", "Value", "Label"],
+    filters = ["Date", "Name"],
     onApply,
 }: {
     filters?: readonly string[];
@@ -12,20 +12,33 @@ export default function FilterDropdown({
     const [selectedFilter, setSelectedFilter] = useState(filters[0]);
     const [fromDate, setFromDate] = useState("");
     const [toDate, setToDate] = useState("");
+    const [nameValue, setNameValue] = useState("");
 
     const applyFilters = () => {
-        alert(`Filter applied: ${selectedFilter} from ${fromDate} to ${toDate}`);
+        let msg = `Filter applied: ${selectedFilter}`;
+
+        if (selectedFilter === "Date") {
+            msg += ` | From: ${fromDate} To: ${toDate}`;
+        } else if (selectedFilter === "Name") {
+            msg += ` | Name: ${nameValue}`;
+        }
+
+        alert(msg);
         onApply();
     };
 
     return (
-        <div className="flex divide-x">
-            <div className="flex flex-col gap-4 p-4  w-full text-sm text-gray-700">
+        <div className="flex bg-white rounded-2xl shadow-lg overflow-hidden min-w-[440px]">
+
+            <div className="flex flex-col gap-1 w-40 bg-gray-50 p-3">
                 {filters.map((filter) => (
                     <button
                         key={filter}
                         onClick={() => setSelectedFilter(filter)}
-                        className={`text-left px-2 py-1 rounded ${filter === selectedFilter ? "bg-blue-600 text-white" : "hover:bg-gray-100"
+                        className={`text-left px-3 py-2 rounded-lg text-sm font-medium transition-all
+                            ${filter === selectedFilter
+                                ? "bg-gray-500 text-white shadow-sm"
+                                : "text-gray-700 hover:bg-gray-100"
                             }`}
                     >
                         {filter}
@@ -33,38 +46,60 @@ export default function FilterDropdown({
                 ))}
             </div>
 
-            <div className="flex flex-col p-4 flex-1 space-y-4">
-                {selectedFilter === "Date" && (
-                    <>
-                        <div className="text-lg font-semibold">Search by date</div>
+            <div className="flex items-stretch">
+                <div className="w-px bg-gray-200 my-4"></div>
+            </div>
 
-                        <div className="flex gap-4 items-center">
-                            <label className="w-20 text-sm">From</label>
+            <div className="flex flex-col p-5 flex-1 space-y-6">
+                <div className="text-xl font-semibold text-gray-800">
+                    {selectedFilter === "Date" && "Search by date"}
+                    {selectedFilter === "Name" && "Search by name"}
+                </div>
+
+                {selectedFilter === "Date" && (
+                    <div className="space-y-4">
+                        <div className="flex items-center gap-4">
+                            <label className="w-20 text-sm font-medium text-gray-700">From</label>
                             <input
                                 type="date"
-                                className="border rounded px-2 py-1"
+                                className="border rounded-lg px-3 py-2 text-sm w-full focus:outline-none"
                                 value={fromDate}
                                 onChange={(e) => setFromDate(e.target.value)}
                             />
                         </div>
 
-                        <div className="flex gap-4 items-center">
-                            <label className="w-20 text-sm">To</label>
+                        <div className="flex items-center gap-4">
+                            <label className="w-20 text-sm font-medium text-gray-700">To</label>
                             <input
                                 type="date"
-                                className="border rounded px-2 py-1"
+                                className="border rounded-lg px-3 py-2 text-sm w-full focus:outline-none"
                                 value={toDate}
                                 onChange={(e) => setToDate(e.target.value)}
                             />
                         </div>
-                    </>
+                    </div>
+                )}
+
+                {selectedFilter === "Name" && (
+                    <div className="space-y-4">
+                        <div className="flex items-center gap-4">
+                            <label className="w-20 text-sm font-medium text-gray-700">Name</label>
+                            <input
+                                type="text"
+                                placeholder="Enter name..."
+                                className="border rounded-lg px-3 py-2 text-sm w-full focus:outline-none"
+                                value={nameValue}
+                                onChange={(e) => setNameValue(e.target.value)}
+                            />
+                        </div>
+                    </div>
                 )}
 
                 <button
                     onClick={applyFilters}
-                    className="self-start bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                    className="bg-black text-white self-start px-5 py-2.5 rounded-lg text-sm font-medium"
                 >
-                    Apply
+                    Apply Filter
                 </button>
             </div>
         </div>
