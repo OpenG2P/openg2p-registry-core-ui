@@ -31,7 +31,7 @@ export default function RootLayout({
                 className={`${geistSans.variable} ${geistMono.variable} antialiased`}
             >
                 <GlobalContextProvider>
-                    <Header />
+                    <div className="p-10"><Header /></div>
                     <main className="transition-all duration-300 ease-in-out flex-1">
                         {children}
                     </main>
