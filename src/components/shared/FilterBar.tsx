@@ -1,12 +1,16 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { FilterDropdown } from "@/components/shared";
+import { useClickOutside } from "@/shared/hooks/useClickOutside";
 
 export default function FilterBar({ onFilters }: { onFilters?: () => void }) {
     const [open, setOpen] = useState(false);
 
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
+    useClickOutside(dropdownRef, () => setOpen(false), open);
 
     const handleApply = () => {
         setOpen(false);
@@ -14,7 +18,7 @@ export default function FilterBar({ onFilters }: { onFilters?: () => void }) {
     };
 
     return (
-        <div className="relative inline-block">
+        <div className="relative inline-block" ref={dropdownRef}>
             <button
                 onClick={() => setOpen((prev) => !prev)}
                 className="h-[30px] flex items-center gap-16 px-3 border rounded bg-white text-sm hover:bg-gray-100"
