@@ -36,7 +36,7 @@ const StatsCard = ({ api_endpoint, active }: StatsCardProps) => {
       className={`flex h-48 w-[225px] flex-col justify-between rounded-3xl border px-7 py-6 text-left transition-all duration-200 ${
         active
           ? "border-black bg-black text-white "
-          : "border-gray-200 bg-white text-gray-900 hover:border-gray-300"
+          : " border-4 border-gray-200 bg-white text-gray-900 hover:border-gray-300"
       }`}
     >
       <div>

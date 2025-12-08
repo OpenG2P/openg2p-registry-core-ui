@@ -32,7 +32,7 @@ export default function RootLayout({
             >
                 <GlobalContextProvider>
                     <div className="p-10"><Header /></div>
-                    <main className="transition-all duration-300 ease-in-out flex-1">
+                    <main className="pt-10transition-all duration-300 ease-in-out flex-1">
                         {children}
                     </main>
                 </GlobalContextProvider>

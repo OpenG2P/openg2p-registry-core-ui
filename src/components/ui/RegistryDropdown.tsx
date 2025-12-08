@@ -1,5 +1,6 @@
 "use client";
 
+import { useClickOutside } from "@/shared/hooks/useClickOutside";
 import { useState, useRef, useEffect } from "react";
 import { MdOutlineArrowDropDown } from "react-icons/md";
 
@@ -19,16 +20,8 @@ const RegistryDropdown = ({ options, selected, onChange }: RegistryDropdownProps
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (!dropdownRef.current?.contains(e.target as Node)) {
-        setOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
-  }, []);
-
+  useClickOutside(dropdownRef, () => setOpen(false), open);
+  
   const selectedLabel = options.find((o) => o.value === selected)?.label || "Select";
 
   return (
@@ -43,7 +36,7 @@ const RegistryDropdown = ({ options, selected, onChange }: RegistryDropdownProps
         `}
       >
         <span>{selectedLabel}</span>
-		<span className="text-4xl"><MdOutlineArrowDropDown /></span>
+		  <span className="text-4xl"><MdOutlineArrowDropDown /></span>
       </button>
 
       {/* DROPDOWN PANEL */}

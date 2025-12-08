@@ -89,7 +89,7 @@ export default function Home() {
 
       </div>
 
-      <div className="fixed bottom-8 left-0 right-0 text-center text-sm text-gray-500">
+      <div className="bottom-8 left-0 right-0 p-10 text-center text-sm text-gray-500">
         <p className="text-xl text-gray-600">powered by</p>
         <p className="text-2xl font-bold text-gray-800 ">OpenG2P Registry</p>
       </div>
