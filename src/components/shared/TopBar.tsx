@@ -14,10 +14,9 @@ export default function TopBar({
     onFilters
 }: any) {
     return (
-        <div className="w-full bg-white border-b border-gray-300 shadow-sm px-4 h-[60px] flex justify-between items-center">
+        <div className="w-full bg-white shadow-sm px-4 h-[60px] flex justify-between items-center">
 
             <BreadcrumbBar breadcrumb={breadcrumb} />
-
             <div className="flex items-center gap-2">
                 {showFilters && <FilterBar onFilters={onFilters} />}
 

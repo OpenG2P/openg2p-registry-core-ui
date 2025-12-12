@@ -5,16 +5,16 @@ import { useRef, useState } from "react";
 import { FilterDropdown } from "@/components/shared";
 import { useClickOutside } from "@/shared/hooks/useClickOutside";
 
-export default function FilterBar({ onFilters }: { onFilters?: () => void }) {
+export default function FilterBar({ onFilters }: { onFilters?: (filter: string) => void }) {
     const [open, setOpen] = useState(false);
 
     const dropdownRef = useRef<HTMLDivElement>(null);
 
     useClickOutside(dropdownRef, () => setOpen(false), open);
 
-    const handleApply = () => {
+    const handleApply = (filter: string) => {
         setOpen(false);
-        if (onFilters) onFilters();
+        if (onFilters) onFilters(filter);
     };
 
     return (

@@ -7,7 +7,7 @@ export default function FilterDropdown({
     onApply,
 }: {
     filters?: readonly string[];
-    onApply: () => void;
+    onApply: (filter: string) => void;
 }) {
     const [selectedFilter, setSelectedFilter] = useState(filters[0]);
     const [fromDate, setFromDate] = useState("");
@@ -15,16 +15,15 @@ export default function FilterDropdown({
     const [nameValue, setNameValue] = useState("");
 
     const applyFilters = () => {
-        let msg = `Filter applied: ${selectedFilter}`;
+        let msg = `${selectedFilter}: `;
 
         if (selectedFilter === "Date") {
-            msg += ` | From: ${fromDate} To: ${toDate}`;
+            msg += `${fromDate} - ${toDate}`;
         } else if (selectedFilter === "Name") {
-            msg += ` | Name: ${nameValue}`;
+            msg += nameValue;
         }
 
-        alert(msg);
-        onApply();
+        onApply(msg);
     };
 
     return (

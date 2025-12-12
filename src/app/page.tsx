@@ -25,20 +25,21 @@ export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState("select");
 
   const handleSearch = (value: string, category?: string) => {
+    if (active === "registers") {
+      const categoryValue = category || selectedCategory;
+      const type = (categoryValue && categoryValue !== "select") ? categoryValue : "individuals";
+      const params = new URLSearchParams();
+      if (value.trim()) {
+        params.set("q", value.trim());
+      }
+      router.push(`/registry/${type}?${params.toString()}`);
+      return;
+    }
+
     if (!value.trim()) return;
 
     let route = "";
-
-    if (active === "registers") {
-      const registryRoutes: Record<string, string> = {
-        families: "/family",
-        individuals: "/individual",
-        crops: "/crop",
-        lands: "/land",
-      };
-
-      route = registryRoutes[category || selectedCategory] || "/family";
-    } else if (active === "change") {
+    if (active === "change") {
       route = "/change_request";
     } else if (active === "incoming") {
       route = "/incoming_message";
@@ -46,8 +47,9 @@ export default function Home() {
       route = "/outgoing_message";
     }
 
-    router.push(`${route}?q=${encodeURIComponent(value)}`);
-    
+    if (route) {
+      router.push(`${route}?q=${encodeURIComponent(value)}`);
+    }
   };
 
   return (
