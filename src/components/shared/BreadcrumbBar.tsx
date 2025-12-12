@@ -16,7 +16,7 @@ export default function BreadcrumbBar({ breadcrumb = [] }: BreadcrumbBarProps) {
     return (
         <div className="flex items-center gap-2">
 
-            <Link href="/home" passHref>
+            <Link href="/" passHref>
                 <div className="h-[30px] flex items-center px-3 border rounded bg-white cursor-pointer hover:bg-gray-100">
                     <Image src="/home.png" width={20} height={20} alt="home" />
                 </div>
