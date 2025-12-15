@@ -34,7 +34,9 @@ export async function GET() {
             type: "select",
             operators: [
                 { value: "equals", label: "Is" },
-                { value: "not_equals", label: "Is not" }
+                { value: "not_equals", label: "Is not" },
+                { value: "in", label: "Is any of" },
+                { value: "not_in", label: "Is none of" }
             ],
             options: [
                 { value: "active", label: "Active" },
@@ -42,7 +44,8 @@ export async function GET() {
                 { value: "pending", label: "Pending" },
                 { value: "archived", label: "Archived" }
             ]
-        },
+        }
+        ,
         {
             id: "created_date",
             label: "Created Date",

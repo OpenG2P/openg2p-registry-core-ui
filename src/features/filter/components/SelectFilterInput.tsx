@@ -8,9 +8,49 @@ interface SelectFilterInputProps extends ValueInputProps {
 
 export default function SelectFilterInput({
     value,
+    operator,
     onChange,
     options = [],
 }: SelectFilterInputProps) {
+    const isMultiSelect = operator === "in" || operator === "not_in";
+
+    const handleMultiSelectChange = (optionValue: string) => {
+        const currentValues = Array.isArray(value) ? value : [];
+
+        if (currentValues.includes(optionValue)) {
+            onChange(currentValues.filter(v => v !== optionValue));
+        } else {
+            onChange([...currentValues, optionValue]);
+        }
+    };
+
+    if (isMultiSelect) {
+        const selectedValues = Array.isArray(value) ? value : [];
+
+        return (
+            <div className="border rounded-lg p-3 w-full space-y-2">
+                {options.length === 0 ? (
+                    <p className="text-sm text-gray-500">No options available</p>
+                ) : (
+                    options.map(opt => (
+                        <label
+                            key={opt.value}
+                            className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-1 rounded"
+                        >
+                            <input
+                                type="checkbox"
+                                checked={selectedValues.includes(opt.value)}
+                                onChange={() => handleMultiSelectChange(opt.value)}
+                                className="rounded border-gray-300"
+                            />
+                            <span className="text-sm">{opt.label}</span>
+                        </label>
+                    ))
+                )}
+            </div>
+        );
+    }
+
     return (
         <select
             className="border rounded-lg px-3 py-2 text-sm w-full"
