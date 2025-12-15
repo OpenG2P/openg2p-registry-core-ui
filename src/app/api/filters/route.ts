@@ -55,20 +55,6 @@ export async function GET() {
                 { value: "between", label: "Between" }
             ]
         },
-        {
-            id: "region",
-            label: "Region",
-            field: "region",
-            type: "select",
-            operators: [
-                { value: "equals", label: "Is" }
-            ],
-            options: [
-                { value: "kathmandu", label: "Kathmandu" },
-                { value: "lalitpur", label: "Lalitpur" },
-                { value: "bhaktapur", label: "Bhaktapur" }
-            ]
-        }
     ];
 
     return NextResponse.json(filters);

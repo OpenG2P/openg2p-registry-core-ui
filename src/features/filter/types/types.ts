@@ -26,3 +26,9 @@ export interface FilterRule {
 }
 
 export type AppliedFilters = FilterRule[];
+
+export interface ValueInputProps {
+    value: any;
+    operator: string;
+    onChange: (value: any) => void;
+}
