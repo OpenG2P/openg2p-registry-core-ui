@@ -1,6 +1,7 @@
 "use client";
 
-import { BreadcrumbBar, FilterBar, PaginationBar } from "@/components/shared";
+import { BreadcrumbBar, PaginationBar } from "@/components/shared";
+import { FilterBar } from "@/features/filter/components";
 
 export default function TopBar({
     breadcrumb = [],
@@ -11,14 +12,26 @@ export default function TopBar({
     total,
     onPrev,
     onNext,
-    onFilters
+    onFilters,
+    onApplyFilters,
+    appliedFilters = {},
+    filterConfig = [],
+    filterLoading = false,
 }: any) {
     return (
         <div className="w-full bg-white shadow-sm px-4 h-[60px] flex justify-between items-center">
 
             <BreadcrumbBar breadcrumb={breadcrumb} />
             <div className="flex items-center gap-2">
-                {showFilters && <FilterBar onFilters={onFilters} />}
+                {showFilters && (
+                    <FilterBar
+                        onFilters={onFilters}
+                        onApplyFilters={onApplyFilters}
+                        appliedFilters={appliedFilters}
+                        filterConfig={filterConfig}
+                        filterLoading={filterLoading}
+                    />
+                )}
 
                 {showPagination && (
                     <PaginationBar

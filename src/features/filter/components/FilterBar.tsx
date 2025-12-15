@@ -1,0 +1,55 @@
+"use client";
+
+import Image from "next/image";
+import { useRef, useState } from "react";
+import FilterDropdown from "./FilterDropdown";
+import { useClickOutside } from "@/shared/hooks/useClickOutside";
+
+export default function FilterBar({
+    onFilters,
+    onApplyFilters,
+    appliedFilters = {},
+    filterConfig = [],
+    filterLoading = false
+}: {
+    onFilters?: () => void;
+    onApplyFilters?: (filters: Record<string, string>) => void;
+    appliedFilters?: Record<string, string>;
+    filterConfig?: any[];
+    filterLoading?: boolean;
+}) {
+    const [open, setOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
+    useClickOutside(dropdownRef, () => setOpen(false), open);
+
+    const handleApply = (filters: Record<string, string>) => {
+        setOpen(false);
+        if (onFilters) onFilters();
+        if (onApplyFilters) onApplyFilters(filters);
+    };
+
+    return (
+        <div className="relative inline-block" ref={dropdownRef}>
+            <button
+                onClick={() => setOpen((prev) => !prev)}
+                className="h-[30px] flex items-center gap-16 px-3 border rounded bg-white text-sm hover:bg-gray-100 disabled:opacity-50"
+                disabled={filterLoading}
+            >
+                <span>{filterLoading ? "Loading..." : "Filters"}</span>
+                <Image src="/filter_icon.png" width={16} height={16} alt="filters" />
+            </button>
+
+            {open && !filterLoading && (
+                <div className="absolute -right-15 top-9 mt-3 bg-white border border-gray-200 rounded-[10px] z-50 flex flex-col shadow-lg">
+                    <div className="absolute -top-2.5 right-[70px] w-5 h-5 bg-white border-l border-t border-gray-200 rotate-45" />
+                    <FilterDropdown
+                        onApply={handleApply}
+                        appliedFilters={appliedFilters}
+                        filterConfig={filterConfig}
+                    />
+                </div>
+            )}
+        </div>
+    );
+}
