@@ -1,11 +1,11 @@
-export type MatchType = "all" | "any";
+export type FilterType = "text" | "number" | "select" | "date";
 
-export interface FilterOperator {
+export interface Operator {
     value: string;
     label: string;
 }
 
-export interface FilterOption {
+export interface SelectOption {
     value: string;
     label: string;
 }
@@ -14,20 +14,15 @@ export interface FilterConfig {
     id: string;
     label: string;
     field: string;
-    type: "text" | "number" | "select" | "multi_select" | "date" | "tags";
-    operators: FilterOperator[];
-    options?: FilterOption[];
-    allow_custom?: boolean;
+    type: FilterType;
+    operators: Operator[];
+    options?: SelectOption[];
 }
 
 export interface FilterRule {
-    id: string;
     field: string;
     operator: string;
-    value?: any;
+    value: string | number | string[] | number[];
 }
 
-export interface FilterState {
-    filters: FilterRule[];
-    match: MatchType;
-}
+export type AppliedFilters = FilterRule[];

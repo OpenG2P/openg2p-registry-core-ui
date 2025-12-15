@@ -2,6 +2,28 @@
 
 import { BreadcrumbBar, PaginationBar } from "@/components/shared";
 import { FilterBar } from "@/features/filter/components";
+import { FilterConfig, FilterRule } from "@/features/filter/types";
+
+
+interface TopBarProps {
+    breadcrumb?: any[];
+    showFilters?: boolean;
+    showPagination?: boolean;
+
+    pageStart?: number;
+    pageEnd?: number;
+    total?: number;
+
+    onPrev?: () => void;
+    onNext?: () => void;
+
+    onFilters?: () => void;
+    onApplyFilters?: (filters: FilterRule[]) => void;
+
+    appliedFilters?: FilterRule[];
+    filterConfig?: FilterConfig[];
+    filterLoading?: boolean;
+}
 
 export default function TopBar({
     breadcrumb = [],
@@ -14,13 +36,12 @@ export default function TopBar({
     onNext,
     onFilters,
     onApplyFilters,
-    appliedFilters = {},
+    appliedFilters = [],
     filterConfig = [],
     filterLoading = false,
-}: any) {
+}: TopBarProps) {
     return (
         <div className="w-full bg-white shadow-sm px-4 h-[60px] flex justify-between items-center">
-
             <BreadcrumbBar breadcrumb={breadcrumb} />
             <div className="flex items-center gap-2">
                 {showFilters && (

@@ -1,26 +1,24 @@
-export const fetchFilterConfig = async () => {
+import { FilterConfig } from "../types/types";
+
+export async function fetchFilterConfig(): Promise<FilterConfig[]> {
     try {
         const response = await fetch('/api/filters');
         if (!response.ok) throw new Error('Failed to fetch filters');
-        return await response.json();
+        const data = await response.json();
+        return data || [];
     } catch (error) {
         console.error('Error fetching filter config:', error);
         return [
             {
-                id: "date",
-                label: "Date",
-                type: "date_range",
-                fields: [
-                    { name: "From", type: "date" },
-                    { name: "To", type: "date" }
-                ]
-            },
-            {
                 id: "name",
                 label: "Name",
+                field: "name",
                 type: "text",
-                fields: [
-                    { name: "Name", type: "text", placeholder: "Enter name..." }
+                operators: [
+                    { value: "contains", label: "Contains" },
+                    { value: "equals", label: "Equals" },
+                    { value: "starts_with", label: "Starts with" },
+                    { value: "ends_with", label: "Ends with" }
                 ]
             }
         ];

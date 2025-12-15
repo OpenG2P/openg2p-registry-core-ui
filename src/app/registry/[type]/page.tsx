@@ -114,13 +114,13 @@ export default function RegistryTypePage() {
         onApplyFilters={applyFilters}
         appliedFilters={appliedFilters}
         filterConfig={filterConfig}
-        filterLoading={loading}
       />
 
       <div className="px-6 py-4">
         <div className="border-b border-gray-200 mb-4">
           <SelectedFilters
             appliedFilters={appliedFilters}
+            filterConfig={filterConfig}
             removeFilter={removeFilter}
             clearAllFilters={clearAllFilters}
           />

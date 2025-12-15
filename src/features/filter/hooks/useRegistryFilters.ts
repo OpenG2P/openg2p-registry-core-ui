@@ -1,13 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { fetchFilterConfig } from "@/features/filter/utils/filterConfig";
-
-export type AppliedFilters = Record<string, string>;
+import { fetchFilterConfig } from "@/features/filter/utils";
+import { AppliedFilters, FilterConfig } from "@/features/filter/types";
 
 export function useRegistryFilters() {
-    const [appliedFilters, setAppliedFilters] = useState<AppliedFilters>({});
-    const [filterConfig, setFilterConfig] = useState<any[]>([]);
+    const [appliedFilters, setAppliedFilters] = useState<AppliedFilters>([]);
+    const [filterConfig, setFilterConfig] = useState<FilterConfig[]>([]);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -24,21 +23,14 @@ export function useRegistryFilters() {
     }, []);
 
     const applyFilters = (filters: AppliedFilters) => {
-        setAppliedFilters(prev => ({
-            ...prev,
-            ...filters,
-        }));
+        setAppliedFilters(filters);
     };
 
-    const removeFilter = (key: string) => {
-        setAppliedFilters(prev => {
-            const next = { ...prev };
-            delete next[key];
-            return next;
-        });
+    const removeFilter = (index: number) => {
+        setAppliedFilters(prev => prev.filter((_, i) => i !== index));
     };
 
-    const clearAllFilters = () => setAppliedFilters({});
+    const clearAllFilters = () => setAppliedFilters([]);
 
     return {
         appliedFilters,

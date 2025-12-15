@@ -4,26 +4,29 @@ import Image from "next/image";
 import { useRef, useState } from "react";
 import FilterDropdown from "./FilterDropdown";
 import { useClickOutside } from "@/shared/hooks/useClickOutside";
+import { FilterConfig, FilterRule } from "@/features/filter/types";
+
+interface FilterBarProps {
+    onFilters?: () => void;
+    onApplyFilters?: (filters: FilterRule[]) => void;
+    appliedFilters?: FilterRule[];
+    filterConfig?: FilterConfig[];
+    filterLoading?: boolean;
+}
 
 export default function FilterBar({
     onFilters,
     onApplyFilters,
-    appliedFilters = {},
+    appliedFilters = [],
     filterConfig = [],
     filterLoading = false
-}: {
-    onFilters?: () => void;
-    onApplyFilters?: (filters: Record<string, string>) => void;
-    appliedFilters?: Record<string, string>;
-    filterConfig?: any[];
-    filterLoading?: boolean;
-}) {
+}: FilterBarProps) {
     const [open, setOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
     useClickOutside(dropdownRef, () => setOpen(false), open);
 
-    const handleApply = (filters: Record<string, string>) => {
+    const handleApply = (filters: FilterRule[]) => {
         setOpen(false);
         if (onFilters) onFilters();
         if (onApplyFilters) onApplyFilters(filters);
