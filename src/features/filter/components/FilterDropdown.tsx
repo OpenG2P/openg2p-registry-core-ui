@@ -9,6 +9,7 @@ import {
     DateFilterInput,
     SelectFilterInput,
 } from "@/features/filter/components";
+import { validateFilters } from "@/features/filter/utils";
 
 
 interface FilterDropdownProps {
@@ -25,6 +26,16 @@ export default function FilterDropdown({
     const [selectedFilterId, setSelectedFilterId] = useState("");
     const [operator, setOperator] = useState("");
     const [value, setValue] = useState<any>("");
+    const [error, setError] = useState<string | null>(null);
+
+    const configMap: Record<string, FilterConfig> = Object.fromEntries(
+        filterConfig.map(cfg => [cfg.field, cfg])
+    );
+
+    useEffect(() => {
+        setError(null);
+    }, [selectedFilterId, operator, value]);
+
 
     useEffect(() => {
         if (!selectedFilterId && filterConfig.length > 0) {
@@ -57,24 +68,36 @@ export default function FilterDropdown({
     const applyFilter = () => {
         if (!selectedFilter || !operator) return;
 
-        if (operator === "between") {
-            if (!Array.isArray(value) || !value[0] || !value[1]) return;
-        } else if (!value) {
-            return;
-        }
-
         const newFilter: FilterRule = {
             field: selectedFilter.field,
             operator,
             value,
         };
 
-        const updatedFilters = appliedFilters.filter(
-            f => !(f.field === newFilter.field && f.operator === newFilter.operator)
-        );
+        const updatedFilters = [
+            ...appliedFilters.filter(
+                f => !(f.field === newFilter.field && f.operator === newFilter.operator)
+            ),
+            newFilter,
+        ];
 
-        onApply([...updatedFilters, newFilter]);
+        const validationErrors = validateFilters(updatedFilters, configMap);
+
+        if (validationErrors.length > 0) {
+            const currentError = validationErrors.find(
+                e => e.filterId === selectedFilter.id
+            );
+
+            if (currentError) {
+                setError(currentError.message);
+                return;
+            }
+        }
+
+        setError(null);
+        onApply(updatedFilters);
     };
+
 
     if (filterConfig.length === 0) {
         return (
@@ -161,6 +184,12 @@ export default function FilterDropdown({
                             <label className="w-20 text-sm font-medium">Value</label>
                             {renderValueInput()}
                         </div>
+                        {error && (
+                            <p className="text-sm text-red-500 ml-20">
+                                {error}
+                            </p>
+                        )}
+
                     </>
                 )}
 
