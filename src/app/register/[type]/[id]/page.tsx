@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { BreadcrumbBar } from "@/components/shared";
+import { useFetch } from "@/shared/hooks/useFetch";
 
 interface PersonalDetails {
   name: string;
@@ -20,7 +21,7 @@ interface OtherDetail {
   items: Array<{ label: string; value: string }>;
 }
 
-interface RegistryDetail {
+interface RegisterDetail {
   id: string;
   name: string;
   personalDetails: PersonalDetails;
@@ -42,13 +43,12 @@ interface RegistryDetail {
   tabs: string[];
 }
 
-export default function RegistryDetailPage() {
+export default function RegisterDetailPage() {
   const params = useParams();
   const id = params.id as string;
   const type = (params.type as string) || "individual";
 
-  const [detail, setDetail] = useState<RegistryDetail | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { data: detail, loading, error, execute } = useFetch<RegisterDetail>();
   const [activeTab, setActiveTab] = useState(0);
 
   const typeLabels: Record<string, string> = {
@@ -61,23 +61,10 @@ export default function RegistryDetailPage() {
   };
 
   useEffect(() => {
-    const fetchDetail = async () => {
-      setLoading(true);
-      try {
-        const response = await fetch(`/api/registry/${type}/${id}`);
-        const data = await response.json();
-        setDetail(data);
-      } catch (error) {
-        console.error("Error fetching registry detail:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     if (id) {
-      fetchDetail();
+      execute(`/api/register/${type}/${id}`);
     }
-  }, [id, type]);
+  }, [id, type, execute]);
 
   if (loading) {
     return (
@@ -87,7 +74,22 @@ export default function RegistryDetailPage() {
     );
   }
 
+  if (error) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center text-red-500">Error: {error}</div>
+      </div>
+    );
+  }
+
   if (!detail) {
+    // If loading is false and no detail, it might be the initial state before fetch or null result.
+    // If it's initial state (not loading, no data, no error), we might want to return null or loader.
+    // However, useFetch sets loading to true immediately when execute is called? 
+    // Actually execute is async. But inside execute it sets loading(true).
+    // Initial state: data=null, loading=false.
+    // So we should check if we initiated a fetch? 
+    // Or just show "Record not found" if loading is complete and no data.
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center text-gray-500">Record not found</div>
@@ -96,7 +98,7 @@ export default function RegistryDetailPage() {
   }
 
   const breadcrumb = [
-    { label: typeLabels[type] || "Registry", href: `/registry/${type}` },
+    { label: typeLabels[type] || "Register", href: `/register/${type}` },
     {
       label: `${detail.name} - ID ${detail.id}`,
       href: undefined,
