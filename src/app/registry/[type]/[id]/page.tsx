@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { BreadcrumbBar } from "@/components/shared";
+import { SectionsContainer, UISchema, WidgetProvider } from "@/openg2p-registry-ui-widgets/src";
 
 interface PersonalDetails {
   name: string;
@@ -41,6 +42,250 @@ interface RegistryDetail {
   };
   tabs: string[];
 }
+
+export const schema: UISchema = {
+  "sections": [
+    {
+      "section-id": "personal-details",
+      "section-title": "Personal Details",
+      "section-editable": true,
+      "panels": [
+        {
+          "panel-id": "personal-details-card",
+          "panel-orientation": "horizontal",
+          "panels": [
+            {
+              "panel-id": "personal-left-column",
+              "panel-orientation": "vertical",
+              "widgets": [
+                {
+                  "widget": "text",
+                  "widget-type": "input",
+                  "widget-label": "Name",
+                  "widget-id": "name",
+                  "widget-data-path": "person.name",
+                  "widget-data-default": "Sarah Elizabeth",
+                  "widget-required": false,
+                  "widget-readonly": true
+                },
+                {
+                  "widget": "text",
+                  "widget-type": "input",
+                  "widget-label": "ID",
+                  "widget-id": "id",
+                  "widget-data-path": "person.id",
+                  "widget-data-default": "1234567890",
+                  "widget-required": false,
+                  "widget-readonly": true
+                },
+                {
+                  "widget": "text",
+                  "widget-type": "input",
+                  "widget-label": "DOB",
+                  "widget-id": "dob",
+                  "widget-data-path": "person.dob",
+                  "widget-data-default": "25 Jan 1980",
+                  "widget-required": false,
+                  "widget-readonly": true
+                }
+              ]
+            },
+            {
+              "panel-id": "personal-center-column",
+              "panel-orientation": "vertical",
+              "widgets": [
+                {
+                  "widget": "text",
+                  "widget-type": "input",
+                  "widget-label": "Phone",
+                  "widget-id": "phone",
+                  "widget-data-path": "person.phone",
+                  "widget-data-default": "12345 67890",
+                  "widget-required": false,
+                  "widget-readonly": true
+                },
+                {
+                  "widget": "text",
+                  "widget-type": "input",
+                  "widget-label": "Mail ID",
+                  "widget-id": "email",
+                  "widget-data-path": "person.email",
+                  "widget-data-default": "abcd@gmail.com",
+                  "widget-required": false,
+                  "widget-readonly": true
+                }
+              ]
+            },
+            {
+              "panel-id": "personal-right-column",
+              "panel-orientation": "vertical",
+              "widgets": [
+                {
+                  "widget": "text",
+                  "widget-type": "input",
+                  "widget-label": "Village",
+                  "widget-id": "village",
+                  "widget-data-path": "address.village",
+                  "widget-data-default": "Village Name",
+                  "widget-required": false,
+                  "widget-readonly": true
+                },
+                {
+                  "widget": "text",
+                  "widget-type": "input",
+                  "widget-label": "Zone",
+                  "widget-id": "zone",
+                  "widget-data-path": "address.zone",
+                  "widget-data-default": "South Zone",
+                  "widget-required": false,
+                  "widget-readonly": true
+                },
+                {
+                  "widget": "text",
+                  "widget-type": "input",
+                  "widget-label": "Area",
+                  "widget-id": "area",
+                  "widget-data-path": "address.area",
+                  "widget-data-default": "Area Name",
+                  "widget-required": false,
+                  "widget-readonly": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section-id": "other-details-1",
+      "section-title": "Other Details",
+      "section-editable": false,
+      "panels": [
+        {
+          "panel-id": "other-details-1-card",
+          "panel-orientation": "horizontal",
+          "panels": [
+            {
+              "panel-id": "other-details-1-panel",
+              "panel-orientation": "vertical",
+              "widgets": [
+                {
+                  "widget": "text",
+                  "widget-type": "input",
+                  "widget-label": "Details",
+                  "widget-id": "details1",
+                  "widget-data-path": "other.details1",
+                  "widget-data-default": "Details 01",
+                  "widget-required": false,
+                  "widget-readonly": true
+                },
+                {
+                  "widget": "text",
+                  "widget-type": "input",
+                  "widget-label": "Details",
+                  "widget-id": "details2",
+                  "widget-data-path": "other.details2",
+                  "widget-data-default": "Details 02",
+                  "widget-required": false,
+                  "widget-readonly": true
+                },
+                {
+                  "widget": "text",
+                  "widget-type": "input",
+                  "widget-label": "Details",
+                  "widget-id": "details3",
+                  "widget-data-path": "other.details3",
+                  "widget-data-default": "Details 03",
+                  "widget-required": false,
+                  "widget-readonly": true
+                }
+              ]
+            },
+            {
+              "panel-id": "other-details-2-panel",
+              "panel-orientation": "vertical",
+              "widgets": [
+                {
+                  "widget": "text",
+                  "widget-type": "input",
+                  "widget-label": "Details",
+                  "widget-id": "details4",
+                  "widget-data-path": "other.details4",
+                  "widget-data-default": "Details 01",
+                  "widget-required": false,
+                  "widget-readonly": true
+                },
+                {
+                  "widget": "text",
+                  "widget-type": "input",
+                  "widget-label": "Details",
+                  "widget-id": "details5",
+                  "widget-data-path": "other.details5",
+                  "widget-data-default": "Details 02",
+                  "widget-required": false,
+                  "widget-readonly": true
+                },
+                {
+                  "widget": "text",
+                  "widget-type": "input",
+                  "widget-label": "Details",
+                  "widget-id": "details6",
+                  "widget-data-path": "other.details6",
+                  "widget-data-default": "Details 03",
+                  "widget-required": false,
+                  "widget-readonly": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section-id": "other-details-2",
+      "section-title": "Other Details 2",
+      "section-editable": false,
+      "panels": [
+        {
+          "panel-id": "other-details-2-card",
+          "panel-orientation": "vertical",
+          "widgets": [
+            {
+              "widget": "text",
+              "widget-type": "input",
+              "widget-label": "Details",
+              "widget-id": "details7",
+              "widget-data-path": "other.details7",
+              "widget-data-default": "Details 01",
+              "widget-required": false,
+              "widget-readonly": true
+            },
+            {
+              "widget": "text",
+              "widget-type": "input",
+              "widget-label": "Details",
+              "widget-id": "details8",
+              "widget-data-path": "other.details8",
+              "widget-data-default": "Details 02",
+              "widget-required": false,
+              "widget-readonly": true
+            },
+            {
+              "widget": "text",
+              "widget-type": "input",
+              "widget-label": "Details",
+              "widget-id": "details9",
+              "widget-data-path": "other.details9",
+              "widget-data-default": "Details 03",
+              "widget-required": false,
+              "widget-readonly": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+};
 
 export default function RegistryDetailPage() {
   const params = useParams();
@@ -127,71 +372,9 @@ export default function RegistryDetailPage() {
         </div>
 
         {activeTab === 0 ? (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2 space-y-6">
-              <div className="bg-white border border-gray-300 rounded-lg p-6">
-                <h2 className="text-xl font-bold mb-6">Personal Details</h2>
-
-                <div className="flex gap-6">
-                  <div className="flex gap-6 items-start pr-6 border-r border-gray-200">
-                    <div className="space-y-2">
-                      <div>
-                        <span className="text-sm text-gray-600">Name : </span>
-                        <span className="text-sm font-medium">{detail.personalDetails.name}</span>
-                      </div>
-                      <div>
-                        <span className="text-sm text-gray-600">ID : </span>
-                        <span className="text-sm font-medium">{detail.personalDetails.id}</span>
-                      </div>
-                      <div>
-                        <span className="text-sm text-gray-600">DOB : </span>
-                        <span className="text-sm font-medium">{detail.personalDetails.dob}</span>
-                      </div>
-                    </div>
-
-                    <div className="w-20 h-20 bg-gray-200 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <svg className="w-12 h-12 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-                      </svg>
-                    </div>
-                  </div>
-
-                  <div className="space-y-2 px-6 border-r border-gray-200">
-                    <div>
-                      <span className="text-sm text-gray-600">Phone : </span>
-                      <span className="text-sm font-medium">{detail.personalDetails.phone}</span>
-                    </div>
-                    <div>
-                      <span className="text-sm text-gray-600">Mail ID : </span>
-                      <span className="text-sm font-medium">{detail.personalDetails.mailId}</span>
-                    </div>
-                  </div>
-
-                  <div className="space-y-2 pl-6">
-                    <div>
-                      <span className="text-sm text-gray-600">Village : </span>
-                      <span className="text-sm font-medium">{detail.personalDetails.village}</span>
-                    </div>
-                    <div>
-                      <span className="text-sm text-gray-600">Zone : </span>
-                      <span className="text-sm font-medium">{detail.personalDetails.zone}</span>
-                    </div>
-                    <div>
-                      <span className="text-sm text-gray-600">Area : </span>
-                      <span className="text-sm font-medium">{detail.personalDetails.area}</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-6 pt-4 border-t border-gray-200">
-                  <button className="text-sm font-medium flex items-center gap-2 hover:underline">
-                    Edit Details
-                    <span>→</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
+          <WidgetProvider>
+            <SectionsContainer sections={schema.sections} />
+          </WidgetProvider>
         ) : (
           <div></div>
         )}
