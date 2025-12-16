@@ -44,10 +44,18 @@ interface RegisterDetail {
   tabs: string[];
 }
 
+interface Register {
+  register_id: string;
+  register_mnemonic: string;
+  register_subject: string;
+  register_description: string;
+  master_register_id: string;
+}
+
 export default function RegisterDetailPage() {
   const params = useParams();
   const id = params.id as string;
-  const type = (params.type as string) || "individual";
+  const type = params.type as string;
 
   const { data: detail, loading, error, execute } = useFetch<RegisterDetail>();
   const [activeTab, setActiveTab] = useState(0);
@@ -69,19 +77,26 @@ export default function RegisterDetailPage() {
   }, []);
 
 
-  const typeLabels: Record<string, string> = {
-    individual: "Individuals",
-    individuals: "Individuals",
-    family: "Families",
-    families: "Families",
-    crops: "Crops",
-    lands: "Lands",
-  };
+  const { data: registersData, execute: executeRegisters } = useFetch<Register[]>();
+
+  // Fetch all register types (for labels)
+  useEffect(() => {
+    executeRegisters("/api/register/all");
+  }, [executeRegisters]);
+
+  const currentRegister = registersData?.find(r => r.register_mnemonic.toLowerCase() === type.toLowerCase());
+  const registerTypelabel = currentRegister?.register_subject || "Register";
 
   useEffect(() => {
-    if (id) {
-      execute(`/api/register/${type}/${id}`);
-    }
+    const requestPayload = {
+      register_id: currentRegister?.register_id,
+      internal_record_id: id,
+    };
+
+    execute(`/api/register/${type}/${id}`, {
+      method: "POST",
+      body: JSON.stringify(requestPayload),
+    });
   }, [id, type, execute]);
 
   if (loading) {
@@ -101,13 +116,6 @@ export default function RegisterDetailPage() {
   }
 
   if (!detail) {
-    // If loading is false and no detail, it might be the initial state before fetch or null result.
-    // If it's initial state (not loading, no data, no error), we might want to return null or loader.
-    // However, useFetch sets loading to true immediately when execute is called? 
-    // Actually execute is async. But inside execute it sets loading(true).
-    // Initial state: data=null, loading=false.
-    // So we should check if we initiated a fetch? 
-    // Or just show "Record not found" if loading is complete and no data.
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center text-gray-500">Record not found</div>
@@ -116,7 +124,7 @@ export default function RegisterDetailPage() {
   }
 
   const breadcrumb = [
-    { label: typeLabels[type] || "Register", href: `/register/${type}` },
+    { label: registerTypelabel, href: `/register/${type}` },
     {
       label: `${detail.name} - ID ${detail.id}`,
       href: undefined,

@@ -1,4 +1,8 @@
 import { useState, useCallback } from 'react';
+import {
+    BackendResponse
+} from '@/shared/types';
+
 
 // A reusable custom hook for making HTTP requests
 // from Next.js Client --> Next.js server APIs
@@ -20,11 +24,11 @@ export function useFetch<T = any>() {
                     ...options?.headers
                 }
             });
+            const result = await res.json();
             if (!res.ok) {
-                const errData = await res.json().catch(() => ({}));
+                const errData = result.catch(() => ({}));
                 throw new Error(errData.error || `Error ${res.status}`);
             }
-            const result = await res.json();
             setData(result);
             return result;
         } catch (e) {

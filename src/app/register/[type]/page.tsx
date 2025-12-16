@@ -44,24 +44,36 @@ export default function RegisterTypePage() {
   const page = parseInt(searchParams.get("page") || "1");
   const limit = parseInt(searchParams.get("limit") || "7");
 
-  const queryObj = new URLSearchParams();
-  queryObj.set("page", page.toString());
-  queryObj.set("limit", limit.toString());
-  if (search) {
-    queryObj.set("search", search);
-  }
-  const queryString = queryObj.toString();
-
-
   //Fetch all register types (for labels)
   useEffect(() => {
     executeRegisters("/api/register/all");
   }, [executeRegisters]);
 
+  const currentRegister = registersData?.find(r => r.register_mnemonic.toLowerCase() === type.toLowerCase());
+  const registerTypelabel = currentRegister?.register_subject || "Register";
+
+
   //Fetch paginated items for current type
   useEffect(() => {
-    execute(`/api/register/${type}?${queryString}`);
-  }, [type, queryString, execute]);
+    if (!currentRegister?.register_id) return;
+
+    const body = {
+      pagination_request: {
+        current_page: page,
+        page_size: limit,
+        search_text: search || undefined,
+      },
+      request_payload: {
+        register_id: currentRegister.register_id,
+      },
+    };
+
+    execute(`/api/register/${type}`, {
+      method: "POST",
+      body: JSON.stringify(body),
+    });
+  }, [page, limit, search, type, currentRegister, execute]);
+
 
 
   const items = data?.items || [];
@@ -74,8 +86,6 @@ export default function RegisterTypePage() {
     pageEnd: (data?.pagination?.current_page && data?.pagination?.page_size ? (data.pagination.current_page - 1) * data.pagination.page_size : 0) + items.length,
   };
 
-  const currentRegister = registersData?.find(r => r.register_mnemonic.toLowerCase() === type.toLowerCase());
-  const registerTypelabel = currentRegister?.register_subject || "Register";
 
   const breadcrumb = [
     { label: registerTypelabel, href: undefined },
