@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { BreadcrumbBar } from "@/components/shared";
+import { SectionsContainer, UISchema, WidgetProvider } from "@/openg2p-registry-ui-widgets/src";
 
 interface PersonalDetails {
   name: string;
@@ -50,6 +51,23 @@ export default function RegistryDetailPage() {
   const [detail, setDetail] = useState<RegistryDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState(0);
+
+  const [uiSchema, setUiSchema] = useState<UISchema | null>(null);
+
+  useEffect(() => {
+    const fetchSchema = async () => {
+      try {
+        const res = await fetch("/api/uischema");
+        const data: UISchema = await res.json();
+        setUiSchema(data);
+      } catch (error) {
+        console.error("Error fetching UI schema:", error);
+      }
+    };
+
+    fetchSchema();
+  }, []);
+
 
   const typeLabels: Record<string, string> = {
     individual: "Individuals",
@@ -104,6 +122,15 @@ export default function RegistryDetailPage() {
     { label: detail.tabs[activeTab] || "Tab 01", href: undefined },
   ];
 
+  if (loading || !uiSchema) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div>Loading...</div>
+      </div>
+    );
+  }
+
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="px-10 py-4 bg-white border-b border-gray-300">
@@ -127,71 +154,9 @@ export default function RegistryDetailPage() {
         </div>
 
         {activeTab === 0 ? (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2 space-y-6">
-              <div className="bg-white border border-gray-300 rounded-lg p-6">
-                <h2 className="text-xl font-bold mb-6">Personal Details</h2>
-
-                <div className="flex gap-6">
-                  <div className="flex gap-6 items-start pr-6 border-r border-gray-200">
-                    <div className="space-y-2">
-                      <div>
-                        <span className="text-sm text-gray-600">Name : </span>
-                        <span className="text-sm font-medium">{detail.personalDetails.name}</span>
-                      </div>
-                      <div>
-                        <span className="text-sm text-gray-600">ID : </span>
-                        <span className="text-sm font-medium">{detail.personalDetails.id}</span>
-                      </div>
-                      <div>
-                        <span className="text-sm text-gray-600">DOB : </span>
-                        <span className="text-sm font-medium">{detail.personalDetails.dob}</span>
-                      </div>
-                    </div>
-
-                    <div className="w-20 h-20 bg-gray-200 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <svg className="w-12 h-12 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-                      </svg>
-                    </div>
-                  </div>
-
-                  <div className="space-y-2 px-6 border-r border-gray-200">
-                    <div>
-                      <span className="text-sm text-gray-600">Phone : </span>
-                      <span className="text-sm font-medium">{detail.personalDetails.phone}</span>
-                    </div>
-                    <div>
-                      <span className="text-sm text-gray-600">Mail ID : </span>
-                      <span className="text-sm font-medium">{detail.personalDetails.mailId}</span>
-                    </div>
-                  </div>
-
-                  <div className="space-y-2 pl-6">
-                    <div>
-                      <span className="text-sm text-gray-600">Village : </span>
-                      <span className="text-sm font-medium">{detail.personalDetails.village}</span>
-                    </div>
-                    <div>
-                      <span className="text-sm text-gray-600">Zone : </span>
-                      <span className="text-sm font-medium">{detail.personalDetails.zone}</span>
-                    </div>
-                    <div>
-                      <span className="text-sm text-gray-600">Area : </span>
-                      <span className="text-sm font-medium">{detail.personalDetails.area}</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-6 pt-4 border-t border-gray-200">
-                  <button className="text-sm font-medium flex items-center gap-2 hover:underline">
-                    Edit Details
-                    <span>→</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
+          <WidgetProvider>
+            <SectionsContainer sections={uiSchema.sections} />
+          </WidgetProvider>
         ) : (
           <div></div>
         )}
