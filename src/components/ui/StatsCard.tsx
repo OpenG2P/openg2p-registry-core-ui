@@ -14,7 +14,6 @@ interface StatItem {
   register_subject: string;
   total_record_count: number;
 }
-
 const StatsCard = ({ stats_endpoint, active }: StatsCardProps) => {
   const { data, loading, error, execute } = useFetch<StatItem[]>();
 
@@ -32,14 +31,18 @@ const StatsCard = ({ stats_endpoint, active }: StatsCardProps) => {
 
   return (
     <div
-      className={`flex h-48 w-[225px] flex-col justify-between rounded-3xl border px-7 py-6 text-left transition-all duration-200 ${active
-        ? "border-black bg-black text-white "
-        : " border-4 border-gray-200 bg-white text-gray-900 hover:border-gray-300"
-        }`}
+      className={`
+        flex h-48 w-[225px] flex-col justify-between rounded-3xl
+        border-4 px-7 py-6 text-left
+        ${active
+          ? "border-black bg-black text-white"
+          : "border-gray-200 bg-white text-gray-900"
+        }
+      `}
     >
-      <div>
+      <div className="pointer-events-none">
         <h2 className="mb-4 text-xl font-bold leading-tight">
-          {data?.length} {statLabel}
+          {data?.length ?? 0} {statLabel}
         </h2>
 
         {loading ? (
@@ -55,7 +58,6 @@ const StatsCard = ({ stats_endpoint, active }: StatsCardProps) => {
               >
                 <span className="font-bold">{item.total_record_count}</span>
                 <span>{item.register_subject}</span>
-
               </li>
             ))}
           </ul>

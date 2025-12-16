@@ -17,12 +17,10 @@ export interface PaginationRequest {
   current_page?: number;
   page_size?: number;
 }
-export interface RequestPayload {
-  request_payload: any
-}
+
 export interface RequestBody {
   pagination_request: PaginationRequest
-  request_payload: RequestPayload;
+  request_payload: any;
 
 }
 
@@ -43,12 +41,10 @@ export interface PaginationResponse {
   current_page?: number;
   page_size?: number;
 }
-export interface ResponsePayload {
-  response_payload: any
-}
+
 export interface ResponseBody {
   pagination_response: PaginationResponse;
-  response_payload: ResponsePayload;
+  response_payload: any;
 }
 
 export interface BackendResponse {
@@ -64,7 +60,7 @@ export function generateTimestamp(): string {
   return new Date().toISOString();
 }
 
-export function createBackendRequest(pagination_request: PaginationRequest, request_payload: RequestPayload): BackendRequest {
+export function createBackendRequest(payload:RequestBody): BackendRequest {
 
   const requestHeader: RequestHeader = {
     sender_app_mnemonic: BACKEND_CONFIG.appMnemonic,
@@ -73,10 +69,7 @@ export function createBackendRequest(pagination_request: PaginationRequest, requ
     request_timestamp: generateTimestamp(),
   };
 
-  const requestBody: RequestBody = {
-    pagination_request: pagination_request,
-    request_payload: request_payload,
-  };
+  const requestBody: RequestBody = payload;
 
   return {
     request_header: requestHeader,
