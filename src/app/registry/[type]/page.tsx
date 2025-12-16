@@ -3,8 +3,9 @@
 import { useEffect, useState } from "react";
 import { useParams, useSearchParams, useRouter } from "next/navigation";
 import { TopBar } from "@/components/shared";
-import { SelectedFilters } from "@/components/shared/SelectedFilters";
 import Link from "next/link";
+import { SelectedFilters } from "@/features/filter/components";
+import { useRegistryFilters } from "@/features/filter/hooks/useRegistryFilters";
 
 interface RegistryItem {
   id: string;
@@ -31,8 +32,6 @@ export default function RegistryTypePage() {
     pageStart: 1,
     pageEnd: 7,
   });
-  const defaultFilters = ["default filter"];
-  const [activeFilters, setActiveFilters] = useState<string[]>(defaultFilters);
 
   const typeLabels: Record<string, string> = {
     individual: "Individuals",
@@ -70,14 +69,6 @@ export default function RegistryTypePage() {
     fetchData();
   }, [type, page, search]);
 
-  useEffect(() => {
-    if (search) {
-      setActiveFilters([...defaultFilters, `Search: ${search}`]);
-    } else {
-      setActiveFilters(defaultFilters);
-    }
-  }, [search]);
-
   const handlePrev = () => {
     if (pagination.page > 1) {
       const params = new URLSearchParams(searchParams.toString());
@@ -94,34 +85,19 @@ export default function RegistryTypePage() {
     }
   };
 
-  const handleClearFilter = (filter: string) => {
-    if (filter.startsWith("Search:")) {
-      const params = new URLSearchParams(searchParams.toString());
-      params.delete("q");
-      params.delete("search");
-      params.set("page", "1");
-      router.push(`/registry/${type}?${params.toString()}`);
-      return;
-    }
-    setActiveFilters(activeFilters.filter((f) => f !== filter));
-  };
-
-  const handleClearAll = () => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.delete("q");
-    params.delete("search");
-    params.set("page", "1");
-    router.push(`/registry/${type}?${params.toString()}`);
-    setActiveFilters(defaultFilters);
-  };
-
-  const handleNewFilter = (filter: string) => {
-    setActiveFilters([...activeFilters, filter]);
-  };
 
   const breadcrumb = [
     { label: typeLabels[type] || "Registry", href: undefined },
   ];
+
+  const {
+    appliedFilters,
+    filterConfig,
+    applyFilters,
+    removeFilter,
+    clearAllFilters,
+  } = useRegistryFilters();
+
 
   return (
     <div className="min-h-scree mx-auto">
@@ -134,15 +110,19 @@ export default function RegistryTypePage() {
         total={pagination.total}
         onPrev={handlePrev}
         onNext={handleNext}
-        onFilters={handleNewFilter}
+        onFilters={() => console.log("filters")}
+        onApplyFilters={applyFilters}
+        appliedFilters={appliedFilters}
+        filterConfig={filterConfig}
       />
 
       <div className="px-6 py-4">
         <div className="border-b border-gray-200 mb-4">
           <SelectedFilters
-            filters={activeFilters}
-            onClearFilter={handleClearFilter}
-            onClearAll={handleClearAll}
+            appliedFilters={appliedFilters}
+            filterConfig={filterConfig}
+            removeFilter={removeFilter}
+            clearAllFilters={clearAllFilters}
           />
         </div>
 
@@ -161,7 +141,7 @@ export default function RegistryTypePage() {
                 className="block"
               >
                 <div className="flex items-center gap-6 p-5 bg-white border-2 border-gray-300 rounded-md hover:shadow-sm hover:border-gray-400 transition-all">
-                  <div className="w-16 h-16 bg-gray-300 rounded-md flex-shrink-0"></div>
+                  <div className="w-16 h-16 bg-gray-300 rounded-md shrink-0"></div>
 
                   <div className="flex-1 min-w-0">
                     <h3 className="font-bold text-gray-900 text-base mb-0.5">
@@ -195,7 +175,7 @@ export default function RegistryTypePage() {
                     </p>
                   </div>
 
-                   <div className="flex-1 min-w-0">
+                  <div className="flex-1 min-w-0">
                     <p className="text-sm text-gray-900 mb-0.5">
                       <span className="font-bold text-gray-600">Label 1: </span>
                       <span className="font-bold">{item.label1}</span>
