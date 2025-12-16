@@ -2,78 +2,90 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useSearchParams, useRouter } from "next/navigation";
-import { TopBar } from "@/components/shared";
 import Link from "next/link";
+import { TopBar } from "@/components/shared";
 import { SelectedFilters } from "@/features/filter/components";
 import { useRegistryFilters } from "@/features/filter/hooks/useRegistryFilters";
+import { useFetch } from "@/shared/hooks/useFetch";
 
-interface RegistryItem {
+import { PaginationResponse } from '@/shared/types';
+
+interface Register {
+  register_id: string;
+  register_mnemonic: string;
+  register_subject: string;
+  register_description: string;
+  master_register_id: string;
+}
+
+interface RegisterItem {
   id: string;
   name: string;
   label1: string;
   label2: string;
 }
 
-export default function RegistryTypePage() {
+interface PaginatedResponse<T> {
+  items: T[];
+  pagination: PaginationResponse;
+}
+
+export default function RegisterTypePage() {
+  const router = useRouter();
   const params = useParams();
   const searchParams = useSearchParams();
-  const router = useRouter();
-  const typeFromPath = (params.type as string) || "individual";
-  const type = typeFromPath || "individual";
-  const search = searchParams.get("q") || searchParams.get("search") || "";
+  const { appliedFilters, filterConfig, applyFilters, removeFilter, clearAllFilters, } = useRegistryFilters();
+
+  const { data: registersData, execute: executeRegisters } = useFetch<Register[]>();
+  const { data, loading, error, execute } = useFetch<PaginatedResponse<RegisterItem>>();
+
+  const type = (params.type as string);
+  const search = searchParams.get("search");
   const page = parseInt(searchParams.get("page") || "1");
+  const limit = parseInt(searchParams.get("limit") || "7");
 
-  const [items, setItems] = useState<RegistryItem[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [pagination, setPagination] = useState({
-    page: 1,
-    limit: 7,
-    total: 7,
-    pageStart: 1,
-    pageEnd: 7,
-  });
+  const queryObj = new URLSearchParams();
+  queryObj.set("page", page.toString());
+  queryObj.set("limit", limit.toString());
+  if (search) {
+    queryObj.set("search", search);
+  }
+  const queryString = queryObj.toString();
 
-  const typeLabels: Record<string, string> = {
-    individual: "Individuals",
-    individuals: "Individuals",
-    family: "Families",
-    families: "Families",
-    crops: "Crops",
-    lands: "Lands",
+
+  //Fetch all register types (for labels)
+  useEffect(() => {
+    executeRegisters("/api/register/all");
+  }, [executeRegisters]);
+
+  //Fetch paginated items for current type
+  useEffect(() => {
+    execute(`/api/register/${type}?${queryString}`);
+  }, [type, queryString, execute]);
+
+
+  const items = data?.items || [];
+  const pagination = {
+    page: data?.pagination?.current_page || 1,
+    limit: data?.pagination?.page_size || 7,
+    total: 500,  // total number of items not provided so for now it is static
+    // Calculate these derived values if not provided by backend
+    pageStart: data?.pagination?.current_page && data?.pagination?.page_size ? (data.pagination.current_page - 1) * data.pagination.page_size : 0,
+    pageEnd: (data?.pagination?.current_page && data?.pagination?.page_size ? (data.pagination.current_page - 1) * data.pagination.page_size : 0) + items.length,
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const params = new URLSearchParams({
-          page: page.toString(),
-          limit: "5",
-        });
-        if (search) {
-          params.set("search", search);
-        }
+  const currentRegister = registersData?.find(r => r.register_mnemonic.toLowerCase() === type.toLowerCase());
+  const registerTypelabel = currentRegister?.register_subject || "Register";
 
-        const response = await fetch(`/api/registry/${type}?${params.toString()}`);
-        const data = await response.json();
-
-        setItems(data.items || []);
-        setPagination(data.pagination || pagination);
-      } catch (error) {
-        console.error("Error fetching registry data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [type, page, search]);
+  const breadcrumb = [
+    { label: registerTypelabel, href: undefined },
+  ];
 
   const handlePrev = () => {
     if (pagination.page > 1) {
       const params = new URLSearchParams(searchParams.toString());
       params.set("page", (pagination.page - 1).toString());
-      router.push(`/registry/${type}?${params.toString()}`);
+      router.push(`/register/${type}?${params.toString()}`);
     }
   };
 
@@ -81,23 +93,9 @@ export default function RegistryTypePage() {
     if (pagination.page < Math.ceil(pagination.total / pagination.limit)) {
       const params = new URLSearchParams(searchParams.toString());
       params.set("page", (pagination.page + 1).toString());
-      router.push(`/registry/${type}?${params.toString()}`);
+      router.push(`/register/${type}?${params.toString()}`);
     }
   };
-
-
-  const breadcrumb = [
-    { label: typeLabels[type] || "Registry", href: undefined },
-  ];
-
-  const {
-    appliedFilters,
-    filterConfig,
-    applyFilters,
-    removeFilter,
-    clearAllFilters,
-  } = useRegistryFilters();
-
 
   return (
     <div className="min-h-scree mx-auto">
@@ -137,7 +135,7 @@ export default function RegistryTypePage() {
             items.map((item) => (
               <Link
                 key={item.id}
-                href={`/registry/${type}/${item.id}`}
+                href={`/register/${type}/${item.id}`}
                 className="block"
               >
                 <div className="flex items-center gap-6 p-5 bg-white border-2 border-gray-300 rounded-md hover:shadow-sm hover:border-gray-400 transition-all">

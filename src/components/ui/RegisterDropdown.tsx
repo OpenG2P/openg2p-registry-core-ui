@@ -10,13 +10,13 @@ export interface DropdownOption {
   label: string;
 }
 
-interface RegistryDropdownProps {
+interface RegisterDropdownProps {
   options: DropdownOption[];
   selected: string;
   onChange: (value: string) => void;
 }
 
-const RegistryDropdown = ({ options, selected, onChange }: RegistryDropdownProps) => {
+const RegisterDropdown = ({ options, selected, onChange }: RegisterDropdownProps) => {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -67,4 +67,4 @@ const RegistryDropdown = ({ options, selected, onChange }: RegistryDropdownProps
   );
 };
 
-export default RegistryDropdown;
+export default RegisterDropdown;
