@@ -3,7 +3,10 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { BreadcrumbBar } from "@/components/shared";
-import { SectionsContainer, UISchema, WidgetProvider } from "@/openg2p-registry-ui-widgets/src";
+import { SectionsContainer, WidgetProvider } from "@openg2p/registry-widgets";
+import type { UISchema } from "@openg2p/registry-widgets";
+import uiSchema from '@/features/individual-details/schemas/UISchema.json';
+
 
 interface PersonalDetails {
   name: string;

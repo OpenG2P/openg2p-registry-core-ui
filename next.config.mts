@@ -11,15 +11,20 @@ const nextConfig: NextConfig = {
   reactCompiler: true,
   // Transpile the local package
   transpilePackages: ['@openg2p/registry-widgets'],
-  // Use webpack for better local package support (required for local file dependencies)
-  webpack: (config, { isServer }) => {
-    // Resolve the local package correctly - point to package root
-    // Path matches the package.json dependency: "file:../OpenG2P/openg2p-react-widgets"
-    // Note: Using correct casing (OpenG2P) for cross-platform compatibility
+  // Webpack configuration for local ESM package
+  webpack: (config) => {
+    const packagePath = path.resolve(__dirname, '../OpenG2P/openg2p-react-widgets');
+    
+    // Point alias to package root - webpack will use package.json main/module fields
     config.resolve.alias = {
       ...config.resolve.alias,
-      '@openg2p/registry-widgets': path.resolve(__dirname, '../OpenG2P/openg2p-react-widgets'),
+      '@openg2p/registry-widgets': packagePath,
     };
+    
+    // Ensure webpack can resolve ESM modules and follows symlinks
+    config.resolve.mainFields = ['module', 'main', 'browser'];
+    config.resolve.symlinks = true;
+    
     return config;
   },
 };

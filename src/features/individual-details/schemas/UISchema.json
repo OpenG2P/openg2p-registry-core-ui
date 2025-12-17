@@ -27,12 +27,21 @@
                   "widget-readonly": true
                 },
                 {
-                  "widget": "text",
+                  "widget": "number",
                   "widget-type": "input",
                   "widget-label": "ID",
                   "widget-id": "id",
                   "widget-data-path": "person.id",
                   "widget-data-default": "1234567890",
+                  "widget-data-format": {
+                    "textAlign": "right",
+                    "decimalPlaces": 2
+
+                  },
+                  "widget-data-validation": {
+                    "min": 0,
+                    "max": 9999999999
+                  },
                   "widget-required": false,
                   "widget-readonly": true
                 },

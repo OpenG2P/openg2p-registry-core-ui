@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { UISchema } from "@/openg2p-registry-ui-widgets/src";
+import type { UISchema } from "@openg2p/registry-widgets";
 
-export const schema: UISchema = {
+const schema: UISchema = {
     "sections": [
         {
             "section-id": "personal-details",
@@ -27,7 +27,7 @@ export const schema: UISchema = {
                                     "widget-readonly": true
                                 },
                                 {
-                                    "widget": "text",
+                                    "widget": "number",
                                     "widget-type": "input",
                                     "widget-label": "ID",
                                     "widget-id": "id",
@@ -37,12 +37,12 @@ export const schema: UISchema = {
                                     "widget-readonly": true
                                 },
                                 {
-                                    "widget": "text",
+                                    "widget": "boolean",
                                     "widget-type": "input",
-                                    "widget-label": "DOB",
-                                    "widget-id": "dob",
-                                    "widget-data-path": "person.dob",
-                                    "widget-data-default": "25 Jan 1980",
+                                    "widget-label": "Is Married",
+                                    "widget-id": "isMarried",
+                                    "widget-data-path": "person.isMarried",
+                                    "widget-data-default": false,
                                     "widget-required": false,
                                     "widget-readonly": true
                                 }

@@ -3,15 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "next dev --webpack",
+    "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {
     "@novu/js": "^3.11.0",
-    "next": "16.0.7",
+    "@openg2p/registry-widgets": "file:../OpenG2P/openg2p-react-widgets",
     "lucide-react": "^0.555.0",
+    "next": "16.0.7",
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "react-icons": "^5.5.0"
