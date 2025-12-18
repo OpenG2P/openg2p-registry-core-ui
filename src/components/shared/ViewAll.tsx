@@ -24,7 +24,7 @@ export default function ViewAll({
     const [isHovered, setIsHovered] = useState(false);
 
     return (
-        <div className="flex justify-start ml-[30px] mt-5">
+        <div className="flex justify-start mt-5">
             <Link
                 href={href}
                 className="lg:text-[12px] xl:text-[12px] 2xl:text-[14px] flex items-center font-semibold px-3 py-1 rounded-[15px] transition-colors duration-200"

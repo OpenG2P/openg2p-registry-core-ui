@@ -20,7 +20,7 @@ export async function POST(
 
     const body = await req.json();
     const backendRequest = createBackendRequest({ pagination_request: {}, request_payload: { request_payload: body } });
-    const backendUrl = `${BACKEND_CONFIG.apiUrl}/register/${type}/details`;
+    const backendUrl = `${BACKEND_CONFIG.apiUrl}/register/get_record`;
 
     const response = await fetch(backendUrl, {
       method: 'POST',
