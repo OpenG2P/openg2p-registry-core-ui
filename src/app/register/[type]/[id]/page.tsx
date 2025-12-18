@@ -11,7 +11,7 @@ import {
   SectionsContainer,
   UISchema,
   WidgetProvider,
-} from "@/openg2p-registry-ui-widgets/src";
+} from "@openg2p/registry-widgets";
 import { useFetch } from "@/shared/hooks/useFetch";
 import { ResponseBody } from "@/shared";
 

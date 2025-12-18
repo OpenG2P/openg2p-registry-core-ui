@@ -190,7 +190,7 @@ export default function RegisterTypePage() {
                       </p>
                     </div>
 
-                    {[0, 1, 2, 3, 4, 5].map(
+                    {[0, 2, 4].map(
                       (i) =>
                         fields[i] && (
                           <div key={i} className="flex-1 min-w-0">
@@ -200,6 +200,14 @@ export default function RegisterTypePage() {
                               </span>
                               <span className="font-bold">
                                 {fields[i].value}
+                              </span>
+                            </p>
+                            <p className="text-sm text-gray-900 truncate">
+                              <span className="font-bold text-gray-600">
+                                {fields[i+1].field_name}:{" "}
+                              </span>
+                              <span className="font-bold">
+                                {fields[i+1].value}
                               </span>
                             </p>
                           </div>

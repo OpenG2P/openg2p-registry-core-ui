@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@novu/js": "^3.11.0",
-    "@openg2p/registry-widgets": "file:../OpenG2P/openg2p-react-widgets",
+    "@openg2p/registry-widgets": "file:../openg2p-registry-ui-widgets",
     "@reduxjs/toolkit": "^2.11.2",
     "lucide-react": "^0.555.0",
     "next": "16.0.7",
