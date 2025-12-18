@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import type { UISchema } from "@/openg2p-registry-ui-widgets/src";
+import type { UISchema } from "@openg2p/registry-widgets";
 
 const schema: UISchema = {
     "sections": [
