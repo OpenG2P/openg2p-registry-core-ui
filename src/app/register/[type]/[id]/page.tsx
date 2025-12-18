@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { BreadcrumbBar } from "@/components/shared";
+import { BreadcrumbBar, ChangeRequestCard, VersionHistoryCard } from "@/components/shared";
 import { SectionsContainer, UISchema, WidgetProvider } from "@/openg2p-registry-ui-widgets/src";
 import { useFetch } from "@/shared/hooks/useFetch";
 
@@ -126,10 +126,10 @@ export default function RegisterDetailPage() {
   const breadcrumb = [
     { label: registerTypelabel, href: `/register/${type}` },
     {
-      label: `${detail.name} - ID ${detail.id}`,
+      label: `${detail.name || "Farmer 1"} - ID ${id}`,
       href: undefined,
     },
-    { label: detail.tabs[activeTab] || "Tab 01", href: undefined },
+    // { label: detail.tabs[activeTab] || "Tab 01", href: undefined },
   ];
 
   if (loading || !uiSchema) {
@@ -139,7 +139,7 @@ export default function RegisterDetailPage() {
       </div>
     );
   }
-
+  const DUMMY_TABS = ["Tab 1", "Tab 2", "Tab 3"];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -149,7 +149,7 @@ export default function RegisterDetailPage() {
 
       <div className="px-10 py-6">
         <div className="flex gap-2 mb-6 border-b-4 border-gray-300">
-          {detail.tabs.map((tab, index) => (
+          {/* {detail.tabs.map((tab, index) => (
             <button
               key={index}
               onClick={() => setActiveTab(index)}
@@ -160,13 +160,46 @@ export default function RegisterDetailPage() {
             >
               {tab}
             </button>
+          ))} */}
+
+          {DUMMY_TABS.map((tab, index) => (
+            <button
+              key={index}
+              onClick={() => setActiveTab(index)}
+              className={`px-12 py-3 font-bold transition-all rounded-t-lg ${activeTab === index
+                  ? "bg-black text-white"
+                  : "bg-gray-300 text-gray-700 hover:bg-gray-400"
+                }`}
+            >
+              {tab}
+            </button>
           ))}
+
         </div>
 
         {activeTab === 0 ? (
-          <WidgetProvider>
-            <SectionsContainer sections={uiSchema.sections} />
-          </WidgetProvider>
+          <div className="grid grid-cols-12 gap-6">
+
+            <div className="col-span-9">
+              <WidgetProvider>
+                <SectionsContainer sections={uiSchema.sections} />
+              </WidgetProvider>
+            </div>
+
+            <div className="col-span-3 flex flex-col gap-6">
+              <div className="col-span-3 flex flex-col gap-6">
+                <ChangeRequestCard
+                  registerId={currentRegister?.register_id!}
+                  internalRecordId={id}
+                />
+                <VersionHistoryCard
+                  registerId={currentRegister?.register_id!}
+                  internalRecordId={id}
+                />
+              </div>
+            </div>
+
+          </div>
         ) : (
           <div></div>
         )}
