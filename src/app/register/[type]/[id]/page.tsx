@@ -3,10 +3,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { BreadcrumbBar } from "@/components/shared";
-import { SectionsContainer, WidgetProvider } from "@openg2p/registry-widgets";
-import type { UISchema } from "@openg2p/registry-widgets";
-import uiSchema from '@/features/individual-details/schemas/UISchema.json';
-
+import { SectionsContainer, UISchema, WidgetProvider } from "@/openg2p-registry-ui-widgets/src";
+import { useFetch } from "@/shared/hooks/useFetch";
 
 interface PersonalDetails {
   name: string;
@@ -24,7 +22,7 @@ interface OtherDetail {
   items: Array<{ label: string; value: string }>;
 }
 
-interface RegistryDetail {
+interface RegisterDetail {
   id: string;
   name: string;
   personalDetails: PersonalDetails;
@@ -46,13 +44,20 @@ interface RegistryDetail {
   tabs: string[];
 }
 
-export default function RegistryDetailPage() {
+interface Register {
+  register_id: string;
+  register_mnemonic: string;
+  register_subject: string;
+  register_description: string;
+  master_register_id: string;
+}
+
+export default function RegisterDetailPage() {
   const params = useParams();
   const id = params.id as string;
-  const type = (params.type as string) || "individual";
+  const type = params.type as string;
 
-  const [detail, setDetail] = useState<RegistryDetail | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { data: detail, loading, error, execute } = useFetch<RegisterDetail>();
   const [activeTab, setActiveTab] = useState(0);
 
   const [uiSchema, setUiSchema] = useState<UISchema | null>(null);
@@ -72,38 +77,40 @@ export default function RegistryDetailPage() {
   }, []);
 
 
-  const typeLabels: Record<string, string> = {
-    individual: "Individuals",
-    individuals: "Individuals",
-    family: "Families",
-    families: "Families",
-    crops: "Crops",
-    lands: "Lands",
-  };
+  const { data: registersData, execute: executeRegisters } = useFetch<Register[]>();
+
+  // Fetch all register types (for labels)
+  useEffect(() => {
+    executeRegisters("/api/register/all");
+  }, [executeRegisters]);
+
+  const currentRegister = registersData?.find(r => r.register_mnemonic.toLowerCase() === type.toLowerCase());
+  const registerTypelabel = currentRegister?.register_subject || "Register";
 
   useEffect(() => {
-    const fetchDetail = async () => {
-      setLoading(true);
-      try {
-        const response = await fetch(`/api/registry/${type}/${id}`);
-        const data = await response.json();
-        setDetail(data);
-      } catch (error) {
-        console.error("Error fetching registry detail:", error);
-      } finally {
-        setLoading(false);
-      }
+    const requestPayload = {
+      register_id: currentRegister?.register_id,
+      internal_record_id: id,
     };
 
-    if (id) {
-      fetchDetail();
-    }
-  }, [id, type]);
+    execute(`/api/register/${type}/${id}`, {
+      method: "POST",
+      body: JSON.stringify(requestPayload),
+    });
+  }, [id, type, execute]);
 
   if (loading) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">Loading...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center text-red-500">Error: {error}</div>
       </div>
     );
   }
@@ -117,7 +124,7 @@ export default function RegistryDetailPage() {
   }
 
   const breadcrumb = [
-    { label: typeLabels[type] || "Registry", href: `/registry/${type}` },
+    { label: registerTypelabel, href: `/register/${type}` },
     {
       label: `${detail.name} - ID ${detail.id}`,
       href: undefined,
