@@ -1,43 +1,43 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
 import ViewAll from "@/components/shared/ViewAll";
 import { useFetch } from "@/shared/hooks/useFetch";
+import { ResponseBody } from "@/shared/types/backend-api";
 
 interface Props {
   registerId: string;
   internalRecordId: string;
 }
 
-interface VersionResponse {
-  response_body: {
-    response_payload: {
-      number_of_versions: number;
-      last_updated_by: string;
-      last_updated_at: string;
-      last_approved_by?: string;
-      last_approved_at?: string;
-    };
-  };
-}
-
 export default function VersionHistoryCard({
   registerId,
   internalRecordId,
 }: Props) {
-  const { data, execute, loading } = useFetch<VersionResponse>();
-
-  useEffect(() => {
-    execute("/api/register/get_number_of_versions", {
+  const { data, loading } = useFetch<ResponseBody>({
+    url: registerId && internalRecordId
+      ? "/api/register/get_number_of_versions"
+      : null,
+    deps: [registerId, internalRecordId],
+    enabled: !!registerId && !!internalRecordId,
+    options: {
       method: "POST",
       body: JSON.stringify({
         register_id: registerId,
         internal_record_id: internalRecordId,
       }),
-    });
-  }, [registerId, internalRecordId, execute]);
+    },
+  });
 
-  const payload = data?.response_body.response_payload;
+  const payload =
+    data?.response_payload as
+      | {
+          number_of_versions: number;
+          last_updated_by: string;
+          last_updated_at: string;
+          last_approved_by?: string;
+          last_approved_at?: string;
+        }
+      | undefined;
 
   if (loading) {
     return (

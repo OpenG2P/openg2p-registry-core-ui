@@ -1,124 +1,138 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import { useParams, useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { TopBar } from "@/components/shared";
 import { SelectedFilters } from "@/features/filter/components";
 import { useRegistryFilters } from "@/features/filter/hooks/useRegistryFilters";
 import { useFetch } from "@/shared/hooks/useFetch";
-
-import { PaginationResponse } from '@/shared/types';
+import { ResponseBody } from "@/shared/types";
 
 interface Register {
   register_id: string;
   register_mnemonic: string;
   register_subject: string;
   register_description: string;
-  master_register_id: string;
+  master_register_id: string | null;
 }
 
-interface RegisterItem {
-  id: string;
-  name: string;
-  label1: string;
-  label2: string;
-}
-
-interface PaginatedResponse<T> {
-  items: T[];
-  pagination: PaginationResponse;
+interface RegisterRecord {
+  internal_record_id: string;
+  functional_record_id: string;
+  record_name: string;
+  image: string;
+  display_fields: {
+    field_name: string;
+    value: string;
+    order: number;
+  }[];
 }
 
 export default function RegisterTypePage() {
   const router = useRouter();
   const params = useParams();
   const searchParams = useSearchParams();
-  const { appliedFilters, filterConfig, applyFilters, removeFilter, clearAllFilters, } = useRegistryFilters();
 
-  const { data: registersData, execute: executeRegisters } = useFetch<Register[]>();
-  const { data, loading, error, execute } = useFetch<PaginatedResponse<RegisterItem>>();
+  const {
+    appliedFilters,
+    filterConfig,
+    applyFilters,
+    removeFilter,
+    clearAllFilters,
+  } = useRegistryFilters();
 
-  const type = (params.type as string);
-  const search = searchParams.get("search");
+  const type = params.type as string;
+  const search = searchParams.get("search") || undefined;
   const page = parseInt(searchParams.get("page") || "1");
   const limit = parseInt(searchParams.get("limit") || "7");
 
-  //Fetch all register types (for labels)
-  useEffect(() => {
-    executeRegisters("/api/register/all");
-  }, [executeRegisters]);
+  /** fetch all registers */
+  const { data: registersData } = useFetch<ResponseBody>({
+    url: "/api/register/all",
+    deps: [],
+  });
 
-  const currentRegister = registersData?.find(r => r.register_mnemonic.toLowerCase() === type.toLowerCase());
-  const registerTypelabel = currentRegister?.register_subject || "Register";
+  const registers = (registersData?.response_payload as Register[]) ?? [];
 
+  const currentRegister = useMemo(
+    () =>
+      registers.find(
+        (r) => r.register_mnemonic.toLowerCase() === type.toLowerCase()
+      ),
+    [registers, type]
+  );
 
-  //Fetch paginated items for current type
-  useEffect(() => {
-    if (!currentRegister?.register_id) return;
+  const registerTypeLabel =
+    currentRegister?.register_subject ?? "Register";
 
-    const body = {
-      pagination_request: {
-        current_page: page,
-        page_size: limit,
-        search_text: search || undefined,
-      },
-      request_payload: {
-        register_id: currentRegister.register_id,
-      },
-    };
-
-    execute(`/api/register/${type}`, {
+  /** fetch records for selected register */
+  const {
+    data: recordsData,
+    loading,
+  } = useFetch<ResponseBody>({
+    url: currentRegister?.register_id
+      ? `/api/register/${type}`
+      : null,
+    deps: [type, page, limit, search, currentRegister?.register_id],
+    enabled: !!currentRegister?.register_id,
+    options: {
       method: "POST",
-      body: JSON.stringify(body),
-    });
-  }, [page, limit, search, type, currentRegister, execute]);
+      body: JSON.stringify({
+        pagination_request: {
+          current_page: page,
+          page_size: limit,
+          search_text: search,
+        },
+        request_payload: {
+          register_id: currentRegister?.register_id,
+        },
+      }),
+    },
+  });
 
+  const items = (recordsData?.response_payload as RegisterRecord[]) ?? [];
+  const paginationResponse = recordsData?.pagination_response;
 
-
-  const items = data?.items || [];
   const pagination = {
-    page: data?.pagination?.current_page || 1,
-    limit: data?.pagination?.page_size || 7,
-    total: 500,  // total number of items not provided so for now it is static
-    // Calculate these derived values if not provided by backend
-    pageStart: data?.pagination?.current_page && data?.pagination?.page_size ? (data.pagination.current_page - 1) * data.pagination.page_size : 0,
-    pageEnd: (data?.pagination?.current_page && data?.pagination?.page_size ? (data.pagination.current_page - 1) * data.pagination.page_size : 0) + items.length,
+    page,
+    limit,
+    total: (paginationResponse?.number_of_pages || 1) * limit,
+    pageStart: (page - 1) * limit + 1,
+    pageEnd: (page - 1) * limit + items.length,
   };
 
-
-  const breadcrumb = [
-    { label: registerTypelabel, href: undefined },
-  ];
-
   const handlePrev = () => {
-    if (pagination.page > 1) {
-      const params = new URLSearchParams(searchParams.toString());
-      params.set("page", (pagination.page - 1).toString());
-      router.push(`/register/${type}?${params.toString()}`);
-    }
+    if (page <= 1) return;
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", String(page - 1));
+    router.push(`/register/${type}?${params}`);
   };
 
   const handleNext = () => {
-    if (pagination.page < Math.ceil(pagination.total / pagination.limit)) {
-      const params = new URLSearchParams(searchParams.toString());
-      params.set("page", (pagination.page + 1).toString());
-      router.push(`/register/${type}?${params.toString()}`);
+    if (
+      !paginationResponse?.number_of_pages ||
+      page >= paginationResponse.number_of_pages
+    ) {
+      return;
     }
+
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", String(page + 1));
+    router.push(`/register/${type}?${params}`);
   };
 
   return (
-    <div className="min-h-scree mx-auto">
+    <div className="min-h-screen mx-auto">
       <TopBar
-        breadcrumb={breadcrumb}
-        showFilters={true}
-        showPagination={true}
+        breadcrumb={[{ label: registerTypeLabel }]}
+        showFilters
+        showPagination
         pageStart={pagination.pageStart}
         pageEnd={pagination.pageEnd}
         total={pagination.total}
         onPrev={handlePrev}
         onNext={handleNext}
-        onFilters={() => console.log("filters")}
         onApplyFilters={applyFilters}
         appliedFilters={appliedFilters}
         filterConfig={filterConfig}
@@ -142,60 +156,59 @@ export default function RegisterTypePage() {
               No items found
             </div>
           ) : (
-            items.map((item) => (
-              <Link
-                key={item.id}
-                href={`/register/${type}/${item.id}`}
-                className="block"
-              >
-                <div className="flex items-center gap-6 p-5 bg-white border-2 border-gray-300 rounded-md hover:shadow-sm hover:border-gray-400 transition-all">
-                  <div className="w-16 h-16 bg-gray-300 rounded-md shrink-0"></div>
+            items.map((item) => {
+              const fields = [...(item.display_fields || [])].sort(
+                (a, b) => a.order - b.order
+              );
 
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-bold text-gray-900 text-base mb-0.5">
-                      {item.name}
-                    </h3>
-                    <p className="text-sm text-gray-600">
-                      <span className="font-bold">ID :</span>{" "}
-                      <span className="font-bold text-gray-900">{item.id}</span>
-                    </p>
-                  </div>
+              return (
+                <Link
+                  key={item.internal_record_id}
+                  href={`/register/${type}/${item.internal_record_id}`}
+                  className="block"
+                >
+                  <div className="flex items-center gap-6 p-5 bg-white border-2 border-gray-300 rounded-md hover:shadow-sm hover:border-gray-400 transition-all">
+                    {item.image ? (
+                      <img
+                        src={item.image}
+                        alt={item.record_name}
+                        className="w-16 h-16 rounded-md object-cover shrink-0"
+                      />
+                    ) : (
+                      <div className="w-16 h-16 bg-gray-300 rounded-md shrink-0"></div>
+                    )}
 
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm text-gray-900 mb-0.5">
-                      <span className="font-bold text-gray-600">Label 1: </span>
-                      <span className="font-bold">{item.label1}</span>
-                    </p>
-                    <p className="text-sm text-gray-900">
-                      <span className="font-bold text-gray-600">Label 2: </span>
-                      <span className="font-bold">{item.label2}</span>
-                    </p>
-                  </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-bold text-gray-900 text-base mb-0.5">
+                        {item.record_name}
+                      </h3>
+                      <p className="text-sm text-gray-600">
+                        <span className="font-bold">ID :</span>{" "}
+                        <span className="font-bold text-gray-900">
+                          {item.internal_record_id}
+                        </span>
+                      </p>
+                    </div>
 
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm text-gray-900 mb-0.5">
-                      <span className="font-bold text-gray-600">Label 1: </span>
-                      <span className="font-bold">{item.label1}</span>
-                    </p>
-                    <p className="text-sm text-gray-900">
-                      <span className="font-bold text-gray-600">Label 2: </span>
-                      <span className="font-bold">{item.label2}</span>
-                    </p>
+                    {[0, 1, 2, 3, 4, 5].map(
+                      (i) =>
+                        fields[i] && (
+                          <div key={i} className="flex-1 min-w-0">
+                            <p className="text-sm text-gray-900 truncate">
+                              <span className="font-bold text-gray-600">
+                                {fields[i].field_name}:{" "}
+                              </span>
+                              <span className="font-bold">
+                                {fields[i].value}
+                              </span>
+                            </p>
+                          </div>
+                        )
+                    )}
                   </div>
-
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm text-gray-900 mb-0.5">
-                      <span className="font-bold text-gray-600">Label 1: </span>
-                      <span className="font-bold">{item.label1}</span>
-                    </p>
-                    <p className="text-sm text-gray-900">
-                      <span className="font-bold text-gray-600">Label 2: </span>
-                      <span className="font-bold">{item.label2}</span>
-                    </p>
-                  </div>
-                </div>
-              </Link>
-            ))
+                </Link>
+              );
+            })
           )}
         </div>
       </div>

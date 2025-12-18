@@ -1,48 +1,19 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import { useParams } from "next/navigation";
-import { BreadcrumbBar, ChangeRequestCard, VersionHistoryCard } from "@/components/shared";
-import { SectionsContainer, UISchema, WidgetProvider } from "@/openg2p-registry-ui-widgets/src";
+import {
+  BreadcrumbBar,
+  ChangeRequestCard,
+  VersionHistoryCard,
+} from "@/components/shared";
+import {
+  SectionsContainer,
+  UISchema,
+  WidgetProvider,
+} from "@/openg2p-registry-ui-widgets/src";
 import { useFetch } from "@/shared/hooks/useFetch";
-
-interface PersonalDetails {
-  name: string;
-  id: string;
-  dob: string;
-  phone: string;
-  mailId: string;
-  village: string;
-  zone: string;
-  area: string;
-}
-
-interface OtherDetail {
-  title: string;
-  items: Array<{ label: string; value: string }>;
-}
-
-interface RegisterDetail {
-  id: string;
-  name: string;
-  personalDetails: PersonalDetails;
-  otherDetails: OtherDetail[];
-  changeRequest: {
-    id: string;
-    title: string;
-    description: string;
-  };
-  versionHistory: {
-    id: string;
-    title: string;
-    description: string;
-    lastUpdatedBy: string;
-    lastUpdatedAt: string;
-    lastApprovedBy: string;
-    lastApprovedAt: string;
-  };
-  tabs: string[];
-}
+import { ResponseBody } from "@/shared";
 
 interface Register {
   register_id: string;
@@ -57,88 +28,60 @@ export default function RegisterDetailPage() {
   const id = params.id as string;
   const type = params.type as string;
 
-  const { data: detail, loading, error, execute } = useFetch<RegisterDetail>();
   const [activeTab, setActiveTab] = useState(0);
 
-  const [uiSchema, setUiSchema] = useState<UISchema | null>(null);
+  /** Fetch UI schema */
+  const { data: dataUISchema } = useFetch<any>({
+    url: `/api/register/${type}/uischema`,
+    deps: [type, id],
+  });
 
-  useEffect(() => {
-    const fetchSchema = async () => {
-      try {
-        const res = await fetch("/api/uischema");
-        const data: UISchema = await res.json();
-        setUiSchema(data);
-      } catch (error) {
-        console.error("Error fetching UI schema:", error);
-      }
-    };
+  /** Fetch all register types */
+  const { data: registersData } = useFetch<ResponseBody>({
+    url: "/api/register/all",
+    deps: [],
+  });
 
-    fetchSchema();
-  }, []);
+  const registers: Register[] =
+    registersData?.response_payload ?? [];
 
+  const currentRegister = useMemo(
+    () =>
+      registers.find(
+        (r) =>
+          r.register_mnemonic.toLowerCase() ===
+          type.toLowerCase()
+      ),
+    [registers, type]
+  );
 
-  const { data: registersData, execute: executeRegisters } = useFetch<Register[]>();
-
-  // Fetch all register types (for labels)
-  useEffect(() => {
-    executeRegisters("/api/register/all");
-  }, [executeRegisters]);
-
-  const currentRegister = registersData?.find(r => r.register_mnemonic.toLowerCase() === type.toLowerCase());
-  const registerTypelabel = currentRegister?.register_subject || "Register";
-
-  useEffect(() => {
-    const requestPayload = {
-      register_id: currentRegister?.register_id,
-      internal_record_id: id,
-    };
-
-    execute(`/api/register/${type}/${id}`, {
+  /** Fetch record details */
+  const { data: recordData } = useFetch<any>({
+    url: currentRegister?.register_id
+      ? `/api/register/${type}/${id}`
+      : null,
+    deps: [currentRegister?.register_id, id, type],
+    enabled: !!currentRegister?.register_id,
+    options: {
       method: "POST",
-      body: JSON.stringify(requestPayload),
-    });
-  }, [id, type, execute]);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-center">Loading...</div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-center text-red-500">Error: {error}</div>
-      </div>
-    );
-  }
-
-  if (!detail) {
-    return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-center text-gray-500">Record not found</div>
-      </div>
-    );
-  }
-
-  const breadcrumb = [
-    { label: registerTypelabel, href: `/register/${type}` },
-    {
-      label: `${detail.name || "Farmer 1"} - ID ${id}`,
-      href: undefined,
+      body: JSON.stringify({
+        register_id: currentRegister?.register_id,
+        internal_record_id: id,
+      }),
     },
-    // { label: detail.tabs[activeTab] || "Tab 01", href: undefined },
-  ];
+  });
 
-  if (loading || !uiSchema) {
-    return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div>Loading...</div>
-      </div>
-    );
-  }
+  const schemaData = recordData?.response_payload?.additional_fields
+  const uiSchema = dataUISchema?.response_payload as UISchema | undefined;
+  const breadcrumb = currentRegister
+    ? [
+      {
+        label: currentRegister.register_subject,
+        href: `/register/${type}`,
+      },
+    ]
+    : [];
+
   const DUMMY_TABS = ["Tab 1", "Tab 2", "Tab 3"];
 
   return (
@@ -148,8 +91,9 @@ export default function RegisterDetailPage() {
       </div>
 
       <div className="px-10 py-6">
+        {/* Tabs */}
         <div className="flex gap-2 mb-6 border-b-4 border-gray-300">
-          {/* {detail.tabs.map((tab, index) => (
+          {DUMMY_TABS.map((tab, index) => (
             <button
               key={index}
               onClick={() => setActiveTab(index)}
@@ -160,48 +104,33 @@ export default function RegisterDetailPage() {
             >
               {tab}
             </button>
-          ))} */}
-
-          {DUMMY_TABS.map((tab, index) => (
-            <button
-              key={index}
-              onClick={() => setActiveTab(index)}
-              className={`px-12 py-3 font-bold transition-all rounded-t-lg ${activeTab === index
-                  ? "bg-black text-white"
-                  : "bg-gray-300 text-gray-700 hover:bg-gray-400"
-                }`}
-            >
-              {tab}
-            </button>
           ))}
-
         </div>
 
-        {activeTab === 0 ? (
+        {/* Content */}
+        {activeTab === 0 && uiSchema && (
           <div className="grid grid-cols-12 gap-6">
-
             <div className="col-span-9">
-              <WidgetProvider>
+              <WidgetProvider schemaData={schemaData}>
                 <SectionsContainer sections={uiSchema.sections} />
               </WidgetProvider>
             </div>
 
             <div className="col-span-3 flex flex-col gap-6">
-              <div className="col-span-3 flex flex-col gap-6">
-                <ChangeRequestCard
-                  registerId={currentRegister?.register_id!}
-                  internalRecordId={id}
-                />
-                <VersionHistoryCard
-                  registerId={currentRegister?.register_id!}
-                  internalRecordId={id}
-                />
-              </div>
+              {currentRegister && (
+                <>
+                  <ChangeRequestCard
+                    registerId={currentRegister.register_id}
+                    internalRecordId={id}
+                  />
+                  <VersionHistoryCard
+                    registerId={currentRegister.register_id}
+                    internalRecordId={id}
+                  />
+                </>
+              )}
             </div>
-
           </div>
-        ) : (
-          <div></div>
         )}
       </div>
     </div>
