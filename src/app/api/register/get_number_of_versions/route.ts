@@ -2,14 +2,6 @@ import { NextResponse } from "next/server";
 
 export async function POST() {
     return NextResponse.json({
-        response_header: {
-            request_id: "req-014",
-            response_status: "SUCCESS",
-            response_error_code: "",
-            response_error_message: "",
-            response_timestamp: new Date().toISOString(),
-        },
-        response_body: {
             pagination_response: null,
             response_payload: {
                 register_id: "25d460ac-50cf-4386-b486-23a4e9b7e254",
@@ -21,5 +13,5 @@ export async function POST() {
                 last_approved_at: "2025-12-17T21:17:20.215562",
             },
         },
-    });
+    );
 }

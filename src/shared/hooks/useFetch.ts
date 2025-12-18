@@ -1,49 +1,91 @@
-import { useState, useCallback } from 'react';
-import {
-    BackendResponse
-} from '@/shared/types';
+import { useState, useCallback, useRef, useEffect } from 'react';
 
+interface UseFetchConfig {
+  url?: string | null;
+  options?: RequestInit;
+  deps?: any[];
+  enabled?: boolean;
+}
 
-// A reusable custom hook for making HTTP requests
-// from Next.js Client --> Next.js server APIs
-// it accepts both post and get request
+export function useFetch<T = any>(config: UseFetchConfig = {}) {
+  const { url = null, options, deps = [], enabled = true } = config;
 
-export function useFetch<T = any>() {
-    const [data, setData] = useState<T | null>(null);
-    const [error, setError] = useState<string | null>(null);
-    const [loading, setLoading] = useState<boolean>(false);
+  const [data, setData] = useState<T | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
-    const execute = useCallback(async (url: string, options?: RequestInit) => {
-        setLoading(true);
-        setError(null);
-        try {
-            const res = await fetch(url, {
-                ...options,
-                headers: {
-                    'Content-Type': 'application/json',
-                    ...options?.headers
-                }
-            });
-            const result = await res.json();
-            if (!res.ok) {
-                const errData = result.catch(() => ({}));
-                throw new Error(errData.error || `Error ${res.status}`);
-            }
-            setData(result);
-            return result;
-        } catch (e) {
-            setError(e instanceof Error ? e.message : 'Unknown error');
-            return null;
-        } finally {
-            setLoading(false);
+  const controllerRef = useRef<AbortController | null>(null);
+
+  const reset = useCallback(() => {
+    if (controllerRef.current) {
+      controllerRef.current.abort();
+      controllerRef.current = null;
+    }
+    setData(null);
+    setError(null);
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    if (!url || !enabled) return;
+
+    if (controllerRef.current) {
+      controllerRef.current.abort();
+    }
+
+    const controller = new AbortController();
+    controllerRef.current = controller;
+
+    const fetchData = async () => {
+      setLoading(true);
+      setError(null);
+
+      try {
+        const res = await fetch(url, {
+          ...options,
+          headers: {
+            'Content-Type': 'application/json',
+            ...options?.headers,
+          },
+          signal: controller.signal,
+        });
+
+        const result = await res.json();
+
+        if (!res.ok) {
+          throw new Error(result?.error || `Error ${res.status}`);
         }
-    }, []);
 
-    const reset = useCallback(() => {
-        setData(null);
-        setError(null);
-        setLoading(false);
-    }, []);
+        setData(result);
+      } catch (e) {
+        if (e instanceof DOMException && e.name === 'AbortError') return;
 
-    return { data, error, loading, execute, reset };
+        setError(e instanceof Error ? e.message : 'Unknown error');
+      } finally {
+        if (controllerRef.current === controller) {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchData();
+
+    return () => {
+      if (controllerRef.current) {
+        controllerRef.current.abort();
+        controllerRef.current = null;
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, deps);
+
+  useEffect(() => {
+    return () => {
+      if (controllerRef.current) {
+        controllerRef.current.abort();
+      }
+    };
+  }, []);
+
+  return { data, error, loading, reset };
 }

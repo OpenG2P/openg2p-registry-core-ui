@@ -22,7 +22,6 @@ const schema: UISchema = {
                                     "widget-label": "Name",
                                     "widget-id": "name",
                                     "widget-data-path": "person.name",
-                                    "widget-data-default": "Sarah Elizabeth",
                                     "widget-required": false,
                                     "widget-readonly": true
                                 },
@@ -32,7 +31,6 @@ const schema: UISchema = {
                                     "widget-label": "ID",
                                     "widget-id": "id",
                                     "widget-data-path": "person.id",
-                                    "widget-data-default": "1234567890",
                                     "widget-required": false,
                                     "widget-readonly": true
                                 },
@@ -42,7 +40,6 @@ const schema: UISchema = {
                                     "widget-label": "Is Married",
                                     "widget-id": "isMarried",
                                     "widget-data-path": "person.isMarried",
-                                    "widget-data-default": false,
                                     "widget-required": false,
                                     "widget-readonly": true
                                 }
@@ -58,7 +55,6 @@ const schema: UISchema = {
                                     "widget-label": "Phone",
                                     "widget-id": "phone",
                                     "widget-data-path": "person.phone",
-                                    "widget-data-default": "12345 67890",
                                     "widget-required": false,
                                     "widget-readonly": true
                                 },
@@ -68,7 +64,6 @@ const schema: UISchema = {
                                     "widget-label": "Mail ID",
                                     "widget-id": "email",
                                     "widget-data-path": "person.email",
-                                    "widget-data-default": "abcd@gmail.com",
                                     "widget-required": false,
                                     "widget-readonly": true
                                 }
@@ -84,7 +79,6 @@ const schema: UISchema = {
                                     "widget-label": "Village",
                                     "widget-id": "village",
                                     "widget-data-path": "address.village",
-                                    "widget-data-default": "Village Name",
                                     "widget-required": false,
                                     "widget-readonly": true
                                 },
@@ -94,7 +88,6 @@ const schema: UISchema = {
                                     "widget-label": "Zone",
                                     "widget-id": "zone",
                                     "widget-data-path": "address.zone",
-                                    "widget-data-default": "South Zone",
                                     "widget-required": false,
                                     "widget-readonly": true
                                 },
@@ -104,7 +97,6 @@ const schema: UISchema = {
                                     "widget-label": "Area",
                                     "widget-id": "area",
                                     "widget-data-path": "address.area",
-                                    "widget-data-default": "Area Name",
                                     "widget-required": false,
                                     "widget-readonly": true
                                 }
@@ -133,7 +125,6 @@ const schema: UISchema = {
                                     "widget-label": "Details",
                                     "widget-id": "details1",
                                     "widget-data-path": "other.details1",
-                                    "widget-data-default": "Details 01",
                                     "widget-required": false,
                                     "widget-readonly": true
                                 },
@@ -143,7 +134,6 @@ const schema: UISchema = {
                                     "widget-label": "Details",
                                     "widget-id": "details2",
                                     "widget-data-path": "other.details2",
-                                    "widget-data-default": "Details 02",
                                     "widget-required": false,
                                     "widget-readonly": true
                                 },
@@ -153,7 +143,6 @@ const schema: UISchema = {
                                     "widget-label": "Details",
                                     "widget-id": "details3",
                                     "widget-data-path": "other.details3",
-                                    "widget-data-default": "Details 03",
                                     "widget-required": false,
                                     "widget-readonly": true
                                 }
@@ -169,7 +158,6 @@ const schema: UISchema = {
                                     "widget-label": "Details",
                                     "widget-id": "details4",
                                     "widget-data-path": "other.details4",
-                                    "widget-data-default": "Details 01",
                                     "widget-required": false,
                                     "widget-readonly": true
                                 },
@@ -179,7 +167,6 @@ const schema: UISchema = {
                                     "widget-label": "Details",
                                     "widget-id": "details5",
                                     "widget-data-path": "other.details5",
-                                    "widget-data-default": "Details 02",
                                     "widget-required": false,
                                     "widget-readonly": true
                                 },
@@ -189,7 +176,6 @@ const schema: UISchema = {
                                     "widget-label": "Details",
                                     "widget-id": "details6",
                                     "widget-data-path": "other.details6",
-                                    "widget-data-default": "Details 03",
                                     "widget-required": false,
                                     "widget-readonly": true
                                 }
@@ -214,7 +200,6 @@ const schema: UISchema = {
                             "widget-label": "Details",
                             "widget-id": "details7",
                             "widget-data-path": "other.details7",
-                            "widget-data-default": "Details 01",
                             "widget-required": false,
                             "widget-readonly": true
                         },
@@ -224,7 +209,6 @@ const schema: UISchema = {
                             "widget-label": "Details",
                             "widget-id": "details8",
                             "widget-data-path": "other.details8",
-                            "widget-data-default": "Details 02",
                             "widget-required": false,
                             "widget-readonly": true
                         },
@@ -234,7 +218,6 @@ const schema: UISchema = {
                             "widget-label": "Details",
                             "widget-id": "details9",
                             "widget-data-path": "other.details9",
-                            "widget-data-default": "Details 03",
                             "widget-required": false,
                             "widget-readonly": true
                         }
@@ -245,6 +228,10 @@ const schema: UISchema = {
     ]
 };
 
+
 export async function GET() {
-    return NextResponse.json(schema);
+    return NextResponse.json({
+        pagination_response: null,
+        response_payload: schema,
+    });
 }

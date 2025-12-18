@@ -1,7 +1,8 @@
-"use client";
+'use client';
 
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { useFetch } from "@/shared/hooks/useFetch";
+import { ResponseBody } from "@/shared/types/backend-api";
 
 interface StatsCardProps {
   stats_endpoint: string;
@@ -14,12 +15,12 @@ interface StatItem {
   register_subject: string;
   total_record_count: number;
 }
-const StatsCard = ({ stats_endpoint, active }: StatsCardProps) => {
-  const { data, loading, error, execute } = useFetch<StatItem[]>();
 
-  useEffect(() => {
-    execute(stats_endpoint);
-  }, [stats_endpoint, execute]);
+const StatsCard = ({ stats_endpoint, active }: StatsCardProps) => {
+  const { data, loading, error } = useFetch<ResponseBody>({
+    url: stats_endpoint,
+    deps: [stats_endpoint],
+  });
 
   const statLabel = useMemo(() => {
     if (stats_endpoint.includes("register")) return "Registers";
@@ -29,20 +30,23 @@ const StatsCard = ({ stats_endpoint, active }: StatsCardProps) => {
     return "Items";
   }, [stats_endpoint]);
 
+  const items = (data?.response_payload as StatItem[]) ?? [];
+
   return (
     <div
       className={`
         flex h-48 w-[225px] flex-col justify-between rounded-3xl
         border-4 px-7 py-6 text-left
-        ${active
-          ? "border-black bg-black text-white"
-          : "border-gray-200 bg-white text-gray-900"
+        ${
+          active
+            ? "border-black bg-black text-white"
+            : "border-gray-200 bg-white text-gray-900"
         }
       `}
     >
       <div className="pointer-events-none">
         <h2 className="mb-4 text-xl font-bold leading-tight">
-          {data?.length ?? 0} {statLabel}
+          {items.length} {statLabel}
         </h2>
 
         {loading ? (
@@ -51,12 +55,14 @@ const StatsCard = ({ stats_endpoint, active }: StatsCardProps) => {
           <p className="text-sm text-red-500">Failed to load stats</p>
         ) : (
           <ul className="space-y-1 text-base leading-relaxed">
-            {data?.map((item) => (
+            {items.map((item) => (
               <li
                 key={item.register_id}
                 className="flex justify-between font-semibold"
               >
-                <span className="font-bold">{item.total_record_count}</span>
+                <span className="font-bold">
+                  {item.total_record_count}
+                </span>
                 <span>{item.register_subject}</span>
               </li>
             ))}

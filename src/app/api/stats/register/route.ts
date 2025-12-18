@@ -7,6 +7,31 @@ import {
 } from '@/shared/types';
 
 
+const REGISTER_SUMMARY = {
+  pagination_response: null,
+  response_payload: [
+    {
+      register_id: '25d460ac-50cf-4386-b486-23a4e9b7e254',
+      register_mnemonic: 'Farmer',
+      register_subject: 'Farmers',
+      total_record_count: 7,
+    },
+    {
+      register_id: '3a8c0f86-b782-4f0a-becb-beede846a340',
+      register_mnemonic: 'Family',
+      register_subject: 'Families',
+      total_record_count: 3,
+    },
+    {
+      register_id: 'b3284590-2865-4a81-b4da-85588070a4a4',
+      register_mnemonic: 'FamilyMember',
+      register_subject: 'FamilyMembers',
+      total_record_count: 6,
+    },
+  ],
+};
+
+
 /**
  * GET /api/stats/register
  * Fetches register summary data with record counts
@@ -21,17 +46,17 @@ export async function GET(req: NextRequest) {
         }
         const backendRequest = createBackendRequest(payload);
 
-        const backendUrl = `${BACKEND_CONFIG.apiUrl}/register/get_register_summary_data`;
+        // const backendUrl = `${BACKEND_CONFIG.apiUrl}/register/get_register_summary_data`;
 
-        const response = await fetch(backendUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(backendRequest),
-        });
+        // const response = await fetch(backendUrl, {
+        //     method: 'POST',
+        //     headers: { 'Content-Type': 'application/json' },
+        //     body: JSON.stringify(backendRequest),
+        // });
 
-        const backendResponse: BackendResponse = await response.json();
-        const data = backendResponse.response_body.response_payload;
-        return NextResponse.json(data);
+        // const backendResponse: BackendResponse = await response.json();
+        // return NextResponse.json(backendResponse.response_body);
+        return NextResponse.json(REGISTER_SUMMARY);
 
     } catch (e) {
         return NextResponse.json(
