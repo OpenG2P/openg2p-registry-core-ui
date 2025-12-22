@@ -16,15 +16,31 @@ const TAB_SCHEMAS: Record<string, UISchema> = {
         "section-editable": false,
         panels: [
           {
-            "panel-id": "panel:farmer.personal.card",
-            "panel-orientation": "vertical",
-            widgets: [
-              { "widget": "text", "widget-type": "input", "widget-label": "First Name", "widget-id": "first_name", "widget-data-path": "farmer.first_name", "widget-readonly": true },
-              { "widget": "text", "widget-type": "input", "widget-label": "Last Name", "widget-id": "last_name", "widget-data-path": "farmer.last_name", "widget-readonly": true },
-              { "widget": "text", "widget-type": "input", "widget-label": "Gender", "widget-id": "gender", "widget-data-path": "farmer.gender", "widget-readonly": true },
-              { "widget": "number", "widget-type": "input", "widget-label": "Age", "widget-id": "age", "widget-data-path": "farmer.age", "widget-readonly": true },
+            "panel-id": "panel-farmer",
+            "panel-orientation": "horizontal",
+            panels: [
+              {
+                "panel-id": "panel:farmer.personal.card",
+                "panel-orientation": "vertical",
+                widgets: [
+                  { "widget": "text", "widget-type": "input", "widget-label": "First Name", "widget-id": "first_name", "widget-data-path": "farmer.first_name", "widget-readonly": true },
+                  { "widget": "text", "widget-type": "input", "widget-label": "Last Name", "widget-id": "last_name", "widget-data-path": "farmer.last_name", "widget-readonly": true },
+                  { "widget": "text", "widget-type": "input", "widget-label": "Gender", "widget-id": "gender", "widget-data-path": "farmer.gender", "widget-readonly": true },
+                  { "widget": "number", "widget-type": "input", "widget-label": "Age", "widget-id": "age", "widget-data-path": "farmer.age", "widget-readonly": true },
+                ],
+              },
+              {
+                "panel-id": "panel:farmer.personal.card1",
+                "panel-orientation": "vertical",
+                widgets: [
+                  { "widget": "text", "widget-type": "input", "widget-label": "First Name", "widget-id": "first_name", "widget-data-path": "farmer.first_name", "widget-readonly": true },
+                  { "widget": "text", "widget-type": "input", "widget-label": "Last Name", "widget-id": "last_name", "widget-data-path": "farmer.last_name", "widget-readonly": true },
+                  { "widget": "text", "widget-type": "input", "widget-label": "Gender", "widget-id": "gender", "widget-data-path": "farmer.gender", "widget-readonly": true },
+                  { "widget": "number", "widget-type": "input", "widget-label": "Age", "widget-id": "age", "widget-data-path": "farmer.age", "widget-readonly": true },
+                ],
+              }
             ],
-          },
+          }
         ],
       },
 
