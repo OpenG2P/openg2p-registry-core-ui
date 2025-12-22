@@ -54,11 +54,20 @@ export async function GET(req: NextRequest) {
     }
 
     const tabs = backendResponse.response_body.response_payload;
-    return NextResponse.json(tabs);
-    */
+    return NextResponse.json(tabs,
+    headers: {
+        "Cache-Control": "public, s-maxage=600, stale-while-revalidate=300",
+    },
+    );
+    */    
 
     /** Mock response */
-    return NextResponse.json(MOCK_TABS_DATA);
+    // HTTP cache for browser/CDN: 10 min + background revalidation
+    return NextResponse.json(MOCK_TABS_DATA, {
+      headers: {
+        "Cache-Control": "public, s-maxage=600, stale-while-revalidate=300",
+      },
+    });
   } catch (e) {
     return NextResponse.json(
       { error: e instanceof Error ? e.message : "Internal Server Error" },

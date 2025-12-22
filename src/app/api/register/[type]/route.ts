@@ -61,7 +61,7 @@ const MOCK_REGISTER_RECORDS = {
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { type: string } }
+  { params }: { params: Promise<{ type: string }> }
 ) {
   try {
     const {

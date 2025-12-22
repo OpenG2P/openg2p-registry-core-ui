@@ -126,6 +126,8 @@ export async function GET(
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(backendRequest),
+      // Next.js server cache: cache backend response for 1 hour
+      next: { revalidate: 3600 },
     });
 
     if (!response.ok) {
