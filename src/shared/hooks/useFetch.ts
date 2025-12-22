@@ -1,20 +1,24 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef, useEffect, useMemo } from "react";
 
 interface UseFetchConfig {
   url?: string | null;
   options?: RequestInit;
-  deps?: any[];
   enabled?: boolean;
 }
 
-export function useFetch<T = any>(config: UseFetchConfig = {}) {
-  const { url = null, options, deps = [], enabled = true } = config;
-
+export function useFetch<T = any>({
+  url = null,
+  options,
+  enabled = true,
+}: UseFetchConfig = {}) {
   const [data, setData] = useState<T | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
   const controllerRef = useRef<AbortController | null>(null);
+
+  // Memoize options to prevent infinite loops
+  const optionsString = useMemo(() => JSON.stringify(options), [options]);
 
   const reset = useCallback(() => {
     if (controllerRef.current) {
@@ -26,8 +30,17 @@ export function useFetch<T = any>(config: UseFetchConfig = {}) {
     setLoading(false);
   }, []);
 
-  useEffect(() => {
-    if (!url || !enabled) return;
+  // Manual execute method for on-demand API calls
+  const execute = useCallback(async (
+    executeUrl?: string,
+    executeOptions?: RequestInit
+  ): Promise<T | null> => {
+    const finalUrl = executeUrl || url;
+    const finalOptions = executeOptions || options;
+
+    if (!finalUrl) {
+      throw new Error('URL is required for execute');
+    }
 
     if (controllerRef.current) {
       controllerRef.current.abort();
@@ -36,56 +49,53 @@ export function useFetch<T = any>(config: UseFetchConfig = {}) {
     const controller = new AbortController();
     controllerRef.current = controller;
 
-    const fetchData = async () => {
-      setLoading(true);
-      setError(null);
+    setLoading(true);
+    setError(null);
 
-      try {
-        const res = await fetch(url, {
-          ...options,
-          headers: {
-            'Content-Type': 'application/json',
-            ...options?.headers,
-          },
-          signal: controller.signal,
-        });
+    try {
+      const res = await fetch(finalUrl, {
+        ...finalOptions,
+        headers: {
+          "Content-Type": "application/json",
+          ...finalOptions?.headers,
+        },
+        signal: controller.signal,
+      });
 
-        const result = await res.json();
-
-        if (!res.ok) {
-          throw new Error(result?.error || `Error ${res.status}`);
-        }
-
-        setData(result);
-      } catch (e) {
-        if (e instanceof DOMException && e.name === 'AbortError') return;
-
-        setError(e instanceof Error ? e.message : 'Unknown error');
-      } finally {
-        if (controllerRef.current === controller) {
-          setLoading(false);
-        }
+      const result = await res.json();
+      if (!res.ok) {
+        throw new Error(result?.error || `Error ${res.status}`);
       }
-    };
 
-    fetchData();
-
-    return () => {
-      if (controllerRef.current) {
-        controllerRef.current.abort();
-        controllerRef.current = null;
+      setData(result);
+      return result;
+    } catch (e) {
+      if (e instanceof DOMException && e.name === "AbortError") {
+        return null;
       }
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, deps);
+      const errorMessage = e instanceof Error ? e.message : "Unknown error";
+      setError(errorMessage);
+      throw e;
+    } finally {
+      if (controllerRef.current === controller) {
+        setLoading(false);
+      }
+    }
+  }, [url, optionsString]);
 
+  // Auto-fetch using execute
   useEffect(() => {
+    if (!url || !enabled) return;
+
+    // Fetch data on mount
+    execute(url, options);
+
     return () => {
       if (controllerRef.current) {
         controllerRef.current.abort();
       }
     };
-  }, []);
+  }, [url, enabled, optionsString]);
 
-  return { data, error, loading, reset };
+  return { data, error, loading, reset, execute };
 }

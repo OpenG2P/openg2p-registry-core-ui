@@ -2,35 +2,68 @@
 
 import { useMemo } from "react";
 import { useFetch } from "@/shared/hooks/useFetch";
-import { ResponseBody } from "@/shared/types/backend-api";
 
 interface StatsCardProps {
   stats_endpoint: string;
   active?: boolean;
 }
 
-interface StatItem {
-  register_id: string;
-  register_mnemonic: string;
-  register_subject: string;
-  total_record_count: number;
-}
 
 const StatsCard = ({ stats_endpoint, active }: StatsCardProps) => {
-  const { data, loading, error } = useFetch<ResponseBody>({
+  const { data, loading, error } = useFetch<any>({
     url: stats_endpoint,
-    deps: [stats_endpoint],
   });
 
-  const statLabel = useMemo(() => {
-    if (stats_endpoint.includes("register")) return "Registers";
-    if (stats_endpoint.includes("change")) return "Change Requests";
-    if (stats_endpoint.includes("incoming")) return "Incoming Messages";
-    if (stats_endpoint.includes("outgoing")) return "Outgoing Messages";
-    return "Items";
-  }, [stats_endpoint]);
+  const { title, rows } = useMemo(() => {
+    if (!data) return { title: "Items", rows: [] };
 
-  const items = (data?.response_payload as StatItem[]) ?? [];
+    /** Register stats */
+    if (Array.isArray(data)) {
+      return {
+        title: "Registers",
+        rows: data.map((item) => ({
+          id: item.register_id,
+          label: item.register_subject,
+          value: item.total_record_count,
+        })),
+      };
+    }
+
+    /** Change request stats */
+    if (stats_endpoint.includes("change")) {
+      return {
+        title: "Change Requests",
+        rows: [
+          { id: "approved", label: "Approved", value: data.approved },
+          { id: "pending", label: "Pending", value: data.pending },
+        ],
+      };
+    }
+
+    /** Incoming message stats */
+    if (stats_endpoint.includes("incoming")) {
+      return {
+        title: "Incoming Messages",
+        rows: [
+          { id: "partners", label: "Partners", value: data.partners },
+          { id: "models", label: "Data Models", value: data.data_models },
+        ],
+      };
+    }
+
+    /** Outgoing message stats */
+    if (stats_endpoint.includes("outgoing")) {
+      return {
+        title: "Outgoing Messages",
+        rows: [
+          { id: "topics", label: "Topics", value: data.topics },
+          { id: "models", label: "Data Models", value: data.data_models },
+        ],
+      };
+    }
+
+    return { title: "Items", rows: [] };
+  }, [data, stats_endpoint]);
 
   return (
     <div
@@ -46,7 +79,7 @@ const StatsCard = ({ stats_endpoint, active }: StatsCardProps) => {
     >
       <div className="pointer-events-none">
         <h2 className="mb-4 text-xl font-bold leading-tight">
-          {items.length} {statLabel}
+          {rows.reduce((sum, r) => sum + r.value, 0)} {title}
         </h2>
 
         {loading ? (
@@ -55,15 +88,13 @@ const StatsCard = ({ stats_endpoint, active }: StatsCardProps) => {
           <p className="text-sm text-red-500">Failed to load stats</p>
         ) : (
           <ul className="space-y-1 text-base leading-relaxed">
-            {items.map((item) => (
+            {rows.map((row) => (
               <li
-                key={item.register_id}
+                key={row.id}
                 className="flex justify-between font-semibold"
               >
-                <span className="font-bold">
-                  {item.total_record_count}
-                </span>
-                <span>{item.register_subject}</span>
+                <span className="font-bold">{row.value}</span>
+                <span>{row.label}</span>
               </li>
             ))}
           </ul>

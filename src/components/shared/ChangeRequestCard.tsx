@@ -17,7 +17,6 @@ export default function ChangeRequestCard({
     url: registerId && internalRecordId
       ? "/api/register/get_number_of_pending_change_logs"
       : null,
-    deps: [registerId, internalRecordId],
     enabled: !!registerId && !!internalRecordId,
     options: {
       method: "POST",
