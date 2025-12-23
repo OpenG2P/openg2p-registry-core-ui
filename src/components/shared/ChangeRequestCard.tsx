@@ -7,9 +7,11 @@ import { ResponseBody } from "@/shared/types/backend-api";
 interface Props {
   registerId: string;
   internalRecordId: string;
+  type: string;
 }
 
 export default function ChangeRequestCard({
+  type,
   registerId,
   internalRecordId,
 }: Props) {
@@ -58,7 +60,11 @@ export default function ChangeRequestCard({
         </p>
       )}
 
-      <ViewAll href="/register/change-requests" label="Know More" />
+      <ViewAll
+        href={`/register/${type}/${internalRecordId}/change-request`}
+        label="Know More"
+      />
+
     </div>
   );
 }

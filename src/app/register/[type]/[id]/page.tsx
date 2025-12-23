@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import {
   BreadcrumbBar,
   ChangeRequestCard,
+  RegisterPageLayout,
   VersionHistoryCard,
 } from "@/components/shared";
 import {
@@ -21,6 +22,10 @@ interface Register {
   register_subject: string;
   register_description: string;
   master_register_id: string;
+}
+
+interface Tab {
+  label: string;
 }
 
 export default function RegisterDetailPage() {
@@ -82,57 +87,41 @@ export default function RegisterDetailPage() {
     ]
     : [];
 
-  const DUMMY_TABS = ["Tab 1", "Tab 2", "Tab 3"];
+  const DUMMY_TABS: Tab[] = [{ label: "Tab 1" }, { label: "Tab 2" }, { label: "Tab 3" }];
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="px-10 py-4 bg-white border-b border-gray-300">
-        <BreadcrumbBar breadcrumb={breadcrumb} />
-      </div>
-
-      <div className="px-10 py-6">
-        {/* Tabs */}
-        <div className="flex gap-2 mb-6 border-b-4 border-gray-300">
-          {DUMMY_TABS.map((tab, index) => (
-            <button
-              key={index}
-              onClick={() => setActiveTab(index)}
-              className={`px-12 py-3 font-bold transition-all rounded-t-lg ${activeTab === index
-                ? "bg-black text-white"
-                : "bg-gray-300 text-gray-700 hover:bg-gray-400"
-                }`}
-            >
-              {tab}
-            </button>
-          ))}
-        </div>
-
-        {/* Content */}
-        {activeTab === 0 && uiSchema && (
-          <div className="grid grid-cols-12 gap-6">
-            <div className="col-span-9">
-              <WidgetProvider schemaData={schemaData}>
-                <SectionsContainer sections={uiSchema.sections} />
-              </WidgetProvider>
-            </div>
-
-            <div className="col-span-3 flex flex-col gap-6">
-              {currentRegister && (
-                <>
-                  <ChangeRequestCard
-                    registerId={currentRegister.register_id}
-                    internalRecordId={id}
-                  />
-                  <VersionHistoryCard
-                    registerId={currentRegister.register_id}
-                    internalRecordId={id}
-                  />
-                </>
-              )}
-            </div>
+    <RegisterPageLayout
+      breadcrumb={breadcrumb}
+      tabs={DUMMY_TABS}
+      activeTab={activeTab}
+      onTabChange={setActiveTab}
+    >
+      {/* Content */}
+      {activeTab === 0 && uiSchema && (
+        <div className="grid grid-cols-12 gap-6">
+          <div className="col-span-9">
+            <WidgetProvider schemaData={schemaData}>
+              <SectionsContainer sections={uiSchema.sections} />
+            </WidgetProvider>
           </div>
-        )}
-      </div>
-    </div>
+
+          <div className="col-span-3 flex flex-col gap-6">
+            {currentRegister && (
+              <>
+                <ChangeRequestCard
+                  type={type}
+                  registerId={currentRegister.register_id}
+                  internalRecordId={id}
+                />
+                <VersionHistoryCard
+                  registerId={currentRegister.register_id}
+                  internalRecordId={id}
+                />
+              </>
+            )}
+          </div>
+        </div>
+      )}
+    </RegisterPageLayout>
   );
 }
