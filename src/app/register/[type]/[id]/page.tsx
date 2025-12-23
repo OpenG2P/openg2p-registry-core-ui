@@ -5,7 +5,7 @@ import { useParams } from 'next/navigation';
 import {
   BreadcrumbBar,
   ChangeRequestCard,
-  RegisterPageLayout,
+  RegisterTabsLayout,
   VersionHistoryCard,
 } from '@/components/shared';
 import {
@@ -164,7 +164,7 @@ export default function RegisterDetailPage() {
 
   return (
 
-    <RegisterPageLayout
+    <RegisterTabsLayout
       breadcrumb={breadcrumbItems}
       tabsData={tabsData}
       activeTab={activeTabIndex}
@@ -189,12 +189,13 @@ export default function RegisterDetailPage() {
               activeTabId={activeTabId}
             />
             <VersionHistoryCard
+              type={registerType}
               registerId={currentRegister.register_id}
               internalRecordId={recordId}
             />
           </div>
         </div>
       )}
-    </RegisterPageLayout>
+    </RegisterTabsLayout>
   );
 }

@@ -23,7 +23,7 @@ interface Props {
     children: ReactNode;
 }
 
-export default function RegisterPageLayout({
+export default function RegisterTabsLayout({
     breadcrumb,
     tabsData,
     activeTab,

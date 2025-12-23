@@ -5,18 +5,18 @@ import { useFetch } from "@/shared/hooks/useFetch";
 import { ResponseBody } from "@/shared/types/backend-api";
 
 interface Props {
+  type: string;
   registerId: string;
   internalRecordId: string;
 }
 
 export default function VersionHistoryCard({
+  type,
   registerId,
   internalRecordId,
 }: Props) {
   const { data, loading } = useFetch<ResponseBody>({
-    url: registerId && internalRecordId
-      ? "/api/register/get_number_of_versions"
-      : null,
+    url: `/api/register/${type}/${registerId}/get_number_of_versions`,
     enabled: !!registerId && !!internalRecordId,
     options: {
       method: "POST",
@@ -29,14 +29,14 @@ export default function VersionHistoryCard({
 
   const payload =
     data?.response_payload as
-      | {
-          number_of_versions: number;
-          last_updated_by: string;
-          last_updated_at: string;
-          last_approved_by?: string;
-          last_approved_at?: string;
-        }
-      | undefined;
+    | {
+      number_of_versions: number;
+      last_updated_by: string;
+      last_updated_at: string;
+      last_approved_by?: string;
+      last_approved_at?: string;
+    }
+    | undefined;
 
   if (loading) {
     return (

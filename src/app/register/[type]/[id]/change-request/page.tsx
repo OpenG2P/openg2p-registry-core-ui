@@ -2,10 +2,9 @@
 
 import { useMemo, useState, useEffect, useCallback } from 'react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
-import { RegisterPageLayout } from '@/components/shared';
+import { RegisterTabsLayout } from '@/components/shared';
 import ChangeLogList from '@/components/shared/ChangeLogList';
 import { useFetch } from '@/shared/hooks/useFetch';
-import { useChangeLogs } from '@/shared/hooks/useChangeLogs';
 
 interface TabConfig {
   'tab-id': string;
@@ -97,11 +96,20 @@ export default function ChangeRequestPage() {
     [tabsData, router, type, id]
   );
 
-  const { data, loading } = useChangeLogs(type, id);
+  const { data, loading } = useFetch<any>({
+    url: `/api/register/${type}/${id}/change_request/get_change_logs`,
+    enabled: !!id && !!type,
+    options: {
+      method: "POST",
+      body: JSON.stringify({
+        register_id: id,
+      }),
+    },
+  });
   const logs = data?.change_logs ?? [];
 
   return (
-    <RegisterPageLayout
+    <RegisterTabsLayout
       breadcrumb={breadcrumb}
       tabsData={tabsData}
       activeTab={activeTabIndex}
@@ -124,6 +132,6 @@ export default function ChangeRequestPage() {
           <ChangeLogList logs={logs} />
         )}
       </div>
-    </RegisterPageLayout>
+    </RegisterTabsLayout>
   );
 }

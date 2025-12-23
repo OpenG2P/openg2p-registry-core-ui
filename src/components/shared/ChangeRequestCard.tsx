@@ -16,10 +16,7 @@ export default function ChangeRequestCard({
   activeTabId,
 }: Props) {
   const { data, loading } = useFetch<ResponseBody>({
-    url:
-      registerId && internalRecordId
-        ? "/api/register/get_number_of_pending_change_logs"
-        : null,
+    url: `/api/register/${type}/${registerId}/get_number_of_pending_change_logs`,
     enabled: !!registerId && !!internalRecordId,
     options: {
       method: "POST",
@@ -33,8 +30,8 @@ export default function ChangeRequestCard({
   const count =
     (
       data?.response_payload as
-        | { number_of_pending_change_logs: number }
-        | undefined
+      | { number_of_pending_change_logs: number }
+      | undefined
     )?.number_of_pending_change_logs ?? 0;
 
   const params = new URLSearchParams();
@@ -42,9 +39,8 @@ export default function ChangeRequestCard({
     params.set("tab", activeTabId);
   }
 
-  const href = `/register/${type}/${internalRecordId}/change-request${
-    params.toString() ? `?${params.toString()}` : ""
-  }`;
+  const href = `/register/${type}/${internalRecordId}/change-request${params.toString() ? `?${params.toString()}` : ""
+    }`;
 
   if (loading) {
     return (
