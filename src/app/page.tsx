@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { StatsCard, RegisterDropdown, SearchBar } from '@/components/ui';
 import { useFetch } from '@/shared/hooks/useFetch';
-import { ResponseBody } from '@/shared/types/backend-api';
 
 interface Register {
   register_id: string;
@@ -14,7 +13,7 @@ interface Register {
   master_register_id: string | null;
 }
 
-type ActiveStatsCard = 'registers' | 'change' | 'incoming' | 'outgoing';
+type ActiveStatsCard = 'registers' | 'change_request' | 'incoming_message' | 'outgoing_message';
 
 export default function Home() {
   const router = useRouter();
@@ -23,21 +22,19 @@ export default function Home() {
     useState<ActiveStatsCard>('registers');
   const [selectedRegister, setSelectedRegister] = useState('select');
 
-  /** useFetch always returns ResponseBody */
-  const { data } = useFetch<ResponseBody>({
+  const { data: registers } = useFetch<Register[]>({
     url: '/api/register/all',
-    deps: [],
   });
 
   const searchPlaceholders: Record<ActiveStatsCard, string> = {
     registers: 'Search Registers',
-    change: 'Search Change Requests',
-    incoming: 'Search Incoming Messages',
-    outgoing: 'Search Outgoing Messages',
+    change_request: 'Search Change Requests',
+    incoming_message: 'Search Incoming Messages',
+    outgoing_message: 'Search Outgoing Messages',
   };
 
   const registerList =
-    (data?.response_payload as Register[] | undefined)?.map((register) => ({
+    registers?.map((register) => ({
       value: register.register_mnemonic.toLowerCase(),
       label: register.register_subject,
     })) ?? [];
@@ -66,9 +63,9 @@ export default function Home() {
       Exclude<ActiveStatsCard, 'registers'>,
       string
     > = {
-      change: '/change_request',
-      incoming: '/incoming_message',
-      outgoing: '/outgoing_message',
+      change_request: '/change_request',
+      incoming_message: '/incoming_message',
+      outgoing_message: '/outgoing_message',
     };
 
     router.push(
@@ -80,7 +77,7 @@ export default function Home() {
     <div className="min-h-screen bg-white text-gray-900">
       <div className="mx-auto flex max-w-6xl flex-col items-center px-6 py-14 space-y-14">
         <div className="flex w-full max-w-5xl flex-wrap items-stretch justify-between gap-6">
-          {(['registers', 'change', 'incoming', 'outgoing'] as ActiveStatsCard[]).map(
+          {(['registers', 'change_request', 'incoming_message', 'outgoing_message'] as ActiveStatsCard[]).map(
             (type) => (
               <button
                 key={type}

@@ -1,17 +1,18 @@
-export interface ChangeLog {
-    change_log_id: string;
-    register_id: string;
-    internal_record_id: string;
-    operation_id: string;
-    source_partner_id: string;
-    created_by: string;
-    created_at: string;
-    approval_status: "PENDING" | "APPROVED" | "REJECTED";
-    approved_by: string | null;
-    approved_at: string | null;
-    change_payload: Record<string, any>;
+export interface ChangeDocument {
+    doc_id: string;
+    doc_name: string;
+    doc_url?: string;
 }
 
-export interface ChangeLogResponse {
-    change_logs: ChangeLog[];
+export interface ChangeLog {
+    change_log_id: string;
+    approval_status: 'PENDING' | 'APPROVED' | 'REJECTED';
+    created_at: string;
+
+    verification: {
+        required: number;
+        completed: number;
+    };
+
+    documents: ChangeDocument[];
 }

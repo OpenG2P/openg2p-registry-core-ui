@@ -10,7 +10,7 @@ export function useChangeLogs(
             registerId && internalRecordId
                 ? "/api/register/get_change_logs"
                 : null,
-        deps: [registerId, internalRecordId],
+        // deps: [registerId, internalRecordId],
         enabled: !!registerId && !!internalRecordId,
         options: {
             method: "POST",

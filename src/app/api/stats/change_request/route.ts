@@ -1,40 +1,47 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
 import {
-    createBackendRequest,
-    BACKEND_CONFIG,
-    BackendResponse,
-    RequestBody
-} from '@/shared/types';
+  createBackendRequest,
+  BACKEND_CONFIG,
+  BackendResponse,
+  RequestBody,
+} from "@/shared/types";
 
-/**
- * GET /api/stats/change_request
- * Fetches all change_request from the backend
- * Backend endpoint: POST /register/get_change_request_summary_data
- */
-export async function GET(req: NextRequest) {
-    try {
+/** Demo response */
+const MOCK_CHANGE_REQUEST_STATS = {
+  total_change_requests: 1900,
+  approved: 700,
+  pending: 1900,
+};
 
-        const payload:RequestBody = {
-            pagination_request: {},
-            request_payload:{},
-        }
-        const backendRequest = createBackendRequest(payload);
-        const backendUrl = `${BACKEND_CONFIG.apiUrl}/register/get_change_request_summary_data`;
+export async function GET(_req: NextRequest) {
+  try {
+    /*
+    const payload: RequestBody = {
+      pagination_request: {},
+      request_payload: {},
+    };
 
-        const response = await fetch(backendUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(backendRequest),
-        });
+    const backendRequest = createBackendRequest(payload);
+    const backendUrl = `${BACKEND_CONFIG.apiUrl}/register/get_change_request_summary_data`;
 
-        const backendResponse: BackendResponse = await response.json();
-        const data = backendResponse.response_body.response_payload;
-        return NextResponse.json(data);
+    const response = await fetch(backendUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(backendRequest),
+    });
 
-    } catch (e) {
-        return NextResponse.json(
-            { error: e instanceof Error ? e.message : 'Internal Server Error' },
-            { status: 500 }
-        );
-    }
+    const backendResponse: BackendResponse = await response.json();
+    return NextResponse.json(
+      backendResponse.response_body.response_payload
+    );
+    */
+
+    /** Mock response */
+    return NextResponse.json(MOCK_CHANGE_REQUEST_STATS);
+  } catch (e) {
+    return NextResponse.json(
+      { error: e instanceof Error ? e.message : "Internal Server Error" },
+      { status: 500 }
+    );
+  }
 }

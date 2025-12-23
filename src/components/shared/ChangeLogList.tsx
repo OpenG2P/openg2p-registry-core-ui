@@ -10,37 +10,66 @@ export default function ChangeLogList({ logs }: Props) {
             {logs.map((log) => (
                 <div
                     key={log.change_log_id}
-                    className="border rounded-lg bg-white p-4"
+                    className="grid grid-cols-1 md:grid-cols-3 gap-4 border rounded-lg bg-white p-4"
                 >
-                    {/* Header */}
-                    <div className="flex justify-between items-center mb-2">
+                    <div className="space-y-1">
                         <div className="text-sm font-semibold">
-                            {log.approval_status}
+                            Change ID: {log.change_log_id}
                         </div>
-                        <div className="text-xs text-gray-500">
-                            {new Date(log.created_at).toLocaleString()}
+                        <div className="text-sm">
+                            Status:{" "}
+                            <span className="font-medium">
+                                {log.approval_status}
+                            </span>
+                        </div>
+                        <div className="text-sm">
+                            Change Date: {" "}
+                            <span className="font-medium">
+                                {new Date(log.created_at).toLocaleString()}
+                            </span>
                         </div>
                     </div>
 
-                    {/* Meta */}
-                    <div className="text-xs text-gray-600 mb-3">
-                        Created by <span className="font-medium">{log.created_by}</span>
+                    <div className="space-y-1 text-sm">
+                        <div>
+                            Verification Required:{" "}
+                            <span className="font-medium">
+                                {log.verification.required}
+                            </span>
+                        </div>
+                        <div>
+                            Verification Done:{" "}
+                            <span className="font-medium">
+                                {log.verification.completed}
+                            </span>
+                        </div>
+                        <div>
+                            Docs Uploaded:{" "}
+                            <span className="font-medium">
+                                {log.documents.length}
+                            </span>
+                        </div>
                     </div>
 
-                    {/* Payload */}
-                    <div className="grid grid-cols-2 gap-2 text-sm">
-                        {Object.entries(log.change_payload).map(
-                            ([key, value]) => (
-                                <div key={key} className="flex gap-2">
-                                    <span className="font-medium text-gray-700">
-                                        {key}:
-                                    </span>
-                                    <span className="text-gray-600">
-                                        {String(value)}
-                                    </span>
-                                </div>
-                            )
+                    <div className="space-y-1 text-sm">
+                        <div className="font-medium text-gray-700">
+                            Documents
+                        </div>
+
+                        {log.documents.length === 0 && (
+                            <div className="text-gray-400 text-xs">
+                                No documents
+                            </div>
                         )}
+
+                        {log.documents.map((doc) => (
+                            <div
+                                key={doc.doc_id}
+                                className="text-blue-600 cursor-pointer"
+                            >
+                                {doc.doc_name}
+                            </div>
+                        ))}
                     </div>
                 </div>
             ))}

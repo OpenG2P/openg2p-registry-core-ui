@@ -17,7 +17,6 @@ export default function VersionHistoryCard({
     url: registerId && internalRecordId
       ? "/api/register/get_number_of_versions"
       : null,
-    deps: [registerId, internalRecordId],
     enabled: !!registerId && !!internalRecordId,
     options: {
       method: "POST",

@@ -1,49 +1,123 @@
 'use client';
 
-import { useState } from "react";
-import { useParams } from "next/navigation";
-import { RegisterPageLayout } from "@/components/shared";
-import { useChangeLogs } from "@/shared/hooks/useChangeLogs";
-import ChangeLogList from "@/components/shared/ChangeLogList";
+import { useMemo, useState, useEffect, useCallback } from 'react';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import { RegisterPageLayout } from '@/components/shared';
+import ChangeLogList from '@/components/shared/ChangeLogList';
+import { useFetch } from '@/shared/hooks/useFetch';
+import { useChangeLogs } from '@/shared/hooks/useChangeLogs';
 
-const DUMMY_TABS = [{ label: "Tab 1" }, { label: "Tab 2" }, { label: "Tab 3" }];
+interface TabConfig {
+  'tab-id': string;
+  'tab-label': string;
+  order: number;
+}
 
-const STATUS_MAP = ["PENDING", "APPROVED", "REJECTED"] as const;
+interface TabsApiResponse {
+  tabs: TabConfig[];
+}
 
-export default function ChangeLogPage() {
+export default function ChangeRequestPage() {
   const { type, id } = useParams<{ type: string; id: string }>();
-  const [activeTab, setActiveTab] = useState(0);
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
-  const breadcrumb = [
-    { label: "Registers", href: `/register/${type}` },
-    { label: "Record", href: `/register/${type}/${id}` },
-    { label: "Change Log" },
-  ];
+  const tabFromUrl = searchParams.get('tab');
 
-  const status = STATUS_MAP[activeTab];
+  const [activeTabIndex, setActiveTabIndex] = useState(0);
 
-  const { data, loading } = useChangeLogs(
-    type,
-    id,
+  const { data: tabsData } = useFetch<TabsApiResponse>({
+    url: `/api/register/${type}/tabs`,
+  });
+
+  useEffect(() => {
+    if (!tabsData?.tabs?.length || !tabFromUrl) return;
+
+    const idx = tabsData.tabs.findIndex(
+      t => t['tab-id'] === tabFromUrl
+    );
+
+    if (idx >= 0) setActiveTabIndex(idx);
+  }, [tabsData, tabFromUrl]);
+
+  const activeTabId = useMemo(
+    () => tabsData?.tabs?.[activeTabIndex]?.['tab-id'],
+    [tabsData, activeTabIndex]
   );
 
-const logs = data?.change_logs ?? [];
+  const { data: registers } = useFetch<any[]>({
+    url: '/api/register/all',
+  });
 
+  const currentRegister = useMemo(
+    () =>
+      registers?.find(
+        r => r.register_mnemonic.toLowerCase() === type.toLowerCase()
+      ),
+    [registers, type]
+  );
+
+  const breadcrumb = useMemo(() => {
+    const activeTab = tabsData?.tabs?.[activeTabIndex];
+
+    return [
+      {
+        label: currentRegister?.register_subject ?? 'Register',
+        href: `/register/${type}`,
+      },
+      {
+        label: `ID-${id}`,
+        href: `/register/${type}/${id}`,
+      },
+      ...(activeTab
+        ? [
+          {
+            label: activeTab['tab-label'],
+            href: `/register/${type}/${id}?tab=${activeTab['tab-id']}`,
+          },
+        ]
+        : []),
+      {
+        label: 'Change Request',
+      },
+    ];
+  }, [currentRegister, tabsData, activeTabIndex, type, id]);
+
+  const handleTabChange = useCallback(
+    (index: number) => {
+      const tabId = tabsData?.tabs?.[index]?.['tab-id'];
+      if (!tabId) return;
+
+      setActiveTabIndex(index);
+
+      router.push(
+        `/register/${type}/${id}/change-request?tab=${tabId}`
+      );
+    },
+    [tabsData, router, type, id]
+  );
+
+  const { data, loading } = useChangeLogs(type, id);
+  const logs = data?.change_logs ?? [];
 
   return (
     <RegisterPageLayout
       breadcrumb={breadcrumb}
-      tabs={DUMMY_TABS}
-      activeTab={activeTab}
-      onTabChange={setActiveTab}
+      tabsData={tabsData}
+      activeTab={activeTabIndex}
+      onTabChange={handleTabChange}
     >
-      <div className="bg-white rounded-lg border p-4">
+      <div className="bg-white rounded-lg p-4">
         {loading && (
-          <p className="text-sm text-gray-500">Loading change logs…</p>
+          <p className="text-sm text-gray-500">
+            Loading change logs…
+          </p>
         )}
 
         {!loading && logs.length === 0 && (
-          <p className="text-sm text-gray-400">No change logs found</p>
+          <p className="text-sm text-gray-400">
+            No change requests found
+          </p>
         )}
 
         {!loading && logs.length > 0 && (

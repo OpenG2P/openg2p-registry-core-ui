@@ -1,13 +1,12 @@
 'use client';
 
-import { useMemo } from "react";
-import { useParams, useSearchParams, useRouter } from "next/navigation";
-import Link from "next/link";
-import { TopBar } from "@/components/shared";
-import { SelectedFilters } from "@/features/filter/components";
-import { useRegistryFilters } from "@/features/filter/hooks/useRegistryFilters";
-import { useFetch } from "@/shared/hooks/useFetch";
-import { ResponseBody } from "@/shared/types";
+import { useMemo, useCallback } from 'react';
+import { useParams, useSearchParams, useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { TopBar } from '@/components/shared';
+import { SelectedFilters } from '@/features/filter/components';
+import { useRegistryFilters } from '@/features/filter/hooks/useRegistryFilters';
+import { useFetch } from '@/shared/hooks/useFetch';
 
 interface Register {
   register_id: string;
@@ -17,21 +16,41 @@ interface Register {
   master_register_id: string | null;
 }
 
+interface DisplayField {
+  field_name: string;
+  value: string;
+  order: number;
+}
+
 interface RegisterRecord {
   internal_record_id: string;
   functional_record_id: string;
   record_name: string;
-  image: string;
-  display_fields: {
-    field_name: string;
-    value: string;
-    order: number;
-  }[];
+  image: string | null;
+  display_fields: DisplayField[];
+}
+
+interface PaginationInfo {
+  number_of_pages: number;
+  number_of_items: number;
+}
+
+interface RegisterRecordsApiResponse {
+  records: RegisterRecord[];
+  pagination: PaginationInfo;
+}
+
+interface PaginationState {
+  page: number;
+  limit: number;
+  total: number;
+  pageStart: number;
+  pageEnd: number;
 }
 
 export default function RegisterTypePage() {
   const router = useRouter();
-  const params = useParams();
+  const routeParams = useParams<{ type: string }>();
   const searchParams = useSearchParams();
 
   const {
@@ -42,85 +61,85 @@ export default function RegisterTypePage() {
     clearAllFilters,
   } = useRegistryFilters();
 
-  const type = params.type as string;
-  const search = searchParams.get("search") || undefined;
-  const page = parseInt(searchParams.get("page") || "1");
-  const limit = parseInt(searchParams.get("limit") || "7");
+  const registerType = routeParams.type;
+  const searchQuery = searchParams.get('search') || undefined;
+  const currentPage = parseInt(searchParams.get('page') || '1', 10);
+  const pageSize = parseInt(searchParams.get('limit') || '7', 10);
 
-  /** fetch all registers */
-  const { data: registersData } = useFetch<ResponseBody>({
-    url: "/api/register/all",
-    deps: [],
+  const { data: registersData } = useFetch<Register[]>({
+    url: '/api/register/all',
   });
 
-  const registers = (registersData?.response_payload as Register[]) ?? [];
-
   const currentRegister = useMemo(
-    () =>
-      registers.find(
-        (r) => r.register_mnemonic.toLowerCase() === type.toLowerCase()
-      ),
-    [registers, type]
+    () => registersData?.find(
+      (register) => register.register_mnemonic.toLowerCase() === registerType.toLowerCase()
+    ),
+    [registersData, registerType]
   );
 
-  const registerTypeLabel =
-    currentRegister?.register_subject ?? "Register";
+  const registerTypeLabel = currentRegister?.register_subject ?? 'Register';
 
-  /** fetch records for selected register */
-  const {
-    data: recordsData,
-    loading,
-  } = useFetch<ResponseBody>({
-    url: currentRegister?.register_id
-      ? `/api/register/${type}`
-      : null,
-    deps: [type, page, limit, search, currentRegister?.register_id],
+  const { data: recordsData, loading: isLoadingRecords } = useFetch<RegisterRecordsApiResponse>({
+    url: `/api/register/${registerType}`,
     enabled: !!currentRegister?.register_id,
     options: {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify({
-        pagination_request: {
-          current_page: page,
-          page_size: limit,
-          search_text: search,
-        },
-        request_payload: {
-          register_id: currentRegister?.register_id,
-        },
+        current_page: currentPage,
+        page_size: pageSize,
+        search_text: searchQuery,
+        register_id: currentRegister?.register_id,
       }),
     },
   });
 
-  const items = (recordsData?.response_payload as RegisterRecord[]) ?? [];
-  const paginationResponse = recordsData?.pagination_response;
+  const records = recordsData?.records ?? [];
+  const paginationInfo = recordsData?.pagination;
 
-  const pagination = {
-    page,
-    limit,
-    total: (paginationResponse?.number_of_pages || 1) * limit,
-    pageStart: (page - 1) * limit + 1,
-    pageEnd: (page - 1) * limit + items.length,
-  };
+  const pagination = useMemo<PaginationState>(() => {
+    const totalPages = paginationInfo?.number_of_pages || 1;
+    const totalItems = totalPages * pageSize;
+    const startIndex = (currentPage - 1) * pageSize + 1;
+    const endIndex = (currentPage - 1) * pageSize + records.length;
 
-  const handlePrev = () => {
-    if (page <= 1) return;
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("page", String(page - 1));
-    router.push(`/register/${type}?${params}`);
-  };
+    return {
+      page: currentPage,
+      limit: pageSize,
+      total: totalItems,
+      pageStart: startIndex,
+      pageEnd: endIndex,
+    };
+  }, [paginationInfo, pageSize, currentPage, records.length]);
 
-  const handleNext = () => {
-    if (
-      !paginationResponse?.number_of_pages ||
-      page >= paginationResponse.number_of_pages
-    ) {
-      return;
+  const navigateToPage = useCallback(
+    (targetPage: number) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set('page', String(targetPage));
+      router.push(`/register/${registerType}?${params}`);
+    },
+    [searchParams, router, registerType]
+  );
+
+  const handlePreviousPage = useCallback(() => {
+    if (currentPage > 1) {
+      navigateToPage(currentPage - 1);
     }
+  }, [currentPage, navigateToPage]);
 
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("page", String(page + 1));
-    router.push(`/register/${type}?${params}`);
-  };
+  const handleNextPage = useCallback(() => {
+    const totalPages = paginationInfo?.number_of_pages || 1;
+    if (currentPage < totalPages) {
+      navigateToPage(currentPage + 1);
+    }
+  }, [currentPage, paginationInfo, navigateToPage]);
+
+  const sortedDisplayFields = useCallback(
+    (fields: DisplayField[]): DisplayField[] => {
+      return [...fields].sort((a, b) => a.order - b.order);
+    },
+    []
+  );
+
 
   return (
     <div className="min-h-screen mx-auto">
@@ -131,8 +150,8 @@ export default function RegisterTypePage() {
         pageStart={pagination.pageStart}
         pageEnd={pagination.pageEnd}
         total={pagination.total}
-        onPrev={handlePrev}
-        onNext={handleNext}
+        onPrev={handlePreviousPage}
+        onNext={handleNextPage}
         onApplyFilters={applyFilters}
         appliedFilters={appliedFilters}
         filterConfig={filterConfig}
@@ -149,70 +168,68 @@ export default function RegisterTypePage() {
         </div>
 
         <div className="space-y-3">
-          {loading ? (
+          {isLoadingRecords ? (
             <div className="text-center py-10 text-gray-500">Loading...</div>
-          ) : items.length === 0 ? (
-            <div className="text-center py-10 text-gray-500">
-              No items found
-            </div>
+          ) : records.length === 0 ? (
+            <div className="text-center py-10 text-gray-500">No items found</div>
           ) : (
-            items.map((item) => {
-              const fields = [...(item.display_fields || [])].sort(
-                (a, b) => a.order - b.order
-              );
+            records.map((record) => {
+              const sortedFields = sortedDisplayFields(record.display_fields);
 
               return (
                 <Link
-                  key={item.internal_record_id}
-                  href={`/register/${type}/${item.internal_record_id}`}
+                  key={record.internal_record_id}
+                  href={`/register/${registerType}/${record.internal_record_id}`}
                   className="block"
                 >
                   <div className="flex items-center gap-6 p-5 bg-white border-2 border-gray-300 rounded-md hover:shadow-sm hover:border-gray-400 transition-all">
-                    {item.image ? (
+                    {record.image ? (
                       <img
-                        src={item.image}
-                        alt={item.record_name}
+                        src={record.image}
+                        alt={record.record_name}
                         className="w-16 h-16 rounded-md object-cover shrink-0"
                       />
                     ) : (
-                      <div className="w-16 h-16 bg-gray-300 rounded-md shrink-0"></div>
+                      <div className="w-16 h-16 bg-gray-300 rounded-md shrink-0" />
                     )}
 
                     <div className="flex-1 min-w-0">
                       <h3 className="font-bold text-gray-900 text-base mb-0.5">
-                        {item.record_name}
+                        {record.record_name}
                       </h3>
                       <p className="text-sm text-gray-600">
-                        <span className="font-bold">ID :</span>{" "}
+                        <span className="font-bold">ID :</span>{' '}
                         <span className="font-bold text-gray-900">
-                          {item.internal_record_id}
+                          {record.internal_record_id}
                         </span>
                       </p>
                     </div>
 
-                    {[0, 2, 4].map(
-                      (i) =>
-                        fields[i] && (
-                          <div key={i} className="flex-1 min-w-0">
+                    {[0, 2, 4].map((startIndex) => {
+                      const firstField = sortedFields[startIndex];
+                      const secondField = sortedFields[startIndex + 1];
+
+                      if (!firstField) return null;
+
+                      return (
+                        <div key={startIndex} className="flex-1 min-w-0">
+                          <p className="text-sm text-gray-900 truncate">
+                            <span className="font-bold text-gray-600">
+                              {firstField.field_name}:{' '}
+                            </span>
+                            <span className="font-bold">{firstField.value}</span>
+                          </p>
+                          {secondField && (
                             <p className="text-sm text-gray-900 truncate">
                               <span className="font-bold text-gray-600">
-                                {fields[i].field_name}:{" "}
+                                {secondField.field_name}:{' '}
                               </span>
-                              <span className="font-bold">
-                                {fields[i].value}
-                              </span>
+                              <span className="font-bold">{secondField.value}</span>
                             </p>
-                            <p className="text-sm text-gray-900 truncate">
-                              <span className="font-bold text-gray-600">
-                                {fields[i+1].field_name}:{" "}
-                              </span>
-                              <span className="font-bold">
-                                {fields[i+1].value}
-                              </span>
-                            </p>
-                          </div>
-                        )
-                    )}
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
                 </Link>
               );

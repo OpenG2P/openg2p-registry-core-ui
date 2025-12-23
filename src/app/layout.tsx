@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "@/commons/globals.css";
 import { GlobalContextProvider } from "@/context/GlobalContext";
 import { Header } from '@/components/layout';
+// import '@openg2p/registry-widgets/dist/index.css';
 
 
 const geistSans = Geist({

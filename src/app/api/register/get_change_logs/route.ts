@@ -4,7 +4,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const { register_id, internal_record_id } = body || {};
 
-    const change_logs = [
+    const rawChangeLogs = [
         {
             change_log_id: "ce31285b-38b0-48a8-b737-4ba6540043e6",
             register_id,
@@ -53,7 +53,21 @@ export async function POST(req: NextRequest) {
         },
     ];
 
+    const transformedLogs = rawChangeLogs.map((log) => ({
+        change_log_id: log.change_log_id,
+        approval_status: log.approval_status,
+        created_at: log.created_at,
+        verification: {
+            required: 3,
+            completed: log.approval_status === "APPROVED" ? 3 : 1,
+        },
+        documents: [
+            { doc_id: "doc-001", doc_name: "Proof of Identity.pdf" },
+            { doc_id: "doc-002", doc_name: "Proof of Address.pdf" },
+        ],
+    }));
+
     return NextResponse.json({
-        change_logs,
+        change_logs: transformedLogs,
     });
 }
