@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation';
 import {
   BreadcrumbBar,
   ChangeRequestCard,
+  RegisterTabsLayout,
   VersionHistoryCard,
 } from '@/components/shared';
 import {
@@ -162,52 +163,39 @@ export default function RegisterDetailPage() {
   const canRenderContent = sectionsData && recordFields && currentRegister;
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="px-10 py-4 bg-white border-b border-gray-300">
-        <BreadcrumbBar breadcrumb={breadcrumbItems} />
-      </div>
 
-      <div className="px-10 py-6">
-        <div className="flex gap-2 mb-6 border-b-4 border-gray-300">
-          {tabsData?.tabs?.map((tab, tabIndex) => (
-            <button
-              key={tab['tab-id']}
-              onClick={() => handleTabSelect(tabIndex)}
-              className={`px-12 py-3 font-bold transition-all rounded-t-lg ${
-                activeTabIndex === tabIndex
-                  ? 'bg-black text-white'
-                  : 'bg-gray-300 text-gray-700 hover:bg-gray-400'
-              }`}
-            >
-              {tab['tab-label']}
-            </button>
-          ))}
-        </div>
-
-        {canRenderContent && (
-          <div className="grid grid-cols-12 gap-6">
-            <div className="col-span-9">
-              <WidgetProvider store={widgetStore} schemaData={recordFields}>
-                <SectionsContainer
-                  sections={sectionsData.sections}
-                  onSectionSave={handleSectionSave}
-                />
-              </WidgetProvider>
-            </div>
-
-            <div className="col-span-3 flex flex-col gap-6">
-              <ChangeRequestCard
-                registerId={currentRegister.register_id}
-                internalRecordId={recordId}
+    <RegisterTabsLayout
+      breadcrumb={breadcrumbItems}
+      tabs={tabsData}
+      activeTab={activeTabIndex}
+      onTabChange={handleTabSelect}
+    >
+      {canRenderContent && (
+        <div className="grid grid-cols-12 gap-6">
+          <div className="col-span-9">
+            <WidgetProvider store={widgetStore} schemaData={recordFields}>
+              <SectionsContainer
+                sections={sectionsData.sections}
+                onSectionSave={handleSectionSave}
               />
-              <VersionHistoryCard
-                registerId={currentRegister.register_id}
-                internalRecordId={recordId}
-              />
-            </div>
+            </WidgetProvider>
           </div>
-        )}
-      </div>
-    </div>
+
+          <div className="col-span-3 flex flex-col gap-6">
+            <ChangeRequestCard
+              type={registerType}
+              registerId={currentRegister.register_id}
+              internalRecordId={recordId}
+              activeTabId={activeTabId}
+            />
+            <VersionHistoryCard
+              type={registerType}
+              registerId={currentRegister.register_id}
+              internalRecordId={recordId}
+            />
+          </div>
+        </div>
+      )}
+    </RegisterTabsLayout>
   );
 }

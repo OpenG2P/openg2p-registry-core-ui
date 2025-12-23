@@ -1,5 +1,3 @@
-'use client';
-
 import ViewAll from "@/components/shared/ViewAll";
 import { useFetch } from "@/shared/hooks/useFetch";
 import { ResponseBody } from "@/shared/types/backend-api";
@@ -7,16 +5,18 @@ import { ResponseBody } from "@/shared/types/backend-api";
 interface Props {
   registerId: string;
   internalRecordId: string;
+  type: string;
+  activeTabId?: string;
 }
 
 export default function ChangeRequestCard({
+  type,
   registerId,
   internalRecordId,
+  activeTabId,
 }: Props) {
   const { data, loading } = useFetch<ResponseBody>({
-    url: registerId && internalRecordId
-      ? "/api/register/get_number_of_pending_change_logs"
-      : null,
+    url: `/api/register/${type}/${registerId}/change_request/get_number_of_pending_change_logs`,
     enabled: !!registerId && !!internalRecordId,
     options: {
       method: "POST",
@@ -28,8 +28,19 @@ export default function ChangeRequestCard({
   });
 
   const count =
-    (data?.response_payload as { number_of_pending_change_logs: number } | undefined)
-      ?.number_of_pending_change_logs ?? 0;
+    (
+      data?.response_payload as
+      | { number_of_pending_change_logs: number }
+      | undefined
+    )?.number_of_pending_change_logs ?? 0;
+
+  const params = new URLSearchParams();
+  if (activeTabId) {
+    params.set("tab", activeTabId);
+  }
+
+  const href = `/register/${type}/${internalRecordId}/change-request${params.toString() ? `?${params.toString()}` : ""
+    }`;
 
   if (loading) {
     return (
@@ -57,7 +68,7 @@ export default function ChangeRequestCard({
         </p>
       )}
 
-      <ViewAll href="/register/change-requests" label="Know More" />
+      <ViewAll href={href} label="Know More" />
     </div>
   );
 }
