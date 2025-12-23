@@ -166,7 +166,7 @@ export default function RegisterDetailPage() {
 
     <RegisterTabsLayout
       breadcrumb={breadcrumbItems}
-      tabsData={tabsData}
+      tabs={tabsData}
       activeTab={activeTabIndex}
       onTabChange={handleTabSelect}
     >

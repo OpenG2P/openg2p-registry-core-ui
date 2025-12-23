@@ -97,7 +97,7 @@ export default function ChangeRequestPage() {
   );
 
   const { data, loading } = useFetch<any>({
-    url: `/api/register/${type}/${id}/change_request/get_change_logs`,
+    url: `/api/register/${type}/${id}/change_request/get/list`,
     enabled: !!id && !!type,
     options: {
       method: "POST",
@@ -111,7 +111,7 @@ export default function ChangeRequestPage() {
   return (
     <RegisterTabsLayout
       breadcrumb={breadcrumb}
-      tabsData={tabsData}
+      tabs={tabsData}
       activeTab={activeTabIndex}
       onTabChange={handleTabChange}
     >
@@ -129,7 +129,11 @@ export default function ChangeRequestPage() {
         )}
 
         {!loading && logs.length > 0 && (
-          <ChangeLogList logs={logs} />
+          <ChangeLogList
+            logs={logs}
+            type={type}
+            registerId={id}
+          />
         )}
       </div>
     </RegisterTabsLayout>
