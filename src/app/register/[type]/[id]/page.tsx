@@ -3,7 +3,6 @@
 import { useMemo, useState, useEffect, useCallback } from 'react';
 import { useParams } from 'next/navigation';
 import {
-  ChangeRequestCard,
   RegisterTabsLayout,
   VersionHistoryCard,
 } from '@/components/shared';
@@ -15,6 +14,7 @@ import {
   SectionsContainer,
 } from '@openg2p/registry-widgets';
 import { useFetch } from '@/shared/hooks/useFetch';
+import ChangeRequestCard from '@/features/change-request/components/ChangeRequestCard';
 import { TabsResponse } from '@/shared/types';
 
 interface Register {

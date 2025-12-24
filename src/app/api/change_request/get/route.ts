@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json(
             {
                 response_header: {
-                    request_id: "",
+                    request_id: crypto.randomUUID(),
                     response_status: "FAILURE",
                     response_error_code: "INVALID_REQUEST",
                     response_error_message: "change_log_id is required",
@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
     }
 
     const record = {
-        change_log_id: changeLogId,
+        change_request_id: changeLogId,
         register_id: "reg-uuid-001",
         tab_id: "tab-uuid-001",
         internal_record_id: "record-uuid-001",
@@ -30,11 +30,11 @@ export async function POST(req: NextRequest) {
         source_partner_id: "postman",
         created_by: "system",
         created_at: "2024-01-15T10:30:00Z",
-        no_of_verifications_required: 1,
-        no_of_verifications_done: 0,
         approval_status: "PENDING",
         approved_by: null,
         approved_at: null,
+        no_of_verifications_required: 1,
+        no_of_verifications_done: 0,
         change_payload: {
             first_name: "John",
             last_name: "Doe",
@@ -44,15 +44,16 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({
         response_header: {
-            request_id: "abc-123",
+            request_id: crypto.randomUUID(),
             response_status: "SUCCESS",
             response_error_code: "",
             response_error_message: "",
             response_timestamp: new Date().toISOString(),
         },
         response_body: {
-            pagination_response: null,
-            response_payload: record,
+            response_payload: {
+                change_request: record,
+            },
         },
     });
 }

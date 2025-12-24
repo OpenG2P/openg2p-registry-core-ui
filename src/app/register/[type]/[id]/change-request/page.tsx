@@ -1,10 +1,12 @@
 'use client';
 
-import { useMemo, useState, useEffect, useCallback } from 'react';
+import { useEffect, useMemo, useState, useCallback } from 'react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { RegisterTabsLayout } from '@/components/shared';
-import ChangeLogList from '@/components/shared/ChangeLogList';
 import { useFetch } from '@/shared/hooks/useFetch';
+import { ChangeLogList } from '@/features/change-request/components';
+import { ChangeLog } from '@/features/change-request/types';
+
 import { TabsResponse } from '@/shared/types';
 
 export default function ChangeRequestPage() {
@@ -13,7 +15,6 @@ export default function ChangeRequestPage() {
   const searchParams = useSearchParams();
 
   const tabFromUrl = searchParams.get('tab');
-
   const [activeTabIndex, setActiveTabIndex] = useState(0);
 
   const { data: tabsData } = useFetch<TabsResponse>({
@@ -29,6 +30,7 @@ export default function ChangeRequestPage() {
 
     if (idx >= 0) setActiveTabIndex(idx);
   }, [tabsData, tabFromUrl]);
+
 
   const activeTabId = useMemo(
     () => tabsData?.tabs?.[activeTabIndex]?.tab_id,
@@ -88,16 +90,31 @@ export default function ChangeRequestPage() {
   );
 
   const { data, loading } = useFetch<any>({
-    url: `/api/register/${type}/${id}/change_request/get/list`,
-    enabled: !!id && !!type,
+    url: `/api/change_request/get/list`,
+    enabled: !!activeTabId,
     options: {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify({
-        register_id: id,
+        request_body: {
+          pagination_request: {
+            current_page: 1,
+            page_size: 10,
+            sort_by: '',
+            filter_by: '',
+          },
+          request_payload: {
+            subject_register_id: id,
+            subject_record_id: id,
+            tab_id: activeTabId,
+          },
+        },
       }),
     },
   });
-  const logs = data?.change_logs ?? [];
+
+  const logs: ChangeLog[] =
+    data?.response_body?.response_payload?.change_requests ?? [];
+
 
   return (
     <RegisterTabsLayout
@@ -106,27 +123,18 @@ export default function ChangeRequestPage() {
       activeTab={activeTabIndex}
       onTabChange={handleTabChange}
     >
-      <div className="bg-white rounded-lg p-4">
-        {loading && (
-          <p className="text-sm text-gray-500">
-            Loading change logs…
-          </p>
-        )}
-
-        {!loading && logs.length === 0 && (
-          <p className="text-sm text-gray-400">
-            No change requests found
-          </p>
-        )}
-
-        {!loading && logs.length > 0 && (
-          <ChangeLogList
-            logs={logs}
-            type={type}
-            registerId={id}
-          />
-        )}
-      </div>
+      {loading ? (
+        <p className="text-sm text-gray-500">Loading…</p>
+      ) : logs.length === 0 ? (
+        <p className="text-sm text-gray-400">No change requests found</p>
+      ) : (
+        <ChangeLogList
+          logs={logs}
+          getDetailsUrl={log =>
+            `/register/${type}/${id}/change-request/${log.change_request_id}`
+          }
+        />
+      )}
     </RegisterTabsLayout>
   );
 }

@@ -63,7 +63,7 @@ export default function Home() {
       Exclude<ActiveStatsCard, 'registers'>,
       string
     > = {
-      change_request: '/change_request',
+      change_request: '/change-request',
       incoming_message: '/incoming_message',
       outgoing_message: '/outgoing_message',
     };
