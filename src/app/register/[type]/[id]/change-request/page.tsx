@@ -5,16 +5,7 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { RegisterTabsLayout } from '@/components/shared';
 import ChangeLogList from '@/components/shared/ChangeLogList';
 import { useFetch } from '@/shared/hooks/useFetch';
-
-interface TabConfig {
-  'tab-id': string;
-  'tab-label': string;
-  order: number;
-}
-
-interface TabsApiResponse {
-  tabs: TabConfig[];
-}
+import { TabsResponse } from '@/shared/types';
 
 export default function ChangeRequestPage() {
   const { type, id } = useParams<{ type: string; id: string }>();
@@ -25,7 +16,7 @@ export default function ChangeRequestPage() {
 
   const [activeTabIndex, setActiveTabIndex] = useState(0);
 
-  const { data: tabsData } = useFetch<TabsApiResponse>({
+  const { data: tabsData } = useFetch<TabsResponse>({
     url: `/api/register/${type}/tabs`,
   });
 
@@ -33,14 +24,14 @@ export default function ChangeRequestPage() {
     if (!tabsData?.tabs?.length || !tabFromUrl) return;
 
     const idx = tabsData.tabs.findIndex(
-      t => t['tab-id'] === tabFromUrl
+      t => t.tab_id === tabFromUrl
     );
 
     if (idx >= 0) setActiveTabIndex(idx);
   }, [tabsData, tabFromUrl]);
 
   const activeTabId = useMemo(
-    () => tabsData?.tabs?.[activeTabIndex]?.['tab-id'],
+    () => tabsData?.tabs?.[activeTabIndex]?.tab_id,
     [tabsData, activeTabIndex]
   );
 
@@ -71,8 +62,8 @@ export default function ChangeRequestPage() {
       ...(activeTab
         ? [
           {
-            label: activeTab['tab-label'],
-            href: `/register/${type}/${id}?tab=${activeTab['tab-id']}`,
+            label: activeTab.tab_label,
+            href: `/register/${type}/${id}?tab=${activeTab.tab_id}`,
           },
         ]
         : []),
@@ -84,7 +75,7 @@ export default function ChangeRequestPage() {
 
   const handleTabChange = useCallback(
     (index: number) => {
-      const tabId = tabsData?.tabs?.[index]?.['tab-id'];
+      const tabId = tabsData?.tabs?.[index]?.tab_id;
       if (!tabId) return;
 
       setActiveTabIndex(index);

@@ -9,17 +9,20 @@ import {
 const MOCK_TABS_DATA = {
   tabs: [
     {
-      "tab-id": "tab:farmer.details",
-      "tab-label": "Farmer Details",
-      order: 1,
+      tab_id: "tab:farmer.profile",
+      register_id: "farmer-register-001",
+      tab_label: "Farmer Profile",
+      tab_order: 1,
     },
     {
-      "tab-id": "tab:crop.details",
-      "tab-label": "Crop Details",
-      order: 2,
+      tab_id: "tab:farm.details",
+      register_id: "farmer-farm-register-001",
+      tab_label: "Farm Details",
+      tab_order: 2,
     },
   ],
 };
+
 
 export async function GET(req: NextRequest) {
   try {
@@ -59,7 +62,7 @@ export async function GET(req: NextRequest) {
         "Cache-Control": "public, s-maxage=600, stale-while-revalidate=300",
     },
     );
-    */    
+    */
 
     /** Mock response */
     // HTTP cache for browser/CDN: 10 min + background revalidation
