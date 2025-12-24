@@ -5,47 +5,60 @@ import {
   BackendResponse,
 } from "@/shared/types";
 
-const MOCK_RECORD_DATA = {
-  internal_record_id: "18b442ea-2d5d-4186-bd6a-7111822ac2e9",
-  functional_record_id: "18b442ea-2d5d-4186-bd6a-7111822ac2e9",
-  link_record_id: null,
+const MOCK_TAB_RECORD_DATA = [
+  {
+    section_register_id: "farmer-register-001",
+    records:[
+      {
+      first_name: "Rajesh",
+      last_name: "Kumar",
+      national_id: "ABCD-1234-5678",
+      gender: "male"
+      },
 
-  created_by: "system",
-  created_at: "2025-12-15T15:35:36.541096",
-  last_approved_at: "2025-12-15T15:35:36.541098",
-  last_approved_by: "system",
-
-  additional_fields: {
-    farmer: {
-    first_name: "Ramesh",
-    last_name: "Kumar",
-    gender: "Male",
-    age: 42,
-
-    phone: "9876543210",
-    email: "ramesh.kumar@example.com",
-    village: "Rampur",
-    district: "Patna",
-
-    category: "Small Farmer",
-    education: "High School",
-    occupation: "Agriculture",
-    marital_status: "Married"
+    ],
+    
   },
-
-  crops: {
-    name: "Wheat",
-    season: "Rabi",
-    type: "Cereal",
-    variety: "HD-2967",
-
-    area: 2.5,
-    irrigation: "Canal",
-    yield: 18,
-    sowing_method: "Line Sowing"
+  {
+    section_register_id: "farmer-crop-register-001",
+    records: [
+      {
+        crop_name: "Rice",
+        season: "Kharif",
+        area: 4.5,
+        expected_yield: 180
+      },
+      {
+        crop_name: "Wheat",
+        season: "Rabi",
+        area: 4.75,
+        expected_yield: 200
+      }
+    ]
+  },
+  {
+    section_register_id: "farmer-farm-register-001",
+    records: [
+      {
+      total_land_area: 10,
+      cultivable_land: 9,
+      land_ownership: "owned",
+      soil_type: "loam",
+      irrigation_source: "borewell",
+      land_documents: null,
+      equipment: [
+        { equipment_name: "Tractor - Mahindra 575" },
+        { equipment_name: "Harvester - John Deere" },
+        { equipment_name: "Sprayer - Honda" },
+        { equipment_name: "Thresher" }
+      ]
+    }
+    ]
   }
-  }
-};
+];
+
+
+
 
 export async function POST(
   req: NextRequest,
@@ -94,7 +107,7 @@ export async function POST(
     return NextResponse.json(record);
     */
 
-    return NextResponse.json(MOCK_RECORD_DATA);
+    return NextResponse.json(MOCK_TAB_RECORD_DATA);
   } catch (e) {
     return NextResponse.json(
       { error: e instanceof Error ? e.message : "Internal Server Error" },
