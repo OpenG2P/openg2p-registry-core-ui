@@ -10,12 +10,12 @@ interface TopBarProps {
     showFilters?: boolean;
     showPagination?: boolean;
 
-    pageStart?: number;
-    pageEnd?: number;
-    total?: number;
+    pageStart: number;
+    pageEnd: number;
+    total: number;
 
-    onPrev?: () => void;
-    onNext?: () => void;
+    onPrev: () => void;
+    onNext: () => void;
 
     onFilters?: () => void;
     onApplyFilters?: (filters: FilterRule[]) => void;

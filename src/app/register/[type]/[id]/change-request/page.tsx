@@ -1,10 +1,11 @@
 'use client';
 
-import { useMemo, useState, useEffect, useCallback } from 'react';
+import { useEffect, useMemo, useState, useCallback } from 'react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { RegisterTabsLayout } from '@/components/shared';
-import ChangeLogList from '@/components/shared/ChangeLogList';
 import { useFetch } from '@/shared/hooks/useFetch';
+import { ChangeLogList } from '@/features/change-request/components';
+import { ChangeLog } from '@/features/change-request/types';
 
 interface TabConfig {
   'tab-id': string;
@@ -22,7 +23,6 @@ export default function ChangeRequestPage() {
   const searchParams = useSearchParams();
 
   const tabFromUrl = searchParams.get('tab');
-
   const [activeTabIndex, setActiveTabIndex] = useState(0);
 
   const { data: tabsData } = useFetch<TabsApiResponse>({
@@ -30,112 +30,78 @@ export default function ChangeRequestPage() {
   });
 
   useEffect(() => {
-    if (!tabsData?.tabs?.length || !tabFromUrl) return;
-
-    const idx = tabsData.tabs.findIndex(
-      t => t['tab-id'] === tabFromUrl
-    );
-
+    if (!tabsData?.tabs || !tabFromUrl) return;
+    const idx = tabsData.tabs.findIndex(t => t['tab-id'] === tabFromUrl);
     if (idx >= 0) setActiveTabIndex(idx);
   }, [tabsData, tabFromUrl]);
 
-  const activeTabId = useMemo(
-    () => tabsData?.tabs?.[activeTabIndex]?.['tab-id'],
-    [tabsData, activeTabIndex]
-  );
-
-  const { data: registers } = useFetch<any[]>({
-    url: '/api/register/all',
-  });
-
-  const currentRegister = useMemo(
-    () =>
-      registers?.find(
-        r => r.register_mnemonic.toLowerCase() === type.toLowerCase()
-      ),
-    [registers, type]
-  );
-
-  const breadcrumb = useMemo(() => {
-    const activeTab = tabsData?.tabs?.[activeTabIndex];
-
-    return [
-      {
-        label: currentRegister?.register_subject ?? 'Register',
-        href: `/register/${type}`,
-      },
-      {
-        label: `ID-${id}`,
-        href: `/register/${type}/${id}`,
-      },
-      ...(activeTab
-        ? [
-          {
-            label: activeTab['tab-label'],
-            href: `/register/${type}/${id}?tab=${activeTab['tab-id']}`,
-          },
-        ]
-        : []),
-      {
-        label: 'Change Request',
-      },
-    ];
-  }, [currentRegister, tabsData, activeTabIndex, type, id]);
-
-  const handleTabChange = useCallback(
-    (index: number) => {
-      const tabId = tabsData?.tabs?.[index]?.['tab-id'];
-      if (!tabId) return;
-
-      setActiveTabIndex(index);
-
-      router.push(
-        `/register/${type}/${id}/change-request?tab=${tabId}`
-      );
-    },
-    [tabsData, router, type, id]
-  );
+  const activeTabId = tabsData?.tabs?.[activeTabIndex]?.['tab-id'];
 
   const { data, loading } = useFetch<any>({
-    url: `/api/register/${type}/${id}/change_request/get/list`,
-    enabled: !!id && !!type,
+    url: `/api/change_request/get/list`,
+    enabled: !!activeTabId,
     options: {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify({
-        register_id: id,
+        request_body: {
+          pagination_request: {
+            current_page: 1,
+            page_size: 10,
+            sort_by: '',
+            filter_by: '',
+          },
+          request_payload: {
+            subject_register_id: id,
+            subject_record_id: id,
+            tab_id: activeTabId,
+          },
+        },
       }),
     },
   });
-  const logs = data?.change_logs ?? [];
+
+  const logs: ChangeLog[] =
+      data?.response_body?.response_payload?.change_requests ?? [];
+
+
+  const breadcrumb = useMemo(
+    () => [
+      { label: 'Register', href: `/register/${type}` },
+      { label: `ID-${id}`, href: `/register/${type}/${id}` },
+      { label: 'Change Request' },
+    ],
+    [type, id]
+  );
+
+  const onTabChange = useCallback(
+    (index: number) => {
+      const tabId = tabsData?.tabs?.[index]?.['tab-id'];
+      if (!tabId) return;
+      setActiveTabIndex(index);
+      router.push(`/register/${type}/${id}/change-request?tab=${tabId}`);
+    },
+    [tabsData, router, type, id]
+  );
 
   return (
     <RegisterTabsLayout
       breadcrumb={breadcrumb}
       tabs={tabsData}
       activeTab={activeTabIndex}
-      onTabChange={handleTabChange}
+      onTabChange={onTabChange}
     >
-      <div className="bg-white rounded-lg p-4">
-        {loading && (
-          <p className="text-sm text-gray-500">
-            Loading change logs…
-          </p>
-        )}
-
-        {!loading && logs.length === 0 && (
-          <p className="text-sm text-gray-400">
-            No change requests found
-          </p>
-        )}
-
-        {!loading && logs.length > 0 && (
-          <ChangeLogList
-            logs={logs}
-            type={type}
-            registerId={id}
-          />
-        )}
-      </div>
+      {loading ? (
+        <p className="text-sm text-gray-500">Loading…</p>
+      ) : logs.length === 0 ? (
+        <p className="text-sm text-gray-400">No change requests found</p>
+      ) : (
+        <ChangeLogList
+          logs={logs}
+          getDetailsUrl={log =>
+            `/register/${type}/${id}/change-request/${log.change_request_id}`
+          }
+        />
+      )}
     </RegisterTabsLayout>
   );
 }

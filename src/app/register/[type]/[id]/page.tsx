@@ -3,8 +3,6 @@
 import { useMemo, useState, useEffect, useCallback } from 'react';
 import { useParams } from 'next/navigation';
 import {
-  BreadcrumbBar,
-  ChangeRequestCard,
   RegisterTabsLayout,
   VersionHistoryCard,
 } from '@/components/shared';
@@ -16,6 +14,7 @@ import {
   SectionChanges,
 } from '@openg2p/registry-widgets';
 import { useFetch } from '@/shared/hooks/useFetch';
+import ChangeRequestCard from '@/features/change-request/components/ChangeRequestCard';
 
 interface Register {
   register_id: string;
