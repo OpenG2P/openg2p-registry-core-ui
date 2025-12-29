@@ -3,8 +3,6 @@
 import { useMemo, useState, useEffect, useCallback } from 'react';
 import { useParams } from 'next/navigation';
 import {
-  BreadcrumbBar,
-  ChangeRequestCard,
   RegisterTabsLayout,
   VersionHistoryCard,
 } from '@/components/shared';
@@ -12,10 +10,12 @@ import {
   WidgetProvider,
   UISchema,
   createWidgetStore,
-  SectionsContainer,
   SectionChanges,
+  SectionsContainer,
 } from '@openg2p/registry-widgets';
 import { useFetch } from '@/shared/hooks/useFetch';
+import ChangeRequestCard from '@/features/change-request/components/ChangeRequestCard';
+import { TabsResponse } from '@/shared/types';
 
 interface Register {
   register_id: string;
@@ -25,23 +25,29 @@ interface Register {
   master_register_id: string | null;
 }
 
-interface RecordDetail {
+interface RegisterFlattenedRecord {
   internal_record_id: string;
-  additional_fields: Record<string, unknown>;
+  [key: string]: unknown;
 }
 
-interface TabConfig {
-  'tab-id': string;
-  'tab-label': string;
-  order: number;
+interface SectionsRecords {
+  section_register_id: string;
+  records: RegisterFlattenedRecord[];
 }
 
-interface TabsApiResponse {
-  tabs: TabConfig[];
+interface SectionSchema {
+  section_register_id: string;
+  register_id: string;
+  section_id: string;
+  tab_id: string;
+  section_mnemonic: string;
+  section_description: string;
+  documents_required: boolean;
+  section_ui_schema: UISchema | null;
 }
 
-interface SectionsApiResponse {
-  sections: UISchema['sections'];
+interface SectionsResponse {
+  sections: SectionSchema[];
 }
 
 interface BreadcrumbItem {
@@ -50,13 +56,13 @@ interface BreadcrumbItem {
 }
 
 export default function RegisterDetailPage() {
-  const routeParams = useParams<{ id: string; type: string }>();
-  const { id: recordId, type: registerType } = routeParams;
+  const { id: recordId, type: registerType } =
+    useParams<{ id: string; type: string }>();
 
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   const widgetStore = useMemo(() => createWidgetStore(), []);
 
-  const { data: tabsData } = useFetch<TabsApiResponse>({
+  const { data: tabsSchema } = useFetch<TabsResponse>({
     url: `/api/register/${registerType}/tabs`,
   });
 
@@ -65,15 +71,26 @@ export default function RegisterDetailPage() {
   });
 
   const currentRegister = useMemo(
-    () => registersData?.find(
-      (register) => register.register_mnemonic.toLowerCase() === registerType.toLowerCase()
-    ),
+    () =>
+      registersData?.find(
+        r => r.register_mnemonic.toLowerCase() === registerType.toLowerCase()
+      ),
     [registersData, registerType]
   );
 
-  const { data: recordDetail } = useFetch<RecordDetail>({
-    url: `/api/register/${registerType}/${recordId}`,
-    enabled: !!currentRegister?.register_id,
+  const activeTabId = useMemo(
+    () => tabsSchema?.tabs?.[activeTabIndex]?.tab_id,
+    [tabsSchema, activeTabIndex]
+  );
+
+  const { data: sectionsSchema } = useFetch<SectionsResponse>({
+    url: `/api/register/${registerType}/tabs/${activeTabId}/sections`,
+    enabled: !!activeTabId,
+  });
+
+  const { data: sectionsRecords } = useFetch<SectionsRecords[]>({
+    url: `/api/register/${registerType}/${recordId}/${activeTabId}`,
+    enabled: !!currentRegister?.register_id && !!activeTabId,
     options: {
       method: 'POST',
       body: JSON.stringify({
@@ -83,33 +100,51 @@ export default function RegisterDetailPage() {
     },
   });
 
-  const activeTabId = useMemo(
-    () => tabsData?.tabs?.[activeTabIndex]?.['tab-id'],
-    [tabsData, activeTabIndex]
-  );
+  
 
-  const { data: sectionsData } = useFetch<SectionsApiResponse>({
-    url: `/api/register/${registerType}/tabs/${activeTabId}/sections`,
-    enabled: !!activeTabId,
-  });
+  // need to transform data if section use 
+  const sectionDataMap = useMemo(() => {
+    if (!sectionsRecords) return null;
 
-  const recordFields = useMemo(
-    () => recordDetail?.additional_fields,
-    [recordDetail]
-  );
+    const map: Record<
+      string,
+      RegisterFlattenedRecord | RegisterFlattenedRecord[]
+    > = {};
+
+    for (const section of sectionsRecords) {
+      const { section_register_id, records } = section;
+      
+      if (!records || records.length === 0) continue;
+
+      map[section_register_id] =
+        records.length === 1 ? records[0] : records;
+    }
+
+    return map;
+  }, [sectionsRecords]);
+
+
+  const sectionsConfig = useMemo(() => {
+    if (!sectionsSchema) return [];
+
+    return sectionsSchema.sections
+      .filter(section => section.section_ui_schema)
+      .flatMap(section => section.section_ui_schema!.sections);
+  }, [sectionsSchema]);
 
   useEffect(() => {
-    const totalTabs = tabsData?.tabs?.length || 0;
+    const totalTabs = tabsSchema?.tabs?.length || 0;
     if (totalTabs > 0 && activeTabIndex >= totalTabs) {
       setActiveTabIndex(0);
     }
-  }, [tabsData, activeTabIndex]);
+  }, [tabsSchema, activeTabIndex]);
 
   const breadcrumbItems = useMemo<BreadcrumbItem[]>(() => {
     if (!currentRegister) return [];
 
-    const activeTab = tabsData?.tabs?.[activeTabIndex];
-    const items: BreadcrumbItem[] = [
+    const activeTab = tabsSchema?.tabs?.[activeTabIndex];
+
+    return [
       {
         label: currentRegister.register_subject,
         href: `/register/${registerType}`,
@@ -118,64 +153,58 @@ export default function RegisterDetailPage() {
         label: `ID-${recordId}`,
         href: `/register/${registerType}/${recordId}`,
       },
+      ...(activeTab
+        ? [{ label: activeTab.tab_label, href: '#' }]
+        : []),
     ];
-
-    if (activeTab) {
-      items.push({
-        label: activeTab['tab-label'],
-        href: `/register/${registerType}/${recordId}`,
-      });
-    }
-
-    return items;
-  }, [currentRegister, tabsData, activeTabIndex, registerType, recordId]);
+  }, [currentRegister, tabsSchema, activeTabIndex, registerType, recordId]);
 
   const { execute: submitChangeRequest } = useFetch();
 
   const handleSectionSave = useCallback(
     async (sectionChanges: SectionChanges) => {
-      if (!currentRegister) return;
-
-      const changeRequestPayload = {
-        ...sectionChanges,
-        register_id: currentRegister.register_id,
-        internal_record_id: recordId,
-      };
-
+      console.log(sectionChanges,"section changes");
+      
+      if (!currentRegister) return;      
       await submitChangeRequest(
         `/api/register/${registerType}/${recordId}/change_request/create`,
         {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(changeRequestPayload),
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            register_id: currentRegister.register_id,
+            section_register_id:null,// section_register_id and section_id will same.
+            tab_id: activeTabId,
+            change_payload:sectionChanges,
+          }),
         }
       );
     },
     [currentRegister, recordId, registerType, submitChangeRequest]
   );
 
-  const handleTabSelect = useCallback((tabIndex: number) => {
-    setActiveTabIndex(tabIndex);
-  }, []);
+  const canRenderContent =
+    tabsSchema &&
+    sectionsSchema &&
+    sectionDataMap &&
+    currentRegister &&
+    sectionsConfig.length > 0;
 
-  const canRenderContent = sectionsData && recordFields && currentRegister;
+  if (!tabsSchema?.tabs?.length) return null;
 
   return (
-
     <RegisterTabsLayout
       breadcrumb={breadcrumbItems}
-      tabs={tabsData}
+      tabs={tabsSchema}
       activeTab={activeTabIndex}
-      onTabChange={handleTabSelect}
+      onTabChange={setActiveTabIndex}
     >
       {canRenderContent && (
         <div className="grid grid-cols-12 gap-6">
           <div className="col-span-9">
-            <WidgetProvider store={widgetStore} schemaData={recordFields}>
+            <WidgetProvider store={widgetStore} schemaData={sectionDataMap}>
               <SectionsContainer
-                sections={sectionsData.sections}
+                sections={sectionsConfig}
                 onSectionSave={handleSectionSave}
               />
             </WidgetProvider>

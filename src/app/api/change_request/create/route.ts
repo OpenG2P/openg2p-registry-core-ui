@@ -15,17 +15,13 @@ export async function POST(
 ) {
   try {
     const { type, id } = await params;
-    const changeRequestPayload = await request.json();
+    const body = await request.json();
 
     const backendRequest = createBackendRequest({
       pagination_request: undefined,
-      request_payload: {
-        register_type: type,
-        internal_record_id: id,
-        change_request: changeRequestPayload,
-      },
+      request_payload: body,
     });
-
+    
     /*
     const backendUrl = `${BACKEND_CONFIG.apiUrl}/change_request/create`;
 

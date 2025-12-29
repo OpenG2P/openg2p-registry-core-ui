@@ -16,7 +16,7 @@ export default function ChangeRequestCard({
   activeTabId,
 }: Props) {
   const { data, loading } = useFetch<ResponseBody>({
-    url: `/api/register/${type}/${registerId}/change_request/get_number_of_pending_change_logs`,
+    url: `/api/change_request/pending`,
     enabled: !!registerId && !!internalRecordId,
     options: {
       method: "POST",
