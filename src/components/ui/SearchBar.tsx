@@ -20,7 +20,7 @@ const SearchBar = ({ placeholder, category, onSearch }: SearchBarProps) => {
         value={value}
         onChange={(e) => setValue(e.target.value)}
         onKeyDown={(e) => e.key === "Enter" && onSearch(value, category)}
-        className=" outline-none flex-1 bg-transparent  px-2 py-2 text-gray-700 placeholder-gray-400"
+        className=" border-none outline-none flex-1 bg-transparent  px-2 py-2 text-gray-700 placeholder-gray-400"
       />
 
       <button

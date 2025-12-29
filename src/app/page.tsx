@@ -1,8 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { StatsCard, RegisterDropdown, SearchBar } from '@/components/ui';
+import {
+  StatsCardLarge,
+  StatsCardSmall,
+  RegisterDropdown,
+  SearchBar,
+} from '@/components/ui';
 import { useFetch } from '@/shared/hooks/useFetch';
 
 interface Register {
@@ -13,7 +18,31 @@ interface Register {
   master_register_id: string | null;
 }
 
-type ActiveStatsCard = 'registers' | 'change_request' | 'incoming_message' | 'outgoing_message';
+type ActiveStatsCard =
+  | 'registers'
+  | 'change_request'
+  | 'incoming_message'
+  | 'outgoing_message';
+
+const isPartnerImportExportEnabled =
+  process.env.NEXT_PUBLIC_PARTNER_IMPORT_EXPORT_ENABLE === 'true';
+
+const statsCardVariant = isPartnerImportExportEnabled ? 'small' : 'large';
+
+const ALL_CARDS: ActiveStatsCard[] = [
+  'registers',
+  'change_request',
+  'incoming_message',
+  'outgoing_message',
+];
+
+const LIMITED_CARDS: ActiveStatsCard[] = [
+  'registers',
+  'change_request',
+];
+
+const visibleCards =
+  statsCardVariant === 'small' ? ALL_CARDS : LIMITED_CARDS;
 
 export default function Home() {
   const router = useRouter();
@@ -73,49 +102,89 @@ export default function Home() {
     );
   };
 
+  const StatsCardComponent =
+    statsCardVariant === 'small'
+      ? StatsCardSmall
+      : StatsCardLarge;
+
   return (
-    <div className="min-h-screen bg-white text-gray-900">
-      <div className="mx-auto flex max-w-6xl flex-col items-center px-6 py-14 space-y-14">
-        <div className="flex w-full max-w-5xl flex-wrap items-stretch justify-between gap-6">
-          {(['registers', 'change_request', 'incoming_message', 'outgoing_message'] as ActiveStatsCard[]).map(
-            (type) => (
+    <div className="relative min-h-screen bg-[#EABB13] pt-10 sm:pt-14 lg:pt-16 overflow-hidden text-gray-900">
+      {/* background vector svg */}
+      <div
+        className="absolute inset-0 bg-repeat opacity-30"
+        style={{
+          backgroundImage: "url('/svgs/VectorGroup.svg')",
+          backgroundSize: '492.5px 492.55px',
+        }}
+      />
+
+      <div className="relative z-10">
+        <div className="mx-auto flex max-w-6xl flex-col items-center px-4 sm:px-6 py-10 sm:py-12 lg:py-14 space-y-10 sm:space-y-12 lg:space-y-14">
+
+          {/* stats cards */}
+          <div
+            className={`
+              flex flex-wrap items-stretch w-full
+              gap-4 sm:gap-5 lg:gap-6
+              ${statsCardVariant === 'small'
+                ? 'justify-center'
+                : 'sm:w-4/5 justify-center lg:justify-between'
+              }
+            `}
+          >
+            {visibleCards.map((type) => (
               <button
                 key={type}
                 type="button"
-                className="flex-1 min-w-[180px] bg-transparent p-0 text-left"
                 onClick={() => setActiveStatsCard(type)}
+                className="
+                  flex-1 bg-transparent p-0 text-left
+                  min-w-40 sm:min-w-[180px] lg:min-w-[220px]
+                "
               >
-                <StatsCard
-                  stats_endpoint={`/api/stats/${type === 'registers' ? 'register' : type}`}
+                <StatsCardComponent
+                  stats_endpoint={`/api/stats/${type === 'registers' ? 'register' : type
+                    }`}
                   active={activeStatsCard === type}
                 />
               </button>
-            )
-          )}
+            ))}
+          </div>
+
+          {/* Search Bar */}
+          <div
+            className={`
+              flex h-14 w-4/5 items-center rounded-4xl border bg-white
+              ${activeStatsCard === 'registers'
+                ? 'border-[#ED7C22] border-l-0 outline-0'
+                : 'border-[#ED7C22]'
+              }
+            `}
+          >
+            {activeStatsCard === 'registers' && (
+              <RegisterDropdown
+                options={registerList}
+                selected={selectedRegister}
+                onChange={setSelectedRegister}
+              />
+            )}
+
+            <SearchBar
+              placeholder={searchPlaceholders[activeStatsCard]}
+              category={selectedRegister}
+              onSearch={handleSearch}
+            />
+          </div>
         </div>
 
-        <div className="flex h-14 w-full max-w-5xl items-center rounded-xl border border-gray-300 bg-white">
-          {activeStatsCard === 'registers' && (
-            <RegisterDropdown
-              options={registerList}
-              selected={selectedRegister}
-              onChange={setSelectedRegister}
-            />
-          )}
-
-          <SearchBar
-            placeholder={searchPlaceholders[activeStatsCard]}
-            category={selectedRegister}
-            onSearch={handleSearch}
+        {/* People SVG below search bar  */}
+        <div className="relative w-full mt-6 sm:mt-8 lg:mt-10 px-4 sm:px-8">
+          <img
+            src="/svgs/People.svg"
+            alt="Peoples"
+            className="w-full h-auto opacity-100 pointer-events-none select-none"
           />
         </div>
-      </div>
-
-      <div className="bottom-8 left-0 right-0 p-10 text-center text-sm text-gray-500">
-        <p className="text-xl text-gray-600">powered by</p>
-        <p className="text-2xl font-bold text-gray-800">
-          OpenG2P Registry
-        </p>
       </div>
     </div>
   );

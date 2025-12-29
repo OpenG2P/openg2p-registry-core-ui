@@ -11,6 +11,8 @@ const MOCK_CHANGE_REQUEST_STATS = {
   total_change_requests: 1900,
   approved: 700,
   pending: 1900,
+  imageUrl:"/openg2p_logo.png" 
+
 };
 
 export async function GET(_req: NextRequest) {
