@@ -9,6 +9,7 @@ import {
   SearchBar,
 } from '@/components/ui';
 import { useFetch } from '@/shared/hooks/useFetch';
+import Image from 'next/image';
 
 interface Register {
   register_id: string;
@@ -108,17 +109,28 @@ export default function Home() {
       : StatsCardLarge;
 
   return (
-    <div className="relative min-h-screen bg-[#EABB13] pt-10 sm:pt-14 lg:pt-16 overflow-hidden text-gray-900">
+    <div
+      className="
+        relative min-h-screen bg-[#EABB13]
+        pt-10 sm:pt-14 md:pt-16 lg:pt-16
+        overflow-hidden text-gray-900
+     "
+    >
       {/* background vector svg */}
       <div
-        className="absolute inset-0 bg-repeat opacity-30"
-        style={{
-          backgroundImage: "url('/svgs/VectorGroup.svg')",
-          backgroundSize: '492.5px 492.55px',
-        }}
+        className="
+          absolute inset-0
+          bg-[url('/svgs/VectorGroup.svg')]
+          bg-repeat
+          bg-[length:240px_240px]
+          sm:bg-[length:300px_300px]
+          md:bg-[length:420px_420px]
+          lg:bg-[length:492.5px_492.55px]
+          opacity-40
+        "
       />
 
-      <div className="relative z-10">
+      <div className="relative">
         <div className="mx-auto flex max-w-6xl flex-col items-center px-4 sm:px-6 py-10 sm:py-12 lg:py-14 space-y-10 sm:space-y-12 lg:space-y-14">
 
           {/* stats cards */}
@@ -128,7 +140,7 @@ export default function Home() {
               gap-4 sm:gap-5 lg:gap-6
               ${statsCardVariant === 'small'
                 ? 'justify-center'
-                : 'sm:w-4/5 justify-center lg:justify-between'
+                : 'sm:w-4/5 md:w-3/4 justify-center lg:justify-center'
               }
             `}
           >
@@ -153,13 +165,7 @@ export default function Home() {
 
           {/* Search Bar */}
           <div
-            className={`
-              flex h-14 w-4/5 items-center rounded-4xl border bg-white
-              ${activeStatsCard === 'registers'
-                ? 'border-[#ED7C22] border-l-0 outline-0'
-                : 'border-[#ED7C22]'
-              }
-            `}
+            className="border-[#ED7C22] flex h-14 w-4/5 items-center rounded-full border bg-white"
           >
             {activeStatsCard === 'registers' && (
               <RegisterDropdown
@@ -178,11 +184,14 @@ export default function Home() {
         </div>
 
         {/* People SVG below search bar  */}
-        <div className="relative w-full mt-6 sm:mt-8 lg:mt-10 px-4 sm:px-8">
-          <img
+        <div className="relative w-full mt-8 sm:mt-10 md:mt-12 lg:mt-14 px-4 sm:px-6 md:px-8 lg:px-10">
+          <Image
             src="/svgs/People.svg"
             alt="Peoples"
+            width={1200}
+            height={600}
             className="w-full h-auto opacity-100 pointer-events-none select-none"
+            priority
           />
         </div>
       </div>

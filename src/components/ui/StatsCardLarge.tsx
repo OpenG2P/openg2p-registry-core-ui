@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useMemo } from 'react';
-import { useFetch } from '@/shared/hooks/useFetch';
-import Image from 'next/image';
+import { useMemo } from "react";
+import { useFetch } from "@/shared/hooks/useFetch";
+import Image from "next/image";
 
 interface StatsCardLargeProps {
   stats_endpoint: string;
@@ -18,11 +18,11 @@ const StatsCardLarge = ({
   });
 
   const { title, rows } = useMemo(() => {
-    if (!data) return { title: 'Items', rows: [] };
+    if (!data) return { title: "Items", rows: [] };
 
     if (Array.isArray(data)) {
       return {
-        title: 'Registers',
+        title: "Registers",
         rows: data.map((item) => ({
           id: item.register_id,
           label: item.register_subject,
@@ -32,17 +32,27 @@ const StatsCardLarge = ({
       };
     }
 
-    if (stats_endpoint.includes('change')) {
+    if (stats_endpoint.includes("change")) {
       return {
-        title: 'Change Requests',
+        title: "Change Requests",
         rows: [
-          { id: 'approved', label: 'Approved', value: data.approved, imageUrl: data.imageUrl },
-          { id: 'pending', label: 'Pending', value: data.pending, imageUrl: data.imageUrl },
+          {
+            id: "approved",
+            label: "Approved",
+            value: data.approved,
+            imageUrl: data.imageUrl,
+          },
+          {
+            id: "pending",
+            label: "Pending",
+            value: data.pending,
+            imageUrl: data.imageUrl,
+          },
         ],
       };
     }
 
-    return { title: 'Items', rows: [] };
+    return { title: "Items", rows: [] };
   }, [data, stats_endpoint]);
 
   const totalCount = rows.reduce((sum, r) => sum + r.value, 0);
@@ -50,9 +60,12 @@ const StatsCardLarge = ({
   return (
     <div
       className={`
-        flex justify-between border-4 transition-all duration-200
+        flex justify-between transition-all duration-200
         w-full h-52 rounded-[40px] px-10 py-8
-        ${active ? 'border-black bg-black text-white' : 'border-gray-200 bg-white text-gray-900'}
+        ${active
+          ? "border-black bg-black text-white"
+          : " bg-[#E1E1E1] text-[#A1A1A1]"
+        }
       `}
     >
       {/* left side */}
@@ -68,7 +81,7 @@ const StatsCardLarge = ({
         </div>
       </div>
 
-        {/* right side */}
+      {/* right side */}
       <div className="flex flex-col justify-center space-y-2">
         {loading ? (
           <p className="text-[16px] opacity-70">Loading...</p>
