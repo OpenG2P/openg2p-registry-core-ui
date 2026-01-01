@@ -133,6 +133,19 @@ export default function RegisterTypePage() {
     }
   }, [currentPage, paginationInfo, navigateToPage]);
 
+  const handleSearch = useCallback((searchValue: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (searchValue.trim()) {
+      params.set('search', searchValue.trim());
+    } else {
+      params.delete('search');
+    }
+    // reset page to 1 when search is applied
+    params.set('page', '1');
+    router.push(`/register/${registerType}?${params.toString()}`);
+  }, [searchParams, router, registerType]);
+
+
   const sortedDisplayFields = useCallback(
     (fields: DisplayField[]): DisplayField[] => {
       return [...fields].sort((a, b) => a.order - b.order);
@@ -140,18 +153,21 @@ export default function RegisterTypePage() {
     []
   );
 
-
   return (
     <div className="min-h-screen mx-auto bg-[#F3F1E4]">
       <TopBar
         breadcrumb={[{ label: registerTypeLabel }]}
         showFilters
         showPagination
+        showSearch
+        searchPlaceholder={`${searchQuery || "search"}`}
+        searchValue={searchQuery || ''}
+        onSearch={handleSearch}
         pageStart={pagination.pageStart}
         pageEnd={pagination.pageEnd}
         total={pagination.total}
         onPrev={handlePreviousPage}
-        onNext={handleNextPage}
+        onNext={handleNextPage} 
         onApplyFilters={applyFilters}
         appliedFilters={appliedFilters}
         filterConfig={filterConfig}
