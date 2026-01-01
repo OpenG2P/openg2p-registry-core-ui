@@ -36,14 +36,18 @@ const RegisterDropdown = ({
         onClick={() => setOpen((v) => !v)}
         className={`
           flex h-14 w-full items-center justify-between
-          rounded-4xl border border-[#ED7C22] bg-white px-8
+          rounded-[30px] border border-[#ED7C22] bg-white px-6
           text-sm font-semibold text-gray-800
           transition-colors
           ${open
             ? "rounded-b-none border-b-0"
-            : `rounded-r-none border-r-0 after:absolute after:right-0 after:top-2 after:bottom-2 after:w-px after:bg-[#ED7C22] after:content-[''] `}`}
+            : `rounded-r-none border-r-0 after:absolute after:right-0 after:top-1 after:bottom-1 after:w-px after:bg-[#ED7C22] after:content-[''] `}
+            `}
       >
-        <span className="truncate">{selectedLabel}</span>
+        <span className={`truncate text-[18px] ${open ? "text-gray-400" : ""}`}>
+          {selectedLabel}
+        </span>
+
         <span
           className={`text-4xl transition-transform duration-200 ${open ? "rotate-180" : ""
             }`}
@@ -56,8 +60,8 @@ const RegisterDropdown = ({
       {open && (
         <div
           className="
-            absolute w-full z-20 top-full
-            overflow-hidden rounded-b-4xl border
+            absolute w-full z-20
+            overflow-hidden rounded-b-[30px] border
             border-t-0 border-[#ED7C22]
             bg-white shadow-lg
           "
@@ -71,12 +75,9 @@ const RegisterDropdown = ({
                 setOpen(false);
               }}
               className={`
-                block w-full px-8 py-2 text-left
-                text-sm font-semibold
+                block w-full px-6 pb-2 text-left
+                text-[16px] font-semibold
                 transition-colors
-                cursor-pointer
-                
-
                 ${selected === opt.value ? "bg-gray-100" : ""}
               `}
             >

@@ -18,6 +18,7 @@ const StatsCardLarge = ({
   });
 
   const { title, rows } = useMemo(() => {
+    if (loading) return { title: '', rows: [] };
     if (!data) return { title: "Items", rows: [] };
 
     if (Array.isArray(data)) {
@@ -53,50 +54,64 @@ const StatsCardLarge = ({
     }
 
     return { title: "Items", rows: [] };
-  }, [data, stats_endpoint]);
+  }, [data, loading, stats_endpoint]);
 
-  const totalCount = rows.reduce((sum, r) => sum + r.value, 0);
+  const totalCount = useMemo(() => {
+    if (loading) return null;
+    return rows.reduce((sum, r) => sum + r.value, 0);
+  }, [rows, loading]);
+
+  const pulseBg = active ? "bg-white/20" : "bg-black/20";
 
   return (
     <div
       className={`
         flex justify-between transition-all duration-200
-        w-full h-52 rounded-[40px] px-10 py-8
+        w-full h-52 rounded-[30px] px-10 py-8 gap-2
         ${active
           ? "border-black bg-black text-white"
-          : " bg-[#E1E1E1] text-[#A1A1A1]"
+          : "bg-[#E1E1E1] text-[#A1A1A1]"
         }
       `}
     >
-      {/* left side */}
+      {/* LEFT */}
       <div className="flex flex-col justify-center">
-        <div className="flex flex-col gap-1">
-          <span className="font-roboto text-[85px] font-bold leading-none">
-            {totalCount}
-          </span>
-
-          <span className="font-roboto text-[24px] font-bold leading-none">
-            {title}
-          </span>
-        </div>
+        {loading ? (
+          <div className="animate-pulse space-y-3">
+            <div className={`h-20 w-32 rounded ${pulseBg}`} />
+            <div className={`h-6 w-40 rounded ${pulseBg}`} />
+          </div>
+        ) : (
+          <>
+            <span className="font-roboto text-[85px] font-bold leading-none">
+              {totalCount}
+            </span>
+            <span className="font-roboto text-[24px] font-bold leading-none">
+              {title}
+            </span>
+          </>
+        )}
       </div>
 
-      {/* right side */}
-      <div className="flex flex-col justify-center space-y-2">
+      {/* RIGHT */}
+      <div className="flex flex-col justify-center space-y-3 min-w-[140px]">
         {loading ? (
-          <p className="text-[16px] opacity-70">Loading...</p>
+          <div className="animate-pulse space-y-2">
+            <div className={`h-4 w-28 rounded ${pulseBg}`} />
+            <div className={`h-4 w-24 rounded ${pulseBg}`} />
+          </div>
         ) : error ? (
           <p className="text-[16px] text-red-500">Failed to load stats</p>
         ) : (
           rows.map((row) => (
-            <div key={row.id} className="flex items-center gap-3 mb-0">
+            <div key={row.id} className="flex items-center gap-3">
               {row.imageUrl && (
-                <Image src={row.imageUrl} width={18} height={18} alt="" />
+                <Image src={row.imageUrl} width={20} height={20} alt="" />
               )}
-              <span className="font-roboto text-[16px] font-medium leading-[30px]">
+              <span className="text-[16px] font-medium leading-[30px]">
                 {row.value}
               </span>
-              <span className="font-roboto text-[16px] font-medium leading-[30px] opacity-80">
+              <span className="text-[16px] font-medium leading-[30px] opacity-80">
                 {row.label}
               </span>
             </div>

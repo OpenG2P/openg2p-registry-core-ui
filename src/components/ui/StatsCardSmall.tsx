@@ -101,7 +101,7 @@ const StatsCardSmall = ({
     <div
       className={`
         flex flex-col justify-between  transition-all duration-200
-        w-full h-auto rounded-[44px] px-6 py-5
+        w-auto h-auto rounded-[30px] px-6 py-4
         ${active
           ? "border-black bg-black text-white"
           : "bg-[#E1E1E1] text-[#A1A1A1]"
@@ -109,18 +109,31 @@ const StatsCardSmall = ({
       `}
     >
       <div className="pointer-events-none">
-        {/* ocunt and tittle */}
+        {/* count and title */}
         <div className="mb-4">
-          <h2 className="font-roboto text-[50px] font-bold leading-none">
-            {totalCount}
-          </h2>
-          <h3 className="font-roboto text-[16px] font-medium leading-7">
-            {title}
-          </h3>
+          {loading ? (
+            <div className="animate-pulse space-y-2">
+              <div className="h-[50px] w-32 rounded bg-gray-300 dark:bg-gray-700"></div>
+              <div className="h-7 w-24 rounded bg-gray-300 dark:bg-gray-700"></div>
+            </div>
+          ) : (
+            <>
+              <h2 className="font-roboto text-[50px] font-bold leading-none">
+                {totalCount}
+              </h2>
+              <h3 className="font-roboto text-[16px] font-medium leading-7">
+                {title}
+              </h3>
+            </>
+          )}
         </div>
 
+
         {loading ? (
-          <p className="text-sm opacity-70">Loading...</p>
+          <div className="animate-pulse space-y-2">
+            <div className="h-6 w-24 rounded bg-gray-300 dark:bg-gray-700"></div>
+            <div className="h-6 w-32 rounded bg-gray-300 dark:bg-gray-700"></div>
+          </div>
         ) : error ? (
           <p className="text-sm text-red-500">Failed to load stats</p>
         ) : (
@@ -129,7 +142,7 @@ const StatsCardSmall = ({
             {rows.map((row) => (
               <li key={row.id} className="flex items-center gap-2">
                 {row.imageUrl && (
-                  <Image src={row.imageUrl} width={16} height={16} alt="" />
+                  <Image src={row.imageUrl} width={18} height={18} alt="" />
                 )}
 
                 {/* value */}

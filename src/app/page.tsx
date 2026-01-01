@@ -52,7 +52,7 @@ export default function Home() {
     useState<ActiveStatsCard>('registers');
   const [selectedRegister, setSelectedRegister] = useState('select');
 
-  const { data: registers } = useFetch<Register[]>({
+  const { data: registers, loading: registerLoading } = useFetch<Register[]>({
     url: '/api/register/all',
   });
 
@@ -122,10 +122,10 @@ export default function Home() {
           absolute inset-0
           bg-[url('/svgs/VectorGroup.svg')]
           bg-repeat
-          bg-[length:240px_240px]
-          sm:bg-[length:300px_300px]
-          md:bg-[length:420px_420px]
-          lg:bg-[length:492.5px_492.55px]
+          bg-size-[240px_240px]
+          sm:bg-size-[300px_300px]
+          md:bg-size-[420px_420px]
+          lg:bg-size-[492.5px_492.55px]
           opacity-40
         "
       />
@@ -136,11 +136,11 @@ export default function Home() {
           {/* stats cards */}
           <div
             className={`
-              flex flex-wrap items-stretch w-full
+              flex flex-wrap items-stretch
               gap-4 sm:gap-5 lg:gap-6
               ${statsCardVariant === 'small'
-                ? 'justify-center'
-                : 'sm:w-4/5 md:w-3/4 justify-center lg:justify-center'
+                ? 'w-full justify-center'
+                : 'w-4/5 justify-between'
               }
             `}
           >
@@ -149,10 +149,13 @@ export default function Home() {
                 key={type}
                 type="button"
                 onClick={() => setActiveStatsCard(type)}
-                className="
-                  flex-1 bg-transparent p-0 text-left
-                  min-w-40 sm:min-w-[180px] lg:min-w-[220px]
-                "
+                className={`
+                  bg-transparent p-0 text-left
+                  ${statsCardVariant === 'small'
+                    ? 'flex-1 min-w-40 sm:min-w-[180px] lg:min-w-[220px]'
+                    : 'w-[calc(50%-12px)] sm:w-[calc(50%-10px)] lg:w-[calc(50%-12px)]'
+                  }
+                `}
               >
                 <StatsCardComponent
                   stats_endpoint={`/api/stats/${type === 'registers' ? 'register' : type
@@ -165,7 +168,7 @@ export default function Home() {
 
           {/* Search Bar */}
           <div
-            className="border-[#ED7C22] flex h-14 w-4/5 items-center rounded-full border bg-white"
+            className="relative border-[#ED7C22] flex h-14 w-4/5 items-center rounded-[30px] border bg-white overflow-visible"
           >
             {activeStatsCard === 'registers' && (
               <RegisterDropdown
@@ -182,6 +185,7 @@ export default function Home() {
             />
           </div>
         </div>
+
 
         {/* People SVG below search bar  */}
         <div className="relative w-full mt-8 sm:mt-10 md:mt-12 lg:mt-14 px-4 sm:px-6 md:px-8 lg:px-10">
