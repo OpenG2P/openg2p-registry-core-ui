@@ -12,7 +12,7 @@ const MOCK_REGISTER_RECORDS = {
       functional_record_id: "FARMER-00001",
       link_record_id: null,
       record_name: "Rajesh Kumar",
-      image: null,
+      image: "/male_image.png",
       display_fields: [
         { field_name: "first_name", value: "Rajesh", order: 1 },
         { field_name: "last_name", value: "Kumar", order: 2 },
@@ -27,7 +27,7 @@ const MOCK_REGISTER_RECORDS = {
       functional_record_id: "FARMER-00002",
       link_record_id: null,
       record_name: "Sita Devi",
-      image: null,
+      image: '/female_image.png',
       display_fields: [
         { field_name: "first_name", value: "Sita", order: 1 },
         { field_name: "last_name", value: "Devi", order: 2 },
@@ -42,7 +42,7 @@ const MOCK_REGISTER_RECORDS = {
       functional_record_id: "FARMER-00003",
       link_record_id: null,
       record_name: "Amit Sharma",
-      image: null,
+      image: "/male_image.png",
       display_fields: [
         { field_name: "first_name", value: "Amit", order: 1 },
         { field_name: "last_name", value: "Sharma", order: 2 },

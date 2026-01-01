@@ -41,9 +41,9 @@ export default function TopBar({
     filterLoading = false,
 }: TopBarProps) {
     return (
-        <div className="w-full bg-white shadow-sm px-4 h-[60px] flex justify-between items-center">
+        <div className="w-full px-4 sm:px-6 h-[70px] flex justify-between items-center">
             <BreadcrumbBar breadcrumb={breadcrumb} />
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 sm:gap-4">
                 {showFilters && (
                     <FilterBar
                         onFilters={onFilters}
