@@ -17,8 +17,8 @@ export default function BreadcrumbBar({ breadcrumb = [] }: BreadcrumbBarProps) {
         <div className="flex items-center gap-2">
 
             <Link href="/" passHref>
-                <div className="h-[30px] flex items-center px-3 rounded  cursor-pointer ">
-                    <Image src="/home.png" width={20} height={20} alt="home" />
+                <div className="h-[30px] flex items-center rounded pr-2 cursor-pointer ">
+                    <Image src="/home.png" width={22} height={22} alt="home" />
                 </div>
             </Link>
 
@@ -30,9 +30,7 @@ export default function BreadcrumbBar({ breadcrumb = [] }: BreadcrumbBarProps) {
                         key={index}
                         className="flex items-center gap-2"
                     >
-                        <div className="w-[97px] h-[23px] flex items-center justify-center font-medium text-[20px] text-black ">
-
-
+                        <div className="w-[97px] h-[23px] flex font-medium text-[20px] text-black ">
                             {item.href && !isLast ? (
                                 <Link href={item.href} passHref>
                                     {item.label}
@@ -40,7 +38,6 @@ export default function BreadcrumbBar({ breadcrumb = [] }: BreadcrumbBarProps) {
                             ) : (
                                 <span>{item.label}</span>
                             )}
-
                         </div>
                     </div>
                 );
