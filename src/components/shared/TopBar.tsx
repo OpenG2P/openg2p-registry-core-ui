@@ -50,39 +50,41 @@ export default function TopBar({
     filterLoading = false,
 }: TopBarProps) {
     return (
-        <div className="w-full px-4 sm:px-6 h-[70px] flex justify-between items-center">
-            <BreadcrumbBar breadcrumb={breadcrumb} />
-            <div className="flex items-center gap-2 sm:gap-4">
-                {showSearch === true && (
-                    <div className=" border border-[#ED7C22] min-w-[200px] max-w-[250px] rounded-4xl h-[30px] flex items-center overflow-hidden bg-[#FFFFFF]">
-                        <SearchBar
-                            placeholder={searchPlaceholder}
-                            category=""
-                            searchValue={searchValue}
-                            iconSize={16}
-                            onSearch={(value) => onSearch?.(value)}
+        <div className="w-full h-[70px] flex justify-center items-center">
+            <div className="w-full px-[30px] flex justify-between items-center">
+                <BreadcrumbBar breadcrumb={breadcrumb} />
+                <div className="flex items-center gap-2 sm:gap-4">
+                    {showSearch && (
+                        <div className="border border-[#ED7C22] rounded-[30px] h-[30px] flex items-center overflow-hidden bg-[#FFFFFF]">
+                            <SearchBar
+                                placeholder={searchPlaceholder}
+                                category=""
+                                searchValue={searchValue}
+                                iconSize={16}
+                                onSearch={(value) => onSearch?.(value)}
+                            />
+                        </div>
+                    )}
+                    {showFilters && (
+                        <FilterBar
+                            onFilters={onFilters}
+                            onApplyFilters={onApplyFilters}
+                            appliedFilters={appliedFilters}
+                            filterConfig={filterConfig}
+                            filterLoading={filterLoading}
                         />
-                    </div>
-                )}
-                {showFilters === true && (
-                    <FilterBar
-                        onFilters={onFilters}
-                        onApplyFilters={onApplyFilters}
-                        appliedFilters={appliedFilters}
-                        filterConfig={filterConfig}
-                        filterLoading={filterLoading}
-                    />
-                )}
+                    )}
 
-                {showPagination === true && (
-                    <PaginationBar
-                        pageStart={pageStart}
-                        pageEnd={pageEnd}
-                        total={total}
-                        onPrev={onPrev}
-                        onNext={onNext}
-                    />
-                )}
+                    {showPagination && (
+                        <PaginationBar
+                            pageStart={pageStart}
+                            pageEnd={pageEnd}
+                            total={total}
+                            onPrev={onPrev}
+                            onNext={onNext}
+                        />
+                    )}
+                </div>
             </div>
         </div>
     );

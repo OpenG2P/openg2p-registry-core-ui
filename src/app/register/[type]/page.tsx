@@ -167,13 +167,13 @@ export default function RegisterTypePage() {
         pageEnd={pagination.pageEnd}
         total={pagination.total}
         onPrev={handlePreviousPage}
-        onNext={handleNextPage} 
+        onNext={handleNextPage}
         onApplyFilters={applyFilters}
         appliedFilters={appliedFilters}
         filterConfig={filterConfig}
       />
 
-      <div className="mx-auto px-4 sm:px-6 lg:px-8 py-4 bg-white rounded-[30px] max-w-7xl">
+      <div className="mx-[30px] px-4 sm:px-6 lg:px-8 py-4 bg-white rounded-[30px]">
 
         <SelectedFilters
           appliedFilters={appliedFilters}
@@ -198,11 +198,10 @@ export default function RegisterTypePage() {
                   href={`/register/${registerType}/${record.internal_record_id}`}
                   className="block w-full"
                 >
-                  <div className={`flex items-center gap-4 sm:gap-6 px-4 sm:px-6 lg:px-8 p-4 w-full overflow-hidden ${
-                    isEven 
-                      ? 'bg-[#D9D9D940]' 
-                      : 'bg-white'
-                  }`}>
+                  <div className={`flex items-center gap-4 sm:gap-6 px-4 sm:px-6 lg:px-8 p-4 w-full overflow-hidden ${isEven
+                    ? 'bg-[#D9D9D940]'
+                    : 'bg-white'
+                    }`}>
                     {record.image ? (
                       <img
                         src={record.image}
