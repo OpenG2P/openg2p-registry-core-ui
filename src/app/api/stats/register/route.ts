@@ -13,19 +13,24 @@ const MOCK_REGISTER_SUMMARY = [
     register_mnemonic: "Farmer",
     register_subject: "Farmers",
     total_record_count: 7,
+    imageUrl:"/openg2p_logo.png" 
+
   },
+
   {
     register_id: "3a8c0f86-b782-4f0a-becb-beede846a340",
     register_mnemonic: "Family",
     register_subject: "Families",
     total_record_count: 3,
+    imageUrl:"/openg2p_logo.png" 
   },
   {
     register_id: "b3284590-2865-4a81-b4da-85588070a4a4",
     register_mnemonic: "FamilyMember",
     register_subject: "FamilyMembers",
     total_record_count: 6,
-  },
+    imageUrl:"/openg2p_logo.png",
+  }
 ];
 
 /**

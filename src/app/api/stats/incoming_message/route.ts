@@ -11,6 +11,8 @@ const MOCK_INCOMING_MESSAGE_STATS = {
   total_incoming_messages: 7000,
   partners: 5,
   data_models: 3,
+  imageUrl:"/openg2p_logo.png" 
+
 };
 
 export async function GET(_req: NextRequest) {
