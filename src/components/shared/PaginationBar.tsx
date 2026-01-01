@@ -70,19 +70,20 @@ export default function PaginationBar({
     const isNextDisabled = pageEnd >= total;
 
     return (
-        <div className="flex items-center gap-3">
-            <span className="text-sm text-gray-700 min-w-[140px] text-center">
-                {pageStart} - {pageEnd} of {total}
+        <div className="flex items-center gap-2">
+            <span className="w-[80px] h-[19px] text-center font-normal text-[16px] text-[#1E1E1E]">
+            {pageStart} - {pageEnd} of {total}
             </span>
+
 
             <div className="flex items-center gap-2">
                 <button
                     onClick={onPrev}
                     disabled={isPrevDisabled}
-                    className={`h-[30px] w-[30px] flex items-center justify-center border rounded
+                    className={`w-[40px] h-[34px] flex items-center justify-center rounded-[17px]
             ${isPrevDisabled
-                            ? "bg-gray-100 cursor-not-allowed opacity-50"
-                            : "bg-white hover:bg-gray-100"
+                            ? "bg-[#F2BA1A] cursor-not-allowed"
+                            : "bg-[#F2BA1A]"
                         }`}
                 >
                     <Image
@@ -97,10 +98,10 @@ export default function PaginationBar({
                 <button
                     onClick={onNext}
                     disabled={isNextDisabled}
-                    className={`h-[30px] w-[30px] flex items-center justify-center border rounded
+                    className={`w-[40px] h-[34px] flex items-center justify-center rounded-[17px]
             ${isNextDisabled
-                            ? "bg-gray-100 cursor-not-allowed opacity-50"
-                            : "bg-white hover:bg-gray-100"
+                            ? "bg-[#F2BA1A] cursor-not-allowed"
+                            : "bg-[#F2BA1A]"
                         }`}
                 >
                     <Image

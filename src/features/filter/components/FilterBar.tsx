@@ -36,10 +36,12 @@ export default function FilterBar({
         <div className="relative inline-block" ref={dropdownRef}>
             <button
                 onClick={() => setOpen((prev) => !prev)}
-                className="h-[30px] flex items-center gap-16 px-3 border rounded bg-white text-sm hover:bg-gray-100 disabled:opacity-50"
+                className="h-[30px] flex items-center gap-16 px-3  rounded-4xl bg-[#F2BA1A] text-sm "
                 disabled={filterLoading}
-            >
-                <span>{filterLoading ? "Loading..." : "Filters"}</span>
+            >   <span className="font-medium text-[16px] leading-none tracking-normal text-[#1E1E1E]">
+                {filterLoading ? "Loading..." : "Filters"}
+                </span>
+
                 <Image src="/filter_icon.png" width={16} height={16} alt="filters" />
             </button>
 

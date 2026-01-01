@@ -148,8 +148,8 @@ export default function FilterDropdown({
                         onClick={() => setSelectedFilterId(filter.id)}
                         className={`w-full text-left px-3 py-2 rounded-lg text-sm
               ${filter.id === selectedFilterId
-                                ? "bg-gray-500 text-white"
-                                : "hover:bg-gray-100 text-gray-700"}`}
+                                ? "bg-[#F2BA1A] text-black"
+                                : "hover: bg-[#F2BA2D] text-black"}`}
                     >
                         {filter.label}
                     </button>
@@ -158,7 +158,7 @@ export default function FilterDropdown({
 
             <div className="w-px bg-gray-200 my-4" />
 
-            <div className="flex-1 p-5 space-y-6">
+            <div className="flex-1 p-5 space-y-6 justify-center">
                 <div className="text-xl font-semibold">
                     {selectedFilter && `Search by ${selectedFilter.label.toLowerCase()}`}
                 </div>
@@ -193,12 +193,14 @@ export default function FilterDropdown({
                     </>
                 )}
 
+                <div className="flex justify-center">
                 <button
                     onClick={applyFilter}
-                    className="bg-black text-white px-5 py-2.5 rounded-lg text-sm"
+                    className="bg-black text-white px-5 py-2.5 rounded-lg text-sm text-center"
                 >
-                    Apply Filter
+                    Apply
                 </button>
+            </div>
             </div>
         </div>
     );

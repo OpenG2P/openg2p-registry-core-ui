@@ -142,7 +142,7 @@ export default function RegisterTypePage() {
 
 
   return (
-    <div className="min-h-screen mx-auto">
+    <div className="min-h-screen mx-auto bg-[#F3F1E4]">
       <TopBar
         breadcrumb={[{ label: registerTypeLabel }]}
         showFilters
@@ -157,47 +157,51 @@ export default function RegisterTypePage() {
         filterConfig={filterConfig}
       />
 
-      <div className="px-6 py-4">
-        <div className="border-b border-gray-200 mb-4">
-          <SelectedFilters
-            appliedFilters={appliedFilters}
-            filterConfig={filterConfig}
-            removeFilter={removeFilter}
-            clearAllFilters={clearAllFilters}
-          />
-        </div>
+      <div className="mx-auto px-4 sm:px-6 lg:px-8 py-4 bg-white rounded-[30px] max-w-7xl">
 
-        <div className="space-y-3">
+        <SelectedFilters
+          appliedFilters={appliedFilters}
+          filterConfig={filterConfig}
+          removeFilter={removeFilter}
+          clearAllFilters={clearAllFilters}
+        />
+
+        <div className="-mx-4 sm:-mx-6 lg:-mx-8 space-y-2">
           {isLoadingRecords ? (
             <div className="text-center py-10 text-gray-500">Loading...</div>
           ) : records.length === 0 ? (
             <div className="text-center py-10 text-gray-500">No items found</div>
           ) : (
-            records.map((record) => {
+            records.map((record, index) => {
               const sortedFields = sortedDisplayFields(record.display_fields);
+              const isEven = index % 2 === 0;
 
               return (
                 <Link
                   key={record.internal_record_id}
                   href={`/register/${registerType}/${record.internal_record_id}`}
-                  className="block"
+                  className="block w-full"
                 >
-                  <div className="flex items-center gap-6 p-5 bg-white border-2 border-gray-300 rounded-md hover:shadow-sm hover:border-gray-400 transition-all">
+                  <div className={`flex items-center gap-4 sm:gap-6 px-4 sm:px-6 lg:px-8 p-4 w-full overflow-hidden ${
+                    isEven 
+                      ? 'bg-[#D9D9D940]' 
+                      : 'bg-white'
+                  }`}>
                     {record.image ? (
                       <img
                         src={record.image}
                         alt={record.record_name}
-                        className="w-16 h-16 rounded-md object-cover shrink-0"
+                        className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-md object-cover shrink-0"
                       />
                     ) : (
-                      <div className="w-16 h-16 bg-gray-300 rounded-md shrink-0" />
+                      <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gray-300 rounded-md shrink-0" />
                     )}
 
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-bold text-gray-900 text-base mb-0.5">
+                      <h3 className="font-bold text-[#ED7C22] text-sm sm:text-base mb-0.5">
                         {record.record_name}
                       </h3>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-xs sm:text-sm text-gray-600">
                         <span className="font-bold">ID :</span>{' '}
                         <span className="font-bold text-gray-900">
                           {record.internal_record_id}
@@ -213,14 +217,14 @@ export default function RegisterTypePage() {
 
                       return (
                         <div key={startIndex} className="flex-1 min-w-0">
-                          <p className="text-sm text-gray-900 truncate">
+                          <p className="text-xs sm:text-sm text-gray-900 truncate">
                             <span className="font-bold text-gray-600">
                               {firstField.field_name}:{' '}
                             </span>
                             <span className="font-bold">{firstField.value}</span>
                           </p>
                           {secondField && (
-                            <p className="text-sm text-gray-900 truncate">
+                            <p className="text-xs sm:text-sm text-gray-900 truncate">
                               <span className="font-bold text-gray-600">
                                 {secondField.field_name}:{' '}
                               </span>
