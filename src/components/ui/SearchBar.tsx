@@ -5,29 +5,31 @@ import { Search } from "lucide-react";
 
 interface SearchBarProps {
   placeholder: string;
+  searchValue?: string;
   category: string;
   onSearch: (value: string, category: string) => void;
+  iconSize?: number;
 }
 
-const SearchBar = ({ placeholder, category, onSearch }: SearchBarProps) => {
-  const [value, setValue] = useState("");
+const SearchBar = ({ placeholder, searchValue, category, onSearch, iconSize = 24 }: SearchBarProps) => {
+  const [value, setValue] = useState(searchValue || "");
 
   return (
-    <div className="  flex flex-1 items-start px-4 py-3">
+    <div className="flex flex-1 items-center px-3 py-1">
       <input
         type="text"
         placeholder={placeholder}
         value={value}
         onChange={(e) => setValue(e.target.value)}
         onKeyDown={(e) => e.key === "Enter" && onSearch(value, category)}
-        className=" border-none outline-none flex-1 bg-transparent  px-2 py-2 text-gray-700 placeholder-gray-400"
+        className="border-none outline-none flex-1 bg-transparent px-1 py-0 text-sm font-medium text-[#1E1E1E] placeholder-[#1E1E1E]"
       />
 
       <button
         onClick={() => onSearch(value, category)}
-        className="px-2 text-black mt-2"
+        className="px-1 text-[#1E1E1E]"
       >
-        <Search size={24} />
+        <Search size={iconSize} />
       </button>
 
     </div>
