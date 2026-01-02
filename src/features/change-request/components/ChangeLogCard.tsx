@@ -12,23 +12,23 @@ export default function ChangeLogCard({ log, onViewDetails }: Props) {
     return (
         <div className="rounded-[30px] bg-white px-10 py-5 mr-60">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="space-y-2">
-                    <h3 className="text-lg font-semibold text-black min-h-7">
+                <div className="space-y-2 text-[16px] text-[#00000080]">
+                    <h3 className="text-lg font-semibold text-black">
                         Change XYZ
                     </h3>
 
-                    <div className="text-[16px] text-[#00000080]">
+                    <div>
                         Change ID: <span className="text-black font-medium">{log.change_request_id}</span>
                     </div>
 
-                    <div className="text-[16px] text-[#00000080]">
+                    <div>
                         Status:{' '}
                         <span className="font-medium text-red-500">
                             {log.approval_status}
                         </span>
                     </div>
 
-                    <div className="text-[16px] text-[#00000080]">
+                    <div>
                         Change Date:{' '}
                         <span className="text-black font-medium">
                             {new Date(log.created_at).toLocaleDateString()}
@@ -37,15 +37,17 @@ export default function ChangeLogCard({ log, onViewDetails }: Props) {
                 </div>
 
                 <div className="space-y-2 text-[16px] text-[#00000080]">
-                    <div className="min-h-7" />
-                    <div className="border-l-3 border-[#D9D9D9] pl-6">
+                    <h3 className="text-lg font-semibold text-black invisible">
+                        Change Data
+                    </h3>
+                    <div className="border-l-3 space-y-2 border-[#D9D9D9] pl-6">
                         <div>
                             No. of verification required:{' '}
                             <span className="text-black font-medium">
                                 {log.no_of_verifications_required}
                             </span>
                         </div>
-                        <div >
+                        <div>
                             No. of verification done:{' '}
                             <span className="text-black font-medium">
                                 {log.no_of_verifications_done}
@@ -59,7 +61,7 @@ export default function ChangeLogCard({ log, onViewDetails }: Props) {
                 </div>
 
                 <div className="space-y-2 text-[16px] text-[#00000080]">
-                    <div className="pl-6 flex items-center gap-0 min-h-7 leading-none">
+                    <div className="pl-6 flex items-center gap-0 leading-none">
                         <span className="text-lg font-semibold text-black">
                             Attached Doc
                         </span>
@@ -68,7 +70,7 @@ export default function ChangeLogCard({ log, onViewDetails }: Props) {
                             alt="Attached documents"
                             width={14}
                             height={14}
-                            className="ml-1"
+                            className="ml-1 mb-1"
                         />
                     </div>
                     <div className="flex flex-col gap-2 font-semibold text-black text-[16px] border-l-3 border-[#D9D9D9] pl-6">
@@ -76,7 +78,7 @@ export default function ChangeLogCard({ log, onViewDetails }: Props) {
                             (label) => (
                                 <span
                                     key={label}
-                                    className="flex items-center gap-1 cursor-pointer"
+                                    className="flex items-center gap-2 cursor-pointer"
                                 >
                                     {label}
                                     <Image
