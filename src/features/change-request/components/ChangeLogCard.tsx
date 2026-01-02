@@ -1,5 +1,6 @@
 'use client';
 
+import Image from "next/image";
 import { ChangeLog } from "@/features/change-request/types";
 
 interface Props {
@@ -9,62 +10,102 @@ interface Props {
 
 export default function ChangeLogCard({ log, onViewDetails }: Props) {
     return (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 border rounded-lg bg-white p-4">
-            <div className="space-y-1">
-                <div className="text-sm font-semibold">
-                    Change ID: {log.change_request_id}
+        <div className="rounded-[30px] bg-white px-10 py-5 mr-60">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="space-y-2">
+                    <h3 className="text-lg font-semibold text-black min-h-7">
+                        Change XYZ
+                    </h3>
+
+                    <div className="text-[16px] text-[#00000080]">
+                        Change ID: <span className="text-black font-medium">{log.change_request_id}</span>
+                    </div>
+
+                    <div className="text-[16px] text-[#00000080]">
+                        Status:{' '}
+                        <span className="font-medium text-red-500">
+                            {log.approval_status}
+                        </span>
+                    </div>
+
+                    <div className="text-[16px] text-[#00000080]">
+                        Change Date:{' '}
+                        <span className="text-black font-medium">
+                            {new Date(log.created_at).toLocaleDateString()}
+                        </span>
+                    </div>
                 </div>
 
-                <div className="text-sm">
-                    Status:{' '}
-                    <span className="font-medium">{log.approval_status}</span>
-                </div>
-
-                <div className="text-sm">
-                    Change Date:{' '}
-                    <span className="font-medium">
-                        {new Date(log.created_at).toLocaleString()}
-                    </span>
-                </div>
-            </div>
-
-            <div className="space-y-1 text-sm">
-                <div>
-                    Verification Required:{' '}
-                    <span className="font-medium">{log.no_of_verifications_required}</span>
-                </div>
-
-                <div>
-                    Verification Done:{' '}
-                    <span className="font-medium">{log.no_of_verifications_done}</span>
-                </div>
-
-                {/* <div>
-                    Docs Uploaded:{' '}
-                    <span className="font-medium">{log.documents.length}</span>
-                </div> */}
-            </div>
-
-            <div className="space-y-1 text-sm">
-                <div className="font-medium text-gray-700">Documents</div>
-
-                {/* {log.documents.length === 0 ? (
-                    <div className="text-gray-400 text-xs">No documents</div>
-                ) : (
-                    log.documents.map(doc => (
-                        <div key={doc.doc_id} className="text-blue-600">
-                            {doc.doc_name}
+                <div className="space-y-2 text-[16px] text-[#00000080]">
+                    <div className="min-h-7" />
+                    <div className="border-l-3 border-[#D9D9D9] pl-6">
+                        <div>
+                            No. of verification required:{' '}
+                            <span className="text-black font-medium">
+                                {log.no_of_verifications_required}
+                            </span>
                         </div>
-                    ))
-                )} */}
+                        <div >
+                            No. of verification done:{' '}
+                            <span className="text-black font-medium">
+                                {log.no_of_verifications_done}
+                            </span>
+                        </div>
+                        <div>
+                            No. of documents attached:{' '}
+                            <span className="text-black font-medium">10</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="space-y-2 text-[16px] text-[#00000080]">
+                    <div className="pl-6 flex items-center gap-0 min-h-7 leading-none">
+                        <span className="text-lg font-semibold text-black">
+                            Attached Doc
+                        </span>
+                        <Image
+                            src="/attached_doc_icon.png"
+                            alt="Attached documents"
+                            width={14}
+                            height={14}
+                            className="ml-1"
+                        />
+                    </div>
+                    <div className="flex flex-col gap-2 font-semibold text-black text-[16px] border-l-3 border-[#D9D9D9] pl-6">
+                        {["Location Documents", "ID Card Documents", "Other Documents"].map(
+                            (label) => (
+                                <span
+                                    key={label}
+                                    className="flex items-center gap-1 cursor-pointer"
+                                >
+                                    {label}
+                                    <Image
+                                        src="/right_arrow.png"
+                                        alt="arrow"
+                                        width={14}
+                                        height={14}
+                                    />
+                                </span>
+                            )
+                        )}
+                    </div>
+                </div>
             </div>
 
-            <div>
+            <div className="my-4 border-t-3 border-[#D9D9D9]" />
+
+            <div className="flex items-center justify-between">
                 <button
                     onClick={onViewDetails}
-                    className="text-sm text-blue-600 hover:underline"
+                    className="text-[16px] text-black flex items-center gap-2 opacity-50 hover:opacity-100 transition"
                 >
-                    View details
+                    View Details
+                    <Image
+                        src="/right_arrow.png"
+                        alt="arrow"
+                        width={14}
+                        height={14}
+                    />
                 </button>
             </div>
         </div>

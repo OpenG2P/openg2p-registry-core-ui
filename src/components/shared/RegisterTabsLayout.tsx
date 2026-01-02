@@ -27,7 +27,7 @@ export default function RegisterTabsLayout({
 
             <div className="px-[30px] py-6">
                 {tabs && activeTab !== undefined && onTabChange && (
-                    <div className="flex gap-2 px-[25px]">
+                    <div className="flex gap-2 px-10">
                         {tabs.tabs.map((tab, tabIndex) => (
                             <button
                                 key={tab.tab_id}
