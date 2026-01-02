@@ -100,7 +100,7 @@ export default function RegisterDetailPage() {
     },
   });
 
-  
+
 
   // need to transform data if section use 
   const sectionDataMap = useMemo(() => {
@@ -113,7 +113,7 @@ export default function RegisterDetailPage() {
 
     for (const section of sectionsRecords) {
       const { section_register_id, records } = section;
-      
+
       if (!records || records.length === 0) continue;
 
       map[section_register_id] =
@@ -163,9 +163,9 @@ export default function RegisterDetailPage() {
 
   const handleSectionSave = useCallback(
     async (sectionChanges: SectionChanges) => {
-      console.log(sectionChanges,"section changes");
-      
-      if (!currentRegister) return;      
+      console.log(sectionChanges, "section changes");
+
+      if (!currentRegister) return;
       await submitChangeRequest(
         `/api/register/${registerType}/${recordId}/change_request/create`,
         {
@@ -173,9 +173,9 @@ export default function RegisterDetailPage() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             register_id: currentRegister.register_id,
-            section_register_id:null,// section_register_id and section_id will same.
+            section_register_id: null,// section_register_id and section_id will same.
             tab_id: activeTabId,
-            change_payload:sectionChanges,
+            change_payload: sectionChanges,
           }),
         }
       );

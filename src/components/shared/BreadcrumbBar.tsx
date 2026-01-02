@@ -14,31 +14,40 @@ interface BreadcrumbBarProps {
 
 export default function BreadcrumbBar({ breadcrumb = [] }: BreadcrumbBarProps) {
     return (
-        <div className="flex items-center gap-2">
-
+        <div className="flex items-end gap-2">
             <Link href="/" passHref>
-                <div className="h-[30px] flex items-center rounded pr-2 cursor-pointer ">
+                <div className="h-[30px] flex items-end pb-0.5 pr-2 cursor-pointer">
                     <Image src="/home.png" width={22} height={22} alt="home" />
                 </div>
             </Link>
 
             {breadcrumb.map((item, index) => {
                 const isLast = index === breadcrumb.length - 1;
+                const textColor = isLast ? "text-black" : "text-black/50";
 
                 return (
-                    <div
-                        key={index}
-                        className="flex items-center gap-2"
-                    >
-                        <div className="w-[97px] h-[23px] flex font-medium text-[20px] text-black ">
+                    <div key={index} className="flex items-end gap-2">
+                        {/* <div className="h-[23px] flex items-end font-medium text-[20px] text-black leading-none"> */}
+                        <div
+                            className={`h-[23px] flex items-end font-medium text-[20px] leading-none ${textColor}`}
+                        >
                             {item.href && !isLast ? (
-                                <Link href={item.href} passHref>
-                                    {item.label}
-                                </Link>
+                                <Link href={item.href}>{item.label}</Link>
                             ) : (
                                 <span>{item.label}</span>
                             )}
                         </div>
+                        {!isLast && (
+                            <div className="flex items-end pb-1">
+                                <Image
+                                    src="/breadcrumb_arrow.png"
+                                    width={8}
+                                    height={14}
+                                    alt="arrow"
+                                    className="w-2 3.5"
+                                />
+                            </div>
+                        )}
                     </div>
                 );
             })}

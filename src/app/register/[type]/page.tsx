@@ -154,7 +154,7 @@ export default function RegisterTypePage() {
   );
 
   return (
-    <div className="min-h-screen mx-auto bg-[#F3F1E4]">
+    <div className="min-h-screen pt-2.5 mx-auto bg-[#F3F1E4]">
       <TopBar
         breadcrumb={[{ label: registerTypeLabel }]}
         showFilters

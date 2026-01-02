@@ -20,21 +20,21 @@ export default function RegisterTabsLayout({
     children,
 }: Props) {
     return (
-        <div className="min-h-screen bg-gray-50">
-            <div className="px-10 py-4 bg-white border-b border-gray-300">
+        <div className="min-h-screen bg-[#F3F1E4]">
+            <div className="px-7.5 pt-7.5">
                 <BreadcrumbBar breadcrumb={breadcrumb} />
             </div>
 
-            <div className="px-10 py-6">
+            <div className="px-[30px] py-6">
                 {tabs && activeTab !== undefined && onTabChange && (
-                    <div className="flex gap-2 mb-6 border-b-4 border-gray-300">
+                    <div className="flex gap-2 px-[25px]">
                         {tabs.tabs.map((tab, tabIndex) => (
                             <button
                                 key={tab.tab_id}
                                 onClick={() => onTabChange(tabIndex)}
-                                className={`px-12 py-3 font-bold rounded-t-lg transition-all ${activeTab === tabIndex
-                                    ? 'bg-black text-white'
-                                    : 'bg-gray-300 text-gray-700 hover:bg-gray-400'
+                                className={`px-8 py-2 text-black text-[18px] font-medium rounded-t-[20px] transition-all ${activeTab === tabIndex
+                                    ? 'bg-[#F2BA1A]'
+                                    : 'bg-[#DDDDDD]'
                                     }`}
                             >
                                 {tab.tab_label}

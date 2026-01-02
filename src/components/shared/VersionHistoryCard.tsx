@@ -3,88 +3,117 @@
 import ViewAll from "@/components/shared/ViewAll";
 import { useFetch } from "@/shared/hooks/useFetch";
 import { ResponseBody } from "@/shared/types/backend-api";
+import Image from "next/image";
 
 interface Props {
-  type: string;
-  registerId: string;
-  internalRecordId: string;
+    type: string;
+    registerId: string;
+    internalRecordId: string;
 }
 
 export default function VersionHistoryCard({
-  type,
-  registerId,
-  internalRecordId,
+    type,
+    registerId,
+    internalRecordId,
 }: Props) {
-  const { data, loading } = useFetch<ResponseBody>({
-    url: `/api/register/${type}/${registerId}/get_number_of_versions`,
-    enabled: !!registerId && !!internalRecordId,
-    options: {
-      method: "POST",
-      body: JSON.stringify({
-        register_id: registerId,
-        internal_record_id: internalRecordId,
-      }),
-    },
-  });
+    const { data, loading } = useFetch<ResponseBody>({
+        url: `/api/register/${type}/${registerId}/get_number_of_versions`,
+        enabled: !!registerId && !!internalRecordId,
+        options: {
+            method: "POST",
+            body: JSON.stringify({
+                register_id: registerId,
+                internal_record_id: internalRecordId,
+            }),
+        },
+    });
 
-  const payload =
-    data?.response_payload as
-    | {
-      number_of_versions: number;
-      last_updated_by: string;
-      last_updated_at: string;
-      last_approved_by?: string;
-      last_approved_at?: string;
+    const payload =
+        data?.response_payload as
+        | {
+            number_of_versions: number;
+            last_updated_by: string;
+            last_updated_at: string;
+            last_approved_by?: string;
+            last_approved_at?: string;
+        }
+        | undefined;
+
+    if (loading) {
+        return (
+            <div className="rounded-[30px] bg-[#E0E0E0] px-8 pt-5 pb-8 text-sm">
+                Loading version history...
+            </div>
+        );
     }
-    | undefined;
 
-  if (loading) {
+    if (!payload) return null;
+
     return (
-      <div className="bg-white rounded-lg border p-4 text-sm">
-        Loading version history...
-      </div>
+        <div className="relative rounded-[30px] bg-[#E0E0E0] px-8 pt-5 pb-8 overflow-hidden">
+            <div className="flex items-center justify-between mb-5">
+                <h3 className="text-[24px] font-semibold text-black leading-none">
+                    Version History
+                </h3>
+                <div className="flex h-[60px] w-20 items-center justify-center rounded-[20px] border-3 border-white bg-[#D9D9D9] text-[34px] font-bold text-black">
+                    {payload.number_of_versions}
+                </div>
+            </div>
+
+            <div className="space-y-1 text-[16px] text-black">
+                <p className="font-medium">Last Updated by</p>
+                <div className="flex items-center gap-2">
+                    <Image
+                        src="/version_profile.png"
+                        alt="Updated by"
+                        width={16}
+                        height={16}
+                        className="rounded-full"
+                    />
+                    <span>{payload.last_updated_by}</span>
+                    <Image
+                        src="/version_calendar.png"
+                        alt="Date"
+                        width={14}
+                        height={14}
+                        className="ml-2"
+                    />
+                    <span>
+                        {new Date(payload.last_updated_at).toLocaleDateString()}
+                    </span>
+                </div>
+            </div>
+
+            {payload.last_approved_by && payload.last_approved_at && (
+                <div className="mt-4 space-y-1 text-[16px] text-black">
+                    <p className="font-medium">Last Approved by</p>
+                    <div className="flex items-center gap-2">
+                        <Image
+                            src="/version_profile.png"
+                            alt="Approved by"
+                            width={16}
+                            height={16}
+                            className="rounded-full"
+                        />
+                        <span>{payload.last_approved_by}</span>
+                        <Image
+                            src="/version_calendar.png"
+                            alt="Date"
+                            width={14}
+                            height={14}
+                            className="ml-2"
+                        />
+                        <span>
+                            {new Date(payload.last_approved_at).toLocaleDateString()}
+                        </span>
+                    </div>
+                </div>
+            )}
+            <ViewAll
+                href={`/register/${type}/${internalRecordId}/version-history`}
+                bgColor="#B0B0AD"
+                label="Know More"
+            />
+        </div>
     );
-  }
-
-  if (!payload) return null;
-
-  return (
-    <div className="bg-white rounded-lg border border-gray-200 p-4 shadow-sm">
-      <h3 className="text-sm font-semibold text-gray-800">
-        Version History{" "}
-        <span className="font-bold">{payload.number_of_versions}</span>
-      </h3>
-
-      <div className="my-3 h-0.5 bg-gray-200" />
-
-      <div className="text-xs text-gray-600 space-y-2">
-        <p>Latest update to this record</p>
-
-        <p>
-          <span className="font-medium">Updated:</span>{" "}
-          {new Date(payload.last_updated_at).toLocaleString()}
-        </p>
-
-        <p>
-          <span className="font-medium">Updated by:</span>{" "}
-          {payload.last_updated_by}
-        </p>
-
-        {payload.last_approved_at && payload.last_approved_by && (
-          <>
-            <p>
-              <span className="font-medium">Approved:</span>{" "}
-              {new Date(payload.last_approved_at).toLocaleString()}
-            </p>
-            <p>
-              <span className="font-medium">Approved by:</span>{" "}
-              {payload.last_approved_by}
-            </p>
-          </>
-        )}
-      </div>
-
-      <ViewAll href="/register/version-history" label="Know More" />
-    </div>
-  );
 }
