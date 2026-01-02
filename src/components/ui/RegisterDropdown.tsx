@@ -2,6 +2,7 @@
 
 import { useClickOutside } from "@/shared/hooks/useClickOutside";
 import { useState, useRef } from "react";
+import { useTranslations } from 'next-intl';
 import { MdOutlineArrowDropDown } from "react-icons/md";
 
 export interface DropdownOption {
@@ -20,13 +21,14 @@ const RegisterDropdown = ({
   selected,
   onChange,
 }: RegisterDropdownProps) => {
+  const t = useTranslations();
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useClickOutside(dropdownRef, () => setOpen(false), open);
 
   const selectedLabel =
-    options.find((o) => o.value === selected)?.label || "Select";
+    options.find((o) => o.value === selected)?.label || t('select');
 
   return (
     <div ref={dropdownRef} className="relative min-w-[180px]  left-[-3px] z-10">

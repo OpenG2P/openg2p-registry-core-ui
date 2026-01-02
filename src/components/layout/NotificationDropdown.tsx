@@ -4,10 +4,12 @@ import Image from "next/image";
 import { ViewAll } from "@/components/shared";
 import { useClickOutside } from "@/shared/hooks/useClickOutside";
 import { useNotification } from "@/context/GlobalContext";
+import { useTranslations } from 'next-intl';
 
 export default function NotificationDropdown() {
     const [open, setOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
+    const t = useTranslations();
 
     const { notifications, unreadCount, isLoading } = useNotification();
 
@@ -21,7 +23,7 @@ export default function NotificationDropdown() {
             >
                 <Image
                     src="/notification.png"
-                    alt="Notifications"
+                    alt={t('notifications')}
                     width={24}
                     height={24}
                 />
@@ -39,7 +41,7 @@ export default function NotificationDropdown() {
                     <div className="absolute -top-2.5 right-[70px] w-5 h-5 bg-white border-l border-t border-gray-200 rotate-45"></div>
 
                     <div className="px-6 pb-2 pt-3 text-[18px] font-medium text-[#ED7C22]">
-                        Notifications
+                        {t('notifications')}
                     </div>
 
                     <div className="flex-1 overflow-y-auto divide-y divide-gray-100">
@@ -74,7 +76,7 @@ export default function NotificationDropdown() {
                                         <div className="shrink-0 w-10 h-10 flex items-center justify-center rounded-md bg-[#FFF4EB]">
                                             <Image
                                                 src="/notification_img.png"
-                                                alt="Notification Icon"
+                                                alt={t('notification')}
                                                 width={20}
                                                 height={20}
                                             />
@@ -82,7 +84,7 @@ export default function NotificationDropdown() {
 
                                         <div className="flex-1 w-full min-w-0">
                                             <h3 className="text-[16px] font-medium text-black whitespace-normal line-clamp-1">
-                                                {n.subject || "Notification"}
+                                                {n.subject || t('notification')}
                                             </h3>
 
                                             <p className="text-[14px] font-normal text-black/60 mt-0.5 line-clamp-1">
@@ -119,7 +121,7 @@ export default function NotificationDropdown() {
 
                         {!isLoading && notifications.length === 0 && (
                             <div className="text-center py-6 text-sm text-gray-500">
-                                No notifications yet.
+                                {t('noNotifications')}
                             </div>
                         )}
                     </div>
@@ -129,7 +131,7 @@ export default function NotificationDropdown() {
                     <div className="mt-auto pb-4">
                         <ViewAll
                             href="/notifications"
-                            label="View All Notifications"
+                            label={t('viewAllNotifications')}
                             bgColor="#F5F5F5"
                             hoverBgColor="#ED7C22"
                             hoverTextColor="#FFFFFF"

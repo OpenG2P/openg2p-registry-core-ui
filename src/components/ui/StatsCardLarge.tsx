@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import { useFetch } from "@/shared/hooks/useFetch";
+import { useTranslations } from 'next-intl';
 import Image from "next/image";
 
 interface StatsCardLargeProps {
@@ -13,20 +14,21 @@ const StatsCardLarge = ({
   stats_endpoint,
   active = false,
 }: StatsCardLargeProps) => {
+  const t = useTranslations();
   const { data, loading, error } = useFetch<any>({
     url: stats_endpoint,
   });
 
   const { title, rows } = useMemo(() => {
     if (loading) return { title: '', rows: [] };
-    if (!data) return { title: "Items", rows: [] };
+    if (!data) return { title: t('items'), rows: [] };
 
     if (Array.isArray(data)) {
       return {
-        title: "Registers",
+        title: t('registers'),
         rows: data.map((item) => ({
           id: item.register_id,
-          label: item.register_subject,
+          label: t(item.register_subject),
           value: item.total_record_count,
           imageUrl: item.imageUrl,
         })),
@@ -35,17 +37,17 @@ const StatsCardLarge = ({
 
     if (stats_endpoint.includes("change")) {
       return {
-        title: "Change Requests",
+        title: t('changeRequests'),
         rows: [
           {
             id: "approved",
-            label: "Approved",
+            label: t('approved'),
             value: data.approved,
             imageUrl: data.imageUrl,
           },
           {
             id: "pending",
-            label: "Pending",
+            label: t('pending'),
             value: data.pending,
             imageUrl: data.imageUrl,
           },
@@ -53,13 +55,13 @@ const StatsCardLarge = ({
       };
     }
 
-    return { title: "Items", rows: [] };
-  }, [data, loading, stats_endpoint]);
+    return { title: t('items'), rows: [] };
+  }, [data, loading, stats_endpoint, t]);
 
   const totalCount = useMemo(() => {
     if (loading) return null;
     return rows.reduce((sum, r) => sum + r.value, 0);
-  }, [rows, loading]);
+  }, [rows, loading, data]);
 
   const pulseBg = active ? "bg-white/20" : "bg-black/20";
 
@@ -101,7 +103,7 @@ const StatsCardLarge = ({
             <div className={`h-4 w-24 rounded ${pulseBg}`} />
           </div>
         ) : error ? (
-          <p className="text-[16px] text-red-500">Failed to load stats</p>
+          <p className="text-[16px] text-red-500">{t('failedToLoad')}</p>
         ) : (
           rows.map((row) => (
             <div key={row.id} className="flex items-center gap-3">
