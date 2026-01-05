@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import { useFetch } from "@/shared/hooks/useFetch";
+import { useTranslations } from 'next-intl';
 import Image from "next/image";
 
 interface StatsCardSmallProps {
@@ -13,19 +14,20 @@ const StatsCardSmall = ({
   stats_endpoint,
   active = false,
 }: StatsCardSmallProps) => {
+  const t = useTranslations();
   const { data, loading, error } = useFetch<any>({
     url: stats_endpoint,
   });
 
   const { title, rows } = useMemo(() => {
-    if (!data) return { title: "Items", rows: [] };
+    if (!data) return { title: t('items'), rows: [] };
 
     if (Array.isArray(data)) {
       return {
-        title: "Registers",
+        title: t('registers'),
         rows: data.slice(0, 2).map((item) => ({
           id: item.register_id,
-          label: item.register_subject,
+          label: t(item.register_subject),
           value: item.total_record_count,
           imageUrl: item.imageUrl,
         })),
@@ -34,17 +36,17 @@ const StatsCardSmall = ({
 
     if (stats_endpoint.includes("change")) {
       return {
-        title: "Change Requests",
+        title: t('changeRequests'),
         rows: [
           {
             id: "approved",
-            label: "Approved",
+            label: t('approved'),
             value: data.approved,
             imageUrl: data.imageUrl,
           },
           {
             id: "pending",
-            label: "Pending",
+            label: t('pending'),
             value: data.pending,
             imageUrl: data.imageUrl,
           },
@@ -54,17 +56,17 @@ const StatsCardSmall = ({
 
     if (stats_endpoint.includes("incoming")) {
       return {
-        title: "Incoming Messages",
+        title: t('incomingMessages'),
         rows: [
           {
             id: "partners",
-            label: "Partners",
+            label: t('partners'),
             value: data.partners,
             imageUrl: data.imageUrl,
           },
           {
             id: "models",
-            label: "Data Models",
+            label: t('dataModels'),
             value: data.data_models,
             imageUrl: data.imageUrl,
           },
@@ -74,17 +76,17 @@ const StatsCardSmall = ({
 
     if (stats_endpoint.includes("outgoing")) {
       return {
-        title: "Outgoing Messages",
+        title: t('outgoingMessages'),
         rows: [
           {
             id: "topics",
-            label: "Topics",
+            label: t('topics'),
             value: data.topics,
             imageUrl: data.imageUrl,
           },
           {
             id: "models",
-            label: "Data Models",
+            label: t('dataModels'),
             value: data.data_models,
             imageUrl: data.imageUrl,
           },
@@ -92,10 +94,12 @@ const StatsCardSmall = ({
       };
     }
 
-    return { title: "Items", rows: [] };
-  }, [data, stats_endpoint]);
+    return { title: t('items'), rows: [] };
+  }, [data, stats_endpoint, t]);
 
-  const totalCount = rows.reduce((sum, r) => sum + r.value, 0);
+  const totalCount = useMemo(() => {
+    return rows.reduce((sum, r) => sum + r.value, 0);
+  }, [data, rows]);
 
   return (
     <div
@@ -135,7 +139,7 @@ const StatsCardSmall = ({
             <div className="h-6 w-32 rounded bg-gray-300 dark:bg-gray-700"></div>
           </div>
         ) : error ? (
-          <p className="text-sm text-red-500">Failed to load stats</p>
+          <p className="text-sm text-red-500">{t('failedToLoad')}</p>
         ) : (
           // items
           <ul className="space-y-2">

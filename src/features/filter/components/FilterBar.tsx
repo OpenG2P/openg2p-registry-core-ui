@@ -5,6 +5,7 @@ import { useRef, useState } from "react";
 import FilterDropdown from "./FilterDropdown";
 import { useClickOutside } from "@/shared/hooks/useClickOutside";
 import { FilterConfig, FilterRule } from "@/features/filter/types";
+import { useTranslations } from 'next-intl';
 
 interface FilterBarProps {
     onFilters?: () => void;
@@ -21,6 +22,7 @@ export default function FilterBar({
     filterConfig = [],
     filterLoading = false
 }: FilterBarProps) {
+    const t = useTranslations();
     const [open, setOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -39,10 +41,10 @@ export default function FilterBar({
                 className="h-[30px] flex items-center gap-16 px-3  rounded-[30px] bg-[#F2BA1A] text-sm "
                 disabled={filterLoading}
             >   <span className="font-medium text-[16px] leading-none tracking-normal text-[#1E1E1E]">
-                {filterLoading ? "Loading..." : "Filters"}
+                    {filterLoading ? t('loading') : t('filters')}
                 </span>
 
-                <Image src="/filter_icon.png" width={16} height={16} alt="filters" />
+                <Image src="/filter_icon.png" width={16} height={16} alt={t('filters')} />
             </button>
 
             {open && !filterLoading && (

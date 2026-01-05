@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useRef } from "react";
-import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
+import { useTranslations } from 'next-intl';
 
 import { useAuth } from "@/context/GlobalContext";
 
@@ -15,6 +15,7 @@ export default function ProfileDropdown() {
     const dropdownRef = useRef<HTMLDivElement>(null);
     const { profile, setProfile } = useAuth();
     const router = useRouter();
+    const t = useTranslations();
 
     const toggleDropdown = () => setOpen((prev) => !prev);
 
@@ -38,7 +39,7 @@ export default function ProfileDropdown() {
                 className="flex items-center gap-2 px-3 py-1 bg-white text-sm font-medium text-gray-800 rounded-md transition cursor-pointer"
             >
                 <span className="text-[16px] text-black">
-                    Hi, <span className="font-medium">{profile?.name || "User"}</span>
+                    {t('hi')}, <span className="font-medium">{profile?.name || t('user')}</span>
                 </span>
 
                 <div className="w-8 h-8 rounded-full overflow-hidden shadow-xl border-2 border-gray-300">
@@ -64,11 +65,11 @@ export default function ProfileDropdown() {
                         >
                             <Image
                                 src="/user_dropdown.png"
-                                alt="My Profile"
+                                alt={t('my_profile')}
                                 width={13}
                                 height={15}
                             />
-                            My Profile
+                            {t('my_profile')}
                         </Link>
 
                         <button
@@ -77,11 +78,11 @@ export default function ProfileDropdown() {
                         >
                             <Image
                                 src="/logout.png"
-                                alt="Logout"
+                                alt={t('logout')}
                                 width={18}
                                 height={18}
                             />
-                            Logout
+                            {t('logout')}
                         </button>
                     </div>
                 </div>

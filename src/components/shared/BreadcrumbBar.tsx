@@ -1,7 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from '@/i18n/navigation';
+import { useTranslations } from 'next-intl';
 
 type BreadcrumbItem = {
     label: string;
@@ -13,6 +14,7 @@ interface BreadcrumbBarProps {
 }
 
 export default function BreadcrumbBar({ breadcrumb = [] }: BreadcrumbBarProps) {
+    const t = useTranslations();
     return (
         <div className="flex items-end gap-2">
             <Link href="/" passHref>

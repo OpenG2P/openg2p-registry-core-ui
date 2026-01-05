@@ -2,7 +2,8 @@
 
 import { useMemo, useCallback } from 'react';
 import { useParams, useSearchParams, useRouter } from 'next/navigation';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
+import { useTranslations } from 'next-intl';
 import { TopBar } from '@/components/shared';
 import { SelectedFilters } from '@/features/filter/components';
 import { useRegistryFilters } from '@/features/filter/hooks/useRegistryFilters';
@@ -50,6 +51,7 @@ interface PaginationState {
 
 export default function RegisterTypePage() {
   const router = useRouter();
+  const t = useTranslations();
   const routeParams = useParams<{ type: string }>();
   const searchParams = useSearchParams();
 
@@ -77,7 +79,7 @@ export default function RegisterTypePage() {
     [registersData, registerType]
   );
 
-  const registerTypeLabel = currentRegister?.register_subject ?? 'Register';
+  const registerTypeLabel = currentRegister?.register_subject ?? t('register');
 
   const { data: recordsData, loading: isLoadingRecords } = useFetch<RegisterRecordsApiResponse>({
     url: `/api/register/${registerType}`,
@@ -154,13 +156,13 @@ export default function RegisterTypePage() {
   );
 
   return (
-    <div className="min-h-screen pt-2.5 mx-auto bg-[#F3F1E4]">
+    <div className="min-h-screen mx-auto bg-[#F3F1E4]">
       <TopBar
         breadcrumb={[{ label: registerTypeLabel }]}
         showFilters
         showPagination
         showSearch
-        searchPlaceholder={`${searchQuery || "search"}`}
+        searchPlaceholder={`${searchQuery || t('search')}`}
         searchValue={searchQuery || ''}
         onSearch={handleSearch}
         pageStart={pagination.pageStart}
@@ -184,9 +186,9 @@ export default function RegisterTypePage() {
 
         <div className="-mx-4 sm:-mx-6 lg:-mx-8 space-y-2">
           {isLoadingRecords ? (
-            <div className="text-center py-10 text-gray-500">Loading...</div>
+            <div className="text-center py-10 text-gray-500">{t('loading')}</div>
           ) : records.length === 0 ? (
-            <div className="text-center py-10 text-gray-500">No items found</div>
+            <div className="text-center py-10 text-gray-500">{t('noItemsFound')}</div>
           ) : (
             records.map((record, index) => {
               const sortedFields = sortedDisplayFields(record.display_fields);
@@ -217,7 +219,7 @@ export default function RegisterTypePage() {
                         {record.record_name}
                       </h3>
                       <p className="text-xs sm:text-sm text-gray-600">
-                        <span className="font-bold">ID :</span>{' '}
+                        <span className="font-bold">{t('id')} :</span>{' '}
                         <span className="font-bold text-gray-900">
                           {record.internal_record_id}
                         </span>
@@ -234,14 +236,14 @@ export default function RegisterTypePage() {
                         <div key={startIndex} className="flex-1 min-w-0">
                           <p className="text-xs sm:text-sm text-gray-900 truncate">
                             <span className="font-bold text-gray-600">
-                              {firstField.field_name}:{' '}
+                              {t(firstField.field_name)}:{' '}
                             </span>
                             <span className="font-bold">{firstField.value}</span>
                           </p>
                           {secondField && (
                             <p className="text-xs sm:text-sm text-gray-900 truncate">
                               <span className="font-bold text-gray-600">
-                                {secondField.field_name}:{' '}
+                                {t(secondField.field_name)}:{' '}
                               </span>
                               <span className="font-bold">{secondField.value}</span>
                             </p>

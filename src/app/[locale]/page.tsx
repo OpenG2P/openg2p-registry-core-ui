@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/i18n/navigation';
+import { useTranslations } from 'next-intl';
 import {
   StatsCardLarge,
   StatsCardSmall,
@@ -47,6 +48,7 @@ const visibleCards =
 
 export default function Home() {
   const router = useRouter();
+  const t = useTranslations();
 
   const [activeStatsCard, setActiveStatsCard] =
     useState<ActiveStatsCard>('registers');
@@ -57,16 +59,16 @@ export default function Home() {
   });
 
   const searchPlaceholders: Record<ActiveStatsCard, string> = {
-    registers: 'Search Registers',
-    change_request: 'Search Change Requests',
-    incoming_message: 'Search Incoming Messages',
-    outgoing_message: 'Search Outgoing Messages',
+    registers: t('searchRegisters'),
+    change_request: t('searchChangeRequests'),
+    incoming_message: t('searchIncomingMessages'),
+    outgoing_message: t('searchOutgoingMessages'),
   };
 
   const registerList =
     registers?.map((register) => ({
       value: register.register_mnemonic.toLowerCase(),
-      label: register.register_subject,
+      label: t(`${register.register_subject}`),
     })) ?? [];
 
   const handleSearch = (value: string, register?: string) => {
@@ -191,7 +193,7 @@ export default function Home() {
         <div className="relative w-full mt-8 sm:mt-10 md:mt-12 lg:mt-14 px-4 sm:px-6 md:px-8 lg:px-10">
           <Image
             src="/svgs/People.svg"
-            alt="Peoples"
+            alt={t('peoplesImageAlt')}
             width={1200}
             height={600}
             className="w-full h-auto opacity-100 pointer-events-none select-none"

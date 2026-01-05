@@ -8,7 +8,7 @@ import {
 const MOCK_REGISTER_RECORDS = {
   records: [
     {
-      internal_record_id: "affa29a7-61db-4321-a256-e0ecb216419c",
+      internal_record_id: "affa29a7-61db",
       functional_record_id: "FARMER-00001",
       link_record_id: null,
       record_name: "Rajesh Kumar",
@@ -23,7 +23,7 @@ const MOCK_REGISTER_RECORDS = {
       ],
     },
     {
-      internal_record_id: "bfa41c3d-2b5f-4c7b-9c5d-12c8c8a0b1aa",
+      internal_record_id: "bfa41c3d-2b5f",
       functional_record_id: "FARMER-00002",
       link_record_id: null,
       record_name: "Sita Devi",
@@ -38,7 +38,7 @@ const MOCK_REGISTER_RECORDS = {
       ],
     },
     {
-      internal_record_id: "c8d6f91a-8e64-4a1e-9f8b-77c9b8a2d9fe",
+      internal_record_id: "c8d6f91a",
       functional_record_id: "FARMER-00003",
       link_record_id: null,
       record_name: "Amit Sharma",
