@@ -1,8 +1,9 @@
 'use client';
 
-import { ReactNode } from "react";
+import { ReactNode, useTransition } from "react";
 import { BreadcrumbBar } from "@/components/shared";
 import { TabsResponse } from "@/shared/types";
+import { useTranslations } from "next-intl";
 
 interface Props {
     breadcrumb: { label: string; href?: string }[];
@@ -19,6 +20,7 @@ export default function RegisterTabsLayout({
     onTabChange,
     children,
 }: Props) {
+    const t = useTranslations()
     return (
         <div className="min-h-screen bg-[#F3F1E4]">
             <div className="px-7.5 pt-7.5">
@@ -28,7 +30,9 @@ export default function RegisterTabsLayout({
             <div className="px-[30px] py-6">
                 {tabs && activeTab !== undefined && onTabChange && (
                     <div className="flex gap-2 px-10">
-                        {tabs.tabs.map((tab, tabIndex) => (
+                        {tabs.tabs.map((tab, tabIndex) => {
+                            console.log('Tab label:', tab.tab_label);
+                            return (
                             <button
                                 key={tab.tab_id}
                                 onClick={() => onTabChange(tabIndex)}
@@ -37,9 +41,10 @@ export default function RegisterTabsLayout({
                                     : 'bg-[#DDDDDD]'
                                     }`}
                             >
-                                {tab.tab_label}
+                               {t(tab.tab_label) || tab.tab_label}
                             </button>
-                        ))}
+                            );
+                        })}
                     </div>
                 )}
                 {children}

@@ -6,7 +6,7 @@ const TAB_SCHEMAS: Record<string, UISchema> = {
     sections: [
       {
         "section-id": "farmer-register-001",
-        "section-title": "Basic Information",
+        "section-title": "basicInformation",
         "section-editable": false,
         panels: [
           {
@@ -20,7 +20,7 @@ const TAB_SCHEMAS: Record<string, UISchema> = {
                   {
                     "widget": "text",
                     "widget-type": "input",
-                    "widget-label": "First Name",
+                    "widget-label": "first_name",
                     "widget-id": "first_name",
                     "widget-data-path": "farmer-register-001.first_name",
                     "widget-required": true,
@@ -30,13 +30,13 @@ const TAB_SCHEMAS: Record<string, UISchema> = {
                       "caseControl": "capitalize",
                       "showCharCounter": false
                     },
-                    "widget-data-placeholder": "Enter first name",
-                    "widget-data-helptext": "Your legal first name as per documents"
+                    "widget-data-placeholder": "enter_first_name",
+                    "widget-data-helptext": "legal_first_name_help"
                   },
                   {
                     "widget": "text",
                     "widget-type": "input",
-                    "widget-label": "Last Name",
+                    "widget-label": "last_name",
                     "widget-id": "last_name",
                     "widget-data-path": "farmer-register-001.last_name",
                     "widget-required": true,
@@ -49,7 +49,7 @@ const TAB_SCHEMAS: Record<string, UISchema> = {
                   {
                     "widget": "text",
                     "widget-type": "input",
-                    "widget-label": "National ID",
+                    "widget-label": "national_id",
                     "widget-id": "national_id",
                     "widget-data-path": "farmer-register-001.national_id",
                     "widget-required": true,
@@ -74,7 +74,7 @@ const TAB_SCHEMAS: Record<string, UISchema> = {
                   {
                     "widget": "radio",
                     "widget-type": "input",
-                    "widget-label": "Gender",
+                    "widget-label": "gender",
                     "widget-id": "gender",
                     "widget-data-path": "farmer-register-001.gender",
                     "widget-required": true,
@@ -82,9 +82,9 @@ const TAB_SCHEMAS: Record<string, UISchema> = {
                     "widget-data-source": {
                       "type": "static",
                       "options": [
-                        { "value": "male", "label": "Male" },
-                        { "value": "female", "label": "Female" },
-                        { "value": "other", "label": "Other" }
+                        { "value": "male", "label": "male" },
+                        { "value": "female", "label": "female" },
+                        { "value": "other", "label": "other" }
                       ]
                     },
                     "widget-orientation": "horizontal"
@@ -97,7 +97,7 @@ const TAB_SCHEMAS: Record<string, UISchema> = {
       },
       {
         "section-id": "farmer-crop-register-001",
-        "section-title": "Current Crops",
+        "section-title": "currentCrops",
         "section-editable": true,
         panels: [
           {
@@ -107,35 +107,35 @@ const TAB_SCHEMAS: Record<string, UISchema> = {
               {
                 "widget": "simple-table",
                 "widget-type": "table",
-                "widget-label": "Crops Cultivated",
+                "widget-label": "cropsCultivated",
                 "widget-id": "crops_table",
                 "widget-data-path": "farmer-crop-register-001",
                 "widget-readonly": true,
                 "widget-data-columns": [
                   {
                     "column-key": "crop_name",
-                    "widget-label": "Crop Name",
+                    "widget-label": "crop_name",
                     "widget": "text",
                     "widget-readonly": true,
                     "widget-data-path": "crop_name"
                   },
                   {
                     "column-key": "season",
-                    "widget-label": "Season",
+                    "widget-label": "season",
                     "widget": "text",
                     "widget-readonly": true,
                     "widget-data-path": "season"
                   },
                   {
                     "column-key": "area",
-                    "widget-label": "Area (Acres)",
+                    "widget-label": "area_acres",
                     "widget": "number",
                     "widget-readonly": true,
                     "widget-data-path": "area"
                   },
                   {
                     "column-key": "expected_yield",
-                    "widget-label": "Expected Yield (Quintals)",
+                    "widget-label": "expected_yield_quintals",
                     "widget": "number",
                     "widget-readonly": true,
                     "widget-data-path": "expected_yield"
@@ -146,7 +146,7 @@ const TAB_SCHEMAS: Record<string, UISchema> = {
                   "remove": true,
                   "edit": true
                 },
-                "widget-data-add-label": "Add Crop"
+                "widget-data-add-label": "addCrop"
               }
             ]
           }
@@ -159,7 +159,7 @@ const TAB_SCHEMAS: Record<string, UISchema> = {
     sections: [
       {
         "section-id": "farmer-farm-register-001",
-        "section-title": "Land Information",
+        "section-title": "landInformation",
         "section-editable": true,
         panels: [
           {
@@ -173,7 +173,7 @@ const TAB_SCHEMAS: Record<string, UISchema> = {
                   {
                     "widget": "number",
                     "widget-type": "input",
-                    "widget-label": "Total Land Area (Acres)",
+                    "widget-label": "total_land_area_acres",
                     "widget-id": "total_land_area",
                     "widget-data-path": "farmer-farm-register-001.total_land_area",
                     "widget-required": true,
@@ -182,7 +182,7 @@ const TAB_SCHEMAS: Record<string, UISchema> = {
                   {
                     "widget": "number",
                     "widget-type": "input",
-                    "widget-label": "Cultivable Land (Acres)",
+                    "widget-label": "cultivable_land_acres",
                     "widget-id": "cultivable_land",
                     "widget-data-path": "farmer-farm-register-001.cultivable_land",
                     "widget-required": true,
@@ -191,7 +191,7 @@ const TAB_SCHEMAS: Record<string, UISchema> = {
                   {
                     "widget": "radio",
                     "widget-type": "input",
-                    "widget-label": "Land Ownership",
+                    "widget-label": "landOwnership",
                     "widget-id": "ownership",
                     "widget-data-path": "farmer-farm-register-001.land_ownership",
                     "widget-required": true,
@@ -199,9 +199,9 @@ const TAB_SCHEMAS: Record<string, UISchema> = {
                     "widget-data-source": {
                       "type": "static",
                       "options": [
-                        { "value": "owned", "label": "Owned" },
-                        { "value": "leased", "label": "Leased" },
-                        { "value": "shared", "label": "Shared" }
+                        { "value": "owned", "label": "owned" },
+                        { "value": "leased", "label": "leased" },
+                        { "value": "shared", "label": "shared" }
                       ]
                     },
                     "widget-orientation": "vertical"
@@ -215,7 +215,7 @@ const TAB_SCHEMAS: Record<string, UISchema> = {
                   {
                     "widget": "select",
                     "widget-type": "input",
-                    "widget-label": "Soil Type",
+                    "widget-label": "soilType",
                     "widget-id": "soil_type",
                     "widget-data-path": "farmer-farm-register-001.soil_type",
                     "widget-required": true,
@@ -223,29 +223,29 @@ const TAB_SCHEMAS: Record<string, UISchema> = {
                     "widget-data-source": {
                       "type": "static",
                       "options": [
-                        { "value": "clay", "label": "Clay" },
-                        { "value": "loam", "label": "Loam" },
-                        { "value": "sandy", "label": "Sandy" },
-                        { "value": "silt", "label": "Silt" },
-                        { "value": "black", "label": "Black Soil" }
+                        { "value": "clay", "label": "clay" },
+                        { "value": "loam", "label": "loam" },
+                        { "value": "sandy", "label": "sandy" },
+                        { "value": "silt", "label": "silt" },
+                        { "value": "black", "label": "black_soil" }
                       ]
                     }
                   },
                   {
                     "widget": "radio",
                     "widget-type": "input",
-                    "widget-label": "Irrigation Source",
+                    "widget-label": "irrigationSource",
                     "widget-id": "irrigation_source",
                     "widget-data-path": "farmer-farm-register-001.irrigation_source",
                     "widget-readonly": true,
                     "widget-data-source": {
                       "type": "static",
                       "options": [
-                        { "value": "borewell", "label": "Borewell" },
-                        { "value": "canal", "label": "Canal" },
-                        { "value": "river", "label": "River" },
-                        { "value": "pond", "label": "Pond" },
-                        { "value": "rainfed", "label": "Rainfed" }
+                        { "value": "borewell", "label": "borewell" },
+                        { "value": "canal", "label": "canal" },
+                        { "value": "river", "label": "river" },
+                        { "value": "pond", "label": "pond" },
+                        { "value": "rainfed", "label": "rainfed" }
                       ]
                     },
                     "widget-orientation": "vertical"
@@ -253,7 +253,7 @@ const TAB_SCHEMAS: Record<string, UISchema> = {
                   {
                     "widget": "file",
                     "widget-type": "input",
-                    "widget-label": "Land Documents",
+                    "widget-label": "landDocuments",
                     "widget-id": "land_docs",
                     "widget-data-path": "farmer-farm-register-001.land_documents",
                     "widget-readonly": true,
@@ -271,7 +271,7 @@ const TAB_SCHEMAS: Record<string, UISchema> = {
       },
       {
         "section-id": "section:farm.equipment",
-        "section-title": "Farm Equipment",
+        "section-title": "farmEquipment",
         "section-editable": true,
         panels: [
           {
@@ -281,7 +281,7 @@ const TAB_SCHEMAS: Record<string, UISchema> = {
               {
                 "widget": "iterable-accordion",
                 "widget-type": "group",
-                "widget-label": "Equipment List",
+                "widget-label": "equipmentList",
                 "widget-id": "equipment_list",
                 "widget-data-path": "farmer-farm-register-001.equipment",
                 "widget-readonly": true,
@@ -289,7 +289,7 @@ const TAB_SCHEMAS: Record<string, UISchema> = {
                 "widget-item": {
                   "widget": "text",
                   "widget-type": "input",
-                  "widget-label": "Equipment Name",
+                  "widget-label": "equipmentName",
                   "widget-id": "equipment_name",
                   "widget-data-path": "equipment_name",
                   "widget-readonly": true
@@ -299,7 +299,7 @@ const TAB_SCHEMAS: Record<string, UISchema> = {
                   "remove": true,
                   "edit": true
                 },
-                "widget-data-add-label": "Add Equipment"
+                "widget-data-add-label": "addEquipment"
               }
             ]
           }

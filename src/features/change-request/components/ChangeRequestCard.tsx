@@ -2,6 +2,7 @@ import ViewAll from "@/components/shared/ViewAll";
 import { useFetch } from "@/shared/hooks/useFetch";
 import { ResponseBody } from "@/shared/types/backend-api";
 import Image from "next/image";
+import { useLocale } from "next-intl";
 
 interface Props {
     registerId: string;
@@ -16,6 +17,8 @@ export default function ChangeRequestCard({
     internalRecordId,
     activeTabId,
 }: Props) {
+    const locale = useLocale();
+    
     const { data, loading } = useFetch<ResponseBody>({
         url: `/api/change_request/pending`,
         enabled: !!registerId && !!internalRecordId,
@@ -38,7 +41,7 @@ export default function ChangeRequestCard({
     const params = new URLSearchParams();
     if (activeTabId) params.set("tab", activeTabId);
 
-    const href = `/register/${type}/${internalRecordId}/change-request${params.toString() ? `?${params.toString()}` : ""
+    const href = `/${locale}/register/${type}/${internalRecordId}/change-request${params.toString() ? `?${params.toString()}` : ""
         }`;
 
     if (loading) {
