@@ -6,10 +6,12 @@ import { RegisterTabsLayout } from '@/components/shared';
 import { useFetch } from '@/shared/hooks/useFetch';
 import { ChangeLogList } from '@/features/change-request/components';
 import { ChangeLog } from '@/features/change-request/types';
+import {useLocale} from 'next-intl'
 
 import { TabsResponse } from '@/shared/types';
 
 export default function ChangeRequestPage() {
+  const locale = useLocale()
   const { type, id } = useParams<{ type: string; id: string }>();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -131,7 +133,7 @@ export default function ChangeRequestPage() {
         <ChangeLogList
           logs={logs}
           getDetailsUrl={log =>
-            `/register/${type}/${id}/change-request/${log.change_request_id}`
+            `/${locale}/register/${type}/${id}/change-request/${log.change_request_id}`
           }
         />
       )}

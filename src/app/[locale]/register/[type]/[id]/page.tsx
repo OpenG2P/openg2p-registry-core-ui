@@ -2,6 +2,7 @@
 
 import { useMemo, useState, useEffect, useCallback } from 'react';
 import { useParams } from 'next/navigation';
+import { useLocale, useTranslations } from 'next-intl';
 import {
   RegisterTabsLayout,
   VersionHistoryCard,
@@ -56,11 +57,16 @@ interface BreadcrumbItem {
 }
 
 export default function RegisterDetailPage() {
+
+  const t = useTranslations();
+
   const { id: recordId, type: registerType } =
     useParams<{ id: string; type: string }>();
 
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   const widgetStore = useMemo(() => createWidgetStore(), []);
+
+ 
 
   const { data: tabsSchema } = useFetch<TabsResponse>({
     url: `/api/register/${registerType}/tabs`,
@@ -146,7 +152,7 @@ export default function RegisterDetailPage() {
 
     return [
       {
-        label: currentRegister.register_subject,
+        label: t(currentRegister.register_subject) || currentRegister.register_subject,
         href: `/register/${registerType}`,
       },
       {
@@ -154,10 +160,10 @@ export default function RegisterDetailPage() {
         href: `/register/${registerType}/${recordId}`,
       },
       ...(activeTab
-        ? [{ label: activeTab.tab_label, href: '#' }]
+        ? [{ label: t(activeTab.tab_label) || activeTab.tab_label, href: '#' }]
         : []),
     ];
-  }, [currentRegister, tabsSchema, activeTabIndex, registerType, recordId]);
+  }, [currentRegister, tabsSchema, activeTabIndex, registerType, recordId, t]);
 
   const { execute: submitChangeRequest } = useFetch();
 
@@ -202,7 +208,11 @@ export default function RegisterDetailPage() {
       {canRenderContent && (
         <div className="grid grid-cols-12 gap-6">
           <div className="col-span-9">
-            <WidgetProvider store={widgetStore} schemaData={sectionDataMap}>
+            <WidgetProvider
+             store={widgetStore} 
+             schemaData={sectionDataMap}
+             translate={t}
+            >
               <SectionsContainer
                 sections={sectionsConfig}
                 onSectionSave={handleSectionSave}
