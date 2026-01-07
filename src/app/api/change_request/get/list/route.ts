@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
 
     const rawChangeLogs = [
         {
-            change_request_id: "ce31285b-38b0-48a8-b737-4ba6540043e6",
+            change_request_id: "ce31285b-38b0-48a8",
             register_id: "123",
             tab_id: "tab-001",
             internal_record_id: "12234425",
@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
             },
         },
         {
-            change_request_id: "2a7b3b61-9c6a-4f25-9dd6-1cfd0a94e221",
+            change_request_id: "ce31285b-38b0-48a9",
             register_id: "123",
             tab_id: "tab-001",
             internal_record_id: "12234425",
@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
             },
         },
         {
-            change_request_id: "9f0b1c23-aaaa-bbbb-cccc-123456789000",
+            change_request_id: "ce31285b-38b0-48a7",
             register_id: "123",
             tab_id: "tab-001",
             internal_record_id: "12234425",
