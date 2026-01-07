@@ -12,7 +12,7 @@ export default function Header() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     return (
-        <header className="w-full bg-white flex items-center justify-between px-3 sm:px-4 md:px-6 py-3 fixed top-0 left-0 right-0 z-20 h-[70px] border-b border-gray-300 shadow-[0px_4px_10px_0px_#00000026]">
+        <header className="w-full bg-white flex items-center justify-between px-3 sm:px-4 md:px-6 py-3 fixed top-0 left-0 right-0 z-20 h-[70px]">
             <Link href="/" className="flex items-center gap-2 sm:gap-3 hover:opacity-80 transition-opacity">
                 <Image
                     src="/openg2p_logo.png"

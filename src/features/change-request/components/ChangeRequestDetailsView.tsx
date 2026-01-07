@@ -17,6 +17,13 @@ export default function ChangeRequestDetailsView({ changeId, breadcrumb }: Props
     const [verifications, setVerifications] = useState<Verification[]>([]);
     const [observation, setObservation] = useState("");
     const [isApproved, setIsApproved] = useState(true);
+    const [rejectReason, setRejectReason] = useState("");
+    const [isRejecting, setIsRejecting] = useState(false);
+    const [loadingAction, setLoadingAction] = useState(false);
+    const [detailsUpdated, setDetailsUpdated] = useState<any>(null);
+    const [popupVisible, setPopupVisible] = useState(false);
+    const [popupType, setPopupType] = useState<"approve" | "reject" | null>(null);
+
 
     const { data, loading } = useFetch<any>({
         url: `/api/change_request/get`,
@@ -74,6 +81,85 @@ export default function ChangeRequestDetailsView({ changeId, breadcrumb }: Props
             setShowAddVerification(false);
         }
     };
+
+    const handleApprove = async () => {
+        setLoadingAction(true);
+        try {
+            const res = await fetch(`/api/change_request/approve`, {
+                method: "POST",
+                body: JSON.stringify({
+                    request_header: {
+                        sender_app_mnemonic: "postman",
+                        sender_app_url: "http://localhost",
+                        request_id: crypto.randomUUID(),
+                        request_timestamp: new Date().toISOString(),
+                    },
+                    request_body: {
+                        request_payload: {
+                            change_request_id: changeId,
+                        },
+                    },
+                }),
+                headers: { "Content-Type": "application/json" },
+            });
+
+            const json = await res.json();
+
+            if (json?.response_body?.response_payload) {
+                setDetailsUpdated(json.response_body.response_payload);
+                setPopupType("approve");
+                setPopupVisible(true);
+            }
+        } catch (e) {
+            alert("Error approving change request");
+        } finally {
+            setLoadingAction(false);
+        }
+    };
+
+    const handleReject = async () => {
+        // if (!rejectReason.trim()) {
+        //     alert("Please provide a rejection reason.");
+        //     return;
+        // }
+
+        setLoadingAction(true);
+        try {
+            const res = await fetch(`/api/change_request/reject`, {
+                method: "POST",
+                body: JSON.stringify({
+                    request_header: {
+                        sender_app_mnemonic: "postman",
+                        sender_app_url: "http://localhost",
+                        request_id: crypto.randomUUID(),
+                        request_timestamp: new Date().toISOString(),
+                    },
+                    request_body: {
+                        request_payload: {
+                            change_request_id: changeId,
+                            rejection_reason: "Rejected",
+                        },
+                    },
+                }),
+                headers: { "Content-Type": "application/json" },
+            });
+
+            const json = await res.json();
+
+            if (json?.response_body?.response_payload) {
+                setDetailsUpdated(json.response_body.response_payload);
+                setIsRejecting(false);
+                setRejectReason("");
+                setPopupType("reject");
+                setPopupVisible(true);
+            }
+        } catch (e) {
+            alert("Error rejecting change request");
+        } finally {
+            setLoadingAction(false);
+        }
+    };
+
 
     return (
         <RegisterTabsLayout breadcrumb={breadcrumb}>
@@ -173,6 +259,8 @@ export default function ChangeRequestDetailsView({ changeId, breadcrumb }: Props
                             <div className="flex items-center gap-4">
                                 <button
                                     type="button"
+                                    disabled={loadingAction}
+                                    onClick={handleReject}
                                     className="px-4 py-2 text-[14px] font-medium rounded-[20px] bg-white text-black/50"
                                 >
                                     Reject Change
@@ -180,6 +268,9 @@ export default function ChangeRequestDetailsView({ changeId, breadcrumb }: Props
 
                                 <button
                                     type="button"
+
+                                    disabled={loadingAction}
+                                    onClick={handleApprove}
                                     className="px-4 py-2 text-[14px] font-medium rounded-[20px] bg-black text-white"
                                 >
                                     Approve Change
@@ -405,6 +496,45 @@ export default function ChangeRequestDetailsView({ changeId, breadcrumb }: Props
                                 ))}
                             </div>
                         </div>
+                    </div>
+                </div>
+            )}
+
+            {popupVisible && (
+                <div className="fixed inset-0 bg-black/80 flex justify-center items-center z-50">
+                    <div className="relative bg-white rounded-[100px] border-10 border-[#F2BA1A] w-[600px] h-[400px] p-6 flex flex-col items-center justify-center gap-4">
+                        <button
+                            className="absolute top-10 right-10 opacity-50"
+                            onClick={() => setPopupVisible(false)}
+                        >
+                            <Image src="/cr_close.png" alt="Close" width={30} height={30} />
+                        </button>
+
+                        <div className="w-20 h-20 relative">
+                            <Image
+                                src={popupType === "approve" ? "/cr_success.png" : "/cr_reject.png"}
+                                alt={popupType === "approve" ? "Approved" : "Rejected"}
+                                fill
+                                className="object-contain"
+                            />
+                        </div>
+
+                        <h3 className="text-xl font-semibold text-center">
+                            {popupType === "approve" ? "Approved Successfully" : "Rejected Successfully"}
+                        </h3>
+
+                        <p className="text-center text-gray-600">
+                            {popupType === "approve"
+                                ? "Thank you for approval, changes updated successfully"
+                                : "The device owner rejected your request, please try again"}
+                        </p>
+
+                        <button
+                            onClick={() => setPopupVisible(false)}
+                            className="mt-4 bg-black text-[16px] text-white px-10 py-2 rounded-[20px]"
+                        >
+                            Close
+                        </button>
                     </div>
                 </div>
             )}
