@@ -63,7 +63,7 @@ const TAB_SCHEMAS: Record<string, UISchema> = {
                         "placeholder": "_"
                       }
                     },
-                    "widget-data-placeholder": "XXXX-XXXX-XXXX"
+                    "widget-data-placeholder": "national_id_placeholder"
                   }
                 ]
               },
@@ -92,6 +92,18 @@ const TAB_SCHEMAS: Record<string, UISchema> = {
                 ]
               }
             ]
+          }
+        ],
+        "section-supporting-documents": [
+          {
+            "document-data-path": "dobProof",
+            "document-type": "image",
+            "document-required": true
+          },
+          {
+            "document-data-path": "addressProof",
+            "document-type": "image",
+            "document-required": true
           }
         ]
       },

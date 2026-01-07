@@ -94,7 +94,9 @@
     "crops": "Crops",
     "familyMembers": "Family Members",
     "families": "Families",
-    
+    "common": {
+        "required": "Required"
+    },
     "basicInformation": "Basic Information",
     "currentCrops": "Current Crops",
     "cropsCultivated": "Crops Cultivated",
@@ -134,7 +136,17 @@
     "other": "Other",
     "national_id": "National ID",
     "farmerProfile": "Farmer Profile",
-    "farmDetails": "Farm Details"
-   
-    
+    "farmDetails": "Farm Details",
+    "Farmer Profile": "Farmer Profile",
+    "Farm Details": "Farm Details",
+    "common": {
+        "required": "Required",
+        "optional": "Optional",
+        "noData": "No data available",
+        "select": "Select",
+        "addItem": "Add Item",
+        "chooseFiles": "Choose Files",
+        "maxFileSize": "Max file size is 10MB"
+    },
+    "national_id_placeholder": "XXXX-XXXX-XXXX"
 }

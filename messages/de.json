@@ -94,7 +94,9 @@
         "crops": "Ernten",
         "familyMembers": "Familienmitglieder",
         "families": "Familien",
-        
+        "common": {
+            "required": "Erforderlich"
+        },
         "basicInformation": "Grundlegende Informationen",
         "currentCrops": "Aktuelle Kulturen",
         "cropsCultivated": "Angebaute Kulturen",

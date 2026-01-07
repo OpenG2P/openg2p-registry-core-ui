@@ -94,7 +94,9 @@
     "crops": "Plodiny",
     "familyMembers": "Rodinní příslušníci",
     "families": "Rodiny",
-    
+    "common": {
+        "required": "Povinné"
+    },
     "basicInformation": "Základní informace",
     "currentCrops": "Aktuální plodiny",
     "cropsCultivated": "Pěstované plodiny",
