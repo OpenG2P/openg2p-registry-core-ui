@@ -7,7 +7,7 @@ import { SelectedFilters } from '@/features/filter/components';
 import { useRegistryFilters } from '@/features/filter/hooks/useRegistryFilters';
 import { usePagination, useFetch } from '@/shared/hooks';
 import { ChangeLogList } from '@/features/change-request/components';
-import { ChangeLog } from '@/features/change-request/types/change-request';
+import { ChangeRequest } from '@/features/change-request/types/change-request';
 
 export default function ChangeRequestPage() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -46,7 +46,7 @@ export default function ChangeRequestPage() {
     },
   });
 
-  const logs: ChangeLog[] =
+  const logs: ChangeRequest[] =
     data?.response_body?.response_payload?.change_requests ?? [];
 
   const paginationInfo =
