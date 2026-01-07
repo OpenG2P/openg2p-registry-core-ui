@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react';
 import { useFetch } from '@/shared/hooks';
-import type { ChangeLog } from '@/features/change-request/types/change-log';
+import type { ChangeRequest } from '@/features/change-request/types/change-request';
 
 interface UseChangeRequestListOptions {
     pageSize?: number;
@@ -48,7 +48,7 @@ export function useChangeRequestList({
         enabled: true,
     });
 
-    const logs: ChangeLog[] =
+    const logs: ChangeRequest[] =
         data?.response_body?.response_payload?.change_requests ?? [];
 
     const paginationInfo = data?.response_body?.pagination_response;

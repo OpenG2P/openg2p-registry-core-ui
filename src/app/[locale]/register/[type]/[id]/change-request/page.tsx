@@ -5,7 +5,7 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { RegisterTabsLayout } from '@/components/shared';
 import { useFetch } from '@/shared/hooks/useFetch';
 import { ChangeLogList } from '@/features/change-request/components';
-import { ChangeLog } from '@/features/change-request/types';
+import { ChangeRequest } from '@/features/change-request/types';
 import {useLocale} from 'next-intl'
 
 import { TabsResponse } from '@/shared/types';
@@ -114,7 +114,7 @@ export default function ChangeRequestPage() {
     },
   });
 
-  const logs: ChangeLog[] =
+  const logs: ChangeRequest[] =
     data?.response_body?.response_payload?.change_requests ?? [];
 
 

@@ -1,12 +1,12 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { ChangeLog } from '@/features/change-request/types';
+import { ChangeRequest } from '@/features/change-request/types';
 import { ChangeLogCard } from '@/features/change-request/components';
 
 interface Props {
-    logs: ChangeLog[];
-    getDetailsUrl: (log: ChangeLog) => string;
+    logs: ChangeRequest[];
+    getDetailsUrl: (log: ChangeRequest) => string;
 }
 
 export default function ChangeLogList({ logs, getDetailsUrl }: Props) {

@@ -1,1 +1,1 @@
-export type { ChangeLog, ChangeDocument, Verification } from './change-log';
+export type { ChangeRequest, ChangeDocument, Verification, PopupType } from './change-request';

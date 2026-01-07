@@ -7,7 +7,7 @@ import { SelectedFilters } from '@/features/filter/components';
 import { useRegistryFilters } from '@/features/filter/hooks/useRegistryFilters';
 import { usePagination, useFetch } from '@/shared/hooks';
 import { ChangeLogList } from '@/features/change-request/components';
-import { ChangeLog } from '@/features/change-request/types/change-log';
+import { ChangeLog } from '@/features/change-request/types/change-request';
 
 export default function ChangeRequestPage() {
   const [currentPage, setCurrentPage] = useState(1);
