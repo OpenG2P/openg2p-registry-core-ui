@@ -128,7 +128,7 @@ export default function NotificationDropdown() {
 
                     <div className="border-b-12 border-gray-100"></div>
 
-                    <div className="mt-auto pb-4">
+                    <div className="mt-auto pb-4 ml-6">
                         <ViewAll
                             href="/notifications"
                             label={t('viewAllNotifications')}

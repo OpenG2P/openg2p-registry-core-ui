@@ -1,10 +1,10 @@
 'use client';
 
 import Image from "next/image";
-import { ChangeLog } from "@/features/change-request/types";
+import { ChangeRequest } from "@/features/change-request/types";
 
 interface Props {
-    log: ChangeLog;
+    log: ChangeRequest;
     onViewDetails: () => void;
 }
 

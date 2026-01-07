@@ -4,7 +4,7 @@ export interface ChangeDocument {
     doc_url?: string;
 }
 
-export interface ChangeLog {
+export interface ChangeRequest {
     change_request_id: string;
     register_id: string;
     tab_id: string;
@@ -25,6 +25,7 @@ export interface ChangeLog {
     change_payload: Record<string, any>;
 }
 
+export type PopupType = "approve" | "reject" | null;
 
 export interface Verification {
     verification_id: string;

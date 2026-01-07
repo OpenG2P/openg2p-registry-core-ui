@@ -1,142 +1,100 @@
 'use client';
 
-import { useEffect, useMemo, useState, useCallback } from 'react';
-import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import { useMemo } from 'react';
+import { useParams } from 'next/navigation';
 import { RegisterTabsLayout } from '@/components/shared';
-import { useFetch } from '@/shared/hooks/useFetch';
-import { ChangeLogList } from '@/features/change-request/components';
-import { ChangeLog } from '@/features/change-request/types';
-import {useLocale} from 'next-intl'
+import { ChangeLogList, ChangeLogSkeleton } from '@/features/change-request/components';
+import { useChangeRequestList } from '@/features/change-request/hooks/useChangeRequestList';
+import { useLocale, useTranslations } from 'next-intl';
+import { useRegister } from '@/context/RegisterContext';
+import { useRegisterTabs } from '@/context/RegisterTabsContext';
 
-import { TabsResponse } from '@/shared/types';
+interface BreadcrumbItem {
+    label: string;
+    href: string;
+}
 
 export default function ChangeRequestPage() {
-  const locale = useLocale()
-  const { type, id } = useParams<{ type: string; id: string }>();
-  const router = useRouter();
-  const searchParams = useSearchParams();
+    const t = useTranslations();
+    const locale = useLocale();
+    const { type, id } = useParams<{ type: string; id: string }>();
+    const { currentRegister } = useRegister();
 
-  const tabFromUrl = searchParams.get('tab');
-  const [activeTabIndex, setActiveTabIndex] = useState(0);
+    const {
+        tabs,
+        activeTab,
+        activeTabIndex,
+        activeTabId,
+        setActiveTabByIndex,
+    } = useRegisterTabs();
 
-  const { data: tabsData } = useFetch<TabsResponse>({
-    url: `/api/register/${type}/tabs`,
-  });
+    const { logs, loading } = useChangeRequestList({
+        subjectId: id,
+        tabId: activeTabId,
+        enabled: !!activeTabId,
+    });
 
-  useEffect(() => {
-    if (!tabsData?.tabs?.length || !tabFromUrl) return;
+    const breadcrumb = useMemo<BreadcrumbItem[]>(() => {
+        if (!currentRegister) return [];
+        const items: BreadcrumbItem[] = [
+            {
+                label:
+                    t(currentRegister.register_subject) ??
+                    currentRegister.register_subject,
+                href: `/register/${type}`,
+            },
+            {
+                label: `ID-${id}`,
+                href: `/register/${type}/${id}`,
+            },
+        ];
 
-    const idx = tabsData.tabs.findIndex(
-      t => t.tab_id === tabFromUrl
+        if (activeTab) {
+            items.push({
+                label: t(activeTab.tab_label) ?? activeTab.tab_label,
+                href: '#',
+            });
+        }
+
+        items.push({
+            label: t('changeRequest') ?? 'Change Request',
+            href: `/register/${type}/${id}/change-request`,
+        });
+
+        return items;
+    }, [
+        type,
+        id,
+        activeTabId,
+        tabs,
+        activeTabIndex,
+        currentRegister,
+        t,
+    ]);
+
+    return (
+        <RegisterTabsLayout
+            breadcrumb={breadcrumb}
+            tabs={{ tabs }}
+            activeTab={activeTabIndex}
+            onTabChange={setActiveTabByIndex}
+        >
+            {loading ? (
+                <div className="space-y-4">
+                    {[...Array(3)].map((_, i) => (
+                        <ChangeLogSkeleton key={i} />
+                    ))}
+                </div>
+            ) : logs.length === 0 ? (
+                <p className="text-sm text-gray-400">No change requests found</p>
+            ) : (
+                <ChangeLogList
+                    logs={logs}
+                    getDetailsUrl={log =>
+                        `/${locale}/register/${type}/${id}/change-request/${log.change_request_id}?tab=${activeTabId}`
+                    }
+                />
+            )}
+        </RegisterTabsLayout>
     );
-
-    if (idx >= 0) setActiveTabIndex(idx);
-  }, [tabsData, tabFromUrl]);
-
-
-  const activeTabId = useMemo(
-    () => tabsData?.tabs?.[activeTabIndex]?.tab_id,
-    [tabsData, activeTabIndex]
-  );
-
-  const { data: registers } = useFetch<any[]>({
-    url: '/api/register/all',
-  });
-
-  const currentRegister = useMemo(
-    () =>
-      registers?.find(
-        r => r.register_mnemonic.toLowerCase() === type.toLowerCase()
-      ),
-    [registers, type]
-  );
-
-  const breadcrumb = useMemo(() => {
-    const activeTab = tabsData?.tabs?.[activeTabIndex];
-
-    return [
-      {
-        label: currentRegister?.register_subject ?? 'Register',
-        href: `/register/${type}`,
-      },
-      {
-        label: `ID-${id}`,
-        href: `/register/${type}/${id}`,
-      },
-      ...(activeTab
-        ? [
-          {
-            label: activeTab.tab_label,
-            href: `/register/${type}/${id}?tab=${activeTab.tab_id}`,
-          },
-        ]
-        : []),
-      {
-        label: 'Change Request',
-      },
-    ];
-  }, [currentRegister, tabsData, activeTabIndex, type, id]);
-
-  const handleTabChange = useCallback(
-    (index: number) => {
-      const tabId = tabsData?.tabs?.[index]?.tab_id;
-      if (!tabId) return;
-
-      setActiveTabIndex(index);
-
-      router.push(
-        `/register/${type}/${id}/change-request?tab=${tabId}`
-      );
-    },
-    [tabsData, router, type, id]
-  );
-
-  const { data, loading } = useFetch<any>({
-    url: `/api/change_request/get/list`,
-    enabled: !!activeTabId,
-    options: {
-      method: 'POST',
-      body: JSON.stringify({
-        request_body: {
-          pagination_request: {
-            current_page: 1,
-            page_size: 10,
-            sort_by: '',
-            filter_by: '',
-          },
-          request_payload: {
-            subject_register_id: id,
-            subject_record_id: id,
-            tab_id: activeTabId,
-          },
-        },
-      }),
-    },
-  });
-
-  const logs: ChangeLog[] =
-    data?.response_body?.response_payload?.change_requests ?? [];
-
-
-  return (
-    <RegisterTabsLayout
-      breadcrumb={breadcrumb}
-      tabs={tabsData}
-      activeTab={activeTabIndex}
-      onTabChange={handleTabChange}
-    >
-      {loading ? (
-        <p className="text-sm text-gray-500">Loading…</p>
-      ) : logs.length === 0 ? (
-        <p className="text-sm text-gray-400">No change requests found</p>
-      ) : (
-        <ChangeLogList
-          logs={logs}
-          getDetailsUrl={log =>
-            `/${locale}/register/${type}/${id}/change-request/${log.change_request_id}`
-          }
-        />
-      )}
-    </RegisterTabsLayout>
-  );
 }

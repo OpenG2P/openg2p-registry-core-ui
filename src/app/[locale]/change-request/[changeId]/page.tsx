@@ -2,7 +2,6 @@
 
 import { useMemo } from "react";
 import { useParams } from "next/navigation";
-import { useFetch } from "@/shared/hooks/useFetch";
 import { ChangeRequestDetailsView } from "@/features/change-request/components";
 
 export default function ChangeRequestDetailsPage() {

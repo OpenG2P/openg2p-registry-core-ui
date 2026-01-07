@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react';
 import { useFetch } from '@/shared/hooks';
-import type { ChangeLog } from '@/features/change-request/types/change-log';
+import type { ChangeRequest } from '@/features/change-request/types/change-request';
 
 interface UseChangeRequestListOptions {
     pageSize?: number;
@@ -8,6 +8,7 @@ interface UseChangeRequestListOptions {
     searchText?: string;
     subjectId?: string;
     tabId?: string;
+    enabled?: boolean;
 }
 
 export function useChangeRequestList({
@@ -16,50 +17,52 @@ export function useChangeRequestList({
     searchText = '',
     subjectId,
     tabId,
+    enabled = true,
 }: UseChangeRequestListOptions) {
     const [currentPage, setCurrentPage] = useState(initialPage);
 
-    const options = useMemo(
+    const requestBody = useMemo(
         () => ({
-            method: 'POST',
-            body: JSON.stringify({
-                request_body: {
-                    pagination_request: {
-                        current_page: currentPage,
-                        page_size: pageSize,
-                        sort_by: '',
-                        filter_by: '',
-                        search_text: searchText,
-                    },
-                    request_payload: {
-                        subject_register_id: subjectId,
-                        subject_record_id: subjectId,
-                        tab_id: tabId,
-                    },
+            request_body: {
+                pagination_request: {
+                    current_page: currentPage,
+                    page_size: pageSize,
+                    sort_by: '',
+                    filter_by: '',
+                    search_text: searchText,
                 },
-            }),
+                request_payload: {
+                    subject_register_id: subjectId,
+                    subject_record_id: subjectId,
+                    tab_id: tabId,
+                },
+            },
         }),
         [currentPage, pageSize, searchText, subjectId, tabId]
     );
 
     const { data, loading } = useFetch<any>({
         url: '/api/change_request/get/list',
-        options,
-        enabled: true,
+        enabled,
+        options: {
+            method: 'POST',
+            body: JSON.stringify(requestBody),
+        },
     });
 
-    const logs: ChangeLog[] =
+    const logs: ChangeRequest[] =
         data?.response_body?.response_payload?.change_requests ?? [];
 
     const paginationInfo = data?.response_body?.pagination_response;
 
-    const onPrev = useCallback(() => {
-        setCurrentPage((p) => Math.max(1, p - 1));
-    }, []);
+    const onPrev = useCallback(
+        () => setCurrentPage(p => Math.max(1, p - 1)),
+        []
+    );
 
     const onNext = useCallback(() => {
         const totalPages = paginationInfo?.number_of_pages ?? 1;
-        setCurrentPage((p) => Math.min(totalPages, p + 1));
+        setCurrentPage(p => Math.min(totalPages, p + 1));
     }, [paginationInfo]);
 
     return {
@@ -68,8 +71,8 @@ export function useChangeRequestList({
         currentPage,
         pageSize,
         paginationInfo,
+        setCurrentPage,
         onPrev,
         onNext,
-        setCurrentPage,
     };
 }

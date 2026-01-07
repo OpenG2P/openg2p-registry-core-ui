@@ -4,6 +4,7 @@ import { GlobalContextProvider } from "@/context/GlobalContext";
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations } from 'next-intl/server';
 import { Header } from "@/components/layout";
+import { RegisterProvider } from "@/context/RegisterContext";
 // import '@openg2p/registry-widgets/dist/index.css';
 
 
@@ -39,7 +40,9 @@ export default async function RootLayout({
                 <NextIntlClientProvider messages={messages}>
                     <GlobalContextProvider>
                         <Header />
-                        {children}
+                        <RegisterProvider>
+                            {children}
+                        </RegisterProvider>
                     </GlobalContextProvider>
                 </NextIntlClientProvider>
             </body>

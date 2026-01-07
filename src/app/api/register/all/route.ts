@@ -8,7 +8,7 @@ import {
 const MOCK_REGISTERS = [
   {
     register_id: "25d460ac-50cf-4386-b486-23a4e9b7e254",
-    register_mnemonic: "Farmer",
+    register_mnemonic: "Farmers",
     register_subject: "farmers",
     register_description: "Farmer Register",
     master_register_id: null,
