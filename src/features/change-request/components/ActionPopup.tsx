@@ -17,7 +17,7 @@ export default function ActionPopup({ type, onClose }: ActionPopupProps) {
 
             <div className="w-20 h-20 relative">
                 <Image
-                    src={type === "approve" ? "/cr_success.png" : "/cr_reject.png"}
+                    src={type === "approve" ? "/cr_approve.png" : "/cr_reject.png"}
                     alt={type === "approve" ? "Approved" : "Rejected"}
                     fill
                     className="object-contain"
