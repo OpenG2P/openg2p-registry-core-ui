@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
+import { useLocale } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
 import { TopBar } from '@/components/shared';
 import { SelectedFilters } from '@/features/filter/components';
@@ -10,6 +11,8 @@ import { ChangeLogList } from '@/features/change-request/components';
 import { useChangeRequestList } from '@/features/change-request/hooks/useChangeRequestList';
 
 export default function ChangeRequestPage() {
+    const locale = useLocale();
+
     const searchParams = useSearchParams();
     const searchText = useMemo(
         () => searchParams.get('q') ?? '',
@@ -86,7 +89,7 @@ export default function ChangeRequestPage() {
                     <ChangeLogList
                         logs={logs}
                         getDetailsUrl={log =>
-                            `/change-request/${log.change_request_id}`
+                            `/${locale}/change-request/${log.change_request_id}`
                         }
                     />
                 )}
