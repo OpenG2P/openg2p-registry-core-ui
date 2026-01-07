@@ -6,4 +6,5 @@ export { default as ActionPopup } from './ActionPopup';
 export { default as ChangeRequestHeader } from './ChangeRequestHeader';
 export { default as VerificationForm } from './VerificationForm';
 export { default as VerificationList } from './VerificationList';
+export { default as ChangeLogSkeleton } from './ChangeLogSkeleton';
 

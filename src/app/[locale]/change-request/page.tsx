@@ -7,7 +7,7 @@ import { TopBar } from '@/components/shared';
 import { SelectedFilters } from '@/features/filter/components';
 import { useRegistryFilters } from '@/features/filter/hooks/useRegistryFilters';
 import { usePagination } from '@/shared/hooks';
-import { ChangeLogList } from '@/features/change-request/components';
+import { ChangeLogList, ChangeLogSkeleton } from '@/features/change-request/components';
 import { useChangeRequestList } from '@/features/change-request/hooks/useChangeRequestList';
 
 export default function ChangeRequestPage() {
@@ -49,8 +49,10 @@ export default function ChangeRequestPage() {
 
     if (loading) {
         return (
-            <div className="bg-white rounded-lg border p-4 text-sm">
-                Loading change requests...
+            <div className="space-y-6 px-6">
+                {[...Array(3)].map((_, i) => (
+                    <ChangeLogSkeleton key={i} />
+                ))}
             </div>
         );
     }
