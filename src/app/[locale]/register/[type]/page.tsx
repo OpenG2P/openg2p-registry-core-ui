@@ -79,7 +79,7 @@ export default function RegisterTypePage() {
     [registersData, registerType]
   );
 
-  const registerTypeLabel = currentRegister?.register_subject ?? t('register');
+  const registerTypeLabel = t(registerType) ?? currentRegister?.register_subject
 
   const { data: recordsData, loading: isLoadingRecords } = useFetch<RegisterRecordsApiResponse>({
     url: `/api/register/${registerType}`,

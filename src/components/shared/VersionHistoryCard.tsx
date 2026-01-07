@@ -41,11 +41,27 @@ export default function VersionHistoryCard({
 
     if (loading) {
         return (
-            <div className="rounded-[30px] bg-[#E0E0E0] px-8 pt-5 pb-8 text-sm">
-                Loading version history...
+            <div className="relative rounded-[30px] bg-[#E0E0E0] px-8 pt-5 pb-8 overflow-hidden animate-pulse">
+                <div className="flex items-center justify-between mb-5">
+                    <div className="h-6 w-40 rounded bg-black/20" />
+                    <div className="h-[60px] w-20 rounded-[20px] bg-black/20" />
+                </div>
+
+                <div className="space-y-3">
+                    <div className="h-4 w-32 rounded bg-black/20" />
+                    <div className="h-4 w-64 rounded bg-black/20" />
+                </div>
+
+                <div className="mt-4 space-y-3">
+                    <div className="h-4 w-32 rounded bg-black/20" />
+                    <div className="h-4 w-64 rounded bg-black/20" />
+                </div>
+
+                <div className="mt-6 h-10 w-32 rounded-full bg-black/20" />
             </div>
         );
     }
+
 
     if (!payload) return null;
 

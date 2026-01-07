@@ -42,7 +42,7 @@ export default function ChangeRequestPage() {
             if (!tabId) return;
 
             setActiveTabIndex(index);
-            router.push(`/register/${type}/${id}/change-request?tab=${tabId}`);
+            router.push(`/${locale}/register/${type}/${id}/change-request?tab=${tabId}`);
         },
         [tabsData, router, type, id]
     );

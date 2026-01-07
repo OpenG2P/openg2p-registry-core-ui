@@ -23,7 +23,7 @@ export default function RegisterTabsLayout({
     const t = useTranslations()
     return (
         <div className="min-h-screen bg-[#F3F1E4]">
-            <div className="px-7.5 pt-7.5">
+            <div className="px-7.5 pt-5">
                 <BreadcrumbBar breadcrumb={breadcrumb} />
             </div>
 
