@@ -3,6 +3,22 @@
 import Image from "next/image";
 import { FilterConfig, FilterRule } from "@/features/filter/types";
 
+const OPERATOR_LABELS: Record<string, string> = {
+  eq: "Equals",
+  neq: "Not equals",
+  in: "In",
+  nin: "Not in",
+  contains: "Contains",
+  ncontains: "Does not contain",
+  startsWith: "Starts with",
+  endsWith: "Ends with",
+  gt: "Greater than",
+  gte: "Greater than or equal",
+  lt: "Less than",
+  lte: "Less than or equal",
+  isNull: "Is null",
+};
+
 interface SelectedFiltersProps {
   appliedFilters: FilterRule[];
   filterConfig: FilterConfig[];
@@ -17,18 +33,19 @@ export default function SelectedFilters({
   clearAllFilters,
 }: SelectedFiltersProps) {
   const getFilterLabel = (rule: FilterRule) => {
-    const config = filterConfig.find((f: any) => f.field === rule.field);
-    const operator = config?.operators.find((o: any) => o.value === rule.operator);
+    const config = filterConfig.find((f) => f.field_name === rule.field_name);
 
     let valueLabel = rule.value;
     if (Array.isArray(rule.value)) {
       valueLabel = rule.value.join(' - ');
-    } else if (config?.type === 'select' && config.options) {
-      const option = config.options.find((o: any) => o.value === rule.value);
+    } else if (config?.filter_type === 'dropdown' && config.options) {
+      const option = config.options.find((o) => o.value === rule.value);
       valueLabel = option?.label || rule.value;
+    } else if (config?.filter_type === 'boolean' && typeof rule.value === 'boolean') {
+      valueLabel = rule.value ? 'True' : 'False';
     }
 
-    return `${config?.label}: ${operator?.label} ${valueLabel || ''}`;
+    return `${config?.display_label}: ${OPERATOR_LABELS[rule.operator] ?? rule.operator} ${valueLabel || ''}`;
   };
 
   return (

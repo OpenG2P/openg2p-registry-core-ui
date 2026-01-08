@@ -18,39 +18,57 @@ interface FilterDropdownProps {
     filterConfig?: FilterConfig[];
 }
 
+const OPERATOR_LABELS: Record<string, string> = {
+    eq: "Equals",
+    neq: "Not equals",
+    in: "In",
+    nin: "Not in",
+    contains: "Contains",
+    ncontains: "Does not contain",
+    startsWith: "Starts with",
+    endsWith: "Ends with",
+    gt: "Greater than",
+    gte: "Greater than or equal",
+    lt: "Less than",
+    lte: "Less than or equal",
+    isNull: "Is null",
+};
+
 export default function FilterDropdown({
     onApply,
     appliedFilters = [],
     filterConfig = [],
 }: FilterDropdownProps) {
-    const [selectedFilterId, setSelectedFilterId] = useState("");
+    const [selectedFieldName, setSelectedFieldName] = useState("");
     const [operator, setOperator] = useState("");
     const [value, setValue] = useState<any>("");
     const [error, setError] = useState<string | null>(null);
 
     const configMap: Record<string, FilterConfig> = Object.fromEntries(
-        filterConfig.map(cfg => [cfg.field, cfg])
+        filterConfig.map(cfg => [cfg.field_name, cfg])
     );
+
+    const sortedConfig = [...filterConfig].sort((a, b) => a.order - b.order);
 
     useEffect(() => {
         setError(null);
-    }, [selectedFilterId, operator, value]);
+    }, [selectedFieldName, operator, value]);
 
 
     useEffect(() => {
-        if (!selectedFilterId && filterConfig.length > 0) {
-            setSelectedFilterId(filterConfig[0].id);
+        if (!selectedFieldName && sortedConfig.length > 0) {
+            setSelectedFieldName(sortedConfig[0].field_name);
         }
-    }, [filterConfig, selectedFilterId]);
+    }, [sortedConfig, selectedFieldName]);
 
-    const selectedFilter = filterConfig.find(f => f.id === selectedFilterId);
+    const selectedFilter = sortedConfig.find(f => f.field_name === selectedFieldName);
 
     useEffect(() => {
         if (!selectedFilter) return;
 
-        const firstOperator = selectedFilter.operators[0]?.value || "";
+        const firstOperator = selectedFilter.allowed_operators[0] || "";
         setOperator(firstOperator);
-    }, [selectedFilterId]);
+    }, [selectedFieldName, selectedFilter]);
 
     useEffect(() => {
         if (!selectedFilter || !operator) {
@@ -59,7 +77,7 @@ export default function FilterDropdown({
         }
 
         const existing = appliedFilters.find(
-            f => f.field === selectedFilter.field && f.operator === operator
+            f => f.field_name === selectedFilter.field_name && f.operator === operator
         );
 
         setValue(existing ? existing.value : "");
@@ -69,14 +87,14 @@ export default function FilterDropdown({
         if (!selectedFilter || !operator) return;
 
         const newFilter: FilterRule = {
-            field: selectedFilter.field,
+            field_name: selectedFilter.field_name,
             operator,
             value,
         };
 
         const updatedFilters = [
             ...appliedFilters.filter(
-                f => !(f.field === newFilter.field && f.operator === newFilter.operator)
+                f => !(f.field_name === newFilter.field_name && f.operator === newFilter.operator)
             ),
             newFilter,
         ];
@@ -85,7 +103,7 @@ export default function FilterDropdown({
 
         if (validationErrors.length > 0) {
             const currentError = validationErrors.find(
-                e => e.filterId === selectedFilter.id
+                e => e.filterId === selectedFilter.field_name
             );
 
             if (currentError) {
@@ -116,22 +134,38 @@ export default function FilterDropdown({
             onChange: setValue,
         };
 
-        switch (selectedFilter.type) {
+        switch (selectedFilter.filter_type) {
             case "text":
                 return <TextFilterInput {...commonProps} />;
 
-            case "number":
+            case "number_range":
                 return <NumberFilterInput {...commonProps} />;
 
-            case "date":
+            case "date_range":
                 return <DateFilterInput {...commonProps} />;
 
-            case "select":
+            case "dropdown":
                 return (
                     <SelectFilterInput
                         {...commonProps}
                         options={selectedFilter.options}
                     />
+                );
+
+            case "boolean":
+                return (
+                    <select
+                        className="border rounded-lg px-3 py-2 text-sm w-full"
+                        value={value === true ? "true" : value === false ? "false" : ""}
+                        onChange={e => {
+                            if (e.target.value === "") return setValue("");
+                            setValue(e.target.value === "true");
+                        }}
+                    >
+                        <option value="">Select</option>
+                        <option value="true">True</option>
+                        <option value="false">False</option>
+                    </select>
                 );
 
             default:
@@ -142,16 +176,16 @@ export default function FilterDropdown({
     return (
         <div className="flex bg-white rounded-2xl shadow-lg overflow-hidden min-w-[440px]">
             <div className="w-40 bg-gray-50 p-3 space-y-1">
-                {filterConfig.map(filter => (
+                {sortedConfig.map(filter => (
                     <button
-                        key={filter.id}
-                        onClick={() => setSelectedFilterId(filter.id)}
+                        key={filter.field_name}
+                        onClick={() => setSelectedFieldName(filter.field_name)}
                         className={`w-full text-left px-3 py-2 rounded-lg text-sm
-              ${filter.id === selectedFilterId
+              ${filter.field_name === selectedFieldName
                                 ? "bg-[#F2BA1A] text-black"
                                 : "hover: bg-[#F2BA2D] text-black"}`}
                     >
-                        {filter.label}
+                        {filter.display_label}
                     </button>
                 ))}
             </div>
@@ -160,7 +194,7 @@ export default function FilterDropdown({
 
             <div className="flex-1 p-5 space-y-6 justify-center">
                 <div className="text-xl font-semibold">
-                    {selectedFilter && `Search by ${selectedFilter.label.toLowerCase()}`}
+                    {selectedFilter && `Search by ${selectedFilter.display_label.toLowerCase()}`}
                 </div>
 
                 {selectedFilter && (
@@ -172,9 +206,9 @@ export default function FilterDropdown({
                                 value={operator}
                                 onChange={e => setOperator(e.target.value)}
                             >
-                                {selectedFilter.operators.map(op => (
-                                    <option key={op.value} value={op.value}>
-                                        {op.label}
+                                {selectedFilter.allowed_operators.map(op => (
+                                    <option key={op} value={op}>
+                                        {OPERATOR_LABELS[op] ?? op}
                                     </option>
                                 ))}
                             </select>

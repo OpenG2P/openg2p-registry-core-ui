@@ -1,9 +1,9 @@
-export type FilterType = "text" | "number" | "select" | "date";
-
-export interface Operator {
-    value: string;
-    label: string;
-}
+export type FilterType =
+    | "text"
+    | "dropdown"
+    | "date_range"
+    | "number_range"
+    | "boolean";
 
 export interface SelectOption {
     value: string;
@@ -11,18 +11,19 @@ export interface SelectOption {
 }
 
 export interface FilterConfig {
-    id: string;
-    label: string;
-    field: string;
-    type: FilterType;
-    operators: Operator[];
+    field_name: string;
+    display_label: string;
+    filter_type: FilterType;
+    order: number;
+    allowed_operators: string[];
     options?: SelectOption[];
+    options_source?: string;
 }
 
 export interface FilterRule {
-    field: string;
+    field_name: string;
     operator: string;
-    value: string | number | string[] | number[];
+    value: string | number | boolean | null | string[] | number[];
 }
 
 export type AppliedFilters = FilterRule[];
