@@ -12,7 +12,7 @@ export default function SelectFilterInput({
     onChange,
     options = [],
 }: SelectFilterInputProps) {
-    const isMultiSelect = operator === "in" || operator === "not_in";
+    const isMultiSelect = operator === "in" || operator === "nin";
 
     const handleMultiSelectChange = (optionValue: string) => {
         const currentValues = Array.isArray(value) ? value : [];

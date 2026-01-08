@@ -1,1 +1,8 @@
-export type { FilterConfig, FilterRule, FilterType, Operator, SelectOption, AppliedFilters, ValueInputProps } from './types';
+export type {
+  FilterConfig,
+  FilterRule,
+  FilterType,
+  SelectOption,
+  AppliedFilters,
+  ValueInputProps,
+} from './types';
