@@ -10,7 +10,7 @@ export const useVerifications = (changeId: string) => {
         url: `/api/change_request/verification/list`,
         enabled: !!changeId,
         options: createPostOptions(
-            createRequestBody({ change_log_id: changeId })
+            createRequestBody({ change_request_id: changeId })
         ),
     });
 
@@ -34,7 +34,7 @@ export const useVerifications = (changeId: string) => {
                     `/api/change_request/verification/create`,
                     createPostOptions(
                         createRequestBody({
-                            change_log_id: changeId,
+                            change_request_id: changeId,
                             verification_observations: observation,
                             is_approved: isApproved,
                         })

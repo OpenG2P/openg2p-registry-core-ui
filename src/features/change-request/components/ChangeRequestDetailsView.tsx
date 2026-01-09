@@ -117,8 +117,6 @@ export default function ChangeRequestDetailsView({
         };
     }, [details]);
 
-    console.log(singleSectionConfig)
-
 
     return (
         <RegisterTabsLayout breadcrumb={breadcrumb}>

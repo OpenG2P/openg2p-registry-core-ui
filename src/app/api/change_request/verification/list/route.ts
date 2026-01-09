@@ -1,3 +1,68 @@
+// import { NextRequest, NextResponse } from "next/server";
+// import {
+//     createBackendRequest,
+//     BACKEND_CONFIG,
+//     BackendResponse,
+// } from "@/shared/types";
+
+// export async function POST(req: NextRequest) {
+//     try {
+//         const body = await req.json();
+
+//         const requestPayload =
+//             body?.request_body?.request_payload ?? {};
+
+//         const { change_request_id } = requestPayload;
+
+//         if (!change_request_id) {
+//             return NextResponse.json(
+//                 { error: "change_request_id is required" },
+//                 { status: 400 }
+//             );
+//         }
+
+//         const backendRequest = createBackendRequest({
+//             request_payload: {
+//                 change_request_id,
+//             },
+//         });
+
+//         const backendUrl =
+//             `${BACKEND_CONFIG.apiUrl}/register/get_verifications_for_change_request`;
+
+//         const response = await fetch(backendUrl, {
+//             method: "POST",
+//             headers: { "Content-Type": "application/json" },
+//             body: JSON.stringify(backendRequest),
+//         });
+
+//         if (!response.ok) {
+//             return NextResponse.json(
+//                 { error: `Backend HTTP error ${response.status}` },
+//                 { status: response.status }
+//             );
+//         }
+
+//         const backendResponse: BackendResponse = await response.json();
+
+//         if (backendResponse.response_header.response_status === "ERROR") {
+//             return NextResponse.json(
+//                 { error: backendResponse.response_header.response_error_message },
+//                 { status: 400 }
+//             );
+//         }
+
+//         return NextResponse.json(backendResponse);
+
+//     } catch (e) {
+//         return NextResponse.json(
+//             { error: e instanceof Error ? e.message : "Internal Server Error" },
+//             { status: 500 }
+//         );
+//     }
+// }
+
+
 import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {

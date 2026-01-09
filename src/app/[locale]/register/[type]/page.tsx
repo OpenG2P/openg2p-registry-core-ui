@@ -1,9 +1,9 @@
 'use client';
 
-import { useMemo, useCallback } from 'react';
+import { useMemo, useCallback, useState } from 'react';
 import { useParams, useSearchParams, useRouter } from 'next/navigation';
 import { Link } from '@/i18n/navigation';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { TopBar } from '@/components/shared';
 import { SelectedFilters } from '@/features/filter/components';
 import { useRegistryFilters } from '@/features/filter/hooks/useRegistryFilters';
@@ -43,10 +43,14 @@ interface PaginationState {
 }
 
 export default function RegisterTypePage() {
+    const locale = useLocale();
     const router = useRouter();
     const t = useTranslations();
     const routeParams = useParams<{ type: string }>();
     const searchParams = useSearchParams();
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const pageSize = 7;
 
     const {
         appliedFilters,
@@ -58,8 +62,6 @@ export default function RegisterTypePage() {
 
     const registerType = routeParams.type;
     const searchQuery = searchParams.get('search') || undefined;
-    const currentPage = parseInt(searchParams.get('page') || '1', 10);
-    const pageSize = parseInt(searchParams.get('limit') || '7', 10);
 
     const { currentRegister } = useRegister();
 
@@ -84,42 +86,41 @@ export default function RegisterTypePage() {
     const records = recordsData?.records ?? [];
     const paginationInfo = recordsData?.pagination;
 
-    const pagination = useMemo<PaginationState>(() => {
-        const totalPages = paginationInfo?.number_of_pages || 1;
-        const totalItems = totalPages * pageSize;
-        const startIndex = (currentPage - 1) * pageSize + 1;
-        const endIndex = (currentPage - 1) * pageSize + records.length;
+    const pagination = useMemo(() => {
+        if (!paginationInfo) {
+            return {
+                pageStart: 0,
+                pageEnd: 0,
+                total: 0,
+            };
+        }
+
+        const pageStart =
+            (currentPage - 1) * pageSize + 1;
+
+        const pageEnd =
+            Math.min(
+                currentPage * pageSize,
+                paginationInfo.number_of_items
+            );
 
         return {
-            page: currentPage,
-            limit: pageSize,
-            total: totalItems,
-            pageStart: startIndex,
-            pageEnd: endIndex,
+            pageStart,
+            pageEnd,
+            total: paginationInfo.number_of_items,
         };
-    }, [paginationInfo, pageSize, currentPage, records.length]);
-
-    const navigateToPage = useCallback(
-        (targetPage: number) => {
-            const params = new URLSearchParams(searchParams.toString());
-            params.set('page', String(targetPage));
-            router.push(`/register/${registerType}?${params}`);
-        },
-        [searchParams, router, registerType]
-    );
+    }, [paginationInfo, currentPage, pageSize]);
 
     const handlePreviousPage = useCallback(() => {
-        if (currentPage > 1) {
-            navigateToPage(currentPage - 1);
-        }
-    }, [currentPage, navigateToPage]);
+        setCurrentPage(p => Math.max(1, p - 1));
+    }, []);
 
     const handleNextPage = useCallback(() => {
-        const totalPages = paginationInfo?.number_of_pages || 1;
-        if (currentPage < totalPages) {
-            navigateToPage(currentPage + 1);
-        }
-    }, [currentPage, paginationInfo, navigateToPage]);
+        const totalPages = paginationInfo?.number_of_pages ?? 1;
+        setCurrentPage(p => Math.min(totalPages, p + 1));
+    }, [paginationInfo]);
+
+
 
     const handleSearch = useCallback((searchValue: string) => {
         const params = new URLSearchParams(searchParams.toString());
@@ -128,9 +129,7 @@ export default function RegisterTypePage() {
         } else {
             params.delete('search');
         }
-        // reset page to 1 when search is applied
-        params.set('page', '1');
-        router.push(`/register/${registerType}?${params.toString()}`);
+        router.push(`/${locale}/register/${registerType}?${params.toString()}`);
     }, [searchParams, router, registerType]);
 
 
@@ -147,10 +146,6 @@ export default function RegisterTypePage() {
                 breadcrumb={[{ label: registerTypeLabel }]}
                 showFilters
                 showPagination
-                showSearch
-                searchPlaceholder={`${searchQuery || t('search')}`}
-                searchValue={searchQuery || ''}
-                onSearch={handleSearch}
                 pageStart={pagination.pageStart}
                 pageEnd={pagination.pageEnd}
                 total={pagination.total}
@@ -161,22 +156,26 @@ export default function RegisterTypePage() {
                 filterConfig={filterConfig}
             />
 
-            <div className="mx-[30px] px-4 sm:px-6 lg:px-8 py-4 bg-white rounded-[30px]">
+            <div className="mx-[30px] bg-white rounded-[30px]">
+                <div className="px-2 pt-1">
+                    <SelectedFilters
+                        appliedFilters={appliedFilters}
+                        filterConfig={filterConfig}
+                        removeFilter={removeFilter}
+                        clearAllFilters={clearAllFilters}
+                        searchValue={searchQuery || ''}
+                        searchPlaceholder={t('search')}
+                        onSearch={handleSearch}
+                    />
+                </div>
 
-                <SelectedFilters
-                    appliedFilters={appliedFilters}
-                    filterConfig={filterConfig}
-                    removeFilter={removeFilter}
-                    clearAllFilters={clearAllFilters}
-                />
-
-                <div className="-mx-4 sm:-mx-6 lg:-mx-8 space-y-2">
+                <div className="space-y-2">
                     {isLoadingRecords ? (
                         <div className="space-y-4">
                             {[...Array(5)].map((_, i) => (
                                 <div
                                     key={i}
-                                    className="flex items-center gap-4 sm:gap-6 px-4 sm:px-6 lg:px-8 p-4 w-full overflow-hidden bg-gray-200 rounded-md animate-pulse"
+                                    className="flex items-center gap-4 sm:gap-6 px-4 sm:px-6 lg:px-8 p-4 w-full overflow-hidden bg-gray-200 animate-pulse"
                                 >
                                     <div className="w-16 h-16 rounded-md bg-gray-300 shrink-0" />
                                     <div className="flex-1 space-y-2 min-w-0">

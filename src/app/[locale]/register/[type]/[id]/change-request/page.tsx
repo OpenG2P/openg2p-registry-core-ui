@@ -13,20 +13,22 @@ export default function ChangeRequestPage() {
     const t = useTranslations();
     const locale = useLocale();
     const { type, id } = useParams<{ type: string; id: string }>();
-    const { currentRegister } = useRegister();
+    const { currentRegister, } = useRegister();
 
     const {
         tabs,
-        activeTab,
         activeTabIndex,
         activeTabId,
         setActiveTabByIndex,
     } = useRegisterTabs();
 
+    const subjectRegisterId = currentRegister?.register_id;
+
     const { logs, loading } = useChangeRequestList({
-        subjectId: id,
+        subjectRecordId: id,
+        subjectRegisterId: subjectRegisterId,
         tabId: activeTabId,
-        enabled: !!activeTabId,
+        enabled: !!activeTabId && !!id && !!subjectRegisterId,
     });
 
     const breadcrumb = useBreadcrumb({
