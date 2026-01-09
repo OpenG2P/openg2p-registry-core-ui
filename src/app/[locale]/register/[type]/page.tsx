@@ -1,9 +1,9 @@
 'use client';
 
 import { useMemo, useCallback, useState } from 'react';
-import { useParams, useSearchParams, useRouter } from 'next/navigation';
-import { Link } from '@/i18n/navigation';
 import { useLocale, useTranslations } from 'next-intl';
+import { useParams, useSearchParams } from 'next/navigation';
+import { Link, useRouter } from '@/i18n/navigation';
 import { TopBar } from '@/components/shared';
 import { SelectedFilters } from '@/features/filter/components';
 import { useRegistryFilters } from '@/features/filter/hooks/useRegistryFilters';
@@ -20,7 +20,7 @@ interface RegisterRecord {
     internal_record_id: string;
     functional_record_id: string;
     record_name: string;
-    image: string | null;
+    record_image_url: string | null;
     display_fields: DisplayField[];
 }
 
@@ -69,6 +69,30 @@ export default function RegisterTypePage() {
 
     const registerTypeLabel = t(registerType) ?? currentRegister?.register_subject
 
+    // whenever filter change same register type will be fetched
+    const filterBy = useMemo(() => {
+        if (!appliedFilters.length) return undefined;
+
+        const stableFilters = [...appliedFilters].sort((a, b) => {
+            const aKey = `${a.field_name}__${a.operator}`;
+            const bKey = `${b.field_name}__${b.operator}`;
+            return aKey.localeCompare(bKey);
+        });
+
+        const result: Record<string, Record<string, unknown>> = {};
+
+        for (const rule of stableFilters) {
+            const field = rule.field_name;
+            const operator = rule.operator;
+            const value = rule.value;
+
+            if (!result[field]) result[field] = {};
+            result[field][operator] = value;
+        }
+
+        return result;
+    }, [appliedFilters]);
+
     const { data: recordsData, loading: isLoadingRecords } = useFetch<RegisterRecordsApiResponse>({
         url: `/api/register/${registerType}`,
         enabled: !!registerId,
@@ -77,6 +101,8 @@ export default function RegisterTypePage() {
             body: JSON.stringify({
                 current_page: currentPage,
                 page_size: pageSize,
+                sort_by:"",
+                filter_by: filterBy,
                 search_text: searchQuery,
                 register_id: currentRegister?.register_id,
             }),
@@ -129,7 +155,7 @@ export default function RegisterTypePage() {
         } else {
             params.delete('search');
         }
-        router.push(`/${locale}/register/${registerType}?${params.toString()}`);
+        router.push(`/register/${registerType}?${params.toString()}`);
     }, [searchParams, router, registerType]);
 
 
@@ -210,9 +236,9 @@ export default function RegisterTypePage() {
                                         ? 'bg-[#D9D9D940]'
                                         : 'bg-white'
                                         }`}>
-                                        {record.image ? (
+                                        {record.record_image_url ? (
                                             <img
-                                                src={record.image}
+                                                src={record.record_image_url}
                                                 alt={record.record_name}
                                                 className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-md object-cover shrink-0"
                                             />
