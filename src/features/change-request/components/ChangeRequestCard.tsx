@@ -21,12 +21,13 @@ export default function ChangeRequestCard({
 
     const { data, loading } = useFetch<ResponseBody>({
         url: `/api/change_request/pending`,
-        enabled: !!registerId && !!internalRecordId,
+        enabled: !!registerId && !!internalRecordId && !!activeTabId,
         options: {
             method: "POST",
             body: JSON.stringify({
                 register_id: registerId,
                 internal_record_id: internalRecordId,
+                tab_id: activeTabId
             }),
         },
     });

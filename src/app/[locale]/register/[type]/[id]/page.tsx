@@ -18,6 +18,7 @@ import { useFetch } from '@/shared/hooks/useFetch';
 import ChangeRequestCard from '@/features/change-request/components/ChangeRequestCard';
 import { useRegister } from '@/context/RegisterContext';
 import { useRegisterTabs } from '@/context/RegisterTabsContext';
+import { useBreadcrumb } from '@/shared/hooks';
 
 interface RegisterFlattenedRecord {
     internal_record_id: string;
@@ -44,11 +45,6 @@ interface SectionsResponse {
     sections: SectionSchema[];
 }
 
-interface BreadcrumbItem {
-    label: string;
-    href: string;
-}
-
 export default function RegisterDetailPage() {
 
     const t = useTranslations();
@@ -67,6 +63,12 @@ export default function RegisterDetailPage() {
     } = useRegisterTabs();
 
     const { currentRegister } = useRegister();
+
+    const breadcrumb = useBreadcrumb({
+        type: registerType,
+        recordId,
+        includeActiveTab: true,
+    });
 
     const { data: sectionsSchema } = useFetch<SectionsResponse>({
         url: `/api/register/${registerType}/tabs/${activeTabId}/sections`,
@@ -115,24 +117,6 @@ export default function RegisterDetailPage() {
             .flatMap(section => section.section_ui_schema!.sections);
     }, [sectionsSchema]);
 
-    const breadcrumbItems = useMemo<BreadcrumbItem[]>(() => {
-        if (!currentRegister) return [];
-
-        return [
-            {
-                label: t(currentRegister.register_subject) || currentRegister.register_subject,
-                href: `/register/${registerType}`,
-            },
-            {
-                label: `ID-${recordId}`,
-                href: `/register/${registerType}/${recordId}`,
-            },
-            ...(activeTab
-                ? [{ label: t(activeTab.tab_label) || activeTab.tab_label, href: '#' }]
-                : []),
-        ];
-    }, [currentRegister, activeTabIndex, registerType, recordId, t]);
-
     const { execute: submitChangeRequest } = useFetch();
 
     const handleSectionSave = useCallback(
@@ -165,7 +149,7 @@ export default function RegisterDetailPage() {
 
     return (
         <RegisterTabsLayout
-            breadcrumb={breadcrumbItems}
+            breadcrumb={breadcrumb}
             tabs={{ tabs }}
             activeTab={activeTabIndex}
             onTabChange={setActiveTabByIndex}

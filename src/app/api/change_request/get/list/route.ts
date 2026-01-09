@@ -1,3 +1,72 @@
+// import { NextRequest, NextResponse } from "next/server";
+// import {
+//     createBackendRequest,
+//     BACKEND_CONFIG,
+//     BackendResponse,
+// } from "@/shared/types";
+
+// export async function POST(req: NextRequest) {
+//     try {
+//         const body = await req.json()
+
+//         const paginationRequest =
+//             body?.request_body?.pagination_request ?? {};
+
+//         const requestPayload =
+//             body?.request_body?.request_payload ?? {};
+
+//         const backendRequest = createBackendRequest({
+//             pagination_request: {
+//                 current_page: paginationRequest.current_page ?? 1,
+//                 page_size: paginationRequest.page_size ?? 10,
+//                 sort_by: paginationRequest.sort_by ?? "",
+//                 filter_by: paginationRequest.filter_by ?? "",
+//                 search_text: paginationRequest.search_text ?? "",
+//             },
+//             request_payload: {
+//                 subject_register_id: requestPayload.subject_register_id,
+//                 subject_record_id: requestPayload.subject_record_id,
+//                 tab_id: requestPayload.tab_id,
+//             },
+//         });
+
+//         const backendUrl = `${BACKEND_CONFIG.apiUrl}/register/get_change_requests`;
+
+//         const response = await fetch(backendUrl, {
+//             method: "POST",
+//             headers: { "Content-Type": "application/json" },
+//             body: JSON.stringify(backendRequest),
+//         });
+
+//         if (!response.ok) {
+//             return NextResponse.json(
+//                 { error: `Backend HTTP error ${response.status}` },
+//                 { status: response.status }
+//             );
+//         }
+
+//         const backendResponse: BackendResponse = await response.json();
+
+//         console.log(backendResponse)
+
+//         if (backendResponse.response_header.response_status === "ERROR") {
+//             return NextResponse.json(
+//                 { error: backendResponse.response_header.response_error_message },
+//                 { status: 400 }
+//             );
+//         }
+
+//         return NextResponse.json(backendResponse);
+
+//     } catch (e) {
+//         return NextResponse.json(
+//             { error: e instanceof Error ? e.message : "Internal Server Error" },
+//             { status: 500 }
+//         );
+//     }
+// }
+
+
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {

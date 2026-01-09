@@ -7,7 +7,7 @@ export const useChangeRequest = (changeId: string) => {
         url: `/api/change_request/get`,
         enabled: !!changeId,
         options: createPostOptions(
-            createRequestBody({ change_log_id: changeId })
+            createRequestBody({ change_request_id: changeId })
         ),
     });
 

@@ -76,6 +76,15 @@ export function RegisterTabsProvider({ children }: { children: ReactNode }) {
         [router, pathname, id]
     );
 
+    useEffect(() => {
+        if (!tabs.length) return;
+
+        if (tabFromUrl) return;
+
+        setActiveTabIndex(0);
+        updateUrl(tabs[0].tab_id);
+    }, [tabs, tabFromUrl, updateUrl]);
+
 
     const setActiveTabByIndex = useCallback(
         (index: number) => {

@@ -6,12 +6,24 @@ import { ChangeRequest } from "@/features/change-request/types";
 interface Props {
     log: ChangeRequest;
     onViewDetails: () => void;
+    isSearchView?: boolean;
 }
 
-export default function ChangeLogCard({ log, onViewDetails }: Props) {
+export default function ChangeLogCard({
+    log,
+    onViewDetails,
+    isSearchView = false,
+}: Props) {
     return (
-        <div className="rounded-[30px] bg-white px-10 py-5 mr-60">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div
+            className={`rounded-[30px] bg-white px-10 py-5 ${!isSearchView ? "mr-60" : ""}`}
+        >
+            <div
+                className={`grid gap-6 ${isSearchView
+                    ? "grid-cols-1 md:grid-cols-4"
+                    : "grid-cols-1 md:grid-cols-3"
+                    }`}
+            >
                 <div className="space-y-2 text-[16px] text-[#00000080]">
                     <h3 className="text-lg font-semibold text-black">
                         Change XYZ
@@ -92,6 +104,22 @@ export default function ChangeLogCard({ log, onViewDetails }: Props) {
                         )}
                     </div>
                 </div>
+
+                {isSearchView && (
+                    <div className="space-y-2 text-[16px]">
+                        <div className="pl-6 flex items-center gap-0 leading-none invisible">
+                            <span className="text-lg font-semibold"> Empty </span>
+                        </div>
+
+                        <div className="border-l-3 border-[#D9D9D9] pl-6">
+                            <div className="flex flex-col gap-2 invisible">
+                                <span>1</span>
+                                <span>2</span>
+                                <span>3</span>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
 
             <div className="my-4 border-t-3 border-[#D9D9D9]" />

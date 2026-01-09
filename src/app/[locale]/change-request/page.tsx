@@ -1,23 +1,21 @@
 'use client';
 
-import { useMemo } from 'react';
-import { useLocale } from 'next-intl';
-import { useSearchParams } from 'next/navigation';
+import { useCallback } from 'react';
+import { useLocale, useTranslations } from 'next-intl';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { TopBar } from '@/components/shared';
 import { SelectedFilters } from '@/features/filter/components';
 import { useRegistryFilters } from '@/features/filter/hooks/useRegistryFilters';
-import { usePagination } from '@/shared/hooks';
 import { ChangeLogList, ChangeLogSkeleton } from '@/features/change-request/components';
 import { useChangeRequestList } from '@/features/change-request/hooks/useChangeRequestList';
 
 export default function ChangeRequestPage() {
     const locale = useLocale();
+    const router = useRouter();
+    const t = useTranslations();
 
     const searchParams = useSearchParams();
-    const searchText = useMemo(
-        () => searchParams.get('q') ?? '',
-        [searchParams]
-    );
+    const searchQuery = searchParams.get('search') || undefined;
 
     const {
         appliedFilters,
@@ -37,35 +35,41 @@ export default function ChangeRequestPage() {
         onNext,
     } = useChangeRequestList({
         pageSize: 7,
-        searchText,
+        searchText: searchQuery,
     });
 
-    const pagination = usePagination({
-        totalItems: paginationInfo?.number_of_items ?? 0,
-        currentPage,
-        pageSize,
-        currentCount: logs.length,
-    });
+    const pageStart =
+        paginationInfo && paginationInfo.number_of_items > 0
+            ? (currentPage - 1) * pageSize + 1
+            : 0;
 
-    if (loading) {
-        return (
-            <div className="space-y-6 px-6">
-                {[...Array(3)].map((_, i) => (
-                    <ChangeLogSkeleton key={i} />
-                ))}
-            </div>
-        );
-    }
+    const pageEnd =
+        paginationInfo
+            ? Math.min(currentPage * pageSize, paginationInfo.number_of_items)
+            : 0;
+
+    const total = paginationInfo?.number_of_items ?? 0;
+
+
+    const handleSearch = useCallback((searchValue: string) => {
+        const params = new URLSearchParams(searchParams.toString());
+        if (searchValue.trim()) {
+            params.set('search', searchValue.trim());
+        } else {
+            params.delete('search');
+        }
+        router.push(`/${locale}/change-request?${params.toString()}`);
+    }, [searchParams]);
 
     return (
-        <div className="min-h-screen mx-auto">
+        <div className="min-h-screen mx-auto bg-[#F3F1E4]">
             <TopBar
                 breadcrumb={[{ label: 'Change Request' }]}
                 showFilters
                 showPagination
-                pageStart={pagination.pageStart}
-                pageEnd={pagination.pageEnd}
-                total={pagination.total}
+                pageStart={pageStart}
+                pageEnd={pageEnd}
+                total={total}
                 onPrev={onPrev}
                 onNext={onNext}
                 onApplyFilters={applyFilters}
@@ -73,23 +77,33 @@ export default function ChangeRequestPage() {
                 filterConfig={filterConfig}
             />
 
-            <div className="px-6 py-4">
-                <SelectedFilters
-                    appliedFilters={appliedFilters}
-                    filterConfig={filterConfig}
-                    removeFilter={removeFilter}
-                    clearAllFilters={clearAllFilters}
-                />
-            </div>
+            <div className="px-7.5">
+                <div className='pl-4 pr-2 mb-4 bg-white rounded-[30px]'>
+                    <SelectedFilters
+                        appliedFilters={appliedFilters}
+                        filterConfig={filterConfig}
+                        removeFilter={removeFilter}
+                        clearAllFilters={clearAllFilters}
+                        searchValue={searchQuery || ''}
+                        searchPlaceholder={t('search')}
+                        onSearch={handleSearch}
+                    />
+                </div>
 
-            <div className="px-6">
-                {logs.length === 0 ? (
+                {loading ? (
+                    <div className="space-y-6">
+                        {[...Array(3)].map((_, i) => (
+                            <ChangeLogSkeleton key={i} isSearchView />
+                        ))}
+                    </div>
+                ) : logs.length === 0 ? (
                     <div className="text-sm text-gray-400 text-center py-6">
                         No change requests found
                     </div>
                 ) : (
                     <ChangeLogList
                         logs={logs}
+                        isSearchView
                         getDetailsUrl={log =>
                             `/${locale}/change-request/${log.change_request_id}`
                         }

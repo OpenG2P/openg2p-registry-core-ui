@@ -1,6 +1,5 @@
 'use client';
 
-import { useMemo } from 'react';
 import { useParams } from 'next/navigation';
 import { RegisterTabsLayout } from '@/components/shared';
 import { ChangeLogList, ChangeLogSkeleton } from '@/features/change-request/components';
@@ -8,69 +7,36 @@ import { useChangeRequestList } from '@/features/change-request/hooks/useChangeR
 import { useLocale, useTranslations } from 'next-intl';
 import { useRegister } from '@/context/RegisterContext';
 import { useRegisterTabs } from '@/context/RegisterTabsContext';
-
-interface BreadcrumbItem {
-    label: string;
-    href: string;
-}
+import { useBreadcrumb } from '@/shared/hooks';
 
 export default function ChangeRequestPage() {
     const t = useTranslations();
     const locale = useLocale();
     const { type, id } = useParams<{ type: string; id: string }>();
-    const { currentRegister } = useRegister();
+    const { currentRegister, } = useRegister();
 
     const {
         tabs,
-        activeTab,
         activeTabIndex,
         activeTabId,
         setActiveTabByIndex,
     } = useRegisterTabs();
 
+    const subjectRegisterId = currentRegister?.register_id;
+
     const { logs, loading } = useChangeRequestList({
-        subjectId: id,
+        subjectRecordId: id,
+        subjectRegisterId: subjectRegisterId,
         tabId: activeTabId,
-        enabled: !!activeTabId,
+        enabled: !!activeTabId && !!id && !!subjectRegisterId,
     });
 
-    const breadcrumb = useMemo<BreadcrumbItem[]>(() => {
-        if (!currentRegister) return [];
-        const items: BreadcrumbItem[] = [
-            {
-                label:
-                    t(currentRegister.register_subject) ??
-                    currentRegister.register_subject,
-                href: `/register/${type}`,
-            },
-            {
-                label: `ID-${id}`,
-                href: `/register/${type}/${id}`,
-            },
-        ];
-
-        if (activeTab) {
-            items.push({
-                label: t(activeTab.tab_label) ?? activeTab.tab_label,
-                href: '#',
-            });
-        }
-
-        items.push({
-            label: t('changeRequest') ?? 'Change Request',
-            href: `/register/${type}/${id}/change-request`,
-        });
-
-        return items;
-    }, [
+    const breadcrumb = useBreadcrumb({
         type,
-        id,
-        activeTabId,
-        tabs,
-        activeTabIndex,
-        currentRegister,
-        t,
-    ]);
+        recordId: id,
+        includeActiveTab: true,
+        includeChangeRequest: true,
+    });
 
     return (
         <RegisterTabsLayout

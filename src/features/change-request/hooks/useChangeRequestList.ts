@@ -6,7 +6,8 @@ interface UseChangeRequestListOptions {
     pageSize?: number;
     initialPage?: number;
     searchText?: string;
-    subjectId?: string;
+    subjectRecordId?: string;
+    subjectRegisterId?: string;
     tabId?: string;
     enabled?: boolean;
 }
@@ -15,7 +16,8 @@ export function useChangeRequestList({
     pageSize = 10,
     initialPage = 1,
     searchText = '',
-    subjectId,
+    subjectRecordId,
+    subjectRegisterId,
     tabId,
     enabled = true,
 }: UseChangeRequestListOptions) {
@@ -32,13 +34,13 @@ export function useChangeRequestList({
                     search_text: searchText,
                 },
                 request_payload: {
-                    subject_register_id: subjectId,
-                    subject_record_id: subjectId,
+                    subject_register_id: subjectRegisterId,
+                    subject_record_id: subjectRecordId,
                     tab_id: tabId,
                 },
             },
         }),
-        [currentPage, pageSize, searchText, subjectId, tabId]
+        [currentPage, pageSize, searchText, subjectRegisterId, subjectRecordId, tabId]
     );
 
     const { data, loading } = useFetch<any>({
