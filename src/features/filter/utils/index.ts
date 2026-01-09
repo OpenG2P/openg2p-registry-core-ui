@@ -1,2 +1,2 @@
-export { fetchFilterConfig } from './filterConfig';
+export { useFilterConfig } from './filterConfig';
 export { validateFilters } from './validateFilters';
