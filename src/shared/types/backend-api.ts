@@ -76,12 +76,12 @@ export interface PaginationResponse {
 
 export interface ResponseBody<T = any> {
   pagination_response: PaginationResponse | null;
-  response_payload: T[];
+  response_payload: T;
 }
 
-export interface BackendResponse {
+export interface BackendResponse<T = any> {
   response_header: ResponseHeader;
-  response_body: ResponseBody;
+  response_body: ResponseBody<T>;
 }
 
 export function generateRequestId(): string {
