@@ -1,7 +1,7 @@
 "use client";
 
 import { useClickOutside } from "@/shared/hooks/useClickOutside";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useTranslations } from 'next-intl';
 import { MdOutlineArrowDropDown } from "react-icons/md";
 
@@ -26,6 +26,15 @@ const RegisterDropdown = ({
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useClickOutside(dropdownRef, () => setOpen(false), open);
+
+  // Auto-select first option
+  useEffect(() => {
+    if (!selected || !options.some(o => o.value === selected)) {
+      if (options.length > 0) {
+        onChange(options[0].value);
+      }
+    }
+  }, [selected, options, onChange]);
 
   const selectedLabel =
     options.find((o) => o.value === selected)?.label || t('select');
