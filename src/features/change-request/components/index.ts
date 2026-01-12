@@ -7,4 +7,4 @@ export { default as ChangeRequestHeader } from './ChangeRequestHeader';
 export { default as VerificationForm } from './VerificationForm';
 export { default as VerificationList } from './VerificationList';
 export { default as ChangeLogSkeleton } from './ChangeLogSkeleton';
-
+export { default as RejectReasonPopup } from './RejectReasonPopup';

@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 
 import { RegisterTabsLayout } from "@/components/shared";
-import { ActionPopup, ChangeRequestHeader, VerificationForm, VerificationList } from "@/features/change-request/components";
+import { ActionPopup, ChangeRequestHeader, RejectReasonPopup, VerificationForm, VerificationList } from "@/features/change-request/components";
 import { useChangeRequest, useChangeRequestActions, useVerifications } from "@/features/change-request/hooks";
 
 import {
@@ -50,6 +50,7 @@ export default function ChangeRequestDetailsView({
         popupType,
         handleApprove,
         handleReject,
+        submitReject,
         setPopupVisible,
     } = useChangeRequestActions(changeId);
 
@@ -170,12 +171,27 @@ export default function ChangeRequestDetailsView({
                 </div>
             )}
 
-            {popupVisible && popupType && (
+            {/* {popupVisible && popupType && (
+                <ActionPopup
+                    type={popupType}
+                    onClose={() => setPopupVisible(false)}
+                />
+            )} */}
+            {popupVisible && popupType === "reject-input" && (
+                <RejectReasonPopup
+                    onSubmit={submitReject}
+                    onClose={() => setPopupVisible(false)}
+                    loading={loadingAction}
+                />
+            )}
+
+            {popupVisible && (popupType === "approve" || popupType === "reject") && (
                 <ActionPopup
                     type={popupType}
                     onClose={() => setPopupVisible(false)}
                 />
             )}
+
         </RegisterTabsLayout>
     );
 }

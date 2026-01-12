@@ -15,23 +15,24 @@ export default function ActionPopup({ type, onClose }: ActionPopupProps) {
                 <Image src="/cr_close.png" alt="Close" width={30} height={30} />
             </button>
 
-            <div className="w-20 h-20 relative">
+            <div className="w-20 h-20 relative rounded-full border-10 border-[#F2BA1A]/20 bg-[#F2BA1A] flex items-center justify-center">
                 <Image
                     src={type === "approve" ? "/cr_approve.png" : "/cr_reject.png"}
                     alt={type === "approve" ? "Approved" : "Rejected"}
-                    fill
+                    width={41}
+                    height={30}
                     className="object-contain"
                 />
             </div>
 
             <h3 className="text-xl font-semibold text-center">
-                {type === "approve" ? "Approved Successfully" : "Rejected Successfully"}
+                {type === "approve" ? "Approved Successfully" : "Thank you, for your information"}
             </h3>
 
             <p className="text-center text-gray-600">
                 {type === "approve"
                     ? "Thank you for approval, changes updated successfully"
-                    : "The device owner rejected your request, please try again"}
+                    : "Message submitted successfully"}
             </p>
 
             <button
