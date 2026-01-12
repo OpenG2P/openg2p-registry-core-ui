@@ -29,7 +29,7 @@ const StatsCardSmall = ({
           id: item.register_id,
           label: t(item.register_subject),
           value: item.total_record_count,
-          imageUrl: item.imageUrl,
+          imageUrl: item.register_icon?.startsWith('data:') ? item.register_icon : undefined,
         })),
       };
     }
@@ -42,13 +42,13 @@ const StatsCardSmall = ({
             id: "approved",
             label: t('approved'),
             value: data.approved,
-            imageUrl: data.imageUrl,
+            imageUrl: "/statsIcon/approved.png",
           },
           {
             id: "pending",
             label: t('pending'),
             value: data.pending,
-            imageUrl: data.imageUrl,
+            imageUrl: "/statsIcon/pending.png",
           },
         ],
       };
@@ -62,13 +62,13 @@ const StatsCardSmall = ({
             id: "partners",
             label: t('partners'),
             value: data.partners,
-            imageUrl: data.imageUrl,
+            imageUrl: "/statsIcon/partners.png",
           },
           {
             id: "models",
             label: t('dataModels'),
             value: data.data_models,
-            imageUrl: data.imageUrl,
+            imageUrl: "/statsIcon/data_models.png",
           },
         ],
       };
@@ -82,13 +82,13 @@ const StatsCardSmall = ({
             id: "topics",
             label: t('topics'),
             value: data.topics,
-            imageUrl: data.imageUrl,
+            imageUrl: "/statsIcon/topics.png",
           },
           {
             id: "models",
             label: t('dataModels'),
             value: data.data_models,
-            imageUrl: data.imageUrl,
+            imageUrl: "/statsIcon/data_models.png",
           },
         ],
       };
@@ -98,8 +98,13 @@ const StatsCardSmall = ({
   }, [data, stats_endpoint, t]);
 
   const totalCount = useMemo(() => {
+    // For registers, just count how many registers, don't sum their values
+    if (stats_endpoint.includes("register")) {
+      return data?.length;
+    }
+    // For other stats, sum the values
     return rows.reduce((sum, r) => sum + r.value, 0);
-  }, [data, rows]);
+  }, [data, rows, stats_endpoint]);
 
   return (
     <div
@@ -146,7 +151,13 @@ const StatsCardSmall = ({
             {rows.map((row) => (
               <li key={row.id} className="flex items-center gap-2">
                 {row.imageUrl && (
-                  <Image src={row.imageUrl} width={18} height={18} alt="" />
+                  <Image
+                    src={row.imageUrl}
+                    width={18}
+                    height={18}
+                    alt=""
+                    className={active ? "invert" : ""}
+                  />
                 )}
 
                 {/* value */}

@@ -94,9 +94,6 @@
     "crops": "Crops",
     "familyMembers": "Family Members",
     "families": "Families",
-    "common": {
-        "required": "Required"
-    },
     "basicInformation": "Basic Information",
     "currentCrops": "Current Crops",
     "cropsCultivated": "Crops Cultivated",
@@ -146,7 +143,15 @@
         "select": "Select",
         "addItem": "Add Item",
         "chooseFiles": "Choose Files",
-        "maxFileSize": "Max file size is 10MB"
+        "maxFileSize": "Max file size is 10MB",
+        "addRow":"Add Row",
+        "remove":"Remove",
+        "actions":"Actions",
+        "chooseFile":"Choose a File"
+
     },
-    "national_id_placeholder": "XXXX-XXXX-XXXX"
+    "national_id_placeholder": "XXXX-XXXX-XXXX",
+    "Upload Supporting Documents":"Upload Supporting Documents",
+    "dobProof":"Date of Birth",
+    "addressProof":"Proof of Address"
 }

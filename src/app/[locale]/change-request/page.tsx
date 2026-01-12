@@ -2,7 +2,9 @@
 
 import { useCallback } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
+import { useRouter } from '@/i18n/navigation';
+
 import { TopBar } from '@/components/shared';
 import { SelectedFilters } from '@/features/filter/components';
 import { useRegistryFilters } from '@/features/filter/hooks/useRegistryFilters';
@@ -58,7 +60,7 @@ export default function ChangeRequestPage() {
         } else {
             params.delete('search');
         }
-        router.push(`/${locale}/change-request?${params.toString()}`);
+        router.push(`/change-request?${params.toString()}`);
     }, [searchParams]);
 
     return (
