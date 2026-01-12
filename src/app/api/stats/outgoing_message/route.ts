@@ -11,7 +11,6 @@ const MOCK_OUTGOING_MESSAGE_STATS = {
   total_outgoing_messages: 1800,
   topics: 7,
   data_models: 8,
-  imageUrl:"/openg2p_logo.png" 
 
 };
 

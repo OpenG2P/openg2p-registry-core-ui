@@ -5,24 +5,44 @@ import {
   BackendResponse,
 } from "@/shared/types";
 
-/**
- * POST /api/register/[type]/[id]/change_request/create
- * Creates a change request for edited sections/widgets
- */
+
 export async function POST(
   request: NextRequest,
-  { params }: { params: Promise<{ type: string; id: string }> }
 ) {
   try {
-    const { type, id } = await params;
-    const body = await request.json();
+    const {
+      register_id,
+      register_mnemonic,
+      internal_record_id,
+      section_register_id,
+      tab_id,
+      section_id,
+      section_schema,
+      section_data,
+      documents,
+    } = await request.json();
 
     const backendRequest = createBackendRequest({
       pagination_request: undefined,
-      request_payload: body,
+      request_payload: {
+        register_id,
+        register_mnemonic,
+        section_register_id,
+        tab_id,
+        section_id,
+        change_payload: {
+          internal_record_id,
+          additionalProp1:{
+            section_schema,
+            section_data,
+          }
+         
+        },
+        documents,
+      },
     });
-    
-    /*
+
+
     const backendUrl = `${BACKEND_CONFIG.apiUrl}/change_request/create`;
 
     const response = await fetch(backendUrl, {
@@ -51,17 +71,7 @@ export async function POST(
       backendResponse.response_body.response_payload,
       { status: 200 }
     );
-    */
 
-    /** Mock response */
-    return NextResponse.json(
-      {
-        success: true,
-        message: "Change request created successfully",
-        change_request_id: `CR-${Date.now()}`,
-      },
-      { status: 200 }
-    );
   } catch (e) {
     return NextResponse.json(
       {

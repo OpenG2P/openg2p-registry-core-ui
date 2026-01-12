@@ -31,7 +31,6 @@ export default function RegisterTabsLayout({
                 {tabs && activeTab !== undefined && onTabChange && (
                     <div className="flex gap-2 px-10">
                         {tabs.tabs.map((tab, tabIndex) => {
-                            console.log('Tab label:', tab.tab_label);
                             return (
                             <button
                                 key={tab.tab_id}

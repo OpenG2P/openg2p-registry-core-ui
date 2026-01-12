@@ -46,6 +46,7 @@ export default function LanguageSwitcher() {
                         src={currentFlag}
                         alt={locale}
                         fill
+                        sizes="24px"
                         className="object-cover"
                     />
                 </div>
@@ -57,6 +58,7 @@ export default function LanguageSwitcher() {
                         src="/down_arrow.png"
                         alt="toggle"
                         fill
+                        sizes="12px"
                         className="object-contain"
                     />
                 </div>
@@ -78,6 +80,7 @@ export default function LanguageSwitcher() {
                                     src={flagMap[loc] || "/flags/uk_flag.png"}
                                     alt={loc}
                                     fill
+                                    sizes="20px"
                                     className="object-cover"
                                 />
                             </div>

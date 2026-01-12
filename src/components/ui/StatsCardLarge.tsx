@@ -26,11 +26,11 @@ const StatsCardLarge = ({
     if (Array.isArray(data)) {
       return {
         title: t('registers'),
-        rows: data.map((item) => ({
+        rows: data.slice(0, 4).map((item) => ({
           id: item.register_id,
           label: t(item.register_subject),
           value: item.total_record_count,
-          imageUrl: item.imageUrl,
+          imageUrl: item.register_icon?.startsWith('data:') ? item.register_icon : undefined,
         })),
       };
     }
@@ -43,13 +43,13 @@ const StatsCardLarge = ({
             id: "approved",
             label: t('approved'),
             value: data.approved,
-            imageUrl: data.imageUrl,
+            imageUrl: "/statsIcon/approved.png",
           },
           {
             id: "pending",
             label: t('pending'),
             value: data.pending,
-            imageUrl: data.imageUrl,
+            imageUrl: "/statsIcon/pending.png",
           },
         ],
       };
@@ -59,9 +59,13 @@ const StatsCardLarge = ({
   }, [data, loading, stats_endpoint, t]);
 
   const totalCount = useMemo(() => {
-    if (loading) return null;
-    return rows.reduce((sum, r) => sum + r.value, 0);
-  }, [rows, loading, data]);
+    // For registers, just count how many registers, don't sum their values
+    if (stats_endpoint.includes("register")) {
+      return data?.length;
+    }
+    // For other stats, sum the values
+    return rows.reduce((sum, r) => sum + (r.value || 0), 0);
+  }, [data, rows, stats_endpoint]);
 
   const pulseBg = active ? "bg-white/20" : "bg-black/20";
 
@@ -86,7 +90,7 @@ const StatsCardLarge = ({
         ) : (
           <>
             <span className="font-roboto text-[85px] font-bold leading-none">
-              {totalCount}
+              {(totalCount || 0).toString()}
             </span>
             <span className="font-roboto text-[24px] font-bold leading-none">
               {title}
@@ -108,10 +112,16 @@ const StatsCardLarge = ({
           rows.map((row) => (
             <div key={row.id} className="flex items-center gap-3">
               {row.imageUrl && (
-                <Image src={row.imageUrl} width={20} height={20} alt="" />
+                <Image
+                  src={row.imageUrl}
+                  width={20}
+                  height={20}
+                  alt=""
+                  className={active ? "invert" : ""}
+                />
               )}
               <span className="text-[16px] font-medium leading-[30px]">
-                {row.value}
+                {(row.value || 0).toString()}
               </span>
               <span className="text-[16px] font-medium leading-[30px] opacity-80">
                 {row.label}
