@@ -95,7 +95,7 @@ export default function Home() {
         };
 
         router.push(
-            `${routeMap[activeStatsCard]}?q=${encodeURIComponent(searchValue)}`
+            `${routeMap[activeStatsCard]}?search=${encodeURIComponent(searchValue)}`
         );
     };
 
@@ -145,7 +145,7 @@ export default function Home() {
                                 className={`
                                 bg-transparent p-0 text-left
                                 ${statsCardVariant === 'small'
-                                        ? 'flex-1 min-w-40 sm:min-w-[180px] lg:min-w-[220px]'
+                                        ? 'flex-1 min-w-40 sm:min-w-45 lg:min-w-55'
                                         : 'w-[calc(50%-12px)] sm:w-[calc(50%-10px)] lg:w-[calc(50%-12px)]'
                                     }
                                 `}

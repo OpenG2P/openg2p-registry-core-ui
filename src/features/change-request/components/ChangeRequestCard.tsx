@@ -50,14 +50,14 @@ export default function ChangeRequestCard({
             <div className="relative rounded-[30px] bg-[#EDC227] px-8 pt-5 pb-8 overflow-hidden animate-pulse">
                 <div className="flex items-center justify-between">
                     <div className="h-6 w-40 rounded bg-black/20" />
-                    <div className="h-[60px] w-20 rounded-[20px] bg-black/20" />
+                    <div className="h-15 w-20 rounded-[20px] bg-black/20" />
                 </div>
 
                 <div className="mt-3 h-3 w-56 rounded bg-black/20" />
 
                 <div className="mt-25 h-10 w-32 rounded-full bg-black/20" />
 
-                <div className="absolute bottom-4 right-4 h-[120px] w-[120px] rounded-full bg-black/20" />
+                <div className="absolute bottom-4 right-4 h-30 w-30 rounded-full bg-black/20" />
             </div>
         );
     }
@@ -68,7 +68,7 @@ export default function ChangeRequestCard({
                 <h3 className="text-[24px] font-semibold text-black leading-none">
                     Change Request
                 </h3>
-                <div className="flex h-[60px] w-20 items-center justify-center rounded-[20px] border-3 border-white bg-[#F2BA1A] text-[34px] font-bold text-black">
+                <div className="flex h-15 w-20 items-center justify-center rounded-[20px] border-3 border-white bg-[#F2BA1A] text-[34px] font-bold text-black">
                     {count}
                 </div>
             </div>

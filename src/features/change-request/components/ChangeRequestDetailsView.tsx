@@ -126,7 +126,7 @@ export default function ChangeRequestDetailsView({
             )}
 
             {!loading && details && (
-                <div className="flex gap-[30px]">
+                <div className="flex gap-7.5">
                     <div className="w-full lg:w-[75%]">
                         <ChangeRequestHeader
                             details={details}
@@ -171,12 +171,6 @@ export default function ChangeRequestDetailsView({
                 </div>
             )}
 
-            {/* {popupVisible && popupType && (
-                <ActionPopup
-                    type={popupType}
-                    onClose={() => setPopupVisible(false)}
-                />
-            )} */}
             {popupVisible && popupType === "reject-input" && (
                 <RejectReasonPopup
                     onSubmit={submitReject}
