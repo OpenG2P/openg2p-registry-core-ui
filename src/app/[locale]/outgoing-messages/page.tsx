@@ -1,18 +1,17 @@
 'use client';
 
 import { useCallback } from 'react';
-import { useLocale, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from '@/i18n/navigation';
 
 import { TopBar } from '@/components/shared';
 import { SelectedFilters } from '@/features/filter/components';
 import { useRegistryFilters } from '@/features/filter/hooks/useRegistryFilters';
-import { ChangeLogList, ChangeLogSkeleton } from '@/features/change-request/components';
-import { useChangeRequestList } from '@/features/change-request/hooks/useChangeRequestList';
+import { IncomingMessageCardSkeleton, IncomingMessageList } from '@/features/messages/components';
+import { useIncomingMessagesList } from '@/features/messages/hooks/useIncomingMessagesList';
 
-export default function ChangeRequestPage() {
-    const locale = useLocale();
+export default function OutgoingMessagesPage() {
     const router = useRouter();
     const t = useTranslations();
 
@@ -28,14 +27,14 @@ export default function ChangeRequestPage() {
     } = useRegistryFilters();
 
     const {
-        logs,
+        messages,
         loading,
         currentPage,
         pageSize,
         paginationInfo,
         onPrev,
         onNext,
-    } = useChangeRequestList({
+    } = useIncomingMessagesList({
         pageSize: 7,
         searchText: searchQuery,
     });
@@ -52,7 +51,6 @@ export default function ChangeRequestPage() {
 
     const total = paginationInfo?.number_of_items ?? 0;
 
-
     const handleSearch = useCallback((searchValue: string) => {
         const params = new URLSearchParams(searchParams.toString());
         if (searchValue.trim()) {
@@ -60,13 +58,13 @@ export default function ChangeRequestPage() {
         } else {
             params.delete('search');
         }
-        router.push(`/change-request?${params.toString()}`);
+        router.push(`/incoming-messages?${params.toString()}`);
     }, [searchParams]);
 
     return (
         <div className="min-h-screen mx-auto bg-[#F3F1E4]">
             <TopBar
-                breadcrumb={[{ label: 'Change Request' }]}
+                breadcrumb={[{ label: 'Outgoing Messages' }]}
                 showFilters
                 showPagination
                 pageStart={pageStart}
@@ -95,23 +93,20 @@ export default function ChangeRequestPage() {
                 {loading ? (
                     <div className="space-y-4">
                         {[...Array(3)].map((_, i) => (
-                            <ChangeLogSkeleton key={i} isSearchView />
+                            <IncomingMessageCardSkeleton key={i} />
                         ))}
                     </div>
-                ) : logs.length === 0 ? (
+                ) : messages.length === 0 ? (
                     <div className="text-sm text-gray-400 text-center py-6">
-                        No change requests found
+                        No incoming messages found
                     </div>
                 ) : (
-                    <ChangeLogList
-                        logs={logs}
-                        isSearchView
-                        getDetailsUrl={log =>
-                            `/${locale}/change-request/${log.change_request_id}`
-                        }
+                    <IncomingMessageList
+                        messages={messages}
                     />
                 )}
             </div>
         </div>
     );
 }
+

@@ -35,7 +35,7 @@ export default async function RootLayout({
     return (
         <html lang={locale}>
             <body
-                className="antialiased pt-[70px]"
+                className="antialiased pt-17.5"
             >
                 <NextIntlClientProvider messages={messages}>
                     <GlobalContextProvider>

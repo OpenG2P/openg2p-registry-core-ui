@@ -40,8 +40,8 @@ export default function TopBar({
     filterLoading = false,
 }: TopBarProps) {
     return (
-        <div className="w-full h-[70px] flex justify-center items-center">
-            <div className="w-full px-[30px] flex justify-between items-center">
+        <div className="w-full h-17.5 flex justify-center items-center">
+            <div className="w-full px-7.5 flex justify-between items-center">
                 <BreadcrumbBar breadcrumb={breadcrumb} />
                 <div className="flex items-center gap-2 sm:gap-4">
                     {showFilters && (

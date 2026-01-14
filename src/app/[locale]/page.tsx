@@ -90,8 +90,8 @@ export default function Home() {
             string
         > = {
             change_request: '/change-request',
-            incoming_message: '/incoming_message',
-            outgoing_message: '/outgoing_message',
+            incoming_message: '/incoming-messages',
+            outgoing_message: '/outgoing-messages',
         };
 
         router.push(

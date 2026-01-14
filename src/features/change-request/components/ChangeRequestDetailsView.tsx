@@ -134,14 +134,14 @@ export default function ChangeRequestDetailsView({
                             onReject={handleReject}
                             loadingAction={loadingAction}
                         />
-                        <div className="px-2">
+                        <div>
                             <h3 className="mt-6 mb-2 font-semibold">New Values</h3>
                             <WidgetProvider
                                 store={widgetStoreNew}
                                 schemaData={newSectionData}
                                 translate={t}
                             >
-                                <SectionsContainer sections={singleSectionConfig} />
+                                <SectionsContainer sections={singleSectionConfig} hideEditButton={true}/>
                             </WidgetProvider>
 
                             <h3 className="mt-6 mb-2 font-semibold">Old Values</h3>
@@ -150,7 +150,7 @@ export default function ChangeRequestDetailsView({
                                 schemaData={oldSectionData}
                                 translate={t}
                             >
-                                <SectionsContainer sections={singleSectionConfig} />
+                                <SectionsContainer sections={singleSectionConfig} hideEditButton={true} />
                             </WidgetProvider>
                         </div>
                     </div>
