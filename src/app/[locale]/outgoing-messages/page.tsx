@@ -8,8 +8,8 @@ import { useRouter } from '@/i18n/navigation';
 import { TopBar } from '@/components/shared';
 import { SelectedFilters } from '@/features/filter/components';
 import { useRegistryFilters } from '@/features/filter/hooks/useRegistryFilters';
-import { IncomingMessageCardSkeleton, IncomingMessageList } from '@/features/messages/components';
-import { useIncomingMessagesList } from '@/features/messages/hooks/useIncomingMessagesList';
+import { OutgoingMessageCardSkeleton, OutgoingMessageList } from '@/features/messages/components';
+import { useOutgoingMessagesList } from '@/features/messages/hooks';
 
 export default function OutgoingMessagesPage() {
     const router = useRouter();
@@ -34,7 +34,7 @@ export default function OutgoingMessagesPage() {
         paginationInfo,
         onPrev,
         onNext,
-    } = useIncomingMessagesList({
+    } = useOutgoingMessagesList({
         pageSize: 7,
         searchText: searchQuery,
     });
@@ -58,7 +58,7 @@ export default function OutgoingMessagesPage() {
         } else {
             params.delete('search');
         }
-        router.push(`/incoming-messages?${params.toString()}`);
+        router.push(`/outgoing-messages?${params.toString()}`);
     }, [searchParams]);
 
     return (
@@ -78,7 +78,7 @@ export default function OutgoingMessagesPage() {
             />
 
             <div className="px-7.5">
-                <div className='pl-4 pr-2 mb-4 bg-white rounded-[30px]'>
+                <div className="pl-4 pr-2 mb-4 bg-white rounded-[30px]">
                     <SelectedFilters
                         appliedFilters={appliedFilters}
                         filterConfig={filterConfig}
@@ -93,20 +93,17 @@ export default function OutgoingMessagesPage() {
                 {loading ? (
                     <div className="space-y-4">
                         {[...Array(3)].map((_, i) => (
-                            <IncomingMessageCardSkeleton key={i} />
+                            <OutgoingMessageCardSkeleton key={i} />
                         ))}
                     </div>
                 ) : messages.length === 0 ? (
                     <div className="text-sm text-gray-400 text-center py-6">
-                        No incoming messages found
+                        No outgoing messages found
                     </div>
                 ) : (
-                    <IncomingMessageList
-                        messages={messages}
-                    />
+                    <OutgoingMessageList messages={messages} />
                 )}
             </div>
         </div>
     );
 }
-
