@@ -23,7 +23,14 @@ export default function OutgoingMessageCard({ message }: Props) {
                 <div className="space-y-2">
                     <h3 className="text-[16px] font-medium text-[#ED7C22] flex justify-between items-center">
                         <span>Source</span>
-                        <Image src="/chat.png" alt="Chat Icon" width={19} height={20} />
+                        <Image
+                            src="/chat.png"
+                            alt="Raw Icon"
+                            width={19}
+                            height={20}
+                            // onClick={() => setOpenPopup(true)}
+                            className="cursor-pointer"
+                        />
                     </h3>
                     <KeyValue label="Outgest ID" value={message.outgest_id} />
                     <KeyValue label="Queued Date & Time" value={formatDateTime(message.queued_datetime)} />

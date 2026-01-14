@@ -70,7 +70,14 @@ export default function IncomingMessageCard({ message }: Props) {
                 <div className="space-y-2">
                     <h3 className="text-[16px] font-medium text-[#ED7C22] flex justify-between items-center">
                         <span>Raw</span>
-                        <Image src="/chat.png" alt="Raw Icon" width={19} height={20} onClick={() => setOpenPopup(true)} />
+                        <Image
+                            src="/chat.png"
+                            alt="Raw Icon"
+                            width={19}
+                            height={20}
+                            onClick={() => setOpenPopup(true)}
+                            className="cursor-pointer"
+                        />
                     </h3>
                     <KeyValue label="Ingest ID" value={message.ingest_id} />
                     <KeyValue label="Partner" value={message.partner} />
@@ -91,7 +98,14 @@ export default function IncomingMessageCard({ message }: Props) {
                 <div className="border-l-2 space-y-2 border-[#D9D9D9] pl-6">
                     <h3 className="text-[16px] font-medium text-[#ED7C22] flex justify-between items-center">
                         <span>Transformation</span>
-                        <Image src="/chat.png" alt="Raw Icon" width={19} height={20} onClick={() => setOpenPopup(true)} />
+                        <Image
+                            src="/chat.png"
+                            alt="Raw Icon"
+                            width={19}
+                            height={20}
+                            onClick={() => setOpenPopup(true)}
+                            className="cursor-pointer"
+                        />
                     </h3>
                     <KeyValue label="Transformation Template" value={message.transformation_template ?? 'N/A'} />
                     <KeyValue label="Ingestion Status" value={message.ingestion_status ?? 'N/A'} />

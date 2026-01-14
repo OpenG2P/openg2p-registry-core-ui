@@ -51,7 +51,7 @@ export default function MessagePopup({
                     </div>
                 </div>
 
-                <div className="flex-1 bg-[#D9D9D980] p-6 overflow-y-auto message-json-scroll scroll-m-10">
+                <div className="flex-1 bg-[#D9D9D980] px-6 py-3 overflow-y-auto message-json-scroll">
                     <pre className="text-[14px] text-black whitespace-pre-wrap">
                         {JSON.stringify(
                             activeTab === 0 ? rawJson : transformedJson,
