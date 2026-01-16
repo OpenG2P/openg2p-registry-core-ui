@@ -61,9 +61,9 @@ const StatsCardLarge = ({
   const totalCount = useMemo(() => {
     // For registers, just count how many registers, don't sum their values
     if (stats_endpoint.includes("register")) {
-      return data?.length;
+      return data?.length || 0;
     }
-    // For other stats, sum the values
+    // For other stats, sum values
     return rows.reduce((sum, r) => sum + (r.value || 0), 0);
   }, [data, rows, stats_endpoint]);
 

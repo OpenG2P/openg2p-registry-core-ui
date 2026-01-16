@@ -98,19 +98,19 @@ const StatsCardSmall = ({
   }, [data, stats_endpoint, t]);
 
   const totalCount = useMemo(() => {
-    // For registers, just count how many registers, don't sum their values
+    // For registers, just count how many registers
     if (stats_endpoint.includes("register")) {
-      return data?.length;
+      return data?.length || 0;
     }
-    // For other stats, sum the values
-    return rows.reduce((sum, r) => sum + r.value, 0);
+    // For other stats, sum values
+    return rows.reduce((sum, r) => sum + (r.value || 0), 0);
   }, [data, rows, stats_endpoint]);
 
   return (
     <div
       className={`
         flex flex-col justify-between  transition-all duration-200
-        w-auto h-auto rounded-[30px] px-6 py-4
+        w-full h-45 rounded-[30px] px-6 py-4
         ${active
           ? "border-black bg-black text-white"
           : "bg-[#E1E1E1] text-[#A1A1A1]"
