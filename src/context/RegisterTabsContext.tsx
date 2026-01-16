@@ -14,6 +14,7 @@ import { useFetch } from '@/shared/hooks';
 import { TabsResponse, TabConfig } from '@/shared/types';
 import { useLocale } from 'next-intl';
 import { usePathname } from 'next/navigation';
+import { useRegister } from './RegisterContext';
 
 
 /* ------------------------------------------------------------------ */
@@ -47,12 +48,22 @@ export function RegisterTabsProvider({ children }: { children: ReactNode }) {
 
 
     const tabFromUrl = searchParams.get('tab');
+    const { currentRegister } = useRegister();
 
-    const { data } = useFetch<TabsResponse>({
-        url: `/api/register/${type}/tabs`,
+    const fetchOptions = useMemo(() => ({
+        method: 'POST',
+        body: JSON.stringify({
+            register_id: currentRegister?.register_id,
+        }),
+    }), [currentRegister?.register_id]);
+
+    const { data } = useFetch<TabConfig[]>({
+        url: `/api/register/tabs`,
+        options: fetchOptions,
+        enabled: !!currentRegister?.register_id,
     });
 
-    const tabs = data?.tabs ?? [];
+    const tabs = data ?? [];
 
     const [activeTabIndex, setActiveTabIndex] = useState(0);
 

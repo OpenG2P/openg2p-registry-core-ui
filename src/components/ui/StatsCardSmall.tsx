@@ -41,13 +41,13 @@ const StatsCardSmall = ({
           {
             id: "approved",
             label: t('approved'),
-            value: data.approved,
+            value: data.approved_count,
             imageUrl: "/statsIcon/approved.png",
           },
           {
             id: "pending",
             label: t('pending'),
-            value: data.pending,
+            value: data.pending_count,
             imageUrl: "/statsIcon/pending.png",
           },
         ],
@@ -61,13 +61,13 @@ const StatsCardSmall = ({
           {
             id: "partners",
             label: t('partners'),
-            value: data.partners,
+            value: data.no_of_partners,
             imageUrl: "/statsIcon/partners.png",
           },
           {
             id: "models",
             label: t('dataModels'),
-            value: data.data_models,
+            value: data.no_of_data_models,
             imageUrl: "/statsIcon/data_models.png",
           },
         ],

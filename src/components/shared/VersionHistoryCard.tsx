@@ -19,7 +19,7 @@ export default function VersionHistoryCard({
 }: Props) {
     const locale = useLocale();
     const { data, loading } = useFetch<ResponseBody>({
-        url: `/api/register/${type}/${registerId}/get_number_of_versions`,
+        url: `/api/register/versions`,
         enabled: !!registerId && !!internalRecordId,
         options: {
             method: "POST",

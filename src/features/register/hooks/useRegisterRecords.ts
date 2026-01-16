@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl';
 import { useRegistryFilters } from '@/features/filter/hooks/useRegistryFilters';
 import { useFetch } from '@/shared/hooks/useFetch';
 import { useRegister } from '@/context/RegisterContext';
-import { RegisterRecordsApiResponse } from '@/features/registry/types';
+import { RegisterRecordsApiResponse } from '@/features/register/types';
 
 export const useRegisterRecords = () => {
     const t = useTranslations();

@@ -12,7 +12,7 @@ import {
   RegisterFlattenedRecord,
   TabSection,
   TabSectionData,
-} from "@/features/registry/types";
+} from "@/features/register/types";
 
 export const useRegisterDetail = () => {
   const t = useTranslations();
@@ -123,7 +123,7 @@ export const useRegisterDetail = () => {
 
             if (filesToUpload.length > 0) {
                 const formData = new FormData();
-                // TODO: Section id hardcoded remove it
+                // TODO: Section id hardcoded need to remove
                 formData.append(
                 "section_id",
                 "20a9362c-92d2-4c2c-b373-f09cfb3ded7b"
