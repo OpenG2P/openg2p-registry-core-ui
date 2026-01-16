@@ -12,8 +12,18 @@ interface UseIncomingMessagesListOptions {
     enabled?: boolean;
 }
 
+interface IncomingMessagesApiResponse {
+    response_body?: {
+        pagination_response?: {
+            number_of_items: number;
+            number_of_pages: number;
+        };
+        response_payload?: IncomingMessage[];
+    };
+}
+
 export function useIncomingMessagesList({
-    pageSize = 10,
+    pageSize = 7,
     initialPage = 1,
     searchText = '',
     subjectRecordId,
@@ -43,12 +53,7 @@ export function useIncomingMessagesList({
         [currentPage, pageSize, searchText, subjectRegisterId, subjectRecordId, tabId]
     );
 
-    const { data, loading } = useFetch<{
-        response_body?: {
-            response_payload?: { incoming_messages?: IncomingMessage[] };
-            pagination_response?: { number_of_items: number; number_of_pages: number };
-        };
-    }>({
+    const { data, loading } = useFetch<IncomingMessagesApiResponse>({
         url: '/api/incoming-message/get/list',
         enabled,
         options: {
@@ -58,14 +63,13 @@ export function useIncomingMessagesList({
     });
 
     const messages: IncomingMessage[] =
-        data?.response_body?.response_payload?.incoming_messages ?? [];
+        data?.response_body?.response_payload ?? [];
 
     const paginationInfo = data?.response_body?.pagination_response;
 
-    const onPrev = useCallback(
-        () => setCurrentPage(p => Math.max(1, p - 1)),
-        []
-    );
+    const onPrev = useCallback(() => {
+        setCurrentPage(p => Math.max(1, p - 1));
+    }, []);
 
     const onNext = useCallback(() => {
         const totalPages = paginationInfo?.number_of_pages ?? 1;

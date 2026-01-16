@@ -6,63 +6,39 @@ import { useState } from 'react';
 import MessagePopup from './MessagePopup';
 import Link from 'next/link';
 import { useLocale } from 'next-intl';
+import { useIncomingMessagePayload } from '../hooks';
 
 interface Props {
     message: IncomingMessage;
 }
+export function formatDateTime(value?: string | null) {
+    if (!value) return '-- -- ----';
+
+    const safeValue = value.includes('Z') ? value : `${value}Z`;
+
+    return new Date(safeValue).toLocaleString(undefined, {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true,
+    });
+}
 
 export default function IncomingMessageCard({ message }: Props) {
-    const formatDateTime = (dt?: string | null) => dt ?? '-- -- ----';
     const [openPopup, setOpenPopup] = useState(false);
     const locale = useLocale();
+    const [payloadType, setPayloadType] = useState<'raw' | 'transformed' | null>(null);
 
-    const demoRawJson = {
-        "ingest_id": "ING-2026-000123",
-        "partner": "Health Ministry",
-        "data_model": "beneficiary_registration",
-        "received_at": "2026-01-14T10:45:32Z",
-        "payload": {
-            "beneficiary": {
-                "first_name": "Ravi",
-                "last_name": "Kumar",
-                "gender": "Male",
-                "date_of_birth": "1994-08-21"
-            },
-            "address": {
-                "village": "Rampur",
-                "district": "Patna",
-                "state": "Bihar",
-                "country": "India"
-            },
-            "identifiers": [
-                {
-                    "type": "Aadhaar",
-                    "value": "XXXX-XXXX-2345"
-                }
-            ]
-        }
-    }
-    const demoTransformedJson = {
-        "registry_id": "REG-889230",
-        "target_register": "National Beneficiary Registry",
-        "operation": "CREATE",
-        "transformation_status": "SUCCESS",
-        "transformed_at": "2026-01-14T10:45:41Z",
-        "data": {
-            "full_name": "Ravi Kumar",
-            "gender": "M",
-            "dob": "1994-08-21",
-            "location": {
-                "district_code": "BR-25",
-                "state_code": "BR"
-            },
-            "external_ids": {
-                "aadhaar_last4": "2345"
-            }
-        }
-    }
-
-
+    const {
+        fetchRaw,
+        fetchTransformed,
+        rawJson,
+        transformedJson,
+        enrichedJson,
+        loading,
+    } = useIncomingMessagePayload();
 
     return (
         <div className="rounded-[30px] bg-white px-10 py-8">
@@ -75,24 +51,28 @@ export default function IncomingMessageCard({ message }: Props) {
                             alt="Raw Icon"
                             width={19}
                             height={20}
-                            onClick={() => setOpenPopup(true)}
+                            onClick={() => {
+                                setPayloadType('raw');
+                                fetchRaw(message.ingest_id);
+                                setOpenPopup(true);
+                            }}
                             className="cursor-pointer"
                         />
                     </h3>
                     <KeyValue label="Ingest ID" value={message.ingest_id} />
-                    <KeyValue label="Partner" value={message.partner} />
-                    <KeyValue label="Data Model" value={message.data_model} />
-                    <KeyValue label="Ingest Date & Time" value={message.ingest_datetime} />
+                    <KeyValue label="Partner" value={message.partner_id} />
+                    <KeyValue label="Data Model" value={message.data_model_id} />
+                    <KeyValue label="Ingest Date & Time" value={formatDateTime(message.receipt_date_time)} />
                     <KeyValue label="Classification Status" value={message.classification_status} />
-                    <KeyValue label="Classification Date & Time" value={formatDateTime(message.classification_datetime)} />
+                    <KeyValue label="Classification Date & Time" value={formatDateTime(message.classification_date_time)} />
                 </div>
 
                 <div className="border-l-2 space-y-2 border-[#D9D9D9] pl-6">
                     <h3 className="text-[16px] font-medium text-[#ED7C22]">Classification</h3>
-                    <KeyValue label="Target Register" value={message.target_register ?? '-- -- --'} />
-                    <KeyValue label="Operation" value={message.operation ?? 'N/A'} />
+                    <KeyValue label="Target Register" value={message.register_id ?? '-- -- --'} />
+                    {/* <KeyValue label="Operation" value={message.operation ?? 'N/A'} /> */}
                     <KeyValue label="Transformation Status" value={message.transformation_status ?? 'N/A'} />
-                    <KeyValue label="Transformation Date & Time" value={formatDateTime(message.transformation_datetime)} />
+                    <KeyValue label="Transformation Date & Time" value={formatDateTime(message.transformation_date_time)} />
                 </div>
 
                 <div className="border-l-2 space-y-2 border-[#D9D9D9] pl-6">
@@ -103,25 +83,31 @@ export default function IncomingMessageCard({ message }: Props) {
                             alt="Raw Icon"
                             width={19}
                             height={20}
-                            onClick={() => setOpenPopup(true)}
+                            // onClick={() => setOpenPopup(true)}
+
+                            onClick={() => {
+                                setPayloadType('transformed');
+                                fetchTransformed(message.ingest_id);
+                                setOpenPopup(true);
+                            }}
                             className="cursor-pointer"
                         />
                     </h3>
-                    <KeyValue label="Transformation Template" value={message.transformation_template ?? 'N/A'} />
+                    {/* <KeyValue label="Transformation Template" value={message.transformation_template ?? 'N/A'} /> */}
                     <KeyValue label="Ingestion Status" value={message.ingestion_status ?? 'N/A'} />
-                    <KeyValue label="Ingestion Date & Time" value={formatDateTime(message.ingestion_datetime)} />
+                    <KeyValue label="Ingestion Date & Time" value={formatDateTime(message.ingestion_date_time)} />
                 </div>
 
                 <div className="border-l-2 space-y-2 border-[#D9D9D9] pl-6">
                     <h3 className="text-[16px] font-medium text-[#ED7C22]">Ingestion</h3>
                     <span className="text-black/50">Change Log ID</span>
                     <span className="text-black/50 mx-1">:</span>
-                    {message.change_log_id ? (
+                    {message.change_request_id ? (
                         <Link
-                            href={`/${locale}/incoming-messages/change-request/${message.change_log_id}`}
+                            href={`/${locale}/incoming-messages/change-request/${message.change_request_id}`}
                             className="font-semibold text-black inline-flex items-center gap-1"
                         >
-                            {message.change_log_id}
+                            {message.change_request_id}
                             <Image
                                 src="/right_arrow.png"
                                 alt="Arrow"
@@ -138,11 +124,13 @@ export default function IncomingMessageCard({ message }: Props) {
             {openPopup && (
                 <MessagePopup
                     onClose={() => setOpenPopup(false)}
-                    rawJson={demoRawJson}
-                    transformedJson={demoTransformedJson}
+                    mode={payloadType}
+                    rawJson={rawJson}
+                    transformedJson={transformedJson}
+                    enrichedJson={enrichedJson}
+                    loading={loading}
                 />
             )}
-
         </div>
     );
 }

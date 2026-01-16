@@ -5,24 +5,30 @@ import Image from 'next/image';
 
 interface MessagePopupProps {
     onClose: () => void;
-    rawJson: object;
-    transformedJson?: object;
+    mode: 'raw' | 'transformed' | null;
+    rawJson: object | null;
+    transformedJson: object | null;
+    enrichedJson: object | null;
+    loading?: boolean;
 }
 
 export default function MessagePopup({
     onClose,
+    mode,
     rawJson,
     transformedJson,
+    enrichedJson,
+    loading,
 }: MessagePopupProps) {
     const [activeTab, setActiveTab] = useState(0);
 
-    const messageTabs = {
-        tabs: [
-            { tab_id: 'raw', tab_label: 'Raw Messages' },
-            { tab_id: 'transformed', tab_label: 'Transformed Messages' },
-        ],
-    };
-
+    const tabs =
+        mode === 'raw'
+            ? [{ id: 'raw', label: 'Raw Messages', data: rawJson }]
+            : [
+                { id: 'transformed', label: 'Transformed Messages', data: transformedJson },
+                { id: 'enriched', label: 'Enriched Messages', data: enrichedJson },
+            ];
 
     return (
         <div className="fixed inset-0 bg-black/80 flex justify-center items-center z-50">
@@ -36,29 +42,29 @@ export default function MessagePopup({
 
                 <div className="pb-6">
                     <div className="flex gap-2 pr-10">
-                        {messageTabs.tabs.map((tab, index) => (
+                        {tabs.map((tab, index) => (
                             <button
-                                key={tab.tab_id}
+                                key={tab.id}
                                 onClick={() => setActiveTab(index)}
-                                className={`px-8 py-2 text-black text-[18px] font-medium rounded-t-[20px] transition-all ${activeTab === index
+                                className={`px-8 py-2 text-[18px] font-medium rounded-t-[20px] transition-all ${activeTab === index
                                     ? 'bg-[#F2BA1A]'
                                     : 'bg-[#DDDDDD]'
                                     }`}
                             >
-                                {tab.tab_label}
+                                {tab.label}
                             </button>
                         ))}
                     </div>
                 </div>
 
                 <div className="flex-1 bg-[#D9D9D980] px-6 py-3 overflow-y-auto message-json-scroll">
-                    <pre className="text-[14px] text-black whitespace-pre-wrap">
-                        {JSON.stringify(
-                            activeTab === 0 ? rawJson : transformedJson,
-                            null,
-                            2
-                        )}
-                    </pre>
+                    {loading ? (
+                        <div className="text-center py-10">Loading...</div>
+                    ) : (
+                        <pre className="text-[14px] text-black whitespace-pre-wrap">
+                            {JSON.stringify(tabs[activeTab]?.data, null, 2)}
+                        </pre>
+                    )}
                 </div>
 
                 <button

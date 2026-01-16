@@ -39,6 +39,7 @@ button {
     border-right: 10px solid transparent;
     border-left: 10px solid transparent;
     background-clip: content-box;
+    min-height: 70px;
 }
 
 .message-json-scroll::-webkit-scrollbar-thumb:hover {
