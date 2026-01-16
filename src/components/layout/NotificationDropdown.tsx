@@ -36,9 +36,9 @@ export default function NotificationDropdown() {
 
             {open && (
                 <div
-                    className="absolute -right-16.5 top-10 mt-3 w-[400px] bg-white border border-gray-200 rounded-[10px] z-50 flex flex-col"
+                    className="absolute -right-16.5 top-10 mt-3 w-100 bg-white border border-gray-200 rounded-[10px] z-50 flex flex-col"
                 >
-                    <div className="absolute -top-2.5 right-[70px] w-5 h-5 bg-white border-l border-t border-gray-200 rotate-45"></div>
+                    <div className="absolute -top-2.5 right-17.5 w-5 h-5 bg-white border-l border-t border-gray-200 rotate-45"></div>
 
                     <div className="px-6 pb-2 pt-3 text-[18px] font-medium text-[#ED7C22]">
                         {t('notifications')}

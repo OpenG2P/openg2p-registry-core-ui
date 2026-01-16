@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 
 import { RegisterTabsLayout } from "@/components/shared";
-import { ActionPopup, ChangeRequestHeader, VerificationForm, VerificationList } from "@/features/change-request/components";
+import { ActionPopup, ChangeRequestHeader, RejectReasonPopup, VerificationForm, VerificationList } from "@/features/change-request/components";
 import { useChangeRequest, useChangeRequestActions, useVerifications } from "@/features/change-request/hooks";
 
 import {
@@ -50,6 +50,7 @@ export default function ChangeRequestDetailsView({
         popupType,
         handleApprove,
         handleReject,
+        submitReject,
         setPopupVisible,
     } = useChangeRequestActions(changeId);
 
@@ -125,7 +126,7 @@ export default function ChangeRequestDetailsView({
             )}
 
             {!loading && details && (
-                <div className="flex gap-[30px]">
+                <div className="flex gap-7.5">
                     <div className="w-full lg:w-[75%]">
                         <ChangeRequestHeader
                             details={details}
@@ -133,14 +134,14 @@ export default function ChangeRequestDetailsView({
                             onReject={handleReject}
                             loadingAction={loadingAction}
                         />
-                        <div className="px-2">
+                        <div>
                             <h3 className="mt-6 mb-2 font-semibold">New Values</h3>
                             <WidgetProvider
                                 store={widgetStoreNew}
                                 schemaData={newSectionData}
                                 translate={t}
                             >
-                                <SectionsContainer sections={singleSectionConfig} />
+                                <SectionsContainer sections={singleSectionConfig} hideEditButton={true}/>
                             </WidgetProvider>
 
                             <h3 className="mt-6 mb-2 font-semibold">Old Values</h3>
@@ -149,7 +150,7 @@ export default function ChangeRequestDetailsView({
                                 schemaData={oldSectionData}
                                 translate={t}
                             >
-                                <SectionsContainer sections={singleSectionConfig} />
+                                <SectionsContainer sections={singleSectionConfig} hideEditButton={true} />
                             </WidgetProvider>
                         </div>
                     </div>
@@ -170,12 +171,21 @@ export default function ChangeRequestDetailsView({
                 </div>
             )}
 
-            {popupVisible && popupType && (
+            {popupVisible && popupType === "reject-input" && (
+                <RejectReasonPopup
+                    onSubmit={submitReject}
+                    onClose={() => setPopupVisible(false)}
+                    loading={loadingAction}
+                />
+            )}
+
+            {popupVisible && (popupType === "approve" || popupType === "reject") && (
                 <ActionPopup
                     type={popupType}
                     onClose={() => setPopupVisible(false)}
                 />
             )}
+
         </RegisterTabsLayout>
     );
 }

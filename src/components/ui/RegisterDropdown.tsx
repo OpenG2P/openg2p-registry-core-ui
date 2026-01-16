@@ -40,7 +40,7 @@ const RegisterDropdown = ({
     options.find((o) => o.value === selected)?.label || t('select');
 
   return (
-    <div ref={dropdownRef} className="relative min-w-[180px]  left-[-3px] z-10">
+    <div ref={dropdownRef} className="relative min-w-45 -left-0.75 z-10">
       {/* BUTTON */}
       <button
         type="button"

@@ -27,7 +27,7 @@ export default function RegisterTabsLayout({
                 <BreadcrumbBar breadcrumb={breadcrumb} />
             </div>
 
-            <div className="px-[30px] py-6">
+            <div className="px-7.5 py-6">
                 {tabs && activeTab !== undefined && onTabChange && (
                     <div className="flex gap-2 px-10">
                         {tabs.tabs.map((tab, tabIndex) => {

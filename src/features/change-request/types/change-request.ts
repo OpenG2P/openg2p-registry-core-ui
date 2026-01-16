@@ -25,7 +25,7 @@ export interface ChangeRequest {
     change_payload: Record<string, any>;
 }
 
-export type PopupType = "approve" | "reject" | null;
+export type PopupType = "approve" | "reject" | "reject-input";
 
 export interface Verification {
     verification_id: string;
