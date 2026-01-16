@@ -2,35 +2,26 @@
 
 import { useState, useRef } from "react";
 import Image from "next/image";
-import { Link, useRouter } from "@/i18n/navigation";
+import { Link } from "@/i18n/navigation";
 import { useTranslations } from 'next-intl';
-
-import { useAuth } from "@/context/GlobalContext";
-
-import { prefixBaseApiPath } from "@/shared/utils/path";
 import { useClickOutside } from "@/shared/hooks/useClickOutside";
 
 export default function ProfileDropdown() {
     const [open, setOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
-    const { profile, setProfile } = useAuth();
-    const router = useRouter();
     const t = useTranslations();
 
     const toggleDropdown = () => setOpen((prev) => !prev);
 
-    const logoutHandler = async () => {
-        try {
-            await fetch(prefixBaseApiPath("/auth/logout"), { method: "POST" });
-        } finally {
-            setProfile(null);
-            router.push(`/login`);
-        }
+    const logoutHandler = () => {
+    //    handel logout logic
+        console.log("Logout button clicked")
     };
 
     useClickOutside(dropdownRef, () => setOpen(false), open);
 
-    const avatarSrc = profile?.picture || "/user_image.png";
+    // set profile pictures
+    const avatarSrc =  "/user_image.png";
 
     return (
         <div ref={dropdownRef} className="relative">
@@ -39,7 +30,8 @@ export default function ProfileDropdown() {
                 className="flex items-center gap-2 px-3 py-1 bg-white text-sm font-medium text-gray-800 rounded-md transition cursor-pointer"
             >
                 <span className="text-[16px] text-black">
-                    {t('hi')}, <span className="font-medium">{profile?.name || t('user')}</span>
+                    {/* in place of use set the actual use name  */}
+                    {t('hi')}, <span className="font-medium">{t('user')}</span>
                 </span>
 
                 <div className="w-8 h-8 rounded-full overflow-hidden shadow-xl border-2 border-gray-300">

@@ -2,7 +2,6 @@
 
 import { createContext, useContext, ReactNode } from "react";
 import { useNovuNotifications } from "@/features/notification/utils/useNovuNotifications";
-import { useAuth } from "@/context/GlobalContext";
 
 interface NotificationContextType {
     notifications: any[];
@@ -15,7 +14,7 @@ interface NotificationContextType {
 const NotificationContext = createContext<NotificationContextType | undefined>(undefined);
 
 export const NotificationContextProvider = ({ children }: { children: ReactNode }) => {
-    const { profile } = useAuth();
+    // here, the profile auth has removed 
     const subscriberId = "123"
     const applicationIdentifier = process.env.NEXT_PUBLIC_NOVU_APPLICATION_IDENTIFIER ?? "";
 
