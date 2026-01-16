@@ -112,19 +112,18 @@ export default function Home() {
         overflow-hidden text-gray-900
      "
         >
-            {/* background vector svg */}
+            {/* background pattern */}
             <div
                 className="
-                    absolute inset-0
-                    bg-[url('/svgs/VectorGroup.svg')]
+                    absolute top-0 left-0
+                    w-screen h-screen
+                    bg-[url('/bg_pattern.png')]
                     bg-repeat
-                    bg-size-[240px_240px]
-                    sm:bg-size-[300px_300px]
-                    md:bg-size-[420px_420px]
-                    lg:bg-size-[492.5px_492.55px]
-                    opacity-40
+                    bg-size-[96px_96px]
+                    opacity-80
+                    pointer-events-none
                 "
-            />
+                />
 
             <div className="relative">
                 <div className="mx-auto flex max-w-6xl flex-col items-center px-4 sm:px-6 py-10 sm:py-12 lg:py-14 space-y-10 sm:space-y-12 lg:space-y-14">
