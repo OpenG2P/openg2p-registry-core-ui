@@ -1,42 +1,16 @@
-import { NextRequest, NextResponse } from "next/server";
-import {
-  createBackendRequest,
-  BACKEND_CONFIG,
-  BackendResponse,
-  RequestBody,
-} from "@/shared/types";
+import { NextRequest } from "next/server";
+import { proxyToBackend } from "@/shared/utils";
 
-
-export async function GET(_req: NextRequest) {
-  try {
-
-    const payload: RequestBody = {
+export async function GET(req: NextRequest) {
+  return proxyToBackend({
+    req,
+    targetEndpoint: '/register/get_register_changerequest_summary_data',
+    buildPayload: () => ({
       pagination_request: {
-        "current_page": 1,
-        "page_size": 1,
+        current_page: 1,
+        page_size: 1,
       },
       request_payload: {},
-    };
-
-    const backendRequest = createBackendRequest(payload);
-    const backendUrl = `${BACKEND_CONFIG.apiUrl}/register/get_register_changerequest_summary_data`;
-
-    const response = await fetch(backendUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(backendRequest),
-    });
-    const backendResponse: BackendResponse = await response.json();
-    return NextResponse.json(
-      backendResponse.response_body.response_payload
-    );
-
-
-
-  } catch (e) {
-    return NextResponse.json(
-      { error: e instanceof Error ? e.message : "Internal Server Error" },
-      { status: 500 }
-    );
-  }
+    })
+  });
 }

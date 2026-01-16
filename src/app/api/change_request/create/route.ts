@@ -1,83 +1,32 @@
-import { NextRequest, NextResponse } from "next/server";
-import {
-  createBackendRequest,
-  BACKEND_CONFIG,
-  BackendResponse,
-} from "@/shared/types";
+import { NextRequest } from "next/server";
+import { proxyToBackend } from "@/shared/utils";
 
-
-export async function POST(
-  request: NextRequest,
-) {
-  try {
-    const {
-      register_id,
-      register_mnemonic,
-      internal_record_id,
-      section_register_id,
-      tab_id,
-      section_id,
-      section_schema,
-      section_data,
-      documents,
-    } = await request.json();
-
-    const backendRequest = createBackendRequest({
-      pagination_request: undefined,
+export async function POST(request: NextRequest) {
+  return proxyToBackend({
+    req: request,
+    targetEndpoint: "/change_request/create",
+    buildPayload: (jsonBody) => ({
+      pagination_request: {
+        current_page: 1,
+        page_size: 1,
+        sort_by: "",
+        filter_by: undefined,
+        search_text: ""
+      },
       request_payload: {
-        register_id,
-        register_mnemonic,
-        section_register_id,
-        tab_id,
-        section_id,
-        change_payload: {
-          internal_record_id,
-          additionalProp1:{
-            section_schema,
-            section_data,
-          }
-         
-        },
-        documents,
+        register_id: jsonBody.register_id,
+        register_mnemonic: jsonBody.register_mnemonic,
+        section_register_id: jsonBody.section_register_id,
+        tab_id: jsonBody.tab_id,
+        section_id: jsonBody.section_id,
+        change_payload: [
+          {
+            internal_record_id: jsonBody.internal_record_id,
+            additionalProp1: {},
+          },
+        ],
+        documents: jsonBody.documents,
       },
-    });
-
-
-    const backendUrl = `${BACKEND_CONFIG.apiUrl}/change_request/create`;
-
-    const response = await fetch(backendUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(backendRequest),
-    });
-
-    if (!response.ok) {
-      return NextResponse.json(
-        { error: `Backend HTTP error ${response.status}` },
-        { status: response.status }
-      );
-    }
-
-    const backendResponse: BackendResponse = await response.json();
-
-    if (backendResponse.response_header.response_status === "ERROR") {
-      return NextResponse.json(
-        { error: backendResponse.response_header.response_error_message },
-        { status: 400 }
-      );
-    }
-
-    return NextResponse.json(
-      backendResponse.response_body.response_payload,
-      { status: 200 }
-    );
-
-  } catch (e) {
-    return NextResponse.json(
-      {
-        error: e instanceof Error ? e.message : "Internal Server Error",
-      },
-      { status: 500 }
-    );
-  }
+    }),
+  });
 }
