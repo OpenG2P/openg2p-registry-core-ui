@@ -9,7 +9,7 @@ import { TopBar } from '@/components/shared';
 import { SelectedFilters } from '@/features/filter/components';
 import { useRegistryFilters } from '@/features/filter/hooks/useRegistryFilters';
 import { ChangeLogList, ChangeLogSkeleton } from '@/features/change-request/components';
-import { useChangeRequestList } from '@/features/change-request/hooks/useChangeRequestList';
+import { useChangeRequestSearch } from '@/features/change-request/hooks/useChangeRequestSearch';
 
 export default function ChangeRequestPage() {
     const locale = useLocale();
@@ -35,7 +35,7 @@ export default function ChangeRequestPage() {
         paginationInfo,
         onPrev,
         onNext,
-    } = useChangeRequestList({
+    } = useChangeRequestSearch({
         pageSize: 7,
         searchText: searchQuery,
     });

@@ -5,15 +5,22 @@ import { ChangeRequest } from "@/features/change-request/types";
 
 interface Props {
     log: ChangeRequest;
+    index: number;
     onViewDetails: () => void;
     isSearchView?: boolean;
 }
 
 export default function ChangeLogCard({
     log,
+    index,
     onViewDetails,
     isSearchView = false,
 }: Props) {
+    const title =
+        log.section_mnemonic?.trim()
+            ? log.section_mnemonic
+            : `Change Request ${String(index + 1)}`;
+
     return (
         <div
             className={`rounded-[30px] bg-white px-10 py-5 ${!isSearchView ? "mr-60" : ""}`}
@@ -26,7 +33,7 @@ export default function ChangeLogCard({
             >
                 <div className="space-y-2 text-[16px] text-[#00000080]">
                     <h3 className="text-lg font-semibold text-black">
-                        Change XYZ
+                        {title}
                     </h3>
 
                     <div>
