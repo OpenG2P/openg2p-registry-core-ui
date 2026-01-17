@@ -121,7 +121,7 @@ export default function ChangeLogCard({
                                 </span>
                             )
                         )} */}
-                        {loading && <span className="text-black/40">Loading documents…</span>}
+                        {/* {loading && <span className="text-black/40">Loading documents…</span>} */}
 
                         {/* {documents.map((doc) => (
                             <span
