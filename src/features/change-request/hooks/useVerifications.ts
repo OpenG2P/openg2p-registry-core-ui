@@ -20,10 +20,8 @@ export const useVerifications = (changeId: string) => {
     });
 
     useEffect(() => {
-        if (verificationResp?.response_body?.response_payload?.verifications) {
-            setVerifications(
-                verificationResp.response_body.response_payload.verifications
-            );
+        if (verificationResp?.verifications) {
+            setVerifications(verificationResp.verifications);
         }
     }, [verificationResp]);
 
@@ -41,7 +39,8 @@ export const useVerifications = (changeId: string) => {
                     )
                 );
 
-                const newVerification = result?.response_body?.response_payload;
+                const newVerification = result?.verification;
+
                 if (newVerification) {
                     setVerifications((prev) => [newVerification, ...prev]);
                     return true;
