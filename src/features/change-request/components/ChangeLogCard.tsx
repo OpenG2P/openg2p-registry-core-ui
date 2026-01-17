@@ -10,6 +10,12 @@ interface Props {
     isSearchView?: boolean;
 }
 
+const statusClassMap: Record<string, string> = {
+    REJECTED: "text-red-500",
+    PENDING: "text-amber-500",
+    APPROVED: "text-green-600",
+};
+
 export default function ChangeLogCard({
     log,
     index,
@@ -20,6 +26,8 @@ export default function ChangeLogCard({
         log.section_mnemonic?.trim()
             ? log.section_mnemonic
             : `Change Request ${String(index + 1)}`;
+
+    const statusClass = statusClassMap[log.approval_status] ?? "text-gray-500";
 
     return (
         <div
@@ -42,7 +50,7 @@ export default function ChangeLogCard({
 
                     <div>
                         Status:{' '}
-                        <span className="font-medium text-red-500">
+                        <span className={`font-medium ${statusClass}`}>
                             {log.approval_status}
                         </span>
                     </div>

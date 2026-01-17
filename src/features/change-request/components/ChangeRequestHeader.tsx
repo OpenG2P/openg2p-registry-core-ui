@@ -14,6 +14,12 @@ interface Props {
     loadingAction: boolean;
 }
 
+const statusClassMap: Record<string, string> = {
+    REJECTED: "text-red-500",
+    PENDING: "text-amber-500",
+    APPROVED: "text-green-600",
+};
+
 export default function ChangeRequestHeader({
     details,
     onApprove,
@@ -24,7 +30,7 @@ export default function ChangeRequestHeader({
         <div className="rounded-[25px] bg-[#F2BA1A33]/80 px-10 py-5 flex flex-col border border-dashed border-[#ED7C22]">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <InfoSection
-                    title="Change XYZ"
+                    title={details?.section_mnemonic || "Change Request"}
                     details={details}
                 />
                 <VerificationStats details={details} />
@@ -67,7 +73,7 @@ const InfoSection = ({ title, details }: { title: string; details: ChangeRequest
         </div>
         <div>
             Status:{" "}
-            <span className="font-medium text-red-500">
+            <span className={`font-medium ${statusClassMap[details.approval_status] ?? "text-gray-500"}`}>
                 {details.approval_status}
             </span>
         </div>

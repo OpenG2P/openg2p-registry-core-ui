@@ -9,8 +9,6 @@ export async function POST(request: NextRequest) {
             const paginationRequest =
                 jsonBody?.request_body?.pagination_request ?? {};
 
-            console.log(paginationRequest.search_text)
-
             return {
                 pagination_request: {
                     current_page: paginationRequest.current_page ?? 1,
