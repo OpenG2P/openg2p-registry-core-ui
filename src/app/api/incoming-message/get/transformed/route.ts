@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
         });
 
         const backendUrl =
-            `${BACKEND_CONFIG.apiUrl}/ingestion-data/search_in_ingestion_data`;
+            `${BACKEND_CONFIG.apiUrl}/ingestion-data/get_enriched_and_transformed_payload`;
 
         const response = await fetch(backendUrl, {
             method: "POST",

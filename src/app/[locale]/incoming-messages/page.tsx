@@ -65,7 +65,7 @@ export default function IncomingMessagesPage() {
         <div className="min-h-screen mx-auto bg-[#F3F1E4]">
             <TopBar
                 breadcrumb={[{ label: 'Incoming Messages' }]}
-                showFilters
+                showFilters={false}
                 showPagination
                 pageStart={pageStart}
                 pageEnd={pageEnd}
