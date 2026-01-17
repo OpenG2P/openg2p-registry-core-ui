@@ -26,8 +26,7 @@ export default function RegisterDetailPage() {
         setActiveTabByIndex,
         activeTabId,
         breadcrumb,
-        sectionsConfig,
-        sectionDataMap,
+        sectionSchemaDataMap,
         handleSectionSave,
         canRenderContent,
         currentRegister
@@ -69,16 +68,23 @@ export default function RegisterDetailPage() {
             ) : (
                 <div className="grid grid-cols-12 gap-6">
                     <div className="col-span-12 lg:col-span-9">
-                        <WidgetProvider
-                            store={widgetStore}
-                            schemaData={sectionDataMap}
-                            translate={t}
-                        >
-                            <SectionsContainer
-                                sections={sectionsConfig}
-                                onSectionSave={handleSectionSave}
-                            />
-                        </WidgetProvider>
+                        {Object.entries(sectionSchemaDataMap).map(
+                            ([sectionId, value]) => (
+                                <div key={sectionId} className="pb-4">
+                                    <WidgetProvider
+                                        store={widgetStore}
+                                        schemaData={value.sectionData}
+                                        translate={t}
+                                    >
+                                        <SectionsContainer
+                                            sections={value.sectionSchema?.sections ?? []}
+                                            onSectionSave={handleSectionSave}
+                                        />
+                                    </WidgetProvider>
+                                </div>
+                            )
+                        )}
+
                     </div>
 
                     <div className="col-span-12 lg:col-span-3 flex flex-col gap-6">
