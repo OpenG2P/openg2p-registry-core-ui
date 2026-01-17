@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { ChangeRequest } from "@/features/change-request/types";
+import { useChangeRequestDocuments } from "../hooks/useChangeRequestDocuments";
 
 interface Props {
     log: ChangeRequest;
@@ -28,6 +29,9 @@ export default function ChangeLogCard({
             : `Change Request ${String(index + 1)}`;
 
     const statusClass = statusClassMap[log.approval_status] ?? "text-gray-500";
+
+    const { documents, loading } =
+        useChangeRequestDocuments(log.change_request_id);
 
     return (
         <div
@@ -82,7 +86,7 @@ export default function ChangeLogCard({
                         </div>
                         <div>
                             No. of documents attached:{' '}
-                            <span className="text-black font-medium">10</span>
+                            <span className="text-black font-medium">{documents.length}</span>
                         </div>
                     </div>
                 </div>
@@ -101,7 +105,7 @@ export default function ChangeLogCard({
                         />
                     </div>
                     <div className="flex flex-col gap-2 font-semibold text-black text-[16px] border-l-3 border-[#D9D9D9] pl-6">
-                        {["Location Documents", "ID Card Documents", "Other Documents"].map(
+                        {/* {["Location Documents", "ID Card Documents", "Other Documents"].map(
                             (label) => (
                                 <span
                                     key={label}
@@ -116,7 +120,50 @@ export default function ChangeLogCard({
                                     />
                                 </span>
                             )
+                        )} */}
+                        {loading && <span className="text-black/40">Loading documents…</span>}
+
+                        {/* {documents.map((doc) => (
+                            <span
+                                key={doc.document_label_id}
+                                className="flex items-center gap-2 cursor-pointer"
+                            >
+                                {doc.document_label}
+                                <Image
+                                    src="/right_arrow.png"
+                                    alt="arrow"
+                                    width={14}
+                                    height={14}
+                                />
+                            </span>
+                        ))} */}
+                        {[
+                            ...documents.slice(0, 3),
+                            ...Array(Math.max(0, 3 - documents.length)).fill(null),
+                        ].map((doc, index) =>
+                            doc ? (
+                                <span
+                                    key={doc.document_label_id}
+                                    className="flex items-center gap-2 cursor-pointer"
+                                >
+                                    {doc.document_label}
+                                    <Image
+                                        src="/right_arrow.png"
+                                        alt="arrow"
+                                        width={14}
+                                        height={14}
+                                    />
+                                </span>
+                            ) : (
+                                <span
+                                    key={`placeholder-${index}`}
+                                    className="flex items-center gap-2 invisible"
+                                >
+                                    placeholder
+                                </span>
+                            )
                         )}
+
                     </div>
                 </div>
 

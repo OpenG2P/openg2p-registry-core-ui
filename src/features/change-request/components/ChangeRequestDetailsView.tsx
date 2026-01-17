@@ -14,6 +14,7 @@ import {
 } from '@openg2p/registry-widgets';
 import { useFetch } from "@/shared/hooks";
 import { useTranslations } from "next-intl";
+import { useChangeRequestDocuments } from "../hooks/useChangeRequestDocuments";
 
 interface Props {
     changeId: string;
@@ -53,6 +54,8 @@ export default function ChangeRequestDetailsView({
         submitReject,
         setPopupVisible,
     } = useChangeRequestActions(changeId);
+
+    const { documents, loading: loadingDocs } = useChangeRequestDocuments(changeId);
 
     const HARD_CODED_OLD_VALUES = {
         first_name: "Rajesh",
@@ -130,6 +133,7 @@ export default function ChangeRequestDetailsView({
                     <div className="w-full lg:w-[75%]">
                         <ChangeRequestHeader
                             details={details}
+                            documents={documents}
                             onApprove={handleApprove}
                             onReject={handleReject}
                             loadingAction={loadingAction}
@@ -141,7 +145,7 @@ export default function ChangeRequestDetailsView({
                                 schemaData={newSectionData}
                                 translate={t}
                             >
-                                <SectionsContainer sections={singleSectionConfig} hideEditButton={true}/>
+                                <SectionsContainer sections={singleSectionConfig} hideEditButton={true} />
                             </WidgetProvider>
 
                             <h3 className="mt-6 mb-2 font-semibold">Old Values</h3>

@@ -1,6 +1,13 @@
 import Image from "next/image";
 import { ChangeRequest } from "../types/change-request";
 
+interface Document {
+    document_label_id: string;
+    document_label: string;
+    document_store_id: string;
+    document_url: string;
+}
+
 export const DOCUMENT_TYPES = [
     "Location Documents",
     "ID Card Documents",
@@ -9,6 +16,7 @@ export const DOCUMENT_TYPES = [
 
 interface Props {
     details: ChangeRequest;
+    documents?: Document[];
     onApprove: () => void;
     onReject: () => void;
     loadingAction: boolean;
@@ -22,6 +30,7 @@ const statusClassMap: Record<string, string> = {
 
 export default function ChangeRequestHeader({
     details,
+    documents = [],
     onApprove,
     onReject,
     loadingAction,
@@ -34,7 +43,8 @@ export default function ChangeRequestHeader({
                     details={details}
                 />
                 <VerificationStats details={details} />
-                <AttachedDocuments />
+                {/* <AttachedDocuments /> */}
+                <AttachedDocuments documents={documents} />
             </div>
 
             <div className="my-4 border-t-2 border-[#F2BA1A]" />
@@ -112,35 +122,86 @@ const VerificationStats = ({ details }: { details: ChangeRequest }) => (
     </div>
 );
 
-const AttachedDocuments = () => (
-    <div className="space-y-2 text-[16px] text-[#00000080]">
-        <div className="pl-6 flex items-center leading-none">
-            <span className="text-lg font-semibold text-black">
-                Attached Doc
-            </span>
-            <Image
-                src="/attached_doc_icon.png"
-                alt="doc"
-                width={14}
-                height={14}
-                className="ml-1 mb-1"
-            />
-        </div>
-        <div className="border-l-2 border-[#F2BA1A] pl-6 flex flex-col gap-2 font-semibold">
-            {DOCUMENT_TYPES.map((label) => (
-                <span
-                    key={label}
-                    className="flex items-center gap-2 cursor-pointer"
-                >
-                    {label}
-                    <Image
-                        src="/right_arrow.png"
-                        alt="arrow"
-                        width={14}
-                        height={14}
-                    />
+// const AttachedDocuments = () => (
+//     <div className="space-y-2 text-[16px] text-[#00000080]">
+//         <div className="pl-6 flex items-center leading-none">
+//             <span className="text-lg font-semibold text-black">
+//                 Attached Doc
+//             </span>
+//             <Image
+//                 src="/attached_doc_icon.png"
+//                 alt="doc"
+//                 width={14}
+//                 height={14}
+//                 className="ml-1 mb-1"
+//             />
+//         </div>
+//         <div className="border-l-2 border-[#F2BA1A] pl-6 flex flex-col gap-2 font-semibold">
+//             {DOCUMENT_TYPES.map((label) => (
+//                 <span
+//                     key={label}
+//                     className="flex items-center gap-2 cursor-pointer"
+//                 >
+//                     {label}
+//                     <Image
+//                         src="/right_arrow.png"
+//                         alt="arrow"
+//                         width={14}
+//                         height={14}
+//                     />
+//                 </span>
+//             ))}
+//         </div>
+//     </div>
+// );
+
+
+const AttachedDocuments = ({ documents = [] }: { documents?: Document[] }) => {
+    const visibleDocs = documents.slice(0, 3);
+    const placeholdersCount = Math.max(0, 3 - visibleDocs.length);
+
+    return (
+        <div className="space-y-2 text-[16px] text-[#00000080]">
+            <div className="pl-6 flex items-center leading-none">
+                <span className="text-lg font-semibold text-black">
+                    Attached Doc
                 </span>
-            ))}
+                <Image
+                    src="/attached_doc_icon.png"
+                    alt="doc"
+                    width={14}
+                    height={14}
+                    className="ml-1 mb-1"
+                />
+            </div>
+
+            <div className="border-l-2 border-[#F2BA1A] pl-6 flex flex-col gap-2 font-semibold">
+                {
+                    visibleDocs.map((doc) => (
+                        <span
+                            key={doc.document_label_id}
+                            className="flex items-center gap-2 cursor-pointer"
+                        >
+                            {doc.document_label}
+                            <Image
+                                src="/right_arrow.png"
+                                alt="arrow"
+                                width={14}
+                                height={14}
+                            />
+                        </span>
+                    ))
+                }
+
+                {Array.from({ length: placeholdersCount }).map((_, i) => (
+                    <span
+                        key={`placeholder-${i}`}
+                        className="flex items-center gap-2 invisible"
+                    >
+                        placeholder
+                    </span>
+                ))}
+            </div>
         </div>
-    </div>
-);
+    );
+};
