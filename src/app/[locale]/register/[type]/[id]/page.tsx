@@ -1,7 +1,5 @@
 'use client';
 
-import { useMemo, useCallback } from 'react';
-import { useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import {
     RegisterTabsLayout,
@@ -9,185 +7,51 @@ import {
 } from '@/components/shared';
 import {
     WidgetProvider,
-    UISchema,
-    createWidgetStore,
-    SectionChanges,
     SectionsContainer,
 } from '@openg2p/registry-widgets';
-import { useFetch } from '@/shared/hooks/useFetch';
 import ChangeRequestCard from '@/features/change-request/components/ChangeRequestCard';
-import { useRegister } from '@/context/RegisterContext';
-import { useRegisterTabs } from '@/context/RegisterTabsContext';
-import { useBreadcrumb } from '@/shared/hooks';
-import { UploadedDocument } from '@/shared/types';
 
-interface RegisterFlattenedRecord {
-    internal_record_id: string;
-    [key: string]: unknown;
-}
+import { useRegisterDetail } from '@/features/register/hooks/useRegisterDetail';
 
-interface SectionsRecords {
-    section_register_id: string;
-    records: RegisterFlattenedRecord[];
-}
-
-interface SectionSchema {
-    section_register_id: string;
-    register_id: string;
-    section_id: string;
-    tab_id: string;
-    section_mnemonic: string;
-    section_description: string;
-    documents_required: boolean;
-    section_ui_schema: UISchema | null;
-}
-
-interface SectionsResponse {
-    sections: SectionSchema[];
-}
 
 export default function RegisterDetailPage() {
-
     const t = useTranslations();
-
-    const { id: recordId, type: registerType } =
-        useParams<{ id: string; type: string }>();
-
-    const widgetStore = useMemo(() => createWidgetStore(), []);
-
     const {
+        resolvingId,
+        internalRecordId,
+        registerType,
+        widgetStore,
         tabs,
-        activeTab,
         activeTabIndex,
-        activeTabId,
         setActiveTabByIndex,
-    } = useRegisterTabs();
+        activeTabId,
+        breadcrumb,
+        sectionsConfig,
+        sectionDataMap,
+        handleSectionSave,
+        canRenderContent,
+        currentRegister
+    } = useRegisterDetail();
 
-    const { currentRegister } = useRegister();
+    // Helper to render skeleton placeholders
+    const renderSkeleton = () => (
+        <div className="grid grid-cols-12 gap-6 animate-pulse">
+            <div className="col-span-12 lg:col-span-9 space-y-6">
+                <div className="bg-gray-300 rounded-lg w-full h-[300px]" />
+                <div className="bg-gray-300 rounded-lg w-full h-[300px]" />
+            </div>
 
-    const breadcrumb = useBreadcrumb({
-        type: registerType,
-        recordId,
-        includeActiveTab: true,
-    });
-
-    const { data: sectionsSchema } = useFetch<SectionsResponse>({
-        url: `/api/register/${registerType}/tabs/${activeTabId}/sections`,
-        enabled: !!activeTabId,
-    });
-
-    const { data: sectionsRecords } = useFetch<SectionsRecords[]>({
-        url: `/api/register/${registerType}/${recordId}/${activeTabId}`,
-        enabled: !!currentRegister?.register_id && !!activeTabId,
-        options: {
-            method: 'POST',
-            body: JSON.stringify({
-                register_id: currentRegister?.register_id,
-                internal_record_id: recordId,
-            }),
-        },
-    });
-
-    // need to transform data 
-    const sectionDataMap = useMemo(() => {
-        if (!sectionsRecords) return null;
-
-        const map: Record<
-            string,
-            RegisterFlattenedRecord | RegisterFlattenedRecord[]
-        > = {};
-
-        for (const section of sectionsRecords) {
-            const { section_register_id, records } = section;
-
-            if (!records || records.length === 0) continue;
-
-            map[section_register_id] =
-                records.length === 1 ? records[0] : records;
-        }
-
-        return map;
-    }, [sectionsRecords]);
-
-
-    const sectionsConfig = useMemo(() => {
-        if (!sectionsSchema) return [];
-
-        return sectionsSchema.sections
-            .filter(section => section.section_ui_schema)
-            .flatMap(section => section.section_ui_schema!.sections);
-    }, [sectionsSchema]);
-
-    const { execute: submitChangeRequest } = useFetch();
-    const { execute: uploadDocumentRequest } = useFetch();
-
-    const handleSectionSave = useCallback(
-        async (sectionChanges: SectionChanges) => {
-            console.log(sectionChanges, "section changes");
-
-            if (!currentRegister) return;
-
-            const newSectionValue = { ...(sectionChanges.new_section_value as Record<string, any>) };
-            const filesToUpload: any[] = [];
-            const fileLabels: string[] = [];
-
-            Object.entries(newSectionValue).forEach(([key, value]) => {
-                // Check for file object
-                if (value && typeof value === 'object' && (value as any).__type === 'File') {
-                    filesToUpload.push(value);
-                    fileLabels.push(key);
-
-                    // remove files form newValue
-                    delete newSectionValue[key];
-                }
-            });
-
-            // upload document then get document_lable_id and document_store_id
-            const documentsResponse: UploadedDocument[] = [];
-            if (filesToUpload.length > 0) {
-                const documentsResponse = await uploadDocumentRequest(
-                    `/api/change_request/upload_document`,
-                    {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            section_id: sectionChanges.section_id,
-                            document_label_ids: fileLabels,
-                            files: filesToUpload,
-                        }),
-                    }
-                );
-            }
-
-
-            // creating change request
-            await submitChangeRequest(
-                `/api/change_request/create`,
-                {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        register_id: currentRegister.register_id,
-                        register_mnemonic: currentRegister.register_mnemonic,
-                        internal_record_id: recordId,
-                        section_register_id: null,
-                        tab_id: activeTabId,
-                        section_id: sectionChanges.section_id,
-                        section_schema: sectionChanges.section_schema,
-                        section_data: newSectionValue,
-                        documents: documentsResponse,
-                    }),
-                }
-            );
-        },
-        [currentRegister, recordId, registerType, submitChangeRequest, activeTabId, uploadDocumentRequest]
+            <div className="hidden lg:block lg:col-span-3 space-y-6">
+                <div className="bg-gray-300 rounded-lg h-48 w-full" />
+                <div className="bg-gray-300 rounded-lg h-48 w-full" />
+            </div>
+        </div>
     );
 
-    const canRenderContent =
-        sectionsSchema &&
-        sectionDataMap &&
-        currentRegister &&
-        sectionsConfig.length > 0;
+    // resolvingId: resolves the functional ID (public-facing) 
+    // to the internal record ID (UUID)
+    const isLoading = (resolvingId && !internalRecordId) || !canRenderContent;
+    const isNotFound = !resolvingId && !internalRecordId;
 
     return (
         <RegisterTabsLayout
@@ -196,9 +60,15 @@ export default function RegisterDetailPage() {
             activeTab={activeTabIndex}
             onTabChange={setActiveTabByIndex}
         >
-            {canRenderContent && (
+            {isLoading ? (
+                renderSkeleton()
+            ) : isNotFound ? (
+                <div className="p-8 text-center text-red-500 bg-white rounded-lg border border-red-100 shadow-sm">
+                    {t('recordNotFound')}
+                </div>
+            ) : (
                 <div className="grid grid-cols-12 gap-6">
-                    <div className="col-span-9">
+                    <div className="col-span-12 lg:col-span-9">
                         <WidgetProvider
                             store={widgetStore}
                             schemaData={sectionDataMap}
@@ -211,18 +81,22 @@ export default function RegisterDetailPage() {
                         </WidgetProvider>
                     </div>
 
-                    <div className="col-span-3 flex flex-col gap-6">
-                        <ChangeRequestCard
-                            type={registerType}
-                            registerId={currentRegister.register_id}
-                            internalRecordId={recordId}
-                            activeTabId={activeTabId}
-                        />
-                        <VersionHistoryCard
-                            type={registerType}
-                            registerId={currentRegister.register_id}
-                            internalRecordId={recordId}
-                        />
+                    <div className="col-span-12 lg:col-span-3 flex flex-col gap-6">
+                        {currentRegister && internalRecordId && (
+                            <>
+                                <ChangeRequestCard
+                                    type={registerType}
+                                    registerId={currentRegister.register_id}
+                                    internalRecordId={internalRecordId}
+                                    activeTabId={activeTabId}
+                                />
+                                <VersionHistoryCard
+                                    type={registerType}
+                                    registerId={currentRegister.register_id}
+                                    internalRecordId={internalRecordId}
+                                />
+                            </>
+                        )}
                     </div>
                 </div>
             )}

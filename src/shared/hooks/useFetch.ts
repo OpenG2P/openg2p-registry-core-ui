@@ -55,14 +55,21 @@ export function useFetch<T = any>({
     try {
       const res = await fetch(finalUrl, {
         ...finalOptions,
-        headers: {
-          "Content-Type": "application/json",
-          ...finalOptions?.headers,
-        },
+        headers:
+          finalOptions?.body instanceof FormData
+            ? {
+                // ONLY non-content-type headers allowed
+                ...(finalOptions?.headers ?? {}),
+              }
+            : {
+                "Content-Type": "application/json",
+                ...(finalOptions?.headers ?? {}),
+              },
         signal: controller.signal,
       });
 
       const result = await res.json();
+
       if (!res.ok) {
         throw new Error(result?.error || `Error ${res.status}`);
       }

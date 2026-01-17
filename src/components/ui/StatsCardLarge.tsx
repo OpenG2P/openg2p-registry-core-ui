@@ -42,13 +42,13 @@ const StatsCardLarge = ({
           {
             id: "approved",
             label: t('approved'),
-            value: data.approved,
+            value: data.approved_count,
             imageUrl: "/statsIcon/approved.png",
           },
           {
             id: "pending",
             label: t('pending'),
-            value: data.pending,
+            value: data.pending_count,
             imageUrl: "/statsIcon/pending.png",
           },
         ],
@@ -61,9 +61,9 @@ const StatsCardLarge = ({
   const totalCount = useMemo(() => {
     // For registers, just count how many registers, don't sum their values
     if (stats_endpoint.includes("register")) {
-      return data?.length;
+      return data?.length || 0;
     }
-    // For other stats, sum the values
+    // For other stats, sum values
     return rows.reduce((sum, r) => sum + (r.value || 0), 0);
   }, [data, rows, stats_endpoint]);
 

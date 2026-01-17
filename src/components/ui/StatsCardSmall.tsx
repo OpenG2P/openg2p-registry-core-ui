@@ -41,13 +41,13 @@ const StatsCardSmall = ({
           {
             id: "approved",
             label: t('approved'),
-            value: data.approved,
+            value: data.approved_count,
             imageUrl: "/statsIcon/approved.png",
           },
           {
             id: "pending",
             label: t('pending'),
-            value: data.pending,
+            value: data.pending_count,
             imageUrl: "/statsIcon/pending.png",
           },
         ],
@@ -61,13 +61,13 @@ const StatsCardSmall = ({
           {
             id: "partners",
             label: t('partners'),
-            value: data.partners,
+            value: data.no_of_partners,
             imageUrl: "/statsIcon/partners.png",
           },
           {
             id: "models",
             label: t('dataModels'),
-            value: data.data_models,
+            value: data.no_of_data_models,
             imageUrl: "/statsIcon/data_models.png",
           },
         ],
@@ -98,19 +98,19 @@ const StatsCardSmall = ({
   }, [data, stats_endpoint, t]);
 
   const totalCount = useMemo(() => {
-    // For registers, just count how many registers, don't sum their values
+    // For registers, just count how many registers
     if (stats_endpoint.includes("register")) {
-      return data?.length;
+      return data?.length || 0;
     }
-    // For other stats, sum the values
-    return rows.reduce((sum, r) => sum + r.value, 0);
+    // For other stats, sum values
+    return rows.reduce((sum, r) => sum + (r.value || 0), 0);
   }, [data, rows, stats_endpoint]);
 
   return (
     <div
       className={`
         flex flex-col justify-between  transition-all duration-200
-        w-auto h-auto rounded-[30px] px-6 py-4
+        w-full h-45 rounded-[30px] px-6 py-4
         ${active
           ? "border-black bg-black text-white"
           : "bg-[#E1E1E1] text-[#A1A1A1]"

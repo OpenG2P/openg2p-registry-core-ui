@@ -35,7 +35,6 @@ export function RegisterProvider({
     const { data, loading } = useFetch<Register[]>({
         url: '/api/register/all',
     });
-
     const registers = data ?? [];
 
     const currentRegister = useMemo(() => {

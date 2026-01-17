@@ -112,17 +112,16 @@ export default function Home() {
         overflow-hidden text-gray-900
      "
         >
-            {/* background vector svg */}
+            {/* background pattern */}
             <div
                 className="
-                    absolute inset-0
-                    bg-[url('/svgs/VectorGroup.svg')]
+                    absolute top-0 left-0
+                    w-full h-full
+                    bg-[url('/bg_pattern.png')]
                     bg-repeat
-                    bg-size-[240px_240px]
-                    sm:bg-size-[300px_300px]
-                    md:bg-size-[420px_420px]
-                    lg:bg-size-[492.5px_492.55px]
-                    opacity-40
+                    bg-size-[96px_96px]
+                    opacity-80
+                    pointer-events-none
                 "
             />
 
@@ -162,7 +161,7 @@ export default function Home() {
                     <div
                         className="relative border-[#ED7C22] flex h-14 w-4/5 items-center rounded-[30px] border bg-white overflow-visible"
                     >
-                        {activeStatsCard === 'registers' && (
+                        {activeStatsCard === 'registers' && registerList && registerList.length > 0 && (
                             <RegisterDropdown
                                 options={registerList}
                                 selected={selectedRegister}
