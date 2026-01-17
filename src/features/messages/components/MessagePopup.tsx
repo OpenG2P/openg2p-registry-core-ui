@@ -5,7 +5,6 @@ import Image from 'next/image';
 
 interface MessagePopupProps {
     onClose: () => void;
-    mode: 'raw' | 'transformed' | null;
     rawJson: object | null;
     transformedJson: object | null;
     enrichedJson: object | null;
@@ -14,7 +13,6 @@ interface MessagePopupProps {
 
 export default function MessagePopup({
     onClose,
-    mode,
     rawJson,
     transformedJson,
     enrichedJson,
@@ -22,13 +20,11 @@ export default function MessagePopup({
 }: MessagePopupProps) {
     const [activeTab, setActiveTab] = useState(0);
 
-    const tabs =
-        mode === 'raw'
-            ? [{ id: 'raw', label: 'Raw Messages', data: rawJson }]
-            : [
-                { id: 'transformed', label: 'Transformed Messages', data: transformedJson },
-                { id: 'enriched', label: 'Enriched Messages', data: enrichedJson },
-            ];
+    const tabs = [
+        { id: 'raw', label: 'Raw Message', data: rawJson },
+        { id: 'enriched', label: 'Enriched Message', data: enrichedJson },
+        { id: 'transformed', label: 'Transformed Message', data: transformedJson },
+    ];
 
     return (
         <div className="fixed inset-0 bg-black/80 flex justify-center items-center z-50">

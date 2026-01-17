@@ -29,16 +29,15 @@ export function formatDateTime(value?: string | null) {
 export default function IncomingMessageCard({ message }: Props) {
     const [openPopup, setOpenPopup] = useState(false);
     const locale = useLocale();
-    const [payloadType, setPayloadType] = useState<'raw' | 'transformed' | null>(null);
 
     const {
-        fetchRaw,
-        fetchTransformed,
+        fetchAll,
         rawJson,
         transformedJson,
         enrichedJson,
         loading,
     } = useIncomingMessagePayload();
+
 
     return (
         <div className="rounded-[30px] bg-white px-10 py-8">
@@ -52,16 +51,16 @@ export default function IncomingMessageCard({ message }: Props) {
                             width={19}
                             height={20}
                             onClick={() => {
-                                setPayloadType('raw');
-                                fetchRaw(message.ingest_id);
+                                fetchAll(message.ingest_id);
                                 setOpenPopup(true);
                             }}
+
                             className="cursor-pointer"
                         />
                     </h3>
                     <KeyValue label="Ingest ID" value={message.ingest_id} />
-                    <KeyValue label="Partner" value={message.partner_id} />
-                    <KeyValue label="Data Model" value={message.data_model_id} />
+                    <KeyValue label="Partner" value={message?.partner_mnemonic} />
+                    <KeyValue label="Data Model" value={message?.data_model_mnemonic} />
                     <KeyValue label="Ingest Date & Time" value={formatDateTime(message.receipt_date_time)} />
                     <KeyValue label="Classification Status" value={message.classification_status} />
                     <KeyValue label="Classification Date & Time" value={formatDateTime(message.classification_date_time)} />
@@ -69,8 +68,8 @@ export default function IncomingMessageCard({ message }: Props) {
 
                 <div className="border-l-2 space-y-2 border-[#D9D9D9] pl-6">
                     <h3 className="text-[16px] font-medium text-[#ED7C22]">Classification</h3>
-                    <KeyValue label="Target Register" value={message.register_id ?? '-- -- --'} />
-                    {/* <KeyValue label="Operation" value={message.operation ?? 'N/A'} /> */}
+                    <KeyValue label="Target Register" value={message.register_mnemonic ?? '-- -- --'} />
+                    {/* <KeyValue label="No.of Attempt" value={message.classification_number_of_attempts ?? 'N/A'} /> */}
                     <KeyValue label="Transformation Status" value={message.transformation_status ?? 'N/A'} />
                     <KeyValue label="Transformation Date & Time" value={formatDateTime(message.transformation_date_time)} />
                 </div>
@@ -83,17 +82,15 @@ export default function IncomingMessageCard({ message }: Props) {
                             alt="Raw Icon"
                             width={19}
                             height={20}
-                            // onClick={() => setOpenPopup(true)}
-
                             onClick={() => {
-                                setPayloadType('transformed');
-                                fetchTransformed(message.ingest_id);
+                                fetchAll(message.ingest_id);
                                 setOpenPopup(true);
                             }}
+
                             className="cursor-pointer"
                         />
                     </h3>
-                    {/* <KeyValue label="Transformation Template" value={message.transformation_template ?? 'N/A'} /> */}
+                    <KeyValue label="Transformation Template" value={message.template_file_id ?? 'N/A'} />
                     <KeyValue label="Ingestion Status" value={message.ingestion_status ?? 'N/A'} />
                     <KeyValue label="Ingestion Date & Time" value={formatDateTime(message.ingestion_date_time)} />
                 </div>
@@ -124,7 +121,6 @@ export default function IncomingMessageCard({ message }: Props) {
             {openPopup && (
                 <MessagePopup
                     onClose={() => setOpenPopup(false)}
-                    mode={payloadType}
                     rawJson={rawJson}
                     transformedJson={transformedJson}
                     enrichedJson={enrichedJson}

@@ -1,28 +1,11 @@
-// export interface IncomingMessage {
-//     ingest_id: string;
-//     partner: string;
-//     data_model: string;
-//     ingest_datetime: string;
-//     classification_status: string;
-//     classification_datetime?: string | null;
-
-//     target_register?: string | null;
-//     operation?: string | null;
-//     transformation_status?: string | null;
-//     transformation_datetime?: string | null;
-
-//     transformation_template?: string | null;
-//     ingestion_status?: string | null;
-//     ingestion_datetime?: string | null;
-
-//     change_log_id?: string | null;
-// }
-
 export interface IncomingMessage {
     ingest_id: string;
 
     partner_id: string;
+    partner_mnemonic: string;
+
     data_model_id: string;
+    data_model_mnemonic: string;
 
     ingest_message_id: string;
     ingest_correlation_id: string;
@@ -30,15 +13,23 @@ export interface IncomingMessage {
     receipt_date_time: string;
 
     classification_status: string;
-    classification_date_time?: string | null;
-    classification_number_of_attempts?: number;
-    classification_latest_error_code?: string | null;
+    classification_date_time?: string;
+    classification_number_of_attempts?: string;
+    classification_latest_error_code?: string;
 
     change_request_id?: string | null;
 
     register_id?: string | null;
-    section_id?: string | null;
-    semantic_pattern_id?: string | null;
+    register_mnemonic?: string;
+
+    section_id?: string;
+    section_mnemonic?: string;
+
+    tab_id?: string;
+
+    semantic_pattern_id?: string;
+    template_id?: string;
+    template_file_id?: string;
 
     transformation_status?: string | null;
     transformation_date_time?: string | null;
