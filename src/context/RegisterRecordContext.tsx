@@ -18,10 +18,10 @@ export function RegisterRecordProvider({ children }: { children: ReactNode }) {
     const { id } = useParams<{ type: string; id: string }>();
     const { currentRegister } = useRegister();
 
-    // The ID in the URL is the functional_record_id
-    const functionalRecordId = decodeURIComponent(id);
+    // The ID in the URL is the internal_record_id
+    const internalRecordId = decodeURIComponent(id);
 
-    // Fetch to resolve Internal ID
+    // Fetch to resolve Functional ID and verify Internal ID
     const fetchOptions = useMemo(() => ({
         method: 'POST',
         body: JSON.stringify({
@@ -30,24 +30,22 @@ export function RegisterRecordProvider({ children }: { children: ReactNode }) {
             sort_by: "",
             search_text: "",
             filter_by: {
-                functional_record_id: {
-                    eq: functionalRecordId
+                internal_record_id: {
+                    eq: internalRecordId
                 }
             },
             register_id: currentRegister?.register_id
         }),
-    }), [functionalRecordId, currentRegister?.register_id]);
+    }), [internalRecordId, currentRegister?.register_id]);
 
     const { data, loading } = useFetch<RegisterRecordsApiResponse>({
         url: `/api/register/records`,
-        enabled: !!currentRegister?.register_id && !!functionalRecordId,
+        enabled: !!currentRegister?.register_id && !!internalRecordId,
         options: fetchOptions,
     });
 
     const record = data?.records?.[0];
-    const internalRecordId = record?.internal_record_id;
-
-
+    const functionalRecordId = record?.functional_record_id || "Not Generated Yet";
     const value = useMemo(() => ({
         internalRecordId,
         functionalRecordId,

@@ -27,6 +27,7 @@ export const useRegisterDetail = () => {
   const breadcrumb = useBreadcrumb({
     type: registerType,
     recordId: functionalRecordId,
+    internalId: internalRecordId,
     includeActiveTab: true,
   });
 

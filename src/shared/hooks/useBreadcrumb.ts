@@ -10,7 +10,8 @@ interface BreadcrumbItem {
 
 interface BreadcrumbOptions {
     type: string;
-    recordId?: string;
+    recordId?: string | null;
+    internalId?: string | null;
     changeId?: string;
     includeActiveTab?: boolean;
     includeChangeRequest?: boolean;
@@ -25,6 +26,7 @@ export function useBreadcrumb(options: BreadcrumbOptions) {
     const {
         type,
         recordId,
+        internalId,
         changeId,
         includeActiveTab = false,
         includeChangeRequest = false,
@@ -41,33 +43,37 @@ export function useBreadcrumb(options: BreadcrumbOptions) {
             href: `/register/${type}`,
         });
 
-        if (recordId) {
+        // Use internalId for href, recordId (functional) for label
+        const displayId = recordId || t('functionalIdNotGenerated');
+        const urlId = internalId || recordId;
+
+        if (urlId) {
             items.push({
-                label: `ID-${recordId}`,
-                href: `/register/${type}/${recordId}`,
+                label: recordId ? `ID-${recordId}` : displayId,
+                href: `/register/${type}/${urlId}`,
             });
         }
 
         if (includeActiveTab && activeTab) {
             items.push({
                 label: t(activeTab.tab_label) ?? activeTab.tab_label,
-                href: recordId
-                    ? `/register/${type}/${recordId}?tab=${activeTab.tab_id}`
+                href: urlId
+                    ? `/register/${type}/${urlId}?tab=${activeTab.tab_id}`
                     : '#',
             });
         }
 
-        if (includeChangeRequest && recordId) {
+        if (includeChangeRequest && urlId) {
             items.push({
                 label: t('changeRequest') ?? 'Change Request',
-                href: `/register/${type}/${recordId}/change-request${activeTabId ? `?tab=${activeTabId}` : ''}`,
+                href: `/register/${type}/${urlId}/change-request${activeTabId ? `?tab=${activeTabId}` : ''}`,
             });
         }
 
-        if (changeId && recordId) {
+        if (changeId && urlId) {
             items.push({
                 label: changeId,
-                href: `/register/${type}/${recordId}/change-request/${changeId}${activeTabId ? `?tab=${activeTabId}` : ''}`,
+                href: `/register/${type}/${urlId}/change-request/${changeId}${activeTabId ? `?tab=${activeTabId}` : ''}`,
             });
         }
 
@@ -78,6 +84,7 @@ export function useBreadcrumb(options: BreadcrumbOptions) {
         currentRegister,
         type,
         recordId,
+        internalId,
         changeId,
         includeActiveTab,
         includeChangeRequest,
