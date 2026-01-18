@@ -12,6 +12,7 @@
     "@novu/js": "^3.11.0",
     "@openg2p/registry-widgets": "file:../openg2p-registry-ui-widgets",
     "@reduxjs/toolkit": "^2.11.2",
+    "inji-sdk": "^0.16.0",
     "lucide-react": "^0.555.0",
     "next": "16.0.7",
     "next-intl": "^4.7.0",
