@@ -39,6 +39,7 @@ export interface TabSection {
     section_mnemonic: string;
     section_description: string;
     documents_required: boolean;
+    section_order: number;
     section_ui_schema: any; // UISchema
 }
 

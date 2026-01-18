@@ -1,19 +1,15 @@
-import { useState, useEffect } from "react";
+import { useMemo } from "react";
 import { useFetch } from "@/shared/hooks/useFetch";
 import { useRegister } from "@/context/RegisterContext";
 import { useRegisterTabs } from "@/context/RegisterTabsContext";
 import { useRegisterRecord } from "@/context/RegisterRecordContext";
-import { TabSection, SectionSchemaData } from "@/features/register/types";
+import { TabSection, SectionSchemaData, RegisterFlattenedRecord, TabSectionData } from "@/features/register/types";
 import { useSectionSave } from "./useSectionSave";
 
 export const useRegisterSections = () => {
   const { internalRecordId } = useRegisterRecord();
   const { activeTabId } = useRegisterTabs();
   const { currentRegister } = useRegister();
-
-  const [sectionSchemaDataMap, setSectionSchemaDataMap] = useState<
-    Record<string, SectionSchemaData>
-  >({});
 
   // list of tab sections
   const { data: tabSections } = useFetch<TabSection[]>({
@@ -28,68 +24,50 @@ export const useRegisterSections = () => {
     },
   });
 
-  const { handleSectionSave } = useSectionSave(tabSections);
+  const { data: tabSectionsData } = useFetch<TabSectionData[]>({
+    url: `/api/register/tab-sections-data`,
+    enabled: !!currentRegister?.register_id && !!activeTabId && !!internalRecordId,
+    options: {
+      method: "POST",
+      body: JSON.stringify({
+        register_id: currentRegister?.register_id,
+        internal_record_id: internalRecordId,
+        tab_id: activeTabId,
+      }),
+    },
+  });
 
-  const { execute: fetchSectionData } = useFetch<any>();
+  const sectionDataMap = useMemo(() => {
+    if (!tabSectionsData) return undefined;
 
-  useEffect(() => {
-    if (
-      !tabSections?.length ||
-      !currentRegister?.register_id ||
-      !internalRecordId
-    ) {
-      return;
+    const map: Record<
+      string,
+      RegisterFlattenedRecord | { records: RegisterFlattenedRecord[] }
+    > = {};
+
+    for (const section of tabSectionsData) {
+      if (!section.records?.length) continue;
+      map[section.section_register_id] =
+        section.records.length === 1
+          ? section.records[0]
+          : {records: section.records};
     }
 
-    const loadAllSections = async () => {
-      try {
-        const entries: [string, SectionSchemaData][] = [];
+    return map;
+  }, [tabSectionsData]);
 
-        for (const section of tabSections) {
-          try {
-            const response = await fetchSectionData("/api/register/section-data", {
-              method: "POST",
-              body: JSON.stringify({
-                register_id: currentRegister.register_id,
-                internal_record_id: internalRecordId,
-                section_register_id: section.section_register_id,
-              }),
-            });
+const orderedTabSections = useMemo(() => {
+  if (!tabSections) return [];
 
-            if (!response || (Array.isArray(response) && response.length === 0)) {
-              continue;
-            }
+  return [...tabSections]
+    .sort(
+      (sectionA, sectionB) =>
+        (sectionA.section_order ?? 0) - (sectionB.section_order ?? 0)
+    )
+    .flatMap(section => section.section_ui_schema?.sections ?? []);
+}, [tabSections]);
 
-            const normalizedData =
-              Array.isArray(response) && response.length === 1 ? response[0] : response;
-
-            entries.push([
-              section.section_id,
-              {
-                sectionSchema: section.section_ui_schema,
-                sectionData: {
-                  [section.section_register_id]: {
-                    ...(!Array.isArray(normalizedData) ? normalizedData : {}),
-                    ...(Array.isArray(normalizedData)
-                      ? { records: normalizedData }
-                      : {}),
-                  },
-                },
-              },
-            ]);
-          } catch (error) {
-            console.error(`Failed loading section ${section.section_id}:`, error);
-          }
-        }
-
-        setSectionSchemaDataMap(Object.fromEntries(entries));
-      } catch (error) {
-        console.error("Critical error loading section data", error);
-      }
-    };
-
-    loadAllSections();
-  }, [tabSections, currentRegister?.register_id, internalRecordId, fetchSectionData]);
+  const { handleSectionSave } = useSectionSave(tabSections);
 
   const canRenderContent = !!(
     tabSections &&
@@ -98,7 +76,8 @@ export const useRegisterSections = () => {
   );
   return {
     tabSections,
-    sectionSchemaDataMap,
+    orderedTabSections,
+    sectionDataMap,
     handleSectionSave,
     canRenderContent,
   };

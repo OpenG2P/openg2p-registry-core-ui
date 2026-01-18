@@ -33,7 +33,8 @@ export const useRegisterDetail = () => {
 
   const {
     tabSections,
-    sectionSchemaDataMap,
+    orderedTabSections,
+    sectionDataMap,
     handleSectionSave,
     canRenderContent,
   } = useRegisterSections();
@@ -50,7 +51,8 @@ export const useRegisterDetail = () => {
     activeTabId,
     breadcrumb,
     tabSections,
-    sectionSchemaDataMap,
+    orderedTabSections,
+    sectionDataMap,
     handleSectionSave,
     canRenderContent,
     currentRegister,
