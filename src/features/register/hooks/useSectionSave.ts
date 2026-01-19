@@ -41,14 +41,14 @@ export const useSectionSave = (tabSections: TabSection[] | null) => {
 
             if (filesToUpload.length > 0) {
                 const formData = new FormData();
-                formData.append("section_id", sectionChanges.section_id);
+                // formData.append("section_id", sectionChanges.section_id);
 
                 fileLabels.forEach((label) => {
-                    formData.append("document_label_ids", label);
+                    formData.append("document_label", label);
                 });
 
                 filesToUpload.forEach((file) => {
-                    formData.append("files", file);
+                    formData.append("documents", file);
                 });
                 documentsResponse = await uploadDocumentRequest(
                     "/api/change_request/upload_document",

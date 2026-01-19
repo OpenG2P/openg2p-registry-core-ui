@@ -45,7 +45,7 @@ export function RegisterRecordProvider({ children }: { children: ReactNode }) {
     });
 
     const record = data?.records?.[0];
-    const functionalRecordId = record?.functional_record_id || "Not Generated Yet";
+    const functionalRecordId = record?.functional_record_id || "-";
     const value = useMemo(() => ({
         internalRecordId,
         functionalRecordId,

@@ -1,6 +1,6 @@
 export type UploadedDocument = {
     document_store_id: string;
-    document_label_id: string;
+    document_label: string;
 };
 
 // Helper function to deserialize file 
