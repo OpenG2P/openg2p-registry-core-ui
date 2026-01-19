@@ -51,6 +51,7 @@ export default function ChangeRequestDetailsView({
     const tabId = details?.tab_id;
     const internalRecordId = details?.internal_record_id;
     const sectionId = details?.section_id;
+    const sectionRegisterId = details?.section_register_id || "";
 
 
     const {
@@ -78,7 +79,7 @@ export default function ChangeRequestDetailsView({
             RegisterFlattenedRecord | { records: RegisterFlattenedRecord[] }
         > = {};
 
-        map["755a038e-3d98-4694-bb2d-ed93e30f9a1b"] =
+        map[sectionRegisterId] =
             details.change_payload.length === 1
                 ? details.change_payload[0]
                 : { records: details.change_payload };
@@ -92,10 +93,10 @@ export default function ChangeRequestDetailsView({
 
         const map: Record<string, RegisterFlattenedRecord> = {};
 
-        map[registerId || ''] = details.current_register_data;
+        map[sectionRegisterId] = details.current_register_data;
 
         return map;
-    }, [details, registerId]);
+    }, [details]);
 
 
     return (

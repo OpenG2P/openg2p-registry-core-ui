@@ -1,165 +1,41 @@
-// import { NextRequest, NextResponse } from "next/server";
-// import {
-//     createBackendRequest,
-//     BACKEND_CONFIG,
-//     BackendResponse,
-// } from "@/shared/types";
-
-// export async function POST(req: NextRequest) {
-//     try {
-//         const body = await req.json()
-
-//         const paginationRequest =
-//             body?.request_body?.pagination_request ?? {};
-
-//         const requestPayload =
-//             body?.request_body?.request_payload ?? {};
-
-//         const backendRequest = createBackendRequest({
-//             pagination_request: {
-//                 current_page: paginationRequest.current_page ?? 1,
-//                 page_size: paginationRequest.page_size ?? 10,
-//                 sort_by: paginationRequest.sort_by ?? "",
-//                 filter_by: paginationRequest.filter_by ?? "",
-//                 search_text: paginationRequest.search_text ?? "",
-//             },
-//             request_payload: {
-//                 subject_register_id: requestPayload.subject_register_id,
-//                 subject_record_id: requestPayload.subject_record_id,
-//                 tab_id: requestPayload.tab_id,
-//             },
-//         });
-
-//         const backendUrl = `${BACKEND_CONFIG.apiUrl}/register/get_change_requests`;
-
-//         const response = await fetch(backendUrl, {
-//             method: "POST",
-//             headers: { "Content-Type": "application/json" },
-//             body: JSON.stringify(backendRequest),
-//         });
-
-//         if (!response.ok) {
-//             return NextResponse.json(
-//                 { error: `Backend HTTP error ${response.status}` },
-//                 { status: response.status }
-//             );
-//         }
-
-//         const backendResponse: BackendResponse = await response.json();
-
-//         console.log(backendResponse)
-
-//         if (backendResponse.response_header.response_status === "ERROR") {
-//             return NextResponse.json(
-//                 { error: backendResponse.response_header.response_error_message },
-//                 { status: 400 }
-//             );
-//         }
-
-//         return NextResponse.json(backendResponse);
-
-//     } catch (e) {
-//         return NextResponse.json(
-//             { error: e instanceof Error ? e.message : "Internal Server Error" },
-//             { status: 500 }
-//         );
-//     }
-// }
-
-
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
+import { proxyToBackend } from "@/shared/utils";
 
 export async function POST(req: NextRequest) {
-    const body = await req.json();
+    return proxyToBackend({
+        req,
+        targetEndpoint: "/register/get_change_requests",
 
-    const paginationRequest =
-        body?.request_body?.pagination_request ?? {};
+        buildPayload: (jsonBody) => {
+            const pagination =
+                jsonBody?.request_body?.pagination_request ?? {};
 
-    const currentPage = paginationRequest.current_page ?? 1;
-    const pageSize = paginationRequest.page_size ?? 10;
+            const payload =
+                jsonBody?.request_body?.request_payload ?? {};
 
-    const rawChangeLogs = [
-        {
-            change_request_id: "ce31285b-38b0-48a8",
-            register_id: "123",
-            tab_id: "tab-001",
-            internal_record_id: "12234425",
-            section_id: "section-001",
-            source_partner_id: "registry-ui",
-            created_by: "system",
-            created_at: "2025-12-15T15:35:36.112Z",
-            approval_status: "PENDING",
-            approved_by: null,
-            approved_at: null,
-            no_of_verifications_required: 3,
-            no_of_verifications_done: 1,
-            change_payload: {
-                first_name: "John",
-                last_name: "Doe",
-            },
+            return {
+                pagination_request: {
+                    current_page: pagination.current_page ?? 1,
+                    page_size: pagination.page_size ?? 10,
+                    sort_by: pagination.sort_by ?? "",
+                    filter_by: pagination.filter_by ?? "",
+                    search_text: pagination.search_text ?? "",
+                },
+                request_payload: {
+                    subject_register_id: payload.subject_register_id,
+                    subject_record_id: payload.subject_record_id,
+                    tab_id: payload.tab_id,
+                },
+            };
         },
-        {
-            change_request_id: "ce31285b-38b0-48a9",
-            register_id: "123",
-            tab_id: "tab-001",
-            internal_record_id: "12234425",
-            section_id: "section-001",
-            source_partner_id: "registry-ui",
-            created_by: "admin",
-            created_at: "2025-12-14T10:20:11.441Z",
-            approval_status: "APPROVED",
-            approved_by: "admin",
-            approved_at: "2025-12-14T12:00:00.000Z",
-            no_of_verifications_required: 3,
-            no_of_verifications_done: 3,
-            change_payload: {
-                phone_number: "+91XXXXXXXXXX",
-            },
-        },
-        {
-            change_request_id: "ce31285b-38b0-48a7",
-            register_id: "123",
-            tab_id: "tab-001",
-            internal_record_id: "12234425",
-            section_id: "section-001",
-            source_partner_id: "registry-ui",
-            created_by: "reviewer",
-            created_at: "2025-12-13T08:10:00.000Z",
-            approval_status: "REJECTED",
-            approved_by: "reviewer",
-            approved_at: "2025-12-13T09:00:00.000Z",
-            no_of_verifications_required: 3,
-            no_of_verifications_done: 1,
-            change_payload: {
-                nationality: "Indian",
-            },
-        },
-    ];
 
-    const totalItems = rawChangeLogs.length;
-    const totalPages = Math.ceil(totalItems / pageSize);
-
-    const startIndex = (currentPage - 1) * pageSize;
-    const endIndex = startIndex + pageSize;
-
-    const paginatedLogs = rawChangeLogs.slice(startIndex, endIndex);
-
-    return NextResponse.json({
-        response_header: {
-            request_id: crypto.randomUUID(),
-            response_status: "SUCCESS",
-            response_error_code: "",
-            response_error_message: "",
-            response_timestamp: new Date().toISOString(),
-        },
-        response_body: {
-            pagination_response: {
-                number_of_items: totalItems,
-                number_of_pages: totalPages,
+        transformResponse: (responseBody) => ({
+            response_body: {
+                response_payload: {
+                    change_requests: responseBody.response_payload ?? [],
+                },
+                pagination_response: responseBody.pagination_response,
             },
-            response_payload: {
-                change_requests: paginatedLogs,
-            },
-        },
+        }),
     });
 }

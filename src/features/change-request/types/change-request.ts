@@ -11,6 +11,7 @@ export interface ChangeRequest {
     internal_record_id: string;
     section_id: string;
     section_mnemonic?: string;
+    section_register_id: string;
 
     source_partner_id: string;
     created_by: string;
