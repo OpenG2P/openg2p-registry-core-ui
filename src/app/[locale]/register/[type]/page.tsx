@@ -1,5 +1,6 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { useTranslations } from 'next-intl';
 import { TopBar } from '@/components/shared';
 import { SelectedFilters } from '@/features/filter/components';
@@ -8,7 +9,12 @@ import { RegisterRecordCard } from '@/features/register/components';
 import { RegisterRecord } from '@/features/register/types';
 import { useState } from 'react';
 import AddNewDropdown from '@/components/ui/AddNewDropdown';
-import VpVerificationModal from '@/components/ui/VpVerificationModal';
+// import VpVerificationModal from '@/components/ui/VpVerificationModal';
+
+const VpVerificationModal = dynamic(
+    () => import('@/components/ui/VpVerificationModal'),
+    { ssr: false }
+);
 
 export default function RegisterTypePage() {
     const t = useTranslations();

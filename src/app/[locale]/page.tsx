@@ -68,7 +68,7 @@ export default function Home() {
     const handleSearch = (value: string, register?: string) => {
         const searchValue = value.trim();
 
-        if (!searchValue && activeStatsCard !== 'registers') return;
+        // if (!searchValue && activeStatsCard !== 'registers') return;
 
         if (activeStatsCard === 'registers') {
             const selected =

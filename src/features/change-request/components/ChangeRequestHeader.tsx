@@ -116,7 +116,7 @@ const VerificationStats = ({ details }: { details: ChangeRequest }) => (
             </div>
             <div>
                 No. of documents attached:{" "}
-                <span className="text-black font-medium">10</span>
+                <span className="text-black font-medium">{0}</span>
             </div>
         </div>
     </div>
