@@ -4,27 +4,30 @@ import { proxyToBackend } from '@/shared/utils';
 export async function POST(request: NextRequest) {
     return proxyToBackend({
         req: request,
-        targetEndpoint: '/register/add_verification_for_change_request',
+        targetEndpoint: '/documents/get_section_documents_for_change_request',
+
         buildPayload: (jsonBody) => {
-            const requestPayload = jsonBody?.request_body?.request_payload ?? {};
+            const payload = jsonBody?.request_body?.request_payload ?? {};
 
             return {
                 pagination_request: {
                     current_page: 1,
-                    page_size: 1,
+                    page_size: 50,
                     sort_by: '',
                     filter_by: undefined,
                     search_text: '',
                 },
                 request_payload: {
-                    change_request_id: requestPayload.change_request_id ?? '',
-                    verification_observations: requestPayload.verification_observations ?? '',
-                    is_approved: requestPayload.is_approved ?? false,
+                    change_request_id: payload.change_request_id,
                 },
             };
         },
+
         transformResponse: (responseBody) => ({
-            verification: responseBody.response_payload,
+            documents:
+                responseBody?.response_body?.response_payload?.documents ?? [],
+            pagination:
+                responseBody?.response_body?.pagination_response,
         }),
     });
 }

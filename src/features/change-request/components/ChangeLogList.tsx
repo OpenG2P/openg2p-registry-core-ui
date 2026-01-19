@@ -15,10 +15,11 @@ export default function ChangeLogList({ logs, getDetailsUrl, isSearchView = fals
 
     return (
         <div className="space-y-4">
-            {logs.map(log => (
+            {logs.map((log, index) => (
                 <ChangeLogCard
                     key={log.change_request_id}
                     log={log}
+                    index={index}
                     isSearchView={isSearchView}
                     onViewDetails={() => router.push(getDetailsUrl(log))}
                 />

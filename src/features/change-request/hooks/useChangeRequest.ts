@@ -11,8 +11,7 @@ export const useChangeRequest = (changeId: string) => {
         ),
     });
 
-    const details: ChangeRequest | null =
-        data?.response_body?.response_payload?.change_request;
+    const details: ChangeRequest | null = data?.response_payload;
 
     return { details, loading };
 };

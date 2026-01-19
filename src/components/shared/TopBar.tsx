@@ -9,6 +9,9 @@ interface TopBarProps {
     showFilters?: boolean;
     showPagination?: boolean;
 
+    showCapsule?: boolean;
+    capsule?: React.ReactNode;
+
     pageStart: number;
     pageEnd: number;
     total: number;
@@ -28,6 +31,8 @@ export default function TopBar({
     breadcrumb = [],
     showFilters = true,
     showPagination = true,
+    showCapsule = false,
+    capsule,
     pageStart,
     pageEnd,
     total,
@@ -42,7 +47,12 @@ export default function TopBar({
     return (
         <div className="w-full h-17.5 flex justify-center items-center">
             <div className="w-full px-7.5 flex justify-between items-center">
-                <BreadcrumbBar breadcrumb={breadcrumb} />
+                {/* <BreadcrumbBar breadcrumb={breadcrumb} /> */}
+                <div className="flex items-center gap-4">
+                    <BreadcrumbBar breadcrumb={breadcrumb} />
+
+                    {showCapsule && capsule}
+                </div>
                 <div className="flex items-center gap-2 sm:gap-4">
                     {showFilters && (
                         <FilterBar

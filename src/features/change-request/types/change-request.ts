@@ -10,6 +10,7 @@ export interface ChangeRequest {
     tab_id: string;
     internal_record_id: string;
     section_id: string;
+    section_mnemonic?: string;
 
     source_partner_id: string;
     created_by: string;

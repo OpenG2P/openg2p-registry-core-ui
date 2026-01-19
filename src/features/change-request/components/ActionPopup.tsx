@@ -11,7 +11,7 @@ export default function ActionPopup({ type, onClose }: ActionPopupProps) {
     return (
         <div className="fixed inset-0 bg-black/80 flex justify-center items-center z-50">
             <div
-                className={`relative bg-white rounded-[100px] w-150 h-100 p-6 flex flex-col items-center justify-center gap-4 border-10 ${isApprove ? "border-[#77D79B]/80" : "border-[#EF8F93]/80"
+                className={`relative bg-white rounded-[40px] w-150 h-100 p-6 flex flex-col items-center justify-center gap-4 border-10 ${isApprove ? "border-[#77D79B]/80" : "border-[#EF8F93]/80"
                     }`}
             >
                 <button

@@ -6,6 +6,9 @@ import { SelectedFilters } from '@/features/filter/components';
 import { useRegisterRecords } from '@/features/register/hooks/useRegisterRecords';
 import { RegisterRecordCard } from '@/features/register/components';
 import { RegisterRecord } from '@/features/register/types';
+import { useState } from 'react';
+import AddNewDropdown from '@/components/ui/AddNewDropdown';
+import VpVerificationModal from '@/components/ui/VpVerificationModal';
 
 export default function RegisterTypePage() {
     const t = useTranslations();
@@ -31,12 +34,26 @@ export default function RegisterTypePage() {
         }
     } = useRegisterRecords();
 
+    const [openVC, setOpenVC] = useState(false);
+    const [openDetails, setOpenDetails] = useState(false);
+
     return (
         <div className="min-h-screen mx-auto bg-[#F3F1E4]">
             <TopBar
                 breadcrumb={[{ label: registerTypeLabel }]}
                 showFilters
                 showPagination
+                showCapsule={true}
+                capsule={
+                    <AddNewDropdown
+                        onAddFromVC={() => setOpenVC(true)}
+                        onOptionOne={() => console.log("Random 1")}
+                        onOptionTwo={() => console.log("Random 2")}
+                        onImportCSV={() => console.log("Import CSV")}
+                        onImportPDS={() => console.log("Import PDS")}
+                        onImportOthers={() => console.log("Import Others")}
+                    />
+                }
                 pageStart={pagination.pageStart}
                 pageEnd={pagination.pageEnd}
                 total={pagination.total}
@@ -98,6 +115,13 @@ export default function RegisterTypePage() {
                     )}
                 </div>
             </div>
+            <>
+                {openVC && (
+                    <VpVerificationModal
+                        onClose={() => setOpenVC(false)}
+                    />
+                )}
+            </>
         </div>
     );
 }
