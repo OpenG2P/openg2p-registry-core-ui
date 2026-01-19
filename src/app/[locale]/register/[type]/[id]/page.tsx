@@ -26,12 +26,13 @@ export default function RegisterDetailPage() {
         setActiveTabByIndex,
         activeTabId,
         breadcrumb,
-        sectionsConfig,
+        orderedTabSections,
         sectionDataMap,
         handleSectionSave,
         canRenderContent,
         currentRegister
     } = useRegisterDetail();
+
 
     // Helper to render skeleton placeholders
     const renderSkeleton = () => (
@@ -48,8 +49,8 @@ export default function RegisterDetailPage() {
         </div>
     );
 
-    // resolvingId: resolves the functional ID (public-facing) 
-    // to the internal record ID (UUID)
+    // resolvingId: resolves the functional ID 
+    // from the internal record ID (UUID)
     const isLoading = (resolvingId && !internalRecordId) || !canRenderContent;
     const isNotFound = !resolvingId && !internalRecordId;
 
@@ -69,16 +70,18 @@ export default function RegisterDetailPage() {
             ) : (
                 <div className="grid grid-cols-12 gap-6">
                     <div className="col-span-12 lg:col-span-9">
-                        <WidgetProvider
-                            store={widgetStore}
-                            schemaData={sectionDataMap}
-                            translate={t}
-                        >
-                            <SectionsContainer
-                                sections={sectionsConfig}
-                                onSectionSave={handleSectionSave}
-                            />
-                        </WidgetProvider>
+                        <div className="col-span-12 lg:col-span-9">
+                            <WidgetProvider
+                                store={widgetStore}
+                                schemaData={sectionDataMap}
+                                translate={t}
+                            >
+                                <SectionsContainer
+                                    sections={orderedTabSections}
+                                    onSectionSave={handleSectionSave}
+                                />
+                            </WidgetProvider>
+                        </div>
                     </div>
 
                     <div className="col-span-12 lg:col-span-3 flex flex-col gap-6">
