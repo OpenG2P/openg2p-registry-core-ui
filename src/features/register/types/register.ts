@@ -39,5 +39,34 @@ export interface TabSection {
     section_mnemonic: string;
     section_description: string;
     documents_required: boolean;
+    section_order: number;
     section_ui_schema: any; // UISchema
+}
+
+export interface SectionData {
+    internal_record_id: string;
+    functional_record_id: string;
+    link_internal_record_id: string;
+    foundational_id: string;
+    link_foundational_id: string;
+    created_by: string;
+    created_at: string;
+    last_approved_at: string;
+    last_approved_by: string;
+    additionalProp1: Record<string, unknown>;
+}
+
+type SectionRecordContainer =
+    | RegisterFlattenedRecord
+    | RegisterFlattenedRecord[]
+    | {
+        records: RegisterFlattenedRecord[];
+    };
+
+export interface SectionSchemaData {
+    sectionSchema: TabSection["section_ui_schema"];
+    sectionData: Record<
+        string,
+        SectionRecordContainer
+    >;
 }

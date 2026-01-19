@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
         tab_id: body.tab_id
       }
     }),
-    caching: {
+     caching: {
       next: { revalidate: 3600 }
     } as RequestInit
   });

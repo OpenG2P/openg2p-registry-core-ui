@@ -17,7 +17,7 @@ export function RegisterRecordCard({ record, registerType, isEven }: RegisterRec
     return (
         <Link
             key={record.internal_record_id}
-            href={`/register/${registerType}/${record.functional_record_id}`}
+            href={`/register/${registerType}/${record.internal_record_id}`}
             className="block w-full"
         >
             <div className={`flex items-center gap-4 sm:gap-6 px-4 sm:px-6 lg:px-8 p-4 w-full overflow-hidden ${isEven

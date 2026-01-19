@@ -58,13 +58,13 @@ export function useFetch<T = any>({
         headers:
           finalOptions?.body instanceof FormData
             ? {
-                // ONLY non-content-type headers allowed
-                ...(finalOptions?.headers ?? {}),
-              }
+              // ONLY non-content-type headers allowed
+              ...(finalOptions?.headers ?? {}),
+            }
             : {
-                "Content-Type": "application/json",
-                ...(finalOptions?.headers ?? {}),
-              },
+              "Content-Type": "application/json",
+              ...(finalOptions?.headers ?? {}),
+            },
         signal: controller.signal,
       });
 
