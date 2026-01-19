@@ -1,17 +1,16 @@
-import { NextResponse } from "next/server";
+import { NextRequest } from "next/server";
+import { proxyToBackend } from "@/shared/utils";
 
-export async function POST() {
-    return NextResponse.json({
-            pagination_response: null,
-            response_payload: {
-                register_id: "25d460ac-50cf-4386-b486-23a4e9b7e254",
-                internal_record_id: "18b442ea-2d5d-4186-bd6a-7111822ac2e9",
-                number_of_versions: 1,
-                last_updated_by: "Ryan David",
-                last_updated_at: "2025-12-17T21:17:20.215562",
-                last_approved_by: "Laura Angela",
-                last_approved_at: "2025-12-17T21:17:20.215562",
+export async function POST(req: NextRequest) {
+    return proxyToBackend({
+        req,
+        targetEndpoint: "/register/get_number_of_versions",
+        buildPayload: (body) => ({
+            request_payload: {
+                register_id: body.register_id,
+                internal_record_id: body.internal_record_id,
+                tab_id: body.tab_id,
             },
-        },
-    );
+        }),
+    });
 }

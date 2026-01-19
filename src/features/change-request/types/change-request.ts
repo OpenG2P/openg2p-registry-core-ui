@@ -23,7 +23,8 @@ export interface ChangeRequest {
     no_of_verifications_required: number;
     no_of_verifications_done: number;
 
-    change_payload: Record<string, any>;
+    change_payload: any;
+    current_register_data: any;
 }
 
 export type PopupType = "approve" | "reject" | "reject-input";

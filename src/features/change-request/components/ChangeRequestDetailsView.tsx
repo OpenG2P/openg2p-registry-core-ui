@@ -8,32 +8,17 @@ import { useChangeRequest, useChangeRequestActions, useVerifications } from "@/f
 
 import {
     WidgetProvider,
-    UISchema,
     createWidgetStore,
     SectionsContainer,
 } from '@openg2p/registry-widgets';
-import { useFetch } from "@/shared/hooks";
 import { useTranslations } from "next-intl";
 import { useChangeRequestDocuments } from "../hooks/useChangeRequestDocuments";
+import { useRegisterSectionsFromCR } from "./useRegisterSectionsFromCR";
+import { RegisterFlattenedRecord } from "@/features/register/types";
 
 interface Props {
     changeId: string;
     breadcrumb: { label: string; href?: string }[];
-}
-
-interface SectionSchema {
-    section_register_id: string;
-    register_id: string;
-    section_id: string;
-    tab_id: string;
-    section_mnemonic: string;
-    section_description: string;
-    documents_required: boolean;
-    section_ui_schema: UISchema | null;
-}
-
-interface SectionsResponse {
-    sections: SectionSchema[];
 }
 
 export default function ChangeRequestDetailsView({
@@ -45,6 +30,7 @@ export default function ChangeRequestDetailsView({
 
     const { details, loading } = useChangeRequest(changeId);
     const { verifications, addVerification } = useVerifications(changeId);
+
     const {
         loadingAction,
         popupVisible,
@@ -53,73 +39,63 @@ export default function ChangeRequestDetailsView({
         handleReject,
         submitReject,
         setPopupVisible,
-    } = useChangeRequestActions(changeId);
+    } = useChangeRequestActions();
+
 
     const { documents, loading: loadingDocs } = useChangeRequestDocuments(changeId);
-
-    const HARD_CODED_OLD_VALUES = {
-        first_name: "Rajesh",
-        last_name: "Kumar",
-        national_id: "ABCD-1234-5678",
-        gender: "male",
-    };
-
-    const HARD_CODED_NEW_VALUES = {
-        first_name: "Rakesh",
-        last_name: "Kumar",
-        national_id: "ABCD-1234-5678",
-        gender: "male",
-    };
-
-
-    // const type = details?.register_id
-    // const activeTabId = details?.tab_id
-
-    const type = "farmers"
-    const activeTabId = "tab:farmer.profile"
-    const sect_id = "farmer-register-001"
-
 
     const widgetStoreOld = useMemo(() => createWidgetStore(), []);
     const widgetStoreNew = useMemo(() => createWidgetStore(), []);
 
-    const { data: sectionsSchema } = useFetch<SectionsResponse>({
-        url: `/api/register/${type}/tabs/${activeTabId}/sections`,
-        enabled: !!activeTabId,
+    const registerId = details?.register_id;
+    const tabId = details?.tab_id;
+    const internalRecordId = details?.internal_record_id;
+    const sectionId = details?.section_id;
+
+
+    const {
+        orderedTabSections,
+    } = useRegisterSectionsFromCR({
+        registerId,
+        tabId,
+        internalRecordId,
     });
 
+    const innerSectionConfig = useMemo(() => {
+        if (!orderedTabSections) return [];
 
-    const singleSectionConfig = useMemo(() => {
-        if (!sectionsSchema || !details) return [];
-
-        const sectionSchema = sectionsSchema.sections.find(
-            s => s.section_register_id === sect_id
+        return orderedTabSections.filter(
+            (section: any) =>
+                section["section-id"] === sectionId
         );
+    }, [orderedTabSections, sectionId]);
 
-        if (!sectionSchema?.section_ui_schema) return [];
+    const newSectionData = useMemo(() => {
+        if (!details?.change_payload?.length) return undefined;
 
-        return sectionSchema.section_ui_schema.sections.filter(
-            section => section["section-id"] === sect_id
-        );
-    }, [sectionsSchema, details]);
+        const map: Record<
+            string,
+            RegisterFlattenedRecord | { records: RegisterFlattenedRecord[] }
+        > = {};
 
+        map["755a038e-3d98-4694-bb2d-ed93e30f9a1b"] =
+            details.change_payload.length === 1
+                ? details.change_payload[0]
+                : { records: details.change_payload };
 
-    const oldSectionData = useMemo<Record<string, any> | undefined>(() => {
-        if (!details) return undefined;
-
-        return {
-            // [details.section_id]: HARD_CODED_OLD_VALUES,
-            [sect_id]: HARD_CODED_OLD_VALUES,
-        };
+        return map;
     }, [details]);
 
-    const newSectionData = useMemo<Record<string, any> | undefined>(() => {
-        if (!details) return undefined;
 
-        return {
-            [sect_id]: HARD_CODED_NEW_VALUES,
-        };
-    }, [details]);
+    const oldSectionData = useMemo(() => {
+        if (!details?.current_register_data) return undefined;
+
+        const map: Record<string, RegisterFlattenedRecord> = {};
+
+        map[registerId || ''] = details.current_register_data;
+
+        return map;
+    }, [details, registerId]);
 
 
     return (
@@ -134,10 +110,11 @@ export default function ChangeRequestDetailsView({
                         <ChangeRequestHeader
                             details={details}
                             documents={documents}
-                            onApprove={handleApprove}
+                            onApprove={() => handleApprove(changeId)}
                             onReject={handleReject}
                             loadingAction={loadingAction}
                         />
+
                         <div>
                             <h3 className="mt-6 mb-2 font-semibold">New Values</h3>
                             <WidgetProvider
@@ -145,7 +122,7 @@ export default function ChangeRequestDetailsView({
                                 schemaData={newSectionData}
                                 translate={t}
                             >
-                                <SectionsContainer sections={singleSectionConfig} hideEditButton={true} />
+                                <SectionsContainer sections={innerSectionConfig} hideEditButton={true} />
                             </WidgetProvider>
 
                             <h3 className="mt-6 mb-2 font-semibold">Old Values</h3>
@@ -154,7 +131,7 @@ export default function ChangeRequestDetailsView({
                                 schemaData={oldSectionData}
                                 translate={t}
                             >
-                                <SectionsContainer sections={singleSectionConfig} hideEditButton={true} />
+                                <SectionsContainer sections={innerSectionConfig} hideEditButton={true} />
                             </WidgetProvider>
                         </div>
                     </div>
@@ -177,7 +154,7 @@ export default function ChangeRequestDetailsView({
 
             {popupVisible && popupType === "reject-input" && (
                 <RejectReasonPopup
-                    onSubmit={submitReject}
+                    onSubmit={(reason) => submitReject(changeId, reason)}
                     onClose={() => setPopupVisible(false)}
                     loading={loadingAction}
                 />
