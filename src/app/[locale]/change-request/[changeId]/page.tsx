@@ -15,7 +15,7 @@ export default function ChangeRequestDetailsPage() {
         label: "Change Request",
         href: `/change-request`,
       },
-      { label: `Change Id  ${changeId}` },
+      { label: `Change ID - ${changeId}` },
     ],
     [changeId]
   );

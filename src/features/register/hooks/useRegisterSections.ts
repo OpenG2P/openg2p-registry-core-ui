@@ -43,7 +43,6 @@ export const useRegisterSections = () => {
     },
   });
 
-
   const sectionDataMap = useMemo(() => {
     if (!tabSectionsData) return undefined;
 
@@ -56,7 +55,7 @@ export const useRegisterSections = () => {
       if (!section.records?.length) continue;
 
       if (section.is_list === true) {
-        map[section.section_register_id] = {records: section.records,};
+        map[section.section_register_id] = { records: section.records, };
       } else {
         map[section.section_register_id] = section.records[0];
       }

@@ -16,28 +16,16 @@ export function useChangeRequestSearch({
     enabled = true,
 }: UseChangeRequestSearchOptions) {
     const [currentPage, setCurrentPage] = useState(initialPage);
-    const requestBody = useMemo(
-        () => ({
-            request_body: {
-                pagination_request: {
-                    current_page: currentPage,
-                    page_size: pageSize,
-                    sort_by: '',
-                    filter_by: '',
-                    search_text: searchText,
-                },
-                request_payload: {},
-            },
-        }),
-        [currentPage, pageSize, searchText]
-    );
-
     const { data, loading } = useFetch<any>({
         url: '/api/change_request/search',
         enabled,
         options: {
             method: 'POST',
-            body: JSON.stringify(requestBody),
+            body: JSON.stringify({
+                current_page: currentPage,
+                page_size: pageSize,
+                search_text: searchText,
+            }),
         },
     });
 

@@ -26,10 +26,10 @@ export const useRegisterDetail = () => {
   const { currentRegister } = useRegister();
 
   const breadcrumb = useBreadcrumb({
-    type: registerType,
-    recordId: functionalRecordId,
-    recordName:recordName,
-    internalId: internalRecordId,
+    registerType,
+    functionalRecordId,
+    recordName,
+    internalRecordId,
     includeActiveTab: true,
   });
 

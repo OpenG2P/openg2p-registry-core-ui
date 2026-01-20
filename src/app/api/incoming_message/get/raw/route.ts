@@ -1,11 +1,10 @@
 import { NextRequest } from "next/server";
 import { proxyToBackend } from "@/shared/utils";
 
-export async function POST(request: NextRequest) {
+export async function POST(req: NextRequest) {
     return proxyToBackend({
-        req: request,
-        targetEndpoint: "/register/get_change_request",
-
+        req,
+        targetEndpoint: "/ingestion-data/get_raw_payload",
         buildPayload: (body) => ({
             pagination_request: {
                 current_page: 1,
@@ -15,10 +14,9 @@ export async function POST(request: NextRequest) {
                 search_text: "",
             },
             request_payload: {
-                change_request_id: body.change_request_id,
+                ingest_id: body.ingest_id,
             },
         }),
-
         transformResponse: (responseBody) => responseBody.response_payload,
     });
 }

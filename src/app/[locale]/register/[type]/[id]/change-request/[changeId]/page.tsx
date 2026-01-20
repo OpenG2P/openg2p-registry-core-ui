@@ -2,31 +2,26 @@
 
 import { useParams } from "next/navigation";
 import { ChangeRequestDetailsView } from "@/features/change-request/components";
-import { useRegister } from "@/context/RegisterContext";
 import { useTranslations } from "next-intl";
-import { useRegisterTabs } from "@/context/RegisterTabsContext";
 import { useBreadcrumb } from "@/shared/hooks";
+import { useRegisterRecord } from "@/context/RegisterRecordContext";
 
 export default function RegisterChangeRequestDetailsPage() {
     const t = useTranslations();
 
-    const { type, id, changeId } = useParams<{
+    const { type: registerType, id: internalRecordId, changeId } = useParams<{
         type: string;
         id: string;
         changeId: string;
     }>();
 
-    const { currentRegister } = useRegister();
-
-    const {
-        activeTab,
-        activeTabIndex,
-        activeTabId
-    } = useRegisterTabs();
+    const { functionalRecordId, recordName } = useRegisterRecord();
 
     const breadcrumb = useBreadcrumb({
-        type,
-        recordId: id,
+        registerType,
+        functionalRecordId,
+        recordName,
+        internalRecordId,
         changeId,
         includeActiveTab: true,
         includeChangeRequest: true,

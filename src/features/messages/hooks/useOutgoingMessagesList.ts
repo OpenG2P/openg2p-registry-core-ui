@@ -28,42 +28,21 @@ export function useOutgoingMessagesList({
 }: UseOutgoingMessagesListOptions) {
     const [currentPage, setCurrentPage] = useState(initialPage);
 
-    const requestBody = useMemo(
-        () => ({
-            request_body: {
-                pagination_request: {
-                    current_page: currentPage,
-                    page_size: pageSize,
-                    sort_by: '',
-                    filter_by: '',
-                    search_text: searchText,
-                },
-                request_payload: {
-                    // Add payload specifics if any
-                },
-            },
-        }),
-        [currentPage, pageSize, searchText]
-    );
-
-    const { data, loading } = useFetch<{
-        response_body?: {
-            response_payload?: { outgoing_messages?: OutgoingMessage[] };
-            pagination_response?: { number_of_items: number; number_of_pages: number };
-        };
-    }>({
-        url: '/api/outgoing-message/get/list',
+    const { data, loading } = useFetch<any>({
+        url: '/api/outgoing_message/get/list',
         enabled,
         options: {
             method: 'POST',
-            body: JSON.stringify(requestBody),
+            body: JSON.stringify({
+                current_page: currentPage,
+                page_size: pageSize,
+                search_text: searchText,
+            }),
         },
     });
 
-    const messages: OutgoingMessage[] =
-        data?.response_body?.response_payload?.outgoing_messages ?? [];
-
-    const paginationInfo = data?.response_body?.pagination_response;
+    const messages: OutgoingMessage[] = data?.messages ?? [];
+    const paginationInfo = data?.pagination;
 
     const onPrev = useCallback(() => setCurrentPage(p => Math.max(1, p - 1)), []);
 

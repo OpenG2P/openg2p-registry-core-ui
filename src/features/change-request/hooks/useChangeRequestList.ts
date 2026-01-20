@@ -23,39 +23,24 @@ export function useChangeRequestList({
 }: UseChangeRequestListOptions) {
     const [currentPage, setCurrentPage] = useState(initialPage);
 
-    const requestBody = useMemo(
-        () => ({
-            request_body: {
-                pagination_request: {
-                    current_page: currentPage,
-                    page_size: pageSize,
-                    sort_by: '',
-                    filter_by: '',
-                    search_text: searchText,
-                },
-                request_payload: {
-                    subject_register_id: subjectRegisterId,
-                    subject_record_id: subjectRecordId,
-                    tab_id: tabId,
-                },
-            },
-        }),
-        [currentPage, pageSize, searchText, subjectRegisterId, subjectRecordId, tabId]
-    );
-
     const { data, loading } = useFetch<any>({
         url: '/api/change_request/get/list',
         enabled,
         options: {
             method: 'POST',
-            body: JSON.stringify(requestBody),
+            body: JSON.stringify({
+                current_page: currentPage,
+                page_size: pageSize,
+                search_text: searchText,
+                subject_register_id: subjectRegisterId,
+                subject_record_id: subjectRecordId,
+                tab_id: tabId,
+            }),
         },
     });
 
-    const logs: ChangeRequest[] =
-        data?.response_body?.response_payload?.change_requests ?? [];
-
-    const paginationInfo = data?.response_body?.pagination_response;
+    const logs: ChangeRequest[] = data?.change_requests ?? [];
+    const paginationInfo = data?.pagination;
 
     const onPrev = useCallback(
         () => setCurrentPage(p => Math.max(1, p - 1)),

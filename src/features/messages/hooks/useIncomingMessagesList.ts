@@ -12,16 +12,6 @@ interface UseIncomingMessagesListOptions {
     enabled?: boolean;
 }
 
-interface IncomingMessagesApiResponse {
-    response_body?: {
-        pagination_response?: {
-            number_of_items: number;
-            number_of_pages: number;
-        };
-        response_payload?: IncomingMessage[];
-    };
-}
-
 export function useIncomingMessagesList({
     pageSize = 7,
     initialPage = 1,
@@ -33,39 +23,24 @@ export function useIncomingMessagesList({
 }: UseIncomingMessagesListOptions) {
     const [currentPage, setCurrentPage] = useState(initialPage);
 
-    const requestBody = useMemo(
-        () => ({
-            request_body: {
-                pagination_request: {
-                    current_page: currentPage,
-                    page_size: pageSize,
-                    sort_by: '',
-                    filter_by: '',
-                    search_text: searchText,
-                },
-                request_payload: {
-                    subject_register_id: subjectRegisterId,
-                    subject_record_id: subjectRecordId,
-                    tab_id: tabId,
-                },
-            },
-        }),
-        [currentPage, pageSize, searchText, subjectRegisterId, subjectRecordId, tabId]
-    );
-
-    const { data, loading } = useFetch<IncomingMessagesApiResponse>({
-        url: '/api/incoming-message/get/list',
+    const { data, loading } = useFetch<any>({
+        url: '/api/incoming_message/get/list',
         enabled,
         options: {
             method: 'POST',
-            body: JSON.stringify(requestBody),
+            body: JSON.stringify({
+                current_page: currentPage,
+                page_size: pageSize,
+                search_text: searchText,
+                subject_register_id: subjectRegisterId,
+                subject_record_id: subjectRecordId,
+                tab_id: tabId,
+            }),
         },
     });
 
-    const messages: IncomingMessage[] =
-        data?.response_body?.response_payload ?? [];
-
-    const paginationInfo = data?.response_body?.pagination_response;
+    const messages: IncomingMessage[] = data?.messages ?? [];
+    const paginationInfo = data?.pagination;
 
     const onPrev = useCallback(() => {
         setCurrentPage(p => Math.max(1, p - 1));

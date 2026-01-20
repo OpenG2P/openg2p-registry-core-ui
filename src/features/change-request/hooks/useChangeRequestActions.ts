@@ -7,15 +7,8 @@ export const useChangeRequestActions = () => {
     const [popupVisible, setPopupVisible] = useState(false);
     const [popupType, setPopupType] = useState<PopupType | null>(null);
 
-    const { execute: executeApprove } = useFetch<any>({
-        url: `/api/change_request/approve`,
-        enabled: false,
-    });
-
-    const { execute: executeReject } = useFetch<any>({
-        url: `/api/change_request/reject`,
-        enabled: false,
-    });
+    const { execute: executeApprove } = useFetch()
+    const { execute: executeReject } = useFetch();
 
     const handleApprove = async (changeRequestId: string) => {
         setLoadingAction(true);
@@ -49,7 +42,7 @@ export const useChangeRequestActions = () => {
     ) => {
         setLoadingAction(true);
         try {
-            const res = await executeApprove(`/api/change_request/reject`, {
+            const res = await executeReject(`/api/change_request/reject`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
