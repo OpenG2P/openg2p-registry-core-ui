@@ -48,27 +48,30 @@ export default function ChangeRequestHeader({
                 <AttachedDocuments documents={documents} />
             </div>
 
-            <div className="my-4 border-t-2 border-[#F2BA1A]" />
+            {details.approval_status === "PENDING" && (
+                <>
+                    <div className="my-4 border-t-2 border-[#F2BA1A]" />
+                    <div className="flex items-center gap-4">
+                        <button
+                            type="button"
+                            disabled={loadingAction}
+                            onClick={onReject}
+                            className="px-4 py-2 text-[14px] font-medium rounded-[20px] bg-white text-black/50"
+                        >
+                            Reject Change
+                        </button>
 
-            <div className="flex items-center gap-4">
-                <button
-                    type="button"
-                    disabled={loadingAction}
-                    onClick={onReject}
-                    className="px-4 py-2 text-[14px] font-medium rounded-[20px] bg-white text-black/50"
-                >
-                    Reject Change
-                </button>
-
-                <button
-                    type="button"
-                    disabled={loadingAction}
-                    onClick={onApprove}
-                    className="px-4 py-2 text-[14px] font-medium rounded-[20px] bg-black text-white"
-                >
-                    Approve Change
-                </button>
-            </div>
+                        <button
+                            type="button"
+                            disabled={loadingAction}
+                            onClick={onApprove}
+                            className="px-4 py-2 text-[14px] font-medium rounded-[20px] bg-black text-white"
+                        >
+                            Approve Change
+                        </button>
+                    </div>
+                </>
+            )}
         </div>
     );
 };

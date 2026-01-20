@@ -163,6 +163,7 @@ export default function ChangeRequestDetailsView({
                                     onClose={() => setShowAddVerification(false)}
                                 />
                             )}
+                            isPending={details.approval_status === "PENDING"}
                         />
                     </div>
                 </div>
