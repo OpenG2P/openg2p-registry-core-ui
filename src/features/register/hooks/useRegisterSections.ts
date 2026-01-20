@@ -3,7 +3,12 @@ import { useFetch } from "@/shared/hooks/useFetch";
 import { useRegister } from "@/context/RegisterContext";
 import { useRegisterTabs } from "@/context/RegisterTabsContext";
 import { useRegisterRecord } from "@/context/RegisterRecordContext";
-import { TabSection, SectionSchemaData, RegisterFlattenedRecord, TabSectionData } from "@/features/register/types";
+import {
+  TabSection,
+  SectionSchemaData,
+  RegisterFlattenedRecord,
+  TabSectionData,
+} from "@/features/register/types";
 import { useSectionSave } from "./useSectionSave";
 
 export const useRegisterSections = () => {
@@ -26,7 +31,8 @@ export const useRegisterSections = () => {
 
   const { data: tabSectionsData } = useFetch<TabSectionData[]>({
     url: `/api/register/tab-sections-data`,
-    enabled: !!currentRegister?.register_id && !!activeTabId && !!internalRecordId,
+    enabled:
+      !!currentRegister?.register_id && !!activeTabId && !!internalRecordId,
     options: {
       method: "POST",
       body: JSON.stringify({
@@ -48,28 +54,29 @@ export const useRegisterSections = () => {
 
     for (const section of tabSectionsData) {
       if (!section.records?.length) continue;
-      map[section.section_register_id] =
-        section.records.length === 1
-          ? section.records[0]
-          : {records: section.records};
+
+      if (section.is_list === true) {
+        map[section.section_register_id] = {records: section.records,};
+      } else {
+        map[section.section_register_id] = section.records[0];
+      }
     }
 
     return map;
   }, [tabSectionsData]);
 
-  console.log(sectionDataMap,"sectionDataMap")
 
+  const orderedTabSections = useMemo(() => {
+    if (!tabSections) return [];
 
-const orderedTabSections = useMemo(() => {
-  if (!tabSections) return [];
+    return [...tabSections]
+      .sort(
+        (sectionA, sectionB) =>
+          (sectionA.section_order ?? 0) - (sectionB.section_order ?? 0),
+      )
+      .flatMap((section) => section.section_ui_schema?.sections ?? []);
+  }, [tabSections]);
 
-  return [...tabSections]
-    .sort(
-      (sectionA, sectionB) =>
-        (sectionA.section_order ?? 0) - (sectionB.section_order ?? 0)
-    )
-    .flatMap(section => section.section_ui_schema?.sections ?? []);
-}, [tabSections]);
 
   const { handleSectionSave } = useSectionSave(tabSections);
 

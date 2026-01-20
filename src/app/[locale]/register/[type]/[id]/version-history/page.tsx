@@ -65,6 +65,7 @@ export default function VersionHistoryPage() {
 
     const sectionId = details?.section_id;
     const sectionRegisterId = details?.section_register_id || "";
+    const isListSection = details?.is_list || false;
 
     const innerSectionConfig = useMemo(() => {
         if (!orderedTabSections) return [];
@@ -84,10 +85,14 @@ export default function VersionHistoryPage() {
             RegisterFlattenedRecord | { records: RegisterFlattenedRecord[] }
         > = {};
 
-        map[sectionRegisterId] =
-            details.change_payload.length === 1
-                ? details.change_payload[0]
-                : { records: details.change_payload };
+        if (isListSection === true) {
+            map[sectionRegisterId] = {
+                records: details.change_payload
+            };
+            } else {
+            map[sectionRegisterId] = details.change_payload[0];
+        }
+
 
         return map;
     }, [details]);

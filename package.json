@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@novu/js": "^3.11.0",
-    "@openg2p/registry-widgets": "file:../openg2p-registry-ui-widgets",
+    "@openg2p/registry-widgets": "^0.1.1",
     "@reduxjs/toolkit": "^2.11.2",
     "i18next": "^25.6.2",
     "inji-sdk": "^0.16.0",

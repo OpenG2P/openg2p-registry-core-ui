@@ -9,6 +9,7 @@ import { RegisterRecordsApiResponse } from '@/features/register/types';
 interface RegisterRecordContextValue {
     internalRecordId?: string;
     functionalRecordId: string;
+    recordName?:string;
     loading: boolean;
 }
 
@@ -45,12 +46,14 @@ export function RegisterRecordProvider({ children }: { children: ReactNode }) {
     });
 
     const record = data?.records?.[0];
-    const functionalRecordId = record?.functional_record_id || "-";
+    const functionalRecordId = record?.functional_record_id || " ";
+    const recordName = record?.record_name || " "
     const value = useMemo(() => ({
         internalRecordId,
         functionalRecordId,
+        recordName,
         loading
-    }), [internalRecordId, functionalRecordId, loading]);
+    }), [internalRecordId, functionalRecordId,recordName, loading]);
 
     return (
         <RegisterRecordContext.Provider value={value}>
