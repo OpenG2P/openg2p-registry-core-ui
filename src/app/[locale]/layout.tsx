@@ -5,8 +5,6 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations } from 'next-intl/server';
 import { Header } from "@/components/layout";
 import { RegisterProvider } from "@/context/RegisterContext";
-// import '@openg2p/registry-widgets/dist/index.css';
-
 
 export async function generateMetadata({
     params
@@ -19,6 +17,9 @@ export async function generateMetadata({
     return {
         title: t('title'),
         description: "",
+        icons: {
+        icon: "/openg2p_logo.png",
+        },
     };
 }
 

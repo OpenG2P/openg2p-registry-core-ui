@@ -37,6 +37,7 @@ export const useRegisterSections = () => {
     },
   });
 
+
   const sectionDataMap = useMemo(() => {
     if (!tabSectionsData) return undefined;
 
@@ -55,6 +56,9 @@ export const useRegisterSections = () => {
 
     return map;
   }, [tabSectionsData]);
+
+  console.log(sectionDataMap,"sectionDataMap")
+
 
 const orderedTabSections = useMemo(() => {
   if (!tabSections) return [];
