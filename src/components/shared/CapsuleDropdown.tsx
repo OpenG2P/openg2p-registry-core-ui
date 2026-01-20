@@ -95,13 +95,6 @@ export default function CapsuleDropdown(props: CapsuleDropdownProps) {
                             <span className="text-[16px] text-black/50 font-medium">
                                 {item}
                             </span>
-                            <Image
-                                src="/down_arrow.png"
-                                alt="open"
-                                width={14}
-                                height={14}
-                                className={index === 0 ? "opacity-100 rotate-180" : "opacity-0"}
-                            />
                         </div>
                     ))}
                 </div>
