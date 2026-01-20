@@ -97,6 +97,7 @@ export default function RegisterDetailPage() {
                                     type={registerType}
                                     registerId={currentRegister.register_id}
                                     internalRecordId={internalRecordId}
+                                    activeTabId={activeTabId}
                                 />
                             </>
                         )}

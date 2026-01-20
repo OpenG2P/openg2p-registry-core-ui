@@ -11,6 +11,7 @@ export interface ChangeRequest {
     internal_record_id: string;
     section_id: string;
     section_mnemonic?: string;
+    section_register_id: string;
 
     source_partner_id: string;
     created_by: string;
@@ -23,7 +24,8 @@ export interface ChangeRequest {
     no_of_verifications_required: number;
     no_of_verifications_done: number;
 
-    change_payload: Record<string, any>;
+    change_payload: any;
+    current_register_data: any;
 }
 
 export type PopupType = "approve" | "reject" | "reject-input";

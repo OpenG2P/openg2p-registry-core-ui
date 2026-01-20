@@ -13,7 +13,7 @@ export default function ChangeRequestPage() {
     const t = useTranslations();
     const locale = useLocale();
     const { type, id } = useParams<{ type: string; id: string }>();
-    const { currentRegister, } = useRegister();
+    const { currentRegister } = useRegister();
 
     const {
         tabs,
