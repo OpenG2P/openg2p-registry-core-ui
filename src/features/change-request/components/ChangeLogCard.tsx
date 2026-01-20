@@ -35,6 +35,7 @@ export default function ChangeLogCard({
 
     return (
         <div
+            key={index}
             className={`rounded-[30px] bg-white px-10 py-5 ${!isSearchView ? "mr-60" : ""}`}
         >
             <div
@@ -144,6 +145,7 @@ export default function ChangeLogCard({
                             doc ? (
                                 <span
                                     key={doc.document_label_id}
+                                    onClick={() => window.open(doc.document_url, '_blank', 'noopener,noreferrer')}
                                     className="flex items-center gap-2 cursor-pointer"
                                 >
                                     {doc.document_label}
