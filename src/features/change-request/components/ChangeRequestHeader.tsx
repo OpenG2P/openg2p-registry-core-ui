@@ -1,13 +1,11 @@
 import Image from "next/image";
 import { ChangeRequest } from "../types/change-request";
 
-interface Document {
-    document_label_id: string;
+export interface ChangeRequestDocument {
     document_label: string;
     document_store_id: string;
     document_url: string;
 }
-
 export const DOCUMENT_TYPES = [
     "Location Documents",
     "ID Card Documents",
@@ -16,7 +14,7 @@ export const DOCUMENT_TYPES = [
 
 interface Props {
     details: ChangeRequest;
-    documents?: Document[];
+    documents?: ChangeRequestDocument[];
     onApprove: () => void;
     onReject: () => void;
     loadingAction: boolean;
@@ -42,7 +40,10 @@ export default function ChangeRequestHeader({
                     title={details?.section_mnemonic || "Change Request"}
                     details={details}
                 />
-                <VerificationStats details={details} />
+                <VerificationStats
+                    details={details}
+                    documentsCount={documents.length}
+                />
                 {/* <AttachedDocuments /> */}
                 <AttachedDocuments documents={documents} />
             </div>
@@ -96,7 +97,7 @@ const InfoSection = ({ title, details }: { title: string; details: ChangeRequest
     </div>
 );
 
-const VerificationStats = ({ details }: { details: ChangeRequest }) => (
+const VerificationStats = ({ details, documentsCount }: { details: ChangeRequest, documentsCount: number; }) => (
     <div className="space-y-2 text-[16px] text-[#00000080]">
         <h3 className="text-lg font-semibold text-black invisible">
             Verification
@@ -116,7 +117,7 @@ const VerificationStats = ({ details }: { details: ChangeRequest }) => (
             </div>
             <div>
                 No. of documents attached:{" "}
-                <span className="text-black font-medium">{0}</span>
+                <span className="text-black font-medium">{documentsCount}</span>
             </div>
         </div>
     </div>
@@ -156,7 +157,7 @@ const VerificationStats = ({ details }: { details: ChangeRequest }) => (
 // );
 
 
-const AttachedDocuments = ({ documents = [] }: { documents?: Document[] }) => {
+const AttachedDocuments = ({ documents = [] }: { documents?: ChangeRequestDocument[] }) => {
     const visibleDocs = documents.slice(0, 3);
     const placeholdersCount = Math.max(0, 3 - visibleDocs.length);
 
@@ -179,7 +180,7 @@ const AttachedDocuments = ({ documents = [] }: { documents?: Document[] }) => {
                 {
                     visibleDocs.map((doc) => (
                         <span
-                            key={doc.document_label_id}
+                            key={doc.document_label}
                             className="flex items-center gap-2 cursor-pointer"
                         >
                             {doc.document_label}

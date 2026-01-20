@@ -19,6 +19,7 @@ export default function VersionHistoryCard({
     activeTabId
 }: Props) {
     const locale = useLocale();
+
     const { data, loading } = useFetch<any>({
         url: `/api/register/versions`,
         enabled: !!registerId && !!internalRecordId && !!activeTabId,
@@ -67,6 +68,12 @@ export default function VersionHistoryCard({
     }
 
     if (!payload) return null;
+
+    const params = new URLSearchParams();
+    if (activeTabId) params.set("tab", activeTabId);
+
+    const href = `/${locale}/register/${type}/${internalRecordId}/version-history${params.toString() ? `?${params.toString()}` : ""
+        }`;
 
     return (
         <div className="relative rounded-[30px] bg-[#E0E0E0] px-8 pt-5 pb-8 overflow-hidden">
@@ -129,7 +136,7 @@ export default function VersionHistoryCard({
                 </div>
             )}
             <ViewAll
-                href={`/${locale}/register/${type}/${internalRecordId}/version-history`}
+                href={href}
                 bgColor="#B0B0AD"
                 label="Know More"
             />

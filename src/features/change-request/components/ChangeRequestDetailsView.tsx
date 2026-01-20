@@ -88,12 +88,27 @@ export default function ChangeRequestDetailsView({
     }, [details]);
 
 
+    // const oldSectionData = useMemo(() => {
+    //     if (!details?.current_register_data) return undefined;
+
+    //     const map: Record<string, RegisterFlattenedRecord> = {};
+
+    //     map[sectionRegisterId] = details.current_register_data;
+
+    //     return map;
+    // }, [details]);
     const oldSectionData = useMemo(() => {
-        if (!details?.current_register_data) return undefined;
+        if (!details?.current_register_data?.length) return undefined;
 
-        const map: Record<string, RegisterFlattenedRecord> = {};
+        const map: Record<
+            string,
+            RegisterFlattenedRecord | { records: RegisterFlattenedRecord[] }
+        > = {};
 
-        map[sectionRegisterId] = details.current_register_data;
+        map[sectionRegisterId] =
+            details.current_register_data.length === 1
+                ? details.current_register_data[0]
+                : { records: details.current_register_data };
 
         return map;
     }, [details]);
