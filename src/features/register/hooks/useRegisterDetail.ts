@@ -14,6 +14,7 @@ export const useRegisterDetail = () => {
   const {
     internalRecordId,
     functionalRecordId,
+    recordName,
     loading: resolvingId,
   } = useRegisterRecord();
 
@@ -27,6 +28,7 @@ export const useRegisterDetail = () => {
   const breadcrumb = useBreadcrumb({
     type: registerType,
     recordId: functionalRecordId,
+    recordName:recordName,
     internalId: internalRecordId,
     includeActiveTab: true,
   });

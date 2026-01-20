@@ -28,6 +28,8 @@ export interface RegisterFlattenedRecord {
 export interface TabSectionData {
     section_register_id: string;
     records: RegisterFlattenedRecord[];
+    is_list:boolean
+
 }
 
 // Let's rely on 'any' for section_ui_schema to avoid import issues in shared folder.

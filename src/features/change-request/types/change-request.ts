@@ -23,7 +23,7 @@ export interface ChangeRequest {
 
     no_of_verifications_required: number;
     no_of_verifications_done: number;
-
+    is_list: boolean;
     change_payload: any;
     current_register_data: any;
 }

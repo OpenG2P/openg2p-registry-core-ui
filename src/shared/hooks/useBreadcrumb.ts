@@ -11,6 +11,7 @@ interface BreadcrumbItem {
 interface BreadcrumbOptions {
     type: string;
     recordId?: string | null;
+    recordName?:string | null;
     internalId?: string | null;
     changeId?: string;
     includeActiveTab?: boolean;
@@ -26,6 +27,7 @@ export function useBreadcrumb(options: BreadcrumbOptions) {
     const {
         type,
         recordId,
+        recordName,
         internalId,
         changeId,
         includeActiveTab = false,
@@ -49,7 +51,7 @@ export function useBreadcrumb(options: BreadcrumbOptions) {
 
         if (urlId) {
             items.push({
-                label: recordId ? `ID-${recordId}` : displayId,
+                label: recordId ? `${recordName} - ${recordId}` : displayId,
                 href: `/register/${type}/${urlId}`,
             });
         }
