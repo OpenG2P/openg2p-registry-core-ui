@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { useFetch } from "@/shared/hooks/useFetch";
 import { PopupType } from "@/features/change-request/types/change-request";
-import { createFullRequestBody, createPostOptions } from "@/features/change-request/utils/api";
 
-export const useChangeRequestActions = (changeId: string) => {
+export const useChangeRequestActions = () => {
     const [loadingAction, setLoadingAction] = useState(false);
     const [popupVisible, setPopupVisible] = useState(false);
     const [popupType, setPopupType] = useState<PopupType | null>(null);
@@ -18,17 +17,19 @@ export const useChangeRequestActions = (changeId: string) => {
         enabled: false,
     });
 
-    const handleApprove = async () => {
+    const handleApprove = async (changeRequestId: string) => {
         setLoadingAction(true);
         try {
-            const res = await executeApprove(
-                `/api/change_request/approve`,
-                createPostOptions(
-                    createFullRequestBody({ change_request_id: changeId })
-                )
-            );
 
-            if (res?.response_body?.response_payload) {
+            const res = await executeApprove(`/api/change_request/approve`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    change_request_id: changeRequestId,
+                })
+            })
+
+            if (res) {
                 setPopupType("approve");
                 setPopupVisible(true);
             }
@@ -42,20 +43,22 @@ export const useChangeRequestActions = (changeId: string) => {
         setPopupVisible(true);
     };
 
-    const submitReject = async (reason: string) => {
+    const submitReject = async (
+        changeRequestId: string,
+        reason: string
+    ) => {
         setLoadingAction(true);
         try {
-            const res = await executeReject(
-                `/api/change_request/reject`,
-                createPostOptions(
-                    createFullRequestBody({
-                        change_request_id: changeId,
-                        rejection_reason: reason,
-                    })
-                )
-            );
+            const res = await executeApprove(`/api/change_request/reject`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    change_request_id: changeRequestId,
+                    rejection_reason: reason,
+                })
+            })
 
-            if (res?.response_body?.response_payload) {
+            if (res) {
                 setPopupType("reject");
             }
         } finally {

@@ -19,25 +19,26 @@ export default function ChangeRequestCard({
 }: Props) {
     const locale = useLocale();
 
-    const { data, loading } = useFetch<ResponseBody>({
+    const { data, loading } = useFetch<any>({
         url: `/api/change_request/pending`,
         enabled: !!registerId && !!internalRecordId && !!activeTabId,
         options: {
             method: "POST",
             body: JSON.stringify({
-                register_id: registerId,
-                internal_record_id: internalRecordId,
-                tab_id: activeTabId
+                subject_register_id: registerId,
+                subject_record_id: internalRecordId,
+                tab_id: activeTabId,
             }),
         },
     });
 
     const count =
         (
-            data?.response_payload as
-            | { number_of_pending_change_logs: number }
+            data as
+            | { number_of_pending_change_requests: number }
             | undefined
-        )?.number_of_pending_change_logs ?? 0;
+        )?.number_of_pending_change_requests ?? 0;
+
 
     const params = new URLSearchParams();
     if (activeTabId) params.set("tab", activeTabId);

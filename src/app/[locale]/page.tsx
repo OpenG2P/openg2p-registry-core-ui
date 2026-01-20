@@ -68,8 +68,6 @@ export default function Home() {
     const handleSearch = (value: string, register?: string) => {
         const searchValue = value.trim();
 
-        if (!searchValue && activeStatsCard !== 'registers') return;
-
         if (activeStatsCard === 'registers') {
             const selected =
                 register && register !== 'select'
@@ -79,9 +77,16 @@ export default function Home() {
             if (!selected) return;
 
             const params = new URLSearchParams();
-            if (searchValue) params.set('search', searchValue);
+            if (searchValue) {
+                params.set('search', searchValue);
+            }
 
-            router.push(`/register/${selected}?${params.toString()}`);
+            const query = params.toString();
+            router.push(
+                query
+                    ? `/register/${selected}?${query}`
+                    : `/register/${selected}`
+            );
             return;
         }
 
@@ -94,8 +99,16 @@ export default function Home() {
             outgoing_message: '/outgoing-messages',
         };
 
+        const params = new URLSearchParams();
+        if (searchValue) {
+            params.set('search', searchValue);
+        }
+        const query = params.toString();
+
         router.push(
-            `${routeMap[activeStatsCard]}?search=${encodeURIComponent(searchValue)}`
+            query
+                ? `${routeMap[activeStatsCard]}?${query}`
+                : routeMap[activeStatsCard]
         );
     };
 

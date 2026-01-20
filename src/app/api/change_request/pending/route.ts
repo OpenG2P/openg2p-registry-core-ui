@@ -1,13 +1,16 @@
-import { NextResponse } from "next/server";
+import { NextRequest } from "next/server";
+import { proxyToBackend } from "@/shared/utils";
 
-export async function POST() {
-    return NextResponse.json({
-            pagination_response: null,
-            response_payload: {
-                register_id: "25d460ac-50cf-4386-b486-23a4e9b7e254",
-                internal_record_id: "1",
-                number_of_pending_change_logs: 10,
+export async function POST(req: NextRequest) {
+    return proxyToBackend({
+        req,
+        targetEndpoint: "/register/get_number_of_pending_change_requests",
+        buildPayload: (body) => ({
+            request_payload: {
+                subject_register_id: body.subject_register_id,
+                subject_record_id: body.subject_record_id,
+                tab_id: body.tab_id,
             },
-        },
-    );
+        }),
+    });
 }

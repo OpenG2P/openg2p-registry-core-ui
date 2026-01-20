@@ -1,17 +1,17 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import dynamic from 'next/dynamic';
 import Image from 'next/image';
+import { OpenID4VPVerification } from 'inji-sdk';
 
 
-const OpenID4VPVerification = dynamic(
-    () =>
-        import('inji-sdk').then(
-            (mod) => mod.OpenID4VPVerification
-        ),
-    { ssr: false }
-);
+// const OpenID4VPVerification = dynamic(
+//     () =>
+//         import('inji-sdk').then(
+//             (mod) => mod.OpenID4VPVerification
+//         ),
+//     { ssr: false }
+// );
 
 const buildTabData = (result: any) => {
     const vcItem = result?.verifiableCredentials?.[0];
@@ -200,7 +200,7 @@ export default function VpVerification() {
                 onError={handleError}
                 onQrCodeExpired={handleQrCodeExpired}
                 isSameDeviceFlowEnabled={false}
-                clientId="did:web:47ff936d663f.ngrok-free.app:v1:verify"
+                clientId="did:web:c447300316ce.ngrok-free.app:v1:verify"
                 triggerElement={
                     <button
                         id="vp-verification-trigger"

@@ -1,16 +1,35 @@
 'use client';
 
 import { useParams } from 'next/navigation';
+import {
+    WidgetProvider,
+    createWidgetStore,
+    SectionsContainer,
+} from '@openg2p/registry-widgets';
 import { CapsuleDropdown, RegisterTabsLayout } from '@/components/shared';
 import { VerificationCard } from '@/features/change-request/components';
 import { useTranslations } from 'next-intl';
 import { useRegisterTabs } from '@/context/RegisterTabsContext';
 import { useBreadcrumb } from '@/shared/hooks';
-import { useVerifications } from '@/features/change-request/hooks';
+import { useChangeRequest, useVerifications } from '@/features/change-request/hooks';
+import { useRecordHistory } from '@/features/register/hooks/useRecordHistory';
+import { useMemo, useState } from 'react';
+import { useRegister } from '@/context/RegisterContext';
+import { useRegisterSectionsFromCR } from '@/features/change-request/components/useRegisterSectionsFromCR';
+import { RegisterFlattenedRecord } from '@/features/register/types';
 
 export default function VersionHistoryPage() {
     const t = useTranslations();
     const { type, id } = useParams<{ type: string; id: string }>();
+
+    const { currentRegister } = useRegister();
+
+    const [selectedChangeRequest, setSelectedChangeRequest] = useState<any | null>(null);
+
+    const registerId = currentRegister?.register_id || "";
+
+    const widgetStoreNew = useMemo(() => createWidgetStore(), []);
+
 
     const {
         tabs,
@@ -19,7 +38,81 @@ export default function VersionHistoryPage() {
         setActiveTabByIndex,
     } = useRegisterTabs();
 
-    const { verifications } = useVerifications("changeId");
+    const {
+        orderedTabSections,
+    } = useRegisterSectionsFromCR({
+        registerId,
+        tabId: activeTabId,
+        internalRecordId: id,
+    });
+
+    const {
+        loadDates,
+        loadChanges,
+        selectedDate,
+        loadingDates,
+        loadingChanges,
+    } = useRecordHistory();
+
+    const [dateOptions, setDateOptions] = useState<string[]>([]);
+    const [changeRequests, setChangeRequests] = useState<any[]>([]);
+
+
+    const changeRequestId = selectedChangeRequest?.change_request_id;
+
+    const { details, loading } = useChangeRequest(changeRequestId);
+    const { verifications } = useVerifications(changeRequestId);
+
+    const sectionId = details?.section_id;
+    const sectionRegisterId = details?.section_register_id || "";
+
+    const innerSectionConfig = useMemo(() => {
+        if (!orderedTabSections) return [];
+
+        return orderedTabSections.filter(
+            (section: any) =>
+                section["section-id"] === sectionId
+        );
+    }, [orderedTabSections, sectionId]);
+
+
+    const newSectionData = useMemo(() => {
+        if (!details?.change_payload?.length) return undefined;
+
+        const map: Record<
+            string,
+            RegisterFlattenedRecord | { records: RegisterFlattenedRecord[] }
+        > = {};
+
+        map[sectionRegisterId] =
+            details.change_payload.length === 1
+                ? details.change_payload[0]
+                : { records: details.change_payload };
+
+        return map;
+    }, [details]);
+
+    const openDateDropdown = async () => {
+        const res = await loadDates({
+            register_id: registerId,
+            internal_record_id: id,
+            tab_id: activeTabId || "",
+        });
+
+        setDateOptions(res?.dates ?? []);
+    };
+
+    const onDateSelect = async (date: string) => {
+        setSelectedChangeRequest(null);
+        const res = await loadChanges({
+            register_id: registerId,
+            internal_record_id: id,
+            tab_id: activeTabId || "",
+            truncated_created_date: date,
+        });
+
+        setChangeRequests(res?.changes ?? []);
+    };
 
     const breadcrumb = useBreadcrumb({
         type,
@@ -34,6 +127,17 @@ export default function VersionHistoryPage() {
         ],
     });
 
+
+    const versionOptions = useMemo(
+        () =>
+            changeRequests.map((cr, index) => ({
+                label: `V ${index + 1}`,
+                value: cr,
+            })),
+        [changeRequests]
+    );
+
+
     return (
         <RegisterTabsLayout
             breadcrumb={breadcrumb}
@@ -46,31 +150,32 @@ export default function VersionHistoryPage() {
                     <div className="bg-white rounded-[30px] px-6 py-5 flex items-center gap-6">
                         <CapsuleDropdown
                             label="Select Date"
-                            items={[
-                                "01 Jan 2026",
-                                "15 Jan 2026",
-                                "30 Jan 2026",
-                            ]}
-                            onChange={(value) => console.log("Date:", value)}
+                            items={dateOptions}
+                            value={selectedDate ?? undefined}
+                            onOpen={openDateDropdown}
+                            onChange={onDateSelect}
                         />
 
                         <CapsuleDropdown
                             label="Select Version"
-                            items={[
-                                "v3",
-                                "v2",
-                                "v1",
-                            ]}
-                            onChange={(value) => console.log("Version:", value)}
+                            items={versionOptions.map(v => v.label)}
+                            onChange={(label) => {
+                                const selected = versionOptions.find(v => v.label === label);
+                                setSelectedChangeRequest(selected?.value ?? null);
+                            }}
                         />
                     </div>
 
                     <div className="bg-white rounded-[30px] p-6">
-                        <p className="text-gray-700">
-                            This is a placeholder for version history details.
-                            You can replace this with change logs, diff viewer,
-                            or timeline content later.
-                        </p>
+                        <WidgetProvider
+                            store={widgetStoreNew}
+                            schemaData={newSectionData}
+                            translate={t}
+                        >
+                            {/* <SectionsContainer sections={innerSectionConfig} hideEditButton={true} mode='CRView'/> */}
+                            <SectionsContainer sections={innerSectionConfig} hideEditButton={true} />
+
+                        </WidgetProvider>
                     </div>
                 </div>
 

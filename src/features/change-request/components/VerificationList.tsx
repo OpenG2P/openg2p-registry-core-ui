@@ -7,6 +7,7 @@ interface Props {
     showForm: boolean;
     onToggleForm: () => void;
     renderForm: () => React.ReactNode;
+    isPending: boolean;
 }
 
 export default function VerificationList({
@@ -14,25 +15,27 @@ export default function VerificationList({
     showForm,
     onToggleForm,
     renderForm,
+    isPending
 }: Props) {
     return (
         <div className="rounded-lg space-y-4">
-            <div className="flex justify-between bg-[#F2BA1A] px-6 py-4 rounded-[25px] items-center">
-                <h4 className="text-[24px] font-semibold">Verifications</h4>
-                <button
-                    onClick={onToggleForm}
-                    className="flex items-center gap-2 text-[14px] px-4 py-1 rounded-[17px] bg-black text-white"
-                >
-                    <span className="pt-0.5">Add</span>
-                    <Image
-                        src="/plus.png"
-                        alt="Add"
-                        width={12}
-                        height={12}
-                        className="pb-0.5"
-                    />
-                </button>
-            </div>
+            {isPending && (
+                <div className="flex justify-between bg-[#F2BA1A] px-6 py-4 rounded-[25px] items-center">
+                    <h4 className="text-[24px] font-semibold">Verifications</h4>
+                    <button
+                        onClick={onToggleForm}
+                        className="flex items-center gap-2 text-[14px] px-4 py-1 rounded-[17px] bg-black text-white"
+                    >
+                        <span className="pt-0.5">Add</span>
+                        <Image
+                            src="/plus.png"
+                            alt="Add"
+                            width={12}
+                            height={12}
+                            className="pb-0.5"
+                        />
+                    </button>
+                </div>)}
 
             {showForm && renderForm()}
 
