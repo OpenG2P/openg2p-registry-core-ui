@@ -19,14 +19,14 @@ export async function POST(request: NextRequest) {
         section_register_id: jsonBody.section_register_id,
         tab_id: jsonBody.tab_id,
         section_id: jsonBody.section_id,
-        change_payload: [
-          {
-            internal_record_id: jsonBody.internal_record_id,
-            additionalProp1: {},
-          },
-        ],
+        internal_record_id:jsonBody.internal_record_id,
+        change_payload: jsonBody.section_records,
         documents: jsonBody.documents,
       },
     }),
   });
 }
+// UPDATE
+// ADD
+// DELETE
+// edit_action:
