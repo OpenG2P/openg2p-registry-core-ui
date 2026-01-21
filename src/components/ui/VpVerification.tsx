@@ -193,14 +193,16 @@ export default function VpVerification() {
         <div className="flex flex-col items-center justify-center h-full text-center">
             <OpenID4VPVerification
                 verifyServiceUrl={
-                    '/v1/verify'
+                    process.env.NEXT_PUBLIC_VERIFY_SERVICE_URL!
                 }
                 presentationDefinition={presentationDefinition}
                 onVPProcessed={handleVPProcessed}
                 onError={handleError}
                 onQrCodeExpired={handleQrCodeExpired}
                 isSameDeviceFlowEnabled={false}
-                clientId="did:web:c447300316ce.ngrok-free.app:v1:verify"
+                clientId={
+                    process.env.NEXT_PUBLIC_VP_CLIENT_ID!
+                }
                 triggerElement={
                     <button
                         id="vp-verification-trigger"
