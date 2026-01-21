@@ -4,12 +4,12 @@ import { createContext, useContext, ReactNode, useMemo } from 'react';
 import { useParams } from 'next/navigation';
 import { useFetch } from '@/shared/hooks';
 import { useRegister } from './RegisterContext';
-import { RegisterRecordsApiResponse } from '@/features/register/types';
+import { RegisterRecord, RegisterRecordsApiResponse } from '@/features/register/types';
 
 interface RegisterRecordContextValue {
     internalRecordId?: string;
     functionalRecordId: string;
-    recordName?:string;
+    recordName?: string;
     loading: boolean;
 }
 
@@ -21,7 +21,6 @@ export function RegisterRecordProvider({ children }: { children: ReactNode }) {
 
     // The ID in the URL is the internal_record_id
     const internalRecordId = decodeURIComponent(id);
-
     // Fetch to resolve Functional ID and verify Internal ID
     const fetchOptions = useMemo(() => ({
         method: 'POST',
@@ -30,30 +29,27 @@ export function RegisterRecordProvider({ children }: { children: ReactNode }) {
             page_size: 1,
             sort_by: "",
             search_text: "",
-            filter_by: {
-                internal_record_id: {
-                    eq: internalRecordId
-                }
-            },
-            register_id: currentRegister?.register_id
+            filter_by: "",
+            subject_register_id: currentRegister?.register_id,
+            subject_record_id: internalRecordId,
         }),
     }), [internalRecordId, currentRegister?.register_id]);
 
-    const { data, loading } = useFetch<RegisterRecordsApiResponse>({
-        url: `/api/register/records`,
+    const { data, loading } = useFetch<RegisterRecord>({
+        url: `/api/register/subject_record`,
         enabled: !!currentRegister?.register_id && !!internalRecordId,
         options: fetchOptions,
     });
 
-    const record = data?.records?.[0];
-    const functionalRecordId = record?.functional_record_id || " ";
-    const recordName = record?.record_name || " "
+    const functionalRecordId = data?.functional_record_id ?? "";
+    const recordName = data?.record_name ?? "";
+
     const value = useMemo(() => ({
         internalRecordId,
         functionalRecordId,
         recordName,
         loading
-    }), [internalRecordId, functionalRecordId,recordName, loading]);
+    }), [internalRecordId, functionalRecordId, recordName, loading]);
 
     return (
         <RegisterRecordContext.Provider value={value}>

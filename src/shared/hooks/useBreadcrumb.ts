@@ -11,7 +11,7 @@ interface BreadcrumbItem {
 interface BreadcrumbOptions {
     registerType: string;
     functionalRecordId?: string | null;
-    recordName?:string | null;
+    recordName?: string | null;
     internalRecordId?: string | null;
     changeId?: string;
     includeActiveTab?: boolean;
@@ -34,7 +34,6 @@ export function useBreadcrumb(options: BreadcrumbOptions) {
         includeChangeRequest = false,
         customItems = [],
     } = options;
-
     return useMemo<BreadcrumbItem[]>(() => {
         if (!currentRegister) return [];
 
@@ -47,7 +46,7 @@ export function useBreadcrumb(options: BreadcrumbOptions) {
 
         if (internalRecordId && activeTab) {
             items.push({
-                label: `${recordName} - ${functionalRecordId} - ${ t(activeTab.tab_label) ?? activeTab.tab_label}`,
+                label: `${recordName} - ${functionalRecordId} - ${t(activeTab.tab_label) ?? activeTab.tab_label}`,
                 href: `/register/${registerType}/${internalRecordId}`,
             });
         }
@@ -80,6 +79,7 @@ export function useBreadcrumb(options: BreadcrumbOptions) {
         activeTab,
         activeTabId,
         customItems,
+        recordName,
         t,
     ]);
 }
