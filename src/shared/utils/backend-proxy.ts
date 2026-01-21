@@ -60,8 +60,10 @@ export async function proxyToBackend({
             });
 
             const payload = (buildPayload || defaultPayloadBuilder)(body);
-            
+            // console.log(payload, "Payload", targetEndpoint);
+
             const backendRequest = createBackendRequest(payload);
+            // console.log(backendRequest, "Backend Request", targetEndpoint);
 
             fetchOptions.headers = {
                 "Content-Type": "application/json"
@@ -70,6 +72,7 @@ export async function proxyToBackend({
         }
 
         const response = await fetch(backendUrl, fetchOptions);
+        // console.log(response, "Response", targetEndpoint);
 
 
         const backendResponse: BackendResponse = await response.json();

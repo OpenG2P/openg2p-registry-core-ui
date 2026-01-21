@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useFetch } from "@/shared/hooks/useFetch";
 import { Verification } from "@/features/change-request/types/change-request";
-import { createRequestBody, createPostOptions } from "@/features/change-request/utils/api";
 
 export const useVerifications = (changeId: string) => {
     const [verifications, setVerifications] = useState<Verification[]>([]);
@@ -9,9 +8,10 @@ export const useVerifications = (changeId: string) => {
     const { data: verificationResp } = useFetch<any>({
         url: `/api/change_request/verification/list`,
         enabled: !!changeId,
-        options: createPostOptions(
-            createRequestBody({ change_request_id: changeId })
-        ),
+        options: {
+            method: "POST",
+            body: JSON.stringify({ change_request_id: changeId }),
+        },
     });
 
     const { execute: executeCreate } = useFetch<any>({
@@ -30,13 +30,14 @@ export const useVerifications = (changeId: string) => {
             try {
                 const result = await executeCreate(
                     `/api/change_request/verification/create`,
-                    createPostOptions(
-                        createRequestBody({
+                    {
+                        method: "POST",
+                        body: JSON.stringify({
                             change_request_id: changeId,
                             verification_observations: observation,
                             is_approved: isApproved,
-                        })
-                    )
+                        }),
+                    }
                 );
 
                 const newVerification = result?.verification;

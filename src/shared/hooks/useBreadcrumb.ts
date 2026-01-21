@@ -9,10 +9,10 @@ interface BreadcrumbItem {
 }
 
 interface BreadcrumbOptions {
-    type: string;
-    recordId?: string | null;
-    recordName?:string | null;
-    internalId?: string | null;
+    registerType: string;
+    functionalRecordId?: string | null;
+    recordName?: string | null;
+    internalRecordId?: string | null;
     changeId?: string;
     includeActiveTab?: boolean;
     includeChangeRequest?: boolean;
@@ -25,16 +25,15 @@ export function useBreadcrumb(options: BreadcrumbOptions) {
     const { activeTab, activeTabId } = useRegisterTabs();
 
     const {
-        type,
-        recordId,
+        registerType,
+        functionalRecordId,
         recordName,
-        internalId,
+        internalRecordId,
         changeId,
         includeActiveTab = false,
         includeChangeRequest = false,
         customItems = [],
     } = options;
-
     return useMemo<BreadcrumbItem[]>(() => {
         if (!currentRegister) return [];
 
@@ -42,40 +41,27 @@ export function useBreadcrumb(options: BreadcrumbOptions) {
 
         items.push({
             label: t(currentRegister.register_subject) ?? currentRegister.register_subject,
-            href: `/register/${type}`,
+            href: `/register/${registerType}`,
         });
 
-        // Use internalId for href, recordId (functional) for label
-        const displayId = recordId || t('functionalIdNotGenerated');
-        const urlId = internalId || recordId;
-
-        if (urlId) {
+        if (internalRecordId && activeTab) {
             items.push({
-                label: recordId ? `${recordName} - ${recordId}` : displayId,
-                href: `/register/${type}/${urlId}`,
+                label: `${recordName} - ${functionalRecordId} - ${t(activeTab.tab_label) ?? activeTab.tab_label}`,
+                href: `/register/${registerType}/${internalRecordId}`,
             });
         }
 
-        if (includeActiveTab && activeTab) {
-            items.push({
-                label: t(activeTab.tab_label) ?? activeTab.tab_label,
-                href: urlId
-                    ? `/register/${type}/${urlId}?tab=${activeTab.tab_id}`
-                    : '#',
-            });
-        }
-
-        if (includeChangeRequest && urlId) {
+        if (includeChangeRequest && internalRecordId) {
             items.push({
                 label: t('changeRequest') ?? 'Change Request',
-                href: `/register/${type}/${urlId}/change-request${activeTabId ? `?tab=${activeTabId}` : ''}`,
+                href: `/register/${registerType}/${internalRecordId}/change-request${activeTabId ? `?tab=${activeTabId}` : ''}`,
             });
         }
 
-        if (changeId && urlId) {
+        if (changeId && internalRecordId) {
             items.push({
                 label: changeId,
-                href: `/register/${type}/${urlId}/change-request/${changeId}${activeTabId ? `?tab=${activeTabId}` : ''}`,
+                href: `/register/${registerType}/${internalRecordId}/change-request/${changeId}${activeTabId ? `?tab=${activeTabId}` : ''}`,
             });
         }
 
@@ -84,15 +70,16 @@ export function useBreadcrumb(options: BreadcrumbOptions) {
         return items;
     }, [
         currentRegister,
-        type,
-        recordId,
-        internalId,
+        registerType,
+        functionalRecordId,
+        internalRecordId,
         changeId,
         includeActiveTab,
         includeChangeRequest,
         activeTab,
         activeTabId,
         customItems,
+        recordName,
         t,
     ]);
 }

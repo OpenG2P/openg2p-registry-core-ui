@@ -17,7 +17,6 @@ import { useRegisterDetail } from '@/features/register/hooks/useRegisterDetail';
 export default function RegisterDetailPage() {
     const t = useTranslations();
     const {
-        resolvingId,
         internalRecordId,
         registerType,
         widgetStore,
@@ -51,8 +50,8 @@ export default function RegisterDetailPage() {
 
     // resolvingId: resolves the functional ID 
     // from the internal record ID (UUID)
-    const isLoading = (resolvingId && !internalRecordId) || !canRenderContent;
-    const isNotFound = !resolvingId && !internalRecordId;
+    const isLoading = !internalRecordId || !canRenderContent;
+    const isNotFound = !internalRecordId;
 
     return (
         <RegisterTabsLayout

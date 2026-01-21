@@ -12,6 +12,7 @@ export interface RegisterRecord {
     record_name: string;
     record_image_url: string | null;
     display_fields: DisplayField[];
+
 }
 
 export interface RegisterRecordsApiResponse {
@@ -28,7 +29,7 @@ export interface RegisterFlattenedRecord {
 export interface TabSectionData {
     section_register_id: string;
     records: RegisterFlattenedRecord[];
-    is_list:boolean
+    is_list: boolean
 
 }
 

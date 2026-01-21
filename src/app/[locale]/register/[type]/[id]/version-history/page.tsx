@@ -16,13 +16,16 @@ import { useRecordHistory } from '@/features/register/hooks/useRecordHistory';
 import { useMemo, useState } from 'react';
 import { useRegister } from '@/context/RegisterContext';
 import { useRegisterSectionsFromCR } from '@/features/change-request/components/useRegisterSectionsFromCR';
+import { useRegisterRecord } from '@/context/RegisterRecordContext';
 import { RegisterFlattenedRecord } from '@/features/register/types';
 
 export default function VersionHistoryPage() {
     const t = useTranslations();
-    const { type, id } = useParams<{ type: string; id: string }>();
+    const { type: registerType, id: internalRecordId } = useParams<{ type: string; id: string }>();
 
     const { currentRegister } = useRegister();
+
+    const { functionalRecordId, recordName } = useRegisterRecord();
 
     const [selectedChangeRequest, setSelectedChangeRequest] = useState<any | null>(null);
 
@@ -43,7 +46,7 @@ export default function VersionHistoryPage() {
     } = useRegisterSectionsFromCR({
         registerId,
         tabId: activeTabId,
-        internalRecordId: id,
+        internalRecordId,
     });
 
     const {
@@ -89,7 +92,7 @@ export default function VersionHistoryPage() {
             map[sectionRegisterId] = {
                 records: details.change_payload
             };
-            } else {
+        } else {
             map[sectionRegisterId] = details.change_payload[0];
         }
 
@@ -100,7 +103,7 @@ export default function VersionHistoryPage() {
     const openDateDropdown = async () => {
         const res = await loadDates({
             register_id: registerId,
-            internal_record_id: id,
+            internal_record_id: internalRecordId,
             tab_id: activeTabId || "",
         });
 
@@ -111,7 +114,7 @@ export default function VersionHistoryPage() {
         setSelectedChangeRequest(null);
         const res = await loadChanges({
             register_id: registerId,
-            internal_record_id: id,
+            internal_record_id: internalRecordId,
             tab_id: activeTabId || "",
             truncated_created_date: date,
         });
@@ -120,8 +123,10 @@ export default function VersionHistoryPage() {
     };
 
     const breadcrumb = useBreadcrumb({
-        type,
-        recordId: id,
+        registerType,
+        functionalRecordId,
+        recordName,
+        internalRecordId,
         includeActiveTab: true,
         includeChangeRequest: false,
         customItems: [

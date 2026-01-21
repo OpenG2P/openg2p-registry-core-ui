@@ -13,7 +13,7 @@ export function useChangeRequestDocuments(
     const { data, loading, error } = useFetch<{
         documents: ChangeRequestDocument[];
     }>({
-        url: '/api/change_request/documents',
+        url: '/api/change_request/get_documents',
         enabled: enabled && !!changeRequestId,
         options: {
             method: 'POST',

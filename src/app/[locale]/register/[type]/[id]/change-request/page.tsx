@@ -4,16 +4,18 @@ import { useParams } from 'next/navigation';
 import { RegisterTabsLayout } from '@/components/shared';
 import { ChangeLogList, ChangeLogSkeleton } from '@/features/change-request/components';
 import { useChangeRequestList } from '@/features/change-request/hooks/useChangeRequestList';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale } from 'next-intl';
 import { useRegister } from '@/context/RegisterContext';
 import { useRegisterTabs } from '@/context/RegisterTabsContext';
 import { useBreadcrumb } from '@/shared/hooks';
+import { useRegisterRecord } from '@/context/RegisterRecordContext';
 
 export default function ChangeRequestPage() {
-    const t = useTranslations();
     const locale = useLocale();
-    const { type, id } = useParams<{ type: string; id: string }>();
+    const { type: registerType, id: internalRecordId } = useParams<{ type: string; id: string }>();
     const { currentRegister } = useRegister();
+
+    const { functionalRecordId, recordName } = useRegisterRecord();
 
     const {
         tabs,
@@ -25,15 +27,17 @@ export default function ChangeRequestPage() {
     const subjectRegisterId = currentRegister?.register_id;
 
     const { logs, loading } = useChangeRequestList({
-        subjectRecordId: id,
+        subjectRecordId: internalRecordId,
         subjectRegisterId: subjectRegisterId,
         tabId: activeTabId,
-        enabled: !!activeTabId && !!id && !!subjectRegisterId,
+        enabled: !!activeTabId && !!internalRecordId && !!subjectRegisterId,
     });
 
     const breadcrumb = useBreadcrumb({
-        type,
-        recordId: id,
+        registerType,
+        functionalRecordId,
+        recordName,
+        internalRecordId,
         includeActiveTab: true,
         includeChangeRequest: true,
     });
@@ -57,7 +61,7 @@ export default function ChangeRequestPage() {
                 <ChangeLogList
                     logs={logs}
                     getDetailsUrl={log =>
-                        `/${locale}/register/${type}/${id}/change-request/${log.change_request_id}?tab=${activeTabId}`
+                        `/${locale}/register/${registerType}/${internalRecordId}/change-request/${log.change_request_id}?tab=${activeTabId}`
                     }
                 />
             )}

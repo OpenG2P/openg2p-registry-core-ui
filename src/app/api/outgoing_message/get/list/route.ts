@@ -1,12 +1,32 @@
 import { NextRequest, NextResponse } from "next/server";
+import { proxyToBackend } from "@/shared/utils";
 
 export async function POST(req: NextRequest) {
+    /*
+    return proxyToBackend({
+        req,
+        targetEndpoint: "/register/search_in_outgoing_messages",
+        buildPayload: (body) => ({
+            pagination_request: {
+                current_page: body.current_page ?? 1,
+                page_size: body.page_size ?? 10,
+                sort_by: body.sort_by ?? "",
+                filter_by: body.filter_by ?? "",
+                search_text: body.search_text ?? "",
+            },
+            request_payload: {},
+        }),
+        transformResponse: (responseBody) => ({
+            messages: responseBody.response_payload ?? [],
+            pagination: responseBody.pagination_response,
+        }),
+    });
+    */
+
     const body = await req.json();
 
-    const paginationRequest = body?.request_body?.pagination_request ?? {};
-
-    const currentPage = paginationRequest.current_page ?? 1;
-    const pageSize = paginationRequest.page_size ?? 10;
+    const currentPage = body.current_page ?? 1;
+    const pageSize = body.page_size ?? 10;
 
     // Mock outgoing messages data
     const rawOutgoingMessages = [
@@ -28,6 +48,9 @@ export async function POST(req: NextRequest) {
                 "Migration",
                 "Change of Address",
                 "Name Correction",
+                "Birth Registration (Double)",
+                "Vaccination (Checkup)",
+                "Death Record",
             ],
         },
         {
@@ -40,13 +63,8 @@ export async function POST(req: NextRequest) {
             topic_resolution: "Pending",
             topic_resolution_datetime: "2025-11-01 09:20AM",
             number_of_topics_resolved: 3,
-            topic_names: [
-                "Health Checkup",
-                "Disease Reporting",
-                "Vaccination",
-            ],
+            topic_names: ["Health Checkup", "Disease Reporting", "Vaccination"],
         },
-        // Add more mock messages as needed
     ];
 
     const totalItems = rawOutgoingMessages.length;
@@ -58,21 +76,10 @@ export async function POST(req: NextRequest) {
     const paginatedMessages = rawOutgoingMessages.slice(startIndex, endIndex);
 
     return NextResponse.json({
-        response_header: {
-            request_id: crypto.randomUUID(),
-            response_status: "SUCCESS",
-            response_error_code: "",
-            response_error_message: "",
-            response_timestamp: new Date().toISOString(),
-        },
-        response_body: {
-            pagination_response: {
-                number_of_items: totalItems,
-                number_of_pages: totalPages,
-            },
-            response_payload: {
-                outgoing_messages: paginatedMessages,
-            },
+        messages: paginatedMessages,
+        pagination: {
+            number_of_items: totalItems,
+            number_of_pages: totalPages,
         },
     });
 }

@@ -1,0 +1,22 @@
+import { NextRequest } from "next/server";
+import { proxyToBackend } from "@/shared/utils";
+
+export async function POST(req: NextRequest) {
+    return proxyToBackend({
+        req,
+        targetEndpoint: '/register/get_subject_record',
+        buildPayload: (body) => ({
+            pagination_request: {
+                current_page: body.current_page,
+                page_size: body.page_size,
+                sort_by: body.sort_by,
+                filter_by: body.filter_by,
+                search_text: body.search_text,
+            },
+            request_payload: {
+                subject_register_id: body.subject_register_id,
+                subject_record_id: body.subject_record_id,
+            },
+        }),
+    });
+}
