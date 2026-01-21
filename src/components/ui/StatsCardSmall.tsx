@@ -58,10 +58,10 @@ const StatsCardSmall = ({
         title: t('incomingMessages'),
         rows: [
           {
-            id: "messages",
-            label: t('messages'),
-            value: data.no_of_messages,
-            imageUrl: "/statsIcon/topics.png",
+            id: "models",
+            label: t('dataModels'),
+            value: data.no_of_data_models,
+            imageUrl: "/statsIcon/data_models.png",
           },
           {
             id: "partners",
@@ -101,6 +101,10 @@ const StatsCardSmall = ({
     if (stats_endpoint.includes("register")) {
       return data?.length || 0;
     }
+    if (stats_endpoint.includes("incoming")){
+       return data?.no_of_messages || 0;
+    }
+
     // For other stats, sum values
     return rows.reduce((sum, r) => sum + (r.value || 0), 0);
   }, [data, rows, stats_endpoint]);
