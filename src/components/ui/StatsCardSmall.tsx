@@ -53,22 +53,21 @@ const StatsCardSmall = ({
         ],
       };
     }
-
     if (stats_endpoint.includes("incoming")) {
       return {
         title: t('incomingMessages'),
         rows: [
           {
+            id: "messages",
+            label: t('messages'),
+            value: data.no_of_messages,
+            imageUrl: "/statsIcon/topics.png",
+          },
+          {
             id: "partners",
             label: t('partners'),
             value: data.no_of_partners,
             imageUrl: "/statsIcon/partners.png",
-          },
-          {
-            id: "models",
-            label: t('dataModels'),
-            value: data.no_of_data_models,
-            imageUrl: "/statsIcon/data_models.png",
           },
         ],
       };

@@ -76,6 +76,8 @@ export const useRegisterSections = () => {
       .flatMap((section) => section.section_ui_schema?.sections ?? []);
   }, [tabSections]);
 
+  console.log("orderedTabSections", orderedTabSections);
+
 
   const { handleSectionSave } = useSectionSave(tabSections);
 
