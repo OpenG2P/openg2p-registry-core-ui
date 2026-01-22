@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import { OpenID4VPVerification } from 'inji-sdk';
 
@@ -13,50 +13,7 @@ import { OpenID4VPVerification } from 'inji-sdk';
 //     { ssr: false }
 // );
 
-const buildTabData = (result: any) => {
-    const vcItem = result?.verifiableCredentials?.[0];
-    const vc = vcItem?.vc;
-
-    return {
-        verificationResults: {
-            verificationTimestamp: new Date().toISOString(),
-            vpIntegrity: result?.vpVerified ? 'Valid' : 'Invalid',
-            vcIntegrity: vcItem?.vcStatus === 'SUCCESS' ? 'Valid' : 'Invalid',
-            vcRevocationStatus: 'Not Revoked',
-            vcExpiryStatus:
-                vc?.expirationDate &&
-                    new Date(vc.expirationDate) > new Date()
-                    ? 'Valid'
-                    : 'Expired',
-            policyCompliance: result?.policyVerified ? 'Valid' : 'Invalid',
-            overallResult: result?.verified ? 'Verified' : 'Failed',
-        },
-
-        presentation: {
-            presentationId: result?.vp?.id,
-            holderDid: result?.vp?.holder,
-            submissionId: result?.vp?.presentation_submission?.id,
-            submissionTime: result?.vp?.issuanceDate,
-        },
-
-        credentials: result?.verifiableCredentials?.map((item: any) => ({
-            credentialId: item?.vc?.id,
-            types: item?.vc?.type,
-            issuer: item?.vc?.issuer,
-            issuanceDate: item?.vc?.issuanceDate,
-            expiryDate: item?.vc?.expirationDate,
-            proofType: item?.vc?.proof?.type,
-            signatureAlgorithm: 'Ed25519',
-            credentialStatus:
-                item?.vcStatus === 'SUCCESS' ? 'Active' : 'Revoked',
-        })),
-
-        payload: result,
-    };
-};
-
-
-const presentationDefinition = {
+const buildPresentationDefinition = (descriptorSchema: any) => ({
     id: process.env.NEXT_PUBLIC_VP_PRESENTATION_ID!,
     purpose: process.env.NEXT_PUBLIC_VP_PURPOSE!,
     format: {
@@ -64,28 +21,24 @@ const presentationDefinition = {
             proof_type: ['Ed25519Signature2020'],
         },
     },
-    input_descriptors: [
-        {
-            id: 'id-card-credential',
-            constraints: {
-                fields: [
-                    {
-                        path: ['$.type'],
-                        filter: {
-                            type: 'object',
-                            pattern: 'VerifiableCredential',
-                        },
-                    },
-                ],
-            },
-        },
-    ],
-};
+    input_descriptors: [descriptorSchema],
+});
 
-export default function VpVerification() {
+interface Props {
+    descriptorSchema: any;
+}
+
+export default function VpVerification({ descriptorSchema }: Props) {
     const [verificationStatus, setVerificationStatus] = useState<'idle' | 'verifying' | 'success' | 'error'>('idle');
     const [verificationResult, setVerificationResult] = useState<any>(null);
     const [error, setError] = useState<string | null>(null);
+
+    const presentationDefinition = useMemo(
+        () => buildPresentationDefinition(descriptorSchema),
+        [descriptorSchema]
+    );
+
+    console.log(presentationDefinition,"present")
 
     const [activeTab, setActiveTab] = useState(0);
 

@@ -40,7 +40,47 @@ export default function RegisterTypePage() {
         }
     } = useRegisterRecords();
 
+    const vcOptions = [
+        {
+            vc_config_id: "vc_birth_cert",
+            vc_mnemonic: "BIRTH_CERTIFICATE",
+            descriptor_schema: {
+                id: "birth-cert",
+                constraints: {
+                    fields: [
+                        {
+                            path: ["$.type"],
+                            filter: {
+                                type: "string",
+                                pattern: "^BirthCertificateCredential$",
+                            },
+                        },
+                    ],
+                },
+            },
+        },
+        {
+            vc_config_id: "vc_dl",
+            vc_mnemonic: "DRIVING_LICENSE",
+            descriptor_schema: {
+                id: "driving-license",
+                constraints: {
+                    fields: [
+                        {
+                            path: ["$.type"],
+                            filter: {
+                                type: "string",
+                                pattern: "^DriverLicenseCredential$",
+                            },
+                        },
+                    ],
+                },
+            },
+        },
+    ];
+    const [selectedVC, setSelectedVC] = useState<any | null>(null);
     const [openVC, setOpenVC] = useState(false);
+
     const [openDetails, setOpenDetails] = useState(false);
 
     return (
@@ -52,9 +92,11 @@ export default function RegisterTypePage() {
                 showCapsule={true}
                 capsule={
                     <AddNewDropdown
-                        onAddFromVC={() => setOpenVC(true)}
-                        onOptionOne={() => console.log("Random 1")}
-                        onOptionTwo={() => console.log("Random 2")}
+                        vcOptions={vcOptions}
+                        onSelectVC={(vc) => {
+                            setSelectedVC(vc);
+                            setOpenVC(true);
+                        }}
                         onImportCSV={() => console.log("Import CSV")}
                         onImportPDS={() => console.log("Import PDS")}
                         onImportOthers={() => console.log("Import Others")}
@@ -122,9 +164,13 @@ export default function RegisterTypePage() {
                 </div>
             </div>
             <>
-                {openVC && (
+                {openVC && selectedVC && (
                     <VpVerificationModal
-                        onClose={() => setOpenVC(false)}
+                        descriptorSchema={selectedVC.descriptor_schema}
+                        onClose={() => {
+                            setOpenVC(false);
+                            setSelectedVC(null);
+                        }}
                     />
                 )}
             </>

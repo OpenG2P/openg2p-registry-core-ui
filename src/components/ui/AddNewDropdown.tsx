@@ -4,19 +4,23 @@ import { useClickOutside } from "@/shared/hooks";
 import Image from "next/image";
 import { useRef, useState } from "react";
 
+interface VCOption {
+    vc_config_id: string;
+    vc_mnemonic: string;
+    descriptor_schema: any;
+}
+
 interface AddNewDropdownProps {
-    onAddFromVC?: () => void;
-    onOptionOne?: () => void;
-    onOptionTwo?: () => void;
+    vcOptions?: VCOption[];
+    onSelectVC?: (vc: VCOption) => void;
     onImportCSV?: () => void;
     onImportPDS?: () => void;
     onImportOthers?: () => void;
 }
 
 export default function AddNewDropdown({
-    onAddFromVC,
-    onOptionOne,
-    onOptionTwo,
+    vcOptions = [],
+    onSelectVC,
     onImportCSV,
     onImportPDS,
     onImportOthers,
@@ -45,29 +49,40 @@ export default function AddNewDropdown({
             </button>
 
             {open && (
-                <div
-                    className="absolute left-0 top-0 mt-1.5 w-45 rounded-[17px] bg-white border border-[#ED7C22] z-50 overflow-hidden"
-                >
+                <div className="absolute left-0 top-0 mt-1.5 w-45 rounded-[17px] bg-white border border-[#ED7C22] z-50 overflow-hidden">
                     <div className="flex items-center gap-2 px-4 py-1">
                         <span className="text-[16px] font-medium text-black">
                             Add New
                         </span>
                         <Image
                             src="/down_arrow.png"
-                            alt="open"
+                            alt="close"
                             width={14}
                             height={8}
-                            className="rotate-180"
-                            onClick={() => setOpen(o => !o)}
+                            className="rotate-180 cursor-pointer"
+                            onClick={() => setOpen(false)}
                         />
                     </div>
-                    <SectionHeading title="Add from VC" onClick={onAddFromVC} />
-                    <DropdownItem label="Random Option 1" onClick={onOptionOne} />
-                    <DropdownItem label="Random Option 2" onClick={onOptionTwo} />
 
-                    <Divider />
+                    {vcOptions.length > 0 && (
+                        <>
+                            <SectionHeading title="Add from VC" />
+                            {vcOptions.map(vc => (
+                                <DropdownItem
+                                    key={vc.vc_config_id}
+                                    label={vc.vc_mnemonic}
+                                    onClick={() => {
+                                        onSelectVC?.(vc);
+                                        setOpen(false);
+                                    }}
+                                />
+                            ))}
+                            {/* <Divider /> */}
+                        </>
+                    )}
 
-                    <SectionHeading title="Import" />
+                    {/* IMPORT SECTION */}
+                    {/* <SectionHeading title="Import" />
                     <DropdownItem label="CSV" onClick={onImportCSV} />
                     <DropdownItem label="PDS" onClick={onImportPDS} />
 
@@ -76,12 +91,13 @@ export default function AddNewDropdown({
                     <DropdownItem
                         label="Import from others"
                         onClick={onImportOthers}
-                    />
+                    /> */}
                 </div>
             )}
         </div>
     );
 }
+
 
 
 function DropdownItem({
@@ -101,12 +117,9 @@ function DropdownItem({
     );
 }
 
-function SectionHeading({ title, onClick }: { title: string, onClick?: () => void; }) {
+function SectionHeading({ title }: { title: string }) {
     return (
-        <div
-            onClick={onClick}
-            className="px-4 py-2 text-[16px] font-semibold cursor-pointer text-black hover:bg-[#F3F1E4]"
-        >
+        <div className="px-4 py-2 text-[16px] font-semibold text-black hover:bg-[#F3F1E4]">
             {title}
         </div>
     );

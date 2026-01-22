@@ -42,63 +42,65 @@ export default function CapsuleDropdown(props: CapsuleDropdownProps) {
     }
 
     return (
-        <div ref={dropdownRef} className="relative flex items-center gap-3 w-fit">
+        <div className=" flex items-center gap-3">
             <span className="text-[16px] text-black font-medium whitespace-nowrap">
                 {label}
             </span>
 
-            <div
-                onClick={handleToggle}
-                className="flex items-center justify-between gap-3 px-3 py-1 rounded-[17px] cursor-pointer bg-white border border-[#F77F57]"
-            >
-                <span className="text-[16px] text-black/50 font-medium">
-                    {selected ?? "Select"}
-                </span>
-
-                <Image
-                    src="/down_arrow.png"
-                    alt="open"
-                    width={14}
-                    height={14}
-                />
-            </div>
-
-            {open && (
+            <div ref={dropdownRef} className="relative">
                 <div
-                    className="absolute right-0 top-0 rounded-[17px] bg-white border border-[#F77F57] z-50 overflow-hidden"
-                    style={{ transform: "translateY(0)" }}
+                    onClick={handleToggle}
+                    className={`flex items-center justify-between gap-3 px-3 py-1 rounded-[17px] cursor-pointer bg-white border border-[#F77F57] ${open ? "invisible" : ""}`}
                 >
+                    <span className="text-[16px] text-black/50 font-medium">
+                        {selected ?? "Select"}
+                    </span>
+
+                    <Image
+                        src="/down_arrow.png"
+                        alt="open"
+                        width={14}
+                        height={14}
+                    />
+                </div>
+
+                {open && (
                     <div
-                        onClick={() => {
-                            setSelected(undefined);
-                            setOpen(false);
-                        }}
-                        className="flex items-center gap-3 px-3 py-1 cursor-pointer"
+                        className="absolute left-0 top-0 rounded-[17px] bg-white border border-[#F77F57] z-50 overflow-hidden"
+                        style={{ transform: "translateY(0)" }}
                     >
-                        <span className="text-[16px] text-black/50 font-medium">
-                            Select
-                        </span>
-                        <Image
-                            src="/down_arrow.png"
-                            alt="open"
-                            width={14}
-                            height={14}
-                            className="rotate-180"
-                        />
-                    </div>
-                    {items.map((item, index) => (
                         <div
-                            key={item}
-                            onClick={() => handleSelect(item)}
+                            onClick={() => {
+                                setSelected(undefined);
+                                setOpen(false);
+                            }}
                             className="flex items-center gap-3 px-3 py-1 cursor-pointer"
                         >
                             <span className="text-[16px] text-black/50 font-medium">
-                                {item}
+                                Select
                             </span>
+                            <Image
+                                src="/down_arrow.png"
+                                alt="open"
+                                width={14}
+                                height={14}
+                                className="rotate-180"
+                            />
                         </div>
-                    ))}
-                </div>
-            )}
+                        {items.map((item, index) => (
+                            <div
+                                key={item}
+                                onClick={() => handleSelect(item)}
+                                className="flex items-center gap-3 px-3 py-1 cursor-pointer"
+                            >
+                                <span className="text-[16px] text-black/50 font-medium">
+                                    {item}
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
         </div>
     );
 }
