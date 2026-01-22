@@ -21,6 +21,9 @@ import { useTranslations } from "next-intl";
 import { RegisterFlattenedRecord } from "@/features/register/types";
 import { useChangeRequestManager, useRegisterSectionsFromCR } from "@/features/change-request/hooks";
 import { ChangeRequestValuesTabs } from "./ChangeRequestValuesTabs";
+import CRHeaderSkeleton from "./CRHeaderSkeleton";
+import SectionSchemaSkeleton from "./SectionSchemaSkeleton";
+import VerificationListSkeleton from "./VerificationListSkeleton";
 
 interface Props {
     changeId: string;
@@ -36,6 +39,8 @@ export default function ChangeRequestDetailsView({ changeId, breadcrumb }: Props
         verifications,
         documents,
         loadingDetails,
+        loadingVerifications,
+        loadingDocuments,
         loadingAction,
         popupVisible,
         popupType,
@@ -56,7 +61,7 @@ export default function ChangeRequestDetailsView({ changeId, breadcrumb }: Props
     const sectionRegisterId = details?.section_register_id || "";
     const isListSection = details?.is_list || false;
 
-    const { orderedTabSections } = useRegisterSectionsFromCR({
+    const { orderedTabSections, loadingSchema } = useRegisterSectionsFromCR({
         registerId,
         tabId,
         internalRecordId,
@@ -109,78 +114,131 @@ export default function ChangeRequestDetailsView({ changeId, breadcrumb }: Props
     }, [details, isListSection, sectionRegisterId]);
 
     return (
+        // <RegisterTabsLayout breadcrumb={breadcrumb}>
+        //     {loadingDetails && <p className="text-sm text-gray-500">Loading change request…</p>}
+
+        //     {!loadingDetails && details && (
+        //         <div className="flex gap-7.5">
+        //             <div className="w-full lg:w-[75%]">
+        //                 <ChangeRequestHeader
+        //                     details={details}
+        //                     documents={documents}
+        //                     onApprove={handleApprove}
+        //                     onReject={handleReject}
+        //                     loadingAction={loadingAction}
+        //                 />
+
+        //                 {/* <div>
+        //                     <h3 className="mt-6 mb-2 font-semibold">New Values</h3>
+        //                     <WidgetProvider
+        //                         store={widgetStoreNew}
+        //                         schemaData={newSectionData}
+        //                         translate={t}
+        //                     >
+        //                         <SectionsContainer sections={innerSectionConfig} hideEditButton={true} />
+        //                     </WidgetProvider>
+
+        //                     <h3 className="mt-6 mb-2 font-semibold">Old Values</h3>
+        //                     <WidgetProvider
+        //                         store={widgetStoreOld}
+        //                         schemaData={oldSectionData}
+        //                         translate={t}
+        //                     >
+        //                         <SectionsContainer sections={innerSectionConfig} hideEditButton={true} />
+        //                     </WidgetProvider>
+        //                 </div> */}
+        //                 <ChangeRequestValuesTabs
+        //                     widgetStoreNew={widgetStoreNew}
+        //                     widgetStoreOld={widgetStoreOld}
+        //                     newSectionData={newSectionData}
+        //                     oldSectionData={oldSectionData}
+        //                     innerSectionConfig={innerSectionConfig}
+        //                     t={t}
+        //                 />
+
+        //             </div>
+
+        //             <div className="w-full lg:w-[25%]">
+        //                 <VerificationList
+        //                     verifications={verifications}
+        //                     showForm={showAddVerification}
+        //                     onToggleForm={() => setShowAddVerification((v) => !v)}
+        //                     renderForm={() => (
+        //                         <VerificationForm
+        //                             onSubmit={addVerification}
+        //                             onClose={() => setShowAddVerification(false)}
+        //                         />
+        //                     )}
+        //                     isPending={details.approval_status === "PENDING"}
+        //                 />
+        //             </div>
+        //         </div>
+        //     )}
+
+        //     {popupVisible && popupType === "reject-input" && (
+        //         <RejectReasonPopup
+        //             onSubmit={(reason) => submitReject(reason)}
+        //             onClose={() => setPopupVisible(false)}
+        //             loading={loadingAction}
+        //         />
+        //     )}
+
+        //     {popupVisible && (popupType === "approve" || popupType === "reject") && (
+        //         <ActionPopup type={popupType} onClose={() => setPopupVisible(false)} />
+        //     )}
+        // </RegisterTabsLayout>
         <RegisterTabsLayout breadcrumb={breadcrumb}>
-            {loadingDetails && <p className="text-sm text-gray-500">Loading change request…</p>}
+            <div className="flex gap-7.5">
+                <div className="w-full lg:w-[75%]">
+                    {loadingDetails || loadingDocuments ? (
+                        <CRHeaderSkeleton />
+                    ) : (
+                        details && (
+                            <ChangeRequestHeader
+                                details={details}
+                                documents={documents}
+                                onApprove={handleApprove}
+                                onReject={handleReject}
+                                loadingAction={loadingAction}
+                            />
+                        )
+                    )}
 
-            {!loadingDetails && details && (
-                <div className="flex gap-7.5">
-                    <div className="w-full lg:w-[75%]">
-                        <ChangeRequestHeader
-                            details={details}
-                            documents={documents}
-                            onApprove={handleApprove}
-                            onReject={handleReject}
-                            loadingAction={loadingAction}
-                        />
+                    {loadingSchema ? (
+                        <SectionSchemaSkeleton />
+                    ) : (
+                        details && (
+                            <ChangeRequestValuesTabs
+                                widgetStoreNew={widgetStoreNew}
+                                widgetStoreOld={widgetStoreOld}
+                                newSectionData={newSectionData}
+                                oldSectionData={oldSectionData}
+                                innerSectionConfig={innerSectionConfig}
+                                t={t}
+                            />
+                        )
+                    )}
+                </div>
 
-                        {/* <div>
-                            <h3 className="mt-6 mb-2 font-semibold">New Values</h3>
-                            <WidgetProvider
-                                store={widgetStoreNew}
-                                schemaData={newSectionData}
-                                translate={t}
-                            >
-                                <SectionsContainer sections={innerSectionConfig} hideEditButton={true} />
-                            </WidgetProvider>
-
-                            <h3 className="mt-6 mb-2 font-semibold">Old Values</h3>
-                            <WidgetProvider
-                                store={widgetStoreOld}
-                                schemaData={oldSectionData}
-                                translate={t}
-                            >
-                                <SectionsContainer sections={innerSectionConfig} hideEditButton={true} />
-                            </WidgetProvider>
-                        </div> */}
-                        <ChangeRequestValuesTabs
-                            widgetStoreNew={widgetStoreNew}
-                            widgetStoreOld={widgetStoreOld}
-                            newSectionData={newSectionData}
-                            oldSectionData={oldSectionData}
-                            innerSectionConfig={innerSectionConfig}
-                            t={t}
-                        />
-
-                    </div>
-
-                    <div className="w-full lg:w-[25%]">
+                <div className="w-full lg:w-[25%]">
+                    {loadingVerifications ? (
+                        <VerificationListSkeleton />
+                    ) : (
                         <VerificationList
                             verifications={verifications}
                             showForm={showAddVerification}
-                            onToggleForm={() => setShowAddVerification((v) => !v)}
+                            onToggleForm={() => setShowAddVerification(v => !v)}
                             renderForm={() => (
                                 <VerificationForm
                                     onSubmit={addVerification}
                                     onClose={() => setShowAddVerification(false)}
                                 />
                             )}
-                            isPending={details.approval_status === "PENDING"}
+                            isPending={details?.approval_status === "PENDING"}
                         />
-                    </div>
+                    )}
                 </div>
-            )}
-
-            {popupVisible && popupType === "reject-input" && (
-                <RejectReasonPopup
-                    onSubmit={(reason) => submitReject(reason)}
-                    onClose={() => setPopupVisible(false)}
-                    loading={loadingAction}
-                />
-            )}
-
-            {popupVisible && (popupType === "approve" || popupType === "reject") && (
-                <ActionPopup type={popupType} onClose={() => setPopupVisible(false)} />
-            )}
+            </div>
         </RegisterTabsLayout>
     );
 }
