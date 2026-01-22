@@ -50,11 +50,21 @@ export default function ChangeRequestPage() {
             onTabChange={setActiveTabByIndex}
         >
             {loading ? (
-                <div className="space-y-4">
-                    {[...Array(3)].map((_, i) => (
-                        <ChangeLogSkeleton key={i} />
-                    ))}
-                </div>
+                <>
+                    {(tabs.length === 0 && <div className="flex gap-2 px-10">
+                        {[1, 2, 3].map(i => (
+                            <div
+                                key={i}
+                                className="h-11 w-32 rounded-t-[20px] bg-[#F2BA1A]/50"
+                            />
+                        ))}
+                    </div>)}
+                    <div className="space-y-4">
+                        {[...Array(3)].map((_, i) => (
+                            <ChangeLogSkeleton key={i} />
+                        ))}
+                    </div>
+                </>
             ) : logs.length === 0 ? (
                 <p className="text-sm text-gray-400">No change requests found</p>
             ) : (

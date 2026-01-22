@@ -114,79 +114,6 @@ export default function ChangeRequestDetailsView({ changeId, breadcrumb }: Props
     }, [details, isListSection, sectionRegisterId]);
 
     return (
-        // <RegisterTabsLayout breadcrumb={breadcrumb}>
-        //     {loadingDetails && <p className="text-sm text-gray-500">Loading change request…</p>}
-
-        //     {!loadingDetails && details && (
-        //         <div className="flex gap-7.5">
-        //             <div className="w-full lg:w-[75%]">
-        //                 <ChangeRequestHeader
-        //                     details={details}
-        //                     documents={documents}
-        //                     onApprove={handleApprove}
-        //                     onReject={handleReject}
-        //                     loadingAction={loadingAction}
-        //                 />
-
-        //                 {/* <div>
-        //                     <h3 className="mt-6 mb-2 font-semibold">New Values</h3>
-        //                     <WidgetProvider
-        //                         store={widgetStoreNew}
-        //                         schemaData={newSectionData}
-        //                         translate={t}
-        //                     >
-        //                         <SectionsContainer sections={innerSectionConfig} hideEditButton={true} />
-        //                     </WidgetProvider>
-
-        //                     <h3 className="mt-6 mb-2 font-semibold">Old Values</h3>
-        //                     <WidgetProvider
-        //                         store={widgetStoreOld}
-        //                         schemaData={oldSectionData}
-        //                         translate={t}
-        //                     >
-        //                         <SectionsContainer sections={innerSectionConfig} hideEditButton={true} />
-        //                     </WidgetProvider>
-        //                 </div> */}
-        //                 <ChangeRequestValuesTabs
-        //                     widgetStoreNew={widgetStoreNew}
-        //                     widgetStoreOld={widgetStoreOld}
-        //                     newSectionData={newSectionData}
-        //                     oldSectionData={oldSectionData}
-        //                     innerSectionConfig={innerSectionConfig}
-        //                     t={t}
-        //                 />
-
-        //             </div>
-
-        //             <div className="w-full lg:w-[25%]">
-        //                 <VerificationList
-        //                     verifications={verifications}
-        //                     showForm={showAddVerification}
-        //                     onToggleForm={() => setShowAddVerification((v) => !v)}
-        //                     renderForm={() => (
-        //                         <VerificationForm
-        //                             onSubmit={addVerification}
-        //                             onClose={() => setShowAddVerification(false)}
-        //                         />
-        //                     )}
-        //                     isPending={details.approval_status === "PENDING"}
-        //                 />
-        //             </div>
-        //         </div>
-        //     )}
-
-        //     {popupVisible && popupType === "reject-input" && (
-        //         <RejectReasonPopup
-        //             onSubmit={(reason) => submitReject(reason)}
-        //             onClose={() => setPopupVisible(false)}
-        //             loading={loadingAction}
-        //         />
-        //     )}
-
-        //     {popupVisible && (popupType === "approve" || popupType === "reject") && (
-        //         <ActionPopup type={popupType} onClose={() => setPopupVisible(false)} />
-        //     )}
-        // </RegisterTabsLayout>
         <RegisterTabsLayout breadcrumb={breadcrumb}>
             <div className="flex gap-7.5">
                 <div className="w-full lg:w-[75%]">
@@ -239,6 +166,20 @@ export default function ChangeRequestDetailsView({ changeId, breadcrumb }: Props
                     )}
                 </div>
             </div>
+            {popupVisible && popupType === "reject-input" && (
+                <RejectReasonPopup
+                    onSubmit={(reason) => submitReject(reason)}
+                    onClose={() => setPopupVisible(false)}
+                    loading={loadingAction}
+                />
+            )}
+
+            {popupVisible && (popupType === "approve" || popupType === "reject") && (
+                <ActionPopup
+                    type={popupType}
+                    onClose={() => setPopupVisible(false)}
+                />
+            )}
         </RegisterTabsLayout>
     );
 }
