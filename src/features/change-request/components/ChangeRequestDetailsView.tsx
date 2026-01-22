@@ -1,48 +1,55 @@
 "use client";
 
-import { memo, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 import { RegisterTabsLayout } from "@/components/shared";
-import { ActionPopup, ChangeRequestHeader, RejectReasonPopup, VerificationForm, VerificationList } from "@/features/change-request/components";
-import { useChangeRequest, useChangeRequestActions, useVerifications } from "@/features/change-request/hooks";
+import {
+    ActionPopup,
+    ChangeRequestHeader,
+    RejectReasonPopup,
+    VerificationForm,
+    VerificationList,
+} from "@/features/change-request/components";
+
 
 import {
     WidgetProvider,
     createWidgetStore,
     SectionsContainer,
-} from '@openg2p/registry-widgets';
+} from "@openg2p/registry-widgets";
 import { useTranslations } from "next-intl";
-import { useChangeRequestDocuments } from "../hooks/useChangeRequestDocuments";
-import { useRegisterSectionsFromCR } from "./useRegisterSectionsFromCR";
 import { RegisterFlattenedRecord } from "@/features/register/types";
+import { useChangeRequestManager, useRegisterSectionsFromCR } from "@/features/change-request/hooks";
+import { ChangeRequestValuesTabs } from "./ChangeRequestValuesTabs";
+import CRHeaderSkeleton from "./CRHeaderSkeleton";
+import SectionSchemaSkeleton from "./SectionSchemaSkeleton";
+import VerificationListSkeleton from "./VerificationListSkeleton";
 
 interface Props {
     changeId: string;
     breadcrumb: { label: string; href?: string }[];
 }
 
-export default function ChangeRequestDetailsView({
-    changeId,
-    breadcrumb,
-}: Props) {
+export default function ChangeRequestDetailsView({ changeId, breadcrumb }: Props) {
     const t = useTranslations();
     const [showAddVerification, setShowAddVerification] = useState(false);
 
-    const { details, loading } = useChangeRequest(changeId);
-    const { verifications, addVerification } = useVerifications(changeId);
-
     const {
+        details,
+        verifications,
+        documents,
+        loadingDetails,
+        loadingVerifications,
+        loadingDocuments,
         loadingAction,
         popupVisible,
         popupType,
+        setPopupVisible,
         handleApprove,
         handleReject,
         submitReject,
-        setPopupVisible,
-    } = useChangeRequestActions();
-
-
-    const { documents, loading: loadingDocs } = useChangeRequestDocuments(changeId);
+        addVerification,
+    } = useChangeRequestManager(changeId);
 
     const widgetStoreOld = useMemo(() => createWidgetStore(), []);
     const widgetStoreNew = useMemo(() => createWidgetStore(), []);
@@ -52,12 +59,9 @@ export default function ChangeRequestDetailsView({
     const internalRecordId = details?.internal_record_id;
     const sectionId = details?.section_id;
     const sectionRegisterId = details?.section_register_id || "";
-    const isListSection = details?.is_list || false
+    const isListSection = details?.is_list || false;
 
-
-    const {
-        orderedTabSections,
-    } = useRegisterSectionsFromCR({
+    const { orderedTabSections, loadingSchema } = useRegisterSectionsFromCR({
         registerId,
         tabId,
         internalRecordId,
@@ -67,8 +71,7 @@ export default function ChangeRequestDetailsView({
         if (!orderedTabSections) return [];
 
         return orderedTabSections.filter(
-            (section: any) =>
-                section["section-id"] === sectionId
+            (section: any) => section["section-id"] === sectionId
         );
     }, [orderedTabSections, sectionId]);
 
@@ -82,7 +85,7 @@ export default function ChangeRequestDetailsView({
 
         if (isListSection === true) {
             map[sectionRegisterId] = {
-            records: details.change_payload
+                records: details.change_payload,
             };
         } else {
             map[sectionRegisterId] = details.change_payload[0];
@@ -101,76 +104,71 @@ export default function ChangeRequestDetailsView({
 
         if (isListSection === true) {
             map[sectionRegisterId] = {
-            records: details.current_register_data
+                records: details.current_register_data,
             };
         } else {
             map[sectionRegisterId] = details.current_register_data[0];
         }
 
         return map;
-        }, [details, isListSection, sectionRegisterId]);
-
-
-
+    }, [details, isListSection, sectionRegisterId]);
 
     return (
         <RegisterTabsLayout breadcrumb={breadcrumb}>
-            {loading && (
-                <p className="text-sm text-gray-500">Loading change request…</p>
-            )}
+            <div className="flex gap-7.5">
+                <div className="w-full lg:w-[75%]">
+                    {loadingDetails || loadingDocuments ? (
+                        <CRHeaderSkeleton />
+                    ) : (
+                        details && (
+                            <ChangeRequestHeader
+                                details={details}
+                                documents={documents}
+                                onApprove={handleApprove}
+                                onReject={handleReject}
+                                loadingAction={loadingAction}
+                            />
+                        )
+                    )}
 
-            {!loading && details && (
-                <div className="flex gap-7.5">
-                    <div className="w-full lg:w-[75%]">
-                        <ChangeRequestHeader
-                            details={details}
-                            documents={documents}
-                            onApprove={() => handleApprove(changeId)}
-                            onReject={handleReject}
-                            loadingAction={loadingAction}
-                        />
+                    {loadingSchema ? (
+                        <SectionSchemaSkeleton />
+                    ) : (
+                        details && (
+                            <ChangeRequestValuesTabs
+                                widgetStoreNew={widgetStoreNew}
+                                widgetStoreOld={widgetStoreOld}
+                                newSectionData={newSectionData}
+                                oldSectionData={oldSectionData}
+                                innerSectionConfig={innerSectionConfig}
+                                t={t}
+                            />
+                        )
+                    )}
+                </div>
 
-                        <div>
-                            <h3 className="mt-6 mb-2 font-semibold">New Values</h3>
-                            <WidgetProvider
-                                store={widgetStoreNew}
-                                schemaData={newSectionData}
-                                translate={t}
-                            >
-                                <SectionsContainer sections={innerSectionConfig} hideEditButton={true} />
-                            </WidgetProvider>
-
-                            <h3 className="mt-6 mb-2 font-semibold">Old Values</h3>
-                            <WidgetProvider
-                                store={widgetStoreOld}
-                                schemaData={oldSectionData}
-                                translate={t}
-                            >
-                                <SectionsContainer sections={innerSectionConfig} hideEditButton={true} />
-                            </WidgetProvider>
-                        </div>
-                    </div>
-
-                    <div className="w-full lg:w-[25%]">
+                <div className="w-full lg:w-[25%]">
+                    {loadingVerifications ? (
+                        <VerificationListSkeleton />
+                    ) : (
                         <VerificationList
                             verifications={verifications}
                             showForm={showAddVerification}
-                            onToggleForm={() => setShowAddVerification((v) => !v)}
+                            onToggleForm={() => setShowAddVerification(v => !v)}
                             renderForm={() => (
                                 <VerificationForm
                                     onSubmit={addVerification}
                                     onClose={() => setShowAddVerification(false)}
                                 />
                             )}
-                            isPending={details.approval_status === "PENDING"}
+                            isPending={details?.approval_status === "PENDING"}
                         />
-                    </div>
+                    )}
                 </div>
-            )}
-
+            </div>
             {popupVisible && popupType === "reject-input" && (
                 <RejectReasonPopup
-                    onSubmit={(reason) => submitReject(changeId, reason)}
+                    onSubmit={(reason) => submitReject(reason)}
                     onClose={() => setPopupVisible(false)}
                     loading={loadingAction}
                 />
@@ -182,7 +180,6 @@ export default function ChangeRequestDetailsView({
                     onClose={() => setPopupVisible(false)}
                 />
             )}
-
         </RegisterTabsLayout>
     );
 }

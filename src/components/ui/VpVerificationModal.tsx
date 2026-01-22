@@ -4,10 +4,12 @@ import Image from 'next/image';
 import VpVerification from './VpVerification';
 
 interface Props {
+    descriptorSchema: any;
     onClose: () => void;
 }
 
 export default function VpVerificationModal({
+    descriptorSchema,
     onClose,
 }: Props) {
 
@@ -22,7 +24,7 @@ export default function VpVerificationModal({
                 </button>
 
                 <div className="flex-1 overflow-auto">
-                    <VpVerification />
+                    <VpVerification descriptorSchema={descriptorSchema}/>
                 </div>
 
                 <div className="mt-6 flex gap-4 justify-center">

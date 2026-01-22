@@ -48,7 +48,7 @@ export default function ChangeRequestCard({
 
     if (loading) {
         return (
-            <div className="relative rounded-[30px] bg-[#EDC227] px-8 pt-5 pb-8 overflow-hidden animate-pulse">
+            <div className="relative rounded-[30px] bg-[#EDC227] px-8 pt-4 pb-7 overflow-hidden animate-pulse">
                 <div className="flex items-center justify-between">
                     <div className="h-6 w-40 rounded bg-black/20" />
                     <div className="h-15 w-20 rounded-[20px] bg-black/20" />

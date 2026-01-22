@@ -12,6 +12,7 @@ import {
 import ChangeRequestCard from '@/features/change-request/components/ChangeRequestCard';
 
 import { useRegisterDetail } from '@/features/register/hooks/useRegisterDetail';
+import RegisterDetailsPageSkeleton from '@/features/register/components/RegisterDetailsPageSkeleton';
 
 
 export default function RegisterDetailPage() {
@@ -32,22 +33,6 @@ export default function RegisterDetailPage() {
         currentRegister
     } = useRegisterDetail();
 
-
-    // Helper to render skeleton placeholders
-    const renderSkeleton = () => (
-        <div className="grid grid-cols-12 gap-6 animate-pulse">
-            <div className="col-span-12 lg:col-span-9 space-y-6">
-                <div className="bg-gray-300 rounded-lg w-full h-[300px]" />
-                <div className="bg-gray-300 rounded-lg w-full h-[300px]" />
-            </div>
-
-            <div className="hidden lg:block lg:col-span-3 space-y-6">
-                <div className="bg-gray-300 rounded-lg h-48 w-full" />
-                <div className="bg-gray-300 rounded-lg h-48 w-full" />
-            </div>
-        </div>
-    );
-
     // resolvingId: resolves the functional ID 
     // from the internal record ID (UUID)
     const isLoading = !internalRecordId || !canRenderContent;
@@ -61,7 +46,7 @@ export default function RegisterDetailPage() {
             onTabChange={setActiveTabByIndex}
         >
             {isLoading ? (
-                renderSkeleton()
+                <RegisterDetailsPageSkeleton tabs={tabs} />
             ) : isNotFound ? (
                 <div className="p-8 text-center text-red-500 bg-white rounded-lg border border-red-100 shadow-sm">
                     {t('recordNotFound')}

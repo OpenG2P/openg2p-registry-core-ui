@@ -15,10 +15,29 @@ interface BreadcrumbBarProps {
 
 export default function BreadcrumbBar({ breadcrumb = [] }: BreadcrumbBarProps) {
     const t = useTranslations();
+    if (breadcrumb.length === 0) {
+        return (
+            <div className="flex items-end gap-2">
+                <Link href="/" passHref>
+                    <div className="h-7.5 flex items-end pb-0.5 pr-2 cursor-pointer">
+                        <Image src="/home.png" width={22} height={22} alt="home" />
+                    </div>
+                </Link>
+
+                {[1, 2].map(i => (
+                    <div key={i} className="flex items-end gap-2">
+                        <div className="h-5.75 w-20 rounded bg-gray-300" />
+                        <div className="h-5.75 w-20 rounded bg-gray-300" />
+                    </div>
+                ))}
+            </div>
+        );
+    }
+
     return (
         <div className="flex items-end gap-2">
             <Link href="/" passHref>
-                <div className="h-[30px] flex items-end pb-0.5 pr-2 cursor-pointer">
+                <div className="h-7.5 flex items-end pb-0.5 pr-2 cursor-pointer">
                     <Image src="/home.png" width={22} height={22} alt="home" />
                 </div>
             </Link>
@@ -31,7 +50,7 @@ export default function BreadcrumbBar({ breadcrumb = [] }: BreadcrumbBarProps) {
                     <div key={index} className="flex items-end gap-2">
                         {/* <div className="h-[23px] flex items-end font-medium text-[20px] text-black leading-none"> */}
                         <div
-                            className={`h-[23px] flex items-end font-medium text-[20px] leading-none ${textColor}`}
+                            className={`h-5.75 flex items-end font-medium text-[20px] leading-none ${textColor}`}
                         >
                             {item.href && !isLast ? (
                                 <Link href={item.href}>{item.label}</Link>
