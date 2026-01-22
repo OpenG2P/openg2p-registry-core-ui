@@ -118,49 +118,21 @@ export default function Home() {
             : StatsCardLarge;
 
     return (
-        <div
-            className="
-        relative min-h-screen bg-[#EABB13]
-        pt-10 sm:pt-14 md:pt-16 lg:pt-16
-        overflow-hidden text-gray-900
-     "
-        >
+        <div className="relative min-h-screen bg-[#EABB13] pt-10 sm:pt-14 md:pt-16 lg:pt-1 overflow-hidden text-gray-900">
             {/* background pattern */}
-            <div
-                className="
-                    absolute top-0 left-0
-                    w-full h-full
-                    bg-[url('/bg_pattern.png')]
-                    bg-repeat
-                    bg-size-[96px_96px]
-                    opacity-80
-                    pointer-events-none
-                "
-            />
+            <div className="absolute top-0 left-0 w-full h-full bg-[url('/bg_pattern.png')] bg-repeat bg-size-[96px_96px] opacity-80 pointer-events-none" />
 
             <div className="relative">
                 <div className="mx-auto flex max-w-6xl flex-col items-center px-4 sm:px-6 py-10 sm:py-12 lg:py-14 space-y-10 sm:space-y-12 lg:space-y-14">
 
                     {/* stats cards */}
-                    <div
-                        className={`
-                            flex flex-wrap items-stretch
-                            gap-4 sm:gap-5 lg:gap-6
-                            ${statsCardVariant === 'small' ? 'w-full justify-center' : 'w-4/5 justify-between'}
-                        `}
-                    >
+                    <div className={`flex flex-wrap items-stretch gap-4 sm:gap-5 lg:gap-6 ${statsCardVariant === 'small' ? 'w-full justify-center' : 'w-4/5 justify-between'}`}>
                         {visibleCards.map((type) => (
                             <button
                                 key={type}
                                 type="button"
                                 onClick={() => setActiveStatsCard(type)}
-                                className={`
-                                bg-transparent p-0 text-left
-                                ${statsCardVariant === 'small'
-                                        ? 'flex-1 min-w-40 sm:min-w-45 lg:min-w-55'
-                                        : 'w-[calc(50%-12px)] sm:w-[calc(50%-10px)] lg:w-[calc(50%-12px)]'
-                                    }
-                                `}
+                                className={`bg-transparent p-0 text-left ${statsCardVariant === 'small' ? 'flex-1 min-w-40 sm:min-w-45 lg:min-w-55' : 'w-[calc(50%-12px)] sm:w-[calc(50%-10px)] lg:w-[calc(50%-12px)]'}`}
                             >
                                 <StatsCardComponent
                                     stats_endpoint={`/api/stats/${type === 'registers' ? 'register' : type}`}
@@ -171,9 +143,7 @@ export default function Home() {
                     </div>
 
                     {/* Search Bar */}
-                    <div
-                        className="relative border-[#ED7C22] flex h-14 w-4/5 items-center rounded-[30px] border bg-white overflow-visible"
-                    >
+                    <div className="relative border-[#ED7C22] flex h-14 w-4/5 items-center rounded-[30px] border bg-white overflow-visible">
                         {activeStatsCard === 'registers' && registerList && registerList.length > 0 && (
                             <RegisterDropdown
                                 options={registerList}

@@ -15,7 +15,7 @@ import { useChangeRequest, useVerifications } from '@/features/change-request/ho
 import { useRecordHistory } from '@/features/register/hooks/useRecordHistory';
 import { useMemo, useState } from 'react';
 import { useRegister } from '@/context/RegisterContext';
-import { useRegisterSectionsFromCR } from '@/features/change-request/components/useRegisterSectionsFromCR';
+import { useRegisterSectionsFromCR } from '@/features/change-request/hooks/useRegisterSectionsFromCR';
 import { useRegisterRecord } from '@/context/RegisterRecordContext';
 import { RegisterFlattenedRecord } from '@/features/register/types';
 

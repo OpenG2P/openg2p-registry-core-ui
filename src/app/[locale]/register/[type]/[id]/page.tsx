@@ -37,8 +37,8 @@ export default function RegisterDetailPage() {
     const renderSkeleton = () => (
         <div className="grid grid-cols-12 gap-6 animate-pulse">
             <div className="col-span-12 lg:col-span-9 space-y-6">
-                <div className="bg-gray-300 rounded-lg w-full h-[300px]" />
-                <div className="bg-gray-300 rounded-lg w-full h-[300px]" />
+                <div className="bg-gray-300 rounded-lg w-full h-75" />
+                <div className="bg-gray-300 rounded-lg w-full h-75" />
             </div>
 
             <div className="hidden lg:block lg:col-span-3 space-y-6">

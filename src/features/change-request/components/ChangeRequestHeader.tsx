@@ -6,11 +6,6 @@ export interface ChangeRequestDocument {
     document_store_id: string;
     document_url: string;
 }
-export const DOCUMENT_TYPES = [
-    "Location Documents",
-    "ID Card Documents",
-    "Other Documents",
-] as const;
 
 interface Props {
     details: ChangeRequest;
@@ -44,7 +39,6 @@ export default function ChangeRequestHeader({
                     details={details}
                     documentsCount={documents.length}
                 />
-                {/* <AttachedDocuments /> */}
                 <AttachedDocuments documents={documents} />
             </div>
 
@@ -126,40 +120,6 @@ const VerificationStats = ({ details, documentsCount }: { details: ChangeRequest
     </div>
 );
 
-// const AttachedDocuments = () => (
-//     <div className="space-y-2 text-[16px] text-[#00000080]">
-//         <div className="pl-6 flex items-center leading-none">
-//             <span className="text-lg font-semibold text-black">
-//                 Attached Doc
-//             </span>
-//             <Image
-//                 src="/attached_doc_icon.png"
-//                 alt="doc"
-//                 width={14}
-//                 height={14}
-//                 className="ml-1 mb-1"
-//             />
-//         </div>
-//         <div className="border-l-2 border-[#F2BA1A] pl-6 flex flex-col gap-2 font-semibold">
-//             {DOCUMENT_TYPES.map((label) => (
-//                 <span
-//                     key={label}
-//                     className="flex items-center gap-2 cursor-pointer"
-//                 >
-//                     {label}
-//                     <Image
-//                         src="/right_arrow.png"
-//                         alt="arrow"
-//                         width={14}
-//                         height={14}
-//                     />
-//                 </span>
-//             ))}
-//         </div>
-//     </div>
-// );
-
-
 const AttachedDocuments = ({ documents = [] }: { documents?: ChangeRequestDocument[] }) => {
     const visibleDocs = documents.slice(0, 3);
     const placeholdersCount = Math.max(0, 3 - visibleDocs.length);
@@ -181,9 +141,10 @@ const AttachedDocuments = ({ documents = [] }: { documents?: ChangeRequestDocume
 
             <div className="border-l-2 border-[#F2BA1A] pl-6 flex flex-col gap-2 font-semibold">
                 {
-                    visibleDocs.map((doc) => (
+                    visibleDocs.map((doc, index) => (
                         <span
-                            key={doc.document_label}
+                            key={index}
+                            onClick={() => window.open(doc.document_url, '_blank', 'noopener,noreferrer')}
                             className="flex items-center gap-2 cursor-pointer"
                         >
                             {doc.document_label}

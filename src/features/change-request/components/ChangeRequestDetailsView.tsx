@@ -1,48 +1,50 @@
 "use client";
 
-import { memo, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 import { RegisterTabsLayout } from "@/components/shared";
-import { ActionPopup, ChangeRequestHeader, RejectReasonPopup, VerificationForm, VerificationList } from "@/features/change-request/components";
-import { useChangeRequest, useChangeRequestActions, useVerifications } from "@/features/change-request/hooks";
+import {
+    ActionPopup,
+    ChangeRequestHeader,
+    RejectReasonPopup,
+    VerificationForm,
+    VerificationList,
+} from "@/features/change-request/components";
+
 
 import {
     WidgetProvider,
     createWidgetStore,
     SectionsContainer,
-} from '@openg2p/registry-widgets';
+} from "@openg2p/registry-widgets";
 import { useTranslations } from "next-intl";
-import { useChangeRequestDocuments } from "../hooks/useChangeRequestDocuments";
-import { useRegisterSectionsFromCR } from "./useRegisterSectionsFromCR";
 import { RegisterFlattenedRecord } from "@/features/register/types";
+import { useChangeRequestManager, useRegisterSectionsFromCR } from "@/features/change-request/hooks";
+import { ChangeRequestValuesTabs } from "./ChangeRequestValuesTabs";
 
 interface Props {
     changeId: string;
     breadcrumb: { label: string; href?: string }[];
 }
 
-export default function ChangeRequestDetailsView({
-    changeId,
-    breadcrumb,
-}: Props) {
+export default function ChangeRequestDetailsView({ changeId, breadcrumb }: Props) {
     const t = useTranslations();
     const [showAddVerification, setShowAddVerification] = useState(false);
 
-    const { details, loading } = useChangeRequest(changeId);
-    const { verifications, addVerification } = useVerifications(changeId);
-
     const {
+        details,
+        verifications,
+        documents,
+        loadingDetails,
         loadingAction,
         popupVisible,
         popupType,
+        setPopupVisible,
         handleApprove,
         handleReject,
         submitReject,
-        setPopupVisible,
-    } = useChangeRequestActions();
-
-
-    const { documents, loading: loadingDocs } = useChangeRequestDocuments(changeId);
+        addVerification,
+    } = useChangeRequestManager(changeId);
 
     const widgetStoreOld = useMemo(() => createWidgetStore(), []);
     const widgetStoreNew = useMemo(() => createWidgetStore(), []);
@@ -52,12 +54,9 @@ export default function ChangeRequestDetailsView({
     const internalRecordId = details?.internal_record_id;
     const sectionId = details?.section_id;
     const sectionRegisterId = details?.section_register_id || "";
-    const isListSection = details?.is_list || false
+    const isListSection = details?.is_list || false;
 
-
-    const {
-        orderedTabSections,
-    } = useRegisterSectionsFromCR({
+    const { orderedTabSections } = useRegisterSectionsFromCR({
         registerId,
         tabId,
         internalRecordId,
@@ -67,8 +66,7 @@ export default function ChangeRequestDetailsView({
         if (!orderedTabSections) return [];
 
         return orderedTabSections.filter(
-            (section: any) =>
-                section["section-id"] === sectionId
+            (section: any) => section["section-id"] === sectionId
         );
     }, [orderedTabSections, sectionId]);
 
@@ -82,7 +80,7 @@ export default function ChangeRequestDetailsView({
 
         if (isListSection === true) {
             map[sectionRegisterId] = {
-            records: details.change_payload
+                records: details.change_payload,
             };
         } else {
             map[sectionRegisterId] = details.change_payload[0];
@@ -101,36 +99,31 @@ export default function ChangeRequestDetailsView({
 
         if (isListSection === true) {
             map[sectionRegisterId] = {
-            records: details.current_register_data
+                records: details.current_register_data,
             };
         } else {
             map[sectionRegisterId] = details.current_register_data[0];
         }
 
         return map;
-        }, [details, isListSection, sectionRegisterId]);
-
-
-
+    }, [details, isListSection, sectionRegisterId]);
 
     return (
         <RegisterTabsLayout breadcrumb={breadcrumb}>
-            {loading && (
-                <p className="text-sm text-gray-500">Loading change request…</p>
-            )}
+            {loadingDetails && <p className="text-sm text-gray-500">Loading change request…</p>}
 
-            {!loading && details && (
+            {!loadingDetails && details && (
                 <div className="flex gap-7.5">
                     <div className="w-full lg:w-[75%]">
                         <ChangeRequestHeader
                             details={details}
                             documents={documents}
-                            onApprove={() => handleApprove(changeId)}
+                            onApprove={handleApprove}
                             onReject={handleReject}
                             loadingAction={loadingAction}
                         />
 
-                        <div>
+                        {/* <div>
                             <h3 className="mt-6 mb-2 font-semibold">New Values</h3>
                             <WidgetProvider
                                 store={widgetStoreNew}
@@ -148,7 +141,16 @@ export default function ChangeRequestDetailsView({
                             >
                                 <SectionsContainer sections={innerSectionConfig} hideEditButton={true} />
                             </WidgetProvider>
-                        </div>
+                        </div> */}
+                        <ChangeRequestValuesTabs
+                            widgetStoreNew={widgetStoreNew}
+                            widgetStoreOld={widgetStoreOld}
+                            newSectionData={newSectionData}
+                            oldSectionData={oldSectionData}
+                            innerSectionConfig={innerSectionConfig}
+                            t={t}
+                        />
+
                     </div>
 
                     <div className="w-full lg:w-[25%]">
@@ -170,19 +172,15 @@ export default function ChangeRequestDetailsView({
 
             {popupVisible && popupType === "reject-input" && (
                 <RejectReasonPopup
-                    onSubmit={(reason) => submitReject(changeId, reason)}
+                    onSubmit={(reason) => submitReject(reason)}
                     onClose={() => setPopupVisible(false)}
                     loading={loadingAction}
                 />
             )}
 
             {popupVisible && (popupType === "approve" || popupType === "reject") && (
-                <ActionPopup
-                    type={popupType}
-                    onClose={() => setPopupVisible(false)}
-                />
+                <ActionPopup type={popupType} onClose={() => setPopupVisible(false)} />
             )}
-
         </RegisterTabsLayout>
     );
 }

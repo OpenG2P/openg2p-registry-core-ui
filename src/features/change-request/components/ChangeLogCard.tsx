@@ -138,7 +138,8 @@ export default function ChangeLogCard({
                                 />
                             </span>
                         ))} */}
-                        {[
+
+                        {/* {[
                             ...documents.slice(0, 3),
                             ...Array(Math.max(0, 3 - documents.length)).fill(null),
                         ].map((doc, index) =>
@@ -164,7 +165,31 @@ export default function ChangeLogCard({
                                     placeholder
                                 </span>
                             )
-                        )}
+                        )} */}
+                        {documents.slice(0, 3).map((doc, index) => (
+                            <span
+                                key={index}
+                                onClick={() => window.open(doc.document_url, '_blank', 'noopener,noreferrer')}
+                                className="flex items-center gap-2 cursor-pointer"
+                            >
+                                {doc.document_label}
+                                <Image
+                                    src="/right_arrow.png"
+                                    alt="arrow"
+                                    width={14}
+                                    height={14}
+                                />
+                            </span>
+                        ))}
+
+                        {Array.from({ length: Math.max(0, 3 - documents.length) }).map((_, idx) => (
+                            <span
+                                key={`placeholder-${idx}`}
+                                className="flex items-center gap-2 invisible"
+                            >
+                                placeholder
+                            </span>
+                        ))}
 
                     </div>
                 </div>

@@ -1,10 +1,6 @@
 import { useMemo } from "react";
 import { useFetch } from "@/shared/hooks/useFetch";
-import {
-  TabSection,
-  RegisterFlattenedRecord,
-  TabSectionData,
-} from "@/features/register/types";
+import { TabSection } from "@/features/register/types";
 
 interface Params {
   registerId?: string;
@@ -19,7 +15,7 @@ export const useRegisterSectionsFromCR = ({
 }: Params) => {
   // Fetch tab sections (UI schema)
 
-  const { data: tabSections } = useFetch<TabSection[]>({
+  const { data: tabSections, loading: loadingSchema } = useFetch<TabSection[]>({
     url: `/api/register/tab-sections`,
     enabled: !!registerId && !!tabId,
     options: {
@@ -44,6 +40,6 @@ export const useRegisterSectionsFromCR = ({
 
   return {
     orderedTabSections,
-    // sectionDataMap,
+    loadingSchema
   };
 };
