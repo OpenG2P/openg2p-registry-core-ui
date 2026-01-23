@@ -10,6 +10,20 @@ interface PaginationBarProps {
     onNext: () => void;
 }
 
+const formatNumber = (num: number) => {
+    if (num < 1000) return num.toString();
+    if (num >= 1000000000) {
+        const val = num / 1000000000;
+        return `${val < 10 ? val.toFixed(1).replace(/\.0$/, "") : Math.floor(val)}B`;
+    }
+    if (num >= 1000000) {
+        const val = num / 1000000;
+        return `${val < 10 ? val.toFixed(1).replace(/\.0$/, "") : Math.floor(val)}M`;
+    }
+    const val = num / 1000;
+    return `${val < 10 ? val.toFixed(1).replace(/\.0$/, "") : Math.floor(val)}k`;
+};
+
 export default function PaginationBar({
     pageStart,
     pageEnd,
@@ -22,8 +36,8 @@ export default function PaginationBar({
 
     return (
         <div className="flex items-center gap-2">
-            <span className="w-20 h-[19px] text-center font-normal text-[16px] text-[#1E1E1E]">
-                {pageStart} - {pageEnd} of {total}
+            <span className="min-w-[80px] px-2 h-[19px] text-center font-normal text-[16px] text-[#1E1E1E] whitespace-nowrap">
+                {formatNumber(pageStart)} - {formatNumber(pageEnd)} of {formatNumber(total)}
             </span>
 
 
