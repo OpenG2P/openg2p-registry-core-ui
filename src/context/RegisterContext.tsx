@@ -22,7 +22,7 @@ interface RegisterContextValue {
     loading: boolean;
 }
 
-const RegisterContext = createContext<RegisterContextValue | null>(null);
+export const RegisterContext = createContext<RegisterContextValue | null>(null);
 
 export function RegisterProvider({
     children,

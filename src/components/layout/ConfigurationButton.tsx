@@ -9,7 +9,7 @@ export default function ConfigurationButton() {
     const t = useTranslations();
 
     const goToConfig = () => {
-        router.push("/config");
+        router.push("/configuration/registers");
     };
 
     return (

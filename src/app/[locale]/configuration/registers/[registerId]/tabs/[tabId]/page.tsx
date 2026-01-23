@@ -1,0 +1,129 @@
+'use client';
+
+import { useState } from 'react';
+import { TopBar, BreadcrumbBar } from '@/components/shared';
+import ConfigSidebar from '@/features/configuration/components/ConfigSidebar';
+import { useParams } from 'next/navigation';
+import RegisterSectionConfigView from '@/features/configuration/components/RegisterSectionConfigView';
+import { TAB_MOCK_DATA } from '@/features/configuration/components/RegisterTabConfigView';
+import ConfigDetailsSummary from '@/features/configuration/components/ConfigDetailsSummary';
+import { REGISTER_MOCK_DATA } from '@/features/configuration/components/RegistersConfigView';
+import { useBreadcrumb } from '@/shared/hooks/useBreadcrumb';
+import EditTabModal from '@/features/configuration/components/EditTabModal';
+
+const TabConfigurationPage = () => {
+    const { registerId, tabId } = useParams<{ registerId: string; tabId: string }>();
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [pagination, setPagination] = useState({
+        pageStart: 1,
+        pageEnd: 12,
+        total: 250_000_000,
+    });
+
+    const getRegisterDetails = (nameOrId: string) => {
+        const registerData = REGISTER_MOCK_DATA.find(
+            r => r.mnemonic.toLowerCase() === nameOrId.toLowerCase() || r.register_id === nameOrId
+        );
+        if (registerData) return registerData;
+
+        return {
+            mnemonic: nameOrId,
+            description: `Register configuration for: ${nameOrId}`,
+            parentRegister: 'Parent Registry'
+        };
+    };
+
+    const getTabDetails = (nameOrId: string) => {
+        const tabData = TAB_MOCK_DATA.find(
+            t => t.tab_name.toLowerCase() === nameOrId.toLowerCase() || t.tab_id === nameOrId
+        );
+        return {
+            tab_name: tabData ? tabData.tab_name : nameOrId,
+            description: tabData ? tabData.description : "Description text..."
+        };
+    };
+
+    const registerDetails = getRegisterDetails(registerId);
+    const tabDetails = getTabDetails(tabId);
+
+    const breadcrumb = useBreadcrumb({
+        rootItem: { label: 'Registers', href: '/configuration/registers' },
+        customItems: [
+            { label: registerDetails.mnemonic, href: `/configuration/registers/${registerId}` },
+            { label: tabDetails.tab_name, href: `/configuration/registers/${registerId}/tabs/${tabId}` }
+        ]
+    });
+
+
+    const handlePrev = () => {
+        setPagination((prev) => ({
+            ...prev,
+            pageStart: Math.max(1, prev.pageStart - 10),
+            pageEnd: Math.max(10, prev.pageEnd - 10),
+        }));
+    };
+
+    const handleNext = () => {
+        setPagination((prev) => ({
+            ...prev,
+            pageStart: prev.pageStart + 10,
+            pageEnd: prev.pageEnd + 10,
+        }));
+    };
+
+    return (
+        <div className="min-h-screen mx-auto bg-[#F3F1E4] flex">
+            <div className="mt-4">
+                <ConfigSidebar activeOption={"registers"} />
+            </div>
+
+            <div className="flex-1">
+                <div className="pt-10 px-7.5 mb-6">
+                    <BreadcrumbBar breadcrumb={breadcrumb} />
+                </div>
+
+                <ConfigDetailsSummary
+                    title={tabDetails.tab_name}
+                    description={tabDetails.description}
+                    extraInfo={registerDetails.mnemonic}
+                    status={true}
+                    selectionOptions={REGISTER_MOCK_DATA.map(r => r.mnemonic)}
+                    onSave={(data) => console.log('Saved Tab:', data)}
+                    onEdit={() => setIsEditModalOpen(true)}
+                />
+
+                <TopBar
+                    breadcrumb={[]}
+                    showFilters={false}
+                    showPagination={true}
+                    showAddNewButton={true}
+                    addNewButtonText={"Add New Section"}
+                    onAddNewButton={() => setIsModalOpen(true)}
+                    pageStart={pagination.pageStart}
+                    pageEnd={pagination.pageEnd}
+                    total={pagination.total}
+                    onPrev={handlePrev}
+                    onNext={handleNext}
+                />
+
+                <RegisterSectionConfigView
+                    isModalOpen={isModalOpen}
+                    onCloseModal={() => setIsModalOpen(false)}
+                />
+
+                <EditTabModal
+                    isOpen={isEditModalOpen}
+                    initialData={{
+                        tabName: tabDetails.tab_name,
+                        description: tabDetails.description
+                    }}
+                    onClose={() => setIsEditModalOpen(false)}
+                />
+
+            </div>
+        </div>
+    );
+};
+
+export default TabConfigurationPage;
