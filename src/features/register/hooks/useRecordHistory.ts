@@ -3,6 +3,7 @@ import { useFetch } from "@/shared/hooks/useFetch";
 
 export const useRecordHistory = () => {
     const [selectedDate, setSelectedDate] = useState<string | null>(null);
+    const [selectedVersion, setSelectedVersion] = useState<string | null>(null);
 
     const { execute: fetchDates, loading: loadingDates } = useFetch<any>({
         url: "/api/change_request/get_version_dates",
@@ -33,6 +34,7 @@ export const useRecordHistory = () => {
         truncated_created_date: string;
     }) => {
         setSelectedDate(payload.truncated_created_date);
+        setSelectedVersion(null);
 
         return fetchChanges("/api/register/get-changes-for-date", {
             method: "POST",
@@ -45,6 +47,9 @@ export const useRecordHistory = () => {
         loadDates,
         loadChanges,
         selectedDate,
+        setSelectedDate,
+        selectedVersion,
+        setSelectedVersion,
         loadingDates,
         loadingChanges,
     };

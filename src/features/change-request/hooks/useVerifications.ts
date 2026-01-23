@@ -20,6 +20,10 @@ export const useVerifications = (changeId: string) => {
     });
 
     useEffect(() => {
+        setVerifications([]);
+    }, [changeId]);
+
+    useEffect(() => {
         if (verificationResp?.verifications) {
             setVerifications(verificationResp.verifications);
         }

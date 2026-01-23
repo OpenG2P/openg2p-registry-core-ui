@@ -10,10 +10,11 @@ interface CapsuleDropdownProps {
     value?: string;
     onChange?: (value: string) => void;
     onOpen?: () => void;
+    emptyMessage?: string;
 }
 
 export default function CapsuleDropdown(props: CapsuleDropdownProps) {
-    const { label, items, value, onChange, onOpen } = props;
+    const { label, items, value, onChange, onOpen, emptyMessage = "No items available" } = props;
 
     const [open, setOpen] = useState(false);
     const [selected, setSelected] = useState<string | undefined>(undefined);
@@ -25,6 +26,8 @@ export default function CapsuleDropdown(props: CapsuleDropdownProps) {
     useEffect(() => {
         if (value !== undefined) {
             setSelected(value);
+        } else {
+            setSelected(undefined);
         }
     }, [value]);
 
@@ -42,7 +45,7 @@ export default function CapsuleDropdown(props: CapsuleDropdownProps) {
     }
 
     return (
-        <div className=" flex items-center gap-3">
+        <div className="flex items-center gap-3">
             <span className="text-[16px] text-black font-medium whitespace-nowrap">
                 {label}
             </span>
@@ -50,7 +53,7 @@ export default function CapsuleDropdown(props: CapsuleDropdownProps) {
             <div ref={dropdownRef} className="relative">
                 <div
                     onClick={handleToggle}
-                    className={`flex items-center justify-between gap-3 px-3 py-1 rounded-[17px] cursor-pointer bg-white border border-[#F77F57] ${open ? "invisible" : ""}`}
+                    className={`flex items-center justify-between gap-3 px-3 py-1 min-w-35 w-auto rounded-[17px] cursor-pointer bg-white border border-[#F77F57] ${open ? "invisible" : ""}`}
                 >
                     <span className="text-[16px] text-black/50 font-medium">
                         {selected ?? "Select"}
@@ -66,7 +69,7 @@ export default function CapsuleDropdown(props: CapsuleDropdownProps) {
 
                 {open && (
                     <div
-                        className="absolute left-0 top-0 rounded-[17px] bg-white border border-[#F77F57] z-50 overflow-hidden"
+                        className="absolute left-0 top-0 min-w-35 w-auto rounded-[17px] bg-white border border-[#F77F57] z-50 overflow-hidden"
                         style={{ transform: "translateY(0)" }}
                     >
                         <div
@@ -74,7 +77,7 @@ export default function CapsuleDropdown(props: CapsuleDropdownProps) {
                                 setSelected(undefined);
                                 setOpen(false);
                             }}
-                            className="flex items-center gap-3 px-3 py-1 cursor-pointer"
+                            className="flex items-center justify-between gap-3 px-3 py-1 cursor-pointer"
                         >
                             <span className="text-[16px] text-black/50 font-medium">
                                 Select
@@ -87,17 +90,29 @@ export default function CapsuleDropdown(props: CapsuleDropdownProps) {
                                 className="rotate-180"
                             />
                         </div>
-                        {items.map((item, index) => (
-                            <div
-                                key={item}
-                                onClick={() => handleSelect(item)}
-                                className="flex items-center gap-3 px-3 py-1 cursor-pointer"
-                            >
-                                <span className="text-[16px] text-black/50 font-medium">
-                                    {item}
-                                </span>
-                            </div>
-                        ))}
+                        {(
+                            items.length === 0 ?
+                                (
+                                    <div className="flex items-center gap-3 px-3 py-1">
+                                        <span className="text-[16px] text-black/50 font-medium">
+                                            {emptyMessage}
+                                        </span>
+                                    </div>
+                                )
+                                : (
+                                    items.map((item) => (
+                                        <div
+                                            key={item}
+                                            onClick={() => handleSelect(item)}
+                                            className="flex items-center gap-3 px-3 py-1 cursor-pointer hover:bg-gray-50"
+                                        >
+                                            <span className="text-[16px] text-black/50 font-medium">
+                                                {item}
+                                            </span>
+                                        </div>
+                                    ))
+                                )
+                        )}
                     </div>
                 )}
             </div>
