@@ -22,6 +22,10 @@ interface TopBarProps {
     onFilters?: () => void;
     onApplyFilters?: (filters: FilterRule[]) => void;
 
+    showAddNewButton?: boolean;
+    onAddNewButton?: () => void;
+    addNewButtonText?: string;
+
     appliedFilters?: FilterRule[];
     filterConfig?: FilterConfig[];
     filterLoading?: boolean;
@@ -40,6 +44,9 @@ export default function TopBar({
     onNext,
     onFilters,
     onApplyFilters,
+    showAddNewButton = false,
+    onAddNewButton,
+    addNewButtonText = "Add New",
     appliedFilters = [],
     filterConfig = [],
     filterLoading = false,
@@ -49,7 +56,9 @@ export default function TopBar({
             <div className="w-full px-7.5 flex justify-between items-center">
                 {/* <BreadcrumbBar breadcrumb={breadcrumb} /> */}
                 <div className="flex items-center gap-4">
-                    <BreadcrumbBar breadcrumb={breadcrumb} />
+                    {breadcrumb && breadcrumb.length > 0 && (
+                        <BreadcrumbBar breadcrumb={breadcrumb} />
+                    )}
 
                     {showCapsule && capsule}
                 </div>
@@ -62,6 +71,21 @@ export default function TopBar({
                             filterConfig={filterConfig}
                             filterLoading={filterLoading}
                         />
+                    )}
+
+                    {showAddNewButton && (
+                        <button
+                            onClick={onAddNewButton}
+                            className="h-[34px] px-6 bg-[#F2BA1A] rounded-[17px] flex items-center gap-2 hover:bg-[#e5b018] transition-colors"
+                        >
+                            <span className="text-[16px] font-medium text-black">
+                                {addNewButtonText}
+                            </span>
+                            <span className=" text-[20px] font-bold text-black leading-none">
+                                +
+                            </span>
+
+                        </button>
                     )}
 
                     {showPagination && (
