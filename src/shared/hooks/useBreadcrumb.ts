@@ -1,7 +1,7 @@
-import { useMemo } from 'react';
+import { useMemo, useContext } from 'react';
 import { useTranslations } from 'next-intl';
-import { useRegister } from '@/context/RegisterContext';
-import { useRegisterTabs } from '@/context/RegisterTabsContext';
+import { RegisterContext } from '@/context/RegisterContext';
+import { RegisterTabsContext } from '@/context/RegisterTabsContext';
 
 interface BreadcrumbItem {
     label: string;
@@ -9,7 +9,7 @@ interface BreadcrumbItem {
 }
 
 interface BreadcrumbOptions {
-    registerType: string;
+    registerType?: string;
     functionalRecordId?: string | null;
     recordName?: string | null;
     internalRecordId?: string | null;
@@ -17,12 +17,17 @@ interface BreadcrumbOptions {
     includeActiveTab?: boolean;
     includeChangeRequest?: boolean;
     customItems?: BreadcrumbItem[];
+    rootItem?: BreadcrumbItem;
 }
 
 export function useBreadcrumb(options: BreadcrumbOptions) {
     const t = useTranslations();
-    const { currentRegister } = useRegister();
-    const { activeTab, activeTabId } = useRegisterTabs();
+    const registerCtx = useContext(RegisterContext);
+    const tabsCtx = useContext(RegisterTabsContext);
+
+    const currentRegister = registerCtx?.currentRegister;
+    const activeTab = tabsCtx?.activeTab;
+    const activeTabId = tabsCtx?.activeTabId;
 
     const {
         registerType,
@@ -33,36 +38,42 @@ export function useBreadcrumb(options: BreadcrumbOptions) {
         includeActiveTab = false,
         includeChangeRequest = false,
         customItems = [],
+        rootItem,
     } = options;
-    return useMemo<BreadcrumbItem[]>(() => {
-        if (!currentRegister) return [];
 
+    return useMemo<BreadcrumbItem[]>(() => {
         const items: BreadcrumbItem[] = [];
 
-        items.push({
-            label: t(currentRegister.register_subject) ?? currentRegister.register_subject,
-            href: `/register/${registerType}`,
-        });
-
-        if (internalRecordId && activeTab) {
-            items.push({
-                label: `${recordName} - ${functionalRecordId} - ${t(activeTab.tab_label) ?? activeTab.tab_label}`,
-                href: `/register/${registerType}/${internalRecordId}`,
-            });
+        if (rootItem) {
+            items.push(rootItem);
         }
 
-        if (includeChangeRequest && internalRecordId) {
+        if (currentRegister && registerType) {
             items.push({
-                label: t('changeRequest') ?? 'Change Request',
-                href: `/register/${registerType}/${internalRecordId}/change-request${activeTabId ? `?tab=${activeTabId}` : ''}`,
+                label: t(currentRegister.register_subject) ?? currentRegister.register_subject,
+                href: `/register/${registerType}`,
             });
-        }
 
-        if (changeId && internalRecordId) {
-            items.push({
-                label: changeId,
-                href: `/register/${registerType}/${internalRecordId}/change-request/${changeId}${activeTabId ? `?tab=${activeTabId}` : ''}`,
-            });
+            if (internalRecordId && activeTab) {
+                items.push({
+                    label: `${recordName} - ${functionalRecordId} - ${t(activeTab.tab_label) ?? activeTab.tab_label}`,
+                    href: `/register/${registerType}/${internalRecordId}`,
+                });
+            }
+
+            if (includeChangeRequest && internalRecordId) {
+                items.push({
+                    label: t('changeRequest') ?? 'Change Request',
+                    href: `/register/${registerType}/${internalRecordId}/change-request${activeTabId ? `?tab=${activeTabId}` : ''}`,
+                });
+            }
+
+            if (changeId && internalRecordId) {
+                items.push({
+                    label: changeId,
+                    href: `/register/${registerType}/${internalRecordId}/change-request/${changeId}${activeTabId ? `?tab=${activeTabId}` : ''}`,
+                });
+            }
         }
 
         items.push(...customItems);
@@ -79,6 +90,7 @@ export function useBreadcrumb(options: BreadcrumbOptions) {
         activeTab,
         activeTabId,
         customItems,
+        rootItem,
         recordName,
         t,
     ]);

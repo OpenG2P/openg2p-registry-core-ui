@@ -32,7 +32,7 @@ interface RegisterTabsContextValue {
 
 /* ------------------------------------------------------------------ */
 
-const RegisterTabsContext =
+export const RegisterTabsContext =
     createContext<RegisterTabsContextValue | null>(null);
 
 /* ------------------------------------------------------------------ */
