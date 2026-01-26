@@ -5,7 +5,7 @@ import { TopBar } from '@/components/shared';
 import ConfigSidebar from '@/features/configuration/components/ConfigSidebar';
 import RegistersConfigView from '@/features/configuration/components/RegistersConfigView';
 
-const ConfigurationPage = () => {
+const RegistersConfigurationPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [pagination, setPagination] = useState({
     pageStart: 1,
@@ -61,4 +61,4 @@ const ConfigurationPage = () => {
   );
 };
 
-export default ConfigurationPage;
+export default RegistersConfigurationPage;
