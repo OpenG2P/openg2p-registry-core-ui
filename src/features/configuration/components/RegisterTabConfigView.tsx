@@ -5,24 +5,7 @@ import { Link } from '@/i18n/navigation';
 import AddTabModal from './AddTabModal';
 import { useParams } from 'next/navigation';
 
-export const TAB_MOCK_DATA = [
-	{
-		tab_id: '550e8400-e29b-41d4-a716-44665544000001',
-		tab_name: "FarmerInfoTab",
-		description: 'Description text...',
-	},
-	{
-		tab_id: '550e8400-e29b-41d4-a716-44665544000002',
-		tab_name: 'Crops',
-		description: 'Description text...',
-
-	},
-	{
-		tab_id: '550e8400-e29b-41d4-a716-44665544000003',
-		tab_name: 'Land',
-		description: 'Description text...',
-	},
-];
+import { useConfigTabs } from '../hooks/useConfigTabs';
 
 interface RegisterTabConfigViewProps {
 	onAddNewRegister: () => void;
@@ -36,18 +19,30 @@ export default function RegisterTabConfigView({
 	onCloseModal,
 }: RegisterTabConfigViewProps) {
 	const { registerId } = useParams<{ registerId: string }>();
+	const { tabs, loading, refresh } = useConfigTabs(registerId);
+
+	if (loading) {
+		return (
+			<div className="flex items-center justify-center p-8 bg-white rounded-[30px] mx-7.5">
+				<div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#ED7C22]"></div>
+			</div>
+		);
+	}
 
 	return (
 		<>
 			<div className="mx-7.5 bg-white rounded-[30px] p-8 overflow-x-visible">
 				<div className="space-y-2">
 					{/* Header */}
-					<div className="grid grid-cols-3 gap-4 pb-2 px-4">
+					<div className="grid grid-cols-4 gap-4 pb-2 px-4">
+						<div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
+							Tab ID
+						</div>
 						<div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
 							Tab Name
 						</div>
 						<div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
-							Description
+							Tab Order
 						</div>
 
 						<div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
@@ -57,21 +52,24 @@ export default function RegisterTabConfigView({
 					</div>
 
 					{/* Data Rows */}
-					{TAB_MOCK_DATA.map((tab, index) => (
+					{tabs.map((tab, index) => (
 						<Link
 							key={tab.tab_id}
 							href={`/configuration/registers/${registerId}/tabs/${tab.tab_id}`}
 							className="block -mx-8"
 						>
 							<div
-								className={`grid grid-cols-3 gap-4 items-center px-12 py-4 transition-colors ${index % 2 === 0 ? 'bg-[#D9D9D940]' : 'bg-white'
+								className={`grid grid-cols-4 gap-4 items-center px-12 py-4 transition-colors ${index % 2 === 0 ? 'bg-[#D9D9D940]' : 'bg-white'
 									} cursor-pointer`}
-							>
+							>  
+							    <div className="text-base font-medium">
+									{tab.tab_id}
+								</div>
 								<div className="text-base font-medium">
-									{tab.tab_name}
+									{tab.tab_label}
 								</div>
 								<div className="text-base font-medium text-gray-500">
-									{tab.description}
+									{tab.tab_order}
 								</div>
 
 								<div className="text-base font-medium">
@@ -95,6 +93,7 @@ export default function RegisterTabConfigView({
 			<AddTabModal
 				isOpen={isModalOpen}
 				onClose={onCloseModal}
+				onSuccess={refresh}
 			/>
 		</>
 	);

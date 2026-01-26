@@ -31,9 +31,9 @@ export const useSectionSave = (tabSections: TabSection[] | null) => {
             if (!section) {
                 console.error("Section not found in tabSections", sectionChanges.section_id);
                 return;
-            }  
-            const {filesToUpload, fileLabels } =extractFilesFromSection(sectionChanges);
-            
+            }
+            const { filesToUpload, fileLabels } = extractFilesFromSection(sectionChanges);
+
             let documentsResponse: UploadedDocument[] = [];
             if (filesToUpload.length > 0) {
                 const formData = new FormData();
@@ -54,10 +54,6 @@ export const useSectionSave = (tabSections: TabSection[] | null) => {
                     }
                 );
             }
-            // check for every record if edit_action =="add"
-            // // if edit_action is add add the link_internal_record_id:on it if edit_action is undefined att to NO_CHANGE '2cd2d2b3-5245-4e60-bb26-e0134644870e',
-            // if edit_action i
-
 
             const records = normalizeEditActions(
                 sectionChanges.records,
