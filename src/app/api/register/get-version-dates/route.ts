@@ -4,7 +4,7 @@ import { proxyToBackend } from "@/shared/utils";
 export async function POST(req: NextRequest) {
     return proxyToBackend({
         req,
-        targetEndpoint: "/register/get_version_dates",
+        targetEndpoint: "/register-data/get_version_dates",
         buildPayload: (body) => ({
             request_payload: {
                 register_id: body.register_id,
