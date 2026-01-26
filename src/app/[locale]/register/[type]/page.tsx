@@ -9,7 +9,7 @@ import { RegisterRecordCard } from '@/features/register/components';
 import { RegisterRecord } from '@/features/register/types';
 import { useState } from 'react';
 import AddNewDropdown from '@/components/ui/AddNewDropdown';
-// import VpVerificationModal from '@/components/ui/VpVerificationModal';
+import { useVCConfigs } from '@/features/register/hooks/useVCConfigs';
 
 const VpVerificationModal = dynamic(
     () => import('@/components/ui/VpVerificationModal'),
@@ -40,48 +40,12 @@ export default function RegisterTypePage() {
         }
     } = useRegisterRecords();
 
-    const vcOptions = [
-        {
-            vc_config_id: "vc_birth_cert",
-            vc_mnemonic: "BIRTH_CERTIFICATE",
-            descriptor_schema: {
-                id: "birth-cert",
-                constraints: {
-                    fields: [
-                        {
-                            path: ["$.type"],
-                            filter: {
-                                type: "string",
-                                pattern: "^BirthCertificateCredential$",
-                            },
-                        },
-                    ],
-                },
-            },
-        },
-        {
-            vc_config_id: "vc_dl",
-            vc_mnemonic: "DRIVING_LICENSE",
-            descriptor_schema: {
-                id: "driving-license",
-                constraints: {
-                    fields: [
-                        {
-                            path: ["$.type"],
-                            filter: {
-                                type: "string",
-                                pattern: "^DriverLicenseCredential$",
-                            },
-                        },
-                    ],
-                },
-            },
-        },
-    ];
-    const [selectedVC, setSelectedVC] = useState<any | null>(null);
-    const [openVC, setOpenVC] = useState(false);
 
-    const [openDetails, setOpenDetails] = useState(false);
+    const { vcOptions, isLoadingVCs } = useVCConfigs();
+
+    const [selectedVC, setSelectedVC] = useState<any | null>(null);
+
+    const [openVC, setOpenVC] = useState(false);
 
     return (
         <div className="min-h-screen mx-auto bg-[#F3F1E4]">
