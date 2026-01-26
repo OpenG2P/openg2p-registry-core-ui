@@ -28,21 +28,9 @@ export default function AddSectionModal({ isOpen, onClose }: AddSectionModalProp
 
     return (
         <div className="fixed inset-0 bg-black/80  z-50 flex items-center justify-center p-4">
-            <div className="relative w-full max-w-[800px] max-h-[600px] bg-[#F2BA1A] rounded-[50px] overflow-hidden flex p-4">
+            <div className="relative w-full max-w-[800px] max-h-[600px] bg-[#F2BA1A] rounded-[20px] overflow-hidden flex p-1">
 
-                <div className="hidden md:flex w-1/5 relative">
-                    <div className="relative w-full h-full flex items-end justify-end">
-                        <Image
-                            src="/config/male_with_pc.png"
-                            alt="Woman with laptop illustration"
-                            width={168}
-                            height={357}
-                            className="object-contain absolute -right-15 bottom-0 z-10"
-                        />
-                    </div>
-                </div>
-
-                <div className="flex-1 w-4/5 bg-white rounded-r-3xl  rounded-l-none p-8 relative ml-9 rounded-[60px] overflow-y-hidden">
+                <div className="flex-1 w-full bg-white p-10 relative  rounded-[20px] overflow-y-hidden">
                     <button
                         onClick={handleCancel}
                         className="absolute top-6 right-6 text-gray-400 hover:text-gray-600 transition-colors"

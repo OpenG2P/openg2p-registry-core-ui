@@ -78,9 +78,10 @@ const SectionConfigurationPage = () => {
                     onEdit={() => setIsEditModalOpen(true)}
                 />
 
+               
                 <div className="p-8">
                     <div className="bg-white rounded-[30px] p-8 min-h-100 flex items-center justify-center text-gray-400">
-                        JsonEditor for  {sectionDetails.section_name} section
+                        {`Widget Editor for ${sectionDetails.section_name} section`}
                     </div>
                 </div>
 

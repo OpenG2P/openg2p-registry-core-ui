@@ -15,6 +15,8 @@ export function useFilterConfig() {
         },
     });
 
+    console.log(data,"filter config data")
+
     return {
         filterConfig: data ?? [],
         loading,

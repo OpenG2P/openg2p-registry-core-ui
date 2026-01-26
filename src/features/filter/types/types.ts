@@ -16,8 +16,7 @@ export interface FilterConfig {
     filter_type: FilterType;
     order: number;
     allowed_operators: string[];
-    options?: SelectOption[];
-    options_source?: string;
+    options_source?: SelectOption[];
 }
 
 export interface FilterRule {

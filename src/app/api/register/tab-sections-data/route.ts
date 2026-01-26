@@ -4,7 +4,7 @@ import { proxyToBackend } from "@/shared/utils";
 export async function POST(req: NextRequest) {
   return proxyToBackend({
     req,
-    targetEndpoint: '/register/get_tab_records',
+    targetEndpoint: '/register-data/get_tab_records',
     buildPayload: (body) => ({
       pagination_request: {
         current_page: 1,

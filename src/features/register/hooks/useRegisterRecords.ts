@@ -15,7 +15,8 @@ export const useRegisterRecords = () => {
     const searchParams = useSearchParams();
 
     const [currentPage, setCurrentPage] = useState(1);
-    const pageSize = 7;
+    //TODO:Need to move in .env
+    const pageSize = 10;
 
     const {
         appliedFilters,

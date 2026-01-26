@@ -9,6 +9,12 @@ interface SidebarOption {
 }
 
 const sidebarOptions: SidebarOption[] = [
+   {
+    id: 'registry',
+    label: 'Registry',
+    icon: <Database size={20} />,
+    path: '/configuration/registry'
+  },
   {
     id: 'registers',
     label: 'Registers',

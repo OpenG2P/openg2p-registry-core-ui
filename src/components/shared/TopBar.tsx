@@ -12,12 +12,12 @@ interface TopBarProps {
     showCapsule?: boolean;
     capsule?: React.ReactNode;
 
-    pageStart: number;
-    pageEnd: number;
-    total: number;
+    pageStart?: number;
+    pageEnd?: number;
+    total?: number;
 
-    onPrev: () => void;
-    onNext: () => void;
+    onPrev?: () => void;
+    onNext?: () => void;
 
     onFilters?: () => void;
     onApplyFilters?: (filters: FilterRule[]) => void;
@@ -88,11 +88,11 @@ export default function TopBar({
                         </button>
                     )}
 
-                    {showPagination && (
+                    {showPagination && onPrev && onNext && (
                         <PaginationBar
-                            pageStart={pageStart}
-                            pageEnd={pageEnd}
-                            total={total}
+                            pageStart={pageStart ?? 0}
+                            pageEnd={pageEnd ?? 0}
+                            total={total ?? 0}
                             onPrev={onPrev}
                             onNext={onNext}
                         />
