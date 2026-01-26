@@ -32,6 +32,7 @@ const OPERATOR_LABELS: Record<string, string> = {
     lt: "Less than",
     lte: "Less than or equal",
     isNull: "Is null",
+    between: "Between",
 };
 
 export default function FilterDropdown({
@@ -148,7 +149,7 @@ export default function FilterDropdown({
                 return (
                     <SelectFilterInput
                         {...commonProps}
-                        options={selectedFilter.options}
+                        options_source={selectedFilter.options_source}
                     />
                 );
 
@@ -228,13 +229,13 @@ export default function FilterDropdown({
                 )}
 
                 <div className="flex justify-center">
-                <button
-                    onClick={applyFilter}
-                    className="bg-black text-white px-5 py-2.5 rounded-lg text-sm text-center"
-                >
-                    Apply
-                </button>
-            </div>
+                    <button
+                        onClick={applyFilter}
+                        className="bg-black text-white px-5 py-2.5 rounded-lg text-sm text-center"
+                    >
+                        Apply
+                    </button>
+                </div>
             </div>
         </div>
     );
