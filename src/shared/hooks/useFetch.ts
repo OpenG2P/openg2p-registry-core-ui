@@ -69,7 +69,7 @@ export function useFetch<T = any>({
       });
 
       const result = await res.json();
-
+      // TODO: for debug this is okay, Need to say useful message
       if (!res.ok) {
         throw new Error(result?.error || `Error ${res.status}`);
       }

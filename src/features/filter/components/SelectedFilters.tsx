@@ -18,6 +18,7 @@ const OPERATOR_LABELS: Record<string, string> = {
     lt: "Less than",
     lte: "Less than or equal",
     isNull: "Is null",
+    between: "Between",
 };
 
 interface SelectedFiltersProps {
@@ -41,12 +42,14 @@ export default function SelectedFilters({
 }: SelectedFiltersProps) {
     const getFilterLabel = (rule: FilterRule) => {
         const config = filterConfig.find((f) => f.field_name === rule.field_name);
+        console.log(config, "select filed config")
 
         let valueLabel = rule.value;
         if (Array.isArray(rule.value)) {
             valueLabel = rule.value.join(' - ');
-        } else if (config?.filter_type === 'dropdown' && config.options) {
-            const option = config.options.find((o) => o.value === rule.value);
+        } else if (config?.filter_type === 'dropdown' && config.options_source) {
+            const option = config.options_source.find((o) => o.value === rule.value);
+            console.log(option)
             valueLabel = option?.label || rule.value;
         } else if (config?.filter_type === 'boolean' && typeof rule.value === 'boolean') {
             valueLabel = rule.value ? 'True' : 'False';

@@ -356,5 +356,7 @@
     "Retired": "Retired",
     "annual_income": "Annual Income",
     "add_family_member": "Add Family Member",
-    "family_members": "Family Members"
+    "family_members": "Family Members",
+    "address_line_1":"Address 1",
+    "address_line_2":"Address 2"
 }

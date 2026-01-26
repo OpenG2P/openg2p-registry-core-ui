@@ -3,14 +3,14 @@
 import { SelectOption, ValueInputProps } from "@/features/filter/types";
 
 interface SelectFilterInputProps extends ValueInputProps {
-    options?: SelectOption[];
+    options_source?: SelectOption[];
 }
 
 export default function SelectFilterInput({
     value,
     operator,
     onChange,
-    options = [],
+    options_source = [],
 }: SelectFilterInputProps) {
     const isMultiSelect = operator === "in" || operator === "nin";
 
@@ -29,10 +29,10 @@ export default function SelectFilterInput({
 
         return (
             <div className="border rounded-lg p-3 w-full space-y-2">
-                {options.length === 0 ? (
+                {options_source.length === 0 ? (
                     <p className="text-sm text-gray-500">No options available</p>
                 ) : (
-                    options.map(opt => (
+                    options_source.map(opt => (
                         <label
                             key={opt.value}
                             className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-1 rounded"
@@ -58,7 +58,7 @@ export default function SelectFilterInput({
             onChange={e => onChange(e.target.value)}
         >
             <option value="">Select</option>
-            {options.map(opt => (
+            {options_source.map(opt => (
                 <option key={opt.value} value={opt.value}>
                     {opt.label}
                 </option>

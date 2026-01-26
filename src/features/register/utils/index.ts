@@ -45,6 +45,7 @@ export function normalizeEditActions(
   if (!Array.isArray(records)) return [];
 
   return records.map((record) => {
+    // TODO: Need to resolve 3-level structure
     const result = { ...record };
 
     if (result.edit_action === undefined) {
