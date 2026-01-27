@@ -59,7 +59,7 @@ export default function RegisterSectionConfigView({
                     {SECTION_MOCK_DATA.map((section, index) => (
                         <Link
                             key={section.section_id}
-                            href={`/configuration/registers/${registerId}/tabs/${tabId}/sections/${section.section_id}`}
+                            href={`/configuration/registers/${registerId}/tabs/${tabId}/sections/${section.section_name}`}
                             className="block -mx-8"
                         >
                             <div

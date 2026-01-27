@@ -4,12 +4,12 @@ import { useState } from 'react';
 import { BreadcrumbBar } from '@/components/shared';
 import ConfigSidebar from '@/features/configuration/components/ConfigSidebar';
 import { useParams } from 'next/navigation';
-import { TAB_MOCK_DATA } from '@/features/configuration/components/RegisterTabConfigView';
-import { SECTION_MOCK_DATA } from '@/features/configuration/components/RegisterSectionConfigView';
-import ConfigDetailsSummary from '@/features/configuration/components/ConfigDetailsSummary';
-import { REGISTER_MOCK_DATA } from '@/features/configuration/components/RegistersConfigView';
-import { useBreadcrumb } from '@/shared/hooks/useBreadcrumb';
 import EditSectionModal from '@/features/configuration/components/EditSectionModal';
+import ConfigDetailsSummary from '@/features/configuration/components/ConfigDetailsSummary';
+import { useBreadcrumb } from '@/shared/hooks/useBreadcrumb';
+import { useAllRegister } from '@/features/configuration/hooks/useAllRegister';
+import { useConfigTabs } from '@/features/configuration/hooks/useConfigTabs';
+import { SECTION_MOCK_DATA } from '@/features/configuration/components/RegisterSectionConfigView';
 
 const SectionConfigurationPage = () => {
     const { registerId, tabId, sectionId } = useParams<{
@@ -19,18 +19,21 @@ const SectionConfigurationPage = () => {
     }>();
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
+    const { registers } = useAllRegister();
+    const { tabs } = useConfigTabs(registerId);
+
     const getRegisterDetails = (nameOrId: string) => {
-        const registerData = REGISTER_MOCK_DATA.find(
-            r => r.mnemonic.toLowerCase() === nameOrId.toLowerCase() || r.register_id === nameOrId
+        const registerData = registers.find(
+            r => r.register_mnemonic.toLowerCase() === nameOrId.toLowerCase() || r.register_id === nameOrId
         );
-        return registerData || { mnemonic: nameOrId };
+        return registerData ? { mnemonic: registerData.register_mnemonic } : { mnemonic: nameOrId };
     };
 
     const getTabDetails = (nameOrId: string) => {
-        const tabData = TAB_MOCK_DATA.find(
-            t => t.tab_name.toLowerCase() === nameOrId.toLowerCase() || t.tab_id === nameOrId
+        const tabData = tabs.find(
+            t => t.tab_id === nameOrId
         );
-        return { tab_name: tabData ? tabData.tab_name : nameOrId };
+        return { tab_name: tabData ? tabData.tab_label : nameOrId };
     };
 
     const getSectionDetails = (nameOrId: string) => {
@@ -73,12 +76,12 @@ const SectionConfigurationPage = () => {
                     description={sectionDetails.description}
                     extraInfo={tabDetails.tab_name}
                     status={true}
-                    selectionOptions={TAB_MOCK_DATA.map(t => t.tab_name)}
+                    selectionOptions={tabs.map(t => t.tab_label)}
                     onSave={(data) => console.log('Saved Section:', data)}
                     onEdit={() => setIsEditModalOpen(true)}
                 />
 
-               
+
                 <div className="p-8">
                     <div className="bg-white rounded-[30px] p-8 min-h-100 flex items-center justify-center text-gray-400">
                         {`Widget Editor for ${sectionDetails.section_name} section`}

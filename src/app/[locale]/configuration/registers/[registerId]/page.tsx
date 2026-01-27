@@ -115,5 +115,4 @@ const RegisterConfigurationPage = () => {
   );
 };
 
-export default RegisterConfigurationPage
-  ;
+export default RegisterConfigurationPage;
