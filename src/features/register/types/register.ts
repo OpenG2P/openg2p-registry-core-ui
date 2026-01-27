@@ -1,4 +1,3 @@
-import { PaginationResponse } from '@/shared/types';
 
 export interface DisplayField {
     field_name: string;
@@ -13,6 +12,13 @@ export interface RegisterRecord {
     record_image_url: string | null;
     display_fields: DisplayField[];
 
+}
+
+export interface PaginationResponse {
+  current_page?: number;
+  page_size?: number;
+  number_of_items?: number;
+  number_of_pages?: number;
 }
 
 export interface RegisterRecordsApiResponse {
@@ -33,7 +39,6 @@ export interface TabSectionData {
 
 }
 
-// Let's rely on 'any' for section_ui_schema to avoid import issues in shared folder.
 export interface TabSection {
     section_register_id: string;
     register_id: string;

@@ -1,6 +1,5 @@
 import ViewAll from "@/components/shared/ViewAll";
 import { useFetch } from "@/shared/hooks/useFetch";
-import { ResponseBody } from "@/shared/types/backend-api";
 import Image from "next/image";
 import { useLocale } from "next-intl";
 import { useEffect, useRef } from "react";

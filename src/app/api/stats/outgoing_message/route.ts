@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { proxyToBackend } from "@/shared/utils";
+import { proxyToBackend } from "@/app/api/_lib/backend-proxy";
 
 const MOCK_OUTGOING_MESSAGE_STATS = {
   total_outgoing_messages: 1800,
