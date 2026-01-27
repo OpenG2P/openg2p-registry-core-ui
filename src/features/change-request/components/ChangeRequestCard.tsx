@@ -3,12 +3,15 @@ import { useFetch } from "@/shared/hooks/useFetch";
 import { ResponseBody } from "@/shared/types/backend-api";
 import Image from "next/image";
 import { useLocale } from "next-intl";
+import { useEffect, useRef } from "react";
 
 interface Props {
     registerId: string;
     internalRecordId: string;
     type: string;
     activeTabId?: string;
+    count?: number;
+    onCountLoaded?: (count: number) => void;
 }
 
 export default function ChangeRequestCard({
@@ -16,8 +19,11 @@ export default function ChangeRequestCard({
     registerId,
     internalRecordId,
     activeTabId,
+    count: externalCount,
+    onCountLoaded,
 }: Props) {
     const locale = useLocale();
+    const hasLoadedInitialCount = useRef(false);
 
     const { data, loading } = useFetch<any>({
         url: `/api/change_request/pending`,
@@ -32,13 +38,16 @@ export default function ChangeRequestCard({
         },
     });
 
-    const count =
-        (
-            data as
-            | { number_of_pending_change_requests: number }
-            | undefined
-        )?.number_of_pending_change_requests ?? 0;
+    // Initialize parent state with API data on first load
+    useEffect(() => {
+        if (!hasLoadedInitialCount.current && data?.number_of_pending_change_requests !== undefined && onCountLoaded) {
+            onCountLoaded(data.number_of_pending_change_requests);
+            hasLoadedInitialCount.current = true;
+        }
+    }, [data, onCountLoaded]);
 
+    // Use external count if provided, otherwise use API data
+    const count = externalCount ?? data?.number_of_pending_change_requests ?? 0;
 
     const params = new URLSearchParams();
     if (activeTabId) params.set("tab", activeTabId);

@@ -11,7 +11,7 @@ import {
 } from "@/features/register/types";
 import { useSectionSave } from "./useSectionSave";
 
-export const useRegisterSections = () => {
+export const useRegisterSections = (onChangeRequestCreated: () => void) => {
   const { internalRecordId } = useRegisterRecord();
   const { activeTabId } = useRegisterTabs();
   const { currentRegister } = useRegister();
@@ -76,10 +76,7 @@ export const useRegisterSections = () => {
       .flatMap((section) => section.section_ui_schema?.sections ?? []);
   }, [tabSections]);
 
-  console.log("orderedTabSections", orderedTabSections);
-
-
-  const { handleSectionSave } = useSectionSave(tabSections);
+  const { handleSectionSave } = useSectionSave(tabSections, onChangeRequestCreated);
 
   const canRenderContent = !!(
     tabSections &&
