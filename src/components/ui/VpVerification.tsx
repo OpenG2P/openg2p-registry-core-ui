@@ -18,7 +18,7 @@ const buildPresentationDefinition = (descriptorSchema: any) => ({
     purpose: process.env.NEXT_PUBLIC_VP_PURPOSE!,
     format: {
         ldp_vc: {
-            proof_type: ['Ed25519Signature2020'],
+            proof_type: ['Ed25519Signature2020','EdDSA','ES256'],
         },
     },
     input_descriptors: [descriptorSchema],
@@ -164,7 +164,7 @@ export default function VpVerification({ descriptorSchema }: Props) {
                     />
                 }
                 qrCodeStyles={{
-                    size: 500,
+                    size: 200,
                     borderRadius: 16,
                     bgColor: '#ffffff',
                     fgColor: '#000000',
