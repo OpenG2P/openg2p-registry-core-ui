@@ -101,13 +101,16 @@ const StatsCardSmall = ({
     if (stats_endpoint.includes("register")) {
       return data?.length || 0;
     }
-    if (stats_endpoint.includes("incoming")){
-       return data?.no_of_messages || 0;
+    if (stats_endpoint.includes("change")) {
+      return data?.total_count || 0;
     }
-
-    // For other stats, sum values
-    return rows.reduce((sum, r) => sum + (r.value || 0), 0);
-  }, [data, rows, stats_endpoint]);
+    if (stats_endpoint.includes("incoming")) {
+      return data?.no_of_messages || 0;
+    }
+    if (stats_endpoint.includes("outgoing")) {
+      return data?.no_of_messages || 0;
+    }
+  }, [data, stats_endpoint]);
 
   return (
     <div

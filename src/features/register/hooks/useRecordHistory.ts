@@ -1,10 +1,6 @@
-import { useState } from "react";
 import { useFetch } from "@/shared/hooks/useFetch";
 
 export const useRecordHistory = () => {
-    const [selectedDate, setSelectedDate] = useState<string | null>(null);
-    const [selectedVersion, setSelectedVersion] = useState<string | null>(null);
-
     const { execute: fetchDates, loading: loadingDates } = useFetch<any>({
         url: "/api/change_request/get_version_dates",
         enabled: false,
@@ -27,15 +23,7 @@ export const useRecordHistory = () => {
         });
     };
 
-    const loadChanges = async (payload: {
-        register_id: string;
-        internal_record_id: string;
-        tab_id: string;
-        truncated_created_date: string;
-    }) => {
-        setSelectedDate(payload.truncated_created_date);
-        setSelectedVersion(null);
-
+    const loadChanges = async (payload: any) => {
         return fetchChanges("/api/register/get-changes-for-date", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -46,10 +34,6 @@ export const useRecordHistory = () => {
     return {
         loadDates,
         loadChanges,
-        selectedDate,
-        setSelectedDate,
-        selectedVersion,
-        setSelectedVersion,
         loadingDates,
         loadingChanges,
     };
