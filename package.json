@@ -22,6 +22,7 @@
     "react-i18next": "^16.5.0",
     "react-icons": "^5.5.0",
     "react-redux": "^9.2.0",
+    "react-toastify": "^11.0.5",
     "registry-widgets": "^1.1.0",
     "zod": "^4.2.1"
   },

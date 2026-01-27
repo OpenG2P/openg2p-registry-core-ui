@@ -6,11 +6,14 @@ import { useRegisterTabs } from "@/context/RegisterTabsContext";
 import { useRegisterRecord } from "@/context/RegisterRecordContext";
 import { SectionChanges } from "@openg2p/registry-widgets";
 import { extractFilesFromSection, normalizeEditActions } from "../utils";
-// import { showToast } from "nextjs-toast-notify";
-
 import { TabSection } from "@/features/register/types";
+import { toast } from "react-toastify";
 
-export const useSectionSave = (tabSections: TabSection[] | null) => {
+
+export const useSectionSave = (
+    tabSections: TabSection[] | null,
+    onChangeRequestCreated: () => void
+) => {
     const { internalRecordId } = useRegisterRecord();
     const { activeTabId } = useRegisterTabs();
     const { currentRegister } = useRegister();
@@ -36,23 +39,41 @@ export const useSectionSave = (tabSections: TabSection[] | null) => {
 
             let documentsResponse: UploadedDocument[] = [];
             if (filesToUpload.length > 0) {
-                const formData = new FormData();
-                // formData.append("section_id", sectionChanges.section_id);
+                try {
+                    // Upload files one by one with their corresponding labels
+                    for (let i = 0; i < filesToUpload.length; i++) {
+                        const formData = new FormData();
+                        formData.append("document_label", fileLabels[i]);
+                        formData.append("documents", filesToUpload[i]);
 
-                fileLabels.forEach((label) => {
-                    formData.append("document_label", label);
-                });
+                        const uploadResult = await uploadDocumentRequest(
+                            "/api/change_request/upload_document",
+                            {
+                                method: "POST",
+                                body: formData,
+                            }
+                        );
 
-                filesToUpload.forEach((file) => {
-                    formData.append("documents", file);
-                });
-                documentsResponse = await uploadDocumentRequest(
-                    "/api/change_request/upload_document",
-                    {
-                        method: "POST",
-                        body: formData,
+                        if (Array.isArray(uploadResult)) {
+                            documentsResponse.push(...uploadResult);
+                        } else if (uploadResult) {
+                            documentsResponse.push(uploadResult);
+                        }
                     }
-                );
+
+                    // Show success toast after all files are uploaded
+                    toast.success(`${filesToUpload.length} file(s) uploaded successfully!`, {
+                        position: "top-right",
+                        autoClose: 4000,
+                    });
+                } catch (error) {
+                    toast.error(`Failed to upload files. Please try again.`, {
+                        position: "top-right",
+                        autoClose: 6000,
+                    });
+                    console.error("File upload error:", error);
+                    return;
+                }
             }
 
             const records = normalizeEditActions(
@@ -74,19 +95,19 @@ export const useSectionSave = (tabSections: TabSection[] | null) => {
                 }),
             });
 
-            // if (change_request_response?.change_request_id) {
-            //     showToast.success(`Change request created successfully!`, {
-            //         position: "top-right",
-            //         duration: 6000,
-            //         sound:true
-            //     });
-            // }else{
-            //     showToast.error(`Failed to create change request!`, {
-            //         position: "top-right",
-            //         duration: 6000,
-            //         sound:true
-            //     });
-            // }
+            if (change_request_response?.change_request_id) {
+                toast.success(`Change request created successfully!`, {
+                    position: "top-right",
+                    autoClose: 6000,
+                });
+                // Update the Pending change request count
+                onChangeRequestCreated();
+            } else {
+                toast.error(`Failed to create change request!`, {
+                    position: "top-right",
+                    autoClose: 6000,
+                });
+            }
         },
         [
             currentRegister,
@@ -95,6 +116,7 @@ export const useSectionSave = (tabSections: TabSection[] | null) => {
             activeTabId,
             uploadDocumentRequest,
             tabSections,
+            onChangeRequestCreated,
         ]
     );
 

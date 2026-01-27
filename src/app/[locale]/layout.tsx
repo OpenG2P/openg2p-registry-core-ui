@@ -5,6 +5,8 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations } from 'next-intl/server';
 import { Header } from "@/components/layout";
 import { RegisterProvider } from "@/context/RegisterContext";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 export async function generateMetadata({
     params
@@ -18,7 +20,7 @@ export async function generateMetadata({
         title: t('title'),
         description: "",
         icons: {
-        icon: "/openg2p_logo.png",
+            icon: "/openg2p_logo.png",
         },
     };
 }
@@ -42,6 +44,7 @@ export default async function RootLayout({
                     <GlobalContextProvider>
                         <Header />
                         <RegisterProvider>
+                            <ToastContainer />
                             {children}
                         </RegisterProvider>
                     </GlobalContextProvider>
