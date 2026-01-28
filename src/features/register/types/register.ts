@@ -63,18 +63,3 @@ export interface SectionData {
     last_approved_by: string;
     additionalProp1: Record<string, unknown>;
 }
-
-type SectionRecordContainer =
-    | RegisterFlattenedRecord
-    | RegisterFlattenedRecord[]
-    | {
-        records: RegisterFlattenedRecord[];
-    };
-
-export interface SectionSchemaData {
-    sectionSchema: TabSection["section_ui_schema"];
-    sectionData: Record<
-        string,
-        SectionRecordContainer
-    >;
-}

@@ -20,8 +20,8 @@ type ActiveStatsCard =
     | 'incoming_message'
     | 'outgoing_message';
 
-const isPartnerImportExportEnabled =
-    process.env.NEXT_PUBLIC_PARTNER_IMPORT_EXPORT_ENABLE === 'true';
+const isPartnerImportExportEnabled = true
+    // process.env.NEXT_PUBLIC_PARTNER_IMPORT_EXPORT_ENABLE === 'true';
 
 const statsCardVariant = isPartnerImportExportEnabled ? 'small' : 'large';
 

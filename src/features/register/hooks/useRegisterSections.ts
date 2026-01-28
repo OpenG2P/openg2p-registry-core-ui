@@ -5,7 +5,6 @@ import { useRegisterTabs } from "@/context/RegisterTabsContext";
 import { useRegisterRecord } from "@/context/RegisterRecordContext";
 import {
   TabSection,
-  SectionSchemaData,
   RegisterFlattenedRecord,
   TabSectionData,
 } from "@/features/register/types";
@@ -73,7 +72,7 @@ export const useRegisterSections = (onChangeRequestCreated: () => void) => {
         (sectionA, sectionB) =>
           (sectionA.section_order ?? 0) - (sectionB.section_order ?? 0),
       )
-      .flatMap((section) => section.section_ui_schema?.sections ?? []);
+      .flatMap((section) => section.section_ui_schema?? []);
   }, [tabSections]);
 
   const { handleSectionSave } = useSectionSave(tabSections, onChangeRequestCreated);
