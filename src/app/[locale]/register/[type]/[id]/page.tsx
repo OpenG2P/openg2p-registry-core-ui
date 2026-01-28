@@ -10,10 +10,11 @@ import {
     SectionsContainer,
 } from '@openg2p/registry-widgets';
 import ChangeRequestCard from '@/features/change-request/components/ChangeRequestCard';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useRegisterDetail } from '@/features/register/hooks/useRegisterDetail';
 import RegisterDetailsPageSkeleton from '@/features/register/components/RegisterDetailsPageSkeleton';
+import { apiAdapter } from '@/features/register/utils/apiAdapter';
 
 
 export default function RegisterDetailPage() {
@@ -37,6 +38,32 @@ export default function RegisterDetailPage() {
         canRenderContent,
         currentRegister
     } = useRegisterDetail(() => setChangeRequestCount(prevCount => (prevCount ?? 0) + 1));
+
+    // Below commented code, only Testing for apiAdapter
+    // Remove it if no required
+    /*
+        useEffect(() => {
+        const testApi = async () => {
+            const geoLevels = await apiAdapter(
+            '/api/master-data/geo_levels',
+            {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                parent_level_id: '',
+                }),
+            }
+            );
+
+            console.log('geoLevels ***************:', geoLevels);
+        };
+
+        testApi();
+    }, []);
+     
+    */
 
     // resolvingId: resolves the functional ID 
     // from the internal record ID (UUID)
@@ -64,6 +91,7 @@ export default function RegisterDetailPage() {
                                 store={widgetStore}
                                 schemaData={sectionDataMap}
                                 translate={t}
+                                apiAdapter={apiAdapter}
                             >
                                 <SectionsContainer
                                     sections={orderedTabSections}
