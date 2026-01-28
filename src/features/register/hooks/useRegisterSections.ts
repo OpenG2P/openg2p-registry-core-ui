@@ -5,13 +5,12 @@ import { useRegisterTabs } from "@/context/RegisterTabsContext";
 import { useRegisterRecord } from "@/context/RegisterRecordContext";
 import {
   TabSection,
-  SectionSchemaData,
   RegisterFlattenedRecord,
   TabSectionData,
 } from "@/features/register/types";
 import { useSectionSave } from "./useSectionSave";
 
-export const useRegisterSections = () => {
+export const useRegisterSections = (onChangeRequestCreated: () => void) => {
   const { internalRecordId } = useRegisterRecord();
   const { activeTabId } = useRegisterTabs();
   const { currentRegister } = useRegister();
@@ -73,13 +72,10 @@ export const useRegisterSections = () => {
         (sectionA, sectionB) =>
           (sectionA.section_order ?? 0) - (sectionB.section_order ?? 0),
       )
-      .flatMap((section) => section.section_ui_schema?.sections ?? []);
+      .flatMap((section) => section.section_ui_schema?? []);
   }, [tabSections]);
 
-  console.log("orderedTabSections", orderedTabSections);
-
-
-  const { handleSectionSave } = useSectionSave(tabSections);
+  const { handleSectionSave } = useSectionSave(tabSections, onChangeRequestCreated);
 
   const canRenderContent = !!(
     tabSections &&

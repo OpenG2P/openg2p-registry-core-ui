@@ -10,6 +10,7 @@ import {
     SectionsContainer,
 } from '@openg2p/registry-widgets';
 import ChangeRequestCard from '@/features/change-request/components/ChangeRequestCard';
+import { useState } from 'react';
 
 import { useRegisterDetail } from '@/features/register/hooks/useRegisterDetail';
 import RegisterDetailsPageSkeleton from '@/features/register/components/RegisterDetailsPageSkeleton';
@@ -17,6 +18,10 @@ import RegisterDetailsPageSkeleton from '@/features/register/components/Register
 
 export default function RegisterDetailPage() {
     const t = useTranslations();
+
+    // state to update the count of pending change requests 
+    const [changeRequestCount, setChangeRequestCount] = useState<number | undefined>(undefined);
+
     const {
         internalRecordId,
         registerType,
@@ -31,7 +36,7 @@ export default function RegisterDetailPage() {
         handleSectionSave,
         canRenderContent,
         currentRegister
-    } = useRegisterDetail();
+    } = useRegisterDetail(() => setChangeRequestCount(prevCount => (prevCount ?? 0) + 1));
 
     // resolvingId: resolves the functional ID 
     // from the internal record ID (UUID)
@@ -76,6 +81,8 @@ export default function RegisterDetailPage() {
                                     registerId={currentRegister.register_id}
                                     internalRecordId={internalRecordId}
                                     activeTabId={activeTabId}
+                                    count={changeRequestCount}
+                                    onCountLoaded={setChangeRequestCount}
                                 />
                                 <VersionHistoryCard
                                     type={registerType}

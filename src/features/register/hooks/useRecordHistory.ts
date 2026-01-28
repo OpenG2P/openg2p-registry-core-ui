@@ -1,55 +1,47 @@
-import { useState } from "react";
 import { useFetch } from "@/shared/hooks/useFetch";
 
-export const useRecordHistory = () => {
-    const [selectedDate, setSelectedDate] = useState<string | null>(null);
-    const [selectedVersion, setSelectedVersion] = useState<string | null>(null);
+interface useRecordHistoryParams {
+    register_id?: string;
+    internal_record_id?: string;
+    tab_id?: string;
+    truncated_created_date?: string | null;
+}
 
-    const { execute: fetchDates, loading: loadingDates } = useFetch<any>({
-        url: "/api/change_request/get_version_dates",
-        enabled: false,
+export const useRecordHistory = (params: useRecordHistoryParams) => {
+    const {
+        data: datesData,
+        loading: loadingDates,
+    } = useFetch<{ dates: string[] }>({
+        url: "/api/register/get-version-dates",
+        options: {
+            method: "POST",
+            body: JSON.stringify({
+                register_id: params.register_id,
+                internal_record_id: params.internal_record_id,
+                tab_id: params.tab_id,
+            }),
+        },
     });
 
-    const { execute: fetchChanges, loading: loadingChanges } = useFetch<any>({
-        url: "/api/change_request/get_changes_for_date",
-        enabled: false,
+    const {
+        data: changesData,
+        loading: loadingChanges,
+    } = useFetch<any>({
+        url: "/api/register/get-versions-for-date",
+        options: {
+            method: "POST",
+            body: JSON.stringify({
+                register_id: params.register_id,
+                internal_record_id: params.internal_record_id,
+                tab_id: params.tab_id,
+                truncated_created_date: params.truncated_created_date,
+            }),
+        },
     });
-
-    const loadDates = async (payload: {
-        register_id: string;
-        internal_record_id: string;
-        tab_id: string;
-    }) => {
-        return fetchDates("/api/register/get-version-dates", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload),
-        });
-    };
-
-    const loadChanges = async (payload: {
-        register_id: string;
-        internal_record_id: string;
-        tab_id: string;
-        truncated_created_date: string;
-    }) => {
-        setSelectedDate(payload.truncated_created_date);
-        setSelectedVersion(null);
-
-        return fetchChanges("/api/register/get-changes-for-date", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload),
-        });
-    };
 
     return {
-        loadDates,
-        loadChanges,
-        selectedDate,
-        setSelectedDate,
-        selectedVersion,
-        setSelectedVersion,
+        datesData,
+        changesData,
         loadingDates,
         loadingChanges,
     };

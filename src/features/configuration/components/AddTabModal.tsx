@@ -6,22 +6,26 @@ import { X, ChevronDown } from 'lucide-react';
 interface AddTabModalProps {
     isOpen: boolean;
     onClose: () => void;
+    onSuccess?: () => void;
 }
 
-export default function AddTabModal({ isOpen, onClose }: AddTabModalProps) {
+export default function AddTabModal({ isOpen, onClose, onSuccess }: AddTabModalProps) {
     const [formData, setFormData] = useState({
-        registerName: '',
+        tabName: '',
         description: '',
-        parentRegister: '',
-        programApplication: ''
     });
 
     const handleSubmit = () => {
         console.log('Form submitted:', formData);
+        if (onSuccess) onSuccess();
         onClose();
     };
 
     const handleCancel = () => {
+        setFormData({
+            tabName: '',
+            description: '',
+        });
         onClose();
     };
 
@@ -31,7 +35,7 @@ export default function AddTabModal({ isOpen, onClose }: AddTabModalProps) {
     return (
         <div className="fixed inset-0 bg-black/80  z-50 flex items-center justify-center p-4">
             <div className="relative w-full max-w-[800px] max-h-[600px] bg-[#F2BA1A] rounded-[20px] overflow-hidden flex p-1">
-              
+
                 <div className="flex-1 w-full bg-white relative rounded-[20px] overflow-y-hidden p-10">
                     <button
                         onClick={handleCancel}
@@ -50,9 +54,9 @@ export default function AddTabModal({ isOpen, onClose }: AddTabModalProps) {
                             <div className="relative">
                                 <input
                                     type="text"
-                                    placeholder="Enter Register Name"
-                                    value={formData.registerName}
-                                    onChange={(e) => setFormData({ ...formData, registerName: e.target.value })}
+                                    placeholder="Enter Tab Name"
+                                    value={formData.tabName}
+                                    onChange={(e) => setFormData({ ...formData, tabName: e.target.value })}
                                     className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all text-gray-600 placeholder:text-gray-400"
                                 />
                             </div>
@@ -71,7 +75,7 @@ export default function AddTabModal({ isOpen, onClose }: AddTabModalProps) {
                             />
                         </div>
 
-                         <div className="flex gap-4 pt-6">
+                        <div className="flex gap-4 pt-6">
                             <button
                                 onClick={handleCancel}
                                 className="px-12 py-2.5 bg-gray-300 text-gray-700 rounded-full"

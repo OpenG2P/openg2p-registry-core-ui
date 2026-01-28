@@ -35,7 +35,7 @@ export const useRegisterSectionsFromCR = ({
       .sort(
         (a, b) => (a.section_order ?? 0) - (b.section_order ?? 0)
       )
-      .flatMap(section => section.section_ui_schema?.sections ?? []);
+      .flatMap(section => section.section_ui_schema?? []);
   }, [tabSections]);
 
   return {

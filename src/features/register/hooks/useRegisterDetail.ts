@@ -8,7 +8,7 @@ import { useRegisterRecord } from "@/context/RegisterRecordContext";
 import { createWidgetStore } from "@openg2p/registry-widgets";
 import { useRegisterSections } from "./useRegisterSections";
 
-export const useRegisterDetail = () => {
+export const useRegisterDetail = (onChangeRequestCreated: () => void) => {
   const t = useTranslations();
   const { type: registerType } = useParams<{ type: string }>();
   const {
@@ -39,7 +39,7 @@ export const useRegisterDetail = () => {
     sectionDataMap,
     handleSectionSave,
     canRenderContent,
-  } = useRegisterSections();
+  } = useRegisterSections(onChangeRequestCreated);
 
   return {
     registerType,

@@ -4,21 +4,23 @@ import { proxyToBackend } from "@/app/api/_lib/backend-proxy";
 export async function POST(request: NextRequest) {
     return proxyToBackend({
         req: request,
-        targetEndpoint: "/change-requests/get_change_request",
-
-        buildPayload: (body) => ({
+        targetEndpoint: "/register-metadata/create_register",
+        buildPayload: (jsonBody) => ({
             pagination_request: {
                 current_page: 1,
                 page_size: 1,
                 sort_by: "",
                 filter_by: undefined,
-                search_text: "",
+                search_text: ""
             },
             request_payload: {
-                change_request_id: body.change_request_id,
+                register_mnemonic: jsonBody.register_mnemonic,
+                register_description: jsonBody.register_description,
+                master_register_id: jsonBody.master_register_id,
+                dedup_is_enabled: false,
+                dedup_threshold_score: 0,
             },
         }),
-
-        transformResponse: (responseBody) => responseBody.response_payload,
     });
 }
+

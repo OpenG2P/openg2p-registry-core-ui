@@ -2,13 +2,14 @@
 
 import { useState } from 'react';
 import { TopBar, BreadcrumbBar } from '@/components/shared';
-import ConfigSidebar from '@/features/configuration/components/ConfigSidebar';
 import { useParams } from 'next/navigation';
-import RegisterTabConfigView from '@/features/configuration/components/RegisterTabConfigView';
-import ConfigDetailsSummary from '@/features/configuration/components/ConfigDetailsSummary';
-import { REGISTER_MOCK_DATA } from '@/features/configuration/components/RegistersConfigView';
 import { useBreadcrumb } from '@/shared/hooks/useBreadcrumb';
+import { useAllRegister } from '@/features/configuration/hooks/useAllRegister';
+import ConfigSidebar from '@/features/configuration/components/ConfigSidebar';
 import EditRegisterModal from '@/features/configuration/components/EditRegisterModal';
+import ConfigDetailsSummary from '@/features/configuration/components/ConfigDetailsSummary';
+import RegisterTabConfigView from '@/features/configuration/components/RegisterTabConfigView';
+
 
 const RegisterConfigurationPage = () => {
   const { registerId } = useParams<{ registerId: string }>();
@@ -19,29 +20,28 @@ const RegisterConfigurationPage = () => {
     pageEnd: 12,
     total: 250_000_000,
   });
+  const { registers, loading } = useAllRegister();
 
-  const getRegisterDetails = (nameOrId: string) => {
-    const registerData = REGISTER_MOCK_DATA.find(
-      r => r.mnemonic.toLowerCase() === nameOrId.toLowerCase() || r.register_id === nameOrId
-    );
+  const currentRegister = registers.find((r) => r.register_id === registerId);
 
-    if (registerData) return registerData;
-
-    return {
-      mnemonic: nameOrId,
-      description: `Register configuration for: ${nameOrId}`,
-      parentRegister: 'Parent Registry'
-    };
+  const getParentMnemonic = (parentId: string | null) => {
+    if (!parentId) return 'None';
+    const parent = registers.find((r) => r.register_id === parentId);
+    return parent ? parent.register_mnemonic : 'None';
   };
-
-  const registerDetails = getRegisterDetails(registerId);
 
   const breadcrumb = useBreadcrumb({
     rootItem: { label: 'Registers', href: '/configuration/registers' },
-    customItems: [{ label: registerDetails.mnemonic, href: `/configuration/registers/${registerId}` }]
+    customItems: [{ label: currentRegister?.register_mnemonic || 'Loading...', href: `/configuration/registers/${registerId}` }]
   });
 
-
+  if (loading || !currentRegister) {
+    return (
+      <div className="min-h-screen bg-[#F3F1E4] flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#ED7C22]"></div>
+      </div>
+    );
+  }
 
   const handlePrev = () => {
     setPagination((prev) => ({
@@ -71,11 +71,11 @@ const RegisterConfigurationPage = () => {
         </div>
 
         <ConfigDetailsSummary
-          title={registerDetails.mnemonic}
-          description={registerDetails.description}
-          extraInfo={registerDetails.parentRegister}
+          title={currentRegister.register_mnemonic}
+          description={currentRegister.register_description}
+          extraInfo={getParentMnemonic(currentRegister.master_register_id)}
           status={true}
-          selectionOptions={["Farmer", "Crop", "Land", "Livestock"]}
+          selectionOptions={registers.map(r => r.register_mnemonic)}
           onSave={(data) => console.log('Saved Register:', data)}
           onEdit={() => setIsEditModalOpen(true)}
         />
@@ -94,21 +94,19 @@ const RegisterConfigurationPage = () => {
           onNext={handleNext}
         />
 
-
         <RegisterTabConfigView
           onAddNewRegister={() => setIsModalOpen(true)}
           isModalOpen={isModalOpen}
           onCloseModal={() => setIsModalOpen(false)}
-
         />
 
         <EditRegisterModal
           isOpen={isEditModalOpen}
           initialData={{
-            registerName: registerDetails.mnemonic,
-            description: registerDetails.description,
-            parentRegister: registerDetails.parentRegister,
-            programApplication: true // Assuming true for now based on page props
+            registerName: currentRegister.register_mnemonic,
+            description: currentRegister.register_description,
+            parentRegister: currentRegister.master_register_id || "",
+            programApplication: true
           }}
           onClose={() => setIsEditModalOpen(false)}
         />
@@ -117,5 +115,4 @@ const RegisterConfigurationPage = () => {
   );
 };
 
-export default RegisterConfigurationPage
-  ;
+export default RegisterConfigurationPage;

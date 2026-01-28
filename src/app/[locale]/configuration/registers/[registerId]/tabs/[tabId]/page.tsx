@@ -5,11 +5,12 @@ import { TopBar, BreadcrumbBar } from '@/components/shared';
 import ConfigSidebar from '@/features/configuration/components/ConfigSidebar';
 import { useParams } from 'next/navigation';
 import RegisterSectionConfigView from '@/features/configuration/components/RegisterSectionConfigView';
-import { TAB_MOCK_DATA } from '@/features/configuration/components/RegisterTabConfigView';
 import ConfigDetailsSummary from '@/features/configuration/components/ConfigDetailsSummary';
-import { REGISTER_MOCK_DATA } from '@/features/configuration/components/RegistersConfigView';
 import { useBreadcrumb } from '@/shared/hooks/useBreadcrumb';
 import EditTabModal from '@/features/configuration/components/EditTabModal';
+
+import { useAllRegister } from '@/features/configuration/hooks/useAllRegister';
+import { useConfigTabs } from '@/features/configuration/hooks/useConfigTabs';
 
 const TabConfigurationPage = () => {
     const { registerId, tabId } = useParams<{ registerId: string; tabId: string }>();
@@ -21,11 +22,18 @@ const TabConfigurationPage = () => {
         total: 250_000_000,
     });
 
+    const { registers } = useAllRegister();
+    const { tabs } = useConfigTabs(registerId);
+
     const getRegisterDetails = (nameOrId: string) => {
-        const registerData = REGISTER_MOCK_DATA.find(
-            r => r.mnemonic.toLowerCase() === nameOrId.toLowerCase() || r.register_id === nameOrId
+        const registerData = registers.find(
+            r => r.register_mnemonic.toLowerCase() === nameOrId.toLowerCase() || r.register_id === nameOrId
         );
-        if (registerData) return registerData;
+        if (registerData) return {
+            mnemonic: registerData.register_mnemonic,
+            description: registerData.register_description,
+            parentRegister: registerData.master_register_id
+        };
 
         return {
             mnemonic: nameOrId,
@@ -35,12 +43,12 @@ const TabConfigurationPage = () => {
     };
 
     const getTabDetails = (nameOrId: string) => {
-        const tabData = TAB_MOCK_DATA.find(
-            t => t.tab_name.toLowerCase() === nameOrId.toLowerCase() || t.tab_id === nameOrId
+        const tabData = tabs.find(
+            t => t.tab_id === nameOrId // Assuming tab_id is the identifier
         );
         return {
-            tab_name: tabData ? tabData.tab_name : nameOrId,
-            description: tabData ? tabData.description : "Description text..."
+            tab_name: tabData ? tabData.tab_label : nameOrId,
+            description: "Description text..." // Description not available in Tab type
         };
     };
 
@@ -88,7 +96,7 @@ const TabConfigurationPage = () => {
                     description={tabDetails.description}
                     extraInfo={registerDetails.mnemonic}
                     status={true}
-                    selectionOptions={REGISTER_MOCK_DATA.map(r => r.mnemonic)}
+                    selectionOptions={registers.map(r => r.register_mnemonic)}
                     onSave={(data) => console.log('Saved Tab:', data)}
                     onEdit={() => setIsEditModalOpen(true)}
                 />

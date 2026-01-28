@@ -1,10 +1,4 @@
-import { randomUUID } from 'crypto';
-
-export const BACKEND_CONFIG = {
-  apiUrl: process.env.BACKEND_API_URL || 'http://localhost:8000',
-  appMnemonic: process.env.APP_MNEMONIC || 'registry-ui',
-  appUrl: process.env.APP_URL || 'http://localhost:3000',
-};
+import "server-only";
 
 export interface RequestHeader {
   sender_app_mnemonic: string;
@@ -84,29 +78,5 @@ export interface BackendResponse<T = any> {
   response_body: ResponseBody<T>;
 }
 
-export function generateRequestId(): string {
-  return randomUUID();
-}
-
-export function generateTimestamp(): string {
-  return new Date().toISOString();
-}
-
-export function createBackendRequest(payload: RequestBody): BackendRequest {
-
-  const requestHeader: RequestHeader = {
-    sender_app_mnemonic: BACKEND_CONFIG.appMnemonic,
-    sender_app_url: BACKEND_CONFIG.appUrl,
-    request_id: generateRequestId(),
-    request_timestamp: generateTimestamp(),
-  };
-
-  const requestBody: RequestBody = payload;
-
-  return {
-    request_header: requestHeader,
-    request_body: requestBody,
-  };
-}
 
 
