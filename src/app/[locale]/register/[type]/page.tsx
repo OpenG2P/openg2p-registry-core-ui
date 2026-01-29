@@ -43,7 +43,7 @@ export default function RegisterTypePage() {
 
 
     const { vcOptions, isLoadingVCs } = useVCConfigs();
-    const { mechanisms, isLoading } = useInputMechanisms();
+    const { mechanisms, isLoadingMechanisms } = useInputMechanisms();
 
     const [selectedVC, setSelectedVC] = useState<any | null>(null);
 

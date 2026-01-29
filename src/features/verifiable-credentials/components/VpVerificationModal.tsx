@@ -43,6 +43,10 @@ export default function VpVerificationModal({
 
     const [activeTab, setActiveTab] = useState<'status' | 'payload'>('status');
 
+    const [importResult, setImportResult] = useState<any>(null);
+    const [isImporting, setIsImporting] = useState(false);
+
+
     const handleVPProcessed = async (result: any[]) => {
         const processedResult = await Promise.all(
             result.map(async (vpResult) => {
@@ -82,18 +86,17 @@ export default function VpVerificationModal({
         setVerificationStatus('error');
     };
 
-    const handleStartVerification = () => {
+    const handleStartVerification = useCallback(() => {
         setVerificationStatus('verifying');
         setVerificationResult(null);
         setError(null);
 
         setTimeout(() => {
             const triggerButton = document.getElementById('vp-verification-trigger');
-            if (triggerButton) {
-                triggerButton.click();
-            }
+            triggerButton?.click();
         }, 100);
-    };
+    }, []);
+
 
     useEffect(() => {
         handleStartVerification();
@@ -142,9 +145,66 @@ export default function VpVerificationModal({
     }, []);
 
 
-    const handleImport = (data: any) => {
-        console.log('Importing verified credential:', data);
-    };
+    // const handleImport = useCallback(async (data: any[]) => {
+    //     try {
+    //         const vcPayload = data?.[0]?.vc;
+    //         if (!vcPayload) return;
+
+    //         const res = await fetch('/api/partner_ingest', {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             body: JSON.stringify({
+    //                 vc: vcPayload,
+    //             }),
+    //         });
+
+    //         if (!res.ok) {
+    //             throw new Error('Import failed');
+    //         }
+
+    //         const result = await res.json();
+
+    //         console.log('Import success:', result);
+    //     } catch (err) {
+    //         console.error('Import error:', err);
+    //         setError('Failed to import verified credential');
+    //     }
+    // }, []);
+
+    const handleImport = useCallback(async (data: any[]) => {
+        try {
+            const vcPayload = data?.[0]?.vc;
+            if (!vcPayload) return;
+
+            setIsImporting(true);
+            setError(null);
+
+            const res = await fetch('/api/partner_ingest', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ vc: vcPayload }),
+            });
+
+            if (!res.ok) {
+                throw new Error('Import failed');
+            }
+
+            const result = await res.json();
+
+            setImportResult(result);
+            setVerificationComplete(true);
+        } catch (err) {
+            console.error('Import error:', err);
+            setError('Failed to import verified credential');
+        } finally {
+            setIsImporting(false);
+        }
+    }, []);
+
 
     return (
         <div className="fixed inset-0 bg-black/80 flex justify-center items-center z-50">
@@ -169,7 +229,39 @@ export default function VpVerificationModal({
                 </div>
 
                 <div className="flex flex-col h-full">
-                    {verificationStatus === 'success' && verificationResult ? (
+                    {importResult ? (
+                        <div className="flex flex-col items-center justify-center h-full text-center px-6">
+                            <Image src="/verified.png" alt="success" width={60} height={60} />
+
+                            <h3 className="text-[22px] font-semibold mt-4">
+                                Import Successful
+                            </h3>
+
+                            <p className="text-gray-600 mt-2">
+                                Credential was successfully ingested
+                            </p>
+
+                            <div className="mt-6 w-full bg-gray-50 rounded-[20px] p-4 text-center text-sm">
+                                <p>
+                                    <span className="font-medium">Status:</span>{' '}
+                                    <span className="text-green-600">
+                                        {importResult.message.ack_status}
+                                    </span>
+                                </p>
+                                <p>
+                                    <span className="font-medium">Correlation ID:</span>{' '}
+                                    {importResult.message.correlation_id}
+                                </p>
+                            </div>
+
+                            <button
+                                onClick={onClose}
+                                className="mt-6 bg-black text-white px-10 py-2 rounded-[20px]"
+                            >
+                                Close
+                            </button>
+                        </div>
+                    ) : verificationStatus === 'success' && verificationResult ? (
                         <>
                             <div className="flex gap-2 mb-3">
                                 <button
@@ -202,10 +294,12 @@ export default function VpVerificationModal({
                             <div className="my-6 flex justify-center">
                                 <button
                                     onClick={() => handleImport(verificationResult)}
-                                    className="bg-black text-white px-10 py-2 rounded-[20px]"
+                                    disabled={isImporting}
+                                    className="bg-black text-white px-10 py-2 rounded-[20px] disabled:opacity-50"
                                 >
-                                    Import
+                                    {isImporting ? 'Importing…' : 'Import'}
                                 </button>
+
                             </div>
                         </>
                     ) : verificationStatus === 'error' ? (
