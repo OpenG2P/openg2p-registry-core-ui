@@ -1,7 +1,7 @@
 import "server-only";
 import { NextRequest, NextResponse } from "next/server";
 import { BACKEND_CONFIG } from "./backend-config";
-import {BackendResponse,RequestBody} from "./backend-types";
+import { BackendResponse, RequestBody } from "./backend-types";
 import { createBackendRequest } from "./backend-request";
 
 export type PayloadBuilder = (jsonBody: any) => RequestBody;
@@ -14,10 +14,12 @@ interface BackendProxyOptions {
 	transformResponse?: ResponseTransformer; // Transforms backend response for client
 	caching?: RequestInit; // this is used for Nextjs caching
 	responseHeaders?: HeadersInit; // HTTP headers for client response or caching
+	backend?: "default" | "masterdata";
 }
 
 export async function proxyToBackend({
 	req,
+	backend,
 	targetEndpoint,
 	buildPayload,
 	transformResponse,
@@ -41,7 +43,12 @@ export async function proxyToBackend({
 			}
 		}
 
-		const backendUrl = `${BACKEND_CONFIG.apiUrl}${targetEndpoint}`;
+		const baseUrl =
+			backend === "masterdata"
+				? BACKEND_CONFIG.masterDataApiUrl
+				: BACKEND_CONFIG.apiUrl;
+
+		const backendUrl = `${baseUrl}${targetEndpoint}`;
 		const fetchOptions: RequestInit = {
 			method: "POST",
 			...caching,
