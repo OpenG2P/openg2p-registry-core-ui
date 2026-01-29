@@ -12,7 +12,7 @@ import AddNewDropdown from '@/components/ui/AddNewDropdown';
 import { useVCConfigs } from '@/features/register/hooks/useVCConfigs';
 
 const VpVerificationModal = dynamic(
-    () => import('@/components/ui/VpVerificationModal'),
+    () => import('@/features/verifiable-credentials/components/VpVerificationModal'),
     { ssr: false }
 );
 

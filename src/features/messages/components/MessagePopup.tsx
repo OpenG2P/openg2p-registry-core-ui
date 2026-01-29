@@ -36,7 +36,7 @@ export default function MessagePopup({
                     <Image src="/cr_close.png" alt="Close" width={30} height={30} />
                 </button>
 
-                <div className="pb-6">
+                <div className="pb-3">
                     <div className="flex gap-2 pr-10">
                         {tabs.map((tab, index) => (
                             <button
