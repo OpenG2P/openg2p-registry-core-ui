@@ -128,7 +128,7 @@ const StatsCardSmall = ({
         <div className="mb-4">
           {loading ? (
             <div className="animate-pulse space-y-2">
-              <div className="h-[50px] w-32 rounded bg-gray-300 dark:bg-gray-700"></div>
+              <div className="h-12.5 w-32 rounded bg-gray-300 dark:bg-gray-700"></div>
               <div className="h-7 w-24 rounded bg-gray-300 dark:bg-gray-700"></div>
             </div>
           ) : (

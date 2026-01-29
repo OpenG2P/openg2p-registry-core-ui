@@ -73,5 +73,5 @@ button {
 
 .message-json-scroll::-webkit-scrollbar-corner {
     background: transparent;
-    /* border-radius: 15px; */
+    border-radius: 15px;
 }

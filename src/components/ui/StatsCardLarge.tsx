@@ -100,7 +100,7 @@ const StatsCardLarge = ({
       </div>
 
       {/* RIGHT */}
-      <div className="flex flex-col justify-center space-y-3 min-w-[140px]">
+      <div className="flex flex-col justify-center space-y-3 min-w-35">
         {loading ? (
           <div className="animate-pulse space-y-2">
             <div className={`h-4 w-28 rounded ${pulseBg}`} />
@@ -120,10 +120,10 @@ const StatsCardLarge = ({
                   className={active ? "invert" : ""}
                 />
               )}
-              <span className="text-[16px] font-medium leading-[30px]">
+              <span className="text-[16px] font-medium leading-7.5">
                 {(row.value || 0).toString()}
               </span>
-              <span className="text-[16px] font-medium leading-[30px] opacity-80">
+              <span className="text-[16px] font-medium leading-7.5 opacity-80">
                 {row.label}
               </span>
             </div>
