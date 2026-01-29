@@ -5,6 +5,7 @@ import { GlobalContextProvider } from "@/context/GlobalContext";
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations } from 'next-intl/server';
 import { Header } from "@/components/layout";
+import { RuntimeConfigProvider } from "@/context/RuntimeConfigContext";
 import { RegisterProvider } from "@/context/RegisterContext";
 import { ToastContainer } from "react-toastify";
 import { Roboto } from 'next/font/google'
@@ -48,14 +49,17 @@ export default async function RootLayout({
             <body className={`${roboto.className} antialiased pt-17.5`}>
                 <NextIntlClientProvider messages={messages}>
                     <GlobalContextProvider>
-                        <Header />
-                        <RegisterProvider>
-                            <ToastContainer />
-                            {children}
-                        </RegisterProvider>
+                        <RuntimeConfigProvider>
+                            <Header />
+                            <RegisterProvider>
+                                <ToastContainer />
+                                {children}
+                            </RegisterProvider>
+                        </RuntimeConfigProvider>
                     </GlobalContextProvider>
                 </NextIntlClientProvider>
             </body>
         </html>
     );
 }
+
