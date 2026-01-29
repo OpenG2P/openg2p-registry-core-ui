@@ -55,7 +55,7 @@ export function ChangeRequestValuesTabs({
                         store={widgetStoreNew}
                         schemaData={newSectionData}
                         translate={t}
-                        dataSourceRequestHandler={dataSourceRequestHandler}
+                        // dataSourceRequestHandler={dataSourceRequestHandler}
                     >
                         <SectionsContainer
                             sections={innerSectionConfig}

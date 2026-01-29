@@ -1,6 +1,6 @@
 import "server-only";
 import { NextRequest, NextResponse } from "next/server";
-import { BACKEND_CONFIG } from "./backend-config";
+import { getBackendConfig } from "./backend-config";
 import { BackendResponse, RequestBody } from "./backend-types";
 import { createBackendRequest } from "./backend-request";
 
@@ -26,6 +26,8 @@ export async function proxyToBackend({
 	caching,
 	responseHeaders
 }: BackendProxyOptions) {
+
+	const backendConfig = getBackendConfig()
 	try {
 		const contentType = req.headers.get("content-type") || "";
 		const isFormData = contentType.includes("multipart/form-data");
@@ -45,15 +47,11 @@ export async function proxyToBackend({
 
 		const baseUrl =
 			backend === "masterdata"
-				? BACKEND_CONFIG.masterDataApiUrl
-				: BACKEND_CONFIG.apiUrl;
+				? backendConfig.masterdataBackendApiUrl
+				: backendConfig.backendApiUrl;
 
 		const backendUrl = `${baseUrl}${targetEndpoint}`;
 		
-		// For master data requests, use the master data API URL as sender_app_url
-		const senderAppUrl = backend === "masterdata" 
-			? BACKEND_CONFIG.masterDataApiUrl 
-			: BACKEND_CONFIG.appUrl;
 		const fetchOptions: RequestInit = {
 			method: "POST",
 			...caching,
@@ -71,7 +69,7 @@ export async function proxyToBackend({
 
 			const payload = (buildPayload || defaultPayloadBuilder)(body);
 
-			const backendRequest = createBackendRequest(payload, senderAppUrl);
+			const backendRequest = createBackendRequest(payload);
 
 			fetchOptions.headers = {
 				"Content-Type": "application/json"

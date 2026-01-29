@@ -9,6 +9,8 @@ import { RuntimeConfigProvider } from "@/context/RuntimeConfigContext";
 import { RegisterProvider } from "@/context/RegisterContext";
 import { ToastContainer } from "react-toastify";
 import { Roboto } from 'next/font/google'
+import { getClientSafeConfig } from '@/app/api/_lib/backend-config';
+
 
 const roboto = Roboto({
     weight: ['300', '400', '500', '700'],
@@ -43,13 +45,15 @@ export default async function RootLayout({
 }) {
     const { locale } = await params;
     const messages = await getMessages();
+    const config = getClientSafeConfig()
+
 
     return (
         <html lang={locale}>
             <body className={`${roboto.className} antialiased pt-17.5`}>
                 <NextIntlClientProvider messages={messages}>
                     <GlobalContextProvider>
-                        <RuntimeConfigProvider>
+                        <RuntimeConfigProvider initialConfig={config}>
                             <Header />
                             <RegisterProvider>
                                 <ToastContainer />

@@ -266,7 +266,7 @@ export default function VersionHistoryPage() {
                                 store={widgetStore}
                                 schemaData={newSectionData}
                                 translate={t}
-                                dataSourceRequestHandler={dataSourceRequestHandler}
+                                // dataSourceRequestHandler={dataSourceRequestHandler}
                             >
                                 <SectionsContainer
                                     sections={innerSectionConfig}
