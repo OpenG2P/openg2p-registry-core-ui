@@ -49,6 +49,11 @@ export async function proxyToBackend({
 				: BACKEND_CONFIG.apiUrl;
 
 		const backendUrl = `${baseUrl}${targetEndpoint}`;
+		
+		// For master data requests, use the master data API URL as sender_app_url
+		const senderAppUrl = backend === "masterdata" 
+			? BACKEND_CONFIG.masterDataApiUrl 
+			: BACKEND_CONFIG.appUrl;
 		const fetchOptions: RequestInit = {
 			method: "POST",
 			...caching,
@@ -65,10 +70,8 @@ export async function proxyToBackend({
 			});
 
 			const payload = (buildPayload || defaultPayloadBuilder)(body);
-			// console.log(payload, "Payload", targetEndpoint);
 
-			const backendRequest = createBackendRequest(payload);
-			// console.log(backendRequest, "Backend Request", targetEndpoint);
+			const backendRequest = createBackendRequest(payload, senderAppUrl);
 
 			fetchOptions.headers = {
 				"Content-Type": "application/json"
@@ -77,8 +80,6 @@ export async function proxyToBackend({
 		}
 
 		const response = await fetch(backendUrl, fetchOptions);
-		// console.log(response, "Response", targetEndpoint);
-
 
 		const backendResponse: BackendResponse = await response.json();
 
@@ -92,7 +93,7 @@ export async function proxyToBackend({
 		const responseBody = backendResponse.response_body;
 		const data = transformResponse
 			? transformResponse(responseBody)
-			: responseBody.response_payload;
+			: responseBody?.response_payload;
 
 		return NextResponse.json(data, { headers: responseHeaders });
 

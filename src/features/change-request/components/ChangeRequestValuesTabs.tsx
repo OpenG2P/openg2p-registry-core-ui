@@ -5,6 +5,7 @@ import {
     WidgetProvider,
     SectionsContainer,
 } from "@openg2p/registry-widgets";
+import { dataSourceRequestHandler } from "@/features/register/utils/dataSourceRequestHandler";
 
 type TabType = "values" /* | "duplicates" */;
 
@@ -54,6 +55,7 @@ export function ChangeRequestValuesTabs({
                         store={widgetStoreNew}
                         schemaData={newSectionData}
                         translate={t}
+                        dataSourceRequestHandler={dataSourceRequestHandler}
                     >
                         <SectionsContainer
                             sections={innerSectionConfig}
@@ -65,6 +67,7 @@ export function ChangeRequestValuesTabs({
                         store={widgetStoreOld}
                         schemaData={oldSectionData}
                         translate={t}
+                        apiAdapter={dataSourceRequestHandler}
                     >
                         <SectionsContainer
                             sections={innerSectionConfig}

@@ -20,6 +20,7 @@ import { useRegisterSectionsFromCR } from '@/features/change-request/hooks/useRe
 import { useRegisterRecord } from '@/context/RegisterRecordContext';
 import { RegisterFlattenedRecord } from '@/features/register/types';
 import VersionHistoryPageSkeleton from '@/features/register/components/VersionHistoryPageSkeleton';
+import { dataSourceRequestHandler } from '@/features/register/utils/dataSourceRequestHandler';
 
 type Change = {
     change_request_id: string;
@@ -265,6 +266,7 @@ export default function VersionHistoryPage() {
                                 store={widgetStore}
                                 schemaData={newSectionData}
                                 translate={t}
+                                dataSourceRequestHandler={dataSourceRequestHandler}
                             >
                                 <SectionsContainer
                                     sections={innerSectionConfig}

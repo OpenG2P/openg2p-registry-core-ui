@@ -14,7 +14,7 @@ import { useEffect, useState } from 'react';
 
 import { useRegisterDetail } from '@/features/register/hooks/useRegisterDetail';
 import RegisterDetailsPageSkeleton from '@/features/register/components/RegisterDetailsPageSkeleton';
-import { apiAdapter } from '@/features/register/utils/apiAdapter';
+import { dataSourceRequestHandler } from '@/features/register/utils/dataSourceRequestHandler';
 
 
 export default function RegisterDetailPage() {
@@ -91,11 +91,12 @@ export default function RegisterDetailPage() {
                                 store={widgetStore}
                                 schemaData={sectionDataMap}
                                 translate={t}
-                                apiAdapter={apiAdapter}
+                                dataSourceRequestHandler={dataSourceRequestHandler}
                             >
                                 <SectionsContainer
                                     sections={orderedTabSections}
                                     onSectionSave={handleSectionSave}
+                                    // dataSourceRequestHandler={dataSourceRequestHandler}
                                 />
                             </WidgetProvider>
                         </div>

@@ -12,11 +12,13 @@ export function generateTimestamp(): string {
   return new Date().toISOString();
 }
 
-export function createBackendRequest(payload: RequestBody): BackendRequest {
-
+export function createBackendRequest(
+  payload: RequestBody,
+  senderAppUrl?: string
+): BackendRequest {
   const requestHeader: RequestHeader = {
     sender_app_mnemonic: BACKEND_CONFIG.appMnemonic,
-    sender_app_url: BACKEND_CONFIG.appUrl,
+    sender_app_url: senderAppUrl || BACKEND_CONFIG.appUrl,
     request_id: generateRequestId(),
     request_timestamp: generateTimestamp(),
   };
