@@ -53,11 +53,11 @@ export default function MessagePopup({
                     </div>
                 </div>
 
-                <div className="flex-1 bg-[#D9D9D980] px-6 py-3 overflow-y-auto message-json-scroll">
+                <div className="flex-1 bg-[#D9D9D980] px-6 py-3 overflow-y-auto overflow-x-auto message-json-scroll">
                     {loading ? (
                         <div className="text-center py-10">Loading...</div>
                     ) : (
-                        <pre className="text-[14px] text-black whitespace-pre-wrap">
+                        <pre className="text-[14px] text-black whitespace-pre">
                             {JSON.stringify(tabs[activeTab]?.data, null, 2)}
                         </pre>
                     )}
