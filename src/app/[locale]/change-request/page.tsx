@@ -6,8 +6,6 @@ import { useSearchParams } from 'next/navigation';
 import { useRouter } from '@/i18n/navigation';
 
 import { TopBar } from '@/components/shared';
-import { SelectedFilters } from '@/features/filter/components';
-import { useRegistryFilters } from '@/features/filter/hooks/useRegistryFilters';
 import { ChangeLogList, ChangeLogSkeleton } from '@/features/change-request/components';
 import { useChangeRequestSearch } from '@/features/change-request/hooks/useChangeRequestSearch';
 
@@ -18,14 +16,6 @@ export default function ChangeRequestPage() {
 
     const searchParams = useSearchParams();
     const searchQuery = searchParams.get('search') || undefined;
-
-    const {
-        appliedFilters,
-        filterConfig,
-        applyFilters,
-        removeFilter,
-        clearAllFilters,
-    } = useRegistryFilters();
 
     const {
         logs,
@@ -67,31 +57,20 @@ export default function ChangeRequestPage() {
         <div className="min-h-screen mx-auto bg-[#F3F1E4]">
             <TopBar
                 breadcrumb={[{ label: 'Change Request' }]}
-                showFilters
+                showSearch
+                searchValue={searchQuery || ''}
+                searchPlaceholder={t('search')}
+                onSearch={handleSearch}
+                showFilters={false}
                 showPagination
                 pageStart={pageStart}
                 pageEnd={pageEnd}
                 total={total}
                 onPrev={onPrev}
                 onNext={onNext}
-                onApplyFilters={applyFilters}
-                appliedFilters={appliedFilters}
-                filterConfig={filterConfig}
             />
 
             <div className="px-7.5">
-                <div className='pl-4 pr-2 mb-4 bg-white rounded-[30px]'>
-                    <SelectedFilters
-                        appliedFilters={appliedFilters}
-                        filterConfig={filterConfig}
-                        removeFilter={removeFilter}
-                        clearAllFilters={clearAllFilters}
-                        searchValue={searchQuery || ''}
-                        searchPlaceholder={t('search')}
-                        onSearch={handleSearch}
-                    />
-                </div>
-
                 {loading ? (
                     <div className="space-y-4">
                         {[...Array(3)].map((_, i) => (

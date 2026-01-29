@@ -10,9 +10,10 @@ import { RegisterRecord } from '@/features/register/types';
 import { useState } from 'react';
 import AddNewDropdown from '@/components/ui/AddNewDropdown';
 import { useVCConfigs } from '@/features/register/hooks/useVCConfigs';
+import { useInputMechanisms } from '@/shared/hooks';
 
 const VpVerificationModal = dynamic(
-    () => import('@/components/ui/VpVerificationModal'),
+    () => import('@/features/verifiable-credentials/components/VpVerificationModal'),
     { ssr: false }
 );
 
@@ -42,6 +43,7 @@ export default function RegisterTypePage() {
 
 
     const { vcOptions, isLoadingVCs } = useVCConfigs();
+    const { mechanisms, isLoadingMechanisms } = useInputMechanisms();
 
     const [selectedVC, setSelectedVC] = useState<any | null>(null);
 
@@ -56,14 +58,14 @@ export default function RegisterTypePage() {
                 showCapsule={true}
                 capsule={
                     <AddNewDropdown
+                        mechanisms={mechanisms}
                         vcOptions={vcOptions}
                         onSelectVC={(vc) => {
                             setSelectedVC(vc);
                             setOpenVC(true);
                         }}
-                        onImportCSV={() => console.log("Import CSV")}
-                        onImportPDS={() => console.log("Import PDS")}
-                        onImportOthers={() => console.log("Import Others")}
+                        onImportCSV={() => console.log('Import CSV')}
+                        onImportPDS={() => console.log('Import PDS')}
                     />
                 }
                 pageStart={pagination.pageStart}

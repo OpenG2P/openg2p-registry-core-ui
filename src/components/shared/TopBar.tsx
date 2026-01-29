@@ -3,11 +3,17 @@
 import { BreadcrumbBar, PaginationBar } from "@/components/shared";
 import { FilterBar } from "@/features/filter/components";
 import { FilterConfig, FilterRule } from "@/features/filter/types";
+import { SearchBar } from "@/components/ui";
 
 interface TopBarProps {
     breadcrumb?: any[];
     showFilters?: boolean;
     showPagination?: boolean;
+
+    showSearch?: boolean;
+    searchValue?: string;
+    searchPlaceholder?: string;
+    onSearch?: (value: string) => void;
 
     showCapsule?: boolean;
     capsule?: React.ReactNode;
@@ -33,6 +39,10 @@ interface TopBarProps {
 
 export default function TopBar({
     breadcrumb = [],
+    showSearch = false,
+    searchValue = '',
+    searchPlaceholder = 'Search',
+    onSearch,
     showFilters = true,
     showPagination = true,
     showCapsule = false,
@@ -54,7 +64,6 @@ export default function TopBar({
     return (
         <div className="w-full h-17.5 flex justify-center items-center">
             <div className="w-full px-7.5 flex justify-between items-center">
-                {/* <BreadcrumbBar breadcrumb={breadcrumb} /> */}
                 <div className="flex items-center gap-4">
                     {breadcrumb && breadcrumb.length > 0 && (
                         <BreadcrumbBar breadcrumb={breadcrumb} />
@@ -63,6 +72,17 @@ export default function TopBar({
                     {showCapsule && capsule}
                 </div>
                 <div className="flex items-center gap-2 sm:gap-4">
+                    {showSearch && onSearch && (
+                        <div className="ml-auto shrink-0 border border-[#ED7C22] rounded-[30px] h-8.5 flex items-center px-2 bg-white">
+                            <SearchBar
+                                placeholder={searchPlaceholder}
+                                category=""
+                                searchValue={searchValue}
+                                iconSize={16}
+                                onSearch={onSearch}
+                            />
+                        </div>
+                    )}
                     {showFilters && (
                         <FilterBar
                             onFilters={onFilters}
@@ -76,7 +96,7 @@ export default function TopBar({
                     {showAddNewButton && (
                         <button
                             onClick={onAddNewButton}
-                            className="h-[34px] px-6 bg-[#F2BA1A] rounded-[17px] flex items-center gap-2 hover:bg-[#e5b018] transition-colors"
+                            className="h-8.5 px-6 bg-[#F2BA1A] rounded-[17px] flex items-center gap-2 hover:bg-[#e5b018] transition-colors"
                         >
                             <span className="text-[16px] font-medium text-black">
                                 {addNewButtonText}
