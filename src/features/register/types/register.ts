@@ -44,6 +44,8 @@ export interface TabSection {
     register_id: string;
     section_id: string;
     tab_id: string;
+    register_purpose:string,
+    register_relation:string,
     section_mnemonic: string;
     section_description: string;
     documents_required: boolean;

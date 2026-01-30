@@ -67,7 +67,7 @@ export function ChangeRequestValuesTabs({
                         store={widgetStoreOld}
                         schemaData={oldSectionData}
                         translate={t}
-                        apiAdapter={dataSourceRequestHandler}
+                        // apiAdapter={dataSourceRequestHandler}
                     >
                         <SectionsContainer
                             sections={innerSectionConfig}

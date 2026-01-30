@@ -8,6 +8,7 @@ import {
 import {
     WidgetProvider,
     SectionsContainer,
+    SectionRenderer,
 } from '@openg2p/registry-widgets';
 import ChangeRequestCard from '@/features/change-request/components/ChangeRequestCard';
 import { useEffect, useState } from 'react';
@@ -87,18 +88,26 @@ export default function RegisterDetailPage() {
                 <div className="grid grid-cols-12 gap-6">
                     <div className="col-span-12 lg:col-span-9">
                         <div className="col-span-12 lg:col-span-9">
-                            <WidgetProvider
+                           <WidgetProvider
                                 store={widgetStore}
                                 schemaData={sectionDataMap}
                                 translate={t}
-                                // dataSourceRequestHandler={dataSourceRequestHandler}
                             >
-                                <SectionsContainer
-                                    sections={orderedTabSections}
-                                    onSectionSave={handleSectionSave}
-                                    // dataSourceRequestHandler={dataSourceRequestHandler}
-                                />
+                                {orderedTabSections.map((section) => {
+                                    const { section_id, section_ui_schema, hideEditButton } = section;
+
+                                    return (
+                                        <div key={section_id} className='pb-4'>
+                                            <SectionRenderer
+                                                section={section_ui_schema}
+                                                onSectionSave={handleSectionSave}
+                                                hideEditButton={hideEditButton}
+                                            />
+                                        </div>
+                                    );
+                                })}
                             </WidgetProvider>
+
                         </div>
                     </div>
 
