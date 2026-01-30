@@ -91,7 +91,7 @@ export default function RegisterDetailPage() {
                                 store={widgetStore}
                                 schemaData={sectionDataMap}
                                 translate={t}
-                                dataSourceRequestHandler={dataSourceRequestHandler}
+                                // dataSourceRequestHandler={dataSourceRequestHandler}
                             >
                                 <SectionsContainer
                                     sections={orderedTabSections}

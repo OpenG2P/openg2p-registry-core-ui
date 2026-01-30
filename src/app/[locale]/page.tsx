@@ -12,6 +12,7 @@ import {
 import Image from 'next/image';
 
 import { useRegister } from '@/context/RegisterContext';
+import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
 
 
 type ActiveStatsCard =
@@ -19,11 +20,6 @@ type ActiveStatsCard =
     | 'change_request'
     | 'incoming_message'
     | 'outgoing_message';
-
-const isPartnerImportExportEnabled = true
-    // process.env.NEXT_PUBLIC_PARTNER_IMPORT_EXPORT_ENABLE === 'true';
-
-const statsCardVariant = isPartnerImportExportEnabled ? 'small' : 'large';
 
 const ALL_CARDS: ActiveStatsCard[] = [
     'registers',
@@ -37,12 +33,13 @@ const LIMITED_CARDS: ActiveStatsCard[] = [
     'change_request',
 ];
 
-const visibleCards =
-    statsCardVariant === 'small' ? ALL_CARDS : LIMITED_CARDS;
-
 export default function Home() {
     const router = useRouter();
     const t = useTranslations();
+    const { config } = useRuntimeConfig();
+
+    const statsCardVariant = config?.partnerImportExportEnable ? 'small' : 'large';
+    const visibleCards = statsCardVariant === 'small' ? ALL_CARDS : LIMITED_CARDS;
 
     const [activeStatsCard, setActiveStatsCard] =
         useState<ActiveStatsCard>('registers');

@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { OpenID4VPVerification } from 'inji-sdk';
 import { buildPayloadFromDecodedJWT, decodeSdJwtToken, buildPresentationDefinition } from '@/features/verifiable-credentials/utils';
 import { PayloadView, StatusView } from '@/features/verifiable-credentials/components';
+import {useRuntimeConfig } from '@/context/RuntimeConfigContext';
 
 interface Props {
     descriptorSchema: any;
@@ -28,6 +29,9 @@ export default function VpVerificationModal({
     descriptorSchema,
     onClose,
 }: Props) {
+
+    // env variable 
+    const { config } = useRuntimeConfig();
 
     const [verificationComplete, setVerificationComplete] = useState(false);
     const [verificationStatus, setVerificationStatus] = useState<'idle' | 'verifying' | 'success' | 'error'>('idle');
@@ -327,13 +331,13 @@ export default function VpVerificationModal({
                     ) : (
                         <div className="flex flex-col items-center justify-center h-full text-center">
                             <OpenID4VPVerification
-                                verifyServiceUrl={process.env.NEXT_PUBLIC_VERIFY_SERVICE_URL!}
+                                verifyServiceUrl={config?.verifyServiceUrl}
                                 presentationDefinition={presentationDefinition}
                                 onVPProcessed={handleVPProcessed}
                                 onError={handleError}
                                 onQrCodeExpired={handleQrCodeExpired}
                                 isSameDeviceFlowEnabled={false}
-                                clientId={process.env.NEXT_PUBLIC_VP_CLIENT_ID!}
+                                clientId={config?.vpClientId!}
                                 triggerElement={
                                     <button
                                         id="vp-verification-trigger"

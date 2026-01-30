@@ -1,12 +1,12 @@
+
 import { NextRequest, NextResponse } from 'next/server';
+import { getClientSafeConfig } from '../_lib/backend-config';
 
 export async function POST(req: NextRequest) {
+    const {partnerIngestUrl} = getClientSafeConfig()
     const body = await req.json();
     const { vc } = body;
-
-    const ingestUrl = process.env.PARTNER_INGEST_URL;
-
-    if (!ingestUrl) {
+    if (!partnerIngestUrl) {
         return NextResponse.json(
             { error: 'Partner ingest URL not configured' },
             { status: 500 }
@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
     }
 
     const response = await fetch(
-        ingestUrl,
+        partnerIngestUrl,
         {
             method: 'POST',
             headers: {
