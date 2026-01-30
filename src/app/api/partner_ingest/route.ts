@@ -1,6 +1,6 @@
 
 import { NextRequest, NextResponse } from 'next/server';
-import { getClientSafeConfig } from '../_lib/backend-config';
+import { getClientSafeConfig } from '../_lib/client-safe-config';
 
 export async function POST(req: NextRequest) {
     const {partnerIngestUrl} = getClientSafeConfig()
