@@ -65,7 +65,9 @@ export default function MyProfile() {
                     <div className="grid grid-cols-2 gap-6 px-12.5 py-4">
                         <div>
                             <p className="text-sm text-gray-500 mb-1">Language</p>
-                            <LanguageSwitcher />
+                            <div className='-ml-4'>
+                                <LanguageSwitcher />
+                            </div>
                         </div>
 
                         <div>
