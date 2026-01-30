@@ -9,7 +9,7 @@ import { RuntimeConfigProvider } from "@/context/RuntimeConfigContext";
 import { RegisterProvider } from "@/context/RegisterContext";
 import { ToastContainer } from "react-toastify";
 import { Roboto } from 'next/font/google'
-import { getClientSafeConfig } from '@/app/api/_lib/backend-config';
+import { getClientSafeConfig } from '@/app/api/_lib/client-safe-config';
 
 
 const roboto = Roboto({
