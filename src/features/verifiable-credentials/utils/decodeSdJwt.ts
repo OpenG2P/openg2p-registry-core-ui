@@ -49,5 +49,6 @@ export const decodeSdJwtToken = async (sdjwt: string) => {
         },
         regularClaims,
         disclosedClaims,
+        decoded
     };
 };

@@ -2,23 +2,23 @@
 
 import { useRouter, usePathname } from '@/i18n/navigation';
 import { routing } from '@/i18n/routing';
-import React, { useState, useRef, useTransition } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
-import Image from "next/image";
-import { useClickOutside } from "@/shared/hooks/useClickOutside";
+import Image from 'next/image';
+import React, { useRef, useState, useTransition } from 'react';
+import { useClickOutside } from '@/shared/hooks/useClickOutside';
 
 const flagMap: Record<string, string> = {
-    en: "/flags/en_flag.png",
-    de: "/flags/de_flag.png",
-    cs: "/flags/cs_flag.png"
+    en: '/flags/en_flag.png',
+    de: '/flags/de_flag.png',
+    cs: '/flags/cs_flag.png',
 };
 
 export default function LanguageSwitcher() {
     const router = useRouter();
     const pathname = usePathname();
     const locale = useLocale();
-    const [isPending, startTransition] = useTransition();
     const t = useTranslations();
+    const [isPending, startTransition] = useTransition();
 
     const [open, setOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -32,59 +32,71 @@ export default function LanguageSwitcher() {
         });
     };
 
-    const currentFlag = flagMap[locale] || "/flags/uk_flag.png";
+    const currentFlag = flagMap[locale] || '/flags/en_flag.png';
 
     return (
-        <div className="relative z-50" ref={dropdownRef}>
+        <div className="relative inline-block" ref={dropdownRef}>
             <button
                 onClick={() => setOpen((prev) => !prev)}
-                className="flex items-center gap-2 bg-transparent text-sm font-medium focus:outline-none"
                 disabled={isPending}
+                className="flex items-center justify-between rounded-[17px] gap-2 px-4 py-2 min-w-35 text-[16px] font-medium cursor-pointer transition-all focus:outline-none"
             >
-                <div className="w-6 h-4 relative border shadow-sm overflow-hidden flex-shrink-0">
-                    <Image
-                        src={currentFlag}
-                        alt={locale}
-                        fill
-                        sizes="24px"
-                        className="object-cover"
-                    />
+                <div className="flex items-center gap-2">
+                    <div className="w-6 h-4 relative rounded-sm overflow-hidden shrink-0 border">
+                        <Image
+                            src={currentFlag}
+                            alt={locale}
+                            fill
+                            sizes="28px"
+                            className="object-cover"
+                        />
+                    </div>
+
+                    <span className="text-black text-[18px]">
+                        {t(locale)}
+                    </span>
                 </div>
-                <span className="text-black text-[16px]">
-                    {t(locale)}
-                </span>
-                <div className={`w-3 h-2 relative transition-transform ${open ? 'rotate-180' : ''}`}>
-                    <Image
-                        src="/down_arrow.png"
-                        alt="toggle"
-                        fill
-                        sizes="12px"
-                        className="object-contain"
-                    />
-                </div>
+
+                <Image
+                    src="/down_arrow.png"
+                    alt="toggle"
+                    width={14}
+                    height={14}
+                    className={`transition-transform ${open ? 'rotate-180' : ''}`}
+                />
             </button>
 
             {open && (
-                <div className="absolute top-10 right-0 w-32 bg-white border  rounded border-gray-200 shadow-lg py-1 flex flex-col">
-                    {routing.locales.map((loc) => (
+                <div
+                    className="absolute top-0 left-0 min-w-35 ring-1 ring-black/10 rounded-[17px] bg-white overflow-hidden z-50"
+                >
+                    {routing.locales.map((loc, index) => (
                         <button
                             key={loc}
                             onClick={() => handleLanguageChange(loc)}
-                            className={`
-                                flex items-center gap-2 px-4 py-2 text-sm text-left hover:bg-gray-50
-                                ${locale === loc ? 'font-bold bg-gray-50' : 'font-normal text-gray-700'}
-                            `}
+                            className="flex items-center justify-between gap-2 px-4 py-2 min-w-35 text-[16px] font-medium cursor-pointer transition-all focus:outline-none"
                         >
-                            <div className="w-5 h-3.5 relative border rounded-sm overflow-hidden flex-shrink-0">
-                                <Image
-                                    src={flagMap[loc] || "/flags/uk_flag.png"}
-                                    alt={loc}
-                                    fill
-                                    sizes="20px"
-                                    className="object-cover"
-                                />
+                            <div className="flex items-center gap-2">
+                                <div className="w-6 h-4 relative rounded-sm overflow-hidden shrink-0 border">
+                                    <Image
+                                        src={flagMap[loc] || '/flags/en_flag.png'}
+                                        alt={loc}
+                                        fill
+                                        sizes="28px"
+                                        className="object-cover"
+                                    />
+                                </div>
+                                <span className='text-black text-[18px]'>{t(loc)}</span>
                             </div>
-                            <span>{t(loc)}</span>
+                            {index === 0 && (
+                                <Image
+                                    src="/down_arrow.png"
+                                    alt="selected"
+                                    width={14}
+                                    height={14}
+                                    className="rotate-180"
+                                />
+                            )}
                         </button>
                     ))}
                 </div>
