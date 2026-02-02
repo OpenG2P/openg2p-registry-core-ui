@@ -88,7 +88,7 @@ export default function RegisterDetailPage() {
                 <div className="grid grid-cols-12 gap-6">
                     <div className="col-span-12 lg:col-span-9">
                         <div className="col-span-12 lg:col-span-9">
-                           <WidgetProvider
+                            <WidgetProvider
                                 store={widgetStore}
                                 schemaData={sectionDataMap}
                                 translate={t}

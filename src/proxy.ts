@@ -4,5 +4,5 @@ import { routing } from './i18n/routing';
 export default proxy(routing);
 
 export const config = {
-    matcher: ['/', '/(de|en|cs)/:path*']
+    matcher: ['/((?!api|_next|.*\\..*).*)']
 };
