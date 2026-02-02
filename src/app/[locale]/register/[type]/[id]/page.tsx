@@ -8,6 +8,7 @@ import {
 import {
     WidgetProvider,
     SectionsContainer,
+    SectionRenderer,
 } from '@openg2p/registry-widgets';
 import ChangeRequestCard from '@/features/change-request/components/ChangeRequestCard';
 import { useEffect, useState } from 'react';
@@ -91,14 +92,22 @@ export default function RegisterDetailPage() {
                                 store={widgetStore}
                                 schemaData={sectionDataMap}
                                 translate={t}
-                                // dataSourceRequestHandler={dataSourceRequestHandler}
                             >
-                                <SectionsContainer
-                                    sections={orderedTabSections}
-                                    onSectionSave={handleSectionSave}
-                                    // dataSourceRequestHandler={dataSourceRequestHandler}
-                                />
+                                {orderedTabSections.map((section) => {
+                                    const { section_id, section_ui_schema, hideEditButton } = section;
+
+                                    return (
+                                        <div key={section_id} className='pb-4'>
+                                            <SectionRenderer
+                                                section={section_ui_schema}
+                                                onSectionSave={handleSectionSave}
+                                                hideEditButton={hideEditButton}
+                                            />
+                                        </div>
+                                    );
+                                })}
                             </WidgetProvider>
+
                         </div>
                     </div>
 

@@ -2,6 +2,7 @@
 import { useState, useMemo, useCallback } from 'react';
 import { useParams, useSearchParams } from 'next/navigation';
 import { useRouter } from '@/i18n/navigation';
+import { notFound } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useRegistryFilters } from '@/features/filter/hooks/useRegistryFilters';
 import { useFetch } from '@/shared/hooks/useFetch';
@@ -29,7 +30,12 @@ export const useRegisterRecords = () => {
     const registerType = routeParams.type;
     const searchQuery = searchParams.get('search') || "";
 
-    const { currentRegister } = useRegister();
+    const { currentRegister, loading: loadingRegister } = useRegister();
+
+    // If we've finished loading registers and the requested type didn't match any, 404
+    if (!loadingRegister && !currentRegister) {
+        notFound();
+    }
 
     const registerId = currentRegister?.register_id;
     const registerTypeLabel = t(registerType) ?? currentRegister?.register_subject;

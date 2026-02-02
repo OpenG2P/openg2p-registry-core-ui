@@ -54,7 +54,7 @@ export const useRegisterSections = (onChangeRequestCreated: () => void) => {
       if (!section.records?.length) continue;
 
       if (section.is_list === true) {
-        map[section.section_register_id] = { records: section.records, };
+        map[section.section_register_id] = { records: section.records };
       } else {
         map[section.section_register_id] = section.records[0];
       }
@@ -63,19 +63,46 @@ export const useRegisterSections = (onChangeRequestCreated: () => void) => {
     return map;
   }, [tabSectionsData]);
 
-
   const orderedTabSections = useMemo(() => {
     if (!tabSections) return [];
 
     return [...tabSections]
-      .sort(
-        (sectionA, sectionB) =>
-          (sectionA.section_order ?? 0) - (sectionB.section_order ?? 0),
-      )
-      .flatMap((section) => section.section_ui_schema?? []);
+      .sort((a, b) => (a.section_order ?? 0) - (b.section_order ?? 0))
+      .map((section) => {
+        const {
+          section_id,
+          register_purpose,
+          register_relation,
+          section_ui_schema,
+        } = section;
+
+        // evalute change request creation allowed or not
+        let hideEditButton = false;
+        if (
+          (register_purpose === "REGISTER" ||
+            register_purpose === "PROGRAM_APPLICATION") &&
+          register_relation !== "SELF"
+        ) {
+          hideEditButton = true;
+        } else if (
+          register_purpose === "TABLE" &&
+          register_relation !== "DESCENDANT"
+        ) {
+          hideEditButton = true;
+        }
+
+        return {
+          section_id,
+          section_ui_schema,
+          hideEditButton,
+        };
+      });
   }, [tabSections]);
 
-  const { handleSectionSave } = useSectionSave(tabSections, onChangeRequestCreated);
+  const { handleSectionSave } = useSectionSave(
+    tabSections,
+    onChangeRequestCreated,
+  );
 
   const canRenderContent = !!(
     tabSections &&
