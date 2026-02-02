@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { OpenID4VPVerification } from 'inji-sdk';
 import { buildPayloadFromDecodedJWT, decodeSdJwtToken, buildPresentationDefinition } from '@/features/verifiable-credentials/utils';
 import { PayloadView, StatusView } from '@/features/verifiable-credentials/components';
-import {useRuntimeConfig } from '@/context/RuntimeConfigContext';
+import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
 
 interface Props {
     descriptorSchema: any;
@@ -13,7 +13,7 @@ interface Props {
 }
 const HARDCODED_RESULT = [
     {
-        "vc": "eyJ4NWMiOlsiTUlJQ0JqQ0NBYXVnQXdJQkFnSVVQWDU0a0Vwbk4rWVZSU3JZRTNaRnZGVzBTNVF3Q2dZSUtvWkl6ajBFQXdJd0p6RWxNQ01HQTFVRUF3d2NkbU10WkdWdGJ5NXZjR1Z1WTNKMmN5NWtaWFlnVW05dmRDQkRRVEFlRncweU5qQXhNamd4TVRNeE16bGFGdzB6TmpBeE1qWXhNVE14TXpsYU1COHhIVEFiQmdOVkJBTU1GSFpqTFdSbGJXOHViM0JsYm1OeWRuTXVaR1YyTUZrd0V3WUhLb1pJemowQ0FRWUlLb1pJemowREFRY0RRZ0FFQWFIaTZ6aWQyMGRyalBnTXRpd25sdVc1RHQyd1pLMjVRcUZncGdjS1lPb0N2dUtOeWRmVm5hTzZOZy8vTk1WNW1MTTdtc3N1dzA4ZEQ5UUROWExsNktPQnZEQ0J1VEFKQmdOVkhSTUVBakFBTUE0R0ExVWREd0VCL3dRRUF3SUhnREFkQmdOVkhTVUVGakFVQmdnckJnRUZCUWNEQWdZSUt3WUJCUVVIQXdFd1BRWURWUjBSQkRZd05JSVVkbU10WkdWdGJ5NXZjR1Z1WTNKMmN5NWtaWGFHSEdoMGRIQnpPaTh2ZG1NdFpHVnRieTV2Y0dWdVkzSjJjeTVrWlhZd0hRWURWUjBPQkJZRUZGWk5hYXE5MW5KbVU0L2VhUXJjWCtBallzdmNNQjhHQTFVZEl3UVlNQmFBRkVxSnB0NGErWW5uZ1RlelJadjEwOVg2ZHNQQk1Bb0dDQ3FHU000OUJBTUNBMGtBTUVZQ0lRQzBoblV4aXdFZXpvbjZGWFZaWW16dDVsaG5KZ1V0QnJzS0w4UlNoOVlKRWdJaEFNV05UUUhBWEp4T0cxYkZuVXI2elorRWhIc1orajR6Tk1uSEdhb1ZFWUlsIiwiTUlJQjh6Q0NBWnFnQXdJQkFnSVVjbzJGd2p5RUFBY3Btb2RIbDRNNDJYa1NKakF3Q2dZSUtvWkl6ajBFQXdJd0p6RWxNQ01HQTFVRUF3d2NkbU10WkdWdGJ5NXZjR1Z1WTNKMmN5NWtaWFlnVW05dmRDQkRRVEFlRncweU5qQXhNamd4TVRNeE16bGFGdzB6TmpBeE1qWXhNVE14TXpsYU1DY3hKVEFqQmdOVkJBTU1ISFpqTFdSbGJXOHViM0JsYm1OeWRuTXVaR1YySUZKdmIzUWdRMEV3V1RBVEJnY3Foa2pPUFFJQkJnZ3Foa2pPUFFNQkJ3TkNBQVNTcFlVM2dvak1hTkUvb29yc2lkVWcyMkp0WE8zTzlFNHRJY0VoaGM4cmx5TG9WZFhJQ0lZRmpWeEFiSklZczFzdTVvMmVNWVBJS1MwZ013b3FrR0ZhbzRHak1JR2dNQjBHQTFVZERnUVdCQlJLaWFiZUd2bUo1NEUzczBXYjlkUFYrbmJEd1RBZkJnTlZIU01FR0RBV2dCUktpYWJlR3ZtSjU0RTNzMFdiOWRQVituYkR3VEFQQmdOVkhSTUJBZjhFQlRBREFRSC9NQTRHQTFVZER3RUIvd1FFQXdJQkJqQTlCZ05WSFJFRU5qQTBnaFIyWXkxa1pXMXZMbTl3Wlc1amNuWnpMbVJsZG9ZY2FIUjBjSE02THk5Mll5MWtaVzF2TG05d1pXNWpjblp6TG1SbGRqQUtCZ2dxaGtqT1BRUURBZ05IQURCRUFpQjAwcXpmQnFObitWc2p2NEQrK1pINU9LMmNiZWJNRDhtQjd3THZGL3lpcGdJZ2I0cjZUaFdqbXd0Zi9QS0hmL3NXNHo1VmJjclpQZEpCUDFqSDZjQThHb1E9Il0sImtpZCI6IkR6MmJoX0pnUXhrRXRwbVFTUnJJdGxWUWdFcjN3THRDc1Q3OHV1aWFSTFkiLCJ0eXAiOiJ2YytzZC1qd3QiLCJhbGciOiJFUzI1NiJ9.eyJpZCI6InVybjp1dWlkOmRhMzk2NzE0LTU2YzUtNGQzNC05YTUxLWExMzQ1YjUxNDQxNCIsImlhdCI6MTc2OTYwMDM3NSwibmJmIjoxNzY5NjAwMzc1LCJleHAiOjE4MDExMzYzNzUsIl9zZF9hbGciOiJzaGEtMjU2IiwiaXNzIjoiaHR0cHM6Ly92Yy1kZW1vLm9wZW5jcnZzLmRldiIsImNuZiI6eyJraWQiOiJkaWQ6andrOmV5SnJkSGtpT2lKRlF5SXNJbXRwWkNJNkluRjRORTFtVWtSSWJFRmlRbk5UVm5GYVprcHhURFY2VTNjek5IaFlWazFQZWxNMk4yZG5jMDEzWkhNaUxDSmpjbllpT2lKUUxUSTFOaUlzSW5naU9pSXRRVEZHVlZKQmNETm9XWE16U1ZJMVdXRklOM2RYYjI5cU1WbG5WbWRMVFhkS1NDMTBjMWx3YUY5aklpd2llU0k2SW1aSVRVVkNORFZqUTA5Q2RGQktZWGcxV2t0WGFtTXdWa0oyUkhKQk5DMTZZV05OUzFkYWVUSTBNRFFpTENKMWMyVWlPaUp6YVdjaWZRIn0sInZjdCI6ImNydnNfYmlydGhfdjEiLCJfc2QiOlsiTjVnQW9YZUVsQ0xoNGFkWnNtUklHbVU3cUhsWGJEbElCbkVVS3VWbjBUbyIsIlV5ZlgzcnVMRkZqVnQ5VGltMUFnb0pQZWg4QU5PM1ljSW5SajlHbzJNYjQiLCJwNHJ5ZDdDR1FoUm5oN1V2SWxGanJZMTZPY2N2UEQ3RF9FemhVM1pOX3gwIiwiOTJ5NmhvUXFiZFFrNV9NUDZ5NlNPaWdvR3RfR01XVHhqblhZaXJGbGdEbyJdfQ.ImfFuSKVYxfUe_PsCwLMtqoiESr7yJXJHvkuTRrLd55ekvVZABPZc8b-nnkdW1cAnvnTY99kuPJb4H7PV5sq_A~WyJ2c3JwT3ltVE45WFdOcTgwcDZ5LXlRIiwiZ2l2ZW5fbmFtZSIsIlB5cnkiXQ~WyJfdEZaRzIzd2pDdi1TdTRaSHlBT3VRIiwiZmFtaWx5X25hbWUiLCJSb3V2aWxhIl0~WyJWUHBXZnV0Y1NZdGUyNEJOejkxQ21nIiwiYmlydGhkYXRlIiwiMjAyNS0wMy0wMyJd~WyIzT2FOUkNOUFVSUFQ0LThjN0xFRDhnIiwicGxhY2Vfb2ZfYmlydGgiLCJDaGFtYWt1YmkgSGVhbHRoIFBvc3QsIElib21ibywgQ2VudHJhbCwgRmFyYWphbGFuZCJd~eyJhbGciOiJFUzI1NiIsInR5cCI6ImtiK2p3dCJ9.eyJpYXQiOjE3Njk2NjA0NTAsImF1ZCI6ImRpZDp3ZWI6cmVnaXN0cnktZmFtaWx5LnBsYXkub3BlbmcycC5vcmc6djE6dmVyaWZ5Iiwibm9uY2UiOiJNVGMyT1RZMk1EUXpOREU1TWc9PSIsInNkX2hhc2giOiJSdGIyZW9IaWdJX2Q3eDVvZGJWZkt5SC1yUGRhc1N2VzBFQ1gyRG13Wk1FIn0.TWzXXsbGcTXnyMiI4aEUcUphPyD3m5LUaffwUE-Y8u_tRU0AUDCFkp2yJiDjuhYBtbkPbY9Qzej4GC2f2C8b8Q",
+        "vc": "eyJ4NWMiOlsiTUlJQ0JqQ0NBYXVnQXdJQkFnSVVQWDU0a0Vwbk4rWVZSU3JZRTNaRnZGVzBTNVF3Q2dZSUtvWkl6ajBFQXdJd0p6RWxNQ01HQTFVRUF3d2NkbU10WkdWdGJ5NXZjR1Z1WTNKMmN5NWtaWFlnVW05dmRDQkRRVEFlRncweU5qQXhNamd4TVRNeE16bGFGdzB6TmpBeE1qWXhNVE14TXpsYU1COHhIVEFiQmdOVkJBTU1GSFpqTFdSbGJXOHViM0JsYm1OeWRuTXVaR1YyTUZrd0V3WUhLb1pJemowQ0FRWUlLb1pJemowREFRY0RRZ0FFQWFIaTZ6aWQyMGRyalBnTXRpd25sdVc1RHQyd1pLMjVRcUZncGdjS1lPb0N2dUtOeWRmVm5hTzZOZy8vTk1WNW1MTTdtc3N1dzA4ZEQ5UUROWExsNktPQnZEQ0J1VEFKQmdOVkhSTUVBakFBTUE0R0ExVWREd0VCL3dRRUF3SUhnREFkQmdOVkhTVUVGakFVQmdnckJnRUZCUWNEQWdZSUt3WUJCUVVIQXdFd1BRWURWUjBSQkRZd05JSVVkbU10WkdWdGJ5NXZjR1Z1WTNKMmN5NWtaWGFHSEdoMGRIQnpPaTh2ZG1NdFpHVnRieTV2Y0dWdVkzSjJjeTVrWlhZd0hRWURWUjBPQkJZRUZGWk5hYXE5MW5KbVU0L2VhUXJjWCtBallzdmNNQjhHQTFVZEl3UVlNQmFBRkVxSnB0NGErWW5uZ1RlelJadjEwOVg2ZHNQQk1Bb0dDQ3FHU000OUJBTUNBMGtBTUVZQ0lRQzBoblV4aXdFZXpvbjZGWFZaWW16dDVsaG5KZ1V0QnJzS0w4UlNoOVlKRWdJaEFNV05UUUhBWEp4T0cxYkZuVXI2elorRWhIc1orajR6Tk1uSEdhb1ZFWUlsIiwiTUlJQjh6Q0NBWnFnQXdJQkFnSVVjbzJGd2p5RUFBY3Btb2RIbDRNNDJYa1NKakF3Q2dZSUtvWkl6ajBFQXdJd0p6RWxNQ01HQTFVRUF3d2NkbU10WkdWdGJ5NXZjR1Z1WTNKMmN5NWtaWFlnVW05dmRDQkRRVEFlRncweU5qQXhNamd4TVRNeE16bGFGdzB6TmpBeE1qWXhNVE14TXpsYU1DY3hKVEFqQmdOVkJBTU1ISFpqTFdSbGJXOHViM0JsYm1OeWRuTXVaR1YySUZKdmIzUWdRMEV3V1RBVEJnY3Foa2pPUFFJQkJnZ3Foa2pPUFFNQkJ3TkNBQVNTcFlVM2dvak1hTkUvb29yc2lkVWcyMkp0WE8zTzlFNHRJY0VoaGM4cmx5TG9WZFhJQ0lZRmpWeEFiSklZczFzdTVvMmVNWVBJS1MwZ013b3FrR0ZhbzRHak1JR2dNQjBHQTFVZERnUVdCQlJLaWFiZUd2bUo1NEUzczBXYjlkUFYrbmJEd1RBZkJnTlZIU01FR0RBV2dCUktpYWJlR3ZtSjU0RTNzMFdiOWRQVituYkR3VEFQQmdOVkhSTUJBZjhFQlRBREFRSC9NQTRHQTFVZER3RUIvd1FFQXdJQkJqQTlCZ05WSFJFRU5qQTBnaFIyWXkxa1pXMXZMbTl3Wlc1amNuWnpMbVJsZG9ZY2FIUjBjSE02THk5Mll5MWtaVzF2TG05d1pXNWpjblp6TG1SbGRqQUtCZ2dxaGtqT1BRUURBZ05IQURCRUFpQjAwcXpmQnFObitWc2p2NEQrK1pINU9LMmNiZWJNRDhtQjd3THZGL3lpcGdJZ2I0cjZUaFdqbXd0Zi9QS0hmL3NXNHo1VmJjclpQZEpCUDFqSDZjQThHb1E9Il0sImtpZCI6IkR6MmJoX0pnUXhrRXRwbVFTUnJJdGxWUWdFcjN3THRDc1Q3OHV1aWFSTFkiLCJ0eXAiOiJ2YytzZC1qd3QiLCJhbGciOiJFUzI1NiJ9.eyJuYXRpb25hbGl0aWVzIjpbIkZBUiJdLCJzZXgiOjIsInBhcmVudHMiOlt7ImdpdmVuX25hbWUiOiJNYXZpcyIsIm1pZGRsZV9uYW1lIjoiIiwiZmFtaWx5X25hbWUiOiJTbWl0aCIsImlkZW50aWZpZXIiOiI4Nzc2NjU1NDQzIiwibmF0aW9uYWxpdGllcyI6WyJGQVIiXX0seyJuYXRpb25hbGl0aWVzIjpbIkZBUiJdfV0sImlkIjoidXJuOnV1aWQ6N2ViMTFlODEtNTg2Yy00MmIxLThiNmMtZDA3ZjczNDc3OGNlIiwiaWF0IjoxNzY5NzY0MTUwLCJuYmYiOjE3Njk3NjQxNTAsImV4cCI6MTgwMTMwMDE1MCwiX3NkX2FsZyI6InNoYS0yNTYiLCJpc3MiOiJodHRwczovL3ZjLWRlbW8ub3BlbmNydnMuZGV2IiwiY25mIjp7Imp3ayI6eyJrdHkiOiJFQyIsImNydiI6IlAtMjU2Iiwia2lkIjoiODQyNmRkYjUtMTFjMS00YTQyLWI5YjYtNDE2NDcyM2I1NTUzIiwieCI6Ilg0dnNJNzJzT2Fib1VnUFNLQm9kTDI0YXZCR0hDQWxlNEwxZnM5QVo1X1kiLCJ5IjoieE9jelBwLU9IdENjM3RYRVdqYlgtTkZ3ZktHRlczaExYVlJJMzNsWmlIRSJ9fSwidmN0IjoiY3J2c19iaXJ0aF92MSIsIl9zZCI6WyJjZUJ4TnZmYno4VW9VUmpELVRrcmsxdE41MVNPd3RwbkNUUWxZaUJUd3JvIiwiRTdOQmRiN3R0enNwdnFvbEk4NW1MV2x3dE9hbWZlT183ZzNuUVdQT0xvNCIsIndMelRwUkt5QzFkSFVBcC0tWW5CYjktazVDOHVmMzJfYlZyZkZSTFNkeDQiLCJhclhhZlctcnViWTMyS1Vra1lfYXVvY0NIX08tVE4yOHZ2N2RpWTRtSWg4IiwiSDhSTm5LYi1JRmxUWGQtRmpkRVB5VTJvUTRPbFU3YTNkYmt1NXJyeHJRUSJdfQ.sGGI3Ss93KnjKd7ICgbGRgQLRfJ31kAG03GRkXeZctFsx7cX8lOyh_C5ODODv163nSCVMNRZmM6ArCINmxEsAg~WyJHdGltdG8wb3NWMDJyb0FPYkNEeFJRIiwiZ2l2ZW5fbmFtZSIsIkRhd24iXQ~WyIyVGlob2ctSm81c09TYkd1RC15MG1BIiwibWlkZGxlX25hbWUiLCIiXQ~WyI0WnpoaGFNZGpQN1FNT0NvZDlDOXhBIiwiZmFtaWx5X25hbWUiLCJGcmVuY2giXQ~WyI5YWZpR2Q2WXBhSVhUYk5pVGViVGhBIiwiYmlydGhkYXRlIiwiMjAyNS0wMi0xMiJd~WyI0NFJSVHNMWk80UnFjaG5Pb1luT3V3IiwicGxhY2Vfb2ZfYmlydGgiLHsibmFtZSI6IkNoYW1ha3ViaSBIZWFsdGggUG9zdCwgSWJvbWJvLCBDZW50cmFsIiwiY291bnRyeSI6IkZBUiJ9XQ~",
         "vcStatus": "SUCCESS"
     }
 ]
@@ -57,14 +57,19 @@ export default function VpVerificationModal({
                 if (typeof vpResult?.vc !== "string") return vpResult;
 
                 try {
-                    const { decodedJwt, regularClaims, disclosedClaims } = await decodeSdJwtToken(vpResult.vc);
+                    const { decodedJwt, regularClaims, disclosedClaims, decoded } = await decodeSdJwtToken(vpResult.vc);
 
                     const payload = buildPayloadFromDecodedJWT(decodedJwt, regularClaims, disclosedClaims);
 
+                    // return {
+                    //     ...vpResult,
+                    //     vc: payload,
+                    //     decodedJwt,
+                    // };
                     return {
                         ...vpResult,
-                        vc: payload,
-                        decodedJwt,
+                        vc: decoded,
+                        // decodedJwt,
                     };
                 } catch (e) {
                     console.error("SD-JWT decode failed:", e);
@@ -113,7 +118,7 @@ export default function VpVerificationModal({
                 HARDCODED_RESULT.map(async (vpResult) => {
                     if (typeof vpResult.vc !== "string") return vpResult;
 
-                    const { decodedJwt, regularClaims, disclosedClaims } = await decodeSdJwtToken(vpResult.vc);
+                    const { decodedJwt, regularClaims, disclosedClaims, decoded } = await decodeSdJwtToken(vpResult.vc);
 
                     console.log(decodedJwt, "decJWT")
                     console.log(regularClaims, "regJWT")
@@ -122,10 +127,15 @@ export default function VpVerificationModal({
 
                     const payload = buildPayloadFromDecodedJWT(decodedJwt, regularClaims, disclosedClaims);
 
+                    // return {
+                    //     ...vpResult,
+                    //     vc: payload,
+                    //     decodedJwt,
+                    // };
                     return {
                         ...vpResult,
-                        vc: payload,
-                        decodedJwt,
+                        vc: decoded,
+                        // decodedJwt,
                     };
                 })
             );

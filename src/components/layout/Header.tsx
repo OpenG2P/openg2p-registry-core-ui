@@ -29,7 +29,7 @@ export default function Header() {
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-4 lg:gap-6">
                 <ConfigurationButton />
-                <LanguageSwitcher />
+                {/* <LanguageSwitcher /> */}
                 <NotificationDropdown />
                 <ProfileDropdown />
             </div>
