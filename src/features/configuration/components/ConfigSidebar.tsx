@@ -43,7 +43,7 @@ const sidebarOptions: SidebarOption[] = [
 
 export default function ConfigSidebar({ activeOption }: { activeOption: string }) {
   return (
-    <div className="w-[240px] h-[910px] bg-[#F2BA1A] rounded-r-[30px] p-4 pt-8">
+    <div className="w-[100%] h-[100%] bg-[#F2BA1A] rounded-r-[30px] p-4 pt-8">
       <div className="space-y-2">
         {sidebarOptions.map((option) => (
           <Link

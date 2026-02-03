@@ -27,10 +27,7 @@ export const getSectionDetails = (id: string, sections: Section[]) => {
     const data = sections.find(s => s.section_id === id);
     return {
         section_id: id,
-        section_mnemonic: id,
-        section_description: '',
         ...data,
-        section_name: data?.section_mnemonic || id,
         description: data?.section_description || '',
         section_ui_schema: data?.section_ui_schema || {}
     };

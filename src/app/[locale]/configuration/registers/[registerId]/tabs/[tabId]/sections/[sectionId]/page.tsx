@@ -34,7 +34,7 @@ const SectionConfigurationPage = () => {
         customItems: [
             { label: registerDetails.register_mnemonic, href: `/configuration/registers/${registerId}` },
             { label: tabDetails.tab_label, href: `/configuration/registers/${registerId}/tabs/${tabId}` },
-            { label: sectionDetails.section_name, href: `/configuration/registers/${registerId}/tabs/${tabId}/sections/${sectionId}` }
+            { label: sectionDetails.section_mnemonic || '', href: `/configuration/registers/${registerId}/tabs/${tabId}/sections/${sectionId}` }
         ]
     });
 
@@ -50,16 +50,14 @@ const SectionConfigurationPage = () => {
         );
     }
 
-
-
     return (
         <ConfigLayout activeOption="registers">
-            <div className="pt-10 px-7.5 mb-6">
+            <div className="pt-4 px-7.5 mb-2 flex-shrink-0">
                 <BreadcrumbBar breadcrumb={breadcrumb} />
             </div>
 
             <ConfigDetailsSummary
-                title={sectionDetails.section_name}
+                title={sectionDetails.section_mnemonic || ''}
                 description={sectionDetails.description}
                 extraInfo={tabDetails.tab_label}
                 status={true}
@@ -69,11 +67,14 @@ const SectionConfigurationPage = () => {
             />
 
             <SectionDetailsConfigView
-                sectionUISchema={sectionDetails?.section_ui_schema}
-            />
+                    sectionUISchema={sectionDetails?.section_ui_schema}
+                    registerId={sectionDetails?.section_register_id || ''}
+                    sectionId={sectionDetails?.section_id || ''}
+                />
+
             <EditSectionModal
                 isOpen={isEditModalOpen}
-                initialData={sectionDetails}
+                initialData={sectionDetails as any}
                 onClose={() => setIsEditModalOpen(false)}
                 onSuccess={refresh}
             />

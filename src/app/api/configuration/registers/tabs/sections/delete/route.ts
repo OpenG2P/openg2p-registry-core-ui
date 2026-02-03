@@ -16,7 +16,6 @@ export async function POST(request: NextRequest) {
                 search_text: ""
             },
             request_payload: {
-                register_id: jsonBody.register_id,
                 section_id: jsonBody.section_id,
             },
         }),

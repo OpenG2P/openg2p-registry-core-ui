@@ -40,7 +40,7 @@ export default function RegisterSectionConfigView({
     const proceedDelete = async (sectionId: string) => {
         const result = await deleteSection('/api/configuration/registers/tabs/sections/delete', {
             method: 'POST',
-            body: JSON.stringify({ register_id: registerId, section_id: sectionId })
+            body: JSON.stringify({section_id: sectionId })
         });
 
         if (result) {
