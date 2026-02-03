@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useFetch } from '@/shared/hooks';
 import { IncomingMessage } from '@/features/messages/types';
 
@@ -22,6 +22,10 @@ export function useIncomingMessagesList({
     enabled = true,
 }: UseIncomingMessagesListOptions) {
     const [currentPage, setCurrentPage] = useState(initialPage);
+
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchText]);
 
     const { data, loading } = useFetch<any>({
         url: '/api/incoming_message/get/list',
