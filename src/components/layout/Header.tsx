@@ -5,14 +5,13 @@ import { useState } from 'react';
 import Link from 'next/link';
 
 import { ProfileDropdown, NotificationDropdown, ConfigurationButton } from '@/components/layout';
-import { LanguageSwitcher } from '@/components/layout';
 
 export default function Header() {
     const t = useTranslations();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     return (
-        <header className="w-full bg-white flex items-center justify-between px-3 sm:px-4 md:px-6 py-3 fixed top-0 left-0 right-0 z-20 h-17.5">
+        <header className="w-full bg-white flex items-center justify-between px-3 py-3 fixed top-0 left-0 right-0 z-20 h-17.5">
             <Link href="/" className="flex items-center gap-2 sm:gap-3 hover:opacity-80 transition-opacity">
                 <Image
                     src="/openg2p_logo.png"
@@ -27,9 +26,8 @@ export default function Header() {
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center gap-4 lg:gap-6">
+            <div className="hidden md:flex items-center gap-8">
                 <ConfigurationButton />
-                {/* <LanguageSwitcher /> */}
                 <NotificationDropdown />
                 <ProfileDropdown />
             </div>
@@ -50,7 +48,6 @@ export default function Header() {
                 <div className="md:hidden absolute top-17.5 left-0 right-0 bg-white border-b border-gray-200 shadow-lg z-30">
                     <div className="flex flex-col p-4 gap-4">
                         <ConfigurationButton />
-                        {/* <LanguageSwitcher /> */}
                         <NotificationDropdown />
                         <ProfileDropdown />
                     </div>

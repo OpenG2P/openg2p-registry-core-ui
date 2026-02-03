@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import { OpenID4VPVerification } from 'inji-sdk';
-import { buildPayloadFromDecodedJWT, decodeSdJwtToken, buildPresentationDefinition } from '@/features/verifiable-credentials/utils';
+import { buildPayloadFromDecodedJWT, decodeSdJwtToken } from '@/features/verifiable-credentials/utils';
 import { PayloadView, StatusView } from '@/features/verifiable-credentials/components';
 import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
 
@@ -40,10 +40,18 @@ export default function VpVerificationModal({
 
     const [error, setError] = useState<string | null>(null);
 
-    const presentationDefinition = useMemo(
-        () => buildPresentationDefinition(descriptorSchema),
-        [descriptorSchema]
-    );
+    const presentationDefinition = useMemo(() => {
+        return {
+            id: config.vpPresentationId!,
+            purpose: config.vpPurpose!,
+            format: {
+                ldp_vc: {
+                    proof_type: ["Ed25519Signature2020", "EdDSA", "ES256"],
+                },
+            },
+            input_descriptors: [descriptorSchema],
+        };
+    }, [descriptorSchema]);
 
     const [activeTab, setActiveTab] = useState<'status' | 'payload'>('status');
 
@@ -157,35 +165,6 @@ export default function VpVerificationModal({
         setError(null);
         handleStartVerification()
     }, []);
-
-
-    // const handleImport = useCallback(async (data: any[]) => {
-    //     try {
-    //         const vcPayload = data?.[0]?.vc;
-    //         if (!vcPayload) return;
-
-    //         const res = await fetch('/api/partner_ingest', {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //             },
-    //             body: JSON.stringify({
-    //                 vc: vcPayload,
-    //             }),
-    //         });
-
-    //         if (!res.ok) {
-    //             throw new Error('Import failed');
-    //         }
-
-    //         const result = await res.json();
-
-    //         console.log('Import success:', result);
-    //     } catch (err) {
-    //         console.error('Import error:', err);
-    //         setError('Failed to import verified credential');
-    //     }
-    // }, []);
 
     const handleImport = useCallback(async (data: any[]) => {
         try {
