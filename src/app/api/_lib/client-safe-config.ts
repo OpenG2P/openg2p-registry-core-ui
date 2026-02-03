@@ -9,6 +9,8 @@ export function getClientSafeConfig() {
     vpClientId: process.env.VP_CLIENT_ID ?? "",
     vpPresentationId: process.env.VP_PRESENTATION_ID ?? "",
     vpPurpose: process.env.VP_PURPOSE ?? "",
-    partnerIngestUrl: process.env.PARTNER_INGEST_URL?? "",
+    partnerIngestUrl: process.env.PARTNER_INGEST_URL ?? "",
+    pageSize: parseInt(process.env.PAGE_SIZE ?? "10"),
   };
 }
+
