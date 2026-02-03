@@ -2,63 +2,65 @@
 
 import { useState } from 'react';
 import { TopBar } from '@/components/shared';
-import ConfigSidebar from '@/features/configuration/components/ConfigSidebar';
+import ConfigLayout from '@/features/configuration/components/ConfigLayout';
 import RegistersConfigView from '@/features/configuration/components/RegistersConfigView';
+
+import { useAllRegister } from '@/features/configuration/hooks/useAllRegister';
+import { usePagination } from '@/shared/hooks';
+import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
 
 const RegistersConfigurationPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [pagination, setPagination] = useState({
-    pageStart: 1,
-    pageEnd: 12,
-    total: 250_000_000,
+  const [currentPage, setCurrentPage] = useState(1);
+  
+  // Env. variable config
+  const { config } = useRuntimeConfig();
+
+  const { registers, pagination, loading, refresh } = useAllRegister(currentPage, config.pageSize);
+
+  const { pageStart, pageEnd, total } = usePagination({
+    totalItems: pagination?.number_of_items || 0,
+    currentPage: currentPage,
+    pageSize: config.pageSize,
+    currentCount: registers.length,
   });
 
   const handlePrev = () => {
-    setPagination((prev) => ({
-      ...prev,
-      pageStart: Math.max(1, prev.pageStart - 10),
-      pageEnd: Math.max(10, prev.pageEnd - 10),
-    }));
+    setCurrentPage((prev) => Math.max(1, prev - 1));
   };
 
   const handleNext = () => {
-    setPagination((prev) => ({
-      ...prev,
-      pageStart: prev.pageStart + 10,
-      pageEnd: prev.pageEnd + 10,
-    }));
+    setCurrentPage((prev) => prev + 1);
   };
 
   return (
-    <div className="min-h-screen mx-auto bg-[#F3F1E4] flex">
-      <div className="mt-4">
-        <ConfigSidebar activeOption={"registers"} />
-      </div>
+    <ConfigLayout activeOption="registers">
+      <TopBar
+        breadcrumb={[{ label: "Registers" }]}
+        showFilters={false}
+        showPagination
+        showAddNewButton
+        addNewButtonText={"Add New Register"}
+        onAddNewButton={() => setIsModalOpen(true)}
+        pageStart={pageStart}
+        pageEnd={pageEnd}
+        total={total}
+        onPrev={handlePrev}
+        onNext={handleNext}
+      />
 
-      <div className="flex-1">
-        <TopBar
-          breadcrumb={[{ label: "Registers" }]}
-          showFilters={false}
-          showPagination
-          showAddNewButton
-          addNewButtonText={"Add New Register"}
-          onAddNewButton={() => setIsModalOpen(true)}
-          pageStart={pagination.pageStart}
-          pageEnd={pagination.pageEnd}
-          total={pagination.total}
-          onPrev={handlePrev}
-          onNext={handleNext}
-        />
+      <RegistersConfigView
+        registers={registers}
+        loading={loading}
+        refresh={refresh}
+        onAddNewRegister={() => setIsModalOpen(true)}
+        isModalOpen={isModalOpen}
+        onCloseModal={() => setIsModalOpen(false)}
+      />
 
-        <RegistersConfigView
-          onAddNewRegister={() => setIsModalOpen(true)}
-          isModalOpen={isModalOpen}
-          onCloseModal={() => setIsModalOpen(false)}
-        />
-
-      </div>
-    </div>
+    </ConfigLayout>
   );
 };
+
 
 export default RegistersConfigurationPage;

@@ -1,42 +1,42 @@
-import { Database, Download, Upload } from 'lucide-react';
 import { Link } from '@/i18n/navigation';
+import Image from 'next/image';
 
 interface SidebarOption {
   id: string;
   label: string;
-  icon: React.ReactNode;
+  iconUrl: string;
   path: string;
 }
 
 const sidebarOptions: SidebarOption[] = [
-   {
+  {
     id: 'registry',
     label: 'Registry',
-    icon: <Database size={20} />,
+    iconUrl: "/config/menu_registry_01.png",
     path: '/configuration/registry'
   },
   {
     id: 'registers',
     label: 'Registers',
-    icon: <Database size={20} />,
+    iconUrl: "/config/menu_registers_02.png",
     path: '/configuration/registers'
   },
   {
     id: 'data-models',
     label: 'Data Models',
-    icon: <Database size={20} />,
+    iconUrl: "/config/menu_data_models_03.png",
     path: '/configuration/data-models'
   },
   {
     id: 'ingest-configurations',
     label: 'Ingest Configurations',
-    icon: <Download size={20} />,
+    iconUrl: "/config/menu_ingest_config_04.png",
     path: '/configuration/ingest-configurations'
   },
   {
     id: 'outgest-configurations',
     label: 'Outgest Configurations',
-    icon: <Upload size={20} />,
+    iconUrl: "/config/menu_outgest_config_05.png",
     path: '/configuration/outgest-configurations'
   }
 ];
@@ -59,8 +59,14 @@ export default function ConfigSidebar({ activeOption }: { activeOption: string }
                 w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0
                 ${activeOption === option.id ? 'bg-black' : 'bg-white'}
               `}>
-                <div className={`${activeOption === option.id ? 'text-white' : 'text-black'}`}>
-                  {option.icon}
+                <div className="flex items-center justify-center">
+                  <Image
+                    src={option.iconUrl}
+                    alt={option.label}
+                    width={20}
+                    height={20}
+                    className="object-contain"
+                  />
                 </div>
               </div>
               <span className="ml-3 text-base font-medium">
