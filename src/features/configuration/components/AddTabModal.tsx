@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import Image from 'next/image';
-import { X, ChevronDown } from 'lucide-react';
-
+import { X } from 'lucide-react';
+import { useFetch } from '@/shared/hooks';
+import { useParams } from 'next/navigation';
+import { toast } from 'react-toastify';
 
 interface AddTabModalProps {
     isOpen: boolean;
@@ -10,21 +11,43 @@ interface AddTabModalProps {
 }
 
 export default function AddTabModal({ isOpen, onClose, onSuccess }: AddTabModalProps) {
+    const { registerId } = useParams<{ registerId: string }>();
+    const { execute: createTab, loading } = useFetch();
+
     const [formData, setFormData] = useState({
         tabName: '',
-        description: '',
+        tabOrder: '',
     });
 
-    const handleSubmit = () => {
-        console.log('Form submitted:', formData);
-        if (onSuccess) onSuccess();
-        onClose();
+    const handleSubmit = async () => {
+        if (!formData.tabName) {
+            toast.warn('Tab Name is required');
+            return;
+        }
+
+        const result = await createTab('/api/configuration/registers/tabs/create', {
+            method: 'POST',
+            body: JSON.stringify({
+                register_id: registerId,
+                tab_label: formData.tabName,
+                tab_order: Number(formData.tabOrder) || 0,
+            })
+        });
+
+        if (result?.tab_id) {
+            toast.success('Tab created successfully');
+            setFormData({ tabName: '', tabOrder: '' });
+            if (onSuccess) onSuccess();
+            onClose();
+        } else {
+            toast.error('Failed to create tab');
+        }
     };
 
     const handleCancel = () => {
         setFormData({
             tabName: '',
-            description: '',
+            tabOrder: '',
         });
         onClose();
     };
@@ -48,15 +71,21 @@ export default function AddTabModal({ isOpen, onClose, onSuccess }: AddTabModalP
 
                     <div className="space-y-4">
                         <div>
-                            <label className="block text-sm font-semibold text-black mb-2">
+                            <label className="block text-sm font-semibold text-black mb-1">
                                 Tab Name
                             </label>
+                            <p className="text-[15px] text-gray-400 mb-2 italic">
+                                * Use lowercase and underscores only (e.g., test_tab)
+                            </p>
                             <div className="relative">
                                 <input
                                     type="text"
-                                    placeholder="Enter Tab Name"
+                                    placeholder="e.g. test_tab"
                                     value={formData.tabName}
-                                    onChange={(e) => setFormData({ ...formData, tabName: e.target.value })}
+                                    onChange={(e) => {
+                                        const value = e.target.value.toLowerCase().replace(/\s+/g, '_');
+                                        setFormData({ ...formData, tabName: value });
+                                    }}
                                     className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all text-gray-600 placeholder:text-gray-400"
                                 />
                             </div>
@@ -64,14 +93,14 @@ export default function AddTabModal({ isOpen, onClose, onSuccess }: AddTabModalP
 
                         <div>
                             <label className="block text-sm font-semibold text-black mb-2">
-                                Description
+                                Tab Order
                             </label>
-                            <textarea
-                                placeholder="Type your message here..."
-                                value={formData.description}
-                                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                                rows={3}
-                                className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all resize-none text-gray-600 placeholder:text-gray-400"
+                            <input
+                                type="number"
+                                placeholder="e.g. 0, 1, 2, etc."
+                                value={formData.tabOrder}
+                                onChange={(e) => setFormData({ ...formData, tabOrder: e.target.value })}
+                                className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all text-gray-600 placeholder:text-gray-400"
                             />
                         </div>
 

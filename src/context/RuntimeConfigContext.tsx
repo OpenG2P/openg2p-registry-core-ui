@@ -9,7 +9,11 @@ export interface RuntimeConfig {
   vpClientId: string;
   vpPresentationId: string;
   vpPurpose: string;
+  pageSize: number;
+  partnerIngestUrl: string;
 }
+
+
 
 interface RuntimeConfigContextType {
   config: RuntimeConfig;
@@ -19,10 +23,10 @@ const RuntimeConfigContext = createContext<RuntimeConfigContextType | undefined>
   undefined
 );
 
-export function RuntimeConfigProvider({ 
+export function RuntimeConfigProvider({
   children,
-  initialConfig 
-}: { 
+  initialConfig
+}: {
   children: ReactNode;
   initialConfig: RuntimeConfig;
 }) {

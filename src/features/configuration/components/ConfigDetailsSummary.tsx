@@ -4,7 +4,7 @@ import { Pencil, Check, X, ChevronDown } from 'lucide-react';
 
 interface ConfigDetailsSummaryProps {
     title: string;
-    description: string;
+    description?: string;
     extraInfo?: string;
     status?: boolean;
     selectionOptions?: string[];

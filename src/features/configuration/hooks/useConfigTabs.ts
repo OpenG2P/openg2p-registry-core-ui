@@ -1,20 +1,33 @@
 import { useFetch } from '@/shared/hooks';
 import { Tab } from '../types';
-import { refresh } from 'next/cache';
 
-export function useConfigTabs(registerId: string) {
-    const { data, loading, error, execute } = useFetch<Tab[]>({
-        url: '/api/register/tabs',
+export function useConfigTabs(registerId: string, page: number = 1, pageSize: number = 10) {
+    const { data, loading, error, execute } = useFetch<{
+        tabs: Tab[];
+        pagination?: {
+            number_of_items: number;
+            number_of_pages: number;
+        };
+    }>({
+        url: '/api/configuration/registers/tabs/get',
         options: {
             method: 'POST',
-            body: JSON.stringify({ register_id: registerId })
+            body: JSON.stringify({
+                register_id: registerId,
+                page,
+                pageSize
+            })
         }
     });
 
+    console.log(data, "data*******************");
+
     return {
-        tabs: data || [],
+        tabs: data?.tabs || [],
+        pagination: data?.pagination,
         loading,
         error,
-        refresh:execute
+        refresh: execute
     };
 }
+

@@ -2,14 +2,16 @@
 import { useState } from 'react';
 
 import { BreadcrumbBar } from '@/components/shared';
-import ConfigSidebar from '@/features/configuration/components/ConfigSidebar';
+import ConfigLayout from '@/features/configuration/components/ConfigLayout';
 import { useParams } from 'next/navigation';
 import EditSectionModal from '@/features/configuration/components/EditSectionModal';
 import ConfigDetailsSummary from '@/features/configuration/components/ConfigDetailsSummary';
 import { useBreadcrumb } from '@/shared/hooks/useBreadcrumb';
 import { useAllRegister } from '@/features/configuration/hooks/useAllRegister';
 import { useConfigTabs } from '@/features/configuration/hooks/useConfigTabs';
-import { SECTION_MOCK_DATA } from '@/features/configuration/components/RegisterSectionConfigView';
+import { useConfigSections } from '@/features/configuration/hooks/useConfigSections';
+import SectionDetailsConfigView from '@/features/configuration/components/SectionDetailsConfigView';
+import { getRegisterDetails, getTabDetails, getSectionDetails } from '@/features/configuration/utils/configUtils';
 
 const SectionConfigurationPage = () => {
     const { registerId, tabId, sectionId } = useParams<{
@@ -19,85 +21,64 @@ const SectionConfigurationPage = () => {
     }>();
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-    const { registers } = useAllRegister();
-    const { tabs } = useConfigTabs(registerId);
+    const { registers, loading: registersLoading } = useAllRegister(1, 100);
+    const { tabs, loading: tabsLoading } = useConfigTabs(registerId, 1, 100);
+    const { sections, loading: sectionsLoading, refresh } = useConfigSections(registerId, tabId, 1, 100);
 
-    const getRegisterDetails = (nameOrId: string) => {
-        const registerData = registers.find(
-            r => r.register_mnemonic.toLowerCase() === nameOrId.toLowerCase() || r.register_id === nameOrId
-        );
-        return registerData ? { mnemonic: registerData.register_mnemonic } : { mnemonic: nameOrId };
-    };
-
-    const getTabDetails = (nameOrId: string) => {
-        const tabData = tabs.find(
-            t => t.tab_id === nameOrId
-        );
-        return { tab_name: tabData ? tabData.tab_label : nameOrId };
-    };
-
-    const getSectionDetails = (nameOrId: string) => {
-        const sectionData = SECTION_MOCK_DATA.find(
-            s => s.section_name.toLowerCase() === nameOrId.toLowerCase() || s.section_id === nameOrId
-        );
-        return {
-            section_name: sectionData ? sectionData.section_name : nameOrId,
-            description: sectionData ? sectionData.description : "Description text..."
-        };
-    };
-
-    const registerDetails = getRegisterDetails(registerId);
-    const tabDetails = getTabDetails(tabId);
-    const sectionDetails = getSectionDetails(sectionId);
+    const registerDetails = getRegisterDetails(registerId, registers);
+    const tabDetails = getTabDetails(tabId, tabs);
+    const sectionDetails = getSectionDetails(sectionId, sections);
 
     const breadcrumb = useBreadcrumb({
         rootItem: { label: 'Registers', href: '/configuration/registers' },
         customItems: [
-            { label: registerDetails.mnemonic, href: `/configuration/registers/${registerId}` },
-            { label: tabDetails.tab_name, href: `/configuration/registers/${registerId}/tabs/${tabId}` },
-            { label: sectionDetails.section_name, href: `/configuration/registers/${registerId}/tabs/${tabId}/sections/${sectionId}` }
+            { label: registerDetails.register_mnemonic, href: `/configuration/registers/${registerId}` },
+            { label: tabDetails.tab_label, href: `/configuration/registers/${registerId}/tabs/${tabId}` },
+            { label: sectionDetails.section_mnemonic || '', href: `/configuration/registers/${registerId}/tabs/${tabId}/sections/${sectionId}` }
         ]
     });
 
+    const isLoading = registersLoading || tabsLoading || sectionsLoading;
+
+    if (isLoading) {
+        return (
+            <ConfigLayout activeOption="registers">
+                <div className="min-h-[400px] flex items-center justify-center">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#ED7C22]"></div>
+                </div>
+            </ConfigLayout>
+        );
+    }
 
     return (
-        <div className="min-h-screen mx-auto bg-[#F3F1E4] flex">
-            <div className="mt-4">
-                <ConfigSidebar activeOption={"registers"} />
+        <ConfigLayout activeOption="registers">
+            <div className="pt-4 px-7.5 mb-2 flex-shrink-0">
+                <BreadcrumbBar breadcrumb={breadcrumb} />
             </div>
 
-            <div className="flex-1">
-                <div className="pt-10 px-7.5 mb-6">
-                    <BreadcrumbBar breadcrumb={breadcrumb} />
-                </div>
+            <ConfigDetailsSummary
+                title={sectionDetails.section_mnemonic || ''}
+                description={sectionDetails.description}
+                extraInfo={tabDetails.tab_label}
+                status={true}
+                selectionOptions={tabs.map(t => t.tab_label)}
+                onSave={(data) => console.log('Saved Section:', data)}
+                onEdit={() => setIsEditModalOpen(true)}
+            />
 
-                <ConfigDetailsSummary
-                    title={sectionDetails.section_name}
-                    description={sectionDetails.description}
-                    extraInfo={tabDetails.tab_name}
-                    status={true}
-                    selectionOptions={tabs.map(t => t.tab_label)}
-                    onSave={(data) => console.log('Saved Section:', data)}
-                    onEdit={() => setIsEditModalOpen(true)}
+            <SectionDetailsConfigView
+                    sectionUISchema={sectionDetails?.section_ui_schema}
+                    registerId={sectionDetails?.section_register_id || ''}
+                    sectionId={sectionDetails?.section_id || ''}
                 />
 
-
-                <div className="p-8">
-                    <div className="bg-white rounded-[30px] p-8 min-h-100 flex items-center justify-center text-gray-400">
-                        {`Widget Editor for ${sectionDetails.section_name} section`}
-                    </div>
-                </div>
-
-                <EditSectionModal
-                    isOpen={isEditModalOpen}
-                    initialData={{
-                        sectionName: sectionDetails.section_name,
-                        description: sectionDetails.description
-                    }}
-                    onClose={() => setIsEditModalOpen(false)}
-                />
-            </div>
-        </div>
+            <EditSectionModal
+                isOpen={isEditModalOpen}
+                initialData={sectionDetails as any}
+                onClose={() => setIsEditModalOpen(false)}
+                onSuccess={refresh}
+            />
+        </ConfigLayout>
     );
 };
 

@@ -51,7 +51,7 @@ export async function proxyToBackend({
 				: backendConfig.backendApiUrl;
 
 		const backendUrl = `${baseUrl}${targetEndpoint}`;
-		
+
 		const fetchOptions: RequestInit = {
 			method: "POST",
 			...caching,
@@ -68,6 +68,7 @@ export async function proxyToBackend({
 			});
 
 			const payload = (buildPayload || defaultPayloadBuilder)(body);
+			// console.log(payload,"payload",targetEndpoint)
 
 			const backendRequest = createBackendRequest(payload);
 

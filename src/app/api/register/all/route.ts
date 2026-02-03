@@ -4,6 +4,6 @@ import { proxyToBackend } from "@/app/api/_lib/backend-proxy";
 export async function GET(req: NextRequest) {
   return proxyToBackend({
     req,
-    targetEndpoint: '/register-metadata/get_all_registers',
+    targetEndpoint: '/register-metadata/get_dashboard_registers',
   });
 }

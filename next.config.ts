@@ -5,21 +5,29 @@ import createNextIntlPlugin from 'next-intl/plugin';
 const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 
 const nextConfig: NextConfig = {
-  /* config options here */
   output: "standalone",
   reactCompiler: true,
-  // Disable caching in development for better hot reloading
-  ...(process.env.NODE_ENV === 'development' && {
-    webpack: (config: any, { dev }: any) => {
-      if (dev) {
-        config.watchOptions = {
-          poll: 1000,
-          aggregateTimeout: 300,
-        };
-      }
-      return config;
-    },
-  }),
+  webpack: (config: any, { dev }: any) => {
+    // Keep existing dev watch options for better hot reloading
+    if (dev) {
+      config.watchOptions = {
+        poll: 1000,
+        aggregateTimeout: 300,
+      };
+    }
+
+    // Silence noisy third‑party warnings to keep build output clean
+    config.ignoreWarnings = [
+      ...(config.ignoreWarnings || []),
+      // Silence dynamic require warning from `inji-sdk`
+      {
+        module: /inji-sdk[\\/]dist[\\/]index\.js/,
+        message: /Critical dependency: the request of a dependency is an expression/,
+      },
+    ];
+
+    return config;
+  },
 };
 
 export default withNextIntl(nextConfig);

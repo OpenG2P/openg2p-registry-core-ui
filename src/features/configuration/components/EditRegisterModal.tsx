@@ -1,69 +1,109 @@
-import { useState, useEffect } from 'react';
-import Image from 'next/image';
-import { X, ChevronDown } from 'lucide-react';
+'use client';
 
-const MOCK_DATA = {
-    parent_register: [
-        "Farmer",
-        "Crop",
-        "Land",
-        "Livestock"
-    ],
-    program_application: [
-        "Yes",
-        "No"
-    ]
-};
+import { useState, useEffect, useRef } from 'react';
+import { X, ChevronDown, Upload } from 'lucide-react';
+import { useAllRegister } from '../hooks/useAllRegister';
+import { useFetch } from '@/shared/hooks';
+import { toast } from 'react-toastify';
+import { Register } from '../types';
+import { convertImageToBase64 } from '../utils/convertImageToBase64';
 
-interface EditRegisterModelProps {
+interface EditRegisterModalProps {
     isOpen: boolean;
     onClose: () => void;
-    initialData?: {
-        registerName: string;
-        description: string;
-        parentRegister: string;
-        programApplication: boolean;
-    };
+    onSuccess?: () => void;
+    initialData?: Register;
 }
 
-export default function EditRegisterModel({ isOpen, onClose, initialData }: EditRegisterModelProps) {
+export default function EditRegisterModal({ isOpen, onClose, onSuccess, initialData }: EditRegisterModalProps) {
+    const { registers } = useAllRegister(1, 100);
+    const { execute: updateRegister } = useFetch();
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
     const [formData, setFormData] = useState({
-        registerName: '',
-        description: '',
-        parentRegister: '',
-        programApplication: ''
+        register_mnemonic: '',
+        register_description: '',
+        master_register_id: '',
+        dedup_is_enabled: false,
+        dedup_threshold_score: '',
+        register_icon: '',
+        register_rank: '',
+        register_purpose: 'REGISTER',
     });
 
     useEffect(() => {
-        if (initialData) {
+        if (initialData && isOpen) {
             setFormData({
-                registerName: initialData.registerName,
-                description: initialData.description,
-                parentRegister: initialData.parentRegister,
-                programApplication: initialData.programApplication ? 'Yes' : 'No'
+                register_mnemonic: initialData.register_mnemonic || '',
+                register_description: initialData.register_description || '',
+                master_register_id: initialData.master_register_id || '',
+                dedup_is_enabled: initialData.dedup_is_enabled || false,
+                dedup_threshold_score: initialData.dedup_threshold_score?.toString() || '0',
+                register_icon: initialData.register_icon || '',
+                register_rank: initialData.register_rank?.toString() || '0',
+                register_purpose: initialData.register_purpose || 'REGISTER',
             });
         }
     }, [initialData, isOpen]);
 
-    const handleSubmit = () => {
-        console.log('Form updated:', formData);
-        onClose();
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            if (file.size > 2 * 1024 * 1024) { // 2MB limit
+                toast.error('Image size must be less than 2MB');
+                return;
+            }
+
+            try {
+                const base64 = await convertImageToBase64(file);
+                setFormData(prev => ({ ...prev, register_icon: base64 }));
+            } catch (error) {
+                toast.error('Failed to process image');
+            }
+        }
+    };
+
+    const handleSubmit = async () => {
+        if (!formData.register_mnemonic || !formData.register_description || !formData.register_purpose) {
+            toast.warn('Basic fields (Mnemonic, Description, Purpose) are required');
+            return;
+        }
+
+        const result = await updateRegister('/api/configuration/registers/edit', {
+            method: 'POST',
+            body: JSON.stringify({
+                register_id: initialData?.register_id,
+                register_mnemonic: formData.register_mnemonic,
+                register_description: formData.register_description,
+                master_register_id: formData.master_register_id || null,
+                dedup_is_enabled: formData.dedup_is_enabled,
+                dedup_threshold_score: Number(formData.dedup_threshold_score) || 0,
+                register_icon: formData.register_icon,
+                register_rank: Number(formData.register_rank) || 0,
+                register_purpose: formData.register_purpose,
+            })
+        });
+
+
+        if (result) {
+            toast.success(`Register "${formData.register_mnemonic}" updated successfully`);
+            if (onSuccess) onSuccess();
+            onClose();
+        } else {
+            toast.error('Failed to update register');
+        }
     };
 
     const handleCancel = () => {
         onClose();
     };
 
-
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 bg-black/80  z-50 flex items-center justify-center p-4">
-            <div className="relative w-full max-w-[800px] max-h-[600px] bg-[#F2BA1A] rounded-[20px] overflow-hidden flex p-1">
-
-              
-
-                <div className="flex-1 w-full bg-white  p-10 relative  rounded-[20px] overflow-y-hidden">
+        <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
+            <div className="relative w-full max-w-[800px] max-h-[95vh] bg-[#F2BA1A] rounded-[20px] overflow-hidden flex p-1">
+                <div className="flex-1 w-full bg-white relative rounded-[20px] p-10 overflow-y-auto">
                     <button
                         onClick={handleCancel}
                         className="absolute top-6 right-6 text-gray-400 hover:text-gray-600 transition-colors"
@@ -82,8 +122,8 @@ export default function EditRegisterModel({ isOpen, onClose, initialData }: Edit
                                 <input
                                     type="text"
                                     placeholder="Enter Register Name"
-                                    value={formData.registerName}
-                                    onChange={(e) => setFormData({ ...formData, registerName: e.target.value })}
+                                    value={formData.register_mnemonic}
+                                    onChange={(e) => setFormData({ ...formData, register_mnemonic: e.target.value })}
                                     className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all text-gray-600 placeholder:text-gray-400"
                                 />
                             </div>
@@ -95,68 +135,160 @@ export default function EditRegisterModel({ isOpen, onClose, initialData }: Edit
                             </label>
                             <textarea
                                 placeholder="Type your message here..."
-                                value={formData.description}
-                                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                                rows={3}
+                                value={formData.register_description}
+                                onChange={(e) => setFormData({ ...formData, register_description: e.target.value })}
+                                rows={2}
                                 className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all resize-none text-gray-600 placeholder:text-gray-400"
                             />
                         </div>
 
-                        <div>
-                            <label className="block text-sm font-semibold text-black mb-2">
-                                Parent Register
-                            </label>
-                            <div className="relative">
-                                <select
-                                    value={formData.parentRegister}
-                                    onChange={(e) => setFormData({ ...formData, parentRegister: e.target.value })}
-                                    className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all bg-white appearance-none cursor-pointer text-gray-600"
-                                >
-                                    <option value="">Select Parent Register</option>
-                                    {MOCK_DATA.parent_register.map((register) => (
-                                        <option key={register} value={register}>
-                                            {register}
-                                        </option>
-                                    ))}
-                                </select>
-                                <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-sm font-semibold text-black mb-2">
+                                    Register Purpose
+                                </label>
+                                <div className="relative">
+                                    <select
+                                        value={formData.register_purpose}
+                                        onChange={(e) => setFormData({ ...formData, register_purpose: e.target.value })}
+                                        className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all bg-white appearance-none cursor-pointer text-gray-600 pr-10"
+                                    >
+                                        <option value="REGISTER">REGISTER</option>
+                                        <option value="PROGRAM_APPLICATION">PROGRAM_APPLICATION</option>
+                                        <option value="TABLE">TABLE</option>
+                                    </select>
+                                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
+                                </div>
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-semibold text-black mb-2">
+                                    Master Register
+                                </label>
+                                <div className="relative">
+                                    <select
+                                        value={formData.master_register_id}
+                                        onChange={(e) => setFormData({ ...formData, master_register_id: e.target.value })}
+                                        className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all bg-white appearance-none cursor-pointer text-gray-600"
+                                    >
+                                        <option value="">Select Master Register</option>
+                                        {registers.map((register: Register) => (
+                                            <option key={register.register_id} value={register.register_id}>
+                                                {register.register_mnemonic}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
+                                </div>
                             </div>
                         </div>
 
-                        <div>
-                            <label className="block text-sm font-semibold text-black mb-2">
-                                Program Application
-                            </label>
-                            <div className="relative">
-                                <select
-                                    value={formData.programApplication}
-                                    onChange={(e) => setFormData({ ...formData, programApplication: e.target.value })}
-                                    className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all bg-white appearance-none cursor-pointer text-gray-600"
-                                >
-                                    <option value="">Select</option>
-                                    {MOCK_DATA.program_application.map((option) => (
-                                        <option key={option} value={option}>
-                                            {option}
-                                        </option>
-                                    ))}
-                                </select>
-                                <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-sm font-semibold text-black mb-2">
+                                    Deduplication Enabled
+                                </label>
+                                <div className="relative">
+                                    <select
+                                        value={formData.dedup_is_enabled ? "true" : "false"}
+                                        onChange={(e) => setFormData({ ...formData, dedup_is_enabled: e.target.value === "true" })}
+                                        className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all bg-white appearance-none cursor-pointer text-gray-600 pr-10"
+                                    >
+                                        <option value="true">True</option>
+                                        <option value="false">False</option>
+                                    </select>
+                                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
+                                </div>
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-semibold text-black mb-2">
+                                    Dedup Threshold Score
+                                </label>
+                                <input
+                                    type="number"
+                                    min="0"
+                                    max="1"
+                                    step="0.1"
+                                    value={formData.dedup_threshold_score}
+                                    onChange={(e) => setFormData({ ...formData, dedup_threshold_score: e.target.value })}
+                                    disabled={!formData.dedup_is_enabled}
+                                    className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all text-gray-600 disabled:opacity-50 placeholder:text-gray-400"
+                                />
                             </div>
                         </div>
 
-                        <div className="flex gap-4 pt-6">
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-sm font-semibold text-black mb-2">
+                                    Register Rank
+                                </label>
+                                <input
+                                    type="number"
+                                    placeholder="e.g. 0"
+                                    value={formData.register_rank}
+                                    onChange={(e) => setFormData({ ...formData, register_rank: e.target.value })}
+                                    className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all text-gray-600 placeholder:text-gray-400"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-semibold text-black mb-2">
+                                    Register Icon
+                                </label>
+                                <div className="flex items-center gap-4">
+                                    <div
+                                        onClick={() => fileInputRef.current?.click()}
+                                        className="w-10 h-10 border-2 border-dashed border-[#F77F57] rounded-lg flex items-center justify-center cursor-pointer hover:bg-orange-50 transition-colors overflow-hidden shrink-0"
+                                    >
+                                        {formData.register_icon ? (
+                                            <img src={formData.register_icon.startsWith('data:') ? formData.register_icon : `data:image/png;base64,${formData.register_icon}`} alt="icon" className="w-full h-full object-cover" />
+                                        ) : (
+                                            <Upload className="text-[#F77F57]" size={20} />
+                                        )}
+                                    </div>
+                                    <div className="flex-1">
+                                        <input
+                                            type="file"
+                                            ref={fileInputRef}
+                                            onChange={handleFileChange}
+                                            accept="image/*"
+                                            className="hidden"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => fileInputRef.current?.click()}
+                                            className="text-sm text-[#F77F57] font-medium hover:underline"
+                                        >
+                                            {formData.register_icon ? 'Change Icon' : 'Upload Icon'}
+                                        </button>
+                                        <p className="text-[10px] text-gray-400">Max size: 2MB</p>
+                                    </div>
+                                    {formData.register_icon && (
+                                        <button
+                                            onClick={() => setFormData(prev => ({ ...prev, register_icon: '' }))}
+                                            className="text-[10px] text-red-500 hover:underline"
+                                        >
+                                            Remove
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="flex gap-4 pt-6 pb-2">
                             <button
                                 onClick={handleCancel}
-                                className="px-12 py-2.5 bg-gray-300 text-gray-700 rounded-full"
+                                className="px-12 py-2.5 bg-gray-300 text-gray-700 rounded-full hover:bg-gray-400 transition-colors"
                             >
                                 Cancel
                             </button>
                             <button
                                 onClick={handleSubmit}
-                                className="px-12 py-2.5 bg-black text-white rounded-full"
+                                className="px-12 py-2.5 bg-black text-white rounded-full hover:bg-gray-800 transition-colors"
                             >
                                 Update
                             </button>
+
                         </div>
                     </div>
                 </div>
