@@ -1,25 +1,99 @@
 import { useState } from 'react';
-import Image from 'next/image';
 import { X, ChevronDown } from 'lucide-react';
+import { useFetch } from '@/shared/hooks';
+import { useParams } from 'next/navigation';
+import { toast } from 'react-toastify';
+import { useAllRegister } from '../hooks/useAllRegister';
+import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
+import { Register } from '../types';
+
+
 
 
 interface AddSectionModalProps {
     isOpen: boolean;
     onClose: () => void;
+    onSuccess?: () => void;
 }
 
-export default function AddSectionModal({ isOpen, onClose }: AddSectionModalProps) {
+export default function AddSectionModal({ isOpen, onClose, onSuccess }: AddSectionModalProps) {
+    const { registerId, tabId } = useParams<{ registerId: string; tabId: string }>();
+    const { config } = useRuntimeConfig();
+    const { execute: createSection, loading } = useFetch();
+    const { registers, loading: registersLoading } = useAllRegister(1, 100);
+
+
     const [formData, setFormData] = useState({
-        sectionName: '',
-        description: '',
+        section_register_id: '',
+        section_mnemonic: '',
+        section_description: '',
+        documents_required: false,
+        no_of_verifications_required: '',
+        auto_approval: false,
+        is_list: false,
+        is_primary_section: false,
     });
 
-    const handleSubmit = () => {
-        console.log('Form submitted:', formData);
-        onClose();
+    const handleSubmit = async () => {
+        if (!formData.section_mnemonic) {
+            toast.warn('Section Name is required');
+            return;
+        }
+
+        if (!formData.section_register_id) {
+            toast.warn('Section Register is required');
+            return;
+        }
+
+        console.log(registerId, "registerId", tabId, "tabId", formData, "formData");
+
+        const result = await createSection('/api/configuration/registers/tabs/sections/create', {
+            method: 'POST',
+            body: JSON.stringify({
+                section_register_id: formData.section_register_id,
+                register_id: registerId,
+                tab_id: tabId,
+                section_mnemonic: formData.section_mnemonic,
+                section_description: formData.section_description,
+                documents_required: formData.documents_required,
+                no_of_verifications_required: Number(formData.no_of_verifications_required) || 0,
+                auto_approval: formData.auto_approval,
+                is_list: formData.is_list,
+                is_primary_section: formData.is_primary_section,
+                section_ui_schema: {}
+            })
+        });
+
+        if (result?.section_id) {
+            toast.success('Section created successfully');
+            setFormData({
+                section_register_id: '',
+                section_mnemonic: '',
+                section_description: '',
+                documents_required: false,
+                no_of_verifications_required: '',
+                auto_approval: false,
+                is_list: false,
+                is_primary_section: false,
+            });
+            if (onSuccess) onSuccess();
+            onClose();
+        } else {
+            toast.error('Failed to create section');
+        }
     };
 
     const handleCancel = () => {
+        setFormData({
+            section_register_id: '',
+            section_mnemonic: '',
+            section_description: '',
+            documents_required: false,
+            no_of_verifications_required: '',
+            auto_approval: false,
+            is_list: false,
+            is_primary_section: false,
+        });
         onClose();
     };
 
@@ -28,9 +102,9 @@ export default function AddSectionModal({ isOpen, onClose }: AddSectionModalProp
 
     return (
         <div className="fixed inset-0 bg-black/80  z-50 flex items-center justify-center p-4">
-            <div className="relative w-full max-w-[800px] max-h-[600px] bg-[#F2BA1A] rounded-[20px] overflow-hidden flex p-1">
+            <div className="relative w-full max-w-[800px] max-h-[95vh] bg-[#F2BA1A] rounded-[20px] overflow-hidden flex p-1">
 
-                <div className="flex-1 w-full bg-white p-10 relative  rounded-[20px] overflow-y-hidden">
+                <div className="flex-1 w-full bg-white p-10 relative rounded-[20px] overflow-y-auto">
                     <button
                         onClick={handleCancel}
                         className="absolute top-6 right-6 text-gray-400 hover:text-gray-600 transition-colors"
@@ -42,19 +116,27 @@ export default function AddSectionModal({ isOpen, onClose }: AddSectionModalProp
 
                     <div className="space-y-4">
                         <div>
-                            <label className="block text-sm font-semibold text-black mb-2">
+                            <label className="block text-sm font-semibold text-black mb-1">
                                 Section Name
                             </label>
+                            <p className="text-[12px] text-gray-400 mb-2 italic">
+                                * Use lowercase and underscores only
+                            </p>
                             <div className="relative">
                                 <input
                                     type="text"
-                                    placeholder="Enter Section Name"
-                                    value={formData.sectionName}
-                                    onChange={(e) => setFormData({ ...formData, sectionName: e.target.value })}
+                                    placeholder="e.g. personal_info"
+                                    value={formData.section_mnemonic}
+                                    onChange={(e) => {
+                                        const value = e.target.value.toLowerCase().replace(/\s+/g, '_');
+                                        setFormData({ ...formData, section_mnemonic: value });
+                                    }}
                                     className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all text-gray-600 placeholder:text-gray-400"
                                 />
                             </div>
                         </div>
+
+
 
                         <div>
                             <label className="block text-sm font-semibold text-black mb-2">
@@ -62,11 +144,121 @@ export default function AddSectionModal({ isOpen, onClose }: AddSectionModalProp
                             </label>
                             <textarea
                                 placeholder="Type your message here..."
-                                value={formData.description}
-                                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                                rows={3}
+                                value={formData.section_description}
+                                onChange={(e) => setFormData({ ...formData, section_description: e.target.value })}
+                                rows={2}
                                 className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all resize-none text-gray-600 placeholder:text-gray-400"
                             />
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-sm font-semibold text-black mb-2">
+                                    No of Verifications Required
+                                </label>
+                                <input
+                                    type="number"
+                                    placeholder="e.g. 0"
+                                    value={formData.no_of_verifications_required}
+                                    onChange={(e) => setFormData({ ...formData, no_of_verifications_required: e.target.value })}
+                                    className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all text-gray-600 placeholder:text-gray-400"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-semibold text-black mb-2">
+                                    Documents Required
+                                </label>
+                                <div className="relative">
+                                    <select
+                                        value={formData.documents_required ? "true" : "false"}
+                                        onChange={(e) => setFormData({ ...formData, documents_required: e.target.value === "true" })}
+                                        className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all bg-white appearance-none cursor-pointer text-gray-600 pr-10"
+                                    >
+                                        <option value="true">True</option>
+                                        <option value="false">False</option>
+                                    </select>
+                                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-sm font-semibold text-black mb-2">
+                                    Auto Approval
+                                </label>
+                                <div className="relative">
+                                    <select
+                                        value={formData.auto_approval ? "true" : "false"}
+                                        onChange={(e) => setFormData({ ...formData, auto_approval: e.target.value === "true" })}
+                                        className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all bg-white appearance-none cursor-pointer text-gray-600 pr-10"
+                                    >
+                                        <option value="true">True</option>
+                                        <option value="false">False</option>
+                                    </select>
+                                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
+                                </div>
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-semibold text-black mb-2">
+                                    Is List
+                                </label>
+                                <div className="relative">
+                                    <select
+                                        value={formData.is_list ? "true" : "false"}
+                                        onChange={(e) => setFormData({ ...formData, is_list: e.target.value === "true" })}
+                                        className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all bg-white appearance-none cursor-pointer text-gray-600 pr-10"
+                                    >
+                                        <option value="true">True</option>
+                                        <option value="false">False</option>
+                                    </select>
+                                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4" >
+                            <div>
+                                <label className="block text-sm font-semibold text-black mb-1">
+                                    Section Register
+                                </label>
+                                <div className="relative">
+                                    <select
+                                        value={formData.section_register_id}
+                                        onChange={(e) => setFormData({ ...formData, section_register_id: e.target.value })}
+                                        className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all bg-white appearance-none cursor-pointer text-gray-600 pr-10"
+                                        disabled={registersLoading}
+                                    >
+                                        <option value="">Select Register</option>
+                                        {registers.map((reg: Register) => (
+                                            <option key={reg.register_id} value={reg.register_id}>
+                                                {reg.register_mnemonic}
+                                            </option>
+                                        ))}
+
+                                    </select>
+                                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
+                                </div>
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-semibold text-black mb-2">
+                                    Is Primary Section
+                                </label>
+                                <div className="relative">
+                                    <select
+                                        value={formData.is_primary_section ? "true" : "false"}
+                                        onChange={(e) => setFormData({ ...formData, is_primary_section: e.target.value === "true" })}
+                                        className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all bg-white appearance-none cursor-pointer text-gray-600 pr-10"
+                                    >
+                                        <option value="true">True</option>
+                                        <option value="false">False</option>
+                                    </select>
+                                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
+                                </div>
+                            </div>
                         </div>
 
                         <div className="flex gap-4 pt-6">
