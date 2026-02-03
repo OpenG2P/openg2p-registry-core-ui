@@ -48,6 +48,8 @@ export default function ChangeRequestCard({
     // Use external count if provided, otherwise use API data
     const count = externalCount ?? data?.number_of_pending_change_requests ?? 0;
 
+    const isDisabled = count === 0;
+
     const params = new URLSearchParams();
     if (activeTabId) params.set("tab", activeTabId);
 
@@ -89,7 +91,15 @@ export default function ChangeRequestCard({
             </p>
 
             <div className="mt-25">
-                <ViewAll href={href} bgColor="#D9D9D9" label="Know More" />
+                <div
+                    className={isDisabled ? "invisible cursor-not-allowed pointer-events-none" : ""}
+                >
+                    <ViewAll
+                        href={href}
+                        bgColor="#D9D9D9"
+                        label="Know More"
+                    />
+                </div>
                 <Image
                     src="/CR.png"
                     alt="Change Request"
