@@ -23,6 +23,7 @@ export default function RegisterDetailPage() {
 
     // state to update the count of pending change requests 
     const [changeRequestCount, setChangeRequestCount] = useState<number | undefined>(undefined);
+    const [loadingTabId, setLoadingTabId] = useState<string | null>(null);
 
     const {
         internalRecordId,
@@ -68,7 +69,36 @@ export default function RegisterDetailPage() {
 
     // resolvingId: resolves the functional ID 
     // from the internal record ID (UUID)
-    const isLoading = !internalRecordId || !canRenderContent;
+
+    const handleTabChange = (index: number) => {
+        const nextTabId = tabs[index]?.tab_id;
+        if (!nextTabId) return;
+
+        setLoadingTabId(nextTabId);
+        setActiveTabByIndex(index);
+    };
+
+    useEffect(() => {
+        if (!loadingTabId) return;
+
+        // when sections for this tab are resolved
+        if (
+            activeTabId === loadingTabId &&
+            canRenderContent &&
+            orderedTabSections.length > 0
+        ) {
+            setLoadingTabId(null);
+        }
+    }, [
+        loadingTabId,
+        activeTabId,
+        canRenderContent,
+        orderedTabSections.length,
+    ]);
+
+    // Show skeleton if tab has changed but content hasn't updated yet
+    const isLoading = !internalRecordId || !canRenderContent || loadingTabId === activeTabId;;
+
     const isNotFound = !internalRecordId;
 
     return (
@@ -76,7 +106,7 @@ export default function RegisterDetailPage() {
             breadcrumb={breadcrumb}
             tabs={{ tabs }}
             activeTab={activeTabIndex}
-            onTabChange={setActiveTabByIndex}
+            onTabChange={handleTabChange}
         >
             {isLoading ? (
                 <RegisterDetailsPageSkeleton tabs={tabs} />
