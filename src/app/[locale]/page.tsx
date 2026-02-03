@@ -39,7 +39,7 @@ export default function Home() {
     const { config } = useRuntimeConfig();
 
     const statsCardVariant = config?.partnerImportExportEnable ? 'small' : 'large';
-    const visibleCards = statsCardVariant === 'large' ? ALL_CARDS : LIMITED_CARDS;
+    const visibleCards = statsCardVariant === 'small' ? ALL_CARDS : LIMITED_CARDS;
 
     const [activeStatsCard, setActiveStatsCard] =
         useState<ActiveStatsCard>('registers');
