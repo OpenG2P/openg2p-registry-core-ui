@@ -9,13 +9,14 @@ interface SearchBarProps {
     category: string;
     onSearch: (value: string, category: string) => void;
     iconSize?: number;
+    pxClass?: string;
 }
 
-const SearchBar = ({ placeholder, searchValue, category, onSearch, iconSize = 24 }: SearchBarProps) => {
+const SearchBar = ({ placeholder, searchValue, category, onSearch, iconSize = 24, pxClass = "px-2" }: SearchBarProps) => {
     const [value, setValue] = useState(searchValue || "");
 
     return (
-        <div className="flex flex-1 items-center px-2 py-1">
+        <div className={`flex flex-1 items-center ${pxClass} py-1`}>
             <input
                 type="text"
                 placeholder={placeholder}

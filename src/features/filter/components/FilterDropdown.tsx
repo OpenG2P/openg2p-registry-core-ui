@@ -202,18 +202,6 @@ export default function FilterDropdown({
                 {selectedFilter && (
                     <>
                         <div className="flex gap-4 items-center">
-                            {/* <label className="w-20 text-sm font-medium">Operator</label>
-                            <select
-                                className="border rounded-lg px-3 py-2 text-sm w-full"
-                                value={operator}
-                                onChange={e => setOperator(e.target.value)}
-                            >
-                                {selectedFilter.allowed_operators.map(op => (
-                                    <option key={op} value={op}>
-                                        {OPERATOR_LABELS[op] ?? op}
-                                    </option>
-                                ))}
-                            </select> */}
                             <label className="w-20 text-sm font-medium">Operator</label>
                             <div className="relative w-full">
                                 <select
@@ -252,7 +240,7 @@ export default function FilterDropdown({
                     </>
                 )}
 
-                <div className="flex justify-center">
+                <div className="flex justify-start">
                     <button
                         onClick={applyFilter}
                         className="bg-black text-white px-5 py-2.5 rounded-lg text-sm text-center"

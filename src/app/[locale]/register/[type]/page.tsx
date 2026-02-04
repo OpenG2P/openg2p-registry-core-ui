@@ -88,6 +88,7 @@ export default function RegisterTypePage() {
                         searchValue={searchQuery}
                         searchPlaceholder={t('search')}
                         onSearch={handleSearch}
+                        pxClass='px-0.5'
                     />
                 </div>
 

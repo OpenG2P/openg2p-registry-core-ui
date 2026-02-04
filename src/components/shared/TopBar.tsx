@@ -14,6 +14,7 @@ interface TopBarProps {
     searchValue?: string;
     searchPlaceholder?: string;
     onSearch?: (value: string) => void;
+    pxClass?: string;
 
     showCapsule?: boolean;
     capsule?: React.ReactNode;
@@ -43,6 +44,7 @@ export default function TopBar({
     searchValue = '',
     searchPlaceholder = 'Search',
     onSearch,
+    pxClass,
     showFilters = true,
     showPagination = true,
     showCapsule = false,
@@ -73,13 +75,14 @@ export default function TopBar({
                 </div>
                 <div className="flex items-center gap-2 sm:gap-4">
                     {showSearch && onSearch && (
-                        <div className="ml-auto shrink-0 border border-[#ED7C22] rounded-[30px] h-8.5 flex items-center px-2 bg-white">
+                        <div className="ml-auto shrink-0 border border-[#ED7C22] rounded-[30px] h-8.5 flex items-center bg-white">
                             <SearchBar
                                 placeholder={searchPlaceholder}
                                 category=""
                                 searchValue={searchValue}
                                 iconSize={16}
                                 onSearch={onSearch}
+                                pxClass={pxClass}
                             />
                         </div>
                     )}

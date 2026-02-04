@@ -61,6 +61,7 @@ export default function ChangeRequestPage() {
                 searchValue={searchQuery || ''}
                 searchPlaceholder={t('search')}
                 onSearch={handleSearch}
+                pxClass='px-0.5'
                 showFilters={false}
                 showPagination
                 pageStart={pageStart}
