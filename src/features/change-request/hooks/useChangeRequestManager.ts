@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { toast } from "react-toastify";
 import { useFetch } from "@/shared/hooks/useFetch";
 import type { ChangeRequest, Verification } from "@/features/change-request/types/change-request";
 import { ChangeRequestDocument } from "../components/ChangeRequestHeader";
@@ -73,13 +74,20 @@ export function useChangeRequestManager(changeId: string) {
                 body: JSON.stringify({ change_request_id: changeId }),
             });
             if (res) {
-                setPopupType("approve");
-                setPopupVisible(true);
+                toast.success("Change request approved successfully", {
+                    position: "top-right",
+                    autoClose: 4000,
+                });
+
                 setDetails((prev) => {
                     if (!prev) return prev;
                     return { ...prev, approval_status: "APPROVED" };
                 });
             }
+        } catch {
+            toast.error("Failed to approve change request", {
+                autoClose: 5000,
+            });
         } finally {
             setLoadingAction(false);
         }
@@ -100,12 +108,22 @@ export function useChangeRequestManager(changeId: string) {
                     body: JSON.stringify({ change_request_id: changeId, rejection_reason: reason }),
                 });
                 if (res) {
-                    setPopupType("reject");
+                    setPopupVisible(false);
+
+                    toast.success("Change request rejected", {
+                        position: "top-right",
+                        autoClose: 4000,
+                    });
+
                     setDetails((prev) => {
                         if (!prev) return prev;
                         return { ...prev, approval_status: "REJECTED" };
                     });
                 }
+            } catch {
+                toast.error("Failed to reject change request", {
+                    autoClose: 5000,
+                });
             } finally {
                 setLoadingAction(false);
             }
@@ -139,11 +157,18 @@ export function useChangeRequestManager(changeId: string) {
                         };
                     });
 
+                    toast.success("Verification added successfully", {
+                        position: "top-right",
+                        autoClose: 4000,
+                    });
+
                     return true;
                 }
                 return false;
             } catch (error) {
-                console.error("Error adding verification:", error);
+                toast.error("Something went wrong while adding verification", {
+                    autoClose: 5000,
+                });
                 return false;
             } finally {
                 setLoadingAction(false);

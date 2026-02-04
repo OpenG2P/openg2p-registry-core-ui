@@ -174,12 +174,12 @@ export default function ChangeRequestDetailsView({ changeId, breadcrumb }: Props
                 />
             )}
 
-            {popupVisible && (popupType === "approve" || popupType === "reject") && (
+            {/* {popupVisible && (popupType === "approve" || popupType === "reject") && (
                 <ActionPopup
                     type={popupType}
                     onClose={() => setPopupVisible(false)}
                 />
-            )}
+            )} */}
         </RegisterTabsLayout>
     );
 }

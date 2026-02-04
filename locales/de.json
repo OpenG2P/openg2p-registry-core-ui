@@ -370,5 +370,8 @@
     "close": "Schließen",
     "rejectTitle": "Oh, Sie lehnen diese Anfrage ab",
     "rejectDescription": "Bitte geben Sie den Grund für die Ablehnung ein",
-    "rejectPlaceholder": "Geben Sie hier Ihren Grund ein..."
+    "rejectPlaceholder": "Geben Sie hier Ihren Grund ein...",
+    "lastUpdatedBy": "Zuletzt aktualisiert von",
+    "lastApprovedBy": "Zuletzt genehmigt von",
+    "noPendingChanges": "Keine ausstehenden Änderungsanfragen"
 }
