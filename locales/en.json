@@ -363,5 +363,15 @@
     "add_family_member": "Add Family Member",
     "family_members": "Family Members",
     "address_line_1": "Address 1",
-    "address_line_2": "Address 2"
+    "address_line_2": "Address 2",
+    "changeRequestFallback": "Change Request {index}",
+    "verificationsRequired": "No. of verification required",
+    "verificationsDone": "No. of verification done",
+    "documentsAttached": "No. of documents attached",
+    "attachedDocuments": "Attached Doc",
+    "PENDING": "Pending",
+    "APPROVED": "Approved",
+    "REJECTED": "Rejected",
+    "approveChange": "Approve Change",
+    "rejectChange": "Reject Change"
 }

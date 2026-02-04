@@ -339,5 +339,15 @@
     "Retired": "V důchodu",
     "annual_income": "Roční příjem",
     "add_family_member": "Přidat člena rodiny",
-    "family_members": "Rodinní příslušníci"
+    "family_members": "Rodinní příslušníci",
+    "changeRequestFallback": "Žádost o změnu {index}",
+    "verificationsRequired": "Počet požadovaných ověření",
+    "verificationsDone": "Počet provedených ověření",
+    "documentsAttached": "Počet přiložených dokumentů",
+    "attachedDocuments": "Přiložené dokumenty",
+    "PENDING": "Čeká na schválení",
+    "APPROVED": "Schváleno",
+    "REJECTED": "Zamítnuto",
+    "rejectChange": "Zamítnout změnu",
+    "approveChange": "Schválit změnu"
 }

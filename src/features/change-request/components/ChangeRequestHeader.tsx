@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { ChangeRequest } from "../types/change-request";
+import { useTranslations } from "next-intl";
 
 export interface ChangeRequestDocument {
     document_label: string;
@@ -28,11 +29,17 @@ export default function ChangeRequestHeader({
     onReject,
     loadingAction,
 }: Props) {
+    const t = useTranslations();
+    const rawTitle = details?.section_mnemonic?.trim();
+
+    const title = rawTitle
+        ? t(rawTitle, { default: rawTitle })
+        : t('changeRequest');
     return (
-        <div className="rounded-[25px] bg-[#F2BA1A33]/80 px-10 py-5 flex flex-col border border-dashed border-[#ED7C22]">
+        <div className="rounded-[30px] bg-[#F2BA1A33]/80 px-10 py-5 flex flex-col border border-dashed border-[#ED7C22]">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <InfoSection
-                    title={details?.section_mnemonic || "Change Request"}
+                    title={title}
                     details={details}
                 />
                 <VerificationStats
@@ -52,7 +59,7 @@ export default function ChangeRequestHeader({
                             onClick={onReject}
                             className="px-4 py-2 text-[14px] font-medium rounded-[20px] bg-white text-black/50"
                         >
-                            Reject Change
+                            {t('rejectChange')}
                         </button>
 
                         <button
@@ -61,7 +68,7 @@ export default function ChangeRequestHeader({
                             onClick={onApprove}
                             className="px-4 py-2 text-[14px] font-medium rounded-[20px] bg-black text-white"
                         >
-                            Approve Change
+                            {t('approveChange')}
                         </button>
                     </div>
                 </>
@@ -69,66 +76,93 @@ export default function ChangeRequestHeader({
         </div>
     );
 };
-
-const InfoSection = ({ title, details }: { title: string; details: ChangeRequest }) => (
-    <div className="space-y-2 text-[16px] text-[#00000080]">
-        <h3 className="text-lg font-semibold text-black">{title}</h3>
-        <div>
-            Change ID:{" "}
-            <span className="text-black font-medium">
-                {details.change_request_id}
-            </span>
-        </div>
-        <div>
-            Status:{" "}
-            <span className={`font-medium ${statusClassMap[details.approval_status] ?? "text-gray-500"}`}>
-                {details.approval_status}
-            </span>
-        </div>
-        <div>
-            Change Date:{" "}
-            <span className="text-black font-medium">
-                {new Date(details.created_at).toLocaleDateString()}
-            </span>
-        </div>
-    </div>
-);
-
-const VerificationStats = ({ details, documentsCount }: { details: ChangeRequest, documentsCount: number; }) => (
-    <div className="space-y-2 text-[16px] text-[#00000080]">
-        <h3 className="text-lg font-semibold text-black invisible">
-            Verification
-        </h3>
-        <div className="border-l-2 border-[#F2BA1A] pl-6 space-y-2">
+const InfoSection = ({
+    title,
+    details,
+}: {
+    title: string;
+    details: ChangeRequest;
+}) => {
+    const t = useTranslations();
+    return (
+        <div className="space-y-2 text-[16px] text-[#00000080]">
+            <h3 className="text-[24px] font-medium text-black">{title}</h3>
             <div>
-                No. of verification required:{" "}
+                {t('changeId')}:{" "}
                 <span className="text-black font-medium">
-                    {details.no_of_verifications_required}
+                    {details.change_request_id}
                 </span>
             </div>
             <div>
-                No. of verification done:{" "}
-                <span className="text-black font-medium">
-                    {details.no_of_verifications_done}
+                {t("status")}:{" "}
+                <span className={`font-medium ${statusClassMap[details.approval_status] ?? "text-gray-500"}`}>
+                    {t(details.approval_status, {
+                        default: details.approval_status,
+                    })}
                 </span>
             </div>
             <div>
-                No. of documents attached:{" "}
-                <span className="text-black font-medium">{documentsCount}</span>
+                {t("changeDate")}:{" "}
+                <span className="text-black font-medium">
+                    {new Date(details.created_at).toLocaleDateString()}
+                </span>
             </div>
         </div>
-    </div>
-);
+    )
+};
+
+const VerificationStats = ({
+    details,
+    documentsCount,
+}: {
+    details: ChangeRequest;
+    documentsCount: number;
+}) => {
+    const t = useTranslations();
+
+    return (
+        <div className="space-y-2 text-[16px] text-[#00000080]">
+            <h3 className="text-lg font-semibold text-black invisible">
+                Verification
+            </h3>
+
+            <div className="border-l border-[#F2BA1A] pl-6 space-y-2">
+                <div>
+                    {t('verificationsRequired')}:{" "}
+                    <span className="text-black font-medium">
+                        {details.no_of_verifications_required}
+                    </span>
+                </div>
+
+                <div>
+                    {t('verificationsDone')}:{" "}
+                    <span className="text-black font-medium">
+                        {details.no_of_verifications_done}
+                    </span>
+                </div>
+
+                <div>
+                    {t('documentsAttached')}:{" "}
+                    <span className="text-black font-medium">
+                        {documentsCount}
+                    </span>
+                </div>
+            </div>
+        </div>
+    );
+};
 
 const AttachedDocuments = ({ documents = [] }: { documents?: ChangeRequestDocument[] }) => {
+    const t = useTranslations();
+
     const visibleDocs = documents.slice(0, 3);
     const placeholdersCount = Math.max(0, 3 - visibleDocs.length);
 
     return (
         <div className="space-y-2 text-[16px] text-[#00000080]">
-            <div className="pl-6 flex items-center leading-none">
-                <span className="text-lg font-semibold text-black">
-                    Attached Doc
+            <div className="pl-6 flex items-center leading-none mt-2">
+                <span className="text-[16px] font-medium text-black">
+                    {t('attachedDocuments')}
                 </span>
                 <Image
                     src="/attached_doc_icon.png"
@@ -139,32 +173,20 @@ const AttachedDocuments = ({ documents = [] }: { documents?: ChangeRequestDocume
                 />
             </div>
 
-            <div className="border-l-2 border-[#F2BA1A] pl-6 flex flex-col gap-2 font-semibold">
-                {
-                    visibleDocs.map((doc, index) => (
-                        <span
-                            key={index}
-                            onClick={() => window.open(doc.document_url, '_blank', 'noopener,noreferrer')}
-                            className="flex items-center gap-2 cursor-pointer"
-                        >
-                            {doc.document_label}
-                            <Image
-                                src="/right_arrow.png"
-                                alt="arrow"
-                                width={14}
-                                height={14}
-                            />
-                        </span>
-                    ))
-                }
+            <div className="border-l border-[#F2BA1A] pl-6 flex flex-col gap-2 font-semibold">
+                {visibleDocs.map((doc, index) => (
+                    <span
+                        key={index}
+                        onClick={() => window.open(doc.document_url, '_blank', 'noopener,noreferrer')}
+                        className="flex items-center gap-2 cursor-pointer"
+                    >
+                        {doc.document_label}
+                        <Image src="/right_arrow.png" alt="arrow" width={14} height={14} />
+                    </span>
+                ))}
 
                 {Array.from({ length: placeholdersCount }).map((_, i) => (
-                    <span
-                        key={`placeholder-${i}`}
-                        className="flex items-center gap-2 invisible"
-                    >
-                        placeholder
-                    </span>
+                    <span key={i} className="invisible">placeholder</span>
                 ))}
             </div>
         </div>

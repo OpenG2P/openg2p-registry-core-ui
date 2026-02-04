@@ -339,5 +339,15 @@
     "Retired": "Rentner",
     "annual_income": "Jahreseinkommen",
     "add_family_member": "Familienmitglied hinzufügen",
-    "family_members": "Familienmitglieder"
+    "family_members": "Familienmitglieder",
+    "changeRequestFallback": "Änderungsantrag {index}",
+    "verificationsRequired": "Anzahl erforderlicher Prüfungen",
+    "verificationsDone": "Anzahl abgeschlossener Prüfungen",
+    "documentsAttached": "Anzahl angehängter Dokumente",
+    "attachedDocuments": "Angehängte Dokumente",
+    "PENDING": "Ausstehend",
+    "APPROVED": "Genehmigt",
+    "REJECTED": "Abgelehnt",
+    "rejectChange": "Änderung ablehnen",
+    "approveChange": "Änderung genehmigen"
 }
