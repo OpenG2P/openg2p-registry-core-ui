@@ -116,6 +116,7 @@ export const useRegisterRecords = () => {
     }, [paginationInfo]);
 
     const handleSearch = useCallback((searchValue: string) => {
+        setCurrentPage(1);
         const params = new URLSearchParams(searchParams.toString());
         if (searchValue.trim()) {
             params.set('search', searchValue.trim());
