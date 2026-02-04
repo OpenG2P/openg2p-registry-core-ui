@@ -2,7 +2,7 @@
 
 import ViewAll from "@/components/shared/ViewAll";
 import { useFetch } from "@/shared/hooks/useFetch";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 
 interface Props {
@@ -19,6 +19,7 @@ export default function VersionHistoryCard({
     activeTabId
 }: Props) {
     const locale = useLocale();
+    const t = useTranslations();
 
     const { data, loading } = useFetch<any>({
         url: `/api/register/versions`,
@@ -75,11 +76,15 @@ export default function VersionHistoryCard({
     const href = `/${locale}/register/${type}/${internalRecordId}/version-history${params.toString() ? `?${params.toString()}` : ""
         }`;
 
+    const count = payload.number_of_versions ?? 0;
+
+    const isDisabled = count === 0;
+
     return (
         <div className="relative rounded-[30px] bg-[#E0E0E0] px-8 pt-5 pb-8 overflow-hidden">
             <div className="flex items-center justify-between mb-5">
                 <h3 className="text-[24px] font-semibold text-black leading-none">
-                    Version History
+                    {t("versionHistory")}
                 </h3>
                 <div className="flex h-15 w-20 items-center justify-center rounded-[20px] border-3 border-white bg-[#D9D9D9] text-[34px] font-bold text-black">
                     {payload.number_of_versions}
@@ -87,7 +92,7 @@ export default function VersionHistoryCard({
             </div>
 
             <div className="space-y-1 text-[16px] text-black font-normal">
-                <p className="font-medium">Last Updated by</p>
+                <p className="font-medium">{t("lastUpdatedBy")}</p>
                 <div className="flex items-center gap-2">
                     <Image
                         src="/version_profile.png"
@@ -112,7 +117,7 @@ export default function VersionHistoryCard({
 
             {payload.last_approved_by && payload.last_approved_at && (
                 <div className="mt-4 space-y-1 text-[16px] text-black">
-                    <p className="font-medium">Last Approved by</p>
+                    <p className="font-medium">{t("lastApprovedBy")}</p>
                     <div className="flex items-center gap-2">
                         <Image
                             src="/version_profile.png"
@@ -135,11 +140,15 @@ export default function VersionHistoryCard({
                     </div>
                 </div>
             )}
-            <ViewAll
-                href={href}
-                bgColor="#B0B0AD"
-                label="Know More"
-            />
+            <div
+                className={isDisabled ? "invisible cursor-not-allowed pointer-events-none" : ""}
+            >
+                <ViewAll
+                    href={href}
+                    bgColor="#B0B0AD"
+                    label={t("knowMore")}
+                />
+            </div>
         </div>
     );
 }

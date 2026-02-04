@@ -92,9 +92,9 @@ export default function RegisterTypePage() {
                     />
                 </div>
 
-                <div className="space-y-2">
+                <div className="">
                     {isLoadingRecords ? (
-                        <div className="space-y-4">
+                        <div className="space-y-2">
                             {[...Array(5)].map((_, i) => (
                                 <div
                                     key={i}

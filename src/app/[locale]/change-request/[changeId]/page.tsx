@@ -3,27 +3,32 @@
 import { useMemo } from "react";
 import { useParams } from "next/navigation";
 import { ChangeRequestDetailsView } from "@/features/change-request/components";
+import { useTranslations } from "next-intl";
 
 export default function ChangeRequestDetailsPage() {
-  const { changeId } = useParams<{
-    changeId: string;
-  }>();
+    const t = useTranslations();
 
-  const breadcrumb = useMemo(
-    () => [
-      {
-        label: "Change Request",
-        href: `/change-request`,
-      },
-      { label: `Change ID - ${changeId}` },
-    ],
-    [changeId]
-  );
+    const { changeId } = useParams<{
+        changeId: string;
+    }>();
 
-  return (
-    <ChangeRequestDetailsView
-      changeId={changeId}
-      breadcrumb={breadcrumb}
-    />
-  );
+    const breadcrumb = useMemo(
+        () => [
+            {
+                label: t("changeRequest"),
+                href: "/change-request",
+            },
+            {
+                label: t("changeIdBreadcrumb", { id: changeId }),
+            },
+        ],
+        [changeId, t]
+    );
+
+    return (
+        <ChangeRequestDetailsView
+            changeId={changeId}
+            breadcrumb={breadcrumb}
+        />
+    );
 }

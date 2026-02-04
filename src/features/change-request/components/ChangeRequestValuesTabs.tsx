@@ -29,7 +29,7 @@ export function ChangeRequestValuesTabs({
                         : 'bg-[#DDDDDD]'
                         }`}
                 >
-                    New & Old Values
+                    {t("newAndOldValues")}
                 </button>
 
                 {/*
@@ -55,7 +55,7 @@ export function ChangeRequestValuesTabs({
                         store={widgetStoreNew}
                         schemaData={newSectionData}
                         translate={t}
-                        // dataSourceRequestHandler={dataSourceRequestHandler}
+                    // dataSourceRequestHandler={dataSourceRequestHandler}
                     >
                         <SectionsContainer
                             sections={innerSectionConfig}
@@ -67,7 +67,7 @@ export function ChangeRequestValuesTabs({
                         store={widgetStoreOld}
                         schemaData={oldSectionData}
                         translate={t}
-                        // apiAdapter={dataSourceRequestHandler}
+                    // apiAdapter={dataSourceRequestHandler}
                     >
                         <SectionsContainer
                             sections={innerSectionConfig}

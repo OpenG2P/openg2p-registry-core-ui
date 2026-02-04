@@ -62,7 +62,6 @@ export default function ChangeLogCard({
                     <div>
                         {t('status')}:{' '}
                         <span className={`font-medium ${statusClass}`}>
-                            {/* {log.approval_status} */}
                             {t(log.approval_status, {
                                 default: log.approval_status,
                             })}

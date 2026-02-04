@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 interface Props {
     onSubmit: (reason: string) => void;
@@ -15,6 +16,7 @@ export default function RejectReasonPopup({
     loading,
 }: Props) {
     const [reason, setReason] = useState("");
+    const t = useTranslations();
 
     return (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
@@ -36,19 +38,20 @@ export default function RejectReasonPopup({
                 </div>
 
                 <h3 className="text-[24px] font-semibold text-centser">
-                    Ohh, You are rejecting this request
+                    {t("rejectTitle")}
                 </h3>
 
                 <div className="w-full max-w-105 mt-2">
                     <p className="text-[16px] text-black mb-1">
-                        Please enter the reason for the rejection
+                        {t("rejectDescription")}
+
                     </p>
 
                     <div className="flex gap-2">
                         <input
                             value={reason}
                             onChange={(e) => setReason(e.target.value)}
-                            placeholder="Type your reason here..."
+                            placeholder={t("rejectPlaceholder")}
                             className="flex-1 border-2 border-black/20 rounded-[10px] px-4 py-2 focus:outline-none"
                         />
                         <button
@@ -56,7 +59,7 @@ export default function RejectReasonPopup({
                             onClick={() => onSubmit(reason)}
                             className="bg-black text-white px-8 rounded-[20px]"
                         >
-                            Submit
+                            {t("submit")}
                         </button>
                     </div>
                 </div>
