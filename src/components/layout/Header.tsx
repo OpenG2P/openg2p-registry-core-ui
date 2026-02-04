@@ -12,7 +12,7 @@ export default function Header() {
 
     return (
         <header className="w-full bg-white flex items-center justify-between px-3 py-3 fixed top-0 left-0 right-0 z-20 h-17.5">
-            <Link href="/" className="flex items-center gap-2 sm:gap-3 hover:opacity-80 transition-opacity">
+            <Link href="/" className="flex items-center gap-2 sm:gap-3">
                 <Image
                     src="/openg2p_logo.png"
                     alt="Openg2p Logo"
@@ -20,9 +20,24 @@ export default function Header() {
                     height={32}
                     className="w-8 h-8 sm:w-10 sm:h-10"
                 />
-                <span className="text-[16px] sm:text-[18px] md:text-[20px] text-black font-medium">
-                    {t('registryGen2')}
-                </span>
+                <div className="flex items-center gap-3">
+                    <span className="text-[16px] sm:text-[18px] md:text-[20px] text-black font-medium">
+                        {t('registryGen2')}
+                    </span>
+
+                    {/* Vertical divider */}
+                    <span className="h-8 w-0.5 bg-[#D9D9D9]" />
+
+                    {/* Powered by block */}
+                    <div className="flex flex-col leading-tight">
+                        <span className="text-[14px] text-black/50">
+                            powered by
+                        </span>
+                        <span className="text-[16px] font-medium text-black">
+                            OpenG2P
+                        </span>
+                    </div>
+                </div>
             </Link>
 
             {/* Desktop Navigation */}
