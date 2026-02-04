@@ -5,7 +5,7 @@ import Image from 'next/image';
 import {
     WidgetProvider,
     createWidgetStore,
-    SectionsContainer,
+    SectionRenderer,
 } from '@openg2p/registry-widgets';
 import { CapsuleDropdown, RegisterTabsLayout } from '@/components/shared';
 import { VerificationCard } from '@/features/change-request/components';
@@ -61,10 +61,8 @@ export default function VersionHistoryPage() {
         setActiveTabByIndex,
     } = useRegisterTabs();
 
-    const { orderedTabSections } = useRegisterSectionsFromCR({
-        registerId,
-        tabId: activeTabId,
-        internalRecordId,
+    const { sectionUISchema, loadingSchema } = useRegisterSectionsFromCR({
+        sectionId: selectedSectionId || '',
     });
 
     const {
@@ -178,14 +176,6 @@ export default function VersionHistoryPage() {
         setSectionsWithChanges({});
     };
 
-    const innerSectionConfig = useMemo(() => {
-        if (!orderedTabSections || !changeRequestData?.section_id) return [];
-        return orderedTabSections.filter(
-            (section: any) =>
-                section['section-id'] === changeRequestData.section_id
-        );
-    }, [orderedTabSections, changeRequestData?.section_id]);
-
     const newSectionData = useMemo(() => {
         if (!changeRequestData?.change_payload?.length) return undefined;
 
@@ -266,10 +256,10 @@ export default function VersionHistoryPage() {
                                 store={widgetStore}
                                 schemaData={newSectionData}
                                 translate={t}
-                                // dataSourceRequestHandler={dataSourceRequestHandler}
+                            // dataSourceRequestHandler={dataSourceRequestHandler}
                             >
-                                <SectionsContainer
-                                    sections={innerSectionConfig}
+                                <SectionRenderer
+                                    section={sectionUISchema}
                                     hideEditButton
                                 />
                             </WidgetProvider>

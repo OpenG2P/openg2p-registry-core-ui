@@ -46,6 +46,7 @@ export default function RegistersConfigView({
       toast.error('An error occurred while deleting the register');
     }
   };
+  console.log(registers, "registers*******************");
 
   const handleDelete = async (e: React.MouseEvent, id: string, name: string) => {
     e.preventDefault();
@@ -125,10 +126,10 @@ export default function RegistersConfigView({
             <Link
               key={register.register_id}
               href={`/configuration/registers/${register.register_id}`}
-              className="block"
+              className="block -mx-8"
             >
               <div
-                className={`grid grid-cols-6 gap-4 items-center px-8 h-[60px] transition-colors ${index % 2 === 0 ? 'bg-[#D9D9D940]' : 'bg-white'
+                className={`grid grid-cols-6 gap-4 items-center px-16 h-[60px] transition-colors ${index % 2 === 0 ? 'bg-[#D9D9D940]' : 'bg-white'
                   } cursor-pointer`}
               >
                 <div className="text-base font-medium flex items-center">
@@ -136,8 +137,8 @@ export default function RegistersConfigView({
                     <Image
                       src={register.register_icon.startsWith('data:') ? register.register_icon : `data:image/png;base64,${register.register_icon}`}
                       alt={register.register_mnemonic}
-                      width={32}
-                      height={32}
+                      width={40}
+                      height={40}
                       className="rounded-md object-contain"
                     />
                   ) : (

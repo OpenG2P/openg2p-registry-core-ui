@@ -3,7 +3,7 @@
 import { useState } from "react";
 import {
     WidgetProvider,
-    SectionsContainer,
+    SectionRenderer,
 } from "@openg2p/registry-widgets";
 import { dataSourceRequestHandler } from "@/features/register/utils/dataSourceRequestHandler";
 
@@ -14,7 +14,7 @@ export function ChangeRequestValuesTabs({
     widgetStoreOld,
     newSectionData,
     oldSectionData,
-    innerSectionConfig,
+    sectionUISchema,
     t,
 }: any) {
     const [activeTab, setActiveTab] = useState<TabType>("values");
@@ -49,7 +49,7 @@ export function ChangeRequestValuesTabs({
 
             {/* Content */}
             {/* <div className="border border-gray-200 rounded-b-lg rounded-tr-lg p-4 bg-white"> */}
-            {activeTab === "values" && (
+            {activeTab === "values" && newSectionData && sectionUISchema && (
                 <div className="flex flex-col gap-4">
                     <WidgetProvider
                         store={widgetStoreNew}
@@ -57,8 +57,8 @@ export function ChangeRequestValuesTabs({
                         translate={t}
                         // dataSourceRequestHandler={dataSourceRequestHandler}
                     >
-                        <SectionsContainer
-                            sections={innerSectionConfig}
+                        <SectionRenderer
+                            section={sectionUISchema}
                             hideEditButton={true}
                         />
                     </WidgetProvider>
@@ -69,8 +69,8 @@ export function ChangeRequestValuesTabs({
                         translate={t}
                         // apiAdapter={dataSourceRequestHandler}
                     >
-                        <SectionsContainer
-                            sections={innerSectionConfig}
+                        <SectionRenderer
+                            section={sectionUISchema}
                             hideEditButton={true}
                         />
                     </WidgetProvider>

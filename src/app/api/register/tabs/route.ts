@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
     buildPayload: (body) => ({
       pagination_request: {
         current_page: 1,
-        page_size: 1,
+        page_size: 10,
         sort_by: "",
         filter_by: undefined,
         search_text: "",

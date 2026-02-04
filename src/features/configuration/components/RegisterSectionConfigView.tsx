@@ -100,7 +100,7 @@ export default function RegisterSectionConfigView({
     return (
         <>
             <div className="mx-7.5 bg-white rounded-[30px] p-8 overflow-x-visible">
-                <div className="space-y-2">
+                <div>
                     {/* Header */}
                     <div className="grid grid-cols-3 gap-4 pb-2 px-4">
                         <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
@@ -124,7 +124,7 @@ export default function RegisterSectionConfigView({
                             className="block -mx-8"
                         >
                             <div
-                                className={`grid grid-cols-3 gap-4 items-center px-12 py-4 transition-colors ${index % 2 === 0 ? 'bg-[#D9D9D940]' : 'bg-white'
+                                className={`grid grid-cols-3 gap-4 items-center h-[60px] px-12 py-4 transition-colors ${index % 2 === 0 ? 'bg-[#D9D9D940]' : 'bg-white'
                                     } cursor-pointer`}
                             >
                                 <div className="text-base font-medium">

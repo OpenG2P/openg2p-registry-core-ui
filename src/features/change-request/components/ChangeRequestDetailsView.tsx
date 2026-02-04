@@ -13,9 +13,7 @@ import {
 
 
 import {
-    WidgetProvider,
     createWidgetStore,
-    SectionsContainer,
 } from "@openg2p/registry-widgets";
 import { useTranslations } from "next-intl";
 import { RegisterFlattenedRecord } from "@/features/register/types";
@@ -53,28 +51,12 @@ export default function ChangeRequestDetailsView({ changeId, breadcrumb }: Props
 
     const widgetStoreOld = useMemo(() => createWidgetStore(), []);
     const widgetStoreNew = useMemo(() => createWidgetStore(), []);
-
-    const registerId = details?.register_id;
-    const tabId = details?.tab_id;
-    const internalRecordId = details?.internal_record_id;
     const sectionId = details?.section_id;
     const sectionRegisterId = details?.section_register_id || "";
     const isListSection = details?.is_list || false;
 
-    const { orderedTabSections, loadingSchema } = useRegisterSectionsFromCR({
-        registerId,
-        tabId,
-        internalRecordId,
-    });
-
-    const innerSectionConfig = useMemo(() => {
-        if (!orderedTabSections) return [];
-
-        return orderedTabSections.filter(
-            (section: any) => section["section-id"] === sectionId
-        );
-    }, [orderedTabSections, sectionId]);
-
+    const { sectionUISchema, loadingSchema } = useRegisterSectionsFromCR({sectionId});
+    
     const newSectionData = useMemo(() => {
         if (!details?.change_payload?.length) return undefined;
 
@@ -140,7 +122,7 @@ export default function ChangeRequestDetailsView({ changeId, breadcrumb }: Props
                                 widgetStoreOld={widgetStoreOld}
                                 newSectionData={newSectionData}
                                 oldSectionData={oldSectionData}
-                                innerSectionConfig={innerSectionConfig}
+                                sectionUISchema={sectionUISchema}
                                 t={t}
                             />
                         )

@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { TopBar } from '@/components/shared';
-import ConfigLayout from '@/features/configuration/components/ConfigLayout';
 import RegistersConfigView from '@/features/configuration/components/RegistersConfigView';
 
 import { useAllRegister } from '@/features/configuration/hooks/useAllRegister';
@@ -34,7 +33,7 @@ const RegistersConfigurationPage = () => {
   };
 
   return (
-    <ConfigLayout activeOption="registers">
+    <>
       <TopBar
         breadcrumb={[{ label: "Registers" }]}
         showFilters={false}
@@ -58,7 +57,7 @@ const RegistersConfigurationPage = () => {
         onCloseModal={() => setIsModalOpen(false)}
       />
 
-    </ConfigLayout>
+    </>
   );
 };
 

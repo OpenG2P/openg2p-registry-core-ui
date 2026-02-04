@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { TopBar, BreadcrumbBar } from '@/components/shared';
-import ConfigLayout from '@/features/configuration/components/ConfigLayout';
 import { useParams } from 'next/navigation';
 import RegisterSectionConfigView from '@/features/configuration/components/RegisterSectionConfigView';
 import ConfigDetailsSummary from '@/features/configuration/components/ConfigDetailsSummary';
@@ -55,11 +54,9 @@ const TabConfigurationPage = () => {
 
     if (registersLoading || tabsLoading) {
         return (
-            <ConfigLayout activeOption="registers">
-                <div className="flex items-center justify-center p-20">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#ED7C22]"></div>
-                </div>
-            </ConfigLayout>
+            <div className="flex items-center justify-center p-20">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#ED7C22]"></div>
+            </div>
         );
     }
 
@@ -67,7 +64,7 @@ const TabConfigurationPage = () => {
 
 
     return (
-        <ConfigLayout activeOption="registers">
+        <>
             <div className="pt-10 px-7.5 mb-6">
                 <BreadcrumbBar breadcrumb={breadcrumb} />
             </div>
@@ -110,7 +107,7 @@ const TabConfigurationPage = () => {
                 onClose={() => setIsEditModalOpen(false)}
                 onSuccess={refreshTabs}
             />
-        </ConfigLayout>
+        </>
     );
 };
 
