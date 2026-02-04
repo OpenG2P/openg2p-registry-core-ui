@@ -79,12 +79,12 @@ export default function ChangeRequestCard({
                 <h3 className="text-[24px] font-semibold text-black leading-none">
                     Change Request
                 </h3>
-                <div className="flex h-15 w-20 items-center justify-center rounded-[20px] border-3 border-white bg-[#F2BA1A] text-[34px] font-bold text-black">
+                <div className="flex h-15 w-20 items-center justify-center rounded-[20px] border-3 border-white bg-[#EDC227] text-[34px] font-bold text-black">
                     {count}
                 </div>
             </div>
 
-            <p className="mt-3 text-xs text-black/70">
+            <p className="mt-3 text-[16px] text-black font-normal">
                 {count > 0
                     ? "Pending changes awaiting review"
                     : "No pending change requests"}

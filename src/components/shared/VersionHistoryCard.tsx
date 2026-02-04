@@ -86,7 +86,7 @@ export default function VersionHistoryCard({
                 </div>
             </div>
 
-            <div className="space-y-1 text-[16px] text-black">
+            <div className="space-y-1 text-[16px] text-black font-normal">
                 <p className="font-medium">Last Updated by</p>
                 <div className="flex items-center gap-2">
                     <Image

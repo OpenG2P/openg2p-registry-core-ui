@@ -35,7 +35,7 @@ export default function RegisterTabsLayout({
                             <button
                                 key={tab.tab_id}
                                 onClick={() => onTabChange(tabIndex)}
-                                className={`px-8 py-2 text-black text-[18px] font-medium rounded-t-[20px] transition-all ${activeTab === tabIndex
+                                className={`px-8 pt-2.5 pb-1 text-black text-[18px] font-medium rounded-t-[20px] transition-all ${activeTab === tabIndex
                                     ? 'bg-[#F2BA1A]'
                                     : 'bg-[#DDDDDD]'
                                     }`}

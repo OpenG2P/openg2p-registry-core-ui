@@ -10,9 +10,18 @@ interface SearchBarProps {
     onSearch: (value: string, category: string) => void;
     iconSize?: number;
     pxClass?: string;
+    textClass?: string;
 }
 
-const SearchBar = ({ placeholder, searchValue, category, onSearch, iconSize = 24, pxClass = "px-2" }: SearchBarProps) => {
+const SearchBar = ({
+    placeholder,
+    searchValue,
+    category,
+    onSearch,
+    iconSize = 24,
+    pxClass = "px-2",
+    textClass = "text-[20px]"
+}: SearchBarProps) => {
     const [value, setValue] = useState(searchValue || "");
 
     return (
@@ -23,7 +32,7 @@ const SearchBar = ({ placeholder, searchValue, category, onSearch, iconSize = 24
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && onSearch(value, category)}
-                className="border-none outline-none flex-1 bg-transparent px-2 pl-3 py-0 text-[20px] font-normal text-[#1E1E1E] placeholder-[#00000080]"
+                className={`border-none outline-none flex-1 bg-transparent px-2 pl-3 py-0 font-normal text-[#1E1E1E] placeholder-[#00000080] ${textClass}`}
             />
 
             <button

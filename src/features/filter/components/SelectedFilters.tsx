@@ -104,6 +104,7 @@ export default function SelectedFilters({
                         iconSize={16}
                         onSearch={onSearch}
                         pxClass={pxClass}
+                        textClass="text-[16px]"
                     />
                 </div>
             )}
