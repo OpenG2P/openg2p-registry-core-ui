@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Search } from "lucide-react";
+import Image from "next/image";
 
 interface SearchBarProps {
     placeholder: string;
@@ -29,9 +29,13 @@ const SearchBar = ({ placeholder, searchValue, category, onSearch, iconSize = 24
                 onClick={() => onSearch(value, category)}
                 className="pl-1 pr-3 text-[#1E1E1E]"
             >
-                <Search size={iconSize} />
+                <Image
+                    src="/search_icon.png"
+                    width={iconSize}
+                    height={iconSize}
+                    alt="Search"
+                />
             </button>
-
         </div>
     );
 };

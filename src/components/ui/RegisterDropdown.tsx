@@ -45,17 +45,17 @@ const RegisterDropdown = ({
             <button
                 type="button"
                 onClick={() => setOpen((v) => !v)}
-                className={`flex h-14 w-full items-center justify-between rounded-[30px] border-[3px] border-[#ED7C22] bg-white px-6 text-sm font-semibold text-gray-800 transition-colors
+                className={`flex h-14 w-full items-center justify-between rounded-[30px] border-[3px] border-[#ED7C22] bg-white px-6 gap-10 text-sm font-semibold text-gray-800 transition-colors
                 ${open
                     ? "rounded-b-none border-b-0"
-                    : `rounded-r-none border-r-0 after:absolute after:right-0 after:top-2.5 after:bottom-2.5 after:w-0.5 after:bg-[#ED7C22] after:content-[''] `}
+                    : `rounded-r-none border-r-0 after:absolute after:right-0 after:top-2.5 after:bottom-2.5 after:w-0.75 after:bg-[#ED7C22] after:content-[''] `}
                 `}
             >
-                <span className={`truncate text-[20px] ${open ? "text-gray-400" : ""}`}>
+                <span className={`truncate text-[20px] ${open ? "text-gray-400" : "text-black font-medium"}`}>
                     {selectedLabel}
                 </span>
 
-                <span className={`text-4xl transition-transform duration-200 ${open ? "rotate-180" : ""}`}>
+                <span className={`text-4xl transition-transform duration-200 opacity-60 ${open ? "rotate-180" : ""}`}>
                     <MdOutlineArrowDropDown />
                 </span>
             </button>
@@ -63,7 +63,7 @@ const RegisterDropdown = ({
             {/* DROPDOWN (OVERLAY) */}
             {open && (
                 <div
-                    className="absolute w-full z-20 overflow-hidden rounded-b-[30px] border-[3px] border-t-0 border-[#ED7C22] bg-white pb-4">
+                    className="absolute w-full z-20 overflow-hidden rounded-b-[30px] border-[3px] border-t-0 border-[#ED7C22] bg-white">
                     {options.map((opt) => (
                         <button
                             key={opt.value}
@@ -72,7 +72,7 @@ const RegisterDropdown = ({
                                 onChange(opt.value);
                                 setOpen(false);
                             }}
-                            className={`block w-full h-14 px-6 pb-2 text-left text-[20px] font-semibold transition-colors ${selected === opt.value ? "bg-gray-100" : ""}`}
+                            className={`block w-full h-14 px-6 py-1 text-left text-[20px] font-medium transition-colors ${selected === opt.value ? "bg-gray-100" : ""}`}
                         >
                             {opt.label}
                         </button>
