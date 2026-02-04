@@ -9,7 +9,7 @@ import { useBreadcrumb } from '@/shared/hooks/useBreadcrumb';
 import { useAllRegister } from '@/features/configuration/hooks/useAllRegister';
 import { useConfigTabs } from '@/features/configuration/hooks/useConfigTabs';
 import { useConfigSections } from '@/features/configuration/hooks/useConfigSections';
-// import SectionDetailsConfigView from '@/features/configuration/components/SectionDetailsConfigView';
+import SectionDetailsConfigView from '@/features/configuration/components/SectionDetailsConfigView';
 import { getRegisterDetails, getTabDetails, getSectionDetails } from '@/features/configuration/utils/configUtils';
 
 const SectionConfigurationPage = () => {
@@ -63,11 +63,11 @@ const SectionConfigurationPage = () => {
                 onEdit={() => setIsEditModalOpen(true)}
             />
 
-            {/* <SectionDetailsConfigView
+            <SectionDetailsConfigView
                     sectionUISchema={sectionDetails?.section_ui_schema}
                     registerId={sectionDetails?.section_register_id || ''}
                     sectionId={sectionDetails?.section_id || ''}
-                /> */}
+                />
 
             <EditSectionModal
                 isOpen={isEditModalOpen}

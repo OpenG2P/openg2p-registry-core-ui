@@ -66,7 +66,10 @@ export default function ChangeRequestDetailsView({ changeId, breadcrumb }: Props
         tabId,
         internalRecordId,
     });
-
+    // TODO: Required to change here 
+    // right now geting single section form list of section from particular tab
+    // by comparing section_id
+    // required on api get_section_uischema
     const innerSectionConfig = useMemo(() => {
         if (!orderedTabSections) return [];
 
