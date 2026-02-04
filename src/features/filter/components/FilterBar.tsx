@@ -38,7 +38,7 @@ export default function FilterBar({
         <div className="relative inline-block items-center" ref={dropdownRef}>
             <button
                 onClick={() => setOpen((prev) => !prev)}
-                className="h-7.5 flex items-center gap-16 px-3  rounded-[30px] bg-[#F2BA1A] text-sm "
+                className="h-7.5 flex items-center gap-8 px-4 rounded-[30px] bg-[#F2BA1A]"
                 disabled={filterLoading}
             >   <span className="font-medium text-[16px] leading-none tracking-normal text-[#1E1E1E]">
                     {filterLoading ? t('loading') : t('filters')}

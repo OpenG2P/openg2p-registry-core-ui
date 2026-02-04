@@ -9,7 +9,7 @@ export default function TextFilterInput({
     return (
         <input
             type="text"
-            className="border rounded-lg px-3 py-2 text-sm w-full"
+            className="border rounded-lg px-3 py-2 text-sm w-full outline-0"
             value={value || ""}
             onChange={e => onChange(e.target.value)}
         />

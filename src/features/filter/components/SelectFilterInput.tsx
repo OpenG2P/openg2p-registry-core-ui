@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { SelectOption, ValueInputProps } from "@/features/filter/types";
 
 interface SelectFilterInputProps extends ValueInputProps {
@@ -52,17 +53,28 @@ export default function SelectFilterInput({
     }
 
     return (
-        <select
-            className="border rounded-lg px-3 py-2 text-sm w-full"
-            value={value || ""}
-            onChange={e => onChange(e.target.value)}
-        >
-            <option value="">Select</option>
-            {options_source.map(opt => (
-                <option key={opt.value} value={opt.value}>
-                    {opt.label}
-                </option>
-            ))}
-        </select>
+        <div className="relative w-full">
+            <select
+                className="border rounded-lg px-3 py-2 text-sm w-full appearance-none bg-white pr-10 outline-0"
+                value={value || ""}
+                onChange={e => onChange(e.target.value)}
+            >
+                <option value="">Select</option>
+                {options_source.map(opt => (
+                    <option key={opt.value} value={opt.value}>
+                        {opt.label}
+                    </option>
+                ))}
+            </select>
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                <Image
+                    src="/down_arrow.png"
+                    alt=""
+                    width={14}
+                    height={14}
+                    className=""
+                />
+            </div>
+        </div>
     );
 }
