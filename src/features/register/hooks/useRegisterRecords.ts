@@ -1,5 +1,5 @@
 
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { useParams, useSearchParams } from 'next/navigation';
 import { useRouter } from '@/i18n/navigation';
 import { notFound } from 'next/navigation';
@@ -8,6 +8,7 @@ import { useRegistryFilters } from '@/features/filter/hooks/useRegistryFilters';
 import { useFetch } from '@/shared/hooks/useFetch';
 import { useRegister } from '@/context/RegisterContext';
 import { RegisterRecordsApiResponse } from '@/features/register/types';
+import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
 
 export const useRegisterRecords = () => {
     const t = useTranslations();
@@ -16,8 +17,9 @@ export const useRegisterRecords = () => {
     const searchParams = useSearchParams();
 
     const [currentPage, setCurrentPage] = useState(1);
-    //TODO:Need to move in .env
-    const pageSize = 10;
+
+    const { config } = useRuntimeConfig();
+    const pageSize = config.pageSize || 10;
 
     const {
         appliedFilters,
@@ -62,6 +64,11 @@ export const useRegisterRecords = () => {
 
         return result;
     }, [appliedFilters]);
+
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [appliedFilters]);
+
 
     const { data: recordsData, loading: isLoadingRecords } = useFetch<RegisterRecordsApiResponse>({
         url: `/api/register/records`,

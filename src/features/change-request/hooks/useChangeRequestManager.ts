@@ -73,13 +73,21 @@ export function useChangeRequestManager(changeId: string) {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ change_request_id: changeId }),
             });
-            if (res) {
+
+            if ("error" in res) {
+                toast.error(res.error, {
+                    position: "top-right",
+                    autoClose: 5000,
+                });
+                return;
+            }
+            if (res.approval_status === "APPROVED") {
                 toast.success("Change request approved successfully", {
                     position: "top-right",
                     autoClose: 4000,
                 });
 
-                setDetails((prev) => {
+                setDetails(prev => {
                     if (!prev) return prev;
                     return { ...prev, approval_status: "APPROVED" };
                 });
