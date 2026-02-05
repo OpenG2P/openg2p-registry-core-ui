@@ -1,10 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { Trash2, Eye } from 'lucide-react';
 import { Link } from '@/i18n/navigation';
 import AddRegisterModal from './AddRegisterModal';
-import EditRegisterModal from './EditRegisterModal';
 import ViewRegisterFieldsModal from './ViewRegisterFieldsModal';
 import { Register } from '../types';
 
@@ -34,8 +32,6 @@ export default function RegistersConfigView({
   const { execute: deleteRegister } = useFetch();
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [viewData, setViewData] = useState<Register | undefined>(undefined);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [editData, setEditData] = useState<Register | undefined>(undefined);
 
   const proceedDelete = async (id: string, name: string) => {
     try {
@@ -55,9 +51,16 @@ export default function RegistersConfigView({
     }
   };
 
-  const handleDelete = async (e: React.MouseEvent, id: string, name: string) => {
+  const handleDelete = async (e: React.MouseEvent, register: Register) => {
     e.preventDefault();
     e.stopPropagation();
+
+    if (register.has_data) {
+      toast.error('Cannot delete register because it has associated data.');
+      return;
+    }
+
+    const { register_id: id, register_mnemonic: name } = register;
 
     toast.info(
       ({ closeToast }) => (
@@ -100,12 +103,7 @@ export default function RegistersConfigView({
     setIsViewModalOpen(true);
   };
 
-  const handleEdit = (e: React.MouseEvent, register: Register) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setEditData(register);
-    setIsEditModalOpen(true);
-  };
+
 
 
   if (loading) {
@@ -195,7 +193,7 @@ export default function RegistersConfigView({
                     />
                   </button>
                   <button
-                    onClick={(e) => handleDelete(e, register.register_id, register.register_mnemonic)}
+                    onClick={(e) => handleDelete(e, register)}
                     className="flex items-center text-[#1cc9b7] cursor-pointer hover:opacity-80 transition-opacity"
                     title="Remove Register"
                   >
@@ -218,12 +216,6 @@ export default function RegistersConfigView({
 
 
       <AddRegisterModal isOpen={isModalOpen} onClose={onCloseModal} onSuccess={refresh} />
-      <EditRegisterModal
-        isOpen={isEditModalOpen}
-        onClose={() => setIsEditModalOpen(false)}
-        initialData={editData}
-        onSuccess={refresh}
-      />
       <ViewRegisterFieldsModal
         isOpen={isViewModalOpen}
         onClose={() => setIsViewModalOpen(false)}

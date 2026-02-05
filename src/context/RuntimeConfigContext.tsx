@@ -11,6 +11,8 @@ export interface RuntimeConfig {
   vpPurpose: string;
   pageSize: number;
   partnerIngestUrl: string;
+  registryName: string;
+  registryLogo: string;
 }
 
 

@@ -9,7 +9,7 @@ import { RuntimeConfigProvider } from "@/context/RuntimeConfigContext";
 import { RegisterProvider } from "@/context/RegisterContext";
 import { ToastContainer } from "react-toastify";
 import { Roboto } from 'next/font/google'
-import { getClientSafeConfig } from '@/app/api/_lib/client-safe-config';
+import { clientSafeConfig } from '@/app/api/_lib/client-safe-config';
 
 
 const roboto = Roboto({
@@ -26,11 +26,14 @@ export async function generateMetadata({
 }): Promise<Metadata> {
     const { locale } = await params;
     const t = await getTranslations({ locale });
+    await clientSafeConfig.fetchRegistryConfig();
+    const config = clientSafeConfig.getAll();
+
     return {
-        title: t('title'),
+        title: config.registryName || t('title'),
         description: "",
         icons: {
-            icon: "/openg2p_logo.png",
+            icon: config.registryLogo || "/openg2p_logo.png",
         },
     };
 }
@@ -44,7 +47,8 @@ export default async function RootLayout({
 }) {
     const { locale } = await params;
     const messages = await getMessages();
-    const config = getClientSafeConfig()
+    await clientSafeConfig.fetchRegistryConfig();
+    const config = clientSafeConfig.getAll();
 
 
     return (
