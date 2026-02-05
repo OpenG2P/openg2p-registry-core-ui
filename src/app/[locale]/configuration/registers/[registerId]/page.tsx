@@ -9,10 +9,12 @@ import EditRegisterModal from '@/features/configuration/components/EditRegisterM
 import ConfigDetailsSummary from '@/features/configuration/components/ConfigDetailsSummary';
 import RegisterTabsContent from '@/features/configuration/components/RegisterTabsContent';
 import { getParentMnemonic, getRegisterDetails } from '@/features/configuration/utils/configUtils';
+import ViewRegisterFieldsModal from '@/features/configuration/components/ViewRegisterFieldsModal';
 
 const RegisterConfigurationPage = () => {
   const { registerId } = useParams<{ registerId: string }>();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<'tabs' | 'filter' | 'search'>('tabs');
 
   const { registers, loading, refresh } = useAllRegister(1, 100);
@@ -45,6 +47,7 @@ const RegisterConfigurationPage = () => {
         selectionOptions={registers.map(r => r.register_mnemonic)}
         onSave={(data) => console.log('Saved Register:', data)}
         onEdit={() => setIsEditModalOpen(true)}
+        onView={() => setIsViewModalOpen(true)}
       />
 
       {/* Tab Navigation */}
@@ -96,6 +99,12 @@ const RegisterConfigurationPage = () => {
         initialData={registerDetails as any}
         onClose={() => setIsEditModalOpen(false)}
         onSuccess={refresh}
+      />
+
+      <ViewRegisterFieldsModal
+        isOpen={isViewModalOpen}
+        data={registerDetails as any}
+        onClose={() => setIsViewModalOpen(false)}
       />
 
     </>

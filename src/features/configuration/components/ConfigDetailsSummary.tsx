@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import { Pencil, Check, X, ChevronDown } from 'lucide-react';
+import { Pencil, Eye, Check, X, ChevronDown } from 'lucide-react';
 
 interface ConfigDetailsSummaryProps {
     title: string;
@@ -10,6 +10,7 @@ interface ConfigDetailsSummaryProps {
     selectionOptions?: string[];
     onSave?: (data: { title: string; description: string; extraInfo: string; status: boolean }) => void;
     onEdit?: () => void;
+    onView?: () => void;
 }
 
 export default function ConfigDetailsSummary({
@@ -19,7 +20,8 @@ export default function ConfigDetailsSummary({
     status = true,
     selectionOptions = [],
     onSave,
-    onEdit
+    onEdit,
+    onView
 }: ConfigDetailsSummaryProps) {
     const [isEditing, setIsEditing] = React.useState(false);
     const [formData, setFormData] = React.useState({
@@ -61,12 +63,20 @@ export default function ConfigDetailsSummary({
                     </div>
                 </div>
 
-                <button
-                    onClick={() => onEdit ? onEdit() : setIsEditing(true)}
-                    className="ml-8 bg-white p-2 rounded-full hover:bg-gray-50 transition-colors shadow-sm flex items-center justify-center"
-                >
-                    <Pencil size={16} className="text-gray-700" />
-                </button>
+                <div className="flex items-center gap-3 ml-8">
+                    <button
+                        onClick={() => onView && onView()}
+                        className="bg-white p-2 rounded-full hover:bg-gray-50 transition-colors shadow-sm flex items-center justify-center flex-shrink-0"
+                    >
+                        <Eye size={16} className="text-gray-700" />
+                    </button>
+                    <button
+                        onClick={() => onEdit ? onEdit() : setIsEditing(true)}
+                        className="bg-white p-2 rounded-full hover:bg-gray-50 transition-colors shadow-sm flex items-center justify-center flex-shrink-0"
+                    >
+                        <Pencil size={16} className="text-gray-700" />
+                    </button>
+                </div>
             </div>
         </div>
     );
