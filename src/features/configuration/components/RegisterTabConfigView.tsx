@@ -95,7 +95,7 @@ export default function RegisterTabConfigView({
 
 	if (loading) {
 		return (
-			<div className="flex items-center justify-center p-8 bg-white rounded-[30px] mx-7.5">
+			<div className="flex items-center justify-center p-8 bg-white rounded-[10px] mx-7.5">
 				<div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#ED7C22]"></div>
 			</div>
 		);
@@ -103,7 +103,7 @@ export default function RegisterTabConfigView({
 
 	return (
 		<>
-			<div className="mx-7.5 bg-white rounded-[30px] p-8 overflow-x-visible">
+			<div className="mx-7.5 bg-white rounded-[10px] p-8 overflow-x-visible">
 				<div>
 					{/* Header */}
 					<div className="grid grid-cols-3 gap-4 pb-2 px-4">
@@ -128,7 +128,7 @@ export default function RegisterTabConfigView({
 							className="block -mx-8"
 						>
 							<div
-								className={`grid grid-cols-3 h-[60px] gap-4 items-center px-12 py-4 transition-colors ${index % 2 === 0 ? 'bg-[#D9D9D940]' : 'bg-white'
+								className={`grid grid-cols-3 h-15 gap-4 items-center px-12 py-4 transition-colors ${index % 2 === 0 ? 'bg-[#D9D9D940]' : 'bg-white'
 									} cursor-pointer`}
 							>
 

@@ -80,6 +80,8 @@ const TabConfigurationPage = () => {
                 breadcrumb={[]}
                 showFilters={false}
                 showPagination={true}
+                showSubHeading
+                subHeading={`Manage sections for ${tabDetails.tab_label}`}
                 showAddNewButton={true}
                 addNewButtonText={"Add New Section"}
                 onAddNewButton={() => setIsModalOpen(true)}

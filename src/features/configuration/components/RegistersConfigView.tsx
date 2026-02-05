@@ -118,7 +118,7 @@ export default function RegistersConfigView({
 
   return (
     <>
-      <div className="mx-7.5 bg-white rounded-[30px] p-4 pt-8 overflow-hidden">
+      <div className="mx-7.5 bg-white rounded-[10px] p-4 pt-8 overflow-hidden">
         <div>
           {/* Header */}
           <div className="grid grid-cols-6 gap-4 pb-2 px-8 border-b border-gray-100">
@@ -150,7 +150,7 @@ export default function RegistersConfigView({
               className="block -mx-8"
             >
               <div
-                className={`grid grid-cols-6 gap-4 items-center px-16 h-[60px] transition-colors ${index % 2 === 0 ? 'bg-[#D9D9D940]' : 'bg-white'
+                className={`grid grid-cols-6 gap-4 items-center px-16 h-15 transition-colors ${index % 2 === 0 ? 'bg-[#D9D9D940]' : 'bg-white'
                   } cursor-pointer`}
               >
                 <div className="text-base font-medium flex items-center">

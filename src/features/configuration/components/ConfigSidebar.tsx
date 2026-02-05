@@ -43,7 +43,7 @@ const sidebarOptions: SidebarOption[] = [
 
 export default function ConfigSidebar({ activeOption }: { activeOption: string }) {
   return (
-    <div className="w-[100%] h-[100%] bg-[#F2BA1A] rounded-r-[30px] p-4 pt-8">
+    <div className="w-full h-full bg-[#F2BA1A] rounded-r-[10px] p-4 pt-8">
       <div className="space-y-2">
         {sidebarOptions.map((option) => (
           <Link
@@ -52,11 +52,11 @@ export default function ConfigSidebar({ activeOption }: { activeOption: string }
             className="relative cursor-pointer rounded-full block"
           >
             {activeOption === option.id && (
-              <div className="absolute inset-0 bg-[#ffd54c] rounded-full" />
+              <div className="absolute inset-0 bg-[#ffd54c] rounded-[10px]" />
             )}
             <div className="relative flex items-center px-4 py-3 z-10">
               <div className={`
-                w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0
+                w-10 h-10 rounded-full flex items-center justify-center shrink-0
                 ${activeOption === option.id ? 'bg-black' : 'bg-white'}
               `}>
                 <div className="flex items-center justify-center">

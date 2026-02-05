@@ -74,9 +74,9 @@ const RegistryConfigurationPage = () => {
 						onCancel={() => setIsEditing(false)}
 					/>
 				) : (
-					<div className="bg-white rounded-[30px] p-12">
+					<div className="bg-white rounded-[10px] p-12">
 						<div className="flex items-center gap-6">
-							<div className="w-[100px] h-[100px] relative flex-shrink-0 rounded overflow-hidden flex items-center justify-center">
+							<div className="w-25 h-25 relative shrink-0 rounded overflow-hidden flex items-center justify-center">
 								<Image
 									src={registryData?.registry_logo || image}
 									alt='Registry Logo'
@@ -96,7 +96,7 @@ const RegistryConfigurationPage = () => {
 
 								<div
 									onClick={startEditing}
-									className='bg-[#D9D9D980] h-8 w-8 rounded-full flex items-center justify-center cursor-pointer hover:bg-[#D9D9D9CC] transition-colors'
+									className='bg-[#D9D9D980] h-8 w-8 rounded-[10px] flex items-center justify-center cursor-pointer hover:bg-[#D9D9D9CC] transition-colors'
 								>
 									<Image
 										src={"/config/pencil_icon.png"}
