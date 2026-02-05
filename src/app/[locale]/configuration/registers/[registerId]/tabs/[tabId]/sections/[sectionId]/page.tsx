@@ -2,7 +2,6 @@
 import { useState } from 'react';
 
 import { BreadcrumbBar } from '@/components/shared';
-import ConfigLayout from '@/features/configuration/components/ConfigLayout';
 import { useParams } from 'next/navigation';
 import EditSectionModal from '@/features/configuration/components/EditSectionModal';
 import ConfigDetailsSummary from '@/features/configuration/components/ConfigDetailsSummary';
@@ -42,16 +41,14 @@ const SectionConfigurationPage = () => {
 
     if (isLoading) {
         return (
-            <ConfigLayout activeOption="registers">
-                <div className="min-h-[400px] flex items-center justify-center">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#ED7C22]"></div>
-                </div>
-            </ConfigLayout>
+            <div className="min-h-[400px] flex items-center justify-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#ED7C22]"></div>
+            </div>
         );
     }
 
     return (
-        <ConfigLayout activeOption="registers">
+        <>
             <div className="pt-4 px-7.5 mb-2 flex-shrink-0">
                 <BreadcrumbBar breadcrumb={breadcrumb} />
             </div>
@@ -78,7 +75,7 @@ const SectionConfigurationPage = () => {
                 onClose={() => setIsEditModalOpen(false)}
                 onSuccess={refresh}
             />
-        </ConfigLayout>
+        </>
     );
 };
 

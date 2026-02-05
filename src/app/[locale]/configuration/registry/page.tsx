@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import ConfigLayout from '@/features/configuration/components/ConfigLayout';
 import { TopBar } from '@/components/shared';
 import Image from 'next/image';
 import EditRegistry from '@/features/configuration/components/EditRegistry';
@@ -58,7 +57,7 @@ const RegistryConfigurationPage = () => {
 	};
 
 	return (
-		<ConfigLayout activeOption="registry">
+		<>
 			<TopBar
 				breadcrumb={[{ label: "Registry" }]}
 				showFilters={false}
@@ -106,7 +105,7 @@ const RegistryConfigurationPage = () => {
 					</div>
 				)}
 			</div>
-		</ConfigLayout>
+		</>
 	);
 };
 

@@ -5,7 +5,6 @@ import { BreadcrumbBar } from '@/components/shared';
 import { useParams } from 'next/navigation';
 import { useBreadcrumb } from '@/shared/hooks/useBreadcrumb';
 import { useAllRegister } from '@/features/configuration/hooks/useAllRegister';
-import ConfigLayout from '@/features/configuration/components/ConfigLayout';
 import EditRegisterModal from '@/features/configuration/components/EditRegisterModal';
 import ConfigDetailsSummary from '@/features/configuration/components/ConfigDetailsSummary';
 import RegisterTabsContent from '@/features/configuration/components/RegisterTabsContent';
@@ -33,7 +32,7 @@ const RegisterConfigurationPage = () => {
   }
 
   return (
-    <ConfigLayout activeOption="registers">
+    <>
       <div className="pt-10 px-7.5 mb-6">
         <BreadcrumbBar breadcrumb={breadcrumb} />
       </div>
@@ -99,7 +98,7 @@ const RegisterConfigurationPage = () => {
         onSuccess={refresh}
       />
 
-    </ConfigLayout>
+    </>
   );
 };
 

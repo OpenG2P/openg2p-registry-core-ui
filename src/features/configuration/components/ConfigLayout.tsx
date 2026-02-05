@@ -3,9 +3,16 @@
 import ConfigSidebar from './ConfigSidebar';
 import { ReactNode } from 'react';
 
+export type ConfigActiveOption =
+    | "registry"
+    | "registers"
+    | "data-models"
+    | "ingest-configurations"
+    | "outgest-configurations"
+
 interface ConfigLayoutProps {
     children: ReactNode;
-    activeOption: "registry" | "registers" | "tabs" | "sections" | "status" | "actions";
+    activeOption: ConfigActiveOption;
 }
 
 export const ConfigLayout = ({ children, activeOption }: ConfigLayoutProps) => {
