@@ -106,10 +106,7 @@ export default function RegisterTabConfigView({
 			<div className="mx-7.5 bg-white rounded-[30px] p-8 overflow-x-visible">
 				<div>
 					{/* Header */}
-					<div className="grid grid-cols-4 gap-4 pb-2 px-4">
-						<div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
-							Tab ID
-						</div>
+					<div className="grid grid-cols-3 gap-4 pb-2 px-4">
 						<div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
 							Tab Label
 						</div>
@@ -131,12 +128,10 @@ export default function RegisterTabConfigView({
 							className="block -mx-8"
 						>
 							<div
-								className={`grid grid-cols-4 h-[60px] gap-4 items-center px-12 py-4 transition-colors ${index % 2 === 0 ? 'bg-[#D9D9D940]' : 'bg-white'
+								className={`grid grid-cols-3 h-[60px] gap-4 items-center px-12 py-4 transition-colors ${index % 2 === 0 ? 'bg-[#D9D9D940]' : 'bg-white'
 									} cursor-pointer`}
 							>
-								<div className="text-base font-medium">
-									{tab.tab_id}
-								</div>
+
 								<div className="text-base font-medium">
 									{tab.tab_label}
 								</div>

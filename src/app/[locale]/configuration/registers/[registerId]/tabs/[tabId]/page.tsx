@@ -39,8 +39,8 @@ const TabConfigurationPage = () => {
     const breadcrumb = useBreadcrumb({
         rootItem: { label: 'Registers', href: '/configuration/registers' },
         customItems: [
-            { label: registerDetails.register_mnemonic, href: `/configuration/registers/${registerId}` },
-            { label: tabDetails.tab_label, href: `/configuration/registers/${registerId}/tabs/${tabId}` }
+            { label: registerDetails.register_mnemonic || '', href: `/configuration/registers/${registerId}` },
+            { label: tabDetails.tab_label || '', href: `/configuration/registers/${registerId}/tabs/${tabId}` }
         ]
     });
 
@@ -70,11 +70,9 @@ const TabConfigurationPage = () => {
             </div>
 
             <ConfigDetailsSummary
-                title={tabDetails.tab_label}
-                extraInfo={registerDetails.register_mnemonic}
-                status={true}
-                selectionOptions={registers.map(r => r.register_mnemonic)}
-                onSave={(data) => console.log('Saved Tab:', data)}
+                title={tabDetails.tab_label || 'None'}
+                extraInfo1={registerDetails.register_mnemonic || 'None'}
+                extraInfo2={String(tabDetails.tab_order ?? 0)}
                 onEdit={() => setIsEditModalOpen(true)}
             />
 
@@ -102,7 +100,7 @@ const TabConfigurationPage = () => {
 
             <EditTabModal
                 isOpen={isEditModalOpen}
-                initialData={tabDetails}
+                initialData={tabDetails as any}
                 registerId={registerId}
                 onClose={() => setIsEditModalOpen(false)}
                 onSuccess={refreshTabs}

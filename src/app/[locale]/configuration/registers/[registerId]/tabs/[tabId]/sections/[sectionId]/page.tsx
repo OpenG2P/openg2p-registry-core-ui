@@ -31,8 +31,8 @@ const SectionConfigurationPage = () => {
     const breadcrumb = useBreadcrumb({
         rootItem: { label: 'Registers', href: '/configuration/registers' },
         customItems: [
-            { label: registerDetails.register_mnemonic, href: `/configuration/registers/${registerId}` },
-            { label: tabDetails.tab_label, href: `/configuration/registers/${registerId}/tabs/${tabId}` },
+            { label: registerDetails.register_mnemonic || '', href: `/configuration/registers/${registerId}` },
+            { label: tabDetails.tab_label || '', href: `/configuration/registers/${registerId}/tabs/${tabId}` },
             { label: sectionDetails.section_mnemonic || '', href: `/configuration/registers/${registerId}/tabs/${tabId}/sections/${sectionId}` }
         ]
     });
@@ -54,20 +54,18 @@ const SectionConfigurationPage = () => {
             </div>
 
             <ConfigDetailsSummary
-                title={sectionDetails.section_mnemonic || ''}
-                description={sectionDetails.description}
-                extraInfo={tabDetails.tab_label}
-                status={true}
-                selectionOptions={tabs.map(t => t.tab_label)}
-                onSave={(data) => console.log('Saved Section:', data)}
+                title={sectionDetails.section_mnemonic || 'None'}
+                description={sectionDetails.section_description || 'None'}
+                extraInfo1={String(sectionDetails.section_order || 0)}
+                extraInfo2={String(tabDetails.tab_label || 'None')}
                 onEdit={() => setIsEditModalOpen(true)}
             />
 
             <SectionDetailsConfigView
-                    sectionUISchema={sectionDetails?.section_ui_schema}
-                    registerId={sectionDetails?.section_register_id || ''}
-                    sectionId={sectionDetails?.section_id || ''}
-                />
+                sectionUISchema={sectionDetails?.section_ui_schema}
+                registerId={sectionDetails?.section_register_id || ''}
+                sectionId={sectionDetails?.section_id || ''}
+            />
 
             <EditSectionModal
                 isOpen={isEditModalOpen}

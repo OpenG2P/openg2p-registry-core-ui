@@ -1,7 +1,11 @@
 'use client';
 
+import { useState } from 'react';
+import { Trash2, Eye } from 'lucide-react';
 import { Link } from '@/i18n/navigation';
 import AddRegisterModal from './AddRegisterModal';
+import EditRegisterModal from './EditRegisterModal';
+import ViewRegisterFieldsModal from './ViewRegisterFieldsModal';
 import { Register } from '../types';
 
 import Image from 'next/image';
@@ -28,6 +32,10 @@ export default function RegistersConfigView({
   onCloseModal,
 }: RegistersConfigViewProps) {
   const { execute: deleteRegister } = useFetch();
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [viewData, setViewData] = useState<Register | undefined>(undefined);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editData, setEditData] = useState<Register | undefined>(undefined);
 
   const proceedDelete = async (id: string, name: string) => {
     try {
@@ -46,7 +54,6 @@ export default function RegistersConfigView({
       toast.error('An error occurred while deleting the register');
     }
   };
-  console.log(registers, "registers*******************");
 
   const handleDelete = async (e: React.MouseEvent, id: string, name: string) => {
     e.preventDefault();
@@ -84,6 +91,20 @@ export default function RegistersConfigView({
         className: 'rounded-[15px] shadow-xl border border-gray-100',
       }
     );
+  };
+
+  const handleView = (e: React.MouseEvent, register: Register) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setViewData(register);
+    setIsViewModalOpen(true);
+  };
+
+  const handleEdit = (e: React.MouseEvent, register: Register) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setEditData(register);
+    setIsEditModalOpen(true);
   };
 
 
@@ -158,20 +179,35 @@ export default function RegistersConfigView({
                 <div className="text-base font-medium truncate">
                   {register.register_purpose}
                 </div>
-                <div className="text-base font-medium">
-                  <span
-                    onClick={(e) => handleDelete(e, register.register_id, register.register_mnemonic)}
-                    className="flex items-center text-[#1cc9b7] cursor-pointer hover:opacity-80"
+                <div className="flex items-center gap-6">
+                  <button
+                    onClick={(e) => handleView(e, register)}
+                    className="flex items-center text-[#1cc9b7] cursor-pointer hover:opacity-80 transition-opacity"
+                    title="View Details"
                   >
-                    Remove
+                    <span className="text-sm font-medium">View</span>
+                    <Image
+                      src="/config/view.png"
+                      alt="View"
+                      width={18}
+                      height={18}
+                      className="ml-2"
+                    />
+                  </button>
+                  <button
+                    onClick={(e) => handleDelete(e, register.register_id, register.register_mnemonic)}
+                    className="flex items-center text-[#1cc9b7] cursor-pointer hover:opacity-80 transition-opacity"
+                    title="Remove Register"
+                  >
+                    <span className="tsmext- font-medium">Remove</span>
                     <Image
                       src="/config/falseSign.png"
                       alt="Remove"
                       width={18}
                       height={18}
-                      className="ml-4"
+                      className="ml-2"
                     />
-                  </span>
+                  </button>
                 </div>
 
               </div>
@@ -182,6 +218,17 @@ export default function RegistersConfigView({
 
 
       <AddRegisterModal isOpen={isModalOpen} onClose={onCloseModal} onSuccess={refresh} />
+      <EditRegisterModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        initialData={editData}
+        onSuccess={refresh}
+      />
+      <ViewRegisterFieldsModal
+        isOpen={isViewModalOpen}
+        onClose={() => setIsViewModalOpen(false)}
+        data={viewData}
+      />
     </>
   );
 }
