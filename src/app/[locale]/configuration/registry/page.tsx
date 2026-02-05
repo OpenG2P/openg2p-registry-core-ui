@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState} from 'react';
 import { TopBar } from '@/components/shared';
 import Image from 'next/image';
 import EditRegistry from '@/features/configuration/components/EditRegistry';

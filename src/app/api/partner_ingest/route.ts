@@ -1,9 +1,9 @@
 
 import { NextRequest, NextResponse } from 'next/server';
-import { getClientSafeConfig } from '../_lib/client-safe-config';
+import { clientSafeConfig } from '../_lib/client-safe-config';
 
 export async function POST(req: NextRequest) {
-    const {partnerIngestUrl} = getClientSafeConfig()
+    const partnerIngestUrl = clientSafeConfig.getAll().partnerIngestUrl;
     const body = await req.json();
     const { vc } = body;
     if (!partnerIngestUrl) {

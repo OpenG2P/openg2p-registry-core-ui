@@ -5,24 +5,27 @@ import { useState } from 'react';
 import Link from 'next/link';
 
 import { ProfileDropdown, NotificationDropdown, ConfigurationButton } from '@/components/layout';
+import { useRuntimeConfig } from "@/context/RuntimeConfigContext";
 
 export default function Header() {
     const t = useTranslations();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const { config } = useRuntimeConfig();
 
     return (
         <header className="w-full bg-white flex items-center justify-between px-3 py-3 fixed top-0 left-0 right-0 z-20 h-17.5">
             <Link href="/" className="flex items-center gap-2 sm:gap-3">
                 <Image
-                    src="/openg2p_logo.png"
-                    alt="Openg2p Logo"
+                    src={config?.registryLogo || "/openg2p_logo.png"}
+                    alt="Registry Logo"
                     width={32}
                     height={32}
-                    className="w-8 h-8 sm:w-10 sm:h-10"
+                    className="w-8 h-8 sm:w-10 sm:h-10 object-contain"
+                    unoptimized
                 />
                 <div className="flex items-center gap-3">
                     <span className="text-[16px] sm:text-[18px] md:text-[20px] text-black font-medium">
-                        {t('registryGen2')}
+                        {config?.registryName || t('registryGen2')}
                     </span>
 
                     {/* <span className="h-8 w-0.5 bg-[#D9D9D9]" />
