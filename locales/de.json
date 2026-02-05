@@ -373,5 +373,9 @@
     "rejectPlaceholder": "Geben Sie hier Ihren Grund ein...",
     "lastUpdatedBy": "Zuletzt aktualisiert von",
     "lastApprovedBy": "Zuletzt genehmigt von",
-    "noPendingChanges": "Keine ausstehenden Änderungsanfragen"
+    "noPendingChanges": "Keine ausstehenden Änderungsanfragen",
+    "selectDate": "Datum auswählen",
+    "selectSection": "Abschnitt auswählen",
+    "selectVersion": "Version auswählen",
+    "noVerifierAssigned": "Für diese Version der Änderungsanfrage ist kein Prüfer zugewiesen."
 }

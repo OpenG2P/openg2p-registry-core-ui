@@ -372,5 +372,9 @@
     "close": "Zavřít",
     "rejectTitle": "Och, odmítáte tento požadavek",
     "rejectDescription": "Zadejte prosím důvod odmítnutí",
-    "rejectPlaceholder": "Zadejte zde důvod..."
+    "rejectPlaceholder": "Zadejte zde důvod...",
+    "selectDate": "Vybrat datum",
+    "selectSection": "Vybrat sekci",
+    "selectVersion": "Vybrat verzi",
+    "noVerifierAssigned": "Pro tuto verzi žádosti o změnu není přiřazen žádný ověřovatel."
 }

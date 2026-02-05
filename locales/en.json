@@ -394,5 +394,9 @@
     "close": "Close",
     "rejectTitle": "Ohh, You are rejecting this request",
     "rejectDescription": "Please enter the reason for the rejection",
-    "rejectPlaceholder": "Type your reason here..."
+    "rejectPlaceholder": "Type your reason here...",
+    "selectDate": "Select Date",
+    "selectSection": "Select Section",
+    "selectVersion": "Select Version",
+    "noVerifierAssigned": "No verifier assigned for this change request version."
 }
