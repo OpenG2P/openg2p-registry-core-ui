@@ -36,7 +36,7 @@ export default function ChangeRequestHeader({
         ? t(rawTitle, { default: rawTitle })
         : t('changeRequest');
     return (
-        <div className="rounded-[30px] bg-[#F2BA1A33]/80 px-10 py-5 flex flex-col border border-dashed border-[#ED7C22]">
+        <div className="rounded-[10px] bg-[#F2BA1A33]/80 px-10 py-5 flex flex-col border border-dashed border-[#ED7C22]">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <InfoSection
                     title={title}
@@ -57,7 +57,7 @@ export default function ChangeRequestHeader({
                             type="button"
                             disabled={loadingAction}
                             onClick={onReject}
-                            className="px-4 py-2 text-[14px] font-medium rounded-[20px] bg-white text-black/50"
+                            className="px-4 py-2 text-[14px] font-medium rounded-[10px] bg-white text-black/50"
                         >
                             {t('rejectChange')}
                         </button>
@@ -66,7 +66,7 @@ export default function ChangeRequestHeader({
                             type="button"
                             disabled={loadingAction}
                             onClick={onApprove}
-                            className="px-4 py-2 text-[14px] font-medium rounded-[20px] bg-black text-white"
+                            className="px-4 py-2 text-[14px] font-medium rounded-[10px] bg-black text-white"
                         >
                             {t('approveChange')}
                         </button>

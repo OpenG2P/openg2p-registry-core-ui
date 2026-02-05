@@ -7,7 +7,7 @@ export default function ChangeLogSkeleton({
     isSearchView = false,
 }: Props) {
     return (
-        <div className={`rounded-[30px] bg-white px-10 py-10 animate-pulse ${!isSearchView ? 'mr-60' : ''}`}>
+        <div className={`rounded-[10px] bg-white px-10 py-10 pb-5 animate-pulse ${!isSearchView ? 'mr-60' : ''}`}>
             <div
                 className={`grid gap-6 ${isSearchView
                     ? "grid-cols-1 md:grid-cols-4"

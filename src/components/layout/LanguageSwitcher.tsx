@@ -39,7 +39,7 @@ export default function LanguageSwitcher() {
             <button
                 onClick={() => setOpen((prev) => !prev)}
                 disabled={isPending}
-                className="flex items-center justify-between rounded-[17px] gap-2 px-4 py-2 min-w-35 text-[16px] font-medium cursor-pointer transition-all focus:outline-none"
+                className="flex items-center justify-between rounded-[10px] gap-2 px-4 py-2 min-w-35 text-[16px] font-medium cursor-pointer transition-all focus:outline-none"
             >
                 <div className="flex items-center gap-2">
                     <div className="w-6 h-4 relative rounded-sm overflow-hidden shrink-0 border">
@@ -68,7 +68,7 @@ export default function LanguageSwitcher() {
 
             {open && (
                 <div
-                    className="absolute top-0 left-0 min-w-35 ring-1 ring-black/10 rounded-[17px] bg-white overflow-hidden z-50"
+                    className="absolute top-0 left-0 min-w-35 ring-1 ring-black/10 rounded-[10px] bg-white overflow-hidden z-50"
                 >
                     {routing.locales.map((loc, index) => (
                         <button

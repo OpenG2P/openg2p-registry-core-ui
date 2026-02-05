@@ -75,7 +75,7 @@ export default function TopBar({
                 </div>
                 <div className="flex items-center gap-2 sm:gap-4">
                     {showSearch && onSearch && (
-                        <div className="ml-auto shrink-0 border border-[#ED7C22] rounded-[30px] h-8.5 flex items-center bg-white">
+                        <div className="ml-auto shrink-0 border border-[#ED7C22] rounded-[10px] h-8.5 flex items-center bg-white">
                             <SearchBar
                                 placeholder={searchPlaceholder}
                                 category=""

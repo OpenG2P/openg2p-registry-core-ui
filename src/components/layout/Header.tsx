@@ -25,10 +25,8 @@ export default function Header() {
                         {t('registryGen2')}
                     </span>
 
-                    {/* Vertical divider */}
-                    <span className="h-8 w-0.5 bg-[#D9D9D9]" />
+                    {/* <span className="h-8 w-0.5 bg-[#D9D9D9]" />
 
-                    {/* Powered by block */}
                     <div className="flex flex-col leading-tight">
                         <span className="text-[14px] text-black/50">
                             powered by
@@ -36,7 +34,7 @@ export default function Header() {
                         <span className="text-[16px] font-medium text-black">
                             OpenG2P
                         </span>
-                    </div>
+                    </div> */}
                 </div>
             </Link>
 

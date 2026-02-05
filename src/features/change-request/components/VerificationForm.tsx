@@ -22,7 +22,7 @@ export default function VerificationForm({ onSubmit, onClose }: Props) {
     };
 
     return (
-        <div className="relative border border-[#F2BA1A] rounded-[25px] p-6 text-sm space-y-3 bg-white">
+        <div className="relative border border-[#F2BA1A] rounded-[10px] p-6 text-sm space-y-3 bg-white">
             <button
                 onClick={onClose}
                 className="absolute top-4 right-4"
@@ -69,7 +69,7 @@ export default function VerificationForm({ onSubmit, onClose }: Props) {
                     onChange={(e) => setObservation(e.target.value)}
                     rows={1}
                     placeholder={t("typeYourMessage")}
-                    className="w-full border border-black/25 rounded-md p-2 text-sm resize-none focus:outline-none"
+                    className="w-full border border-black/25 rounded-[10px] p-2 text-sm resize-none focus:outline-none"
                 />
             </div>
 

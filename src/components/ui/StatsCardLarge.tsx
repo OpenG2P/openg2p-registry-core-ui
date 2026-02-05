@@ -70,7 +70,7 @@ const StatsCardLarge = ({
     const pulseBg = active ? "bg-white/20" : "bg-black/20";
 
     return (
-        <div className={`flex justify-between transition-all duration-200 w-full h-52 rounded-[30px] px-10 py-8 gap-2
+        <div className={`flex justify-between transition-all duration-200 w-full h-52 rounded-[10px] px-10 py-8 gap-2
             ${active
                 ? "border-black bg-black text-white"
                 : "bg-[#E1E1E1] text-[#A1A1A1]"

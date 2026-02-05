@@ -1,6 +1,6 @@
 const ChangeRequestHeaderSkeleton = () => {
     return (
-        <div className="rounded-[25px] bg-[#F2BA1A33]/80 px-10 py-5 flex flex-col border border-dashed border-[#ED7C22] animate-pulse">
+        <div className="rounded-[10px] bg-[#F2BA1A33]/80 px-10 py-5 flex flex-col border border-dashed border-[#ED7C22] animate-pulse">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <InfoSectionSkeleton />
                 <VerificationStatsSkeleton />
@@ -10,8 +10,8 @@ const ChangeRequestHeaderSkeleton = () => {
             <div className="my-4 border-t-2 border-[#F2BA1A]" />
 
             <div className="flex items-center gap-4">
-                <div className="h-9 w-35 bg-gray-100 rounded-[20px]" />
-                <div className="h-9 w-35 bg-black/20 rounded-[20px]" />
+                <div className="h-9 w-35 bg-gray-100 rounded-[10px]" />
+                <div className="h-9 w-35 bg-black/20 rounded-[10px]" />
             </div>
         </div>
     );

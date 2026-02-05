@@ -45,10 +45,10 @@ const RegisterDropdown = ({
             <button
                 type="button"
                 onClick={() => setOpen((v) => !v)}
-                className={`flex h-14 w-full items-center justify-between rounded-[30px] border-[3px] border-[#ED7C22] bg-white px-6 gap-10 text-sm font-semibold text-gray-800 transition-colors
+                className={`flex h-14 w-full items-center justify-between rounded-[10px] border border-[#ED7C22] bg-white px-6 gap-10 text-sm font-semibold text-gray-800 transition-colors
                 ${open
                     ? "rounded-b-none border-b-0"
-                    : `rounded-r-none border-r-0 after:absolute after:right-0 after:top-2.5 after:bottom-2.5 after:w-0.75 after:bg-[#ED7C22] after:content-[''] `}
+                    : `rounded-r-none border-r-0 after:absolute after:right-0 after:top-2.5 after:bottom-2.5 after:w-px after:bg-[#ED7C22] after:content-[''] `}
                 `}
             >
                 <span className={`truncate text-[20px] ${open ? "text-gray-400" : "text-black font-medium"}`}>
@@ -63,7 +63,7 @@ const RegisterDropdown = ({
             {/* DROPDOWN (OVERLAY) */}
             {open && (
                 <div
-                    className="absolute w-full z-20 overflow-hidden rounded-b-[30px] border-[3px] border-t-0 border-[#ED7C22] bg-white">
+                    className="absolute w-full z-20 overflow-hidden rounded-b-[10px] border border-t-0 border-[#ED7C22] bg-white">
                     {options.map((opt) => (
                         <button
                             key={opt.value}

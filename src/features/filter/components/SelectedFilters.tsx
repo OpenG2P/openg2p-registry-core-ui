@@ -58,21 +58,21 @@ export default function SelectedFilters({
     };
 
     return (
-        <div className="bg-white px-4 py-4 mb-2 flex items-center rounded-[30px] gap-4">
+        <div className="bg-white px-4 py-4 mb-2 flex items-center rounded-[10px] gap-4">
             <div className="flex flex-wrap items-center gap-4 flex-1">
                 <span className="w-27.5 font-normal text-[16px] text-black pl-1">
                     Selected filters
                 </span>
 
                 {appliedFilters.length === 0 ? (
-                    <div className="h-8.5 flex items-center bg-[#fcf0d6] rounded-full px-3 text-sm">
+                    <div className="h-8.5 flex items-center bg-[#fcf0d6] rounded-[10px] px-3 text-sm">
                         None
                     </div>
                 ) : (
                     appliedFilters.map((filter, index) => (
                         <div
                             key={index}
-                            className="h-8.5 flex items-center bg-[#fcf0d6] rounded-full px-3 text-sm gap-2"
+                            className="h-8.5 flex items-center bg-[#fcf0d6] rounded-[10px] px-3 text-sm gap-2"
                         >
                             <span>{getFilterLabel(filter)}</span>
                             <button
@@ -96,7 +96,7 @@ export default function SelectedFilters({
             </div>
 
             {onSearch && (
-                <div className="ml-auto shrink-0 border border-[#ED7C22] rounded-[30px] h-8.5 flex items-center bg-white">
+                <div className="ml-auto shrink-0 border border-[#ED7C22] rounded-[10px] h-8.5 flex items-center bg-white">
                     <SearchBar
                         placeholder={searchPlaceholder}
                         category=""

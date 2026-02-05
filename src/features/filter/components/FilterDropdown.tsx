@@ -176,7 +176,7 @@ export default function FilterDropdown({
     };
 
     return (
-        <div className="flex bg-white rounded-2xl shadow-lg overflow-hidden min-w-110">
+        <div className="flex bg-white rounded-[10px] shadow-lg overflow-hidden min-w-110">
             <div className="w-40 bg-gray-50 p-3 space-y-1">
                 {sortedConfig.map(filter => (
                     <button

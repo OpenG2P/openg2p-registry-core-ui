@@ -1,6 +1,6 @@
 export default function IncomingMessageCardSkeleton() {
     return (
-        <div className="rounded-[30px] bg-white px-10 py-8 animate-pulse">
+        <div className="rounded-[10px] bg-white px-10 py-8 animate-pulse">
             <div className="grid gap-6 grid-cols-1 md:grid-cols-4 text-[16px]">
                 <div className="space-y-3">
                     <div className="flex justify-between items-center">

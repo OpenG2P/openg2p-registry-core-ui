@@ -47,7 +47,7 @@ export default function VersionHistoryCard({
 
     if (loading) {
         return (
-            <div className="relative rounded-[30px] bg-[#E0E0E0] px-8 pt-5 pb-8 overflow-hidden animate-pulse">
+            <div className="relative rounded-[10px] bg-[#E0E0E0] px-8 pt-5 pb-8 overflow-hidden animate-pulse">
                 <div className="flex items-center justify-between mb-5">
                     <div className="h-6 w-40 rounded bg-black/20" />
                     <div className="h-15 w-20 rounded-[20px] bg-black/20" />
@@ -81,12 +81,12 @@ export default function VersionHistoryCard({
     const isDisabled = count === 0;
 
     return (
-        <div className="relative rounded-[30px] bg-[#E0E0E0] px-8 pt-5 pb-8 overflow-hidden">
+        <div className="relative rounded-[10px] bg-[#E0E0E0] px-8 pt-5 pb-8 overflow-hidden">
             <div className="flex items-center justify-between mb-5">
                 <h3 className="text-[24px] font-semibold text-black leading-none">
                     {t("versionHistory")}
                 </h3>
-                <div className="flex h-15 w-20 items-center justify-center rounded-[20px] border-3 border-white bg-[#D9D9D9] text-[34px] font-bold text-black">
+                <div className="flex h-15 w-20 items-center justify-center rounded-[10px] border-3 border-white bg-[#D9D9D9] text-[34px] font-bold text-black">
                     {payload.number_of_versions}
                 </div>
             </div>

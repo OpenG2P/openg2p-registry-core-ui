@@ -41,7 +41,7 @@ export default function ChangeLogCard({
     return (
         <div
             key={index}
-            className={`rounded-[30px] bg-white px-10 py-5 ${!isSearchView ? "mr-60" : ""}`}
+            className={`rounded-[10px] bg-white px-10 py-5 ${!isSearchView ? "mr-60" : ""}`}
         >
             <div
                 className={`grid gap-6 ${isSearchView

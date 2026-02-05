@@ -24,7 +24,7 @@ export function ChangeRequestValuesTabs({
             <div className="ml-7.5">
                 <button
                     onClick={() => setActiveTab("values")}
-                    className={`px-8 py-2 text-black text-[18px] font-medium rounded-t-[20px] transition-all ${activeTab === "values"
+                    className={`px-8 py-2 text-black text-[18px] font-medium rounded-t-[10px] transition-all ${activeTab === "values"
                         ? 'bg-[#F2BA1A]'
                         : 'bg-[#DDDDDD]'
                         }`}

@@ -10,7 +10,7 @@ export default function VerificationCard(props: VerificationCardProps) {
     const { verification } = props;
     const t = useTranslations();
     return (
-        <div className="bg-[#E0E0E0] rounded-[25px] p-6 space-y-3">
+        <div className="bg-[#E0E0E0] rounded-[10px] p-6 space-y-3">
             <div className="font-normal text-[14px] text-black/50">
                 {t("verifiedBy")}
             </div>

@@ -28,9 +28,9 @@ export default function MyProfile() {
                 showFilters={false}
                 showPagination={false}
             />
-            <div className="flex mx-7.5 bg-white rounded-[30px]">
+            <div className="flex mx-7.5 bg-white rounded-[10px]">
                 <div
-                    className="w-[20%] bg-[#F2BA1A] bg-[url('/bg_pattern.png')] rounded-[30px] shadow-[0px_17px_21px_0px_#F2BA1A2B] flex items-start justify-center"
+                    className="w-[20%] bg-[#F2BA1A] bg-[url('/bg_pattern.png')] rounded-[10px] shadow-[0px_17px_21px_0px_#F2BA1A2B] flex items-start justify-center"
                 >
                     <Image
                         src={profile.image}
@@ -133,7 +133,7 @@ function Info({
                 <p className="font-medium text-[18px]">{value}</p>
 
                 {verified && (
-                    <span className="px-3 pb-0.5 pt-1.5 text-[14px] font-semibold rounded-[20px] bg-[#2CC15726] text-[#00B765]">
+                    <span className="px-3 pb-0.5 pt-1.5 text-[14px] font-semibold rounded-[10px] bg-[#2CC15726] text-[#00B765]">
                         Verified
                     </span>
                 )}
