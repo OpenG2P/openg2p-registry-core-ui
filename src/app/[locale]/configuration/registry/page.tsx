@@ -76,17 +76,19 @@ const RegistryConfigurationPage = () => {
 				) : (
 					<div className="bg-white rounded-[30px] p-12">
 						<div className="flex items-center gap-6">
-							<Image
-								src={registryData?.registry_logo || image}
-								alt='Registry Logo'
-								width={100}
-								height={100}
-								className="object-contain"
-								unoptimized
-							/>
+							<div className="w-[100px] h-[100px] relative flex-shrink-0 rounded overflow-hidden flex items-center justify-center">
+								<Image
+									src={registryData?.registry_logo || image}
+									alt='Registry Logo'
+									width={100}
+									height={100}
+									className="object-contain w-full h-full"
+									unoptimized
+								/>
+							</div>
 							<div className="flex items-center gap-4">
 								<div className='flex flex-col items-start gap-2'>
-									<span className='text-black text-[16px] font-normal leading-[22px] tracking-normal m-0'>Registry Name</span>
+									<span className='text-black text-[16px] font-normal  tracking-normal m-0'>Registry Name</span>
 									<h1 className="text-[#ED7C22] text-xl m-0">
 										{registryData?.registry_name || registryName}
 									</h1>

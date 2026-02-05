@@ -57,7 +57,7 @@ export default function EditRegistry({
                     {/* Top Section */}
                     <div className="flex items-center gap-10">
                         {/* Image Edit Area */}
-                        <div className="relative w-[120px] h-[120px] bg-[#E5E7EB] rounded-[10px] flex items-center justify-center overflow-hidden shrink-0">
+                        <div className="relative group w-[120px] h-[120px] bg-[#E5E7EB] rounded-[10px] flex items-center justify-center overflow-hidden shrink-0">
                             <input
                                 type="file"
                                 id="registry-image-upload"
@@ -79,6 +79,24 @@ export default function EditRegistry({
                                     <ImageIcon size={50} strokeWidth={1} />
                                 </div>
                             )}
+
+                            {/* Overlay Action Buttons */}
+                            <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                <button
+                                    onClick={triggerUpload}
+                                    className="flex items-center justify-center gap-2 w-[95px] py-1.5 bg-white rounded-full text-[#ED7C22] shadow-md hover:bg-gray-50 transition-all active:scale-95"
+                                >
+                                    <Upload size={15} strokeWidth={2.5} />
+                                    <span className="text-[13px] leading-none">Upload</span>
+                                </button>
+                                <button
+                                    onClick={() => setImage('/config/blank_image.png')}
+                                    className="flex items-center justify-center gap-2 w-[95px] py-1.5 bg-white rounded-full text-[#ED7C22] shadow-md hover:bg-gray-50 transition-all active:scale-95"
+                                >
+                                    <Trash2 size={15} strokeWidth={2.5} />
+                                    <span className="text-[13px] leading-none">Remove</span>
+                                </button>
+                            </div>
                         </div>
 
                         {/* Input Area */}
@@ -95,24 +113,6 @@ export default function EditRegistry({
                                     />
 
                                 </div>
-                            </div>
-
-                            {/* Action Buttons */}
-                            <div className="flex items-center gap-5">
-                                <button
-                                    onClick={triggerUpload}
-                                    className="flex items-center justify-center gap-2 bg-[#F2BA1A]/20 text-[#ED7C22] w-[140px] h-[40px] rounded-[10px] text-[14px] font-normal hover:bg-[#F2BA1A]/30 transition-colors"
-                                >
-                                    <Upload size={18} strokeWidth={2} />
-                                    <span>Upload Image</span>
-                                </button>
-                                <button
-                                    onClick={() => setImage('/config/blank_image.png')}
-                                    className="flex items-center justify-center gap-2 bg-[#F2BA1A]/20 text-[#ED7C22] w-[140px] h-[40px] rounded-[10px] text-[14px] font-normal hover:bg-[#F2BA1A]/30 transition-colors"
-                                >
-                                    <Trash2 size={18} strokeWidth={2} />
-                                    <span>Remove Image</span>
-                                </button>
                             </div>
                         </div>
                     </div>

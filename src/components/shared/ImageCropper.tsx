@@ -16,13 +16,16 @@ export default function ImageCropper({ image, onCropComplete, onCancel }: ImageC
     const [zoom, setZoom] = useState(1);
     const [rotation, setRotation] = useState(0);
     const [aspect, setAspect] = useState(1);
-    const [inputWidth, setInputWidth] = useState<number>(1);
-    const [inputHeight, setInputHeight] = useState<number>(1);
+    const [inputWidth, setInputWidth] = useState<string>('1');
+    const [inputHeight, setInputHeight] = useState<string>('1');
     const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
 
     useEffect(() => {
-        if (inputWidth > 0 && inputHeight > 0) {
-            setAspect(inputWidth / inputHeight);
+        const w = Number(inputWidth);
+        const h = Number(inputHeight);
+
+        if (w > 0 && h > 0) {
+            setAspect(w / h);
         }
     }, [inputWidth, inputHeight]);
 
@@ -121,9 +124,8 @@ export default function ImageCropper({ image, onCropComplete, onCancel }: ImageC
                         <span className="text-xs text-gray-500 font-semibold">Width</span>
                         <input
                             type="number"
-                            min="1"
                             value={inputWidth}
-                            onChange={(e) => setInputWidth(Math.max(1, Number(e.target.value)))}
+                            onChange={(e) => setInputWidth(e.target.value)}
                             className="w-20 px-2 py-1 text-sm border border-gray-300 rounded outline-none focus:border-gray-500"
                         />
 
@@ -132,9 +134,8 @@ export default function ImageCropper({ image, onCropComplete, onCancel }: ImageC
                         <span className="text-xs text-gray-500 font-semibold">Height</span>
                         <input
                             type="number"
-                            min="1"
                             value={inputHeight}
-                            onChange={(e) => setInputHeight(Math.max(1, Number(e.target.value)))}
+                            onChange={(e) => setInputHeight(e.target.value)}
                             className="w-20 px-2 py-1 text-sm border border-gray-300 rounded outline-none focus:border-gray-500"
                         />
                     </div>
