@@ -18,7 +18,6 @@ type ClientSafeConfigShape = {
 
 class ClientSafeConfig {
   private config: ClientSafeConfigShape;
-  private fetchPromise: Promise<ClientSafeConfigShape> | null = null;
 
   constructor() {
     this.config = {
@@ -37,41 +36,37 @@ class ClientSafeConfig {
   }
 
   async fetchRegistryConfig(): Promise<ClientSafeConfigShape> {
-    if (this.fetchPromise) return this.fetchPromise;
+    const backendConfig = getBackendConfig();
+    const backendUrl = `${backendConfig.backendApiUrl}/registry-config/get_registry_configuration`;
 
-    this.fetchPromise = (async () => {
-      const backendConfig = getBackendConfig();
-      const backendUrl = `${backendConfig.backendApiUrl}/registry-config/get_registry_configuration`;
+    try {
+      const backendRequest = createBackendRequest({
+        request_payload: {}
+      });
 
-      try {
-        const backendRequest = createBackendRequest({
-          request_payload: {}
-        });
-
-        const response = await fetch(backendUrl, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(backendRequest),
-          next: { revalidate: 3600, tags: ['registry-config'] }
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          const payload = data.response_body?.response_payload;
-
-          this.setMany({
-            registryName: payload?.registry_name ?? "",
-            registryLogo: payload?.registry_logo ?? "",
-          });
+      const response = await fetch(backendUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(backendRequest),
+        next: {
+          revalidate: 0,
+          tags: ['registry-config']
         }
-      } catch (error) {
-        console.error("Failed to fetch registry config:", error);
-        this.fetchPromise = null; // Reset on error to allow retry
-      }
-      return this.config;
-    })();
+      });
 
-    return this.fetchPromise;
+      if (response.ok) {
+        const data = await response.json();
+        const payload = data.response_body?.response_payload;
+
+        this.setMany({
+          registryName: payload?.registry_name ?? "",
+          registryLogo: payload?.registry_logo ?? "",
+        });
+      }
+    } catch (error) {
+      console.error("Failed to fetch registry config:", error);
+    }
+    return this.config;
   }
 
   getAll(): ClientSafeConfigShape {
