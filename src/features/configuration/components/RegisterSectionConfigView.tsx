@@ -91,7 +91,7 @@ export default function RegisterSectionConfigView({
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center p-8 bg-white rounded-[30px] mx-7.5">
+            <div className="flex items-center justify-center p-8 bg-white rounded-[10px] mx-7.5">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#ED7C22]"></div>
             </div>
         );

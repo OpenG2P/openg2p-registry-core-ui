@@ -19,6 +19,10 @@ interface TopBarProps {
     showCapsule?: boolean;
     capsule?: React.ReactNode;
 
+    subHeading?: string | React.ReactNode;
+    showSubHeading?: boolean;
+
+
     pageStart?: number;
     pageEnd?: number;
     total?: number;
@@ -48,6 +52,8 @@ export default function TopBar({
     showFilters = true,
     showPagination = true,
     showCapsule = false,
+    showSubHeading = false,
+    subHeading,
     capsule,
     pageStart,
     pageEnd,
@@ -72,6 +78,12 @@ export default function TopBar({
                     )}
 
                     {showCapsule && capsule}
+
+                    {showSubHeading && subHeading && (
+                        <div className="text-[20px] text-[#ED7C22] font-medium">
+                            {subHeading}
+                        </div>
+                    )}
                 </div>
                 <div className="flex items-center gap-2 sm:gap-4">
                     {showSearch && onSearch && (
