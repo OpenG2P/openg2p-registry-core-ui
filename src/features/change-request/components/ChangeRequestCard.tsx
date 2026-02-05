@@ -1,7 +1,7 @@
 import ViewAll from "@/components/shared/ViewAll";
 import { useFetch } from "@/shared/hooks/useFetch";
 import Image from "next/image";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useRef } from "react";
 
 interface Props {
@@ -22,6 +22,7 @@ export default function ChangeRequestCard({
     onCountLoaded,
 }: Props) {
     const locale = useLocale();
+    const t = useTranslations();
     const hasLoadedInitialCount = useRef(false);
 
     const { data, loading } = useFetch<any>({
@@ -77,17 +78,17 @@ export default function ChangeRequestCard({
         <div className="relative rounded-[30px] bg-[#EDC227] px-8 pt-5 pb-8 overflow-hidden">
             <div className="flex items-center justify-between">
                 <h3 className="text-[24px] font-semibold text-black leading-none">
-                    Change Request
+                    {t("changeRequest")}
                 </h3>
-                <div className="flex h-15 w-20 items-center justify-center rounded-[20px] border-3 border-white bg-[#F2BA1A] text-[34px] font-bold text-black">
+                <div className="flex h-15 w-20 items-center justify-center rounded-[20px] border-3 border-white bg-[#EDC227] text-[34px] font-bold text-black">
                     {count}
                 </div>
             </div>
 
-            <p className="mt-3 text-xs text-black/70">
+            <p className="mt-3 text-[16px] text-black font-normal">
                 {count > 0
-                    ? "Pending changes awaiting review"
-                    : "No pending change requests"}
+                    ? t("pendingChanges")
+                    : t("noPendingChanges")}
             </p>
 
             <div className="mt-25">
@@ -97,7 +98,7 @@ export default function ChangeRequestCard({
                     <ViewAll
                         href={href}
                         bgColor="#D9D9D9"
-                        label="Know More"
+                        label={t("knowMore")}
                     />
                 </div>
                 <Image

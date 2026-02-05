@@ -13,7 +13,7 @@ export default function NumberFilterInput({
             <div className="flex items-center gap-2 w-full">
                 <input
                     type="number"
-                    className="border rounded-lg px-3 py-2 text-sm w-1/2"
+                    className="border rounded-lg px-3 py-2 text-sm w-1/2 outline-0"
                     placeholder="Min"
                     value={min || ""}
                     onChange={e => onChange([e.target.value, max])}
@@ -21,7 +21,7 @@ export default function NumberFilterInput({
                 <span className="text-gray-400">-</span>
                 <input
                     type="number"
-                    className="border rounded-lg px-3 py-2 text-sm w-1/2"
+                    className="border rounded-lg px-3 py-2 text-sm w-1/2 outline-0"
                     placeholder="Max"
                     value={max || ""}
                     onChange={e => onChange([min, e.target.value])}
@@ -33,7 +33,7 @@ export default function NumberFilterInput({
     return (
         <input
             type="number"
-            className="border rounded-lg px-3 py-2 text-sm w-full"
+            className="border rounded-lg px-3 py-2 text-sm w-full outline-0"
             value={value || ""}
             onChange={e => onChange(e.target.value)}
         />

@@ -56,11 +56,12 @@ export default function ChangeRequestPage() {
     return (
         <div className="min-h-screen mx-auto bg-[#F3F1E4]">
             <TopBar
-                breadcrumb={[{ label: 'Change Request' }]}
+                breadcrumb={[{ label: t("changeRequest") }]}
                 showSearch
                 searchValue={searchQuery || ''}
                 searchPlaceholder={t('search')}
                 onSearch={handleSearch}
+                pxClass='px-0.5'
                 showFilters={false}
                 showPagination
                 pageStart={pageStart}

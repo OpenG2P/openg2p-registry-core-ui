@@ -29,6 +29,7 @@ interface SelectedFiltersProps {
     searchValue?: string;
     searchPlaceholder?: string;
     onSearch?: (value: string) => void;
+    pxClass?: string;
 }
 
 export default function SelectedFilters({
@@ -37,8 +38,9 @@ export default function SelectedFilters({
     removeFilter,
     clearAllFilters,
     searchValue = '',
-    searchPlaceholder = 'Search...',
-    onSearch
+    searchPlaceholder = 'Search',
+    onSearch,
+    pxClass
 }: SelectedFiltersProps) {
     const getFilterLabel = (rule: FilterRule) => {
         const config = filterConfig.find((f) => f.field_name === rule.field_name);
@@ -94,13 +96,15 @@ export default function SelectedFilters({
             </div>
 
             {onSearch && (
-                <div className="ml-auto shrink-0 border border-[#ED7C22] rounded-[30px] h-8.5 flex items-center px-2 bg-white">
+                <div className="ml-auto shrink-0 border border-[#ED7C22] rounded-[30px] h-8.5 flex items-center bg-white">
                     <SearchBar
                         placeholder={searchPlaceholder}
                         category=""
                         searchValue={searchValue}
                         iconSize={16}
                         onSearch={onSearch}
+                        pxClass={pxClass}
+                        textClass="text-[16px]"
                     />
                 </div>
             )}

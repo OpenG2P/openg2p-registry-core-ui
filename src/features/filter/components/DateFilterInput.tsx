@@ -13,14 +13,14 @@ export default function DateFilterInput({
             <div className="flex items-center gap-2 w-full">
                 <input
                     type="date"
-                    className="border rounded-lg px-2 py-2 text-sm w-1/2"
+                    className="border rounded-lg px-2 py-2 text-sm w-1/2 outline-0"
                     value={start || ""}
                     onChange={e => onChange([e.target.value, end])}
                 />
                 <span className="text-gray-400">-</span>
                 <input
                     type="date"
-                    className="border rounded-lg px-2 py-2 text-sm w-1/2"
+                    className="border rounded-lg px-2 py-2 text-sm w-1/2 outline-0"
                     value={end || ""}
                     onChange={e => onChange([start, e.target.value])}
                 />
@@ -31,7 +31,7 @@ export default function DateFilterInput({
     return (
         <input
             type="date"
-            className="border rounded-lg px-3 py-2 text-sm w-full"
+            className="border rounded-lg px-3 py-2 text-sm w-full outline-0"
             value={value || ""}
             onChange={e => onChange(e.target.value)}
         />

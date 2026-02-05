@@ -224,14 +224,14 @@ export default function VersionHistoryPage() {
                     <div className="w-[75%] flex flex-col gap-6">
                         <div className="bg-white rounded-[30px] px-6 py-5 flex items-center gap-6">
                             <CapsuleDropdown
-                                label="Select Date"
+                                label={t("selectDate")}
                                 items={dateOptions}
                                 value={selectedDate ?? undefined}
                                 onChange={onDateSelect}
                             />
 
                             <CapsuleDropdown
-                                label="Select Section"
+                                label={t("selectSection")}
                                 items={sectionOptions.map(s => s.label)}
                                 value={
                                     selectedSectionId
@@ -243,7 +243,7 @@ export default function VersionHistoryPage() {
                             />
 
                             <CapsuleDropdown
-                                label="Select Version"
+                                label={t("selectVersion")}
                                 items={versionOptions.map(v => v.label)}
                                 value={versionOptions.find(v => v.value === selectedVersionId)?.label}
                                 onChange={onVersionSelect}
@@ -277,7 +277,7 @@ export default function VersionHistoryPage() {
                         ) : (
                             <div className="bg-[#E0E0E0] rounded-[25px] p-6 space-y-3">
                                 <div className="font-semibold text-[14px] text-black/50">
-                                    Verified by
+                                    {t("verifiedBy")}
                                 </div>
 
                                 <div className="flex items-center gap-3">
@@ -301,13 +301,12 @@ export default function VersionHistoryPage() {
 
                                 <div>
                                     <div className="text-[14px] font-medium text-black/50 mb-1">
-                                        Message
+                                        {t("message")}
                                     </div>
                                     <div className="text-[16px] text-black/50">
-                                        No verifier assigned for this change request version.
+                                        {t("noVerifierAssigned")}
                                     </div>
                                 </div>
-
                             </div>
                         )}
                     </div>

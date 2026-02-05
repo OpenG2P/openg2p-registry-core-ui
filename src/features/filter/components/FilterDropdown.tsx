@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { FilterConfig, FilterRule } from "@/features/filter/types";
 
@@ -120,7 +121,7 @@ export default function FilterDropdown({
 
     if (filterConfig.length === 0) {
         return (
-            <div className="flex items-center justify-center p-10 min-w-[440px]">
+            <div className="flex items-center justify-center p-10 min-w-110">
                 <p className="text-gray-500">Loading filters...</p>
             </div>
         );
@@ -175,14 +176,14 @@ export default function FilterDropdown({
     };
 
     return (
-        <div className="flex bg-white rounded-2xl shadow-lg overflow-hidden min-w-[440px]">
+        <div className="flex bg-white rounded-2xl shadow-lg overflow-hidden min-w-110">
             <div className="w-40 bg-gray-50 p-3 space-y-1">
                 {sortedConfig.map(filter => (
                     <button
                         key={filter.field_name}
                         onClick={() => setSelectedFieldName(filter.field_name)}
                         className={`w-full text-left px-3 py-2 rounded-lg text-sm
-              ${filter.field_name === selectedFieldName
+                        ${filter.field_name === selectedFieldName
                                 ? "bg-[#F2BA1A] text-black"
                                 : "hover: bg-[#F2BA2D] text-black"}`}
                     >
@@ -202,17 +203,28 @@ export default function FilterDropdown({
                     <>
                         <div className="flex gap-4 items-center">
                             <label className="w-20 text-sm font-medium">Operator</label>
-                            <select
-                                className="border rounded-lg px-3 py-2 text-sm w-full"
-                                value={operator}
-                                onChange={e => setOperator(e.target.value)}
-                            >
-                                {selectedFilter.allowed_operators.map(op => (
-                                    <option key={op} value={op}>
-                                        {OPERATOR_LABELS[op] ?? op}
-                                    </option>
-                                ))}
-                            </select>
+                            <div className="relative w-full">
+                                <select
+                                    className="border rounded-lg px-3 py-2 text-sm w-full appearance-none bg-white pr-10 outline-0"
+                                    value={operator}
+                                    onChange={e => setOperator(e.target.value)}
+                                >
+                                    {selectedFilter.allowed_operators.map(op => (
+                                        <option key={op} value={op}>
+                                            {OPERATOR_LABELS[op] ?? op}
+                                        </option>
+                                    ))}
+                                </select>
+                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                    <Image
+                                        src="/down_arrow.png"
+                                        alt=""
+                                        width={14}
+                                        height={14}
+                                        className=""
+                                    />
+                                </div>
+                            </div>
                         </div>
 
                         <div className="flex gap-4 items-center">
@@ -228,7 +240,7 @@ export default function FilterDropdown({
                     </>
                 )}
 
-                <div className="flex justify-center">
+                <div className="flex justify-start">
                     <button
                         onClick={applyFilter}
                         className="bg-black text-white px-5 py-2.5 rounded-lg text-sm text-center"

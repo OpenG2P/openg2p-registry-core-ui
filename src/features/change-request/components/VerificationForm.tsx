@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 interface Props {
     onSubmit: (observation: string, isApproved: boolean) => Promise<boolean>;
@@ -7,6 +8,7 @@ interface Props {
 }
 
 export default function VerificationForm({ onSubmit, onClose }: Props) {
+    const t = useTranslations();
     const [observation, setObservation] = useState("");
     const [isApproved, setIsApproved] = useState(true);
 
@@ -27,7 +29,7 @@ export default function VerificationForm({ onSubmit, onClose }: Props) {
             >
                 <Image
                     src="/close.png"
-                    alt="close"
+                    alt={t("close")}
                     width={22}
                     height={22}
                     className="opacity-70 hover:opacity-100"
@@ -35,14 +37,14 @@ export default function VerificationForm({ onSubmit, onClose }: Props) {
             </button>
 
             <div className="font-semibold text-black/50">
-                New Verification
+                {t("newVerification")}
             </div>
 
             <div className="flex items-center gap-3">
                 <div className="w-10 h-10 relative">
                     <Image
                         src="/verified_person.png"
-                        alt="verified person"
+                        alt={t("verifiedPerson")}
                         fill
                         className="rounded-full object-cover"
                     />
@@ -50,7 +52,7 @@ export default function VerificationForm({ onSubmit, onClose }: Props) {
                 <div className="flex flex-col">
                     <span className="text-[20px] font-medium text-black">
                         John Smith
-                        <span className="ml-2 text-[14px] text-black/50">You</span>
+                        <span className="ml-2 text-[14px] text-black/50">{t("you")}</span>
                     </span>
                     <span className="text-[14px] text-black/50">
                         {new Date().toLocaleString()}
@@ -60,13 +62,13 @@ export default function VerificationForm({ onSubmit, onClose }: Props) {
 
             <div>
                 <div className="text-[14px] font-medium text-black/50 mb-1">
-                    Message
+                    {t("message")}
                 </div>
                 <textarea
                     value={observation}
                     onChange={(e) => setObservation(e.target.value)}
                     rows={1}
-                    placeholder="Type your message here..."
+                    placeholder={t("typeYourMessage")}
                     className="w-full border border-black/25 rounded-md p-2 text-sm resize-none focus:outline-none"
                 />
             </div>
@@ -74,12 +76,12 @@ export default function VerificationForm({ onSubmit, onClose }: Props) {
             <div className="flex items-center justify-between pt-3">
                 <div className="flex items-center gap-6">
                     <CheckboxOption
-                        label="OK"
+                        label={t("ok")}
                         checked={isApproved}
                         onClick={() => setIsApproved(true)}
                     />
                     <CheckboxOption
-                        label="Not OK"
+                        label={t("notOk")}
                         checked={!isApproved}
                         onClick={() => setIsApproved(false)}
                     />
@@ -89,7 +91,7 @@ export default function VerificationForm({ onSubmit, onClose }: Props) {
                     onClick={handleSubmit}
                     className="px-4 py-1.5 text-sm rounded-xl bg-black text-white"
                 >
-                    Submit
+                    {t("submit")}
                 </button>
             </div>
         </div>

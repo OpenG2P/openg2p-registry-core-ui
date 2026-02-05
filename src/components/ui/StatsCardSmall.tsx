@@ -113,7 +113,7 @@ const StatsCardSmall = ({
     }, [data, stats_endpoint]);
 
     return (
-        <div className={`flex flex-col justify-between  transition-all duration-200 w-full rounded-[30px] px-6 py-6 ${active ? "border-black bg-black text-white" : "bg-[#E1E1E1] text-[#A1A1A1]"}`}>
+        <div className={`flex flex-col justify-between  transition-all duration-200 w-full rounded-[30px] px-7 py-6 ${active ? "border-black bg-black text-white" : "bg-[#E1E1E1] text-[#A1A1A1]"}`}>
             <div className="pointer-events-none">
                 {/* count and title */}
                 <div className="mb-4 mt-4">
@@ -137,7 +137,7 @@ const StatsCardSmall = ({
 
                 {loading ? (
                     <div className="animate-pulse">
-                        <div className="h-4 w-24 rounded bg-gray-300 dark:bg-gray-700 mb-2"></div>
+                        <div className="h-4 w-24 rounded bg-gray-300 dark:bg-gray-700 mb-1.75"></div>
                         <div className="h-5 w-32 rounded bg-gray-300 dark:bg-gray-700"></div>
                     </div>
                 ) : error ? (
@@ -150,10 +150,10 @@ const StatsCardSmall = ({
                                 {row.imageUrl && (
                                     <Image
                                         src={row.imageUrl}
-                                        width={18}
-                                        height={18}
+                                        width={20}
+                                        height={20}
                                         alt=""
-                                        className={active ? "invert" : ""}
+                                        className={active ? "invert" : "opacity-60"}
                                     />
                                 )}
 
