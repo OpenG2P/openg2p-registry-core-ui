@@ -100,7 +100,7 @@ export default function TopBar({
                     {showAddNewButton && (
                         <button
                             onClick={onAddNewButton}
-                            className="h-8.5 px-6 bg-[#F2BA1A] rounded-[17px] flex items-center gap-2 hover:bg-[#e5b018] transition-colors"
+                            className="h-8.5 px-6 bg-[#F2BA1A] rounded-[10px] flex items-center gap-2 hover:bg-[#e5b018] transition-colors"
                         >
                             <span className="text-[16px] font-medium text-black">
                                 {addNewButtonText}

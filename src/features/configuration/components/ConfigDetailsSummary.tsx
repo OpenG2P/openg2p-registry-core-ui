@@ -23,15 +23,15 @@ export default function ConfigDetailsSummary({
     return (
         <div className="mx-8 mb-0">
             <div
-                className="bg-[#F3E6BC] border-[#ED7C22] border-dashed border rounded-[30px] px-12 h-[60px] flex items-center justify-between shadow-sm"
+                className="bg-[#F3E6BC] border-[#ED7C22] border-dashed border rounded-[10px] px-12 h-15 flex items-center justify-between shadow-sm"
                 style={{ borderStyle: 'dashed', borderWidth: '1px' }}
             >
                 <div className="flex flex-1 items-center gap-10">
-                    <div className="min-w-[120px]">
+                    <div className="min-w-30">
                         <span className="text-gray-600 font-medium text-base">{title}</span>
                     </div>
 
-                    <div className="flex-1 max-w-[300px] truncate">
+                    <div className="flex-1 max-w-75 truncate">
                         <span className="text-gray-600 text-sm">{description}</span>
                     </div>
 
@@ -51,7 +51,7 @@ export default function ConfigDetailsSummary({
                     {onView && (
                         <button
                             onClick={onView}
-                            className="bg-white p-2 rounded-full hover:bg-gray-50 transition-colors shadow-sm flex items-center justify-center flex-shrink-0"
+                            className="bg-white p-2 rounded-[10px] hover:bg-gray-50 transition-colors shadow-sm flex items-center justify-center shrink-0"
                             title="View Details"
                         >
                             <Eye size={16} className="text-gray-700" />
@@ -60,7 +60,7 @@ export default function ConfigDetailsSummary({
                     {onEdit && (
                         <button
                             onClick={onEdit}
-                            className="bg-white p-2 rounded-full hover:bg-gray-50 transition-colors shadow-sm flex items-center justify-center flex-shrink-0"
+                            className="bg-white p-2 rounded-[10px] hover:bg-gray-50 transition-colors shadow-sm flex items-center justify-center shrink-0"
                             title="Edit"
                         >
                             <Pencil size={16} className="text-gray-700" />

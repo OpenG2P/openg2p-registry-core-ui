@@ -164,7 +164,7 @@ export default function Home() {
                     alt={t('peoplesImageAlt')}
                     width={1200}
                     height={600}
-                    className="w-full h-auto select-none"
+                    // className="w-full h-auto select-none"
                     priority
                 />
             </div>

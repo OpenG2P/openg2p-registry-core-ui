@@ -55,8 +55,8 @@ export default function ImageCropper({ image, onCropComplete, onCancel }: ImageC
     };
 
     return (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-4">
-            <div className="relative w-full max-w-[700px] bg-white rounded-[25px] overflow-hidden border-4 border-[#F2BA1A]">
+        <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/80 p-4">
+            <div className="relative w-full max-w-175 bg-white rounded-[10px] overflow-hidden border-4 border-[#F2BA1A]">
                 {/* Header */}
                 <div className="flex items-center justify-between px-8 py-6">
                     <h2 className="text-[#ED7C22] text-2xl font-bold font-roboto">Edit Image</h2>
@@ -69,7 +69,7 @@ export default function ImageCropper({ image, onCropComplete, onCancel }: ImageC
                 </div>
 
                 {/* Cropper Area */}
-                <div className="relative mx-8 h-[350px] bg-[#3D3D00] rounded-[15px] overflow-hidden">
+                <div className="relative mx-8 h-87.5 bg-[#3D3D00] rounded-[10px] overflow-hidden">
                     <Cropper
                         image={image}
                         crop={crop}
@@ -152,7 +152,7 @@ export default function ImageCropper({ image, onCropComplete, onCancel }: ImageC
                     {/* Apply */}
                     <button
                         onClick={handleApply}
-                        className="bg-black text-white px-8 py-2 rounded-full font-bold text-sm hover:bg-gray-800 transition-colors shadow-lg shrink-0"
+                        className="bg-black text-white px-8 py-2 rounded-[10px] font-bold text-sm hover:bg-gray-800 transition-colors shadow-lg shrink-0"
                     >
                         Apply
                     </button>

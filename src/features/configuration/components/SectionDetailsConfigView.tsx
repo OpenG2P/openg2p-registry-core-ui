@@ -45,7 +45,7 @@ export default function SectionDetailsConfigView({
     };
 
     return (
-        <div className='mx-8 mt-6 bg-white rounded-[30px] px-8 pb-8 pt-12 mb-6 overflow-x-visible'>
+        <div className='mx-8 mt-6 bg-white rounded-[10px] px-8 pb-8 pt-12 mb-6 overflow-x-visible'>
             <SectionBuilder
                 initialSection={sectionUISchema}
                 onChange={handleSectionChange}

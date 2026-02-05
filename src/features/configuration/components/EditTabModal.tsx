@@ -62,8 +62,8 @@ export default function EditTabModal({ isOpen, onClose, onSuccess, initialData, 
 
     return (
         <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
-            <div className="relative w-full max-w-[800px] max-h-[600px] bg-[#F2BA1A] rounded-[20px] overflow-hidden flex p-1">
-                <div className="flex-1 w-full bg-white p-10 relative rounded-[20px] overflow-y-auto">
+            <div className="relative w-full max-w-200 max-h-150 bg-[#F2BA1A] rounded-[10px] overflow-hidden flex p-1">
+                <div className="flex-1 w-full bg-white p-10 relative rounded-[10px] overflow-y-auto">
                     <button
                         onClick={handleCancel}
                         className="absolute top-6 right-6 text-gray-400 hover:text-gray-600 transition-colors"
@@ -105,13 +105,13 @@ export default function EditTabModal({ isOpen, onClose, onSuccess, initialData, 
                         <div className="flex gap-4 pt-6">
                             <button
                                 onClick={handleCancel}
-                                className="px-12 py-2.5 bg-gray-300 text-gray-700 rounded-full hover:bg-gray-400 transition-colors"
+                                className="px-12 py-2.5 bg-gray-300 text-gray-700 rounded-[10px] hover:bg-gray-400 transition-colors"
                             >
                                 Cancel
                             </button>
                             <button
                                 onClick={handleSubmit}
-                                className="px-12 py-2.5 bg-black text-white rounded-full hover:bg-gray-800 transition-colors disabled:opacity-50"
+                                className="px-12 py-2.5 bg-black text-white rounded-[10px] hover:bg-gray-800 transition-colors disabled:opacity-50"
                             >
                                 Update
                             </button>

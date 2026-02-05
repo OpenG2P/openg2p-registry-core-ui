@@ -81,11 +81,11 @@ const RegisterConfigurationPage = () => {
       />
 
       <div className=" ml-4 mt-4 px-7.5">
-        <div className="flex justify-between items-center h-[56px]">
+        <div className="flex justify-between items-center h-14">
           <div className="flex gap-2 items-end h-full">
             <button
               onClick={() => setActiveTab('tabs')}
-              className={`px-8 py-2 text-[18px] font-medium rounded-t-[20px] transition-all ${activeTab === 'tabs'
+              className={`px-8 py-2 text-[18px] font-medium rounded-t-[10px] transition-all ${activeTab === 'tabs'
                 ? 'bg-[#F2BA1A] text-black'
                 : 'bg-[#DDDDDD] text-black'
                 }`}
@@ -95,7 +95,7 @@ const RegisterConfigurationPage = () => {
 
             <button
               onClick={() => setActiveTab('filter')}
-              className={`px-8 py-2 text-[18px] font-medium rounded-t-[20px] transition-all ${activeTab === 'filter'
+              className={`px-8 py-2 text-[18px] font-medium rounded-t-[10px] transition-all ${activeTab === 'filter'
                 ? 'bg-[#F2BA1A] text-black'
                 : 'bg-[#DDDDDD] text-black'
                 }`}
@@ -105,7 +105,7 @@ const RegisterConfigurationPage = () => {
 
             <button
               onClick={() => setActiveTab('search')}
-              className={`px-8 py-2 text-[18px] font-medium rounded-t-[20px] transition-all ${activeTab === 'search'
+              className={`px-8 py-2 text-[18px] font-medium rounded-t-[10px] transition-all ${activeTab === 'search'
                 ? 'bg-[#F2BA1A] text-black'
                 : 'bg-[#DDDDDD] text-black'
                 }`}
@@ -148,7 +148,7 @@ const RegisterConfigurationPage = () => {
           />
         ) : (
           <div className="mx-7.5">
-            <div className="bg-white rounded-[30px] p-12 flex items-center justify-center min-h-[400px]">
+            <div className="bg-white rounded-[10px] p-12 flex items-center justify-center min-h-100">
               <p className="text-gray-400 text-lg text-center italic">No {activeTab === 'filter' ? 'Filter' : 'Search'} Schema available for this register</p>
             </div>
           </div>

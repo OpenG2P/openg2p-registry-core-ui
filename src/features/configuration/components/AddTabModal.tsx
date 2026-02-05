@@ -57,9 +57,9 @@ export default function AddTabModal({ isOpen, onClose, onSuccess }: AddTabModalP
 
     return (
         <div className="fixed inset-0 bg-black/80  z-50 flex items-center justify-center p-4">
-            <div className="relative w-full max-w-[800px] max-h-[600px] bg-[#F2BA1A] rounded-[20px] overflow-hidden flex p-1">
+            <div className="relative w-full max-w-200 max-h-150 bg-[#F2BA1A] rounded-[10px] overflow-hidden flex p-1">
 
-                <div className="flex-1 w-full bg-white relative rounded-[20px] overflow-y-hidden p-10">
+                <div className="flex-1 w-full bg-white relative rounded-[10px] overflow-y-hidden p-10">
                     <button
                         onClick={handleCancel}
                         className="absolute top-6 right-6 text-gray-400 hover:text-gray-600 transition-colors"
@@ -107,13 +107,13 @@ export default function AddTabModal({ isOpen, onClose, onSuccess }: AddTabModalP
                         <div className="flex gap-4 pt-6">
                             <button
                                 onClick={handleCancel}
-                                className="px-12 py-2.5 bg-gray-300 text-gray-700 rounded-full"
+                                className="px-12 py-2.5 bg-gray-300 text-gray-700 rounded-[10px]"
                             >
                                 Cancel
                             </button>
                             <button
                                 onClick={handleSubmit}
-                                className="px-12 py-2.5 bg-black text-white rounded-full"
+                                className="px-12 py-2.5 bg-black text-white rounded-[10px]"
                             >
                                 Save
                             </button>
