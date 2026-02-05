@@ -28,7 +28,7 @@ export default function MessagePopup({
 
     return (
         <div className="fixed inset-0 bg-black/80 flex justify-center items-center z-50">
-            <div className="relative bg-white rounded-[40px] w-200 h-150 p-10 border-10 border-[#F2BA1A] flex flex-col">
+            <div className="relative bg-white rounded-[10px] w-200 h-150 p-10 border-10 border-[#F2BA1A] flex flex-col">
                 <button
                     className="absolute top-10 right-10 opacity-50"
                     onClick={onClose}
@@ -42,7 +42,7 @@ export default function MessagePopup({
                             <button
                                 key={tab.id}
                                 onClick={() => setActiveTab(index)}
-                                className={`px-8 py-2 text-[18px] font-medium rounded-t-[20px] transition-all ${activeTab === index
+                                className={`px-8 py-2 text-[18px] font-medium rounded-t-[10px] transition-all ${activeTab === index
                                     ? 'bg-[#F2BA1A]'
                                     : 'bg-[#DDDDDD]'
                                     }`}
@@ -65,7 +65,7 @@ export default function MessagePopup({
 
                 <button
                     onClick={onClose}
-                    className="mt-4 bg-black text-[16px] text-white px-10 py-2 rounded-[20px] w-fit self-start"
+                    className="mt-4 bg-black text-[16px] text-white px-10 py-2 rounded-[10px] w-fit self-start"
                 >
                     Close
                 </button>

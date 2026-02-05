@@ -113,7 +113,7 @@ const StatsCardSmall = ({
     }, [data, stats_endpoint]);
 
     return (
-        <div className={`flex flex-col justify-between  transition-all duration-200 w-full rounded-[30px] px-7 py-6 ${active ? "border-black bg-black text-white" : "bg-[#E1E1E1] text-[#A1A1A1]"}`}>
+        <div className={`flex flex-col justify-between  transition-all duration-200 w-full rounded-[10px] px-7 py-6 ${active ? "border-black bg-black text-white" : "bg-[#E1E1E1] text-[#A1A1A1]"}`}>
             <div className="pointer-events-none">
                 {/* count and title */}
                 <div className="mb-4 mt-4">

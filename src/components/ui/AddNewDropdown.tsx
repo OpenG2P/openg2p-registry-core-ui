@@ -41,7 +41,7 @@ export default function AddNewDropdown({
         <div ref={ref} className="relative">
             <button
                 onClick={() => setOpen(o => !o)}
-                className={`flex items-center gap-2 px-4 py-1 mt-2 rounded-[17px] bg-white ${open ? '' : 'border border-[#F77F57]'}`}
+                className={`flex items-center gap-2 px-4 py-1 mt-2 rounded-[10px] bg-white ${open ? '' : 'border border-[#F77F57]'}`}
             >
                 <span className="text-[16px] font-medium text-[#1E1E1E]">Add New</span>
                 <Image
@@ -54,7 +54,7 @@ export default function AddNewDropdown({
             </button>
 
             {open && (
-                <div className="absolute left-0 top-0 mt-1.5 w-45 rounded-[17px] bg-white border border-[#ED7C22] z-50 overflow-hidden">
+                <div className="absolute left-0 top-0 mt-1.5 w-45 rounded-[10px] bg-white border border-[#ED7C22] z-50 overflow-hidden">
                     <div className="flex items-center justify-between px-4 py-1">
                         <span className="text-[16px] font-medium text-[#1E1E1E]">Add New</span>
                         <Image

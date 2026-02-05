@@ -53,7 +53,7 @@ export default function CapsuleDropdown(props: CapsuleDropdownProps) {
             <div ref={dropdownRef} className="relative">
                 <div
                     onClick={handleToggle}
-                    className={`flex items-center justify-between gap-3 px-3 py-1 min-w-35 w-auto rounded-[17px] cursor-pointer bg-white border border-[#F77F57] ${open ? "invisible" : ""}`}
+                    className={`flex items-center justify-between gap-3 px-3 py-1 min-w-35 w-auto rounded-[10px] cursor-pointer bg-white border border-[#F77F57] ${open ? "invisible" : ""}`}
                 >
                     <span className="text-[16px] text-black/50 font-medium">
                         {selected ?? "Select"}
@@ -69,7 +69,7 @@ export default function CapsuleDropdown(props: CapsuleDropdownProps) {
 
                 {open && (
                     <div
-                        className="absolute left-0 top-0 min-w-35 w-auto rounded-[17px] bg-white border border-[#F77F57] z-50 overflow-hidden"
+                        className="absolute left-0 top-0 min-w-35 w-auto rounded-[10px] bg-white border border-[#F77F57] z-50 overflow-hidden"
                         style={{ transform: "translateY(0)" }}
                     >
                         <div

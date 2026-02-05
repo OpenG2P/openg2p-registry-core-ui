@@ -78,7 +78,7 @@ export default function RegisterTypePage() {
                 filterConfig={filterConfig}
             />
 
-            <div className="mx-7.5 bg-white rounded-[30px]">
+            <div className="mx-7.5 bg-white rounded-[10px]">
                 <div className="px-2 pt-1">
                     <SelectedFilters
                         appliedFilters={appliedFilters}

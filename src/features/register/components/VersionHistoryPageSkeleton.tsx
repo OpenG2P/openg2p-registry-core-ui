@@ -12,7 +12,7 @@ export default function VersionHistoryPageSkeleton({ tabs = [] }: Props) {
                     {[1, 2, 3].map(i => (
                         <div
                             key={i}
-                            className="h-11 w-32 rounded-t-[20px] bg-[#F2BA1A]/50"
+                            className="h-10 w-32 rounded-t-[10px] bg-[#F2BA1A]/50"
                         />
                     ))}
                 </div>
@@ -20,19 +20,19 @@ export default function VersionHistoryPageSkeleton({ tabs = [] }: Props) {
 
             <div className="flex gap-6">
                 <div className="w-[75%] flex flex-col gap-6">
-                    <div className="bg-white rounded-[30px] px-6 py-5 flex items-center gap-6">
+                    <div className="bg-white rounded-[10px] px-6 py-5 flex items-center gap-6">
                         <div className="flex items-center gap-3">
                             <div className="h-5 w-25 bg-gray-300 rounded" />
-                            <div className="h-8.5 w-35 bg-gray-200 rounded-[17px]" />
+                            <div className="h-8.5 w-35 bg-gray-200 rounded-[10px]" />
                         </div>
 
                         <div className="flex items-center gap-3">
                             <div className="h-5 w-25 bg-gray-300 rounded" />
-                            <div className="h-8.5 w-35 bg-gray-200 rounded-[17px]" />
+                            <div className="h-8.5 w-35 bg-gray-200 rounded-[10px]" />
                         </div>
                     </div>
 
-                    <div className="bg-white rounded-[30px] p-9.5 space-y-5 shadow-sm">
+                    <div className="bg-white rounded-[10px] p-9.5 space-y-5 shadow-sm">
                         <div className="h-6 w-48 bg-gray-300 rounded" />
 
                         <div className="space-y-3">
@@ -61,7 +61,7 @@ export default function VersionHistoryPageSkeleton({ tabs = [] }: Props) {
 
 const VerificationCardSkeleton = () => {
     return (
-        <div className="bg-[#E0E0E0]/60 rounded-[25px] p-6 space-y-4 animate-pulse">
+        <div className="bg-[#E0E0E0]/60 rounded-[10px] p-6 space-y-4 animate-pulse">
             <div className="h-4 w-24 bg-black/20 rounded" />
 
             <div className="flex items-center gap-3">

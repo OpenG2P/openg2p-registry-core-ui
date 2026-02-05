@@ -40,7 +40,7 @@ export default function IncomingMessageCard({ message }: Props) {
 
 
     return (
-        <div className="rounded-[30px] bg-white px-10 py-8">
+        <div className="rounded-[10px] bg-white px-10 py-8">
             <div className="grid gap-6 grid-cols-1 md:grid-cols-4 text-[16px] text-[#00000080]">
                 {/* Column 1: Raw */}
                 <div className="space-y-4">

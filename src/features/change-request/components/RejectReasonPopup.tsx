@@ -20,7 +20,7 @@ export default function RejectReasonPopup({
 
     return (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
-            <div className="relative bg-white rounded-[40px] border-10 border-[#EF8F93]/80 w-150 h-100 p-6 flex flex-col items-center justify-center gap-4">
+            <div className="relative bg-white rounded-[10px] border-10 border-[#EF8F93]/80 w-150 h-100 p-6 flex flex-col items-center justify-center gap-4">
                 <button
                     className="absolute top-10 right-10 opacity-50"
                     onClick={onClose}
@@ -57,7 +57,7 @@ export default function RejectReasonPopup({
                         <button
                             disabled={!reason || loading}
                             onClick={() => onSubmit(reason)}
-                            className="bg-black text-white px-8 rounded-[20px]"
+                            className="bg-black text-white px-8 rounded-[10px]"
                         >
                             {t("submit")}
                         </button>

@@ -222,7 +222,7 @@ export default function VersionHistoryPage() {
             ) : (
                 <div className="flex gap-6">
                     <div className="w-[75%] flex flex-col gap-6">
-                        <div className="bg-white rounded-[30px] px-6 py-5 flex items-center gap-6">
+                        <div className="bg-white rounded-[10px] px-6 py-5 flex items-center gap-6">
                             <CapsuleDropdown
                                 label={t("selectDate")}
                                 items={dateOptions}
@@ -275,7 +275,7 @@ export default function VersionHistoryPage() {
                                 />
                             ))
                         ) : (
-                            <div className="bg-[#E0E0E0] rounded-[25px] p-6 space-y-3">
+                            <div className="bg-[#E0E0E0] rounded-[10px] p-6 space-y-3">
                                 <div className="font-semibold text-[14px] text-black/50">
                                     {t("verifiedBy")}
                                 </div>

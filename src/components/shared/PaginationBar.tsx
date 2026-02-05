@@ -36,7 +36,7 @@ export default function PaginationBar({
 
     return (
         <div className="flex items-center gap-2">
-            <span className="min-w-[80px] px-2 h-[19px] text-center font-normal text-[16px] text-[#1E1E1E] whitespace-nowrap">
+            <span className="min-w-20 px-2 h-4.75 text-center font-normal text-[16px] text-[#1E1E1E] whitespace-nowrap">
                 {formatNumber(pageStart)} - {formatNumber(pageEnd)} of {formatNumber(total)}
             </span>
 
@@ -45,7 +45,7 @@ export default function PaginationBar({
                 <button
                     onClick={onPrev}
                     disabled={isPrevDisabled}
-                    className={`w-10 h-[34px] flex items-center justify-center rounded-[17px]
+                    className={`w-10 h-8.5 flex items-center justify-center rounded-[10px]
             ${isPrevDisabled
                             ? "bg-[#F2BA1A] cursor-not-allowed"
                             : "bg-[#F2BA1A]"
@@ -63,7 +63,7 @@ export default function PaginationBar({
                 <button
                     onClick={onNext}
                     disabled={isNextDisabled}
-                    className={`w-10 h-[34px] flex items-center justify-center rounded-[17px]
+                    className={`w-10 h-8.5 flex items-center justify-center rounded-[10px]
             ${isNextDisabled
                             ? "bg-[#F2BA1A] cursor-not-allowed"
                             : "bg-[#F2BA1A]"

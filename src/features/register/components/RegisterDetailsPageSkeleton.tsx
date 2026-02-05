@@ -11,14 +11,14 @@ export default function RegisterDetailsPageSkeleton({ tabs = [] }: Props) {
                 {[1, 2, 3].map(i => (
                     <div
                         key={i}
-                        className="h-11 w-32 rounded-t-[20px] bg-[#F2BA1A]/50"
+                        className="h-10 w-32 rounded-t-[10px] bg-[#F2BA1A]/50"
                     />
                 ))}
             </div>)}
 
             <div className="grid grid-cols-12 gap-6">
                 <div className="col-span-12 lg:col-span-9 space-y-6">
-                    <div className="rounded-[30px] bg-white p-9.5 space-y-4 shadow-sm">
+                    <div className="rounded-[10px] bg-white p-9.5 space-y-4 shadow-sm">
                         <div className="flex items-center gap-3">
                             <div className="h-6 w-48 rounded bg-gray-300 animate-pulse" />
                         </div>
@@ -58,7 +58,7 @@ export default function RegisterDetailsPageSkeleton({ tabs = [] }: Props) {
 
 
                 <div className="hidden lg:flex lg:col-span-3 flex-col gap-6">
-                    <div className="relative rounded-[30px] bg-[#EDC227] px-8 pt-4 pb-7 overflow-hidden animate-pulse">
+                    <div className="relative rounded-[10px] bg-[#EDC227] px-8 pt-4 pb-7 overflow-hidden animate-pulse">
                         <div className="flex items-center justify-between">
                             <div className="h-6 w-40 rounded bg-black/20" />
                             <div className="h-15 w-20 rounded-[20px] bg-black/20" />
@@ -70,7 +70,7 @@ export default function RegisterDetailsPageSkeleton({ tabs = [] }: Props) {
 
                         <div className="absolute bottom-4 right-4 h-30 w-30 rounded-full bg-black/20" />
                     </div>
-                    <div className="relative rounded-[30px] bg-[#E0E0E0] px-8 pt-4 pb-7 overflow-hidden animate-pulse">
+                    <div className="relative rounded-[10px] bg-[#E0E0E0] px-8 pt-4 pb-7 overflow-hidden animate-pulse">
                         <div className="flex items-center justify-between mb-5">
                             <div className="h-6 w-40 rounded bg-black/20" />
                             <div className="h-15 w-20 rounded-[20px] bg-black/20" />
