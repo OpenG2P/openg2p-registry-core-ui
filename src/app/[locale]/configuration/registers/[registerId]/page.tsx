@@ -1,15 +1,17 @@
 'use client';
 
 import { useState } from 'react';
-import { BreadcrumbBar } from '@/components/shared';
+import { BreadcrumbBar, TopBar } from '@/components/shared';
 import { useParams } from 'next/navigation';
 import { useBreadcrumb } from '@/shared/hooks/useBreadcrumb';
 import { useAllRegister } from '@/features/configuration/hooks/useAllRegister';
 import EditRegisterModal from '@/features/configuration/components/EditRegisterModal';
 import ConfigDetailsSummary from '@/features/configuration/components/ConfigDetailsSummary';
-import RegisterTabsContent from '@/features/configuration/components/RegisterTabsContent';
-import { getParentMnemonic, getRegisterDetails } from '@/features/configuration/utils/configUtils';
+import { getRegisterDetails } from '@/features/configuration/utils/configUtils';
 import ViewRegisterFieldsModal from '@/features/configuration/components/ViewRegisterFieldsModal';
+import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
+import { usePagination } from '@/shared/hooks';
+import RegisterTabConfigView from '@/features/configuration/components/RegisterTabConfigView';
 
 const RegisterConfigurationPage = () => {
   const { registerId } = useParams<{ registerId: string }>();
@@ -20,10 +22,40 @@ const RegisterConfigurationPage = () => {
   const { registers, loading, refresh } = useAllRegister(1, 100);
   const registerDetails = getRegisterDetails(registerId, registers);
 
+  const tabLabels = {
+    tabs: 'Tabs',
+    filter: 'Filter Schema',
+    search: 'Search Schema'
+  };
+
   const breadcrumb = useBreadcrumb({
     rootItem: { label: 'Registers', href: '/configuration/registers' },
-    customItems: [{ label: registerDetails.register_mnemonic, href: `/configuration/registers/${registerId}` }]
+    customItems: [
+      { label: registerDetails?.register_mnemonic || '', href: `/configuration/registers/${registerId}` },
+      { label: tabLabels[activeTab], href: `/configuration/registers/${registerId}` }
+    ]
   });
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const { config } = useRuntimeConfig();
+  const PAGE_SIZE = config.pageSize || 10;
+  const [paginationInfo, setPaginationInfo] = useState({ totalItems: 0, currentCount: 0 });
+
+  const pagination = usePagination({
+    currentPage,
+    pageSize: PAGE_SIZE,
+    totalItems: paginationInfo.totalItems,
+    currentCount: paginationInfo.currentCount,
+  });
+
+  const handlePrev = () => {
+    setCurrentPage(prev => Math.max(1, prev - 1));
+  };
+
+  const handleNext = () => {
+    setCurrentPage(prev => prev + 1);
+  };
 
   if (loading || !registerDetails.register_id) {
     return (
@@ -40,59 +72,88 @@ const RegisterConfigurationPage = () => {
       </div>
 
       <ConfigDetailsSummary
-        title={registerDetails.register_mnemonic}
-        description={registerDetails.register_description}
-        extraInfo={getParentMnemonic(registerDetails.master_register_id || null, registers)}
-        status={true}
-        selectionOptions={registers.map(r => r.register_mnemonic)}
-        onSave={(data) => console.log('Saved Register:', data)}
+        title={registerDetails?.register_mnemonic || 'None'}
+        description={registerDetails?.register_description}
+        extraInfo1={registerDetails?.master_register_id || 'None'}
+        extraInfo2={registerDetails.register_purpose || 'None'}
         onEdit={() => setIsEditModalOpen(true)}
         onView={() => setIsViewModalOpen(true)}
       />
 
-      {/* Tab Navigation */}
-      <div className="px-7.5 py-6">
-        <div className="flex gap-2 px-10">
-          <button
-            onClick={() => setActiveTab('tabs')}
-            className={`px-8 py-2 text-black text-[18px] font-medium rounded-t-[20px] transition-all ${activeTab === 'tabs'
-              ? 'bg-[#F2BA1A]'
-              : 'bg-[#DDDDDD]'
-              }`}
-          >
-            Tabs
-          </button>
-          <button
-            onClick={() => setActiveTab('filter')}
-            className={`px-8 py-2 text-black text-[18px] font-medium rounded-t-[20px] transition-all ${activeTab === 'filter'
-              ? 'bg-[#F2BA1A]'
-              : 'bg-[#DDDDDD]'
-              }`}
-          >
-            Filter Schema
-          </button>
-          <button
-            onClick={() => setActiveTab('search')}
-            className={`px-8 py-2 text-black text-[18px] font-medium rounded-t-[20px] transition-all ${activeTab === 'search'
-              ? 'bg-[#F2BA1A]'
-              : 'bg-[#DDDDDD]'
-              }`}
-          >
-            Search Schema
-          </button>
+      <div className=" ml-4 mt-4 px-7.5">
+        <div className="flex justify-between items-center h-[56px]">
+          <div className="flex gap-2 items-end h-full">
+            <button
+              onClick={() => setActiveTab('tabs')}
+              className={`px-8 py-2 text-[18px] font-medium rounded-t-[20px] transition-all ${activeTab === 'tabs'
+                ? 'bg-[#F2BA1A] text-black'
+                : 'bg-[#DDDDDD] text-black'
+                }`}
+            >
+              Tabs
+            </button>
+
+            <button
+              onClick={() => setActiveTab('filter')}
+              className={`px-8 py-2 text-[18px] font-medium rounded-t-[20px] transition-all ${activeTab === 'filter'
+                ? 'bg-[#F2BA1A] text-black'
+                : 'bg-[#DDDDDD] text-black'
+                }`}
+            >
+              Filter Schema
+            </button>
+
+            <button
+              onClick={() => setActiveTab('search')}
+              className={`px-8 py-2 text-[18px] font-medium rounded-t-[20px] transition-all ${activeTab === 'search'
+                ? 'bg-[#F2BA1A] text-black'
+                : 'bg-[#DDDDDD] text-black'
+                }`}
+            >
+              Search Schema
+            </button>
+          </div>
+
+          {/* TopBar */}
+          <div className="flex items-center h-full">
+            <TopBar
+              breadcrumb={[]}
+              showFilters={false}
+              showPagination={activeTab === 'tabs'}
+              showAddNewButton={activeTab === 'tabs'}
+              addNewButtonText="Add New Tab"
+              onAddNewButton={() => setIsModalOpen(true)}
+              pageStart={pagination.pageStart}
+              pageEnd={pagination.pageEnd}
+              total={pagination.total}
+              onPrev={handlePrev}
+              onNext={handleNext}
+              showCapsule={false}
+            />
+          </div>
         </div>
       </div>
 
+
       {/* Tab Content */}
-      {activeTab === 'tabs' ? (
-        <RegisterTabsContent registerId={registerId} />
-      ) : (
-        <div className="mx-7.5 mt-8">
-          <div className="bg-white rounded-[30px] p-12 flex items-center justify-center min-h-[400px]">
-            <p className="text-gray-400 text-lg">No content available</p>
+      <div className="mt-0">
+        {activeTab === 'tabs' ? (
+          <RegisterTabConfigView
+            onAddNewRegister={() => setIsModalOpen(true)}
+            isModalOpen={isModalOpen}
+            onCloseModal={() => setIsModalOpen(false)}
+            page={currentPage}
+            pageSize={PAGE_SIZE}
+            onDataLoaded={(totalItems, currentCount) => setPaginationInfo({ totalItems, currentCount })}
+          />
+        ) : (
+          <div className="mx-7.5">
+            <div className="bg-white rounded-[30px] p-12 flex items-center justify-center min-h-[400px]">
+              <p className="text-gray-400 text-lg text-center italic">No {activeTab === 'filter' ? 'Filter' : 'Search'} Schema available for this register</p>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
       <EditRegisterModal
         isOpen={isEditModalOpen}
@@ -106,11 +167,8 @@ const RegisterConfigurationPage = () => {
         data={registerDetails as any}
         onClose={() => setIsViewModalOpen(false)}
       />
-
     </>
   );
 };
-
-
 
 export default RegisterConfigurationPage;

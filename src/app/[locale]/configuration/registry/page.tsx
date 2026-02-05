@@ -85,9 +85,12 @@ const RegistryConfigurationPage = () => {
 								unoptimized
 							/>
 							<div className="flex items-center gap-4">
-								<h1 className="text-[#ED7C22] text-xl font-medium m-0">
-									{registryData?.registry_name || registryName}
-								</h1>
+								<div className='flex flex-col items-start gap-2'>
+									<span className='text-black text-[16px] font-normal leading-[22px] tracking-normal m-0'>Registry Name</span>
+									<h1 className="text-[#ED7C22] text-xl m-0">
+										{registryData?.registry_name || registryName}
+									</h1>
+								</div>
 
 								<div
 									onClick={startEditing}

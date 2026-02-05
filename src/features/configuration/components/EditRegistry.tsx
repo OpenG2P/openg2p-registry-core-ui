@@ -84,13 +84,17 @@ export default function EditRegistry({
                         {/* Input Area */}
                         <div className="flex-1 flex items-center gap-4">
                             <div className="w-[300px]">
-                                <input
-                                    type="text"
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)}
-                                    placeholder="Registry Name"
-                                    className="w-full h-[40px] px-4 rounded-[10px] border-none text-[16px] font-medium text-black/50 bg-white outline-none placeholder:text-black/50"
-                                />
+                                <div className='flex flex-col items-start gap-1'>
+                                    <span className='text-black text-[16px] font-normal leading-[22px] tracking-normal m-0'>Registry Name</span>
+                                    <input
+                                        type="text"
+                                        value={name}
+                                        onChange={(e) => setName(e.target.value)}
+                                        placeholder="Registry Name"
+                                        className="w-full h-[40px] px-4 rounded-[10px] border-none text-[16px] font-medium text-black/50 bg-white outline-none placeholder:text-black/50"
+                                    />
+
+                                </div>
                             </div>
 
                             {/* Action Buttons */}

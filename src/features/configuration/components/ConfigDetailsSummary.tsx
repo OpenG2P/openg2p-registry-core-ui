@@ -1,14 +1,11 @@
 import React from 'react';
-import Image from 'next/image';
 import { Pencil, Eye, Check, X, ChevronDown } from 'lucide-react';
 
 interface ConfigDetailsSummaryProps {
     title: string;
     description?: string;
-    extraInfo?: string;
-    status?: boolean;
-    selectionOptions?: string[];
-    onSave?: (data: { title: string; description: string; extraInfo: string; status: boolean }) => void;
+    extraInfo1?: string;
+    extraInfo2?: string;
     onEdit?: () => void;
     onView?: () => void;
 }
@@ -16,20 +13,12 @@ interface ConfigDetailsSummaryProps {
 export default function ConfigDetailsSummary({
     title,
     description,
-    extraInfo,
-    status = true,
-    selectionOptions = [],
-    onSave,
+    extraInfo1,
+    extraInfo2,
     onEdit,
     onView
 }: ConfigDetailsSummaryProps) {
     const [isEditing, setIsEditing] = React.useState(false);
-    const [formData, setFormData] = React.useState({
-        title,
-        description,
-        extraInfo: extraInfo || '',
-        status
-    });
 
     return (
         <div className="mx-8 mb-0">
@@ -39,43 +28,44 @@ export default function ConfigDetailsSummary({
             >
                 <div className="flex flex-1 items-center gap-10">
                     <div className="min-w-[120px]">
-                        <span className="text-gray-900 font-medium text-base">{title}</span>
+                        <span className="text-gray-600 font-medium text-base">{title}</span>
                     </div>
 
                     <div className="flex-1 max-w-[300px] truncate">
                         <span className="text-gray-600 text-sm">{description}</span>
                     </div>
 
-                    {extraInfo && (
+                    {extraInfo1 && (
                         <div className="flex-1 truncate">
-                            <span className="text-gray-600 text-sm">{extraInfo}</span>
+                            <span className="text-gray-600 text-sm">{extraInfo1}</span>
                         </div>
                     )}
-
-                    <div className="flex items-center gap-2 ml-auto">
-                        <span className="text-[#1CC9B7] font-medium text-sm">{status ? 'Yes' : 'No'}</span>
-                        <Image
-                            src={status ? "/config/trueSign.png" : "/config/falseSign.png"}
-                            alt={status ? "Success" : "Failure"}
-                            width={18}
-                            height={18}
-                        />
-                    </div>
+                    {extraInfo2 && (
+                        <div className="flex-1 truncate">
+                            <span className="text-gray-600 text-sm">{extraInfo2}</span>
+                        </div>
+                    )}
                 </div>
 
                 <div className="flex items-center gap-3 ml-8">
-                    <button
-                        onClick={() => onView && onView()}
-                        className="bg-white p-2 rounded-full hover:bg-gray-50 transition-colors shadow-sm flex items-center justify-center flex-shrink-0"
-                    >
-                        <Eye size={16} className="text-gray-700" />
-                    </button>
-                    <button
-                        onClick={() => onEdit ? onEdit() : setIsEditing(true)}
-                        className="bg-white p-2 rounded-full hover:bg-gray-50 transition-colors shadow-sm flex items-center justify-center flex-shrink-0"
-                    >
-                        <Pencil size={16} className="text-gray-700" />
-                    </button>
+                    {onView && (
+                        <button
+                            onClick={onView}
+                            className="bg-white p-2 rounded-full hover:bg-gray-50 transition-colors shadow-sm flex items-center justify-center flex-shrink-0"
+                            title="View Details"
+                        >
+                            <Eye size={16} className="text-gray-700" />
+                        </button>
+                    )}
+                    {onEdit && (
+                        <button
+                            onClick={onEdit}
+                            className="bg-white p-2 rounded-full hover:bg-gray-50 transition-colors shadow-sm flex items-center justify-center flex-shrink-0"
+                            title="Edit"
+                        >
+                            <Pencil size={16} className="text-gray-700" />
+                        </button>
+                    )}
                 </div>
             </div>
         </div>
