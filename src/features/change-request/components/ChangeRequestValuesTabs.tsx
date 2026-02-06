@@ -60,9 +60,8 @@ export function ChangeRequestValuesTabs({
                         <SectionRenderer
                             section={sectionUISchema}
                             hideEditButton={true}
-                            changeRequestType="new"
                             mode="CRView"
-                            showChangeRequestLabel={true}
+                            changeRequestType="new"
                         />
                     </WidgetProvider>
 
@@ -75,9 +74,9 @@ export function ChangeRequestValuesTabs({
                         <SectionRenderer
                             section={sectionUISchema}
                             hideEditButton={true}
-                            changeRequestType="old"
                             mode="CRView"
-                            showChangeRequestLabel={true}
+                            changeRequestType="old"
+
                         />
                     </WidgetProvider>
                 </div>
