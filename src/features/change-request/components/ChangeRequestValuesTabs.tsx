@@ -6,6 +6,7 @@ import {
     SectionRenderer,
 } from "@openg2p/registry-widgets";
 import { dataSourceRequestHandler } from "@/features/register/utils/dataSourceRequestHandler";
+import type { SectionConfig } from "@openg2p/registry-widgets";
 
 type TabType = "values" /* | "duplicates" */;
 
