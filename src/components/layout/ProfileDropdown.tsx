@@ -31,7 +31,7 @@ export default function ProfileDropdown() {
             >
                 <span className="text-[16px] text-black font-normal">
                     {/* in place of use set the actual use name  */}
-                    {t('hi')}, <span className="font-semibold">{t('user')}</span>
+                    <span className="font-semibold">{t('user')}</span>
                 </span>
 
                 <div className="w-9.5 h-9.5 rounded-full overflow-hidden drop-shadow-[0_4px_20px_rgba(0,0,0,0.25)]">

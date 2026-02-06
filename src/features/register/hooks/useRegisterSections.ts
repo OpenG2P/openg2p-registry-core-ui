@@ -16,7 +16,7 @@ export const useRegisterSections = (onChangeRequestCreated: () => void) => {
   const { currentRegister } = useRegister();
 
   // list of tab sections
-  const { data: tabSections } = useFetch<TabSection[]>({
+  const { data: tabSections, loading: loadingSections } = useFetch<TabSection[]>({
     url: `/api/register/tab-sections`,
     enabled: !!activeTabId,
     options: {
@@ -28,7 +28,7 @@ export const useRegisterSections = (onChangeRequestCreated: () => void) => {
     },
   });
 
-  const { data: tabSectionsData } = useFetch<TabSectionData[]>({
+  const { data: tabSectionsData, loading: loadingData } = useFetch<TabSectionData[]>({
     url: `/api/register/tab-sections-data`,
     enabled:
       !!currentRegister?.register_id && !!activeTabId && !!internalRecordId,
@@ -104,10 +104,19 @@ export const useRegisterSections = (onChangeRequestCreated: () => void) => {
     onChangeRequestCreated,
   );
 
+  const isSchemaStale =
+    tabSections &&
+    tabSections.length > 0 &&
+    tabSections[0].tab_id !== activeTabId;
+
+  const isFetching = loadingSections || loadingData;
+
   const canRenderContent = !!(
     tabSections &&
     currentRegister &&
-    internalRecordId
+    internalRecordId &&
+    !isSchemaStale &&
+    !isFetching
   );
   return {
     tabSections,
