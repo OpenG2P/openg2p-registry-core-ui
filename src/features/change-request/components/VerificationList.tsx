@@ -32,7 +32,7 @@ export default function VerificationList({
                     >
                         <span className="pt-0.5">{t("add")}</span>
                         <Image
-                            src="/plus.png"
+                            src="/images/common/plus.png"
                             alt="Add"
                             width={12}
                             height={12}

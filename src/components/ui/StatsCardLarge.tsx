@@ -43,13 +43,13 @@ const StatsCardLarge = ({
                         id: "approved",
                         label: t('approved'),
                         value: data.approved_count,
-                        imageUrl: "/statsIcon/approved.png",
+                        imageUrl: "/images/register/statsIcon/approved.png",
                     },
                     {
                         id: "pending",
                         label: t('pending'),
                         value: data.pending_count,
-                        imageUrl: "/statsIcon/pending.png",
+                        imageUrl: "/images/register/statsIcon/pending.png",
                     },
                 ],
             };

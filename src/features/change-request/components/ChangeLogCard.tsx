@@ -106,7 +106,7 @@ export default function ChangeLogCard({
                             {t('attachedDocuments')}
                         </span>
                         <Image
-                            src="/attached_doc_icon.png"
+                            src="/images/changerequest/attached_doc_icon.png"
                             alt="Attached documents"
                             width={14}
                             height={14}
@@ -122,7 +122,7 @@ export default function ChangeLogCard({
                             >
                                 {doc.document_label}
                                 <Image
-                                    src="/right_arrow.png"
+                                    src="/images/common/right_arrow.png"
                                     alt="arrow"
                                     width={14}
                                     height={14}
@@ -168,7 +168,7 @@ export default function ChangeLogCard({
                 >
                     {t('viewDetails')}
                     <Image
-                        src="/right_arrow.png"
+                        src="/images/common/right_arrow.png"
                         alt="arrow"
                         width={14}
                         height={14}

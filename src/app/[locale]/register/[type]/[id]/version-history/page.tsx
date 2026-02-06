@@ -256,7 +256,7 @@ export default function VersionHistoryPage() {
                                 store={widgetStore}
                                 schemaData={newSectionData}
                                 translate={t}
-                            // dataSourceRequestHandler={dataSourceRequestHandler}
+                                dataSourceRequestHandler={dataSourceRequestHandler}
                             >
                                 <SectionRenderer
                                     section={sectionUISchema}
@@ -283,7 +283,7 @@ export default function VersionHistoryPage() {
                                 <div className="flex items-center gap-3">
                                     <div className="w-10 h-10 relative">
                                         <Image
-                                            src="/verified_person.png"
+                                            src="/images/common/verified_person.png"
                                             alt="verified person"
                                             fill
                                             className="rounded-full object-cover opacity-20 grayscale"

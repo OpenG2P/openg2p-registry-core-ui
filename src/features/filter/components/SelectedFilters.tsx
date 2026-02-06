@@ -79,7 +79,7 @@ export default function SelectedFilters({
                                 onClick={() => removeFilter(index)}
                                 aria-label="Remove filter"
                             >
-                                <Image src="/close.png" width={16} height={16} alt="clear" />
+                                <Image src="/images/common/close.png" width={16} height={16} alt="clear" />
                             </button>
                         </div>
                     ))

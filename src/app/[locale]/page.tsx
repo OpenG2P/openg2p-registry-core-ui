@@ -115,10 +115,7 @@ export default function Home() {
             : StatsCardLarge;
 
     return (
-        <div className="min-h-screen bg-[#EABB13] pt-8 sm:pt-10 md:pt-12 overflow-hidden text-gray-900 bg-[url('/bg_pattern.png')]">
-            {/* background pattern */}
-            {/* <div className="absolute top-0 left-0 w-full h-full bg-[url('/bg_pattern.png')] bg-repeat bg-size-[96px_96px] opacity-80 pointer-events-none" /> */}
-
+        <div className="min-h-screen bg-[#EABB13] pt-8 sm:pt-10 md:pt-12 overflow-hidden text-gray-900 bg-[url('/images/common/bg_pattern.png')]">
             <div className="relative">
                 <div className="mx-auto flex max-w-6xl flex-col items-center px-4 sm:px-6 py-8 sm:py-10 lg:py-12 space-y-10 sm:space-y-12 lg:space-y-14">
 
@@ -158,7 +155,7 @@ export default function Home() {
                 </div>
                 <div className="bottom-0 w-full px-4">
                     <Image
-                        src="/svgs/People.svg"
+                        src="/images/common/people.svg"
                         alt={t('peoplesImageAlt')}
                         width={1200}
                         height={600}

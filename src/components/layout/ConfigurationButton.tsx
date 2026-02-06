@@ -18,7 +18,7 @@ export default function ConfigurationButton() {
             className="flex items-center gap-2 hover:opacity-80"
         >
             <Image
-                src="/config_icon.png"
+                src="/images/config/config_icon.png"
                 alt="Config Icon"
                 width={24}
                 height={24}

@@ -165,7 +165,7 @@ const AttachedDocuments = ({ documents = [] }: { documents?: ChangeRequestDocume
                     {t('attachedDocuments')}
                 </span>
                 <Image
-                    src="/attached_doc_icon.png"
+                    src="/images/changerequest/attached_doc_icon.png"
                     alt="doc"
                     width={14}
                     height={14}
@@ -181,7 +181,7 @@ const AttachedDocuments = ({ documents = [] }: { documents?: ChangeRequestDocume
                         className="flex items-center gap-2 cursor-pointer"
                     >
                         {doc.document_label}
-                        <Image src="/right_arrow.png" alt="arrow" width={14} height={14} />
+                        <Image src="/images/common/right_arrow.png" alt="arrow" width={14} height={14} />
                     </span>
                 ))}
 

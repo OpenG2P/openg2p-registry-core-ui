@@ -16,7 +16,7 @@ export default function NotFound() {
           <div className="flex items-end gap-2">
             <Link href="/" passHref>
               <div className="h-7.5 flex items-end pb-0.5 pr-2 cursor-pointer">
-                <Image src="/home.png" width={22} height={22} alt="home" />
+                <Image src="/images/common/home.png" width={22} height={22} alt="home" />
               </div>
             </Link>
 
@@ -30,7 +30,7 @@ export default function NotFound() {
       <div className="flex flex-1 items-center justify-start px-8">
         <div className="w-full bg-white rounded-[28px] py-20 flex flex-col items-center text-center">
           <Image
-            src="/error/404.png"
+            src="/images/common/404.png"
             width={200}
             height={200}
             alt="404 error illustration"

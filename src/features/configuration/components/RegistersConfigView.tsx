@@ -185,7 +185,7 @@ export default function RegistersConfigView({
                   >
                     <span className="text-sm font-medium">View</span>
                     <Image
-                      src="/config/view.png"
+                      src="/images/common/view.png"
                       alt="View"
                       width={18}
                       height={18}
@@ -199,7 +199,7 @@ export default function RegistersConfigView({
                   >
                     <span className="tsmext- font-medium">Remove</span>
                     <Image
-                      src="/config/falseSign.png"
+                      src="/images/common/false_sign.png"
                       alt="Remove"
                       width={18}
                       height={18}

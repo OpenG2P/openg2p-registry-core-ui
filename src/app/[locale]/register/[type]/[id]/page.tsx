@@ -75,6 +75,7 @@ export default function RegisterDetailPage() {
                                                 section={section_ui_schema}
                                                 onSectionSave={handleSectionSave}
                                                 hideEditButton={hideEditButton}
+                                                dataSourceRequestHandler = {dataSourceRequestHandler}
                                             />
                                         </div>
                                     );

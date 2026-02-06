@@ -95,7 +95,7 @@ export default function VersionHistoryCard({
                 <p className="font-medium">{t("lastUpdatedBy")}</p>
                 <div className="flex items-center gap-2">
                     <Image
-                        src="/version_profile.png"
+                        src="/images/register/version_profile.png"
                         alt="Updated by"
                         width={16}
                         height={16}
@@ -103,7 +103,7 @@ export default function VersionHistoryCard({
                     />
                     <span>{payload.last_updated_by}</span>
                     <Image
-                        src="/version_calendar.png"
+                        src="/images/register/version_calendar.png"
                         alt="Date"
                         width={14}
                         height={14}
@@ -120,7 +120,7 @@ export default function VersionHistoryCard({
                     <p className="font-medium">{t("lastApprovedBy")}</p>
                     <div className="flex items-center gap-2">
                         <Image
-                            src="/version_profile.png"
+                            src="/images/register/version_profile.png"
                             alt="Approved by"
                             width={16}
                             height={16}
@@ -128,7 +128,7 @@ export default function VersionHistoryCard({
                         />
                         <span>{payload.last_approved_by}</span>
                         <Image
-                            src="/version_calendar.png"
+                            src="/images/register/version_calendar.png"
                             alt="Date"
                             width={14}
                             height={14}

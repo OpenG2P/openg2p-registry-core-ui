@@ -55,7 +55,7 @@ export function ChangeRequestValuesTabs({
                         store={widgetStoreNew}
                         schemaData={newSectionData}
                         translate={t}
-                    // dataSourceRequestHandler={dataSourceRequestHandler}
+                    dataSourceRequestHandler={dataSourceRequestHandler}
                     >
                         <SectionRenderer
                             section={sectionUISchema}
@@ -69,7 +69,7 @@ export function ChangeRequestValuesTabs({
                         store={widgetStoreOld}
                         schemaData={oldSectionData}
                         translate={t}
-                    // apiAdapter={dataSourceRequestHandler}
+                        dataSourceRequestHandler={dataSourceRequestHandler}
                     >
                         <SectionRenderer
                             section={sectionUISchema}

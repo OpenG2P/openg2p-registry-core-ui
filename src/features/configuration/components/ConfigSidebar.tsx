@@ -12,31 +12,31 @@ const sidebarOptions: SidebarOption[] = [
   {
     id: 'registry',
     label: 'Registry',
-    iconUrl: "/config/menu_registry_01.png",
+    iconUrl: "/images/config/menu_registry_01.png",
     path: '/configuration/registry'
   },
   {
     id: 'registers',
     label: 'Registers',
-    iconUrl: "/config/menu_registers_02.png",
+    iconUrl: "/images/config/menu_registers_02.png",
     path: '/configuration/registers'
   },
   {
     id: 'data-models',
     label: 'Data Models',
-    iconUrl: "/config/menu_data_models_03.png",
+    iconUrl: "/images/config/menu_data_models_03.png",
     path: '/configuration/data-models'
   },
   {
     id: 'ingest-configurations',
     label: 'Ingest Configurations',
-    iconUrl: "/config/menu_ingest_config_04.png",
+    iconUrl: "/images/config/menu_ingest_config_04.png",
     path: '/configuration/ingest-configurations'
   },
   {
     id: 'outgest-configurations',
     label: 'Outgest Configurations',
-    iconUrl: "/config/menu_outgest_config_05.png",
+    iconUrl: "/images/config/menu_outgest_config_05.png",
     path: '/configuration/outgest-configurations'
   }
 ];

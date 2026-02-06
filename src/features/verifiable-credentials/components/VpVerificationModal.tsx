@@ -217,14 +217,14 @@ export default function VpVerificationModal({
                         onClick={onClose}
                         className={`opacity-60 hover:opacity-100 transition-all ${verificationComplete ? 'static' : 'absolute right-0'}`}
                     >
-                        <Image src="/cr_close.png" alt="Close" width={30} height={30} />
+                        <Image src="/images/changerequest/cr_close.png" alt="Close" width={30} height={30} />
                     </button>
                 </div>
 
                 <div className="flex flex-col h-full">
                     {importResult ? (
                         <div className="flex flex-col items-center justify-center h-full text-center px-6">
-                            <Image src="/verified.png" alt="success" width={60} height={60} />
+                            <Image src="/images/common/verified.png" alt="success" width={60} height={60} />
 
                             <h3 className="text-[22px] font-semibold mt-4">
                                 Import Successful
@@ -342,7 +342,7 @@ export default function VpVerificationModal({
                                 }}
                             />
                             <div className="flex flex-col items-center gap-3">
-                                {/* <Image src="/loader.gif" alt="loading" width={40} height={40} /> */}
+                                {/* <Image src="/images/common/loader.gif" alt="loading" width={40} height={40} /> */}
                                 <p className="font-medium">Importing your data</p>
                                 <p className="text-sm text-gray-500">Please wait a few moments</p>
                             </div>

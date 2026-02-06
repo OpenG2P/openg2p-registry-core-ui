@@ -47,7 +47,7 @@ export default function IncomingMessageCard({ message }: Props) {
                     <h3 className="text-[18px] font-semibold text-[#ED7C22] flex justify-between items-center">
                         <span>Raw</span>
                         <Image
-                            src="/chat.png"
+                            src="/images/messages/chat.png"
                             alt="Raw Icon"
                             width={19}
                             height={20}
@@ -85,7 +85,7 @@ export default function IncomingMessageCard({ message }: Props) {
                     <h3 className="text-[18px] font-semibold text-[#ED7C22] flex justify-between items-center">
                         <span>Transformation</span>
                         <Image
-                            src="/chat.png"
+                            src="/images/messages/chat.png"
                             alt="Raw Icon"
                             width={19}
                             height={20}
@@ -124,7 +124,7 @@ export default function IncomingMessageCard({ message }: Props) {
                                 >
                                     {message.change_request_id}
                                     <Image
-                                        src="/right_arrow.png"
+                                        src="/images/common/right_arrow.png"
                                         alt="Arrow"
                                         width={14}
                                         height={14}

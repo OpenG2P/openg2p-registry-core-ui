@@ -20,7 +20,7 @@ export default function BreadcrumbBar({ breadcrumb = [] }: BreadcrumbBarProps) {
             <div className="flex items-end gap-2">
                 <Link href="/" passHref>
                     <div className="h-7.5 flex items-end pb-0.5 pr-2 cursor-pointer">
-                        <Image src="/home.png" width={22} height={22} alt="home" />
+                        <Image src="/images/common/home.png" width={22} height={22} alt="home" />
                     </div>
                 </Link>
 
@@ -38,7 +38,7 @@ export default function BreadcrumbBar({ breadcrumb = [] }: BreadcrumbBarProps) {
         <div className="flex items-end gap-2">
             <Link href="/" passHref>
                 <div className="h-7.5 flex items-end pb-0.5 pr-2 cursor-pointer">
-                    <Image src="/home.png" width={22} height={22} alt="home" />
+                    <Image src="/images/common/home.png" width={22} height={22} alt="home" />
                 </div>
             </Link>
 
@@ -61,7 +61,7 @@ export default function BreadcrumbBar({ breadcrumb = [] }: BreadcrumbBarProps) {
                         {!isLast && (
                             <div className="flex items-end pb-1">
                                 <Image
-                                    src="/breadcrumb_arrow.png"
+                                    src="/images/common/breadcrumb_arrow.png"
                                     width={8}
                                     height={14}
                                     alt="arrow"

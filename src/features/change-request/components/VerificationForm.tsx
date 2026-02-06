@@ -28,7 +28,7 @@ export default function VerificationForm({ onSubmit, onClose }: Props) {
                 className="absolute top-4 right-4"
             >
                 <Image
-                    src="/close.png"
+                    src="/images/common/close.png"
                     alt={t("close")}
                     width={22}
                     height={22}
@@ -43,7 +43,7 @@ export default function VerificationForm({ onSubmit, onClose }: Props) {
             <div className="flex items-center gap-3">
                 <div className="w-10 h-10 relative">
                     <Image
-                        src="/verified_person.png"
+                        src="/images/common/verified_person.png"
                         alt={t("verifiedPerson")}
                         fill
                         className="rounded-full object-cover"
@@ -117,7 +117,7 @@ const CheckboxOption = ({
                 }`}
         >
             {checked && (
-                <Image src="/tick.png" alt="tick" width={16} height={16} />
+                <Image src="/images/common/tick.png" alt="tick" width={16} height={16} />
             )}
         </div>
         <span className="text-gray-700">{label}</span>

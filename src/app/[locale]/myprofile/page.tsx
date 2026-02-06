@@ -18,7 +18,7 @@ export default function MyProfile() {
         language: 'English',
         timezone: 'Asia/Calcutta (01/27/2026 12:59:35)',
         notifications: 'enabled',
-        image: '/profile.png',
+        image: '/images/register/profile.png',
     };
     return (
         <div className="min-h-screen bg-[#F3F1E4]">
@@ -30,7 +30,7 @@ export default function MyProfile() {
             />
             <div className="flex mx-7.5 bg-white rounded-[10px]">
                 <div
-                    className="w-[20%] bg-[#F2BA1A] bg-[url('/bg_pattern.png')] rounded-[10px] shadow-[0px_17px_21px_0px_#F2BA1A2B] flex items-start justify-center"
+                    className="w-[20%] bg-[#F2BA1A] bg-[url('/images/common/bg_pattern.png')] rounded-[10px] shadow-[0px_17px_21px_0px_#F2BA1A2B] flex items-start justify-center"
                 >
                     <Image
                         src={profile.image}
@@ -75,7 +75,7 @@ export default function MyProfile() {
                             <div className="flex items-center justify-between">
                                 <p className="text-[18px] font-medium">{profile.timezone}</p>
                                 <Image
-                                    src="/edit.png"
+                                    src="/images/common/edit.png"
                                     alt="Edit timezone"
                                     width={16}
                                     height={16}

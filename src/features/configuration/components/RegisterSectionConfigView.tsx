@@ -141,7 +141,7 @@ export default function RegisterSectionConfigView({
                                     >
                                         Remove
                                         <Image
-                                            src="/config/falseSign.png"
+                                            src="/images/common/false_sign.png"
                                             alt="Remove"
                                             width={18}
                                             height={18}

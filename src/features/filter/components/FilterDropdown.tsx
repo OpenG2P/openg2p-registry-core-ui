@@ -217,7 +217,7 @@ export default function FilterDropdown({
                                 </select>
                                 <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
                                     <Image
-                                        src="/down_arrow.png"
+                                        src="/images/common/down_arrow.png"
                                         alt=""
                                         width={14}
                                         height={14}

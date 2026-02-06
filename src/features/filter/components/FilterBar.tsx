@@ -44,7 +44,7 @@ export default function FilterBar({
                     {filterLoading ? t('loading') : t('filters')}
                 </span>
 
-                <Image src="/filter_icon.png" width={16} height={16} alt={t('filters')} />
+                <Image src="/images/common/filter_icon.png" width={16} height={16} alt={t('filters')} />
             </button>
 
             {open && !filterLoading && (

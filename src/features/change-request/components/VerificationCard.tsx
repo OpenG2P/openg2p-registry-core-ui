@@ -18,7 +18,7 @@ export default function VerificationCard(props: VerificationCardProps) {
             <div className="flex items-center gap-3">
                 <div className="w-10 h-10 relative">
                     <Image
-                        src="/verified_person.png"
+                        src="/images/common/verified_person.png"
                         alt="verified person"
                         fill
                         className="rounded-full object-cover"
@@ -70,7 +70,7 @@ const StatusIndicator = ({
                 }`}
         >
             {isActive && (
-                <Image src="/tick.png" alt="tick" width={16} height={16} />
+                <Image src="/images/common/tick.png" alt="tick" width={16} height={16} />
             )}
         </div>
         <span className="text-[14px] font-medium text-black">{label}</span>
