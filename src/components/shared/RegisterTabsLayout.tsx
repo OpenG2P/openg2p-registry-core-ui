@@ -32,16 +32,16 @@ export default function RegisterTabsLayout({
                     <div className="flex gap-2 px-10">
                         {tabs.tabs.map((tab, tabIndex) => {
                             return (
-                            <button
-                                key={tab.tab_id}
-                                onClick={() => onTabChange(tabIndex)}
-                                className={`px-8 pt-2.5 pb-1 text-black text-[18px] font-medium rounded-t-[10px] transition-all ${activeTab === tabIndex
-                                    ? 'bg-[#F2BA1A]'
-                                    : 'bg-[#DDDDDD]'
-                                    }`}
-                            >
-                               {t(tab.tab_label) || tab.tab_label}
-                            </button>
+                                <button
+                                    key={tab.tab_id}
+                                    onClick={() => onTabChange(tabIndex)}
+                                    className={`px-8 pt-2.5 pb-1 text-black text-[18px] font-medium rounded-t-[10px] transition-all ${activeTab === tabIndex
+                                        ? 'bg-[#F2BA1A]'
+                                        : 'bg-[#DDDDDD]'
+                                        }`}
+                                >
+                                    {t(tab.tab_label) || tab.tab_label}
+                                </button>
                             );
                         })}
                     </div>

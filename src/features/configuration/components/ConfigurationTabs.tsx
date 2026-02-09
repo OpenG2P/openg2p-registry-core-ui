@@ -1,0 +1,111 @@
+'use client';
+
+import { useState, useRef } from 'react';
+import { ChevronDown } from 'lucide-react';
+import { useClickOutside } from '@/shared/hooks';
+
+interface ConfigurationTabsProps {
+    activeTab: string;
+    setActiveTab: (tab: any) => void;
+    tabLabels: Record<string, string>;
+}
+
+const TabsDropdown = ({
+    options,
+    activeTab,
+    onTabChange,
+    labelMap,
+    isMore = false
+}: {
+    options: string[],
+    activeTab: string,
+    onTabChange: (tab: any) => void,
+    labelMap: Record<string, string>,
+    isMore?: boolean
+}) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
+    const isActiveInDropdown = options.includes(activeTab);
+
+    useClickOutside(dropdownRef, () => setIsOpen(false), isOpen);
+
+    return (
+        <div className="relative inline-block text-center " ref={dropdownRef}>
+            <div>
+                <button
+                    type="button"
+                    onClick={() => setIsOpen(!isOpen)}
+                    className={`inline-flex justify-center items-center min-w-[120px] px-4 py-2 rounded-t-[10px] font-medium text-[18px]
+             ${isActiveInDropdown ? 'bg-[#F2BA1A] text-black' : 'bg-[#D1D1D1] text-black '
+                        }`}
+                >
+                    <span className="truncate">
+                        {isActiveInDropdown ? labelMap[activeTab] : (isMore ? 'More' : labelMap[activeTab])}
+                    </span>
+                    <ChevronDown className={`ml-2 h-6 w-6 shrink-0 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+                </button>
+            </div>
+
+            {isOpen && (
+                <div className="origin-top-left outline-none absolute left-0 mt-0 min-w-[120px] 
+                rounded-b-[10px] rounded-r-[10px] bg-white border border-[#F2BA1A] drop-shadow-[0_2px_6px_rgba(0,0,0,0.25)]
+                z-50 
+                ">
+                    <div className="py-1">
+                        {options.map((option) => (
+                            <button
+                                key={option}
+                                onClick={() => {
+                                    onTabChange(option);
+                                    setIsOpen(false);
+                                }}
+                                className={` block w-full max-w-[250px] text-left px-4 py-2 font-medium text-[18px] transition-colors ${activeTab === option
+                                    ? 'bg-[#F2BA1A40] text-black font-semibold'
+                                    : 'text-black'
+                                    }`}
+                            >
+                                {labelMap[option]}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+};
+
+export default function ConfigurationTabs({
+    activeTab,
+    setActiveTab,
+    tabLabels
+}: ConfigurationTabsProps) {
+    const tabKeys = Object.keys(tabLabels);
+
+    return (
+        <div className="flex gap-2 items-end h-full">
+            {tabKeys.slice(0, 3).map((key) => (
+                <button
+                    key={key}
+                    onClick={() => setActiveTab(key as any)}
+                    className={`min-w-[120px] px-4 py-2 rounded-t-[10px] font-medium text-[18px]
+      ${activeTab === key
+                            ? 'bg-[#F2BA1A] text-black'
+                            : 'bg-[#D1D1D1] text-black'
+                        }`}
+                >
+                    {tabLabels[key]}
+                </button>
+            ))}
+
+            {tabKeys.length > 3 && (
+                <TabsDropdown
+                    options={tabKeys.slice(3)}
+                    activeTab={activeTab}
+                    onTabChange={setActiveTab}
+                    labelMap={tabLabels}
+                    isMore
+                />
+            )}
+        </div>
+    );
+}

@@ -13,6 +13,8 @@ import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
 import { usePagination } from '@/shared/hooks';
 import RegisterTabConfigView from '@/features/configuration/components/RegisterTabConfigView';
 import RegisterSchemaView from '@/features/configuration/components/RegisterSchemaView';
+import ConfigurationTabs from '@/features/configuration/components/ConfigurationTabs';
+
 
 const RegisterConfigurationPage = () => {
   const { registerId } = useParams<{ registerId: string }>();
@@ -27,7 +29,7 @@ const RegisterConfigurationPage = () => {
     tabs: 'Tabs',
     filter: 'Filter Schema',
     search: 'Search Schema',
-    deduplication: 'Deduplication Schema'
+    deduplication: 'Deduplication Schema',
   };
 
   const breadcrumb = useBreadcrumb({
@@ -84,47 +86,11 @@ const RegisterConfigurationPage = () => {
 
       <div className=" ml-4 mt-4 px-7.5">
         <div className="flex justify-between items-center h-14">
-          <div className="flex gap-2 items-end h-full">
-            <button
-              onClick={() => setActiveTab('tabs')}
-              className={`px-4 py-2 text-[18px] font-medium rounded-t-[10px] transition-all ${activeTab === 'tabs'
-                ? 'bg-[#F2BA1A] text-black'
-                : 'bg-[#DDDDDD] text-black'
-                }`}
-            >
-              Tabs
-            </button>
-
-            <button
-              onClick={() => setActiveTab('filter')}
-              className={`px-4 py-2 text-[18px] font-medium rounded-t-[10px] transition-all ${activeTab === 'filter'
-                ? 'bg-[#F2BA1A] text-black'
-                : 'bg-[#DDDDDD] text-black'
-                }`}
-            >
-              Filter Schema
-            </button>
-
-            <button
-              onClick={() => setActiveTab('search')}
-              className={`px-4 py-2 text-[18px] font-medium rounded-t-[10px] transition-all ${activeTab === 'search'
-                ? 'bg-[#F2BA1A] text-black'
-                : 'bg-[#DDDDDD] text-black'
-                }`}
-            >
-              Search Schema
-            </button>
-
-            <button
-              onClick={() => setActiveTab('deduplication')}
-              className={`px-4 py-2 text-[18px] font-medium rounded-t-[10px] transition-all ${activeTab === 'deduplication'
-                ? 'bg-[#F2BA1A] text-black'
-                : 'bg-[#DDDDDD] text-black'
-                }`}
-            >
-              Deduplication Schema
-            </button>
-          </div>
+          <ConfigurationTabs
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            tabLabels={tabLabels}
+          />
 
           {/* TopBar */}
           <div className="flex items-center h-full">

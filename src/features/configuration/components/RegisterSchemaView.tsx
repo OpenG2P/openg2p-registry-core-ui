@@ -29,21 +29,17 @@ export default function RegisterSchemaView({
         }
     }, [schema, activeTab]);
 
-    if (loading) {
-        return (
-            <div className="flex items-center justify-center p-8 bg-white rounded-[10px] mx-7.5">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#ED7C22]"></div>
-            </div>
-        );
-    }
-
-
-    if (!schema) {
-        return <div className="p-6 text-gray-500">No schema found</div>;
-    }
-
     const handleSave = async () => {
-        const parsedSchema = JSON.parse(editableSchema);
+
+        let parsedSchema = null
+
+        try {
+            parsedSchema = JSON.parse(editableSchema);
+        } catch (error) {
+            toast.error('Invalid JSON schema. Please fix the syntax before saving.');
+            return;
+        }
+
         const result = await updateSchema('/api/configuration/registers/register_schema/update', {
             method: 'POST',
             body: JSON.stringify({
@@ -61,6 +57,19 @@ export default function RegisterSchemaView({
             toast.error('Failed to update schema');
         }
     };
+
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center p-8 bg-white rounded-[10px] mx-7.5">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#ED7C22]"></div>
+            </div>
+        );
+    }
+
+
+    if (!schema) {
+        return <div className="p-6 text-gray-500">No schema found</div>;
+    }
 
     return (
         <div className="mx-7.5 bg-white rounded-[10px] p-6 relative">
