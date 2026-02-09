@@ -1,0 +1,88 @@
+'use client';
+import { useRegisterSchema } from '../hooks/useRegisterSchema';
+import { useState, useEffect } from 'react';
+import { useFetch } from '@/shared/hooks';
+import { toast } from 'react-toastify';
+
+interface RegisterSchemaViewProps {
+    registerId: string;
+    activeTab: 'filter' | 'search' | 'deduplication';
+}
+
+export default function RegisterSchemaView({
+    registerId,
+    activeTab,
+}: RegisterSchemaViewProps) {
+    const { schema, loading, refresh } = useRegisterSchema(registerId);
+    const [editableSchema, setEditableSchema] = useState<string>('');
+    const { execute: updateSchema, loading: updating } = useFetch();
+
+    useEffect(() => {
+        if (schema) {
+            const rawSchema =
+                activeTab === 'filter'
+                    ? schema.filter_schema
+                    : activeTab === 'search'
+                        ? schema.search_result_schema
+                        : schema.deduplicate_schema;
+            setEditableSchema(JSON.stringify(rawSchema, null, 2));
+        }
+    }, [schema, activeTab]);
+
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center p-8 bg-white rounded-[10px] mx-7.5">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#ED7C22]"></div>
+            </div>
+        );
+    }
+
+
+    if (!schema) {
+        return <div className="p-6 text-gray-500">No schema found</div>;
+    }
+
+    const handleSave = async () => {
+        const parsedSchema = JSON.parse(editableSchema);
+        const result = await updateSchema('/api/configuration/registers/register_schema/update', {
+            method: 'POST',
+            body: JSON.stringify({
+                register_id: registerId,
+                filter_schema: activeTab === 'filter' ? parsedSchema : undefined,
+                search_result_schema: activeTab === 'search' ? parsedSchema : undefined,
+                deduplicate_schema: activeTab === 'deduplication' ? parsedSchema : undefined,
+            }),
+        });
+
+        if (result) {
+            toast.success('Schema updated successfully');
+            refresh?.();
+        } else {
+            toast.error('Failed to update schema');
+        }
+    };
+
+    return (
+        <div className="mx-7.5 bg-white rounded-[10px] p-6 relative">
+            <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-semibold text-gray-700 capitalize">
+                    {activeTab} Schema
+                </h3>
+                <button
+                    onClick={handleSave}
+                    className="bg-black text-white px-4 py-2 rounded-[10px] font-semibold"
+                >
+                    Save Schema
+                </button>
+            </div>
+            <div className="border border-gray-200 rounded-[10px] bg-[#D9D9D933] overflow-hidden">
+                <textarea
+                    value={editableSchema}
+                    onChange={(e) => setEditableSchema(e.target.value)}
+                    className="w-full min-h-[500px] p-4 font-mono text-sm text-gray-800 focus:outline-none resize-y"
+                    spellCheck={false}
+                />
+            </div>
+        </div>
+    );
+}

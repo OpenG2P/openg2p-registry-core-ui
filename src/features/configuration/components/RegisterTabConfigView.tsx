@@ -142,7 +142,7 @@ export default function RegisterTabConfigView({
 								<div className="text-base font-medium">
 									<span
 										onClick={(e) => handleDelete(e, tab.tab_id)}
-										className="flex items-center text-[#1cc9b7]"
+										className="flex items-center text-[#00000080]"
 									>
 										Remove
 										<Image

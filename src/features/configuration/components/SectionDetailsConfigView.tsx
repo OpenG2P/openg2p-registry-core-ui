@@ -18,11 +18,11 @@ export default function SectionDetailsConfigView({
     const { execute: updateUISchema, loading } = useFetch();
 
     const handleSectionChange = (updatedSection: SectionConfig) => {
+        //If required then perform some action on UI schema onchange.
         console.log(updatedSection, "onChange Updated section");
     };
 
     const handleSave = async (updatedSection: SectionConfig) => {
-        //TODO: If required then adjust the integration with backend
         if (!registerId || !sectionId) {
             toast.error('Missing required section information');
             return;
@@ -37,7 +37,7 @@ export default function SectionDetailsConfigView({
             })
         });
 
-        if (result) {
+        if (result?.section_id) {
             toast.success('Section UI schema updated successfully');
         } else {
             toast.error('Failed to update section UI schema');

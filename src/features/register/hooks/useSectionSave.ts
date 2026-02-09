@@ -24,7 +24,6 @@ export const useSectionSave = (
     const handleSectionSave = useCallback(
         async (sectionChanges: SectionChanges) => {
 
-            console.log(sectionChanges,"sectionChanges")
             if (!currentRegister || !internalRecordId) {
                 return;
             }

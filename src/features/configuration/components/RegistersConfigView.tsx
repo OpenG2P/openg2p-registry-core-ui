@@ -197,7 +197,7 @@ export default function RegistersConfigView({
                     className="flex items-center text-[#1cc9b7] cursor-pointer hover:opacity-80 transition-opacity"
                     title="Remove Register"
                   >
-                    <span className="tsmext- font-medium">Remove</span>
+                    <span className="tsmext- font-medium text-[#00000080]">Remove</span>
                     <Image
                       src="/images/common/false_sign.png"
                       alt="Remove"
