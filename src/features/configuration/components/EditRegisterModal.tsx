@@ -218,7 +218,29 @@ export default function EditRegisterModal({ isOpen, onClose, onSuccess, initialD
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-3 gap-4">
+                            <div>
+                                <label className="block text-sm font-semibold text-black mb-2">
+                                    Available Register Rank
+                                </label>
+                                <div className="relative">
+                                    <select
+                                        className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all bg-white appearance-none cursor-pointer text-gray-600 pr-10"
+                                        value=""
+                                        onChange={() => { }}
+                                    >
+                                        <option value="">View Existing Ranks</option>
+                                        {[...registers]
+                                            .sort((a, b) => (Number(a.register_rank) || 0) - (Number(b.register_rank) || 0))
+                                            .map((register: Register) => (
+                                                <option key={register.register_id} value={register.register_rank}>
+                                                    {register.register_mnemonic} (Rank: {register.register_rank})
+                                                </option>
+                                            ))}
+                                    </select>
+                                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
+                                </div>
+                            </div>
                             <div>
                                 <label className="block text-sm font-semibold text-black mb-2">
                                     Register Rank
