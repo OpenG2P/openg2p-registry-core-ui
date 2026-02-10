@@ -68,7 +68,7 @@ export async function proxyToBackend({
 			});
 
 			const payload = (buildPayload || defaultPayloadBuilder)(body);
-			console.log(payload,"payload",targetEndpoint)
+			// console.log(payload,"payload",targetEndpoint)
 
 			const backendRequest = createBackendRequest(payload);
 
@@ -79,10 +79,10 @@ export async function proxyToBackend({
 		}
 
 		const response = await fetch(backendUrl, fetchOptions);
-		console.log(response,"**************************")
+		// console.log(response,"**************************")
 
 		const backendResponse: BackendResponse = await response.json();
-		console.log(backendResponse,"backendResponse",targetEndpoint)
+		// console.log(backendResponse,"backendResponse",targetEndpoint)
 
 
 		if (backendResponse.response_header?.response_status === 'ERROR') {

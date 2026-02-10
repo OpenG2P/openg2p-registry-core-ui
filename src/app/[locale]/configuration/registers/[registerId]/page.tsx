@@ -35,8 +35,7 @@ const RegisterConfigurationPage = () => {
   const breadcrumb = useBreadcrumb({
     rootItem: { label: 'Registers', href: '/configuration/registers' },
     customItems: [
-      { label: registerDetails?.register_mnemonic || '', href: `/configuration/registers/${registerId}` },
-      { label: tabLabels[activeTab], href: `/configuration/registers/${registerId}` }
+      { label: `${registerDetails?.register_mnemonic || ''} - ${tabLabels[activeTab]}`, href: `/configuration/registers/${registerId}` }
     ]
   });
 

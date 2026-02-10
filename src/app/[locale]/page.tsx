@@ -46,7 +46,7 @@ export default function Home() {
     const [selectedRegister, setSelectedRegister] = useState('select');
 
 
-    const { registers, loading } = useRegister();
+    const { registers } = useRegister();
 
     const registerList =
         registers.map(r => ({
