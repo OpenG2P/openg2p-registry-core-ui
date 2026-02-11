@@ -29,7 +29,7 @@ export default function StatusView({ vp }: StatusViewProps) {
 
                 <div className="bg-gray-100 p-10 flex flex-col justify-center items-center text-center">
                     <Image
-                        src={isSuccess ? '/verified.png' : '/invalid.png'}
+                        src={isSuccess ? '/images/common/verified.png' : '/images/common/invalid.png'}
                         alt={status}
                         width={48}
                         height={48}

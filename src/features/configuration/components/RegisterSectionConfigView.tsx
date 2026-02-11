@@ -40,7 +40,7 @@ export default function RegisterSectionConfigView({
     const proceedDelete = async (sectionId: string) => {
         const result = await deleteSection('/api/configuration/registers/tabs/sections/delete', {
             method: 'POST',
-            body: JSON.stringify({section_id: sectionId })
+            body: JSON.stringify({ section_id: sectionId })
         });
 
         if (result) {
@@ -137,11 +137,11 @@ export default function RegisterSectionConfigView({
                                 <div className="text-base font-medium">
                                     <span
                                         onClick={(e) => handleDelete(e, section.section_id)}
-                                        className="flex items-center text-[#1cc9b7]"
+                                        className="flex items-center text-[#00000080]"
                                     >
                                         Remove
                                         <Image
-                                            src="/config/falseSign.png"
+                                            src="/images/common/false_sign.png"
                                             alt="Remove"
                                             width={18}
                                             height={18}

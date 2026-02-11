@@ -102,7 +102,7 @@ export default function ChangeRequestCard({
                     />
                 </div>
                 <Image
-                    src="/CR.png"
+                    src="/images/changerequest/cr.png"
                     alt="Change Request"
                     width={164}
                     height={164}

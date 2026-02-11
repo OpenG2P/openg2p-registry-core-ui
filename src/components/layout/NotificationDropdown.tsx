@@ -22,7 +22,7 @@ export default function NotificationDropdown() {
                 className="relative p-1"
             >
                 <Image
-                    src="/notification.png"
+                    src="/images/messages/notification.png"
                     alt={t('notifications')}
                     width={24}
                     height={24}
@@ -75,7 +75,7 @@ export default function NotificationDropdown() {
                                     <div className="flex gap-3 p-3 w-full">
                                         <div className="shrink-0 w-10 h-10 flex items-center justify-center rounded-md bg-[#FFF4EB]">
                                             <Image
-                                                src="/notification_img.png"
+                                                src="/images/messages/notification_img.png"
                                                 alt={t('notification')}
                                                 width={20}
                                                 height={20}

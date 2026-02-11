@@ -25,12 +25,12 @@ export default function RejectReasonPopup({
                     className="absolute top-10 right-10 opacity-50"
                     onClick={onClose}
                 >
-                    <Image src="/cr_close.png" alt="Close" width={30} height={30} />
+                    <Image src="/images/changerequest/cr_close.png" alt="Close" width={30} height={30} />
                 </button>
 
                 <div className="w-20 h-20 rounded-full border-10 border-[#EF8F93]/10 bg-[#EF8F93]/80 flex items-center justify-center">
                     <Image
-                        src="/cr_reject.png"
+                        src="/images/changerequest/cr_reject.png"
                         alt="Reject"
                         width={41}
                         height={30}

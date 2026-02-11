@@ -47,7 +47,7 @@ export default function IncomingMessageCard({ message }: Props) {
                     <h3 className="text-[18px] font-semibold text-[#ED7C22] flex justify-between items-center">
                         <span>Raw</span>
                         <Image
-                            src="/chat.png"
+                            src="/images/messages/chat.png"
                             alt="Raw Icon"
                             width={19}
                             height={20}
@@ -85,7 +85,7 @@ export default function IncomingMessageCard({ message }: Props) {
                     <h3 className="text-[18px] font-semibold text-[#ED7C22] flex justify-between items-center">
                         <span>Transformation</span>
                         <Image
-                            src="/chat.png"
+                            src="/images/messages/chat.png"
                             alt="Raw Icon"
                             width={19}
                             height={20}
@@ -116,20 +116,19 @@ export default function IncomingMessageCard({ message }: Props) {
 
                     <div className="space-y-2">
                         <div className="text-black">
-                            <span className="text-black/50 text-[16px]">Change Log ID</span>
-                            <span className="text-black/50 mx-1">:</span>
+                            <span className="text-black/50 text-[16px]">CR: </span>
                             {message.change_request_id ? (
                                 <Link
                                     href={`/${locale}/incoming-messages/change-request/${message.change_request_id}`}
-                                    className="font-medium text-[14px] text-black inline-flex items-center gap-1"
+                                    className="font-medium text-[14px] text-black break-all"
                                 >
                                     {message.change_request_id}
                                     <Image
-                                        src="/right_arrow.png"
+                                        src="/images/common/right_arrow.png"
                                         alt="Arrow"
                                         width={14}
                                         height={14}
-                                        className="inline-block"
+                                        className="inline-block ml-1"
                                     />
                                 </Link>
                             ) : (
@@ -155,8 +154,8 @@ export default function IncomingMessageCard({ message }: Props) {
 function KeyValue({ label, value }: { label: string; value: string }) {
     return (
         <div className="text-black">
-            <span className="text-black/50 text-[16px]">{label}</span>
-            <span className="text-black/50 mx-1">:</span>
+            <span className="text-black/50 text-[16px]">{label}: </span>
+            {/* <span className="text-black/50 mx-1">:</span> */}
             <span className="font-medium text-[14px]">{value}</span>
         </div>
     );

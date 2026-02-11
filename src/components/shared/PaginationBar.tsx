@@ -52,7 +52,7 @@ export default function PaginationBar({
                         }`}
                 >
                     <Image
-                        src="/right_arrow.png"
+                        src="/images/common/right_arrow.png"
                         width={14}
                         height={14}
                         alt="prev"
@@ -70,7 +70,7 @@ export default function PaginationBar({
                         }`}
                 >
                     <Image
-                        src="/right_arrow.png"
+                        src="/images/common/right_arrow.png"
                         width={14}
                         height={14}
                         alt="next"

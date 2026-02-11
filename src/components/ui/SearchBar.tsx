@@ -40,7 +40,7 @@ const SearchBar = ({
                 className="pl-1 pr-3 text-[#1E1E1E]"
             >
                 <Image
-                    src="/search_icon.png"
+                    src="/images/common/search_icon.png"
                     width={iconSize}
                     height={iconSize}
                     alt="Search"

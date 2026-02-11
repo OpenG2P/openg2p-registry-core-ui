@@ -16,7 +16,7 @@ export default function Header() {
         <header className="w-full bg-white flex items-center justify-between px-3 py-3 fixed top-0 left-0 right-0 z-20 h-17.5">
             <Link href="/" className="flex items-center gap-2 sm:gap-3">
                 <Image
-                    src={config?.registryLogo || "/openg2p_logo.png"}
+                    src={config?.registryLogo || "/images/common/openg2p_logo.png"}
                     alt="Registry Logo"
                     width={32}
                     height={32}

@@ -42,13 +42,13 @@ const StatsCardSmall = ({
                         id: "approved",
                         label: t('approved'),
                         value: data.approved_count,
-                        imageUrl: "/statsIcon/approved.png",
+                        imageUrl: "/images/register/statsIcon/approved.png",
                     },
                     {
                         id: "pending",
                         label: t('pending'),
                         value: data.pending_count,
-                        imageUrl: "/statsIcon/pending.png",
+                        imageUrl: "/images/register/statsIcon/pending.png",
                     },
                 ],
             };
@@ -61,13 +61,13 @@ const StatsCardSmall = ({
                         id: "models",
                         label: t('dataModels'),
                         value: data.no_of_data_models,
-                        imageUrl: "/statsIcon/data_models.png",
+                        imageUrl: "/images/register/statsIcon/data_models.png",
                     },
                     {
                         id: "partners",
                         label: t('partners'),
                         value: data.no_of_partners,
-                        imageUrl: "/statsIcon/partners.png",
+                        imageUrl: "/images/register/statsIcon/partners.png",
                     },
                 ],
             };
@@ -81,13 +81,13 @@ const StatsCardSmall = ({
                         id: "topics",
                         label: t('topics'),
                         value: data.topics,
-                        imageUrl: "/statsIcon/topics.png",
+                        imageUrl: "/images/register/statsIcon/topics.png",
                     },
                     {
                         id: "models",
                         label: t('dataModels'),
                         value: data.data_models,
-                        imageUrl: "/statsIcon/data_models.png",
+                        imageUrl: "/images/register/statsIcon/data_models.png",
                     },
                 ],
             };
@@ -114,7 +114,7 @@ const StatsCardSmall = ({
 
     return (
         <div className={`flex flex-col justify-between  transition-all duration-200 w-full rounded-[10px] px-7 py-6 ${active ? "border-black bg-black text-white" : "bg-[#E1E1E1] text-[#A1A1A1]"}`}>
-            <div className="pointer-events-none">
+            <div className="pointer-events-none min-h-40">
                 {/* count and title */}
                 <div className="mb-4 mt-4">
                     {loading ? (

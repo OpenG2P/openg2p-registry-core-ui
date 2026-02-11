@@ -12,12 +12,15 @@ import ViewRegisterFieldsModal from '@/features/configuration/components/ViewReg
 import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
 import { usePagination } from '@/shared/hooks';
 import RegisterTabConfigView from '@/features/configuration/components/RegisterTabConfigView';
+import RegisterSchemaView from '@/features/configuration/components/RegisterSchemaView';
+import ConfigurationTabs from '@/features/configuration/components/ConfigurationTabs';
+
 
 const RegisterConfigurationPage = () => {
   const { registerId } = useParams<{ registerId: string }>();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<'tabs' | 'filter' | 'search'>('tabs');
+  const [activeTab, setActiveTab] = useState<'tabs' | 'filter' | 'search' | 'deduplication'>('tabs');
 
   const { registers, loading, refresh } = useAllRegister(1, 100);
   const registerDetails = getRegisterDetails(registerId, registers);
@@ -25,14 +28,14 @@ const RegisterConfigurationPage = () => {
   const tabLabels = {
     tabs: 'Tabs',
     filter: 'Filter Schema',
-    search: 'Search Schema'
+    search: 'Search Schema',
+    deduplication: 'Deduplication Schema',
   };
 
   const breadcrumb = useBreadcrumb({
     rootItem: { label: 'Registers', href: '/configuration/registers' },
     customItems: [
-      { label: registerDetails?.register_mnemonic || '', href: `/configuration/registers/${registerId}` },
-      { label: tabLabels[activeTab], href: `/configuration/registers/${registerId}` }
+      { label: `${registerDetails?.register_mnemonic || ''} - ${tabLabels[activeTab]}`, href: `/configuration/registers/${registerId}` }
     ]
   });
 
@@ -82,37 +85,11 @@ const RegisterConfigurationPage = () => {
 
       <div className=" ml-4 mt-4 px-7.5">
         <div className="flex justify-between items-center h-14">
-          <div className="flex gap-2 items-end h-full">
-            <button
-              onClick={() => setActiveTab('tabs')}
-              className={`px-8 py-2 text-[18px] font-medium rounded-t-[10px] transition-all ${activeTab === 'tabs'
-                ? 'bg-[#F2BA1A] text-black'
-                : 'bg-[#DDDDDD] text-black'
-                }`}
-            >
-              Tabs
-            </button>
-
-            <button
-              onClick={() => setActiveTab('filter')}
-              className={`px-8 py-2 text-[18px] font-medium rounded-t-[10px] transition-all ${activeTab === 'filter'
-                ? 'bg-[#F2BA1A] text-black'
-                : 'bg-[#DDDDDD] text-black'
-                }`}
-            >
-              Filter Schema
-            </button>
-
-            <button
-              onClick={() => setActiveTab('search')}
-              className={`px-8 py-2 text-[18px] font-medium rounded-t-[10px] transition-all ${activeTab === 'search'
-                ? 'bg-[#F2BA1A] text-black'
-                : 'bg-[#DDDDDD] text-black'
-                }`}
-            >
-              Search Schema
-            </button>
-          </div>
+          <ConfigurationTabs
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            tabLabels={tabLabels}
+          />
 
           {/* TopBar */}
           <div className="flex items-center h-full">
@@ -147,11 +124,10 @@ const RegisterConfigurationPage = () => {
             onDataLoaded={(totalItems, currentCount) => setPaginationInfo({ totalItems, currentCount })}
           />
         ) : (
-          <div className="mx-7.5">
-            <div className="bg-white rounded-[10px] p-12 flex items-center justify-center min-h-100">
-              <p className="text-gray-400 text-lg text-center italic">No {activeTab === 'filter' ? 'Filter' : 'Search'} Schema available for this register</p>
-            </div>
-          </div>
+          <RegisterSchemaView
+            registerId={registerId}
+            activeTab={activeTab as 'filter' | 'search' | 'deduplication'}
+          />
         )}
       </div>
 

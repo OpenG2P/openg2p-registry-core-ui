@@ -60,7 +60,7 @@ export default function CapsuleDropdown(props: CapsuleDropdownProps) {
                     </span>
 
                     <Image
-                        src="/down_arrow.png"
+                        src="/images/common/down_arrow.png"
                         alt="open"
                         width={14}
                         height={14}
@@ -83,7 +83,7 @@ export default function CapsuleDropdown(props: CapsuleDropdownProps) {
                                 Select
                             </span>
                             <Image
-                                src="/down_arrow.png"
+                                src="/images/common/down_arrow.png"
                                 alt="open"
                                 width={14}
                                 height={14}

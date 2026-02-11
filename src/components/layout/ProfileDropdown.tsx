@@ -21,7 +21,7 @@ export default function ProfileDropdown() {
     useClickOutside(dropdownRef, () => setOpen(false), open);
 
     // set profile pictures
-    const avatarSrc =  "/user_image.png";
+    const avatarSrc =  "/images/common/user_image.png";
 
     return (
         <div ref={dropdownRef} className="relative">
@@ -31,7 +31,7 @@ export default function ProfileDropdown() {
             >
                 <span className="text-[16px] text-black font-normal">
                     {/* in place of use set the actual use name  */}
-                    {t('hi')}, <span className="font-semibold">{t('user')}</span>
+                    <span className="font-semibold">{t('user')}</span>
                 </span>
 
                 <div className="w-9.5 h-9.5 rounded-full overflow-hidden drop-shadow-[0_4px_20px_rgba(0,0,0,0.25)]">
@@ -56,7 +56,7 @@ export default function ProfileDropdown() {
                             className="flex items-center gap-x-2 px-4 py-4 text-sm text-black font-bold"
                         >
                             <Image
-                                src="/user_dropdown.png"
+                                src="/images/common/user_dropdown.png"
                                 alt={t('my_profile')}
                                 width={13}
                                 height={15}
@@ -69,7 +69,7 @@ export default function ProfileDropdown() {
                             className="flex items-center gap-x-2 px-4 pb-4 text-sm text-black font-bold"
                         >
                             <Image
-                                src="/logout.png"
+                                src="/images/common/logout.png"
                                 alt={t('logout')}
                                 width={18}
                                 height={18}

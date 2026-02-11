@@ -45,7 +45,7 @@ export default function AddNewDropdown({
             >
                 <span className="text-[16px] font-medium text-[#1E1E1E]">Add New</span>
                 <Image
-                    src="/down_arrow.png"
+                    src="/images/common/down_arrow.png"
                     alt="open"
                     width={14}
                     height={8}
@@ -58,7 +58,7 @@ export default function AddNewDropdown({
                     <div className="flex items-center justify-between px-4 py-1">
                         <span className="text-[16px] font-medium text-[#1E1E1E]">Add New</span>
                         <Image
-                            src="/down_arrow.png"
+                            src="/images/common/down_arrow.png"
                             alt="close"
                             width={14}
                             height={8}

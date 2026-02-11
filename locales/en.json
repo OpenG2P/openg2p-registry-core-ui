@@ -5,7 +5,6 @@
     "searchChangeRequests": "Search Change Requests",
     "searchIncomingMessages": "Search Incoming Messages",
     "searchOutgoingMessages": "Search Outgoing Messages",
-    "hi": "Hi",
     "my_profile": "My Profile",
     "logout": "Logout",
     "notifications": "Notifications",
@@ -186,9 +185,10 @@
         "clickToAddRow": "Click To Add Row",
         "edit": "Edit",
         "something_went_wrong": "Something went wrong!",
-        "retry": "Try Again",
-        "error_404_title": "404 error",
-        "error_404_subtitle": "Oops! sorry we couldn't find that page",
+        "something_went_wrong_subtitle": "Please try again.",
+        "retry": "Refresh",
+        "error_404_title": "Oops! 404 error",
+        "error_404_subtitle": "sorry we couldn't find that page",
         "go_back": "Go Back"
     },
     "table": {
@@ -398,5 +398,10 @@
     "selectDate": "Select Date",
     "selectSection": "Select Section",
     "selectVersion": "Select Version",
-    "noVerifierAssigned": "No verifier assigned for this change request version."
+    "noVerifierAssigned": "No verifier assigned for this change request version.",
+    "family": "Family",
+    "family_info": "Family Info",
+    "family_member_info": "Family Member Info",
+    "housing_information": "Housing Information",
+    "no_of_children": "# of children"
 }

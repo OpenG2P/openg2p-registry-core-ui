@@ -65,7 +65,7 @@ export default function EditRegistry({
                                 accept="image/*"
                                 onChange={handleFileChange}
                             />
-                            {image && image !== '/config/blank_image.png' ? (
+                            {image && image !== '/images/config/blank_image.png' ? (
                                 <Image
                                     src={image}
                                     alt="Registry Logo"
@@ -90,7 +90,7 @@ export default function EditRegistry({
                                     <span className="text-[13px] leading-none">Upload</span>
                                 </button>
                                 <button
-                                    onClick={() => setImage('/config/blank_image.png')}
+                                    onClick={() => setImage('/images/config/blank_image.png')}
                                     className="flex items-center justify-center gap-2 w-23.75 py-1.5 bg-white rounded-[10px] text-[#ED7C22] shadow-md hover:bg-gray-50 transition-all active:scale-95"
                                 >
                                     <Trash2 size={15} strokeWidth={2.5} />

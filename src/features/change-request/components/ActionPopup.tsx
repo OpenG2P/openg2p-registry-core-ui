@@ -18,7 +18,7 @@ export default function ActionPopup({ type, onClose }: ActionPopupProps) {
                     className="absolute top-10 right-10 opacity-50"
                     onClick={onClose}
                 >
-                    <Image src="/cr_close.png" alt="Close" width={30} height={30} />
+                    <Image src="/images/changerequest/cr_close.png" alt="Close" width={30} height={30} />
                 </button>
 
                 <div
@@ -28,7 +28,7 @@ export default function ActionPopup({ type, onClose }: ActionPopupProps) {
                         }`}
                 >
                     <Image
-                        src={type === "approve" ? "/cr_approve.png" : "/cr_reject.png"}
+                        src={type === "approve" ? "/images/changerequest/cr_approve.png" : "/images/changerequest/cr_reject.png"}
                         alt={type === "approve" ? "Approved" : "Rejected"}
                         width={41}
                         height={30}

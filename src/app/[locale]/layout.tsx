@@ -33,7 +33,7 @@ export async function generateMetadata({
         title: config.registryName || t('title'),
         description: "",
         icons: {
-            icon: config.registryLogo || "/openg2p_logo.png",
+            icon: config.registryLogo || "/images/common/openg2p_logo.png",
         },
     };
 }

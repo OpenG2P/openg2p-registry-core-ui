@@ -12,7 +12,7 @@ const RegistryConfigurationPage = () => {
 	const [isEditing, setIsEditing] = useState(false);
 	const [configurationId, setConfigurationId] = useState<string | null>(null);
 	const [registryName, setRegistryName] = useState('Registry Name');
-	const [image, setImage] = useState('/config/blank_image.png');
+	const [image, setImage] = useState('/images/config/blank_image.png');
 
 	const { data: registryData, execute: fetchRegistry } = useFetch({ url: '/api/configuration/registry/get' });
 	const { execute: saveRegistry } = useFetch();
@@ -23,7 +23,7 @@ const RegistryConfigurationPage = () => {
 		if (registryData) {
 			setConfigurationId(registryData.configuration_id);
 			setRegistryName(registryData.registry_name || 'Registry Name');
-			setImage(registryData.registry_logo || '/config/blank_image.png');
+			setImage(registryData.registry_logo || '/images/config/blank_image.png');
 		}
 		setIsEditing(true);
 	};
@@ -99,7 +99,7 @@ const RegistryConfigurationPage = () => {
 									className='bg-[#D9D9D980] h-8 w-8 rounded-[10px] flex items-center justify-center cursor-pointer hover:bg-[#D9D9D9CC] transition-colors'
 								>
 									<Image
-										src={"/config/pencil_icon.png"}
+										src={"/images/config/pencil_icon.png"}
 										alt='Pencil Icon'
 										width={18}
 										height={18}

@@ -56,14 +56,13 @@ export function ChangeRequestValuesTabs({
                         store={widgetStoreNew}
                         schemaData={newSectionData}
                         translate={t}
-                    // dataSourceRequestHandler={dataSourceRequestHandler}
+                    dataSourceRequestHandler={dataSourceRequestHandler}
                     >
                         <SectionRenderer
                             section={sectionUISchema}
                             hideEditButton={true}
-                            changeRequestType="new"
                             mode="CRView"
-                            showChangeRequestLabel={true}
+                            changeRequestType="new"
                         />
                     </WidgetProvider>
 
@@ -71,14 +70,14 @@ export function ChangeRequestValuesTabs({
                         store={widgetStoreOld}
                         schemaData={oldSectionData}
                         translate={t}
-                    // apiAdapter={dataSourceRequestHandler}
+                        dataSourceRequestHandler={dataSourceRequestHandler}
                     >
                         <SectionRenderer
                             section={sectionUISchema}
                             hideEditButton={true}
-                            changeRequestType="old"
                             mode="CRView"
-                            showChangeRequestLabel={true}
+                            changeRequestType="old"
+
                         />
                     </WidgetProvider>
                 </div>
