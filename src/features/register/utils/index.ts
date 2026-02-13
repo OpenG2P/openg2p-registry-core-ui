@@ -1,17 +1,16 @@
 import { deserializeFile } from '@/shared/types';
 import { DisplayField } from '../types';
-import { SectionChanges } from '@openg2p/registry-widgets';
 
 export const sortedDisplayFields = (fields: DisplayField[]): DisplayField[] => {
     return [...fields].sort((firstField, secondField) => firstField.order - secondField.order);
 };
 
-export const extractFilesFromSection = (sectionChanges: SectionChanges) => {
+export const extractFilesFromSection = (files?:unknown[]) => {
   const filesToUpload: File[] = [];
   const fileLabels: string[] = [];
 
-  if (Array.isArray(sectionChanges.files)) {
-    sectionChanges.files.forEach((value, index) => {
+  if (Array.isArray(files)) {
+    files.forEach((value, index) => {
       if (value && typeof value === 'object' && (value as any).__type === 'File') {
         try {
           const realFile = deserializeFile(value);

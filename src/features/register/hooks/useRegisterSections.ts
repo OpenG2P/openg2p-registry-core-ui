@@ -74,6 +74,7 @@ export const useRegisterSections = (onChangeRequestCreated: () => void) => {
           register_purpose,
           register_relation,
           section_ui_schema,
+          section_register_id,
         } = section;
 
         // evalute change request creation allowed or not
@@ -93,6 +94,7 @@ export const useRegisterSections = (onChangeRequestCreated: () => void) => {
 
         return {
           section_id,
+          section_register_id,
           section_ui_schema,
           hideEditButton,
         };
@@ -100,7 +102,6 @@ export const useRegisterSections = (onChangeRequestCreated: () => void) => {
   }, [tabSections]);
 
   const { handleSectionSave } = useSectionSave(
-    tabSections,
     onChangeRequestCreated,
   );
 
