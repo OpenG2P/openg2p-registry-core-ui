@@ -67,7 +67,7 @@ export default function RegisterDetailPage() {
                                 translate={t}
                             >
                                 {orderedTabSections.map((section) => {
-                                    const { section_id, section_ui_schema, hideEditButton } = section;
+                                    const { section_id, section_register_id,section_ui_schema, hideEditButton } = section;
 
                                     return (
                                         <div key={section_id} className='pb-4'>
@@ -76,6 +76,8 @@ export default function RegisterDetailPage() {
                                                 onSectionSave={handleSectionSave}
                                                 hideEditButton={hideEditButton}
                                                 dataSourceRequestHandler = {dataSourceRequestHandler}
+                                                dbSectionId = {section_id}
+                                                sectionRegisterId = {section_register_id}
                                             />
                                         </div>
                                     );

@@ -6,12 +6,10 @@ import { useRegisterTabs } from "@/context/RegisterTabsContext";
 import { useRegisterRecord } from "@/context/RegisterRecordContext";
 import { SectionChanges } from "@openg2p/registry-widgets";
 import { extractFilesFromSection, normalizeEditActions } from "../utils";
-import { TabSection } from "@/features/register/types";
 import { toast } from "react-toastify";
 
 
 export const useSectionSave = (
-    tabSections: TabSection[] | null,
     onChangeRequestCreated: () => void
 ) => {
     const { internalRecordId } = useRegisterRecord();
@@ -28,15 +26,19 @@ export const useSectionSave = (
                 return;
             }
 
-            const section = tabSections?.find(
-                (section) => section.section_id === sectionChanges.section_id
-            );
+            const {register_id, register_mnemonic} = currentRegister;
+            const { section_id, section_register_id, records:sectionChangeRecords, files } = sectionChanges;
 
-            if (!section) {
-                console.error("Section not found in tabSections", sectionChanges.section_id);
+
+            if (!section_id && !section_register_id) {
+                console.error(
+                    "Missing identifiers: both section_id and section_register_id are undefined.",
+                    { section_id, section_register_id }
+                );
                 return;
             }
-            const { filesToUpload, fileLabels } = extractFilesFromSection(sectionChanges);
+
+            const { filesToUpload, fileLabels } = extractFilesFromSection(files);
 
             let documentsResponse: UploadedDocument[] = [];
             if (filesToUpload.length > 0) {
@@ -78,19 +80,19 @@ export const useSectionSave = (
             }
 
             const records = normalizeEditActions(
-                sectionChanges.records,
+                sectionChangeRecords,
                 internalRecordId
             )
             const change_request_response = await submitChangeRequest(`/api/change_request/create`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    register_id: currentRegister.register_id,
-                    register_mnemonic: currentRegister.register_mnemonic,
+                    register_id: register_id,
+                    register_mnemonic: register_mnemonic,
                     internal_record_id: internalRecordId,
-                    section_register_id: section.section_register_id,
+                    section_register_id: section_register_id,
                     tab_id: activeTabId,
-                    section_id: sectionChanges.section_id,
+                    section_id: section_id,
                     section_records: records,
                     documents: documentsResponse,
                 }),
@@ -116,7 +118,6 @@ export const useSectionSave = (
             submitChangeRequest,
             activeTabId,
             uploadDocumentRequest,
-            tabSections,
             onChangeRequestCreated,
         ]
     );
