@@ -17,9 +17,9 @@ export const useRegisterSectionsFromCR = ({
         section_id: sectionId,
       }),
     },
-  });  
+  });
   return {
-    sectionUISchema:data?.section_ui_schema,
-    loadingSchema
+    sectionUISchema: data?.section_ui_schema,
+    loadingSchema: !!sectionId ? loadingSchema : false
   };
 };

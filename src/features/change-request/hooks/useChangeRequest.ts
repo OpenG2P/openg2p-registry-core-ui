@@ -12,5 +12,5 @@ export const useChangeRequest = (changeId: string) => {
 
     const details: ChangeRequest | null = data;
 
-    return { details, loading };
+    return { details, loading: !!changeId ? loading : false };
 };

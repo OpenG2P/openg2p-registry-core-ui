@@ -7,11 +7,10 @@ import {
 } from '@/components/shared';
 import {
     WidgetProvider,
-    SectionsContainer,
     SectionRenderer,
 } from '@openg2p/registry-widgets';
 import ChangeRequestCard from '@/features/change-request/components/ChangeRequestCard';
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { useRegisterDetail } from '@/features/register/hooks/useRegisterDetail';
 import RegisterDetailsPageSkeleton from '@/features/register/components/RegisterDetailsPageSkeleton';
@@ -60,29 +59,37 @@ export default function RegisterDetailPage() {
                 <div className="grid grid-cols-12 gap-6">
                     <div className="col-span-12 lg:col-span-9">
                         <div className="col-span-12 lg:col-span-9">
-                            <WidgetProvider
-                                key={activeTabId}
-                                store={widgetStore}
-                                schemaData={sectionDataMap}
-                                translate={t}
-                            >
-                                {orderedTabSections.map((section) => {
-                                    const { section_id, section_register_id,section_ui_schema, hideEditButton } = section;
+                            {orderedTabSections.length > 0 && sectionDataMap ? (
+                                <WidgetProvider
+                                    key={activeTabId}
+                                    store={widgetStore}
+                                    schemaData={sectionDataMap}
+                                    translate={t}
+                                >
+                                    {orderedTabSections.map((section) => {
+                                        const { section_id, section_register_id, section_ui_schema, hideEditButton } = section;
 
-                                    return (
-                                        <div key={section_id} className='pb-4'>
-                                            <SectionRenderer
-                                                section={section_ui_schema}
-                                                onSectionSave={handleSectionSave}
-                                                hideEditButton={hideEditButton}
-                                                dataSourceRequestHandler = {dataSourceRequestHandler}
-                                                dbSectionId = {section_id}
-                                                sectionRegisterId = {section_register_id}
-                                            />
-                                        </div>
-                                    );
-                                })}
-                            </WidgetProvider>
+                                        return (
+                                            <div key={section_id} className='pb-4'>
+                                                <SectionRenderer
+                                                    section={section_ui_schema}
+                                                    onSectionSave={handleSectionSave}
+                                                    hideEditButton={hideEditButton}
+                                                    dataSourceRequestHandler={dataSourceRequestHandler}
+                                                    dbSectionId={section_id}
+                                                    sectionRegisterId={section_register_id}
+                                                />
+                                            </div>
+                                        );
+                                    })}
+                                </WidgetProvider>
+                            ) : !isLoading && (
+                                <div className=" px-6 py-5 flex items-center justify-center text-center">
+                                    <div className="text-[16px] text-black/50 font-medium">
+                                        {t("noTabSection")}
+                                    </div>
+                                </div>
+                            )}
 
                         </div>
                     </div>
