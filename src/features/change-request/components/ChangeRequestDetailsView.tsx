@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 
-import { RegisterTabsLayout } from "@/components/shared";
+import { TabsLayout } from "@/components/shared";
 import {
     ActionPopup,
     ChangeRequestHeader,
@@ -96,7 +96,7 @@ export default function ChangeRequestDetailsView({ changeId, breadcrumb }: Props
     }, [details, isListSection, sectionRegisterId]);
 
     return (
-        <RegisterTabsLayout breadcrumb={breadcrumb}>
+        <TabsLayout breadcrumb={breadcrumb}>
             <div className="flex gap-7.5">
                 <div className="w-full lg:w-[75%]">
                     {loadingDetails || loadingDocuments ? (
@@ -162,6 +162,6 @@ export default function ChangeRequestDetailsView({ changeId, breadcrumb }: Props
                     onClose={() => setPopupVisible(false)}
                 />
             )} */}
-        </RegisterTabsLayout>
+        </TabsLayout>
     );
 }

@@ -45,8 +45,6 @@ export default function AddSectionModal({ isOpen, onClose, onSuccess }: AddSecti
             return;
         }
 
-        console.log(registerId, "registerId", tabId, "tabId", formData, "formData");
-
         const result = await createSection('/api/configuration/registers/tabs/sections/create', {
             method: 'POST',
             body: JSON.stringify({

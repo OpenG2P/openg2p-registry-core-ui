@@ -7,7 +7,7 @@ import {
     createWidgetStore,
     SectionRenderer,
 } from '@openg2p/registry-widgets';
-import { CapsuleDropdown, RegisterTabsLayout } from '@/components/shared';
+import { CapsuleDropdown, TabsLayout } from '@/components/shared';
 import { VerificationCard } from '@/features/change-request/components';
 import { useTranslations } from 'next-intl';
 import { useRegisterTabs } from '@/context/RegisterTabsContext';
@@ -273,7 +273,7 @@ export default function VersionHistoryPage() {
     const isContentLoading = isLoading;
 
     return (
-        <RegisterTabsLayout
+        <TabsLayout
             breadcrumb={breadcrumb}
             tabs={{ tabs }}
             activeTab={activeTabIndex}
@@ -387,6 +387,6 @@ export default function VersionHistoryPage() {
                     )}
                 </div>
             )}
-        </RegisterTabsLayout>
+        </TabsLayout>
     );
 }

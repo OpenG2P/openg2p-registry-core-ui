@@ -39,7 +39,7 @@ export function useChangeRequestList({
         },
     });
 
-    const logs: ChangeRequest[] = data?.change_requests ?? [];
+    const changeRequests: ChangeRequest[] = data?.change_requests ?? [];
     const paginationInfo = data?.pagination;
 
     const onPrev = useCallback(
@@ -53,7 +53,7 @@ export function useChangeRequestList({
     }, [paginationInfo]);
 
     return {
-        logs,
+        changeRequests,
         loading,
         currentPage,
         pageSize,

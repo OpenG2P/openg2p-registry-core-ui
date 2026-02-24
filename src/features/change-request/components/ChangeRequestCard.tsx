@@ -1,113 +1,179 @@
-import ViewAll from "@/components/shared/ViewAll";
-import { useFetch } from "@/shared/hooks/useFetch";
+'use client';
+
 import Image from "next/image";
-import { useLocale, useTranslations } from "next-intl";
-import { useEffect, useRef } from "react";
+import { useTranslations } from 'next-intl';
+import { ChangeRequest } from "@/features/change-request/types";
+import { useChangeRequestDocuments } from "../hooks/useChangeRequestDocuments";
 
 interface Props {
-    registerId: string;
-    internalRecordId: string;
-    type: string;
-    activeTabId?: string;
-    count?: number;
-    onCountLoaded?: (count: number) => void;
+    changeRequest: ChangeRequest;
+    index: number;
+    onViewDetails: () => void;
+    isSearchView?: boolean;
 }
 
+const statusClassMap: Record<string, string> = {
+    REJECTED: "text-red-500",
+    PENDING: "text-amber-500",
+    APPROVED: "text-green-600",
+};
+
 export default function ChangeRequestCard({
-    type,
-    registerId,
-    internalRecordId,
-    activeTabId,
-    count: externalCount,
-    onCountLoaded,
+    changeRequest,
+    index,
+    onViewDetails,
+    isSearchView = false,
 }: Props) {
-    const locale = useLocale();
+
     const t = useTranslations();
-    const hasLoadedInitialCount = useRef(false);
 
-    const { data, loading } = useFetch<any>({
-        url: `/api/change_request/pending`,
-        enabled: !!registerId && !!internalRecordId && !!activeTabId,
-        options: {
-            method: "POST",
-            body: JSON.stringify({
-                subject_register_id: registerId,
-                subject_record_id: internalRecordId,
-                tab_id: activeTabId,
-            }),
-        },
-    });
+    const rawTitle = changeRequest.section_mnemonic?.trim();
 
-    // Initialize parent state with API data on first load
-    useEffect(() => {
-        if (!hasLoadedInitialCount.current && data?.number_of_pending_change_requests !== undefined && onCountLoaded) {
-            onCountLoaded(data.number_of_pending_change_requests);
-            hasLoadedInitialCount.current = true;
-        }
-    }, [data, onCountLoaded]);
+    const title = rawTitle
+        ? t(rawTitle, { default: rawTitle })
+        : t('changeRequestFallback', { index: index + 1 });
 
-    // Use external count if provided, otherwise use API data
-    const count = externalCount ?? data?.number_of_pending_change_requests ?? 0;
+    const statusClass = statusClassMap[changeRequest.approval_status] ?? "text-gray-500";
 
-    const isDisabled = count === 0;
-
-    const params = new URLSearchParams();
-    if (activeTabId) params.set("tab", activeTabId);
-
-    const href = `/${locale}/register/${type}/${internalRecordId}/change-request${params.toString() ? `?${params.toString()}` : ""
-        }`;
-
-    if (loading) {
-        return (
-            <div className="relative rounded-[10px] bg-[#EDC227] px-8 pt-4 pb-7 overflow-hidden animate-pulse">
-                <div className="flex items-center justify-between">
-                    <div className="h-6 w-40 rounded bg-black/20" />
-                    <div className="h-15 w-20 rounded-[20px] bg-black/20" />
-                </div>
-
-                <div className="mt-3 h-3 w-56 rounded bg-black/20" />
-
-                <div className="mt-25 h-10 w-32 rounded-full bg-black/20" />
-
-                <div className="absolute bottom-4 right-4 h-30 w-30 rounded-full bg-black/20" />
-            </div>
-        );
-    }
+    const { documents, loading } =
+        useChangeRequestDocuments(changeRequest.change_request_id);
 
     return (
-        <div className="relative rounded-[10px] bg-[#EDC227] px-8 pt-5 pb-8 overflow-hidden">
-            <div className="flex items-center justify-between">
-                <h3 className="text-[24px] font-semibold text-black leading-none">
-                    {t("changeRequest")}
-                </h3>
-                <div className="flex h-15 w-20 items-center justify-center rounded-[10px] border-3 border-white bg-[#EDC227] text-[34px] font-bold text-black">
-                    {count}
+        <div
+            key={index}
+            className={`rounded-[10px] bg-white px-10 py-5 ${!isSearchView ? "mr-60" : ""}`}
+        >
+            <div
+                className={`grid gap-6 ${isSearchView
+                    ? "grid-cols-1 md:grid-cols-4"
+                    : "grid-cols-1 md:grid-cols-3"
+                    }`}
+            >
+                <div className="space-y-2 text-[16px] text-[#00000080]">
+                    <h3 className="text-[24px] font-medium text-black">
+                        {title}
+                    </h3>
+
+                    <div>
+                        {t('changeId')}:{' '}
+                        <span className="text-black font-medium">{changeRequest.change_request_id}</span>
+                    </div>
+
+                    <div>
+                        {t('status')}:{' '}
+                        <span className={`font-medium ${statusClass}`}>
+                            {t(changeRequest.approval_status, {
+                                default: changeRequest.approval_status,
+                            })}
+                        </span>
+                    </div>
+
+                    <div>
+                        {t('changeDate')}:{' '}
+                        <span className="text-black font-medium">
+                            {new Date(changeRequest.created_at).toLocaleDateString()}
+                        </span>
+                    </div>
                 </div>
+
+                <div className="space-y-2 text-[16px] text-[#00000080]">
+                    <h3 className="text-lg font-semibold text-black invisible">
+                        Verification
+                    </h3>
+                    <div className="border-l space-y-2 border-[#D9D9D9] pl-6">
+                        <div>
+                            {t('verificationsRequired')}:{' '}
+                            <span className="text-black font-medium">
+                                {changeRequest.no_of_verifications_required}
+                            </span>
+                        </div>
+                        <div>
+                            {t('verificationsDone')}:{' '}
+                            <span className="text-black font-medium">
+                                {changeRequest.no_of_verifications_done}
+                            </span>
+                        </div>
+                        <div>
+                            {t('documentsAttached')}:{' '}
+                            <span className="text-black font-medium">{documents.length}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="space-y-2 text-[16px] text-[#00000080]">
+                    <div className="pl-6 flex items-center gap-0 leading-none mt-2">
+                        <span className="text-[16px] font-medium text-black">
+                            {t('attachedDocuments')}
+                        </span>
+                        <Image
+                            src="/images/changerequest/attached_doc_icon.png"
+                            alt="Attached documents"
+                            width={14}
+                            height={14}
+                            className="ml-1 mb-1"
+                        />
+                    </div>
+                    <div className="flex flex-col gap-2 font-normal text-black/50 text-[16px] border-l border-[#D9D9D9] pl-6">
+                        {documents.slice(0, 3).map((doc, index) => (
+                            <span
+                                key={index}
+                                onClick={() => window.open(doc.document_url, '_blank', 'noopener,noreferrer')}
+                                className="flex items-center gap-2 cursor-pointer"
+                            >
+                                {doc.document_label}
+                                <Image
+                                    src="/images/common/right_arrow.png"
+                                    alt="arrow"
+                                    width={14}
+                                    height={14}
+                                />
+                            </span>
+                        ))}
+
+                        {Array.from({ length: Math.max(0, 3 - documents.length) }).map((_, idx) => (
+                            <span
+                                key={`placeholder-${idx}`}
+                                className="flex items-center gap-2 invisible"
+                            >
+                                placeholder
+                            </span>
+                        ))}
+
+                    </div>
+                </div>
+
+                {isSearchView && (
+                    <div className="space-y-2 text-[16px]">
+                        <div className="pl-6 flex items-center gap-0 leading-none invisible">
+                            <span className="text-lg font-semibold"> Empty </span>
+                        </div>
+
+                        <div className="border-l border-[#D9D9D9] pl-6">
+                            <div className="flex flex-col gap-2 invisible">
+                                <span>1</span>
+                                <span>2</span>
+                                <span>3</span>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
 
-            <p className="mt-3 text-[16px] text-black font-normal">
-                {count > 0
-                    ? t("pendingChanges")
-                    : t("noPendingChanges")}
-            </p>
+            <div className="my-4 border-t border-[#D9D9D9]" />
 
-            <div className="mt-25">
-                <div
-                    className={isDisabled ? "invisible cursor-not-allowed pointer-events-none" : ""}
+            <div className="flex items-center justify-between">
+                <button
+                    onClick={onViewDetails}
+                    className="text-[14px] text-black font-normal flex items-center gap-2 opacity-60 hover:opacity-100 transition"
                 >
-                    <ViewAll
-                        href={href}
-                        bgColor="#D9D9D9"
-                        label={t("knowMore")}
+                    {t('viewDetails')}
+                    <Image
+                        src="/images/common/right_arrow.png"
+                        alt="arrow"
+                        width={14}
+                        height={14}
                     />
-                </div>
-                <Image
-                    src="/images/changerequest/cr.png"
-                    alt="Change Request"
-                    width={164}
-                    height={164}
-                    className="absolute bottom-0 right-2"
-                />
+                </button>
             </div>
         </div>
     );

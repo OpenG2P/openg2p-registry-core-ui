@@ -1,8 +1,8 @@
 'use client';
 
 import { useParams } from 'next/navigation';
-import { RegisterTabsLayout } from '@/components/shared';
-import { ChangeLogList, ChangeLogSkeleton } from '@/features/change-request/components';
+import { TabsLayout } from '@/components/shared';
+import { ChangeRequestList, ChangeRequestSkeleton } from '@/features/change-request/components';
 import { useChangeRequestList } from '@/features/change-request/hooks/useChangeRequestList';
 import { useLocale, useTranslations } from 'next-intl';
 import { useRegister } from '@/context/RegisterContext';
@@ -27,7 +27,7 @@ export default function ChangeRequestPage() {
 
     const subjectRegisterId = currentRegister?.register_id;
 
-    const { logs, loading } = useChangeRequestList({
+    const { changeRequests, loading } = useChangeRequestList({
         subjectRecordId: internalRecordId,
         subjectRegisterId: subjectRegisterId,
         tabId: activeTabId,
@@ -44,7 +44,7 @@ export default function ChangeRequestPage() {
     });
 
     return (
-        <RegisterTabsLayout
+        <TabsLayout
             breadcrumb={breadcrumb}
             tabs={{ tabs }}
             activeTab={activeTabIndex}
@@ -62,11 +62,11 @@ export default function ChangeRequestPage() {
                     </div>)}
                     <div className="space-y-4">
                         {[...Array(3)].map((_, i) => (
-                            <ChangeLogSkeleton key={i} />
+                            <ChangeRequestSkeleton key={i} />
                         ))}
                     </div>
                 </>
-            ) : logs.length === 0 ? (
+            ) : changeRequests.length === 0 ? (
                 <div className=" px-6 py-5 flex items-center justify-center text-center">
                     <div className="text-[16px] text-black/50 font-medium">
                         {t("noChangeRequest")}
@@ -74,13 +74,13 @@ export default function ChangeRequestPage() {
                 </div>
 
             ) : (
-                <ChangeLogList
-                    logs={logs}
-                    getDetailsUrl={log =>
-                        `/${locale}/register/${registerType}/${internalRecordId}/change-request/${log.change_request_id}?tab=${activeTabId}`
+                <ChangeRequestList
+                    changeRequests={changeRequests}
+                    getDetailsUrl={changeRequest =>
+                        `/${locale}/register/${registerType}/${internalRecordId}/change-request/${changeRequest.change_request_id}?tab=${activeTabId}`
                     }
                 />
             )}
-        </RegisterTabsLayout>
+        </TabsLayout>
     );
 }

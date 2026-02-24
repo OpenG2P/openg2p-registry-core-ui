@@ -2,19 +2,19 @@
 
 import { useTranslations } from 'next-intl';
 import {
-    RegisterTabsLayout,
-    VersionHistoryCard,
+    TabsLayout,
 } from '@/components/shared';
 import {
     WidgetProvider,
     SectionRenderer,
 } from '@openg2p/registry-widgets';
-import ChangeRequestCard from '@/features/change-request/components/ChangeRequestCard';
+import RegisterChangeRequestCard from '@/features/change-request/components/RegisterChangeRequestCard';
 import { useState, useEffect } from 'react';
 
 import { useRegisterDetail } from '@/features/register/hooks/useRegisterDetail';
 import RegisterDetailsPageSkeleton from '@/features/register/components/RegisterDetailsPageSkeleton';
 import { dataSourceRequestHandler } from '@/features/register/utils/dataSourceRequestHandler';
+import { VersionHistoryCard } from '@/features/register/components';
 
 
 export default function RegisterDetailPage() {
@@ -43,7 +43,7 @@ export default function RegisterDetailPage() {
     const isNotFound = !internalRecordId;
 
     return (
-        <RegisterTabsLayout
+        <TabsLayout
             breadcrumb={breadcrumb}
             tabs={{ tabs }}
             activeTab={activeTabIndex}
@@ -97,7 +97,7 @@ export default function RegisterDetailPage() {
                     <div className="col-span-12 lg:col-span-3 flex flex-col gap-6">
                         {currentRegister && internalRecordId && (
                             <>
-                                <ChangeRequestCard
+                                <RegisterChangeRequestCard
                                     type={registerType}
                                     registerId={currentRegister.register_id}
                                     internalRecordId={internalRecordId}
@@ -116,6 +116,6 @@ export default function RegisterDetailPage() {
                     </div>
                 </div>
             )}
-        </RegisterTabsLayout>
+        </TabsLayout>
     );
 }

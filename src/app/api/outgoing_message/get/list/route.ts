@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
             queued_datetime: "2025-10-25 10:32AM",
             source_register: "Birth Registry",
             record_id: "43210",
-            source_change_log_id: "12378",
+            source_change_request_id: "12378",
 
             topic_resolution: "Resolved",
             topic_resolution_datetime: "2025-10-25 10:32AM",
@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
             queued_datetime: "2025-11-01 09:15AM",
             source_register: "Health Registry",
             record_id: "98765",
-            source_change_log_id: "67890",
+            source_change_request_id: "67890",
 
             topic_resolution: "Pending",
             topic_resolution_datetime: "2025-11-01 09:20AM",
