@@ -12,6 +12,7 @@ import ViewRegisterFieldsModal from '@/features/configuration/components/ViewReg
 import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
 import { usePagination } from '@/shared/hooks';
 import RegisterTabConfigView from '@/features/configuration/components/RegisterTabConfigView';
+import RegisterFormConfigView from '@/features/configuration/components/RegisterFormConfigView';
 import RegisterSchemaView from '@/features/configuration/components/RegisterSchemaView';
 import ConfigurationTabs from '@/features/configuration/components/ConfigurationTabs';
 
@@ -25,8 +26,10 @@ const RegisterConfigurationPage = () => {
   const { registers, loading, refresh } = useAllRegister(1, 100);
   const registerDetails = getRegisterDetails(registerId, registers);
 
+  const isProgramApplication = registerDetails.register_purpose === 'PROGRAM_APPLICATION';
+
   const tabLabels = {
-    tabs: 'Tabs',
+    tabs: isProgramApplication ? 'Forms' : 'Tabs',
     filter: 'Filter Schema',
     search: 'Search Schema',
     deduplication: 'Deduplication Schema',
@@ -98,7 +101,7 @@ const RegisterConfigurationPage = () => {
               showFilters={false}
               showPagination={activeTab === 'tabs'}
               showAddNewButton={activeTab === 'tabs'}
-              addNewButtonText="Add New Tab"
+              addNewButtonText={isProgramApplication ? "Add New Form" : "Add New Tab"}
               onAddNewButton={() => setIsModalOpen(true)}
               pageStart={pagination.pageStart}
               pageEnd={pagination.pageEnd}
@@ -115,14 +118,24 @@ const RegisterConfigurationPage = () => {
       {/* Tab Content */}
       <div className="mt-0">
         {activeTab === 'tabs' ? (
-          <RegisterTabConfigView
-            onAddNewRegister={() => setIsModalOpen(true)}
-            isModalOpen={isModalOpen}
-            onCloseModal={() => setIsModalOpen(false)}
-            page={currentPage}
-            pageSize={PAGE_SIZE}
-            onDataLoaded={(totalItems, currentCount) => setPaginationInfo({ totalItems, currentCount })}
-          />
+          isProgramApplication ? (
+            <RegisterFormConfigView
+              isModalOpen={isModalOpen}
+              onCloseModal={() => setIsModalOpen(false)}
+              page={currentPage}
+              pageSize={PAGE_SIZE}
+              onDataLoaded={(totalItems, currentCount) => setPaginationInfo({ totalItems, currentCount })}
+            />
+          ) : (
+            <RegisterTabConfigView
+              onAddNewRegister={() => setIsModalOpen(true)}
+              isModalOpen={isModalOpen}
+              onCloseModal={() => setIsModalOpen(false)}
+              page={currentPage}
+              pageSize={PAGE_SIZE}
+              onDataLoaded={(totalItems, currentCount) => setPaginationInfo({ totalItems, currentCount })}
+            />
+          )
         ) : (
           <RegisterSchemaView
             registerId={registerId}
