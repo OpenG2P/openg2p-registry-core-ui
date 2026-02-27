@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useState } from 'react';
 import Link from 'next/link';
 
@@ -9,12 +9,13 @@ import { useRuntimeConfig } from "@/context/RuntimeConfigContext";
 
 export default function Header() {
     const t = useTranslations();
+    const locale = useLocale();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const { config } = useRuntimeConfig();
 
     return (
         <header className="w-full bg-white flex items-center justify-between px-3 py-3 fixed top-0 left-0 right-0 z-20 h-17.5">
-            <Link href="/" className="flex items-center gap-2 sm:gap-3">
+            <Link href={`/${locale}`} className="flex items-center gap-2 sm:gap-3">
                 <Image
                     src={config?.registryLogo || "/images/common/openg2p_logo.png"}
                     alt="Registry Logo"
