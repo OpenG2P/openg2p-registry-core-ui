@@ -7,14 +7,14 @@ import {
     createWidgetStore,
     SectionRenderer,
 } from '@openg2p/registry-widgets';
-import { CapsuleDropdown, RegisterTabsLayout } from '@/components/shared';
+import { CapsuleDropdown, TabsLayout } from '@/components/shared';
 import { VerificationCard } from '@/features/change-request/components';
 import { useTranslations } from 'next-intl';
 import { useRegisterTabs } from '@/context/RegisterTabsContext';
 import { useBreadcrumb } from '@/shared/hooks';
 import { useChangeRequest, useVerifications } from '@/features/change-request/hooks';
-import { useRecordHistory } from '@/features/register/hooks/useRecordHistory';
-import { useEffect, useMemo, useState } from 'react';
+import { useRecordHistoryDates, useRecordHistoryChanges } from '@/features/register/hooks/useRecordHistory';
+import { useEffect, useMemo, useReducer, useRef } from 'react';
 import { useRegister } from '@/context/RegisterContext';
 import { useRegisterSectionsFromCR } from '@/features/change-request/hooks/useRegisterSectionsFromCR';
 import { useRegisterRecord } from '@/context/RegisterRecordContext';
@@ -32,6 +32,62 @@ type SectionWithChanges = {
     changes: Change[];
 };
 
+type FilterState = {
+    dateOptions: string[];
+    selectedDate: string | null;
+    selectedSectionId: string | null;
+    selectedVersionId: string | null;
+    sectionsWithChanges: Record<string, SectionWithChanges>;
+};
+
+const initialFilterState: FilterState = {
+    dateOptions: [],
+    selectedDate: null,
+    selectedSectionId: null,
+    selectedVersionId: null,
+    sectionsWithChanges: {},
+};
+
+function filterReducer(state: FilterState, action:
+    | { type: 'SET_DATES'; dates: string[] }
+    | { type: 'SET_CHANGES'; changes: Record<string, SectionWithChanges> }
+    | { type: 'SELECT_DATE'; date: string }
+    | { type: 'SELECT_SECTION'; id: string; versionId: string | null }
+    | { type: 'SELECT_VERSION'; id: string }
+    | { type: 'RESET' }
+): FilterState {
+    switch (action.type) {
+        case 'SET_DATES':
+            const newDate = state.selectedDate && action.dates.includes(state.selectedDate)
+                ? state.selectedDate
+                : action.dates[0] ?? null;
+            return {
+                ...state,
+                dateOptions: action.dates,
+                selectedDate: newDate
+            };
+        case 'SET_CHANGES':
+            const firstId = Object.keys(action.changes)[0] ?? null;
+            const firstVersion = firstId ? action.changes[firstId]?.changes?.[0]?.change_request_id ?? null : null;
+            return {
+                ...state,
+                sectionsWithChanges: action.changes,
+                selectedSectionId: firstId,
+                selectedVersionId: firstVersion
+            };
+        case 'SELECT_DATE':
+            return { ...state, selectedDate: action.date, selectedSectionId: null, selectedVersionId: null };
+        case 'SELECT_SECTION':
+            return { ...state, selectedSectionId: action.id, selectedVersionId: action.versionId };
+        case 'SELECT_VERSION':
+            return { ...state, selectedVersionId: action.id };
+        case 'RESET':
+            return initialFilterState;
+        default:
+            return state;
+    }
+}
+
 export default function VersionHistoryPage() {
     const t = useTranslations();
 
@@ -45,14 +101,17 @@ export default function VersionHistoryPage() {
 
     const widgetStore = useMemo(() => createWidgetStore(), []);
 
-    const [dateOptions, setDateOptions] = useState<string[]>([]);
-    const [selectedDate, setSelectedDate] = useState<string | null>(null);
-    const [selectedSectionId, setSelectedSectionId] = useState<string | null>(null);
-    const [selectedVersionId, setSelectedVersionId] = useState<string | null>(null);
+    const [filterState, dispatch] = useReducer(filterReducer, initialFilterState);
+    const {
+        dateOptions,
+        selectedDate,
+        selectedSectionId,
+        selectedVersionId,
+        sectionsWithChanges
+    } = filterState;
 
-    const [sectionsWithChanges, setSectionsWithChanges] = useState<
-        Record<string, SectionWithChanges>
-    >({});
+    const prevSectionData = useRef<typeof newSectionData>(undefined);
+    const prevSectionUISchema = useRef<typeof sectionUISchema>(undefined);
 
     const {
         tabs,
@@ -67,9 +126,17 @@ export default function VersionHistoryPage() {
 
     const {
         datesData,
+        loadingDates,
+    } = useRecordHistoryDates({
+        register_id: registerId,
+        internal_record_id: internalRecordId || '',
+        tab_id: activeTabId,
+    });
+
+    const {
         changesData,
         loadingChanges,
-    } = useRecordHistory({
+    } = useRecordHistoryChanges({
         register_id: registerId,
         internal_record_id: internalRecordId || '',
         tab_id: activeTabId,
@@ -86,12 +153,9 @@ export default function VersionHistoryPage() {
     /* ───────── Handle dates response ───────── */
     useEffect(() => {
         if (datesData?.dates?.length) {
-            setDateOptions(datesData.dates);
-            setSelectedDate(prev => prev || datesData.dates[0]);
+            dispatch({ type: 'SET_DATES', dates: datesData.dates });
         } else if (datesData) {
-            setDateOptions([]);
-            setSelectedDate(null);
-            setSectionsWithChanges({});
+            dispatch({ type: 'RESET' });
         }
     }, [datesData]);
 
@@ -105,25 +169,11 @@ export default function VersionHistoryPage() {
         changesArray.forEach((item: any) => {
             dict[item.section_id] = {
                 section_mnemonic: item.section_mnemonic,
-                changes: item.changes ?? [],
+                changes: [...(item.changes ?? [])].reverse(),
             };
         });
 
-        setSectionsWithChanges(dict);
-
-        // Auto-select first section and its first version
-        const sectionIds = Object.keys(dict);
-        if (sectionIds.length > 0) {
-            const firstSecId = sectionIds[0];
-            setSelectedSectionId(firstSecId);
-            const firstSec = dict[firstSecId];
-            if (firstSec.changes.length > 0) {
-                setSelectedVersionId(firstSec.changes[0].change_request_id);
-            }
-        } else {
-            setSelectedSectionId(null);
-            setSelectedVersionId(null);
-        }
+        dispatch({ type: 'SET_CHANGES', changes: dict });
     }, [changesData]);
 
     const sectionOptions = useMemo(() => {
@@ -133,47 +183,48 @@ export default function VersionHistoryPage() {
                 ? t(data.section_mnemonic)
                 : data.section_mnemonic,
         }));
-    }, [sectionsWithChanges, t]);
+    }, [sectionsWithChanges]);
+
+    const currentSectionChanges = useMemo(() => {
+        if (!selectedSectionId) return [];
+        return sectionsWithChanges[selectedSectionId]?.changes ?? [];
+    }, [selectedSectionId, sectionsWithChanges]);
 
     const versionOptions = useMemo(() => {
-        if (!selectedSectionId) return [];
-        return (
-            sectionsWithChanges[selectedSectionId]?.changes.map((cr, index) => ({
-                label: `V${index + 1}`,
-                value: cr.change_request_id,
-            })) ?? []
-        );
-    }, [selectedSectionId, sectionsWithChanges]);
+        const total = currentSectionChanges.length;
+        return currentSectionChanges.map((cr, index) => ({
+            label: `V${total - index}`,
+            value: cr.change_request_id,
+        }));
+    }, [currentSectionChanges]);
 
 
     const onDateSelect = (date: string) => {
-        setSelectedDate(date);
-        setSelectedSectionId(null);
-        setSelectedVersionId(null);
+        dispatch({ type: 'SELECT_DATE', date });
     };
 
     const onSectionSelect = (label: string) => {
         const selected = sectionOptions.find(section => section.label === label);
         if (!selected) return;
 
-        setSelectedSectionId(selected.id);
-        setSelectedVersionId(
-            sectionsWithChanges[selected.id]?.changes?.[0]?.change_request_id ?? null
-        );
+        dispatch({
+            type: 'SELECT_SECTION',
+            id: selected.id,
+            versionId: sectionsWithChanges[selected.id]?.changes?.[0]?.change_request_id ?? null
+        });
     };
 
     const onVersionSelect = (label: string) => {
         const option = versionOptions.find(version => version.label === label);
         if (option) {
-            setSelectedVersionId(option.value);
+            dispatch({ type: 'SELECT_VERSION', id: option.value });
         }
     };
 
     const handleTabChange = (index: number) => {
         setActiveTabByIndex(index);
-        setDateOptions([]);
-        setSelectedDate(null);
-        setSectionsWithChanges({});
+        prevSectionData.current = undefined;
+        prevSectionUISchema.current = undefined;
     };
 
     const newSectionData = useMemo(() => {
@@ -196,6 +247,16 @@ export default function VersionHistoryPage() {
         return map;
     }, [changeRequestData]);
 
+    if (newSectionData) prevSectionData.current = newSectionData;
+    if (sectionUISchema) prevSectionUISchema.current = sectionUISchema;
+
+    const stableSectionData = newSectionData ?? prevSectionData.current;
+    const stableSectionUISchema = sectionUISchema ?? prevSectionUISchema.current;
+
+    const isLoading = loadingDates || loadingChanges || loadingChangeRequestData || loadingSchema;
+    const hasAnythingToShow = !!stableSectionData && !!stableSectionUISchema;
+    const showSkeleton = isLoading && !hasAnythingToShow;
+
     const breadcrumb = useBreadcrumb({
         registerType,
         functionalRecordId,
@@ -208,10 +269,11 @@ export default function VersionHistoryPage() {
         ],
     });
 
-    const showSkeleton = loadingChangeRequestData || loadingChanges;
+    const hasVersionHistory = dateOptions.length > 0;
+    const isContentLoading = isLoading;
 
     return (
-        <RegisterTabsLayout
+        <TabsLayout
             breadcrumb={breadcrumb}
             tabs={{ tabs }}
             activeTab={activeTabIndex}
@@ -220,98 +282,111 @@ export default function VersionHistoryPage() {
             {showSkeleton ? (
                 <VersionHistoryPageSkeleton tabs={tabs} />
             ) : (
-                <div className="flex gap-6">
+                <div className={`flex gap-6 transition-opacity duration-200 ${isContentLoading ? 'opacity-60 pointer-events-none' : 'opacity-100'}`}>
                     <div className="w-[75%] flex flex-col gap-6">
-                        <div className="bg-white rounded-[10px] px-6 py-5 flex items-center gap-6">
-                            <CapsuleDropdown
-                                label={t("selectDate")}
-                                items={dateOptions}
-                                value={selectedDate ?? undefined}
-                                onChange={onDateSelect}
-                            />
-
-                            <CapsuleDropdown
-                                label={t("selectSection")}
-                                items={sectionOptions.map(s => s.label)}
-                                value={
-                                    selectedSectionId
-                                        ? sectionOptions.find(s => s.id === selectedSectionId)?.label
-                                        : undefined
-                                }
-                                onChange={onSectionSelect}
-                                key={selectedDate ?? 'date'}
-                            />
-
-                            <CapsuleDropdown
-                                label={t("selectVersion")}
-                                items={versionOptions.map(v => v.label)}
-                                value={versionOptions.find(v => v.value === selectedVersionId)?.label}
-                                onChange={onVersionSelect}
-                                key={`${selectedDate}-${selectedSectionId}`}
-                            />
-                        </div>
-
-                        <div className="bg-white rounded-[30px]">
-                            <WidgetProvider
-                                store={widgetStore}
-                                schemaData={newSectionData}
-                                translate={t}
-                                dataSourceRequestHandler={dataSourceRequestHandler}
-                            >
-                                <SectionRenderer
-                                    section={sectionUISchema}
-                                    hideEditButton
+                        {hasVersionHistory && (
+                            <div className="bg-white rounded-[10px] px-6 py-5 flex items-center gap-6">
+                                <CapsuleDropdown
+                                    label={t("selectDate")}
+                                    items={dateOptions}
+                                    value={selectedDate ?? undefined}
+                                    onChange={onDateSelect}
                                 />
-                            </WidgetProvider>
-                        </div>
-                    </div>
 
-                    <div className="w-[25%] space-y-3">
-                        {verifications.length > 0 ? (
-                            verifications.map(v => (
-                                <VerificationCard
-                                    key={v.verification_id}
-                                    verification={v}
+                                <CapsuleDropdown
+                                    label={t("selectSection")}
+                                    items={sectionOptions.map(s => s.label)}
+                                    value={
+                                        selectedSectionId
+                                            ? sectionOptions.find(s => s.id === selectedSectionId)?.label
+                                            : undefined
+                                    }
+                                    onChange={onSectionSelect}
+                                    key={selectedDate ?? 'date'}
                                 />
-                            ))
-                        ) : (
-                            <div className="bg-[#E0E0E0] rounded-[10px] p-6 space-y-3">
-                                <div className="font-semibold text-[14px] text-black/50">
-                                    {t("verifiedBy")}
-                                </div>
 
-                                <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 relative">
-                                        <Image
-                                            src="/images/common/verified_person.png"
-                                            alt="verified person"
-                                            fill
-                                            className="rounded-full object-cover opacity-20 grayscale"
-                                        />
-                                    </div>
-                                    <div className="flex flex-col">
-                                        <span className="text-[20px] font-medium text-black/20">
-                                            —
-                                        </span>
-                                        <span className="text-[14px] text-black/20">
-                                            —
-                                        </span>
-                                    </div>
-                                </div>
+                                <CapsuleDropdown
+                                    label={t("selectVersion")}
+                                    items={versionOptions.map(v => v.label)}
+                                    value={versionOptions.find(v => v.value === selectedVersionId)?.label}
+                                    onChange={onVersionSelect}
+                                    key={`${selectedDate}-${selectedSectionId}`}
+                                />
+                            </div>
+                        )}
 
-                                <div>
-                                    <div className="text-[14px] font-medium text-black/50 mb-1">
-                                        {t("message")}
-                                    </div>
-                                    <div className="text-[16px] text-black/50">
-                                        {t("noVerifierAssigned")}
-                                    </div>
+                        {hasVersionHistory && stableSectionData && stableSectionUISchema && (
+                            <div className="bg-white rounded-[30px]">
+                                <WidgetProvider
+                                    store={widgetStore}
+                                    schemaData={stableSectionData}
+                                    translate={t}
+                                    dataSourceRequestHandler={dataSourceRequestHandler}
+                                >
+                                    <SectionRenderer
+                                        section={stableSectionUISchema}
+                                        hideEditButton
+                                    />
+                                </WidgetProvider>
+                            </div>
+                        )}
+                        {!hasVersionHistory && !isLoading && tabs.length > 0 && (
+                            <div className="bg-white rounded-[10px] px-6 py-5 flex items-center justify-center text-center">
+                                <div className="text-[16px] text-black/50 font-medium">
+                                    {t("noVersionHistory")}
                                 </div>
                             </div>
                         )}
                     </div>
+
+                    {hasVersionHistory && (
+                        <div className="w-[25%] space-y-3">
+                            {verifications.length > 0 ? (
+                                verifications.map(v => (
+                                    <VerificationCard
+                                        key={v.verification_id}
+                                        verification={v}
+                                    />
+                                ))
+                            ) : (
+                                <div className="bg-[#E0E0E0] rounded-[10px] p-6 space-y-3">
+                                    <div className="font-semibold text-[14px] text-black/50">
+                                        {t("verifiedBy")}
+                                    </div>
+
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-10 h-10 relative">
+                                            <Image
+                                                src="/images/common/verified_person.png"
+                                                alt="verified person"
+                                                fill
+                                                className="rounded-full object-cover opacity-20 grayscale"
+                                            />
+                                        </div>
+                                        <div className="flex flex-col">
+                                            <span className="text-[20px] font-medium text-black/20">
+                                                —
+                                            </span>
+                                            <span className="text-[14px] text-black/20">
+                                                —
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div className="text-[14px] font-medium text-black/50 mb-1">
+                                            {t("message")}
+                                        </div>
+                                        <div className="text-[16px] text-black/50">
+                                            {t("noVerifierAssigned")}
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    )}
                 </div>
             )}
-        </RegisterTabsLayout>
+        </TabsLayout>
     );
 }

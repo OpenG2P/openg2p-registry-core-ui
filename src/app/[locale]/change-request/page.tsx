@@ -6,7 +6,7 @@ import { useSearchParams } from 'next/navigation';
 import { useRouter } from '@/i18n/navigation';
 
 import { TopBar } from '@/components/shared';
-import { ChangeLogList, ChangeLogSkeleton } from '@/features/change-request/components';
+import { ChangeRequestList, ChangeRequestSkeleton } from '@/features/change-request/components';
 import { useChangeRequestSearch } from '@/features/change-request/hooks/useChangeRequestSearch';
 
 export default function ChangeRequestPage() {
@@ -18,7 +18,7 @@ export default function ChangeRequestPage() {
     const searchQuery = searchParams.get('search') || undefined;
 
     const {
-        logs,
+        changeRequests,
         loading,
         currentPage,
         pageSize,
@@ -75,19 +75,19 @@ export default function ChangeRequestPage() {
                 {loading ? (
                     <div className="space-y-4">
                         {[...Array(3)].map((_, i) => (
-                            <ChangeLogSkeleton key={i} isSearchView />
+                            <ChangeRequestSkeleton key={i} isSearchView />
                         ))}
                     </div>
-                ) : logs.length === 0 ? (
+                ) : changeRequests.length === 0 ? (
                     <div className="text-sm text-gray-400 text-center py-6">
                         No change requests found
                     </div>
                 ) : (
-                    <ChangeLogList
-                        logs={logs}
+                    <ChangeRequestList
+                        changeRequests={changeRequests}
                         isSearchView
-                        getDetailsUrl={log =>
-                            `/${locale}/change-request/${log.change_request_id}`
+                        getDetailsUrl={changeRequest =>
+                            `/${locale}/change-request/${changeRequest.change_request_id}`
                         }
                     />
                 )}

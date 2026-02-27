@@ -34,7 +34,7 @@ export function useChangeRequestSearch({
         },
     });
 
-    const logs: ChangeRequest[] = data?.records ?? [];
+    const changeRequests: ChangeRequest[] = data?.records ?? [];
     const paginationInfo = data?.pagination;
 
     const onPrev = useCallback(
@@ -48,7 +48,7 @@ export function useChangeRequestSearch({
     }, [paginationInfo]);
 
     return {
-        logs,
+        changeRequests,
         loading,
         currentPage,
         pageSize,

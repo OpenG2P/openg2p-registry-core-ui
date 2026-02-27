@@ -3,7 +3,7 @@ export interface OutgoingMessage {
     queued_datetime: string;
     source_register: string;
     record_id: string;
-    source_change_log_id: string;
+    source_change_request_id: string;
 
     topic_resolution: string;
     topic_resolution_datetime: string;

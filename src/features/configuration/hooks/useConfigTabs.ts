@@ -20,8 +20,6 @@ export function useConfigTabs(registerId: string, page: number = 1, pageSize: nu
         }
     });
 
-    console.log(data, "data*******************");
-
     return {
         tabs: data?.tabs || [],
         pagination: data?.pagination,

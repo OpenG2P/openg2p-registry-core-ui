@@ -1,13 +1,12 @@
 import { useFetch } from "@/shared/hooks/useFetch";
 
-interface useRecordHistoryParams {
+interface useRecordHistoryDatesParams {
     register_id?: string;
     internal_record_id?: string;
     tab_id?: string;
-    truncated_created_date?: string | null;
 }
 
-export const useRecordHistory = (params: useRecordHistoryParams) => {
+export const useRecordHistoryDates = (params: useRecordHistoryDatesParams) => {
     const {
         data: datesData,
         loading: loadingDates,
@@ -23,11 +22,26 @@ export const useRecordHistory = (params: useRecordHistoryParams) => {
         },
     });
 
+    return {
+        datesData,
+        loadingDates,
+    };
+};
+
+interface useRecordHistoryChangesParams {
+    register_id?: string;
+    internal_record_id?: string;
+    tab_id?: string;
+    truncated_created_date?: string | null;
+}
+
+export const useRecordHistoryChanges = (params: useRecordHistoryChangesParams) => {
     const {
         data: changesData,
         loading: loadingChanges,
     } = useFetch<any>({
         url: "/api/register/get-versions-for-date",
+        enabled: !!params.truncated_created_date,
         options: {
             method: "POST",
             body: JSON.stringify({
@@ -40,9 +54,7 @@ export const useRecordHistory = (params: useRecordHistoryParams) => {
     });
 
     return {
-        datesData,
         changesData,
-        loadingDates,
-        loadingChanges,
+        loadingChanges: !!params.truncated_created_date ? loadingChanges : false,
     };
 };

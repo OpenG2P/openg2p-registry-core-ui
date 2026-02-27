@@ -32,7 +32,7 @@ export default function VersionHistoryPageSkeleton({ tabs = [] }: Props) {
                         </div>
                     </div>
 
-                    <div className="bg-white rounded-[10px] p-9.5 space-y-5 shadow-sm">
+                    <div className="bg-white rounded-[30px] p-9.5 space-y-5">
                         <div className="h-6 w-48 bg-gray-300 rounded" />
 
                         <div className="space-y-3">

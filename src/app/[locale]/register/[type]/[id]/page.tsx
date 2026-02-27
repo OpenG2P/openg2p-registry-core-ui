@@ -2,20 +2,19 @@
 
 import { useTranslations } from 'next-intl';
 import {
-    RegisterTabsLayout,
-    VersionHistoryCard,
+    TabsLayout,
 } from '@/components/shared';
 import {
     WidgetProvider,
-    SectionsContainer,
     SectionRenderer,
 } from '@openg2p/registry-widgets';
-import ChangeRequestCard from '@/features/change-request/components/ChangeRequestCard';
-import { useEffect, useState } from 'react';
+import RegisterChangeRequestCard from '@/features/change-request/components/RegisterChangeRequestCard';
+import { useState, useEffect } from 'react';
 
 import { useRegisterDetail } from '@/features/register/hooks/useRegisterDetail';
 import RegisterDetailsPageSkeleton from '@/features/register/components/RegisterDetailsPageSkeleton';
 import { dataSourceRequestHandler } from '@/features/register/utils/dataSourceRequestHandler';
+import { VersionHistoryCard } from '@/features/register/components';
 
 
 export default function RegisterDetailPage() {
@@ -44,7 +43,7 @@ export default function RegisterDetailPage() {
     const isNotFound = !internalRecordId;
 
     return (
-        <RegisterTabsLayout
+        <TabsLayout
             breadcrumb={breadcrumb}
             tabs={{ tabs }}
             activeTab={activeTabIndex}
@@ -60,29 +59,37 @@ export default function RegisterDetailPage() {
                 <div className="grid grid-cols-12 gap-6">
                     <div className="col-span-12 lg:col-span-9">
                         <div className="col-span-12 lg:col-span-9">
-                            <WidgetProvider
-                                key={activeTabId}
-                                store={widgetStore}
-                                schemaData={sectionDataMap}
-                                translate={t}
-                            >
-                                {orderedTabSections.map((section) => {
-                                    const { section_id, section_register_id,section_ui_schema, hideEditButton } = section;
+                            {orderedTabSections.length > 0 && sectionDataMap ? (
+                                <WidgetProvider
+                                    key={activeTabId}
+                                    store={widgetStore}
+                                    schemaData={sectionDataMap}
+                                    translate={t}
+                                >
+                                    {orderedTabSections.map((section) => {
+                                        const { section_id, section_register_id, section_ui_schema, hideEditButton } = section;
 
-                                    return (
-                                        <div key={section_id} className='pb-4'>
-                                            <SectionRenderer
-                                                section={section_ui_schema}
-                                                onSectionSave={handleSectionSave}
-                                                hideEditButton={hideEditButton}
-                                                dataSourceRequestHandler = {dataSourceRequestHandler}
-                                                dbSectionId = {section_id}
-                                                sectionRegisterId = {section_register_id}
-                                            />
-                                        </div>
-                                    );
-                                })}
-                            </WidgetProvider>
+                                        return (
+                                            <div key={section_id} className='pb-4'>
+                                                <SectionRenderer
+                                                    section={section_ui_schema}
+                                                    onSectionSave={handleSectionSave}
+                                                    hideEditButton={hideEditButton}
+                                                    dataSourceRequestHandler={dataSourceRequestHandler}
+                                                    dbSectionId={section_id}
+                                                    sectionRegisterId={section_register_id}
+                                                />
+                                            </div>
+                                        );
+                                    })}
+                                </WidgetProvider>
+                            ) : !isLoading && (
+                                <div className=" px-6 py-5 flex items-center justify-center text-center">
+                                    <div className="text-[16px] text-black/50 font-medium">
+                                        {t("noTabSection")}
+                                    </div>
+                                </div>
+                            )}
 
                         </div>
                     </div>
@@ -90,7 +97,7 @@ export default function RegisterDetailPage() {
                     <div className="col-span-12 lg:col-span-3 flex flex-col gap-6">
                         {currentRegister && internalRecordId && (
                             <>
-                                <ChangeRequestCard
+                                <RegisterChangeRequestCard
                                     type={registerType}
                                     registerId={currentRegister.register_id}
                                     internalRecordId={internalRecordId}
@@ -109,6 +116,6 @@ export default function RegisterDetailPage() {
                     </div>
                 </div>
             )}
-        </RegisterTabsLayout>
+        </TabsLayout>
     );
 }

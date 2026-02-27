@@ -36,7 +36,7 @@ export default function OutgoingMessageCard({ message }: Props) {
                     <KeyValue label="Queued Date & Time" value={formatDateTime(message.queued_datetime)} />
                     <KeyValue label="Source Register" value={message.source_register} />
                     <KeyValue label="Record ID" value={message.record_id} />
-                    <KeyValue label="Source Change Log ID" value={message.source_change_log_id} />
+                    <KeyValue label="Source Change Request ID" value={message.source_change_request_id} />
                 </div>
 
                 <div className="border-l-2 border-[#D9D9D9] pl-6 flex flex-col justify-between">

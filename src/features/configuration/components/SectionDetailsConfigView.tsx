@@ -19,7 +19,6 @@ export default function SectionDetailsConfigView({
 
     const handleSectionChange = (updatedSection: SectionConfig) => {
         //If required then perform some action on UI schema onchange.
-        console.log(updatedSection, "onChange Updated section");
     };
 
     const handleSave = async (updatedSection: SectionConfig) => {
