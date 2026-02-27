@@ -13,9 +13,9 @@ interface UseIncomingMessagesListOptions {
 }
 
 export function useIncomingMessagesList({
-    pageSize = 7,
+    pageSize,
     initialPage = 1,
-    searchText = '',
+    searchText,
     subjectRecordId,
     subjectRegisterId,
     tabId,

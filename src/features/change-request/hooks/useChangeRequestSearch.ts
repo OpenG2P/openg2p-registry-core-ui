@@ -10,7 +10,7 @@ interface UseChangeRequestSearchOptions {
 }
 
 export function useChangeRequestSearch({
-    pageSize = 10,
+    pageSize,
     initialPage = 1,
     searchText = '',
     enabled = true,

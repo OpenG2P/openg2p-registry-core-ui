@@ -11,7 +11,7 @@ import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
 const RegistersConfigurationPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  
+
   // Env. variable config
   const { config } = useRuntimeConfig();
 
@@ -20,7 +20,7 @@ const RegistersConfigurationPage = () => {
   const { pageStart, pageEnd, total } = usePagination({
     totalItems: pagination?.number_of_items || 0,
     currentPage: currentPage,
-    pageSize: config.pageSize,
+    pageSize: config.pageSize || 10,
     currentCount: registers.length,
   });
 

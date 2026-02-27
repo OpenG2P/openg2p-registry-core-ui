@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useRef } from "react";
 import { useFetch } from "@/shared/hooks/useFetch";
 import { UploadedDocument } from "@/shared/types";
 import { useRegister } from "@/context/RegisterContext";
@@ -19,97 +19,107 @@ export const useSectionSave = (
     const { execute: submitChangeRequest } = useFetch();
     const { execute: uploadDocumentRequest } = useFetch();
 
+    const isSubmitting = useRef(false);
+
     const handleSectionSave = useCallback(
         async (sectionChanges: SectionChanges) => {
+
+            // prevent duplicate submission, when user click multiples time
+            if (isSubmitting.current) return;
 
             if (!currentRegister || !internalRecordId) {
                 return;
             }
 
-            const {register_id, register_mnemonic} = currentRegister;
-            const { section_id, section_register_id, records:sectionChangeRecords, files } = sectionChanges;
+            isSubmitting.current = true;
+            try {
+
+                const { register_id, register_mnemonic } = currentRegister;
+                const { section_id, section_register_id, records: sectionChangeRecords, files } = sectionChanges;
 
 
-            if (!section_id && !section_register_id) {
-                console.error(
-                    "Missing identifiers: both section_id and section_register_id are undefined.",
-                    { section_id, section_register_id }
-                );
-                return;
-            }
+                if (!section_id && !section_register_id) {
+                    console.error(
+                        "Missing identifiers: both section_id and section_register_id are undefined.",
+                        { section_id, section_register_id }
+                    );
+                    return;
+                }
 
-            const { filesToUpload, fileLabels } = extractFilesFromSection(files);
+                const { filesToUpload, fileLabels } = extractFilesFromSection(files);
 
-            let documentsResponse: UploadedDocument[] = [];
-            if (filesToUpload.length > 0) {
-                try {
-                    // Upload files one by one with their corresponding labels
-                    for (let i = 0; i < filesToUpload.length; i++) {
-                        const formData = new FormData();
-                        formData.append("document_label", fileLabels[i]);
-                        formData.append("documents", filesToUpload[i]);
+                let documentsResponse: UploadedDocument[] = [];
+                if (filesToUpload.length > 0) {
+                    try {
+                        // Upload files one by one with their corresponding labels
+                        for (let i = 0; i < filesToUpload.length; i++) {
+                            const formData = new FormData();
+                            formData.append("document_label", fileLabels[i]);
+                            formData.append("documents", filesToUpload[i]);
 
-                        const uploadResult = await uploadDocumentRequest(
-                            "/api/change_request/upload_document",
-                            {
-                                method: "POST",
-                                body: formData,
+                            const uploadResult = await uploadDocumentRequest(
+                                "/api/change_request/upload_document",
+                                {
+                                    method: "POST",
+                                    body: formData,
+                                }
+                            );
+
+                            if (Array.isArray(uploadResult)) {
+                                documentsResponse.push(...uploadResult);
+                            } else if (uploadResult) {
+                                documentsResponse.push(uploadResult);
                             }
-                        );
-
-                        if (Array.isArray(uploadResult)) {
-                            documentsResponse.push(...uploadResult);
-                        } else if (uploadResult) {
-                            documentsResponse.push(uploadResult);
                         }
-                    }
 
-                    // Show success toast after all files are uploaded
-                    toast.success(`${filesToUpload.length} file(s) uploaded successfully!`, {
-                        position: "top-right",
-                        autoClose: 4000,
-                    });
-                } catch (error) {
-                    toast.error(`Failed to upload files. Please try again.`, {
+                        toast.success(`${filesToUpload.length} file(s) uploaded successfully!`, {
+                            position: "top-right",
+                            autoClose: 4000,
+                        });
+                    } catch (error) {
+                        toast.error(`Failed to upload files. Please try again.`, {
+                            position: "top-right",
+                            autoClose: 6000,
+                        });
+                        console.error("File upload error:", error);
+                        return;
+                    }
+                }
+
+                const records = normalizeEditActions(
+                    sectionChangeRecords,
+                    internalRecordId
+                )
+                const change_request_response = await submitChangeRequest(`/api/change_request/create`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        register_id: register_id,
+                        register_mnemonic: register_mnemonic,
+                        internal_record_id: internalRecordId,
+                        section_register_id: section_register_id,
+                        tab_id: activeTabId,
+                        section_id: section_id,
+                        section_records: records,
+                        documents: documentsResponse,
+                    }),
+                });
+
+                if (change_request_response?.change_request_id) {
+                    toast.success(`Change request created successfully!`, {
                         position: "top-right",
                         autoClose: 6000,
                     });
-                    console.error("File upload error:", error);
-                    return;
+                    // Update the Pending change request count
+                    onChangeRequestCreated();
+                } else {
+                    toast.error(`Failed to create change request!`, {
+                        position: "top-right",
+                        autoClose: 6000,
+                    });
                 }
-            }
-
-            const records = normalizeEditActions(
-                sectionChangeRecords,
-                internalRecordId
-            )
-            const change_request_response = await submitChangeRequest(`/api/change_request/create`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    register_id: register_id,
-                    register_mnemonic: register_mnemonic,
-                    internal_record_id: internalRecordId,
-                    section_register_id: section_register_id,
-                    tab_id: activeTabId,
-                    section_id: section_id,
-                    section_records: records,
-                    documents: documentsResponse,
-                }),
-            });
-
-            if (change_request_response?.change_request_id) {
-                toast.success(`Change request created successfully!`, {
-                    position: "top-right",
-                    autoClose: 6000,
-                });
-                // Update the Pending change request count
-                onChangeRequestCreated();
-            } else {
-                toast.error(`Failed to create change request!`, {
-                    position: "top-right",
-                    autoClose: 6000,
-                });
+            } finally {
+                isSubmitting.current = false;
             }
         },
         [

@@ -10,13 +10,17 @@ import { SelectedFilters } from '@/features/filter/components';
 import { useRegistryFilters } from '@/features/filter/hooks/useRegistryFilters';
 import { OutgoingMessageCardSkeleton, OutgoingMessageList } from '@/features/messages/components';
 import { useOutgoingMessagesList } from '@/features/messages/hooks';
+import { usePagination } from '@/shared/hooks';
+import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
 
 export default function OutgoingMessagesPage() {
     const router = useRouter();
     const t = useTranslations();
+    const { config } = useRuntimeConfig();
 
     const searchParams = useSearchParams();
     const searchQuery = searchParams.get('search') || undefined;
+    const pageSize = config.pageSize || 10;
 
     const {
         appliedFilters,
@@ -30,26 +34,20 @@ export default function OutgoingMessagesPage() {
         messages,
         loading,
         currentPage,
-        pageSize,
         paginationInfo,
         onPrev,
         onNext,
     } = useOutgoingMessagesList({
-        pageSize: 7,
+        pageSize,
         searchText: searchQuery,
     });
 
-    const pageStart =
-        paginationInfo && paginationInfo.number_of_items > 0
-            ? (currentPage - 1) * pageSize + 1
-            : 0;
-
-    const pageEnd =
-        paginationInfo
-            ? Math.min(currentPage * pageSize, paginationInfo.number_of_items)
-            : 0;
-
-    const total = paginationInfo?.number_of_items ?? 0;
+    const { pageStart, pageEnd, total } = usePagination({
+        totalItems: paginationInfo?.number_of_items ?? 0,
+        currentPage,
+        pageSize,
+        currentCount: messages.length,
+    });
 
     const handleSearch = useCallback((searchValue: string) => {
         const params = new URLSearchParams(searchParams.toString());

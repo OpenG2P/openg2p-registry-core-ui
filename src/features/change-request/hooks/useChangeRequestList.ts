@@ -13,7 +13,7 @@ interface UseChangeRequestListOptions {
 }
 
 export function useChangeRequestList({
-    pageSize = 10,
+    pageSize,
     initialPage = 1,
     searchText = '',
     subjectRecordId,
