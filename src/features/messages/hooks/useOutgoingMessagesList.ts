@@ -21,7 +21,7 @@ interface UseOutgoingMessagesListOptions {
 }
 
 export function useOutgoingMessagesList({
-    pageSize = 10,
+    pageSize,
     initialPage = 1,
     searchText = '',
     enabled = true,

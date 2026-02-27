@@ -8,38 +8,36 @@ import { useRouter } from '@/i18n/navigation';
 import { TopBar } from '@/components/shared';
 import { IncomingMessageCardSkeleton, IncomingMessageList } from '@/features/messages/components';
 import { useIncomingMessagesList } from '@/features/messages/hooks/useIncomingMessagesList';
+import { usePagination } from '@/shared/hooks';
+import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
 
 export default function IncomingMessagesPage() {
     const router = useRouter();
     const t = useTranslations();
+    const { config } = useRuntimeConfig();
 
     const searchParams = useSearchParams();
     const searchQuery = searchParams.get('search') || undefined;
+    const pageSize = config.pageSize || 10;
 
     const {
         messages,
         loading,
         currentPage,
-        pageSize,
         paginationInfo,
         onPrev,
         onNext,
     } = useIncomingMessagesList({
-        pageSize: 7,
+        pageSize,
         searchText: searchQuery,
     });
 
-    const pageStart =
-        paginationInfo && paginationInfo.number_of_items > 0
-            ? (currentPage - 1) * pageSize + 1
-            : 0;
-
-    const pageEnd =
-        paginationInfo
-            ? Math.min(currentPage * pageSize, paginationInfo.number_of_items)
-            : 0;
-
-    const total = paginationInfo?.number_of_items ?? 0;
+    const { pageStart, pageEnd, total } = usePagination({
+        totalItems: paginationInfo?.number_of_items ?? 0,
+        currentPage,
+        pageSize,
+        currentCount: messages.length,
+    });
 
     const handleSearch = useCallback((searchValue: string) => {
         const params = new URLSearchParams(searchParams.toString());
