@@ -10,6 +10,8 @@ interface ConfigurationTabsProps {
     tabLabels: Record<string, string>;
 }
 
+const MAX_VISIBLE_TABS = 2;
+
 const TabsDropdown = ({
     options,
     activeTab,
@@ -80,26 +82,30 @@ export default function ConfigurationTabs({
     tabLabels
 }: ConfigurationTabsProps) {
     const tabKeys = Object.keys(tabLabels);
+    const inlineTabs = tabKeys.slice(0, MAX_VISIBLE_TABS);
+    const moreTabs = tabKeys.slice(MAX_VISIBLE_TABS);
 
     return (
         <div className="flex gap-2 items-end h-full">
-            {tabKeys.slice(0, 3).map((key) => (
+            {inlineTabs.map((key) => (
                 <button
                     key={key}
                     onClick={() => setActiveTab(key as any)}
-                    className={`min-w-[120px] px-4 py-2 rounded-t-[10px] font-medium text-[18px]
+                    className={`min-w-[120px] max-w-[180px] px-4 py-2 rounded-t-[10px] font-medium text-[18px]
       ${activeTab === key
                             ? 'bg-[#F2BA1A] text-black'
                             : 'bg-[#D1D1D1] text-black'
                         }`}
                 >
-                    {tabLabels[key]}
+                    <span className="block w-full truncate text-center">
+                        {tabLabels[key]}
+                    </span>
                 </button>
             ))}
 
-            {tabKeys.length > 3 && (
+            {moreTabs.length > 0 && (
                 <TabsDropdown
-                    options={tabKeys.slice(3)}
+                    options={moreTabs}
                     activeTab={activeTab}
                     onTabChange={setActiveTab}
                     labelMap={tabLabels}

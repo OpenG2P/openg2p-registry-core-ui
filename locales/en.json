@@ -5,6 +5,7 @@
     "searchChangeRequests": "Search Change Requests",
     "searchIncomingMessages": "Search Incoming Messages",
     "searchOutgoingMessages": "Search Outgoing Messages",
+    "pendingRequests": "Pending Requests",
     "my_profile": "My Profile",
     "logout": "Logout",
     "notifications": "Notifications",
@@ -406,5 +407,6 @@
     "no_of_children": "# of children",
     "noVersionHistory": "No Version History",
     "noTabSection": "No Tab Section",
-    "noChangeRequest": "No Change Request"
+    "noChangeRequest": "No Change Request",
+    "more":"More"
 }
