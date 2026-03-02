@@ -10,6 +10,7 @@ import { useRegisterTabs } from '@/context/RegisterTabsContext';
 import { useBreadcrumb, usePagination } from '@/shared/hooks';
 import { useRegisterRecord } from '@/context/RegisterRecordContext';
 import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
+import { useFetch } from '@/shared/hooks/useFetch';
 
 export default function ChangeRequestPage() {
     const t = useTranslations();
@@ -45,13 +46,25 @@ export default function ChangeRequestPage() {
         enabled: !!activeTabId && !!internalRecordId && !!subjectRegisterId,
     });
 
-    // TODO: uncomment when pagination added to this page
-    // const { pageStart, pageEnd, total } = usePagination({
-    //     totalItems: paginationInfo?.number_of_items ?? 0,
-    //     currentPage,
-    //     pageSize,
-    //     currentCount: changeRequests.length,
-    // });
+    const { data: pendingData } = useFetch<any>({
+        url: '/api/change_request/pending',
+        enabled: !!subjectRegisterId && !!internalRecordId && !!activeTabId,
+        options: {
+            method: 'POST',
+            body: JSON.stringify({
+                subject_register_id: subjectRegisterId,
+                subject_record_id: internalRecordId,
+                tab_id: activeTabId,
+            }),
+        },
+    });
+
+    const { pageStart, pageEnd, total } = usePagination({
+        totalItems: paginationInfo?.number_of_items ?? 0,
+        currentPage,
+        pageSize,
+        currentCount: changeRequests.length,
+    });
 
     const breadcrumb = useBreadcrumb({
         registerType,
@@ -62,13 +75,37 @@ export default function ChangeRequestPage() {
         includeChangeRequest: true,
     });
 
-    return (<>
+    // Right side of TabsLayout-- Pending request + pagination
+    const pendingRequestsCount = pendingData?.number_of_pending_change_requests ?? 0;
+    const rightContent = (
+        <div className="flex items-center gap-10">
+            {pendingRequestsCount !== undefined && (
+                <div className="flex items-center gap-2">
+                    <span className="text-[18px] font-medium text-black">
+                        {t('pendingRequests')}
+                    </span>
+                    <span className="text-[24px] font-bold text-[#F2BA1A]">
+                        {pendingRequestsCount.toString().padStart(2, '0')}
+                    </span>
+                </div>
+            )}
+            <PaginationBar
+                pageStart={pageStart ?? 0}
+                pageEnd={pageEnd ?? 0}
+                total={total ?? 0}
+                onPrev={onPrev}
+                onNext={onNext}
+            />
+        </div>
+    );
 
+    return (
         <TabsLayout
             breadcrumb={breadcrumb}
             tabs={{ tabs }}
             activeTab={activeTabIndex}
             onTabChange={setActiveTabByIndex}
+            rightContent={rightContent}
         >
             {loading ? (
                 <>
@@ -100,27 +137,8 @@ export default function ChangeRequestPage() {
                             `/${locale}/register/${registerType}/${internalRecordId}/change-request/${changeRequest.change_request_id}?tab=${activeTabId}`
                         }
                     />
-
-                    {/* TODO: Place the pagination according to the design */}
-
-                    {/* {total > 0 && (
-                        <div className="flex justify-end px-6 py-4">
-                            <PaginationBar
-                                pageStart={pageStart}
-                                pageEnd={pageEnd}
-                                total={total}
-                                onPrev={onPrev}
-                                onNext={onNext}
-                            />
-                        </div>
-                    )} */}
-
                 </>
             )}
         </TabsLayout>
-
-    </>
-
-
     );
 }
