@@ -1,24 +1,30 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
-import { X, ChevronDown, Upload } from 'lucide-react';
-import { useAllRegister } from '../hooks/useAllRegister';
+import { useState, useRef } from 'react';
+import { X, ChevronDown, Upload, Image as ImageIcon } from 'lucide-react';
+import { useAllRegister } from '../shared/hooks/useAllRegister';
 import { useFetch } from '@/shared/hooks';
-import { toast } from 'react-toastify';
-import { Register } from '../types';
-import { convertImageToBase64 } from '../utils/convertImageToBase64';
 
-interface EditRegisterModalProps {
+// import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
+import { toast } from 'react-toastify';
+import { Register } from '../shared/types';
+import { convertImageToBase64 } from '../shared/utils/convertImageToBase64';
+
+
+interface AddRegisterModalProps {
     isOpen: boolean;
     onClose: () => void;
     onSuccess?: () => void;
-    initialData?: Register;
 }
 
-export default function EditRegisterModal({ isOpen, onClose, onSuccess, initialData }: EditRegisterModalProps) {
+export default function AddRegisterModal({ isOpen, onClose, onSuccess }: AddRegisterModalProps) {
+    // const { config } = useRuntimeConfig();
+    // const { registers } = useAllRegister(1, config.pageSize);
     const { registers } = useAllRegister(1, 100);
-    const { execute: updateRegister } = useFetch();
+    const { execute: createRegister, loading: creating } = useFetch();
     const fileInputRef = useRef<HTMLInputElement>(null);
+
+
 
     const [formData, setFormData] = useState({
         register_mnemonic: '',
@@ -30,21 +36,6 @@ export default function EditRegisterModal({ isOpen, onClose, onSuccess, initialD
         register_rank: '',
         register_purpose: 'REGISTER',
     });
-
-    useEffect(() => {
-        if (initialData && isOpen) {
-            setFormData({
-                register_mnemonic: initialData.register_mnemonic || '',
-                register_description: initialData.register_description || '',
-                master_register_id: initialData.master_register_id || '',
-                dedup_is_enabled: initialData.dedup_is_enabled || false,
-                dedup_threshold_score: initialData.dedup_threshold_score?.toString() || '0',
-                register_icon: initialData.register_icon || '',
-                register_rank: initialData.register_rank?.toString() || '0',
-                register_purpose: initialData.register_purpose || 'REGISTER',
-            });
-        }
-    }, [initialData, isOpen]);
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -63,16 +54,17 @@ export default function EditRegisterModal({ isOpen, onClose, onSuccess, initialD
         }
     };
 
+
+
     const handleSubmit = async () => {
         if (!formData.register_mnemonic || !formData.register_description || !formData.register_purpose) {
             toast.warn('Basic fields (Mnemonic, Description, Purpose) are required');
             return;
         }
 
-        const result = await updateRegister('/api/configuration/registers/edit', {
+        const result = await createRegister('/api/configuration/registers/create', {
             method: 'POST',
             body: JSON.stringify({
-                register_id: initialData?.register_id,
                 register_mnemonic: formData.register_mnemonic,
                 register_description: formData.register_description,
                 master_register_id: formData.master_register_id || null,
@@ -84,19 +76,42 @@ export default function EditRegisterModal({ isOpen, onClose, onSuccess, initialD
             })
         });
 
+        if (result?.register_id) {
+            toast.success(`Register "${result.register_mnemonic}" created successfully`);
 
-        if (result) {
-            toast.success(`Register "${formData.register_mnemonic}" updated successfully`);
+            // Reset form
+            setFormData({
+                register_mnemonic: '',
+                register_description: '',
+                master_register_id: '',
+                dedup_is_enabled: false,
+                dedup_threshold_score: '',
+                register_icon: '',
+                register_rank: '',
+                register_purpose: 'REGISTER',
+            });
+
             if (onSuccess) onSuccess();
             onClose();
         } else {
-            toast.error('Failed to update register');
+            toast.error('Failed to create register');
         }
     };
 
     const handleCancel = () => {
+        setFormData({
+            register_mnemonic: '',
+            register_description: '',
+            master_register_id: '',
+            dedup_is_enabled: false,
+            dedup_threshold_score: '',
+            register_icon: '',
+            register_rank: '',
+            register_purpose: 'REGISTER',
+        });
         onClose();
     };
+
 
     if (!isOpen) return null;
 
@@ -104,6 +119,7 @@ export default function EditRegisterModal({ isOpen, onClose, onSuccess, initialD
         <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
             <div className="relative w-full max-w-200 max-h-[95vh] bg-[#F2BA1A] rounded-[10px] overflow-hidden flex p-1">
                 <div className="flex-1 w-full bg-white relative rounded-[10px] p-10 overflow-y-auto">
+
                     <button
                         onClick={handleCancel}
                         className="absolute top-6 right-6 text-gray-400 hover:text-gray-600 transition-colors"
@@ -111,7 +127,7 @@ export default function EditRegisterModal({ isOpen, onClose, onSuccess, initialD
                         <X size={40} strokeWidth={2} />
                     </button>
 
-                    <h2 className="text-2xl font-bold text-orange-500 mb-4">Edit Register</h2>
+                    <h2 className="text-2xl font-bold text-orange-500 mb-4">Add New Register</h2>
 
                     <div className="space-y-4">
                         <div>
@@ -182,6 +198,8 @@ export default function EditRegisterModal({ isOpen, onClose, onSuccess, initialD
                                 </div>
                             </div>
                         </div>
+
+
 
                         <div className="grid grid-cols-2 gap-4">
                             <div>
@@ -263,7 +281,7 @@ export default function EditRegisterModal({ isOpen, onClose, onSuccess, initialD
                                         className="w-10 h-10 border-2 border-dashed border-[#F77F57] rounded-lg flex items-center justify-center cursor-pointer hover:bg-orange-50 transition-colors overflow-hidden shrink-0"
                                     >
                                         {formData.register_icon ? (
-                                            <img src={formData.register_icon.startsWith('data:') ? formData.register_icon : `data:image/png;base64,${formData.register_icon}`} alt="icon" className="w-full h-full object-cover" />
+                                            <img src={formData.register_icon} alt="icon" className="w-full h-full object-cover" />
                                         ) : (
                                             <Upload className="text-[#F77F57]" size={20} />
                                         )}
@@ -295,7 +313,11 @@ export default function EditRegisterModal({ isOpen, onClose, onSuccess, initialD
                                     )}
                                 </div>
                             </div>
+
+
+
                         </div>
+
 
                         <div className="flex gap-4 pt-6 pb-2">
                             <button
@@ -308,9 +330,8 @@ export default function EditRegisterModal({ isOpen, onClose, onSuccess, initialD
                                 onClick={handleSubmit}
                                 className="px-12 py-2.5 bg-black text-white rounded-[10px] hover:bg-gray-800 transition-colors"
                             >
-                                Update
+                                Save
                             </button>
-
                         </div>
                     </div>
                 </div>

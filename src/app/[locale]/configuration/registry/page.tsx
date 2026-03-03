@@ -1,11 +1,11 @@
 'use client';
 
-import { useState} from 'react';
+import { useState } from 'react';
 import { TopBar } from '@/components/shared';
 import Image from 'next/image';
-import EditRegistry from '@/features/configuration/components/EditRegistry';
+import { EditRegistry } from '@/features/configuration/registry';
 import { useFetch } from '@/shared/hooks/useFetch';
-import { convertImageToBase64 } from '@/features/configuration/utils';
+import { convertImageToBase64 } from '@/features/configuration/shared';
 import { toast } from 'react-toastify';
 
 const RegistryConfigurationPage = () => {

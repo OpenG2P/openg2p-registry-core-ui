@@ -5,7 +5,7 @@ import { useParams } from 'next/navigation';
 import { toast } from 'react-toastify';
 
 
-import { Section } from '../types';
+import { Section } from '../shared/types';
 
 interface EditSectionModalProps {
     isOpen: boolean;

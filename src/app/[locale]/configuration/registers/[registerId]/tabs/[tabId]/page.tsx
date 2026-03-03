@@ -3,16 +3,20 @@
 import { useState } from 'react';
 import { TopBar, BreadcrumbBar } from '@/components/shared';
 import { useParams } from 'next/navigation';
-import RegisterSectionConfigView from '@/features/configuration/components/RegisterSectionConfigView';
-import ConfigDetailsSummary from '@/features/configuration/components/ConfigDetailsSummary';
+import {
+    RegisterSectionConfigView,
+    EditTabModal
+} from '@/features/configuration/registers';
+import {
+    ConfigDetailsSummary,
+    useAllRegister,
+    useConfigTabs,
+    getRegisterDetails,
+    getTabDetails
+} from '@/features/configuration/shared';
 import { useBreadcrumb } from '@/shared/hooks/useBreadcrumb';
-import EditTabModal from '@/features/configuration/components/EditTabModal';
-import { useAllRegister } from '@/features/configuration/hooks/useAllRegister';
-import { useConfigTabs } from '@/features/configuration/hooks/useConfigTabs';
-
 import { usePagination } from '@/shared/hooks/usePagination';
 import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
-import { getRegisterDetails, getTabDetails } from '@/features/configuration/utils/configUtils';
 
 const TabConfigurationPage = () => {
     const { registerId, tabId } = useParams<{ registerId: string; tabId: string }>();

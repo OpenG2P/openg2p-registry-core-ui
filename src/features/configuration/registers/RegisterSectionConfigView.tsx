@@ -1,15 +1,16 @@
 'use client';
 
-import { useEffect } from 'react';
 import Image from 'next/image';
 import { Link } from '@/i18n/navigation';
 import AddSectionModal from './AddSectionModal';
 import { useParams } from 'next/navigation';
-import { useConfigSections } from '../hooks/useConfigSections';
+import { useConfigSections } from '../shared/hooks/useConfigSections';
 import { useFetch } from '@/shared/hooks';
 import { toast } from 'react-toastify';
 
-interface PARegisterSectionConfigViewProps {
+import { useEffect } from 'react';
+
+interface RegisterSectionConfigViewProps {
     isModalOpen: boolean;
     onCloseModal: () => void;
     page?: number;
@@ -17,17 +18,15 @@ interface PARegisterSectionConfigViewProps {
     onDataLoaded?: (totalItems: number, currentCount: number) => void;
 }
 
-// PA (Program Application)
-export default function PARegisterSectionConfigView({
+export default function RegisterSectionConfigView({
     isModalOpen,
     onCloseModal,
     page = 1,
     pageSize = 10,
     onDataLoaded,
-}: PARegisterSectionConfigViewProps) {
-    const { registerId, formId } = useParams<{ registerId: string; formId: string }>();
-
-    const { sections, loading, refresh, pagination } = useConfigSections(registerId, formId, page, pageSize);
+}: RegisterSectionConfigViewProps) {
+    const { registerId, tabId } = useParams<{ registerId: string; tabId: string }>();
+    const { sections, loading, refresh, pagination } = useConfigSections(registerId, tabId, page, pageSize);
 
     useEffect(() => {
         if (pagination && onDataLoaded) {
@@ -36,6 +35,7 @@ export default function PARegisterSectionConfigView({
     }, [pagination, sections.length, onDataLoaded]);
 
     const { execute: deleteSection } = useFetch();
+
 
     const proceedDelete = async (sectionId: string) => {
         const result = await deleteSection('/api/configuration/registers/tabs/sections/delete', {
@@ -109,16 +109,18 @@ export default function PARegisterSectionConfigView({
                         <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
                             Description
                         </div>
+
                         <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
                             Actions
                         </div>
+
                     </div>
 
                     {/* Data Rows */}
                     {sections.map((section, index) => (
                         <Link
                             key={section.section_id}
-                            href={`/configuration/registers/${registerId}/forms/${formId}/sections/${section.section_id}`}
+                            href={`/configuration/registers/${registerId}/tabs/${tabId}/sections/${section.section_id}`}
                             className="block -mx-8"
                         >
                             <div
@@ -131,6 +133,7 @@ export default function PARegisterSectionConfigView({
                                 <div className="text-base font-medium text-gray-500">
                                     {section.section_description}
                                 </div>
+
                                 <div className="text-base font-medium">
                                     <span
                                         onClick={(e) => handleDelete(e, section.section_id)}

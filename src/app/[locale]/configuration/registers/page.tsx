@@ -2,9 +2,8 @@
 
 import { useState } from 'react';
 import { TopBar } from '@/components/shared';
-import RegistersConfigView from '@/features/configuration/components/RegistersConfigView';
-
-import { useAllRegister } from '@/features/configuration/hooks/useAllRegister';
+import { RegistersConfigView } from '@/features/configuration/registers';
+import { useAllRegister } from '@/features/configuration/shared';
 import { usePagination } from '@/shared/hooks';
 import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
 

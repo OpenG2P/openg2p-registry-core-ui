@@ -2,7 +2,7 @@
 
 import { X } from 'lucide-react';
 import Image from 'next/image';
-import { Register } from '../types';
+import { Register } from '../shared/types';
 
 interface ViewRegisterFieldsModalProps {
     isOpen: boolean;

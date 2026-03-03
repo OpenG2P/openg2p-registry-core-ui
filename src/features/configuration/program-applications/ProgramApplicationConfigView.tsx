@@ -6,11 +6,11 @@ import Image from 'next/image';
 import { Link } from '@/i18n/navigation';
 import AddFormModal from './AddFormModal';
 import { useParams } from 'next/navigation';
-import { useConfigTabs } from '../hooks/useConfigTabs';
+import { useConfigTabs } from '../shared/hooks/useConfigTabs';
 import { useFetch } from '@/shared/hooks';
 import { toast } from 'react-toastify';
 
-interface RegisterFormConfigViewProps {
+interface ProgramApplicationConfigViewProps {
     isModalOpen: boolean;
     onCloseModal: () => void;
     page?: number;
@@ -18,13 +18,13 @@ interface RegisterFormConfigViewProps {
     onDataLoaded?: (totalItems: number, currentCount: number) => void;
 }
 
-export default function RegisterFormConfigView({
+export default function ProgramApplicationConfigView({
     isModalOpen,
     onCloseModal,
     page = 1,
     pageSize = 10,
     onDataLoaded,
-}: RegisterFormConfigViewProps) {
+}: ProgramApplicationConfigViewProps) {
     const { registerId } = useParams<{ registerId: string }>();
     // Using the same hook as tabs for now as per previous logic, but isolated in this component
     const { tabs: forms, loading, refresh, pagination } = useConfigTabs(registerId, page, pageSize);

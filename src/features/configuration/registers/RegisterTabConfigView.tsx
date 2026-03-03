@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { Link } from '@/i18n/navigation';
 import AddTabModal from './AddTabModal';
 import { useParams } from 'next/navigation';
-import { useConfigTabs } from '../hooks/useConfigTabs';
+import { useConfigTabs } from '../shared/hooks/useConfigTabs';
 import { useFetch } from '@/shared/hooks';
 import { toast } from 'react-toastify';
 

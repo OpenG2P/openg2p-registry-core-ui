@@ -3,15 +3,17 @@
 import { useState } from 'react';
 import { TopBar, BreadcrumbBar } from '@/components/shared';
 import { useParams } from 'next/navigation';
-import ConfigDetailsSummary from '@/features/configuration/components/ConfigDetailsSummary';
+import {
+    ConfigDetailsSummary,
+    useAllRegister,
+    useConfigTabs,
+    getRegisterDetails,
+    getTabDetails
+} from '@/features/configuration/shared';
 import { useBreadcrumb } from '@/shared/hooks/useBreadcrumb';
-import EditFormModal from '@/features/configuration/components/EditFormModal';
-import { useAllRegister } from '@/features/configuration/hooks/useAllRegister';
-import { useConfigTabs } from '@/features/configuration/hooks/useConfigTabs';
 import { usePagination } from '@/shared/hooks/usePagination';
 import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
-import { getRegisterDetails, getTabDetails } from '@/features/configuration/utils/configUtils';
-import PARegisterSectionConfigView from '@/features/configuration/components/PARegisterSectionConfigView';
+import { ProgramApplicationConfigView, EditFormModal } from '@/features/configuration/program-applications';
 
 const PARegisterFormConfigurationPage = () => {
     const { registerId, formId } = useParams<{ registerId: string; formId: string }>();
@@ -90,7 +92,7 @@ const PARegisterFormConfigurationPage = () => {
                 onNext={handleNext}
             />
             {/* program application register section configuration view */}
-            <PARegisterSectionConfigView
+            <ProgramApplicationConfigView
                 isModalOpen={isModalOpen}
                 onCloseModal={() => setIsModalOpen(false)}
                 page={currentPage}

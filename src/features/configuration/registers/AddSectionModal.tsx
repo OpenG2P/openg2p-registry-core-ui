@@ -3,9 +3,9 @@ import { X, ChevronDown } from 'lucide-react';
 import { useFetch } from '@/shared/hooks';
 import { useParams } from 'next/navigation';
 import { toast } from 'react-toastify';
-import { useAllRegister } from '../hooks/useAllRegister';
+import { useAllRegister } from '../shared/hooks/useAllRegister';
 import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
-import { Register } from '../types';
+import { Register } from '../shared/types';
 
 
 

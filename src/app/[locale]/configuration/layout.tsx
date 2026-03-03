@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import ConfigLayout, { type ConfigActiveOption } from '@/features/configuration/components/ConfigLayout';
+import { ConfigLayout, type ConfigActiveOption } from '@/features/configuration/shared';
 
 const SIDEBAR_OPTIONS: ConfigActiveOption[] = ['registry', 'registers', 'data-models', 'ingest-configurations', 'outgest-configurations'];
 
