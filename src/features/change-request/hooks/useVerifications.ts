@@ -1,11 +1,13 @@
 import { useState, useEffect, useCallback } from "react";
 import { useFetch } from "@/shared/hooks/useFetch";
+import { toast } from "react-toastify";
 import { Verification } from "@/features/change-request/types/change-request";
 
 export const useVerifications = (changeId: string) => {
     const [verifications, setVerifications] = useState<Verification[]>([]);
+    const [loadingVerifications, setLoadingVerifications] = useState(true);
 
-    const { data: verificationResp } = useFetch<any>({
+    const { data: verificationResp, loading: verificationsLoading } = useFetch<any>({
         url: `/api/change_request/verification/list`,
         enabled: !!changeId,
         options: {
@@ -27,6 +29,7 @@ export const useVerifications = (changeId: string) => {
         if (verificationResp?.verifications) {
             setVerifications(verificationResp.verifications);
         }
+        setLoadingVerifications(verificationsLoading)
     }, [verificationResp]);
 
     const addVerification = useCallback(
@@ -48,16 +51,22 @@ export const useVerifications = (changeId: string) => {
 
                 if (newVerification) {
                     setVerifications((prev) => [newVerification, ...prev]);
+                    toast.success("Verification added successfully", {
+                        position: "top-right",
+                        autoClose: 4000,
+                    });
                     return true;
                 }
                 return false;
             } catch (error) {
-                console.error("Error adding verification:", error);
+                toast.error("Something went wrong while adding verification", {
+                    autoClose: 5000,
+                });
                 return false;
             }
         },
         [changeId, executeCreate]
     );
 
-    return { verifications, addVerification };
+    return { verifications, loadingVerifications, addVerification };
 };

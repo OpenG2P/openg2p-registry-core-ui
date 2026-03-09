@@ -17,7 +17,7 @@ import {
 } from "@openg2p/registry-widgets";
 import { useTranslations } from "next-intl";
 import { RegisterFlattenedRecord } from "@/features/register/types";
-import { useChangeRequestManager, useRegisterSectionsFromCR } from "@/features/change-request/hooks";
+import { useChangeRequestManager, useRegisterSectionsFromCR, useVerifications } from "@/features/change-request/hooks";
 import { ChangeRequestValuesTabs } from "./ChangeRequestValuesTabs";
 import CRHeaderSkeleton from "./CRHeaderSkeleton";
 import SectionSchemaSkeleton from "./SectionSchemaSkeleton";
@@ -34,10 +34,8 @@ export default function ChangeRequestDetailsView({ changeId, breadcrumb }: Props
 
     const {
         details,
-        verifications,
         documents,
         loadingDetails,
-        loadingVerifications,
         loadingDocuments,
         loadingAction,
         popupVisible,
@@ -46,8 +44,11 @@ export default function ChangeRequestDetailsView({ changeId, breadcrumb }: Props
         handleApprove,
         handleReject,
         submitReject,
-        addVerification,
     } = useChangeRequestManager(changeId);
+
+    const {verifications, loadingVerifications, addVerification} = useVerifications(changeId);
+
+    const verificationCount = verifications.length;
 
     const widgetStoreOld = useMemo(() => createWidgetStore(), []);
     const widgetStoreNew = useMemo(() => createWidgetStore(), []);
@@ -105,6 +106,7 @@ export default function ChangeRequestDetailsView({ changeId, breadcrumb }: Props
                         details && (
                             <ChangeRequestHeader
                                 details={details}
+                                verificationCount={verificationCount}
                                 documents={documents}
                                 onApprove={handleApprove}
                                 onReject={handleReject}

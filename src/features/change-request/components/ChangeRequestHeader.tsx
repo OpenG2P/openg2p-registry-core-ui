@@ -10,6 +10,7 @@ export interface ChangeRequestDocument {
 
 interface Props {
     details: ChangeRequest;
+    verificationCount: number;
     documents?: ChangeRequestDocument[];
     onApprove: () => void;
     onReject: () => void;
@@ -24,6 +25,7 @@ const statusClassMap: Record<string, string> = {
 
 export default function ChangeRequestHeader({
     details,
+    verificationCount,
     documents = [],
     onApprove,
     onReject,
@@ -44,6 +46,7 @@ export default function ChangeRequestHeader({
                 />
                 <VerificationStats
                     details={details}
+                    verificationCount={verificationCount}
                     documentsCount={documents.length}
                 />
                 <AttachedDocuments documents={documents} />
@@ -113,9 +116,11 @@ const InfoSection = ({
 
 const VerificationStats = ({
     details,
+    verificationCount,
     documentsCount,
 }: {
     details: ChangeRequest;
+    verificationCount: number;
     documentsCount: number;
 }) => {
     const t = useTranslations();
@@ -137,7 +142,7 @@ const VerificationStats = ({
                 <div>
                     {t('verificationsDone')}:{" "}
                     <span className="text-black font-medium">
-                        {details.no_of_verifications_done}
+                        {verificationCount}
                     </span>
                 </div>
 
