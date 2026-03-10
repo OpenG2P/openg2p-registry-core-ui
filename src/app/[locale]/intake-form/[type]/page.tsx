@@ -37,7 +37,6 @@ export default function IntakeFormPage() {
     };
 
     const { currentRegister, registers } = useRegister();
-    console.log(currentRegister, registerType);
 
     const {
         appliedFilters,
