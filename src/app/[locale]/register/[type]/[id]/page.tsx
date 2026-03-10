@@ -65,6 +65,7 @@ export default function RegisterDetailPage() {
                                     store={widgetStore}
                                     schemaData={sectionDataMap}
                                     translate={t}
+                                    dataSourceRequestHandler={dataSourceRequestHandler}
                                 >
                                     {orderedTabSections.map((section) => {
                                         const { section_id, section_register_id, section_ui_schema, hideEditButton } = section;

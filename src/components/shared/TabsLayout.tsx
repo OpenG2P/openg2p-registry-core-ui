@@ -1,6 +1,7 @@
 'use client';
 
-import { ReactNode, useTransition } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
+import { ChevronDown } from "lucide-react";
 import { BreadcrumbBar } from "@/components/shared";
 import { TabsResponse } from "@/shared/types";
 import { useTranslations } from "next-intl";
@@ -11,6 +12,7 @@ interface Props {
     activeTab?: number;
     onTabChange?: (index: number) => void;
     children: ReactNode;
+    rightContent?: ReactNode;
 }
 
 export default function TabsLayout({
@@ -19,8 +21,53 @@ export default function TabsLayout({
     activeTab,
     onTabChange,
     children,
+    rightContent,
 }: Props) {
-    const t = useTranslations()
+    const t = useTranslations();
+    const [isMoreOpen, setIsMoreOpen] = useState(false);
+    const moreMenuRef = useRef<HTMLDivElement | null>(null);
+
+    const MAX_VISIBLE_TABS = 5;
+
+    const allTabs = tabs?.tabs ?? [];
+    const visibleTabs = allTabs.slice(0, MAX_VISIBLE_TABS);
+    const moreTabs = allTabs.slice(MAX_VISIBLE_TABS);
+    const hasMoreTabs = moreTabs.length > 0;
+
+    const isMoreActive =
+        hasMoreTabs && activeTab !== undefined && activeTab >= MAX_VISIBLE_TABS;
+
+    useEffect(() => {
+        if (!isMoreOpen) return;
+
+        const handleClickOutside = (event: MouseEvent) => {
+            if (
+                moreMenuRef.current &&
+                !moreMenuRef.current.contains(event.target as Node)
+            ) {
+                setIsMoreOpen(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [isMoreOpen]);
+
+    // if activeTab change then close the dropdown of more tab
+    useEffect(() => {
+        setIsMoreOpen(false);
+    }, [activeTab]);
+
+    const activeMoreTab =
+        hasMoreTabs &&
+        activeTab !== undefined &&
+        activeTab >= MAX_VISIBLE_TABS &&
+        activeTab < allTabs.length
+            ? allTabs[activeTab]
+            : undefined;
+
     return (
         <div className="min-h-screen bg-[#F3F1E4]">
             <div className="px-7.5 pt-5">
@@ -29,21 +76,96 @@ export default function TabsLayout({
 
             <div className="px-7.5 py-6">
                 {tabs && activeTab !== undefined && onTabChange && (
-                    <div className="flex gap-2 px-10">
-                        {tabs.tabs.map((tab, tabIndex) => {
-                            return (
-                                <button
-                                    key={tab.tab_id}
-                                    onClick={() => onTabChange(tabIndex)}
-                                    className={`px-8 pt-2.5 pb-1 text-black text-[18px] font-medium rounded-t-[10px] transition-all ${activeTab === tabIndex
-                                        ? 'bg-[#F2BA1A]'
-                                        : 'bg-[#DDDDDD]'
+                    <div className="flex flex-wrap items-center justify-between gap-4 px-10">
+                        <div className="flex flex-wrap items-center gap-2">
+                            {visibleTabs.map((tab, index) => {
+                                const tabIndex = index;
+                                const isActive = activeTab === tabIndex;
+
+                                return (
+                                    <button
+                                        key={tab.tab_id}
+                                        onClick={() => onTabChange(tabIndex)}
+                                        className={`min-w-30 max-w-45 px-4 py-2 text-black text-[18px] font-medium rounded-t-[10px] transition-all ${
+                                            isActive
+                                                ? "bg-[#F2BA1A]"
+                                                : "bg-[#DDDDDD]"
                                         }`}
-                                >
-                                    {t(tab.tab_label) || tab.tab_label}
-                                </button>
-                            );
-                        })}
+                                    >
+                                        <span className="block w-full truncate text-center">
+                                            {t(tab.tab_label) || tab.tab_label}
+                                        </span>
+                                    </button>
+                                );
+                            })}
+
+                            {hasMoreTabs && (
+                                <div className="relative" ref={moreMenuRef}>
+                                    <button
+                                        type="button"
+                                        onClick={() =>
+                                            setIsMoreOpen((prev) => !prev)
+                                        }
+                                        className={`inline-flex items-center justify-center gap-2 min-w-30 px-4 py-2 rounded-t-[10px] font-medium text-[18px] text-black transition-all whitespace-nowrap ${
+                                            isMoreActive
+                                                ? "bg-[#F2BA1A]"
+                                                : "bg-[#D1D1D1]"
+                                        }`}
+                                    >
+                                        <span className="truncate">
+                                            {activeMoreTab
+                                                ? t(activeMoreTab.tab_label) ||
+                                                  activeMoreTab.tab_label
+                                                : t("more") || "More"}
+                                        </span>
+                                        <ChevronDown
+                                            className={`ml-1 h-5 w-5 shrink-0 transition-transform ${
+                                                isMoreOpen ? "rotate-180" : ""
+                                            }`}
+                                        />
+                                    </button>
+
+                                    {isMoreOpen && (
+                                        <div className="origin-top-left outline-none absolute left-0 mt-0 min-w-30 rounded-b-[10px] rounded-r-[10px] bg-white border border-[#F2BA1A] drop-shadow-[0_2px_6px_rgba(0,0,0,0.25)] z-50">
+                                            <div className="py-1">
+                                                {moreTabs.map((tab, index) => {
+                                                    const tabIndex =
+                                                        MAX_VISIBLE_TABS +
+                                                        index;
+                                                    const isActive =
+                                                        activeTab === tabIndex;
+
+                                                    return (
+                                                        <button
+                                                            key={tab.tab_id}
+                                                            type="button"
+                                                            onClick={() => {
+                                                                onTabChange(
+                                                                    tabIndex
+                                                                );
+                                                                setIsMoreOpen(
+                                                                    false
+                                                                );
+                                                            }}
+                                                            className={`block w-full max-w-62.5 text-left px-4 py-2 font-medium text-[18px] transition-colors ${
+                                                                isActive
+                                                                    ? "bg-[#F2BA1A40] text-black font-semibold"
+                                                                    : "text-black"
+                                                            }`}
+                                                        >
+                                                            {t(
+                                                                tab.tab_label
+                                                            ) || tab.tab_label}
+                                                        </button>
+                                                    );
+                                                })}
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                        {rightContent}
                     </div>
                 )}
                 {children}

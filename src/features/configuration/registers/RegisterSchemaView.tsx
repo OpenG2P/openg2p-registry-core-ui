@@ -1,5 +1,5 @@
 'use client';
-import { useRegisterSchema } from '../hooks/useRegisterSchema';
+import { useRegisterSchema } from '../shared/hooks/useRegisterSchema';
 import { useState, useEffect } from 'react';
 import { useFetch } from '@/shared/hooks';
 import { toast } from 'react-toastify';

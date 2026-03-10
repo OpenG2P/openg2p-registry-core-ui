@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import { useFetch } from '@/shared/hooks';
 import { toast } from 'react-toastify';
-import { Tab } from '../types';
+import { Tab } from '../shared/types';
 
 interface EditTabModalProps {
     isOpen: boolean;

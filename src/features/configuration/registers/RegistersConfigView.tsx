@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Link } from '@/i18n/navigation';
 import AddRegisterModal from './AddRegisterModal';
 import ViewRegisterFieldsModal from './ViewRegisterFieldsModal';
-import { Register } from '../types';
+import { Register } from '../shared/types';
 
 import Image from 'next/image';
 

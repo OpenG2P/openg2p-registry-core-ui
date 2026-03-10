@@ -4,10 +4,6 @@ import { useState } from 'react';
 import { TopBar, BreadcrumbBar } from '@/components/shared';
 import { useParams } from 'next/navigation';
 import {
-    RegisterSectionConfigView,
-    EditTabModal
-} from '@/features/configuration/registers';
-import {
     ConfigDetailsSummary,
     useAllRegister,
     useConfigTabs,
@@ -17,9 +13,10 @@ import {
 import { useBreadcrumb } from '@/shared/hooks/useBreadcrumb';
 import { usePagination } from '@/shared/hooks/usePagination';
 import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
+import { ProgramApplicationConfigView, EditFormModal } from '@/features/configuration/program-applications';
 
-const TabConfigurationPage = () => {
-    const { registerId, tabId } = useParams<{ registerId: string; tabId: string }>();
+const PARegisterFormConfigurationPage = () => {
+    const { registerId, formId } = useParams<{ registerId: string; formId: string }>();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
@@ -28,7 +25,8 @@ const TabConfigurationPage = () => {
     const [paginationInfo, setPaginationInfo] = useState({ totalItems: 0, currentCount: 0 });
 
     const { registers, loading: registersLoading } = useAllRegister(1, 100);
-    const { tabs, loading: tabsLoading, refresh: refreshTabs } = useConfigTabs(registerId, 1, 100);
+    // TODO: Need to change form and tab things if both store in different tables
+    const { tabs: forms, loading: formsLoading, refresh: refreshForms } = useConfigTabs(registerId, 1, 100);
 
     const pagination = usePagination({
         currentPage,
@@ -38,13 +36,14 @@ const TabConfigurationPage = () => {
     });
 
     const registerDetails = getRegisterDetails(registerId, registers);
-    const tabDetails = getTabDetails(tabId, tabs);
+    //TODO: Need to change if different table for tab and forms
+    const formDetails = getTabDetails(formId, forms);
 
     const breadcrumb = useBreadcrumb({
         rootItem: { label: 'Registers', href: '/configuration/registers' },
         customItems: [
             { label: registerDetails.register_mnemonic || '', href: `/configuration/registers/${registerId}` },
-            { label: tabDetails.tab_label || '', href: `/configuration/registers/${registerId}/tabs/${tabId}` }
+            { label: formDetails.tab_label || '', href: `/configuration/registers/${registerId}/forms/${formId}` }
         ]
     });
 
@@ -56,16 +55,13 @@ const TabConfigurationPage = () => {
         setCurrentPage(prev => prev + 1);
     };
 
-    if (registersLoading || tabsLoading) {
+    if (registersLoading || formsLoading) {
         return (
             <div className="flex items-center justify-center p-20">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#ED7C22]"></div>
             </div>
         );
     }
-
-
-
 
     return (
         <>
@@ -74,9 +70,9 @@ const TabConfigurationPage = () => {
             </div>
 
             <ConfigDetailsSummary
-                title={tabDetails.tab_label || 'None'}
+                title={formDetails.tab_label || 'None'}
                 extraInfo1={registerDetails.register_mnemonic || 'None'}
-                extraInfo2={String(tabDetails.tab_order ?? 0)}
+                extraInfo2={String(formDetails.tab_order ?? 0)}
                 onEdit={() => setIsEditModalOpen(true)}
             />
 
@@ -85,9 +81,9 @@ const TabConfigurationPage = () => {
                 showFilters={false}
                 showPagination={true}
                 showSubHeading
-                subHeading={`Manage sections for ${tabDetails.tab_label}`}
+                subHeading={`Manage sections for ${formDetails.tab_label}`}
                 showAddNewButton={true}
-                addNewButtonText={"Add New Section"}
+                addNewButtonText="Add New Section"
                 onAddNewButton={() => setIsModalOpen(true)}
                 pageStart={pagination.pageStart}
                 pageEnd={pagination.pageEnd}
@@ -95,8 +91,8 @@ const TabConfigurationPage = () => {
                 onPrev={handlePrev}
                 onNext={handleNext}
             />
-
-            <RegisterSectionConfigView
+            {/* program application register section configuration view */}
+            <ProgramApplicationConfigView
                 isModalOpen={isModalOpen}
                 onCloseModal={() => setIsModalOpen(false)}
                 page={currentPage}
@@ -104,16 +100,15 @@ const TabConfigurationPage = () => {
                 onDataLoaded={(totalItems, currentCount) => setPaginationInfo({ totalItems, currentCount })}
             />
 
-            <EditTabModal
+            <EditFormModal
                 isOpen={isEditModalOpen}
-                initialData={tabDetails as any}
+                initialData={formDetails as any}
                 registerId={registerId}
                 onClose={() => setIsEditModalOpen(false)}
-                onSuccess={refreshTabs}
+                onSuccess={refreshForms}
             />
         </>
     );
 };
 
-
-export default TabConfigurationPage;
+export default PARegisterFormConfigurationPage;

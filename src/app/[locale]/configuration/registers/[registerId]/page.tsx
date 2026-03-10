@@ -4,29 +4,37 @@ import { useState } from 'react';
 import { BreadcrumbBar, TopBar } from '@/components/shared';
 import { useParams } from 'next/navigation';
 import { useBreadcrumb } from '@/shared/hooks/useBreadcrumb';
-import { useAllRegister } from '@/features/configuration/hooks/useAllRegister';
-import EditRegisterModal from '@/features/configuration/components/EditRegisterModal';
-import ConfigDetailsSummary from '@/features/configuration/components/ConfigDetailsSummary';
-import { getRegisterDetails } from '@/features/configuration/utils/configUtils';
-import ViewRegisterFieldsModal from '@/features/configuration/components/ViewRegisterFieldsModal';
+import {
+  useAllRegister,
+  ConfigDetailsSummary,
+  getRegisterDetails,
+  ConfigurationTabs,
+  convertImageToBase64
+} from '@/features/configuration/shared';
+import {
+  EditRegisterModal,
+  ViewRegisterFieldsModal,
+  RegisterTabConfigView,
+  RegisterSchemaView
+} from '@/features/configuration/registers';
+import { ProgramApplicationConfigView } from '@/features/configuration/program-applications';
 import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
 import { usePagination } from '@/shared/hooks';
-import RegisterTabConfigView from '@/features/configuration/components/RegisterTabConfigView';
-import RegisterSchemaView from '@/features/configuration/components/RegisterSchemaView';
-import ConfigurationTabs from '@/features/configuration/components/ConfigurationTabs';
 
 
 const RegisterConfigurationPage = () => {
   const { registerId } = useParams<{ registerId: string }>();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<'tabs' | 'filter' | 'search' | 'deduplication'>('tabs');
+  const [activeTab, setActiveTab] = useState<'tabs_or_forms' | 'filter' | 'search' | 'deduplication'>('tabs_or_forms');
 
   const { registers, loading, refresh } = useAllRegister(1, 100);
   const registerDetails = getRegisterDetails(registerId, registers);
 
+  const isProgramApplication = registerDetails.register_purpose === 'PROGRAM_APPLICATION';
+
   const tabLabels = {
-    tabs: 'Tabs',
+    tabs_or_forms: isProgramApplication ? 'Forms' : 'Tabs',
     filter: 'Filter Schema',
     search: 'Search Schema',
     deduplication: 'Deduplication Schema',
@@ -68,6 +76,8 @@ const RegisterConfigurationPage = () => {
     );
   }
 
+
+
   return (
     <>
       <div className="pt-10 px-7.5 mb-6">
@@ -96,9 +106,9 @@ const RegisterConfigurationPage = () => {
             <TopBar
               breadcrumb={[]}
               showFilters={false}
-              showPagination={activeTab === 'tabs'}
-              showAddNewButton={activeTab === 'tabs'}
-              addNewButtonText="Add New Tab"
+              showPagination={activeTab === 'tabs_or_forms'}
+              showAddNewButton={activeTab === 'tabs_or_forms'}
+              addNewButtonText={isProgramApplication ? "Add New Form" : "Add New Tab"}
               onAddNewButton={() => setIsModalOpen(true)}
               pageStart={pagination.pageStart}
               pageEnd={pagination.pageEnd}
@@ -114,15 +124,25 @@ const RegisterConfigurationPage = () => {
 
       {/* Tab Content */}
       <div className="mt-0">
-        {activeTab === 'tabs' ? (
-          <RegisterTabConfigView
-            onAddNewRegister={() => setIsModalOpen(true)}
-            isModalOpen={isModalOpen}
-            onCloseModal={() => setIsModalOpen(false)}
-            page={currentPage}
-            pageSize={PAGE_SIZE}
-            onDataLoaded={(totalItems, currentCount) => setPaginationInfo({ totalItems, currentCount })}
-          />
+        {activeTab === 'tabs_or_forms' ? (
+          isProgramApplication ? (
+            <ProgramApplicationConfigView
+              isModalOpen={isModalOpen}
+              onCloseModal={() => setIsModalOpen(false)}
+              page={currentPage}
+              pageSize={PAGE_SIZE}
+              onDataLoaded={(totalItems, currentCount) => setPaginationInfo({ totalItems, currentCount })}
+            />
+          ) : (
+            <RegisterTabConfigView
+              onAddNewRegister={() => setIsModalOpen(true)}
+              isModalOpen={isModalOpen}
+              onCloseModal={() => setIsModalOpen(false)}
+              page={currentPage}
+              pageSize={PAGE_SIZE}
+              onDataLoaded={(totalItems, currentCount) => setPaginationInfo({ totalItems, currentCount })}
+            />
+          )
         ) : (
           <RegisterSchemaView
             registerId={registerId}

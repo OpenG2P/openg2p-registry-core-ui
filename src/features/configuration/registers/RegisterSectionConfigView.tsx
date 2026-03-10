@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { Link } from '@/i18n/navigation';
 import AddSectionModal from './AddSectionModal';
 import { useParams } from 'next/navigation';
-import { useConfigSections } from '../hooks/useConfigSections';
+import { useConfigSections } from '../shared/hooks/useConfigSections';
 import { useFetch } from '@/shared/hooks';
 import { toast } from 'react-toastify';
 
