@@ -9,7 +9,7 @@ import {
     SectionRenderer,
 } from '@openg2p/registry-widgets';
 import RegisterChangeRequestCard from '@/features/change-request/components/RegisterChangeRequestCard';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import { useRegisterDetail } from '@/features/register/hooks/useRegisterDetail';
 import RegisterDetailsPageSkeleton from '@/features/register/components/RegisterDetailsPageSkeleton';

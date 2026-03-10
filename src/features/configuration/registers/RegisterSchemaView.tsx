@@ -88,7 +88,7 @@ export default function RegisterSchemaView({
                 <textarea
                     value={editableSchema}
                     onChange={(e) => setEditableSchema(e.target.value)}
-                    className="w-full min-h-[500px] p-4 font-mono text-sm text-gray-800 focus:outline-none resize-y"
+                    className="w-full min-h-125 p-4 font-mono text-sm text-gray-800 focus:outline-none resize-y"
                     spellCheck={false}
                 />
             </div>

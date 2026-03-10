@@ -6,27 +6,27 @@ import { ConfigLayout, type ConfigActiveOption } from '@/features/configuration/
 const SIDEBAR_OPTIONS: ConfigActiveOption[] = ['registry', 'registers', 'data-models', 'ingest-configurations', 'outgest-configurations'];
 
 function getActiveOptionFromPathname(pathname: string | null): ConfigActiveOption {
-  if (!pathname) return 'registers';
-  const segments = pathname.split('/');
-  const configIndex = segments.indexOf('configuration');
-  const segment = configIndex >= 0 && configIndex < segments.length - 1
-    ? segments[configIndex + 1]
-    : '';
-  const option = segment as ConfigActiveOption;
-  return SIDEBAR_OPTIONS.includes(option) ? option : 'registers';
+    if (!pathname) return 'registers';
+    const segments = pathname.split('/');
+    const configIndex = segments.indexOf('configuration');
+    const segment = configIndex >= 0 && configIndex < segments.length - 1
+        ? segments[configIndex + 1]
+        : '';
+    const option = segment as ConfigActiveOption;
+    return SIDEBAR_OPTIONS.includes(option) ? option : 'registers';
 }
 
 export default function ConfigurationLayout({
-  children,
+    children,
 }: {
-  children: React.ReactNode;
+    children: React.ReactNode;
 }) {
-  const pathname = usePathname();
-  const activeOption = getActiveOptionFromPathname(pathname);
+    const pathname = usePathname();
+    const activeOption = getActiveOptionFromPathname(pathname);
 
-  return (
-    <ConfigLayout activeOption={activeOption}>
-      {children}
-    </ConfigLayout>
-  );
+    return (
+        <ConfigLayout activeOption={activeOption}>
+            {children}
+        </ConfigLayout>
+    );
 }
