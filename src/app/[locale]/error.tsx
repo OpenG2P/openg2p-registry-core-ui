@@ -49,11 +49,11 @@ export default function Error({
             priority
           />
 
-          <h1 className="mb-1 text-[40px] font-semibold leading-[47px] text-[#ED7C22]">
+          <h1 className="mb-1 text-[40px] font-semibold leading-11.75 text-[#ED7C22]">
             {t('something_went_wrong')}
           </h1>
 
-          <p className="mb-6 text-[20px] font-light leading-[24px] text-black/50">
+          <p className="mb-6 text-[20px] font-light leading-6 text-black/50">
             {t('something_went_wrong_subtitle')}
           </p>
 
