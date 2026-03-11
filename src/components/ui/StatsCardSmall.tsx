@@ -92,6 +92,45 @@ const StatsCardSmall = ({
                 ],
             };
         }
+        if (stats_endpoint.includes("intake")) {
+            return {
+                title: t('intakeForm'),
+                rows: [
+                    {
+                        id: "pending",
+                        label: t('pending'),
+                        value: data.total_approval_pending_submissions,
+                        imageUrl: "/images/register/statsIcon/topics.png",
+                    },
+                    {
+                        id: "draft",
+                        label: t('draft'),
+                        value: data.total_draft_submissions,
+                        imageUrl: "/images/register/statsIcon/data_models.png",
+                    },
+                ],
+            };
+        }
+
+         if (stats_endpoint.includes("messages")) {
+            return {
+                title: t('messages'),
+                rows: [
+                    {
+                        id: "incoming",
+                        label: t('incoming'),
+                        value: data.incoming,
+                        imageUrl: "/images/messages/message_icon.png",
+                    },
+                    {
+                        id: "outgoing",
+                        label: t('outgoing'),
+                        value: data.outgoing,
+                        imageUrl: "/images/messages/message_icon.png",
+                    },
+                ],
+            };
+        }
 
         return { title: t('items'), rows: [] };
     }, [data, stats_endpoint, t]);
@@ -109,6 +148,12 @@ const StatsCardSmall = ({
         }
         if (stats_endpoint.includes("outgoing")) {
             return data?.no_of_messages || 0;
+        }
+        if (stats_endpoint.includes("intake")) {
+            return data?.total_submissions || 0;
+        }
+        if (stats_endpoint.includes("messages")) {
+            return data?.total || 0;
         }
     }, [data, stats_endpoint]);
 

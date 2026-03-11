@@ -11,7 +11,7 @@ export default function RegisterDetailsPageSkeleton({ tabs = [] }: Props) {
                 {[1, 2, 3].map(i => (
                     <div
                         key={i}
-                        className="h-10 w-32 rounded-t-[10px] bg-[#F2BA1A]/50"
+                        className="h-11 w-32 rounded-t-[10px] bg-[#F2BA1A]/50"
                     />
                 ))}
             </div>)}
