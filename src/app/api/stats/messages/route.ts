@@ -17,7 +17,7 @@ export async function GET(req: NextRequest) {
                     request_payload: {},
                 }),
             }),
-
+            // TODO: Once the outgoing summary api is ready replace the below endpoint
             proxyToBackend({
                 req,
                 targetEndpoint: "/ingestion-data/get_ingestion_summary_data",

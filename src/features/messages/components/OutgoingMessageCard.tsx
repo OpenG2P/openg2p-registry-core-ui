@@ -17,7 +17,7 @@ export default function OutgoingMessageCard({ message }: Props) {
     const topicsToShow = showAllTopics ? message.topic_names : message.topic_names.slice(0, 4);
 
     return (
-        <div className="rounded-[30px] bg-white px-10 py-8">
+        <div className="rounded-[10px] bg-white px-10 py-8">
             <div className="grid gap-6 grid-cols-1 md:grid-cols-3 text-[16px] text-[#00000080]">
 
                 <div className="space-y-2">
