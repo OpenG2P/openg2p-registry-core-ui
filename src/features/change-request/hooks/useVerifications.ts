@@ -3,21 +3,24 @@ import { useFetch } from "@/shared/hooks/useFetch";
 import { toast } from "react-toastify";
 import { Verification } from "@/features/change-request/types/change-request";
 
-export const useVerifications = (changeId: string) => {
+export const useVerifications = (changeId?: string, intakeFormSubmissionId?: string) => {
     const [verifications, setVerifications] = useState<Verification[]>([]);
     const [loadingVerifications, setLoadingVerifications] = useState(true);
 
     const { data: verificationResp, loading: verificationsLoading } = useFetch<any>({
-        url: `/api/change_request/verification/list`,
-        enabled: !!changeId,
+        url: `/api/verification/list`,
+        enabled: !!changeId || !!intakeFormSubmissionId,
         options: {
             method: "POST",
-            body: JSON.stringify({ change_request_id: changeId }),
+            body: JSON.stringify({
+                change_request_id: changeId ?? "",
+                intake_form_submission_id: intakeFormSubmissionId ?? "",
+            }),
         },
     });
 
     const { execute: executeCreate } = useFetch<any>({
-        url: `/api/change_request/verification/create`,
+        url: `/api/verification/create`,
         enabled: false,
     });
 
@@ -36,11 +39,12 @@ export const useVerifications = (changeId: string) => {
         async (observation: string, isApproved: boolean) => {
             try {
                 const result = await executeCreate(
-                    `/api/change_request/verification/create`,
+                    `/api/verification/create`,
                     {
                         method: "POST",
                         body: JSON.stringify({
-                            change_request_id: changeId,
+                            change_request_id: changeId ?? "",
+                            intake_form_submission_id: intakeFormSubmissionId ?? "",
                             verification_observations: observation,
                             is_approved: isApproved,
                         }),

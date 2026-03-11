@@ -5,28 +5,28 @@ export const sortedDisplayFields = (fields: DisplayField[]): DisplayField[] => {
     return [...fields].sort((firstField, secondField) => firstField.order - secondField.order);
 };
 
-export const extractFilesFromSection = (files?:unknown[]) => {
-  const filesToUpload: File[] = [];
-  const fileLabels: string[] = [];
+export const extractFilesFromSection = (files?: unknown[]) => {
+    const filesToUpload: File[] = [];
+    const fileLabels: string[] = [];
 
-  if (Array.isArray(files)) {
-    files.forEach((value, index) => {
-      if (value && typeof value === 'object' && (value as any).__type === 'File') {
-        try {
-          const realFile = deserializeFile(value);
-          filesToUpload.push(realFile);
-          fileLabels.push(`file_${index}`);
-        } catch (error) {
-          console.error('Failed to deserialize file:', error);
-        }
-      }
-    });
-  }
-  
-  return {
-    filesToUpload,
-    fileLabels,
-  };
+    if (Array.isArray(files)) {
+        files.forEach((value, index) => {
+            if (value && typeof value === 'object' && (value as any).__type === 'File') {
+                try {
+                    const realFile = deserializeFile(value);
+                    filesToUpload.push(realFile);
+                    fileLabels.push(`file_${index}`);
+                } catch (error) {
+                    console.error('Failed to deserialize file:', error);
+                }
+            }
+        });
+    }
+
+    return {
+        filesToUpload,
+        fileLabels,
+    };
 };
 
 /**
@@ -38,24 +38,24 @@ export const extractFilesFromSection = (files?:unknown[]) => {
  * - UPDATE: Existing record updated (handled at registry widget level)
  */
 export function normalizeEditActions(
-  records: any[],
-  linkInternalRecordId = "Empty Internal RecordID"
+    records: any[],
+    linkInternalRecordId = "Empty Internal RecordID"
 ) {
-  if (!Array.isArray(records)) return [];
+    if (!Array.isArray(records)) return [];
 
-  return records.map((record) => {
-    // TODO: Need to resolve 3-level structure
-    const result = { ...record };
+    return records.map((record) => {
+        // TODO: Need to resolve 3-level structure
+        const result = { ...record };
 
-    if (result.edit_action === undefined) {
-      result.edit_action = "NO_CHANGE";
-    }
+        if (result.edit_action === undefined) {
+            result.edit_action = "NO_CHANGE";
+        }
 
-    if (result.edit_action === "ADD") {
-      result.link_internal_record_id = linkInternalRecordId;
-      result.internal_record_id = "";
-    }
+        if (result.edit_action === "ADD") {
+            result.link_internal_record_id = linkInternalRecordId;
+            result.internal_record_id = "";
+        }
 
-    return result;
-  });
+        return result;
+    });
 }

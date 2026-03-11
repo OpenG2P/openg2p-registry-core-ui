@@ -37,7 +37,7 @@ const TabsDropdown = ({
                 <button
                     type="button"
                     onClick={() => setIsOpen(!isOpen)}
-                    className={`inline-flex justify-center items-center min-w-[120px] px-4 py-2 rounded-t-[10px] font-medium text-[18px]
+                    className={`inline-flex justify-center items-center min-w-30 px-4 py-2 rounded-t-[10px] font-medium text-[18px]
              ${isActiveInDropdown ? 'bg-[#F2BA1A] text-black' : 'bg-[#D1D1D1] text-black '
                         }`}
                 >
@@ -49,7 +49,7 @@ const TabsDropdown = ({
             </div>
 
             {isOpen && (
-                <div className="origin-top-left outline-none absolute left-0 mt-0 min-w-[120px] 
+                <div className="origin-top-left outline-none absolute left-0 mt-0 min-w-30 
                 rounded-b-[10px] rounded-r-[10px] bg-white border border-[#F2BA1A] drop-shadow-[0_2px_6px_rgba(0,0,0,0.25)]
                 z-50 
                 ">
@@ -61,7 +61,7 @@ const TabsDropdown = ({
                                     onTabChange(option);
                                     setIsOpen(false);
                                 }}
-                                className={` block w-full max-w-[250px] text-left px-4 py-2 font-medium text-[18px] transition-colors ${activeTab === option
+                                className={` block w-full max-w-62.5 text-left px-4 py-2 font-medium text-[18px] transition-colors ${activeTab === option
                                     ? 'bg-[#F2BA1A40] text-black font-semibold'
                                     : 'text-black'
                                     }`}
@@ -91,7 +91,7 @@ export default function ConfigurationTabs({
                 <button
                     key={key}
                     onClick={() => setActiveTab(key as any)}
-                    className={`min-w-[120px] max-w-[180px] px-4 py-2 rounded-t-[10px] font-medium text-[18px]
+                    className={`min-w-30 max-w-45 px-4 py-2 rounded-t-[10px] font-medium text-[18px]
       ${activeTab === key
                             ? 'bg-[#F2BA1A] text-black'
                             : 'bg-[#D1D1D1] text-black'

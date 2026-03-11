@@ -46,7 +46,7 @@ export default function ChangeRequestDetailsView({ changeId, breadcrumb }: Props
         submitReject,
     } = useChangeRequestManager(changeId);
 
-    const {verifications, loadingVerifications, addVerification} = useVerifications(changeId);
+    const { verifications, loadingVerifications, addVerification } = useVerifications(changeId, undefined);
 
     const verificationCount = verifications.length;
 

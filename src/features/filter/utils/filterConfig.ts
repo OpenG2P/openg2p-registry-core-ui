@@ -2,12 +2,12 @@ import { FilterConfig } from "../types/types";
 import { useFetch } from "@/shared/hooks/useFetch";
 import { useRegister } from "@/context/RegisterContext";
 
-export function useFilterConfig() {
+export function useFilterConfig(url: string) {
     const { currentRegister } = useRegister();
     const registerId = currentRegister?.register_id;
 
     const { data, loading, error } = useFetch<FilterConfig[]>({
-        url: "/api/register/filters",
+        url,
         enabled: !!registerId,
         options: {
             method: "POST",

@@ -8,6 +8,6 @@ import { transformEndpointName } from './endpointMapper';
  * @returns Next.js API route URL (e.g., "/api/master-data/geo_level_values")
  */
 export function routeServiceEndpoint(service: string, endpoint: string): string {
-  const transformedEndpoint = transformEndpointName(endpoint);
-  return `/api/${service}/${transformedEndpoint}`;
+    const transformedEndpoint = transformEndpointName(endpoint);
+    return `/api/${service}/${transformedEndpoint}`;
 }

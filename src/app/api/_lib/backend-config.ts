@@ -2,10 +2,10 @@ import "server-only";
 
 //backend configuration (use in API routes)
 export function getBackendConfig() {
-  return {
-    backendApiUrl: process.env.BACKEND_API_URL ?? "",
-    masterdataBackendApiUrl: process.env.MASTERDATA_BACKEND_API_URL ?? "",
-    appMnemonic: process.env.APP_MNEMONIC ?? "",
-    appUrl: process.env.APP_URL ?? "",
-  };
+    return {
+        backendApiUrl: process.env.BACKEND_API_URL ?? "",
+        masterdataBackendApiUrl: process.env.MASTERDATA_BACKEND_API_URL ?? "",
+        appMnemonic: process.env.APP_MNEMONIC ?? "",
+        appUrl: process.env.APP_URL ?? "",
+    };
 }

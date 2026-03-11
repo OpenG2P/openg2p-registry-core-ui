@@ -7,7 +7,7 @@ import { useRouter } from '@/i18n/navigation';
 
 import { TopBar } from '@/components/shared';
 import { SelectedFilters } from '@/features/filter/components';
-import { useRegistryFilters } from '@/features/filter/hooks/useRegistryFilters';
+import { useFilters } from '@/features/filter/hooks/useFilters';
 import { OutgoingMessageCardSkeleton, OutgoingMessageList } from '@/features/messages/components';
 import { useOutgoingMessagesList } from '@/features/messages/hooks';
 import { usePagination } from '@/shared/hooks';
@@ -24,11 +24,13 @@ export default function OutgoingMessagesPage() {
 
     const {
         appliedFilters,
+        filterBy,
         filterConfig,
         applyFilters,
         removeFilter,
         clearAllFilters,
-    } = useRegistryFilters();
+    } = useFilters("/api/register/filters");
+    // change thr url once api is ready
 
     const {
         messages,

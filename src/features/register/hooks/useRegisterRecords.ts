@@ -4,7 +4,7 @@ import { useParams, useSearchParams } from 'next/navigation';
 import { useRouter } from '@/i18n/navigation';
 import { notFound } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { useRegistryFilters } from '@/features/filter/hooks/useRegistryFilters';
+import { useFilters } from '@/features/filter/hooks/useFilters';
 import { useFetch } from '@/shared/hooks/useFetch';
 import { useRegister } from '@/context/RegisterContext';
 import { RegisterRecordsApiResponse } from '@/features/register/types';
@@ -23,11 +23,12 @@ export const useRegisterRecords = () => {
 
     const {
         appliedFilters,
+        filterBy,
         filterConfig,
         applyFilters,
         removeFilter,
         clearAllFilters,
-    } = useRegistryFilters();
+    } = useFilters("/api/register/filters");
 
     const registerType = routeParams.type;
     const searchQuery = searchParams.get('search') || "";
@@ -41,29 +42,6 @@ export const useRegisterRecords = () => {
 
     const registerId = currentRegister?.register_id;
     const registerTypeLabel = t(registerType) ?? currentRegister?.register_subject;
-
-    const filterBy = useMemo(() => {
-        if (!appliedFilters.length) return "";
-
-        const stableFilters = [...appliedFilters].sort((a, b) => {
-            const aKey = `${a.field_name}__${a.operator}`;
-            const bKey = `${b.field_name}__${b.operator}`;
-            return aKey.localeCompare(bKey);
-        });
-
-        const result: Record<string, Record<string, unknown>> = {};
-
-        for (const rule of stableFilters) {
-            const field = rule.field_name;
-            const operator = rule.operator;
-            const value = rule.value;
-
-            if (!result[field]) result[field] = {};
-            result[field][operator] = value;
-        }
-
-        return result;
-    }, [appliedFilters]);
 
     useEffect(() => {
         setCurrentPage(1);
