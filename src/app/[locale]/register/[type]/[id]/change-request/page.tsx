@@ -77,7 +77,7 @@ export default function ChangeRequestPage() {
 
     // Right side of TabsLayout-- Pending request + pagination
     const pendingRequestsCount = pendingData?.number_of_pending_change_requests ?? 0;
-    const rightContent = (
+    const rightContent = !loading && (
         <div className="flex items-center gap-10">
             {pendingRequestsCount !== undefined && (
                 <div className="flex items-center gap-2">
@@ -89,13 +89,15 @@ export default function ChangeRequestPage() {
                     </span>
                 </div>
             )}
-            <PaginationBar
-                pageStart={pageStart ?? 0}
-                pageEnd={pageEnd ?? 0}
-                total={total ?? 0}
-                onPrev={onPrev}
-                onNext={onNext}
-            />
+            <div className='mb-2.5'>
+                <PaginationBar
+                    pageStart={pageStart ?? 0}
+                    pageEnd={pageEnd ?? 0}
+                    total={total ?? 0}
+                    onPrev={onPrev}
+                    onNext={onNext}
+                />
+            </div>
         </div>
     );
 

@@ -9,7 +9,6 @@ interface Props {
     changeRequest: ChangeRequest;
     index: number;
     onViewDetails: () => void;
-    isSearchView?: boolean;
 }
 
 const statusClassMap: Record<string, string> = {
@@ -22,7 +21,6 @@ export default function ChangeRequestCard({
     changeRequest,
     index,
     onViewDetails,
-    isSearchView = false,
 }: Props) {
 
     const t = useTranslations();
@@ -41,13 +39,10 @@ export default function ChangeRequestCard({
     return (
         <div
             key={index}
-            className={`rounded-[10px] bg-white px-10 py-5 ${!isSearchView ? "mr-60" : ""}`}
+            className="rounded-[10px] bg-white px-10 py-5"
         >
             <div
-                className={`grid gap-6 ${isSearchView
-                    ? "grid-cols-1 md:grid-cols-4"
-                    : "grid-cols-1 md:grid-cols-3"
-                    }`}
+                className="grid gap-6 grid-cols-4"
             >
                 <div className="space-y-2 text-[16px] text-[#00000080]">
                     <h3 className="text-[24px] font-medium text-black">
@@ -142,21 +137,19 @@ export default function ChangeRequestCard({
                     </div>
                 </div>
 
-                {isSearchView && (
-                    <div className="space-y-2 text-[16px]">
-                        <div className="pl-6 flex items-center gap-0 leading-none invisible">
-                            <span className="text-lg font-semibold"> Empty </span>
-                        </div>
+                <div className="space-y-2 text-[16px]">
+                    <div className="pl-6 flex items-center gap-0 leading-none invisible">
+                        <span className="text-lg font-semibold"> Empty </span>
+                    </div>
 
-                        <div className="border-l border-[#D9D9D9] pl-6">
-                            <div className="flex flex-col gap-2 invisible">
-                                <span>1</span>
-                                <span>2</span>
-                                <span>3</span>
-                            </div>
+                    <div className="border-l border-[#D9D9D9] pl-6">
+                        <div className="flex flex-col gap-2 invisible">
+                            <span>1</span>
+                            <span>2</span>
+                            <span>3</span>
                         </div>
                     </div>
-                )}
+                </div>
             </div>
 
             <div className="my-4 border-t border-[#D9D9D9]" />
