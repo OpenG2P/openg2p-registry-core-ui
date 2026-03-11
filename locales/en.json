@@ -408,5 +408,11 @@
     "noVersionHistory": "No Version History",
     "noTabSection": "No Tab Section",
     "noChangeRequest": "No Change Request",
-    "more":"More"
+    "more": "More",
+    "searchIntakeForm": "Search Intake Forms",
+    "searchMessages": "Search Messages",
+    "intakeForms": "Intake Forms",
+    "pendingSubmissions": "Pending Submissions",
+    "draftSubmissions": "Draft Submissions",
+    "messages": "Messages"
 }

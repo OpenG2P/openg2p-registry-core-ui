@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl';
 import {
     StatsCardLarge,
     StatsCardSmall,
-    RegisterDropdown,
+    SearchBarDropdown,
     SearchBar,
 } from '@/components/ui';
 import Image from 'next/image';
@@ -26,8 +26,7 @@ const ALL_CARDS: ActiveStatsCard[] = [
     'intake-form',
     'change-request',
     'messages'
-]
-
+];
 
 const LIMITED_CARDS: ActiveStatsCard[] = [
     'registers',
@@ -151,7 +150,7 @@ export default function Home() {
                     {/* Search Bar */}
                     <div className="relative border-[#ED7C22] flex h-14 w-4/5 items-center rounded-[10px] border bg-white overflow-visible">
                         {(activeStatsCard === 'registers' || activeStatsCard === 'intake-form') && registerList && registerList.length > 0 && (
-                            <RegisterDropdown
+                            <SearchBarDropdown
                                 options={registerList}
                                 selected={selectedRegister}
                                 onChange={setSelectedRegister}
@@ -159,7 +158,7 @@ export default function Home() {
                         )}
 
                         {activeStatsCard === 'messages' && (
-                            <RegisterDropdown
+                            <SearchBarDropdown
                                 options={messageTypeOptions}
                                 selected={selectedMessageType}
                                 onChange={setSelectedMessageType}

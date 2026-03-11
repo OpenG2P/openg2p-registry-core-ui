@@ -53,58 +53,20 @@ const StatsCardSmall = ({
                 ],
             };
         }
-        if (stats_endpoint.includes("incoming")) {
-            return {
-                title: t('incomingMessages'),
-                rows: [
-                    {
-                        id: "models",
-                        label: t('dataModels'),
-                        value: data.no_of_data_models,
-                        imageUrl: "/images/register/statsIcon/data_models.png",
-                    },
-                    {
-                        id: "partners",
-                        label: t('partners'),
-                        value: data.no_of_partners,
-                        imageUrl: "/images/register/statsIcon/partners.png",
-                    },
-                ],
-            };
-        }
 
-        if (stats_endpoint.includes("outgoing")) {
-            return {
-                title: t('outgoingMessages'),
-                rows: [
-                    {
-                        id: "topics",
-                        label: t('topics'),
-                        value: data.topics,
-                        imageUrl: "/images/register/statsIcon/topics.png",
-                    },
-                    {
-                        id: "models",
-                        label: t('dataModels'),
-                        value: data.data_models,
-                        imageUrl: "/images/register/statsIcon/data_models.png",
-                    },
-                ],
-            };
-        }
         if (stats_endpoint.includes("intake")) {
             return {
-                title: t('intakeForm'),
+                title: t('intakeForms'),
                 rows: [
                     {
-                        id: "pending",
-                        label: t('pending'),
+                        id: "pendingSubmissions",
+                        label: t('pendingSubmissions'),
                         value: data.total_approval_pending_submissions,
                         imageUrl: "/images/register/statsIcon/topics.png",
                     },
                     {
-                        id: "draft",
-                        label: t('draft'),
+                        id: "draftSubmissions",
+                        label: t('draftSubmissions'),
                         value: data.total_draft_submissions,
                         imageUrl: "/images/register/statsIcon/data_models.png",
                     },
@@ -112,19 +74,19 @@ const StatsCardSmall = ({
             };
         }
 
-         if (stats_endpoint.includes("messages")) {
+        if (stats_endpoint.includes("messages")) {
             return {
                 title: t('messages'),
                 rows: [
                     {
-                        id: "incoming",
-                        label: t('incoming'),
+                        id: "incomingMessages",
+                        label: t('incomingMessages'),
                         value: data.incoming,
                         imageUrl: "/images/messages/message_icon.png",
                     },
                     {
-                        id: "outgoing",
-                        label: t('outgoing'),
+                        id: "outgoingMessages",
+                        label: t('outgoingMessages'),
                         value: data.outgoing,
                         imageUrl: "/images/messages/message_icon.png",
                     },
@@ -142,12 +104,6 @@ const StatsCardSmall = ({
         }
         if (stats_endpoint.includes("change")) {
             return data?.total_count || 0;
-        }
-        if (stats_endpoint.includes("incoming")) {
-            return data?.no_of_messages || 0;
-        }
-        if (stats_endpoint.includes("outgoing")) {
-            return data?.no_of_messages || 0;
         }
         if (stats_endpoint.includes("intake")) {
             return data?.total_submissions || 0;
