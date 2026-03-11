@@ -26,7 +26,7 @@ export default function RegisterChangeRequestCard({
     const hasLoadedInitialCount = useRef(false);
 
     const { data, loading } = useFetch<any>({
-        url: `/api/change_request/pending`,
+        url: `/api/change-request/pending`,
         enabled: !!registerId && !!internalRecordId && !!activeTabId,
         options: {
             method: "POST",

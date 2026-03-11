@@ -29,7 +29,7 @@ export function useOutgoingMessagesList({
     const [currentPage, setCurrentPage] = useState(initialPage);
 
     const { data, loading } = useFetch<any>({
-        url: '/api/outgoing_message/get/list',
+        url: '/api/outgoing-message/get/list',
         enabled,
         options: {
             method: 'POST',

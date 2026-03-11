@@ -40,7 +40,7 @@ export default function RegisterSchemaView({
             return;
         }
 
-        const result = await updateSchema('/api/configuration/registers/register_schema/update', {
+        const result = await updateSchema('/api/configuration/registers/register-schema/update', {
             method: 'POST',
             body: JSON.stringify({
                 register_id: registerId,

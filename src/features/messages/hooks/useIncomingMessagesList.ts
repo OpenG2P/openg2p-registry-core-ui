@@ -28,7 +28,7 @@ export function useIncomingMessagesList({
     }, [searchText]);
 
     const { data, loading } = useFetch<any>({
-        url: '/api/incoming_message/get/list',
+        url: '/api/incoming-message/get/list',
         enabled,
         options: {
             method: 'POST',

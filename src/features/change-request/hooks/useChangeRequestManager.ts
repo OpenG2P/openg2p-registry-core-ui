@@ -18,7 +18,7 @@ export function useChangeRequestManager(changeId: string) {
     const [popupType, setPopupType] = useState<PopupType>(null);
 
     const { data: detailsData, loading: detailsLoading } = useFetch<ChangeRequest>({
-        url: "/api/change_request/get",
+        url: "/api/change-request/get",
         enabled: !!changeId,
         options: {
             method: "POST",
@@ -27,7 +27,7 @@ export function useChangeRequestManager(changeId: string) {
     });
 
     const { data: documentsData, loading: documentsLoading } = useFetch<{ documents: ChangeRequestDocument[] }>({
-        url: "/api/change_request/get_documents",
+        url: "/api/change-request/get-documents",
         enabled: !!changeId,
         options: {
             method: "POST",
@@ -51,7 +51,7 @@ export function useChangeRequestManager(changeId: string) {
     const handleApprove = useCallback(async () => {
         setLoadingAction(true);
         try {
-            const res = await executeApprove("/api/change_request/approve", {
+            const res = await executeApprove("/api/change-request/approve", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ change_request_id: changeId }),
@@ -93,7 +93,7 @@ export function useChangeRequestManager(changeId: string) {
         async (reason: string) => {
             setLoadingAction(true);
             try {
-                const res = await executeReject("/api/change_request/reject", {
+                const res = await executeReject("/api/change-request/reject", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ change_request_id: changeId, rejection_reason: reason }),

@@ -3,8 +3,8 @@ import { TopBar } from '@/components/shared';
 import { useParams } from 'next/navigation';
 
 export default function IntakeFormSubmissionPage() {
-    const routeParams = useParams<{ type: string, intake_form_submission_id: string }>();
-    const intake_form_submission_id = routeParams.intake_form_submission_id;
+    const routeParams = useParams<{ type: string, submissionId: string }>();
+    const intake_form_submission_id = routeParams.submissionId;
     const registerType = routeParams.type;
 
     return (

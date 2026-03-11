@@ -36,7 +36,7 @@ export function RegisterRecordProvider({ children }: { children: ReactNode }) {
     }), [internalRecordId, currentRegister?.register_id]);
 
     const { data, loading } = useFetch<RegisterRecord>({
-        url: `/api/register/subject_record`,
+        url: `/api/register/subject-record`,
         enabled: !!currentRegister?.register_id && !!internalRecordId,
         options: fetchOptions,
     });

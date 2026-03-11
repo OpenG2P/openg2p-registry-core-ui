@@ -24,7 +24,7 @@ export function useChangeRequestList({
     const [currentPage, setCurrentPage] = useState(initialPage);
 
     const { data, loading } = useFetch<any>({
-        url: '/api/change_request/get/list',
+        url: '/api/change-request/get/list',
         enabled,
         options: {
             method: 'POST',

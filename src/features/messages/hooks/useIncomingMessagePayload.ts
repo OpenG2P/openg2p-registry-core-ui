@@ -7,7 +7,7 @@ export function useIncomingMessagePayload() {
     const [ingestId, setIngestId] = useState<string | null>(null);
 
     const { data: rawData, loading: rawDataLoading } = useFetch<any>({
-        url: '/api/incoming_message/get/raw',
+        url: '/api/incoming-message/get/raw',
         enabled: !!ingestId,
         options: {
             method: 'POST',
@@ -16,7 +16,7 @@ export function useIncomingMessagePayload() {
     });
 
     const { data: transformedData, loading: transformedDataLoading } = useFetch<any>({
-        url: '/api/incoming_message/get/transformed',
+        url: '/api/incoming-message/get/transformed',
         enabled: !!ingestId,
         options: {
             method: 'POST',

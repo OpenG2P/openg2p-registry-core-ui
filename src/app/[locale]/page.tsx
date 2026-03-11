@@ -17,20 +17,20 @@ import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
 
 type ActiveStatsCard =
     | 'registers'
-    | 'change_request'
-    | 'incoming_message'
-    | 'outgoing_message';
+    | 'change-request'
+    | 'incoming-message'
+    | 'outgoing-message';
 
 const ALL_CARDS: ActiveStatsCard[] = [
     'registers',
-    'change_request',
-    'incoming_message',
-    'outgoing_message',
+    'change-request',
+    'incoming-message',
+    'outgoing-message',
 ];
 
 const LIMITED_CARDS: ActiveStatsCard[] = [
     'registers',
-    'change_request',
+    'change-request',
 ];
 
 export default function Home() {
@@ -57,9 +57,9 @@ export default function Home() {
 
     const searchPlaceholders: Record<ActiveStatsCard, string> = {
         registers: t('searchRegisters'),
-        change_request: t('searchChangeRequests'),
-        incoming_message: t('searchIncomingMessages'),
-        outgoing_message: t('searchOutgoingMessages'),
+        'change-request': t('searchChangeRequests'),
+        'incoming-message': t('searchIncomingMessages'),
+        'outgoing-message': t('searchOutgoingMessages'),
     };
 
     const handleSearch = (value: string, register?: string) => {
@@ -91,9 +91,9 @@ export default function Home() {
             Exclude<ActiveStatsCard, 'registers'>,
             string
         > = {
-            change_request: '/change-request',
-            incoming_message: '/incoming-messages',
-            outgoing_message: '/outgoing-messages',
+            'change-request': '/change-request',
+            'incoming-message': '/incoming-messages',
+            'outgoing-message': '/outgoing-messages',
         };
 
         const params = new URLSearchParams();
