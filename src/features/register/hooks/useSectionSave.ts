@@ -58,7 +58,7 @@ export const useSectionSave = (
                             formData.append("documents", filesToUpload[i]);
 
                             const uploadResult = await uploadDocumentRequest(
-                                "/api/change_request/upload_document",
+                                "/api/change-request/upload-document",
                                 {
                                     method: "POST",
                                     body: formData,
@@ -90,7 +90,7 @@ export const useSectionSave = (
                     sectionChangeRecords,
                     internalRecordId
                 )
-                const change_request_response = await submitChangeRequest(`/api/change_request/create`, {
+                const change_request_response = await submitChangeRequest(`/api/change-request/create`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({

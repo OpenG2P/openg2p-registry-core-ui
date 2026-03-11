@@ -47,7 +47,7 @@ export default function ChangeRequestPage() {
     });
 
     const { data: pendingData } = useFetch<any>({
-        url: '/api/change_request/pending',
+        url: '/api/change-request/pending',
         enabled: !!subjectRegisterId && !!internalRecordId && !!activeTabId,
         options: {
             method: 'POST',

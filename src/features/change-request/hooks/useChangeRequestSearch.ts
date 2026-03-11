@@ -22,7 +22,7 @@ export function useChangeRequestSearch({
     }, [searchText]);
 
     const { data, loading } = useFetch<any>({
-        url: '/api/change_request/search',
+        url: '/api/change-request/search',
         enabled,
         options: {
             method: 'POST',

@@ -115,7 +115,7 @@ export default function VpVerificationModal({
             setIsImporting(true);
             setError(null);
 
-            const res = await fetch('/api/partner_ingest', {
+            const res = await fetch('/api/partner-ingest', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

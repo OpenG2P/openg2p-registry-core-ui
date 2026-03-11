@@ -15,8 +15,6 @@ export function transformEndpointName(endpoint: string): string {
     // Remove "g2p_" prefix if present
     transformed = transformed.replace(/^g2p_/, '');
 
-    // Keep snake_case format (don't convert to kebab-case)
-    // Existing routes use snake_case: geo_level_values, geo_levels
-
-    return transformed;
+    // New routes use hyphen-case: geo-level-values, geo-levels
+    return transformed.replaceAll('_', '-');
 }

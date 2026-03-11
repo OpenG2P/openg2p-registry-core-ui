@@ -13,7 +13,7 @@ export const useRegisterSchema = (
     registerId: string
 ) => {
     // const { data, loading, execute } = useFetch<RegisterSchema>({
-    //     url: '/api/configuration/registers/register_schema',
+    //     url: '/api/configuration/registers/register-schema',
     //     options: {
     //         method: 'POST',
     //         body: JSON.stringify({
@@ -22,7 +22,7 @@ export const useRegisterSchema = (
     //     },
     // });
     const { data, loading, execute } = useFetch<RegisterSchema>({
-        url: '/api/configuration/registers/register_schema',
+        url: '/api/configuration/registers/register-schema',
         options: {
             method: 'POST',
             body: JSON.stringify({
