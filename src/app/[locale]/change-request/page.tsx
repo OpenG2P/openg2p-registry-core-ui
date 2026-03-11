@@ -73,7 +73,7 @@ export default function ChangeRequestPage() {
                 {loading ? (
                     <div className="space-y-4">
                         {[...Array(3)].map((_, i) => (
-                            <ChangeRequestSkeleton key={i} isSearchView />
+                            <ChangeRequestSkeleton key={i} />
                         ))}
                     </div>
                 ) : changeRequests.length === 0 ? (
@@ -83,7 +83,6 @@ export default function ChangeRequestPage() {
                 ) : (
                     <ChangeRequestList
                         changeRequests={changeRequests}
-                        isSearchView
                         getDetailsUrl={changeRequest =>
                             `/${locale}/change-request/${changeRequest.change_request_id}`
                         }

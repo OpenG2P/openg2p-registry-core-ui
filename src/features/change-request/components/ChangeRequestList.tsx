@@ -7,10 +7,9 @@ import { ChangeRequestCard } from '@/features/change-request/components';
 interface Props {
     changeRequests: ChangeRequest[];
     getDetailsUrl: (changeRequest: ChangeRequest) => string;
-    isSearchView?: boolean;
 }
 
-export default function ChangeLogList({ changeRequests, getDetailsUrl, isSearchView = false }: Props) {
+export default function ChangeLogList({ changeRequests, getDetailsUrl }: Props) {
     const router = useRouter();
 
     return (
@@ -20,7 +19,6 @@ export default function ChangeLogList({ changeRequests, getDetailsUrl, isSearchV
                     key={changeRequest.change_request_id}
                     changeRequest={changeRequest}
                     index={index}
-                    isSearchView={isSearchView}
                     onViewDetails={() => router.push(getDetailsUrl(changeRequest))}
                 />
             ))}

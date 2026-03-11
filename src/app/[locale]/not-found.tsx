@@ -47,9 +47,15 @@ export default function NotFound() {
 
                     <button
                         onClick={() => router.back()}
-                        className="flex items-center gap-2 rounded-full bg-black px-8 py-2.5 text-sm font-semibold text-white transition-transform hover:scale-105 active:scale-95"
+                        className="flex items-center gap-2 rounded-full bg-black px-8 py-2.5 text-[16px] font-semibold text-white"
                     >
-                        <span className="text-lg">←</span>
+                        <Image
+                            src="/images/common/left_white_arrow.png"
+                            width={16}
+                            height={14}
+                            alt="left arrow"
+                            priority
+                        />
                         {t('go_back')}
                     </button>
                 </div>

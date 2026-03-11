@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl';
 import {
     StatsCardLarge,
     StatsCardSmall,
-    RegisterDropdown,
+    SearchBarDropdown,
     SearchBar,
 } from '@/components/ui';
 import Image from 'next/image';
@@ -17,15 +17,15 @@ import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
 
 type ActiveStatsCard =
     | 'registers'
+    | 'intake-form'
     | 'change-request'
-    | 'incoming-message'
-    | 'outgoing-message';
+    | 'messages';
 
 const ALL_CARDS: ActiveStatsCard[] = [
     'registers',
+    'intake-form',
     'change-request',
-    'incoming-message',
-    'outgoing-message',
+    'messages'
 ];
 
 const LIMITED_CARDS: ActiveStatsCard[] = [
@@ -44,6 +44,12 @@ export default function Home() {
     const [activeStatsCard, setActiveStatsCard] =
         useState<ActiveStatsCard>('registers');
     const [selectedRegister, setSelectedRegister] = useState('select');
+    const [selectedMessageType, setSelectedMessageType] = useState('incoming');
+
+    const messageTypeOptions = [
+        { value: 'incoming', label: t('incomingMessages') },
+        { value: 'outgoing', label: t('outgoingMessages') },
+    ];
 
 
     const { registers } = useRegister();
@@ -56,16 +62,23 @@ export default function Home() {
 
 
     const searchPlaceholders: Record<ActiveStatsCard, string> = {
-        registers: t('searchRegisters'),
+        'registers': t('searchRegisters'),
+        'intake-form': t('searchIntakeForm'),
         'change-request': t('searchChangeRequests'),
-        'incoming-message': t('searchIncomingMessages'),
-        'outgoing-message': t('searchOutgoingMessages'),
+        'messages': t('searchMessages')
     };
 
     const handleSearch = (value: string, register?: string) => {
         const searchValue = value.trim();
 
-        if (activeStatsCard === 'registers') {
+        const params = new URLSearchParams();
+        if (searchValue) {
+            params.set('search', searchValue);
+        }
+
+        const query = params.toString();
+
+        if (activeStatsCard === 'registers' || activeStatsCard === 'intake-form') {
             const selected =
                 register && register !== 'select'
                     ? register
@@ -73,35 +86,33 @@ export default function Home() {
 
             if (!selected) return;
 
-            const params = new URLSearchParams();
-            if (searchValue) {
-                params.set('search', searchValue);
-            }
+            const basePath =
+                activeStatsCard === 'registers'
+                    ? `/register/${selected}`
+                    : `/intake-form/${selected}`;
 
-            const query = params.toString();
-            router.push(
-                query
-                    ? `/register/${selected}?${query}`
-                    : `/register/${selected}`
-            );
+            router.push(query ? `${basePath}?${query}` : basePath);
+            return;
+        }
+
+        if (activeStatsCard === 'messages') {
+            const type = selectedMessageType || 'incoming';
+
+            const basePath =
+                type === 'incoming'
+                    ? '/incoming-messages'
+                    : '/outgoing-messages';
+
+            router.push(query ? `${basePath}?${query}` : basePath);
             return;
         }
 
         const routeMap: Record<
-            Exclude<ActiveStatsCard, 'registers'>,
+            Exclude<ActiveStatsCard, 'registers' | 'intake-form' | 'messages'>,
             string
         > = {
-            'change-request': '/change-request',
-            'incoming-message': '/incoming-messages',
-            'outgoing-message': '/outgoing-messages',
+            'change-request': '/change-request'
         };
-
-        const params = new URLSearchParams();
-        if (searchValue) {
-            params.set('search', searchValue);
-        }
-        const query = params.toString();
-
         router.push(
             query
                 ? `${routeMap[activeStatsCard]}?${query}`
@@ -138,11 +149,19 @@ export default function Home() {
 
                     {/* Search Bar */}
                     <div className="relative border-[#ED7C22] flex h-14 w-4/5 items-center rounded-[10px] border bg-white overflow-visible">
-                        {activeStatsCard === 'registers' && registerList && registerList.length > 0 && (
-                            <RegisterDropdown
+                        {(activeStatsCard === 'registers' || activeStatsCard === 'intake-form') && registerList && registerList.length > 0 && (
+                            <SearchBarDropdown
                                 options={registerList}
                                 selected={selectedRegister}
                                 onChange={setSelectedRegister}
+                            />
+                        )}
+
+                        {activeStatsCard === 'messages' && (
+                            <SearchBarDropdown
+                                options={messageTypeOptions}
+                                selected={selectedMessageType}
+                                onChange={setSelectedMessageType}
                             />
                         )}
 

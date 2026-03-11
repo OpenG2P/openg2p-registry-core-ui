@@ -78,7 +78,7 @@ export default function OutgoingMessagesPage() {
             />
 
             <div className="px-7.5">
-                <div className="pl-4 pr-2 mb-4 bg-white rounded-[30px]">
+                <div className="pl-4 pr-2 mb-4 bg-white rounded-[10px]">
                     <SelectedFilters
                         appliedFilters={appliedFilters}
                         filterConfig={filterConfig}

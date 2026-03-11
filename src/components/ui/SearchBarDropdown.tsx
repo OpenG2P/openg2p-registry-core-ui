@@ -10,17 +10,17 @@ export interface DropdownOption {
     label: string;
 }
 
-interface RegisterDropdownProps {
+interface SearchBarDropdownProps {
     options: DropdownOption[];
     selected: string;
     onChange: (value: string) => void;
 }
 
-const RegisterDropdown = ({
+const SearchBarDropdown = ({
     options,
     selected,
     onChange,
-}: RegisterDropdownProps) => {
+}: SearchBarDropdownProps) => {
     const t = useTranslations();
     const [open, setOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -83,4 +83,4 @@ const RegisterDropdown = ({
     );
 };
 
-export default RegisterDropdown;
+export default SearchBarDropdown;

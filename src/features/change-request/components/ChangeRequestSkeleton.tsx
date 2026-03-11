@@ -1,18 +1,10 @@
 'use client';
-interface Props {
-    isSearchView?: boolean;
-}
 
-export default function ChangeLogSkeleton({
-    isSearchView = false,
-}: Props) {
+export default function ChangeLogSkeleton() {
     return (
-        <div className={`rounded-[10px] bg-white px-10 py-10 pb-5 animate-pulse ${!isSearchView ? 'mr-60' : ''}`}>
+        <div className="rounded-[10px] bg-white px-10 py-10 pb-5 animate-pulse">
             <div
-                className={`grid gap-6 ${isSearchView
-                    ? "grid-cols-1 md:grid-cols-4"
-                    : "grid-cols-1 md:grid-cols-3"
-                    }`}
+                className="grid gap-6 grid-cols-4"
             >
                 <div className="space-y-3">
                     <div className="h-6 bg-gray-300 rounded w-3/4" />
@@ -41,14 +33,14 @@ export default function ChangeLogSkeleton({
                         <div className="h-4 bg-gray-300 rounded w-28" />
                     </div>
                 </div>
-                {isSearchView && (
-                    <div className="space-y-3">
-                        <div className="h-6 bg-gray-300 rounded w-3/4" />
+                <div className="space-y-3">
+                    <div className="h-6 bg-gray-300 rounded w-3/4 invisible" />
+                    <div className="space-y-2 border-l-3 border-[#D9D9D9] pl-6">
+                        <div className="h-4 bg-gray-300 rounded w-2/3" />
                         <div className="h-4 bg-gray-300 rounded w-1/2" />
                         <div className="h-4 bg-gray-300 rounded w-1/3" />
-                        <div className="h-4 bg-gray-300 rounded w-1/4" />
                     </div>
-                )}
+                </div>
             </div>
 
             <div className="my-4 border-t-3 border-[#D9D9D9]" />

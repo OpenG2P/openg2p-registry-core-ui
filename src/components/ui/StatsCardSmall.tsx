@@ -53,41 +53,42 @@ const StatsCardSmall = ({
                 ],
             };
         }
-        if (stats_endpoint.includes("incoming")) {
+
+        if (stats_endpoint.includes("intake")) {
             return {
-                title: t('incomingMessages'),
+                title: t('intakeForms'),
                 rows: [
                     {
-                        id: "models",
-                        label: t('dataModels'),
-                        value: data.no_of_data_models,
-                        imageUrl: "/images/register/statsIcon/data_models.png",
+                        id: "pendingSubmissions",
+                        label: t('pendingSubmissions'),
+                        value: data.total_approval_pending_submissions,
+                        imageUrl: "/images/register/statsIcon/topics.png",
                     },
                     {
-                        id: "partners",
-                        label: t('partners'),
-                        value: data.no_of_partners,
-                        imageUrl: "/images/register/statsIcon/partners.png",
+                        id: "draftSubmissions",
+                        label: t('draftSubmissions'),
+                        value: data.total_draft_submissions,
+                        imageUrl: "/images/register/statsIcon/data_models.png",
                     },
                 ],
             };
         }
 
-        if (stats_endpoint.includes("outgoing")) {
+        if (stats_endpoint.includes("messages")) {
             return {
-                title: t('outgoingMessages'),
+                title: t('messages'),
                 rows: [
                     {
-                        id: "topics",
-                        label: t('topics'),
-                        value: data.topics,
-                        imageUrl: "/images/register/statsIcon/topics.png",
+                        id: "incomingMessages",
+                        label: t('incomingMessages'),
+                        value: data.incoming,
+                        imageUrl: "/images/messages/message_icon.png",
                     },
                     {
-                        id: "models",
-                        label: t('dataModels'),
-                        value: data.data_models,
-                        imageUrl: "/images/register/statsIcon/data_models.png",
+                        id: "outgoingMessages",
+                        label: t('outgoingMessages'),
+                        value: data.outgoing,
+                        imageUrl: "/images/messages/message_icon.png",
                     },
                 ],
             };
@@ -104,11 +105,11 @@ const StatsCardSmall = ({
         if (stats_endpoint.includes("change")) {
             return data?.total_count || 0;
         }
-        if (stats_endpoint.includes("incoming")) {
-            return data?.no_of_messages || 0;
+        if (stats_endpoint.includes("intake")) {
+            return data?.total_submissions || 0;
         }
-        if (stats_endpoint.includes("outgoing")) {
-            return data?.no_of_messages || 0;
+        if (stats_endpoint.includes("messages")) {
+            return data?.total || 0;
         }
     }, [data, stats_endpoint]);
 
