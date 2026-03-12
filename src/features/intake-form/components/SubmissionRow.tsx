@@ -1,15 +1,23 @@
 'use client';
 
 import { Link } from '@/i18n/navigation';
+import { useTranslations } from 'next-intl';
+import { IntakeFormSubmission } from '../types/intake-form';
 
-interface IntakeFormSubmission {
-    intake_form_submission_id: string;
-    name: string;
-    id: string;
-    intake_form_name: string;
-    datetime: string;
-    status: string;
-    enumerated_by: string;
+export function formatDateTime(value?: string | null) {
+    if (!value) return '-- -- ----';
+
+    const safeValue = value.includes('T') ? value : value.replace(' ', 'T');
+    const date = new Date(safeValue);
+
+    return date.toLocaleString(undefined, {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true,
+    });
 }
 
 interface IntakeFormSubmissionRowProps {
@@ -19,24 +27,29 @@ interface IntakeFormSubmissionRowProps {
 }
 
 export function IntakeFormSubmissionRow({ submission, registerType, isEven }: IntakeFormSubmissionRowProps) {
+    const t = useTranslations();
+
     return (
         <Link
-            href={`/intake-form/${registerType}/submission/${submission.intake_form_submission_id}`}
+            href={`/intake-form/${registerType}/submission/${submission.submission_id}`}
             className="block w-full"
         >
             <div
                 className={`flex items-center gap-4 sm:gap-6 px-4 sm:px-6 lg:px-8 p-4 w-full overflow-hidden ${isEven ? 'bg-[#D9D9D940]' : 'bg-white'
                     }`}
             >
-                <div className="flex-1 min-w-0">
-                    <h3 className="font-bold text-[#ED7C22] text-sm sm:text-base mb-0.5 truncate">
-                        {submission.name}
-                    </h3>
+                <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gray-300 rounded-md shrink-0" />
 
+                <div className="flex-1 min-w-0">
                     <p className="text-xs sm:text-sm text-gray-600">
-                        <span className="font-bold text-gray-600">ID: </span>
+                        <span className="font-bold text-gray-600">Name: </span>
                         <span className="font-bold text-gray-900">
-                            {submission.id}
+                        </span>
+                    </p>
+                    <p className="text-xs sm:text-sm text-gray-600">
+                        <span className="font-bold text-gray-600">Refrence No: </span>
+                        <span className="font-bold text-gray-900">
+                            {submission.submission_reference}
                         </span>
                     </p>
                 </div>
@@ -44,45 +57,60 @@ export function IntakeFormSubmissionRow({ submission, registerType, isEven }: In
                 <div className="flex-1 min-w-0">
                     <p className="text-xs sm:text-sm text-gray-900 truncate">
                         <span className="font-bold text-gray-600">
-                            Intake Form:{' '}
+                            Channel:{' '}
                         </span>
                         <span className="font-bold">
-                            {submission.intake_form_name}
+
                         </span>
                     </p>
 
                     <p className="text-xs sm:text-sm text-gray-900 truncate">
                         <span className="font-bold text-gray-600">
-                            Enumerated By:{' '}
+                            Submitted By:{' '}
                         </span>
                         <span className="font-bold">
-                            {submission.enumerated_by}
+                            {submission.created_by}
                         </span>
                     </p>
                 </div>
+
                 <div className="flex-1 min-w-0">
                     <p className="text-xs sm:text-sm text-gray-900 truncate">
                         <span className="font-bold text-gray-600">
-                            Datetime:{' '}
+                            Date/Time:{' '}
                         </span>
                         <span className="font-bold">
-                            {submission.datetime}
+                            {formatDateTime(submission.created_at)}
                         </span>
                     </p>
 
                     <p className="text-xs sm:text-sm text-gray-900 truncate">
                         <span className="font-bold text-gray-600">
-                            Status:{' '}
+                            Form Status:{' '}
                         </span>
-                        <span
-                            className={`font-bold ${submission.status === 'Approved'
-                                ? 'text-green-600'
-                                : submission.status === 'Pending'
-                                    ? 'text-yellow-600'
-                                    : 'text-red-600'
-                                }`}
-                        >
-                            {submission.status}
+                        <span className="font-bold">
+                            {submission.intake_form_status}
+                        </span>
+                    </p>
+                </div>
+
+                <div className="flex-1 min-w-0">
+                    <p className="text-xs sm:text-sm text-gray-900 truncate">
+                        <span className="font-bold text-gray-600">
+                            Verification:{' '}
+                        </span>
+                        <span className="font-bold">
+                            {submission.no_of_verifications_done} / {submission.no_of_verifications_required}
+                        </span>
+                    </p>
+
+
+                    <p className="text-xs sm:text-sm text-gray-900 truncate">
+                        <span className="font-bold text-gray-600">
+                            Approval Status:{' '}
+                        </span>
+                        <span className="font-bold">
+                            {submission.approval_status}
                         </span>
                     </p>
                 </div>

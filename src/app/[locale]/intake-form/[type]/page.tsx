@@ -7,9 +7,13 @@ import { SelectedFilters } from '@/features/filter/components';
 import { useFilters } from '@/features/filter/hooks/useFilters';
 import { useRegister } from '@/context/RegisterContext';
 import { useParams, useSearchParams } from 'next/navigation';
+import { useState } from 'react';
 
 import NewIntakeFormDropdown from '@/features/intake-form/components/NewIntakeFormDropdown';
 import { IntakeFormSubmissionRow } from '@/features/intake-form/components/SubmissionRow';
+import { usePagination } from '@/shared/hooks';
+import { useIntakeForms } from '@/features/intake-form/hooks/useIntakeForms';
+import { useIntakeSubmissions } from '@/features/intake-form/hooks/useIntakeSubmissions';
 
 export default function IntakeFormPage() {
     const t = useTranslations();
@@ -19,95 +23,70 @@ export default function IntakeFormPage() {
     const registerType = routeParams.type;
 
     const searchParams = useSearchParams();
-    const searchQuery = searchParams.get('search') || '';
+    const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '');
+    const [currentPage, setCurrentPage] = useState(1);
+    const pageSize = 10;
 
-    const handleSearch = (searchQuery: string) => {
-        console.log(searchQuery);
-        return;
-    };
+    const { currentRegister } = useRegister();
+    const registerId = currentRegister?.register_id;
 
-    const handlePreviousPage = () => {
-        console.log('previous');
-        return;
-    };
-
-    const handleNextPage = () => {
-        console.log('next');
-        return;
-    };
-
-    const { currentRegister, registers } = useRegister();
+    const { forms, loading: formsLoading } = useIntakeForms(registerId);
 
     const {
         appliedFilters,
-        filterBy,
         filterConfig,
         applyFilters,
         removeFilter,
         clearAllFilters,
     } = useFilters("/api/register/filters");
-    // change url once the api is ready
+    const tabId = "intake_form_tab_1"
+    const { submissions, loading: submissionsLoading } = useIntakeSubmissions(registerId, {
+        tabId,
+        searchText: searchQuery,
+        currentPage,
+        pageSize,
+    });
 
-    const dummyForms = [
-        {
-            intake_form_id: '1',
-            intake_form_name: 'Household Registration',
-        },
-        {
-            intake_form_id: '2',
-            intake_form_name: 'Farmer Enrollment',
-        },
-        {
-            intake_form_id: '3',
-            intake_form_name: 'Child Nutrition Survey',
-        },
-        {
-            intake_form_id: '4',
-            intake_form_name: 'School Scholarship Application',
-        },
-    ];
+    const pagination = usePagination({
+        totalItems: submissions?.length || 0,
+        currentPage,
+        pageSize,
+        currentCount: submissions?.length || 0,
+    });
 
-    const dummySubmissions = [
-        {
-            intake_form_submission_id: '10000000',
-            name: 'John Doe',
-            id: '123456',
-            intake_form_name: 'Farmer Enrollment',
-            datetime: '10 Mar 2026 10:15 AM',
-            status: 'Approved',
-            enumerated_by: 'Ravi Sharma',
-        },
-        {
-            intake_form_submission_id: '200000000',
-            name: 'Sita Devi',
-            id: '654321',
-            intake_form_name: 'Household Registration',
-            datetime: '09 Mar 2026 02:40 PM',
-            status: 'Pending',
-            enumerated_by: 'Anita Kumari',
-        },
-    ];
+    const handleSearch = (newSearchQuery: string) => {
+        setSearchQuery(newSearchQuery);
+        setCurrentPage(1);
+    };
+
+    const handlePreviousPage = () => {
+        setCurrentPage(prev => Math.max(prev - 1, 1));
+    };
+
+    const handleNextPage = () => {
+        setCurrentPage(prev => prev + 1);
+    };
 
     return (
         <div className="min-h-screen mx-auto bg-[#F3F1E4]">
             <TopBar
-                breadcrumb={[{ label: 'Intake Form' }]}
+                breadcrumb={[{ label: 'Application-Intake Form', href: `/intake-form/${registerType}` }]}
                 showFilters
                 showPagination
                 showCapsule={true}
                 capsule={
                     <NewIntakeFormDropdown
-                        forms={dummyForms}
+                        forms={forms || []}
                         onSelectForm={(form) => {
                             router.push(
-                                `/intake-form/${registerType}/new/${form.intake_form_id}`
+                                `/intake-form/${registerType}/new/${form.tab_id}`
                             );
                         }}
                     />
                 }
-                pageStart={1}
-                pageEnd={10}
-                total={100}
+                pageStart={pagination.pageStart}
+                pageEnd={pagination.pageEnd}
+                total={pagination.total}
                 onPrev={handlePreviousPage}
                 onNext={handleNextPage}
                 onApplyFilters={applyFilters}
@@ -129,15 +108,21 @@ export default function IntakeFormPage() {
                     />
                 </div>
 
-                <div>
-                    {dummySubmissions.map((submission, index) => (
-                        <IntakeFormSubmissionRow
-                            key={submission.intake_form_submission_id}
-                            submission={submission}
-                            registerType={registerType}
-                            isEven={index % 2 === 0}
-                        />
-                    ))}
+                <div className="min-h-[200px]">
+                    {formsLoading || submissionsLoading ? (
+                        <div className="flex items-center justify-center py-10">
+                            <span className="text-black/50">Loading...</span>
+                        </div>
+                    ) : (
+                        submissions?.map((submission, index) => (
+                            <IntakeFormSubmissionRow
+                                key={submission.submission_id}
+                                submission={submission}
+                                registerType={registerType}
+                                isEven={index % 2 === 0}
+                            />
+                        ))
+                    )}
                 </div>
             </div>
         </div>
