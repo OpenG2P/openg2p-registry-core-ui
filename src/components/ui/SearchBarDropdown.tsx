@@ -40,18 +40,18 @@ const SearchBarDropdown = ({
         options.find((o) => o.value === selected)?.label || t('select');
 
     return (
-        <div ref={dropdownRef} className="relative min-w-45 -left-0.75 z-10">
+        <div ref={dropdownRef} className="relative min-w-45 -mx-px z-10">
             {/* BUTTON */}
             <button
                 type="button"
                 onClick={() => setOpen((v) => !v)}
-                className={`flex h-14 w-full items-center justify-between rounded-[10px] border border-[#ED7C22] bg-white px-6 gap-10 text-sm font-semibold text-gray-800 transition-colors
+                className={`flex h-14 w-full items-center justify-between rounded-[10px] border border-[#ED7C22] bg-white px-6 gap-5 text-[20px] font-semibold text-gray-800 transition-colors
                 ${open
                     ? "rounded-b-none border-b-0"
-                    : `rounded-r-none border-r-0 after:absolute after:right-0 after:top-2.5 after:bottom-2.5 after:w-px after:bg-[#ED7C22] after:content-[''] `}
+                    : `rounded-r-none border-r-0 after:absolute after:right-0 after:top-2.5 after:bottom-2.5 after:w-px after:bg-[#ED7C22] after:content-['']`}
                 `}
             >
-                <span className={`truncate text-[20px] ${open ? "text-gray-400" : "text-black font-medium"}`}>
+                <span className={`truncate text-[20px] ${open ? "text-black/50 font-medium" : "text-black font-medium"}`}>
                     {selectedLabel}
                 </span>
 
@@ -72,7 +72,7 @@ const SearchBarDropdown = ({
                                 onChange(opt.value);
                                 setOpen(false);
                             }}
-                            className={`block w-full h-14 px-6 py-1 text-left text-[20px] font-medium transition-colors ${selected === opt.value ? "bg-gray-100" : ""}`}
+                            className={`block w-full h-14 px-6 py-1 text-left text-[20px] font-medium transition-colors ${selected === opt.value ? "bg-gray-200" : ""}`}
                         >
                             {opt.label}
                         </button>

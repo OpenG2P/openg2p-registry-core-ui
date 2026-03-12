@@ -148,7 +148,7 @@ export default function Home() {
                     </div>
 
                     {/* Search Bar */}
-                    <div className="relative border-[#ED7C22] flex h-14 w-4/5 items-center rounded-[10px] border bg-white overflow-visible">
+                    <div className="relative border border-[#ED7C22] flex h-14 w-4/5 items-center rounded-[10px] bg-white overflow-visible">
                         {(activeStatsCard === 'registers' || activeStatsCard === 'intake-form') && registerList && registerList.length > 0 && (
                             <SearchBarDropdown
                                 options={registerList}
