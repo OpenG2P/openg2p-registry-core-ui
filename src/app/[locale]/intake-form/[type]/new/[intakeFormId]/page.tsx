@@ -5,8 +5,7 @@ import { TopBar } from '@/components/shared';
 import MultiSectionAccordionForms from '@/features/intake-form/components/MultiSectionAccordionForms';
 import { useRegister } from '@/context/RegisterContext';
 import { useIntakeFormDetails } from '@/features/intake-form/hooks/useIntakeFormDetails';
-import { useFetch } from '@/shared/hooks/useFetch';
-import { toast } from 'react-toastify';
+import { useIntakeFormAction } from '@/features/intake-form/hooks/useIntakeFormAction';
 
 export default function NewIntakeFormSubmissionPage() {
     const router = useRouter();
@@ -18,73 +17,13 @@ export default function NewIntakeFormSubmissionPage() {
     const registerId = currentRegister?.register_id;
 
     const { sections, loading } = useIntakeFormDetails(registerId, intake_form_id);
-    const { execute: executeSave } = useFetch({ enabled: false });
-
-    const handleAction = async (values: any, action: 'submit' | 'draft') => {
-        if (!sections) return;
-
-        const sectionPayloads = sections.map(section => ({
-            section_id: section.section_id,
-            intake_form_payload_json: values[section.section_register_id] || {}
-        }));
-
-        const draftPayload = {
-            submission_id: null,
-            register_id: registerId,
-            tab_id: intake_form_id,
-            foundational_id: null,
-            link_foundational_id: null,
-            no_of_verifications_required: 0,
-            section_payloads: sectionPayloads
-        };
-
-        try {
-            const draftResult = await executeSave('/api/intake-form/submission/save-draft', {
-                method: 'POST',
-                body: JSON.stringify(draftPayload)
-            });
-
-            if (!draftResult) {
-                toast.error('Operation failed');
-                return;
-            }
-
-            if (action === 'submit') {
-                const submissionId = draftResult?.response?.response_payload?.submission_id ||
-                    draftResult?.response_payload?.submission_id ||
-                    draftResult?.submission_id;
-
-                if (!submissionId) {
-                    toast.error('Draft saved, but could not finalize without submission ID');
-                    return;
-                }
-
-                const submitResult = await executeSave('/api/intake-form/submission/finalize', {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        submission_id: submissionId,
-                        current_page: 0,
-                        page_size: 10,
-                        sort_by: "",
-                        filter_by: "",
-                        search_text: ""
-                    })
-                });
-
-                if (submitResult) {
-                    toast.success('Form submitted successfully');
-                    router.push(`/intake-form/${registerType}`);
-                } else {
-                    toast.error('Submission failed');
-                }
-            } else {
-                toast.success('Draft saved successfully');
-                router.push(`/intake-form/${registerType}`);
-            }
-        } catch (error) {
-            toast.error('Error occured while saving form');
-        }
-    };
+    const { handleAction, FormActionModals } = useIntakeFormAction({
+        registerId,
+        tabId: intake_form_id,
+        registerType,
+        sections,
+        submissionId: null
+    });
 
     return (
         <div className="min-h-screen mx-auto bg-[#F3F1E4]">
@@ -111,6 +50,8 @@ export default function NewIntakeFormSubmissionPage() {
                     />
                 )}
             </div>
+            
+            <FormActionModals />
         </div>
     );
 }

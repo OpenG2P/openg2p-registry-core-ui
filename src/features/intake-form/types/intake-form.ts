@@ -40,6 +40,7 @@ export interface IntakeFormSubmission {
 export interface IntakeSubmissionPayload {
     submission_id: string;
     submission_reference: number | string;
+    record_name: string;
     register_id: string;
     tab_id: string;
     foundational_id: string;
@@ -64,7 +65,9 @@ export interface IntakeSubmissionPayload {
 
 export interface SectionPayload {
     section_id: string;
-    payload_json: any;
+    section_register_id: string;
+    is_list: boolean;
+    records: any[];
 }
 
 export interface SectionChanges {

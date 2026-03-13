@@ -9,7 +9,9 @@ import SubmissionHeader from '@/features/intake-form/components/SubmissionHeader
 import IntakeVerificationCard from '@/features/intake-form/components/IntakeVerificationCard';
 import RegisterChangeRequestCard from '@/features/change-request/components/RegisterChangeRequestCard';
 import { useTranslations } from 'next-intl';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+import { useIntakeFormAction } from '@/features/intake-form/hooks/useIntakeFormAction';
+import { RegisterFlattenedRecord } from '@/features/register/types';
 
 export default function IntakeFormSubmissionPage() {
     const t = useTranslations();
@@ -25,6 +27,36 @@ export default function IntakeFormSubmissionPage() {
     const isDraft = submission?.intake_form_status === 'DRAFT';
 
     const [changeRequestCount, setChangeRequestCount] = useState<number | undefined>(undefined);
+
+    const { handleAction, FormActionModals } = useIntakeFormAction({
+        registerId,
+        tabId: intakeFormId || '',
+        registerType,
+        sections,
+        submissionId
+    });
+    const sectionDataMap = useMemo(() => {
+        if (!submission?.section_payloads) return {};
+
+        const map: Record<
+            string,
+            RegisterFlattenedRecord | { records: RegisterFlattenedRecord[] }
+        > = {};
+
+        for (const section of submission.section_payloads) {
+            if (!section.records?.length) continue;
+
+            if (section.is_list === true) {
+                map[section.section_register_id] = { records: section.records };
+            } else {
+                map[section.section_register_id] = section.records[0];
+            }
+        }
+
+        return map;
+    }, [submission?.section_payloads]);
+
+    console.log(sectionDataMap,"sectionsDataMap")
 
     return (
         <div className="min-h-screen mx-auto bg-[#F3F1E4]">
@@ -56,8 +88,9 @@ export default function IntakeFormSubmissionPage() {
                                 </h3>
                                 <MultiSectionAccordionForms
                                     sections={sections || []}
+                                    schemaData={sectionDataMap}
                                     showActions={isDraft}
-                                    onAction={() => console.log("action click")}
+                                    onAction={handleAction}
                                 />
                             </div>
                         </div>
@@ -84,6 +117,8 @@ export default function IntakeFormSubmissionPage() {
                     </div>
                 )}
             </div>
+
+            <FormActionModals />
         </div>
     );
 }
