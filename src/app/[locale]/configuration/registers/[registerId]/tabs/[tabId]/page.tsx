@@ -5,7 +5,8 @@ import { TopBar, BreadcrumbBar } from '@/components/shared';
 import { useParams } from 'next/navigation';
 import {
     RegisterSectionConfigView,
-    EditTabModal
+    EditTabModal,
+    EditIntakeFormModal
 } from '@/features/configuration/registers';
 import {
     ConfigDetailsSummary,
@@ -21,7 +22,8 @@ import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
 const TabConfigurationPage = () => {
     const { registerId, tabId } = useParams<{ registerId: string; tabId: string }>();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isEditTabModalOpen, setIsEditTabModalOpen] = useState(false);
+    const [isEditIntakeModalOpen, setIsEditIntakeModalOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const { config } = useRuntimeConfig();
     const PAGE_SIZE = config.pageSize || 10;
@@ -40,11 +42,13 @@ const TabConfigurationPage = () => {
     const registerDetails = getRegisterDetails(registerId, registers);
     const tabDetails = getTabDetails(tabId, tabs);
 
+    const label_name = tabDetails.tab_label || tabDetails.intake_form_name;
+
     const breadcrumb = useBreadcrumb({
         rootItem: { label: 'Registers', href: '/configuration/registers' },
         customItems: [
             { label: registerDetails.register_mnemonic || '', href: `/configuration/registers/${registerId}` },
-            { label: tabDetails.tab_label || '', href: `/configuration/registers/${registerId}/tabs/${tabId}` }
+            { label: label_name || '', href: `/configuration/registers/${registerId}/tabs/${tabId}` }
         ]
     });
 
@@ -74,10 +78,16 @@ const TabConfigurationPage = () => {
             </div>
 
             <ConfigDetailsSummary
-                title={tabDetails.tab_label || 'None'}
+                title={label_name || "None"}
                 extraInfo1={registerDetails.register_mnemonic || 'None'}
                 extraInfo2={String(tabDetails.tab_order ?? 0)}
-                onEdit={() => setIsEditModalOpen(true)}
+                onEdit={() => {
+                    if (tabDetails.used_for_new_intake_form) {
+                        setIsEditIntakeModalOpen(true);
+                    } else {
+                        setIsEditTabModalOpen(true);
+                    }
+                }}
             />
 
             <TopBar
@@ -85,7 +95,7 @@ const TabConfigurationPage = () => {
                 showFilters={false}
                 showPagination={true}
                 showSubHeading
-                subHeading={`Manage sections for ${tabDetails.tab_label}`}
+                subHeading={`Manage sections for ${label_name}`}
                 showAddNewButton={true}
                 addNewButtonText={"Add New Section"}
                 onAddNewButton={() => setIsModalOpen(true)}
@@ -105,10 +115,17 @@ const TabConfigurationPage = () => {
             />
 
             <EditTabModal
-                isOpen={isEditModalOpen}
+                isOpen={isEditTabModalOpen}
                 initialData={tabDetails as any}
                 registerId={registerId}
-                onClose={() => setIsEditModalOpen(false)}
+                onClose={() => setIsEditTabModalOpen(false)}
+                onSuccess={refreshTabs}
+            />
+            <EditIntakeFormModal
+                isOpen={isEditIntakeModalOpen}
+                initialData={tabDetails as any}
+                registerId={registerId}
+                onClose={() => setIsEditIntakeModalOpen(false)}
                 onSuccess={refreshTabs}
             />
         </>

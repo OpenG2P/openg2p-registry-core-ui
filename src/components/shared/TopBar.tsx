@@ -37,6 +37,10 @@ interface TopBarProps {
     onAddNewButton?: () => void;
     addNewButtonText?: string;
 
+    showSecondaryButton?: boolean;
+    secondaryButtonText?: string;
+    onSecondaryButton?: () => void;
+
     appliedFilters?: FilterRule[];
     filterConfig?: FilterConfig[];
     filterLoading?: boolean;
@@ -65,6 +69,9 @@ export default function TopBar({
     showAddNewButton = false,
     onAddNewButton,
     addNewButtonText = "Add New",
+    showSecondaryButton = false,
+    secondaryButtonText,
+    onSecondaryButton,
     appliedFilters = [],
     filterConfig = [],
     filterLoading = false,
@@ -109,10 +116,24 @@ export default function TopBar({
                         />
                     )}
 
+                    {showSecondaryButton && (
+                        <button
+                            onClick={onSecondaryButton}
+                            className="h-8.5 px-6 bg-[#ED7C22] rounded-[10px] flex items-center gap-2 hover:bg-[#d96d1d] transition-colors"
+                        >
+                            <span className="text-[16px] font-medium text-black">
+                                {secondaryButtonText}
+                            </span>
+                            <span className=" text-[20px] font-bold text-black leading-none">
+                                +
+                            </span>
+                        </button>
+                    )}
+
                     {showAddNewButton && (
                         <button
                             onClick={onAddNewButton}
-                            className="h-8.5 px-6 bg-[#F2BA1A] rounded-[10px] flex items-center gap-2 hover:bg-[#e5b018] transition-colors"
+                            className="h-8.5 px-6 bg-[#ED7C22] rounded-[10px] flex items-center gap-2 hover:bg-[#d96d1d] transition-colors"
                         >
                             <span className="text-[16px] font-medium text-black">
                                 {addNewButtonText}

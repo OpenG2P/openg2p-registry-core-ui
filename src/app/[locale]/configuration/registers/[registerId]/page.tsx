@@ -27,6 +27,7 @@ const RegisterConfigurationPage = () => {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isViewModalOpen, setIsViewModalOpen] = useState(false);
     const [activeTab, setActiveTab] = useState<'tabs_or_forms' | 'filter' | 'search' | 'deduplication'>('tabs_or_forms');
+    const [isIntakeModalOpen, setIsIntakeModalOpen] = useState(false);
 
     const { registers, loading, refresh } = useAllRegister(1, 100);
     const registerDetails = getRegisterDetails(registerId, registers);
@@ -110,6 +111,9 @@ const RegisterConfigurationPage = () => {
                             showAddNewButton={activeTab === 'tabs_or_forms'}
                             addNewButtonText={isProgramApplication ? "Add New Form" : "Add New Tab"}
                             onAddNewButton={() => setIsModalOpen(true)}
+                            showSecondaryButton={activeTab === 'tabs_or_forms'}
+                            secondaryButtonText="Add Intake Form Tab"
+                            onSecondaryButton={() => setIsIntakeModalOpen(true)}
                             pageStart={pagination.pageStart}
                             pageEnd={pagination.pageEnd}
                             total={pagination.total}
@@ -138,6 +142,8 @@ const RegisterConfigurationPage = () => {
                             onAddNewRegister={() => setIsModalOpen(true)}
                             isModalOpen={isModalOpen}
                             onCloseModal={() => setIsModalOpen(false)}
+                            isIntakeModalOpen={isIntakeModalOpen}
+                            onCloseIntakeModal={() => setIsIntakeModalOpen(false)}
                             page={currentPage}
                             pageSize={PAGE_SIZE}
                             onDataLoaded={(totalItems, currentCount) => setPaginationInfo({ totalItems, currentCount })}
