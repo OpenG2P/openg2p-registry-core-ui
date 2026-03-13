@@ -3,11 +3,7 @@
 import { useClickOutside } from '@/shared/hooks';
 import Image from 'next/image';
 import { useRef, useState } from 'react';
-
-interface IntakeForm {
-    intake_form_id: string;
-    intake_form_name: string;
-}
+import { IntakeForm } from '../types/intake-form';
 
 interface NewIntakeFormDropdownProps {
     forms?: IntakeForm[];
@@ -27,11 +23,11 @@ export default function NewIntakeFormDropdown({
         <div ref={ref} className="relative">
             <button
                 onClick={() => setOpen(o => !o)}
-                className={`flex items-center gap-2 px-4 py-1 mt-2 rounded-[10px] bg-white ${open ? '' : 'border border-[#F77F57]'
+                className={`flex border-b items-center gap-2 px-4 py-1 mt-2 rounded-[10px] bg-white ${open ? '' : 'border border-[#F77F57]'
                     }`}
             >
                 <span className="text-[16px] font-medium text-[#1E1E1E]">
-                    New Intake Form
+                    New Intake
                 </span>
 
                 <Image
@@ -47,7 +43,7 @@ export default function NewIntakeFormDropdown({
                 <div className="absolute left-0 top-0 mt-1.5 w-60 rounded-[10px] bg-white border border-[#ED7C22] z-50 overflow-hidden">
                     <div className="flex items-center justify-between px-4 py-1">
                         <span className="text-[16px] font-medium text-[#1E1E1E]">
-                            New Intake Form
+                            New Intake
                         </span>
 
                         <Image
@@ -62,7 +58,7 @@ export default function NewIntakeFormDropdown({
 
                     {forms.map(form => (
                         <DropdownItem
-                            key={form.intake_form_id}
+                            key={form.tab_id}
                             label={form.intake_form_name}
                             onClick={() => {
                                 onSelectForm?.(form);
@@ -86,7 +82,7 @@ function DropdownItem({
     return (
         <div
             onClick={onClick}
-            className="px-4 py-2 text-[14px] cursor-pointer text-black/50 hover:bg-[#F3F1E4]"
+            className="px-4 py-2 text-[14px]  cursor-pointer text-black/50 hover:bg-[#F3F1E4]"
         >
             {label}
         </div>
