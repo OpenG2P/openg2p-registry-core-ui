@@ -79,7 +79,7 @@ export async function proxyToBackend({
 		}
 
 		const response = await fetch(backendUrl, fetchOptions);
-		// console.log(response,"**************************")
+		// console.log(response,"**************************",backendUrl)
 
 		const backendResponse: BackendResponse = await response.json();
 		// console.log(backendResponse,"backendResponse",targetEndpoint)
