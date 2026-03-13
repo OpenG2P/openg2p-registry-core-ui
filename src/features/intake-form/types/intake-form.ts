@@ -22,12 +22,18 @@ export interface IntakeFormSubmission {
     submission_id: string;
     submission_reference: string;
     intake_form_status: IntakeFormStatus;
+    change_request_submission_status: string;
     approval_status: ApprovalStatus;
-    created_at: string;
-    created_by: string;
-    tab_id: string;
+    submission_no_of_attempts: number;
     no_of_verifications_required: number;
     no_of_verifications_done: number;
+    created_by: string;
+    created_at: string;
+    last_updated_by: string;
+    last_updated_at: string;
+    approved_by: string | null;
+    approved_at: string | null;
+    tab_id: string;
     foundational_id?: string;
 }
 
@@ -53,8 +59,30 @@ export interface IntakeSubmissionPayload {
     created_at: string;
     last_updated_by: string;
     last_updated_at: string;
-    section_payloads: {
-        section_id: string;
-        payload_json: any;
-    }[];
+    section_payloads: SectionPayload[];
+}
+
+export interface SectionPayload {
+    section_id: string;
+    payload_json: any;
+}
+
+export interface SectionChanges {
+    section_id?: string;
+    section_register_id?: string;
+    records: unknown[];
+    files?: unknown[];
+}
+
+export interface Verification {
+    verification_id: string;
+    verified_by: string;
+    verified_at: string;
+    verification_observations: string;
+    is_approved: boolean;
+}
+
+export interface VerificationStats {
+    totalRequired: number;
+    totalDone: number;
 }

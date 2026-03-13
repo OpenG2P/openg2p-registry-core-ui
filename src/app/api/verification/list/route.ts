@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
             },
             request_payload: {
                 change_request_id: body.change_request_id ?? '',
-                intake_form_submission_id: body.intake_form_submission_id ?? ''
+                submission_id: body.submission_id ?? ''
             },
         }),
         transformResponse: (responseBody) => ({

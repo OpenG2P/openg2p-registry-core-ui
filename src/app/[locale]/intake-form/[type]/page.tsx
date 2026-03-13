@@ -1,8 +1,8 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
 import { TopBar } from '@/components/shared';
 import { useRouter } from '@/i18n/navigation';
+import { useTranslations } from 'next-intl';
 import { SelectedFilters } from '@/features/filter/components';
 import { useFilters } from '@/features/filter/hooks/useFilters';
 import { useRegister } from '@/context/RegisterContext';
@@ -10,7 +10,7 @@ import { useParams, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 
 import NewIntakeFormDropdown from '@/features/intake-form/components/NewIntakeFormDropdown';
-import { IntakeFormSubmissionRow } from '@/features/intake-form/components/SubmissionRow';
+import IntakeFormSubmissionList from '@/features/intake-form/components/SubmissionList';
 import { usePagination } from '@/shared/hooks';
 import { useIntakeForms } from '@/features/intake-form/hooks/useIntakeForms';
 import { useIntakeSubmissions } from '@/features/intake-form/hooks/useIntakeSubmissions';
@@ -39,6 +39,7 @@ export default function IntakeFormPage() {
         removeFilter,
         clearAllFilters,
     } = useFilters("/api/register/filters");
+
     const tabId = "intake_form_tab_1"
     const { submissions, loading: submissionsLoading } = useIntakeSubmissions(registerId, {
         tabId,
@@ -70,7 +71,7 @@ export default function IntakeFormPage() {
     return (
         <div className="min-h-screen mx-auto bg-[#F3F1E4]">
             <TopBar
-                breadcrumb={[{ label: 'Application-Intake Form', href: `/intake-form/${registerType}` }]}
+                breadcrumb={[{ label: 'Intake Form', href: `/intake-form/${registerType}` }]}
                 showFilters
                 showPagination
                 showCapsule={true}
@@ -94,36 +95,43 @@ export default function IntakeFormPage() {
                 filterConfig={filterConfig}
             />
 
-            <div className="mx-7.5 bg-white rounded-[10px]">
-                <div className="px-2 pt-1">
-                    <SelectedFilters
-                        appliedFilters={appliedFilters}
-                        filterConfig={filterConfig}
-                        removeFilter={removeFilter}
-                        clearAllFilters={clearAllFilters}
-                        searchValue={searchQuery}
-                        searchPlaceholder={t('search')}
-                        onSearch={handleSearch}
-                        pxClass="px-0.5"
+            <div className="px-7.5">
+                <SelectedFilters
+                    appliedFilters={appliedFilters}
+                    filterConfig={filterConfig}
+                    removeFilter={removeFilter}
+                    clearAllFilters={clearAllFilters}
+                    searchValue={searchQuery}
+                    searchPlaceholder={t('search')}
+                    onSearch={handleSearch}
+                    pxClass="px-0.5"
+                />
+                {formsLoading || submissionsLoading ? (
+                    <div className="space-y-4">
+                        {[...Array(3)].map((_, i) => (
+                            <div key={i} className="rounded-[10px] bg-white px-10 py-8 animate-pulse">
+                                <div className="grid gap-6 grid-cols-1 md:grid-cols-4">
+                                    {[...Array(4)].map((_, j) => (
+                                        <div key={j} className="space-y-3">
+                                            <div className="h-5 bg-gray-200 rounded w-24" />
+                                            <div className="h-4 bg-gray-100 rounded w-full" />
+                                            <div className="h-4 bg-gray-100 rounded w-3/4" />
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                ) : submissions && submissions.length > 0 ? (
+                    <IntakeFormSubmissionList
+                        submissions={submissions}
+                        registerType={registerType}
                     />
-                </div>
-
-                <div className="min-h-[200px]">
-                    {formsLoading || submissionsLoading ? (
-                        <div className="flex items-center justify-center py-10">
-                            <span className="text-black/50">Loading...</span>
-                        </div>
-                    ) : (
-                        submissions?.map((submission, index) => (
-                            <IntakeFormSubmissionRow
-                                key={submission.submission_id}
-                                submission={submission}
-                                registerType={registerType}
-                                isEven={index % 2 === 0}
-                            />
-                        ))
-                    )}
-                </div>
+                ) : (
+                    <div className="text-sm text-gray-400 text-center py-6">
+                        No submissions found
+                    </div>
+                )}
             </div>
         </div>
     );

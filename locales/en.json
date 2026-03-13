@@ -168,6 +168,7 @@
     "address_proof": "Proof of Address",
     "dobProof": "Date of Birth",
     "common": {
+        "previous": "previous",
         "required": "*",
         "optional": "Optional",
         "noData": "No data available",
@@ -414,5 +415,13 @@
     "intakeForms": "Intake Forms",
     "pendingSubmissions": "Pending Submissions",
     "draftSubmissions": "Draft Submissions",
-    "messages": "Messages"
+    "messages": "Messages",
+    "reject_submission": "Reject Submission",
+    "approve_submission": "Approve Submission",
+    "intake_submission": "Intake Submission",
+    "attached_documents": "Attached Documents",
+    "verifications_required": "Verifications Required",
+    "verifications_done": "Verifications Done",
+    "documents_attached": "Documents Attached",
+    "attached_forms": "Attached forms"
 }
