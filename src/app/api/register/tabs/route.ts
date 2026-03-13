@@ -14,7 +14,8 @@ export async function POST(req: NextRequest) {
                 search_text: "",
             },
             request_payload: {
-                register_id: body.register_id
+                register_id: body.register_id,
+                used_for_new_intake_form: false
             }
         }),
 

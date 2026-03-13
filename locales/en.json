@@ -1,7 +1,7 @@
 {
     "title": "Registry",
     "registryGen2": "Registry",
-    "searchRegisters": "Search Registers",
+    "searchRegisters": "Search Records In Register",
     "searchChangeRequests": "Search Change Requests",
     "searchIncomingMessages": "Search Incoming Messages",
     "searchOutgoingMessages": "Search Outgoing Messages",
@@ -194,7 +194,7 @@
         "go_back": "Go Back"
     },
     "table": {
-        "noData": "No Record Persent",
+        "noData": "No Record Present",
         "addRecord": "Add Record",
         "clickToAdd": "Click To Add Record"
     },
@@ -410,7 +410,7 @@
     "noTabSection": "No Tab Section",
     "noChangeRequest": "No Change Request",
     "more": "More",
-    "searchIntakeForm": "Search Intake Forms",
+    "searchIntakeForm": "Search Intake Form Submissions",
     "searchMessages": "Search Messages",
     "intakeForms": "Intake Forms",
     "pendingSubmissions": "Pending Submissions",

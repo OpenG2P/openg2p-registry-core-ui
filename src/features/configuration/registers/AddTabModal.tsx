@@ -31,6 +31,7 @@ export default function AddTabModal({ isOpen, onClose, onSuccess }: AddTabModalP
                 register_id: registerId,
                 tab_label: formData.tabName,
                 tab_order: Number(formData.tabOrder) || 0,
+                used_for_new_intake_form: false
             })
         });
 
@@ -120,8 +121,6 @@ export default function AddTabModal({ isOpen, onClose, onSuccess }: AddTabModalP
                         </div>
                     </div>
                 </div>
-
-
             </div>
         </div>
     );

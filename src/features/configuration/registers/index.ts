@@ -10,3 +10,5 @@ export { default as RegisterTabConfigView } from './RegisterTabConfigView';
 export { default as RegistersConfigView } from './RegistersConfigView';
 export { default as SectionDetailsConfigView } from './SectionDetailsConfigView';
 export { default as ViewRegisterFieldsModal } from './ViewRegisterFieldsModal';
+export { default as IntakeFormModal } from './IntakeFormModal';
+export { default as EditIntakeFormModal } from './EditIntakeFormModal';

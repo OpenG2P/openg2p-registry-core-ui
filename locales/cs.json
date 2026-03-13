@@ -1,7 +1,7 @@
 {
     "title": "Registry Gen-2",
     "registryGen2": "Registry Gen2",
-    "searchRegisters": "Hledat registry",
+    "searchRegisters": "Hledat záznamy v registru",
     "searchChangeRequests": "Hledat žádosti o změnu",
     "searchIncomingMessages": "Hledat příchozí zprávy",
     "searchOutgoingMessages": "Hledat odchozí zprávy",
@@ -377,5 +377,11 @@
     "selectDate": "Vybrat datum",
     "selectSection": "Vybrat sekci",
     "selectVersion": "Vybrat verzi",
-    "noVerifierAssigned": "Pro tuto verzi žádosti o změnu není přiřazen žádný ověřovatel."
+    "noVerifierAssigned": "Pro tuto verzi žádosti o změnu není přiřazen žádný ověřovatel.",
+    "searchIntakeForm": "Hledat odeslané formuláře",
+    "searchMessages": "Hledat zprávy",
+    "intakeForms": "Vstupní formuláře",
+    "pendingSubmissions": "Čekající odeslání",
+    "draftSubmissions": "Koncepty odeslání",
+    "messages": "Zprávy"
 }

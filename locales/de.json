@@ -1,7 +1,7 @@
 {
     "title": "Registry Gen-2",
     "registryGen2": "Registry Gen2",
-    "searchRegisters": "Register suchen",
+    "searchRegisters": "Einträge im Register suchen",
     "searchChangeRequests": "Änderungsanfragen suchen",
     "searchIncomingMessages": "Eingehende Nachrichten suchen",
     "searchOutgoingMessages": "Ausgehende Nachrichten suchen",
@@ -378,5 +378,11 @@
     "selectDate": "Datum auswählen",
     "selectSection": "Abschnitt auswählen",
     "selectVersion": "Version auswählen",
-    "noVerifierAssigned": "Für diese Version der Änderungsanfrage ist kein Prüfer zugewiesen."
+    "noVerifierAssigned": "Für diese Version der Änderungsanfrage ist kein Prüfer zugewiesen.",
+    "searchIntakeForm": "Eingereichte Formulare suchen",
+    "searchMessages": "Nachrichten suchen",
+    "intakeForms": "Formulare",
+    "pendingSubmissions": "Ausstehende Einreichungen",
+    "draftSubmissions": "Entwürfe",
+    "messages": "Nachrichten"
 }
