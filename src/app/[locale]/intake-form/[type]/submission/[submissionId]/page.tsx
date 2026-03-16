@@ -7,7 +7,7 @@ import { useIntakeFormDetails } from '@/features/intake-form/hooks/useIntakeForm
 import MultiSectionAccordionForms from '@/features/intake-form/components/MultiSectionAccordionForms';
 import SubmissionHeader from '@/features/intake-form/components/SubmissionHeader';
 import IntakeVerificationCard from '@/features/intake-form/components/IntakeVerificationCard';
-import RegisterChangeRequestCard from '@/features/change-request/components/RegisterChangeRequestCard';
+import SubmissionChangeRequestCard from '@/features/intake-form/components/SubmissionChangeRequestCard';
 import { useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
 import { useIntakeFormAction } from '@/features/intake-form/hooks/useIntakeFormAction';
@@ -19,7 +19,7 @@ export default function IntakeFormSubmissionPage() {
     const submissionId = routeParams.submissionId;
     const registerType = routeParams.type;
 
-    const { submission, loading: loadingSubmission } = useIntakeSubmissionDetails(submissionId);
+    const { submission, loading: loadingSubmission, refetch } = useIntakeSubmissionDetails(submissionId);
     const registerId = submission?.register_id;
     const intakeFormId = submission?.tab_id;
     const { sections, loading: loadingSections } = useIntakeFormDetails(registerId, intakeFormId);
@@ -33,7 +33,10 @@ export default function IntakeFormSubmissionPage() {
         tabId: intakeFormId || '',
         registerType,
         sections,
-        submissionId
+        submissionId,
+        onSuccess: () => {
+            if (refetch) refetch();
+        }
     });
     const sectionDataMap = useMemo(() => {
         if (!submission?.section_payloads) return {};
@@ -79,7 +82,7 @@ export default function IntakeFormSubmissionPage() {
                     <div className="flex flex-col lg:flex-row gap-7.5">
                         <div className="w-full lg:w-[75%] space-y-6">
                             {!isDraft && (
-                                <SubmissionHeader submission={submission} />
+                                <SubmissionHeader submission={submission} onActionComplete={refetch} />
                             )}
 
                             <div className="bg-white rounded-[10px] p-6 border border-[#0000000D] space-y-2">
@@ -96,12 +99,10 @@ export default function IntakeFormSubmissionPage() {
                         </div>
 
                         <div className="w-full lg:w-[25%] space-y-6">
-                            {registerId && submission?.submission_id && (
-                                <RegisterChangeRequestCard
+                            {submission?.submission_id && (
+                                <SubmissionChangeRequestCard
                                     type={registerType}
-                                    registerId={registerId}
-                                    internalRecordId={submission.submission_id}
-                                    activeTabId={submission.tab_id}
+                                    submissionId={submission.submission_id}
                                     count={changeRequestCount}
                                     onCountLoaded={setChangeRequestCount}
                                 />

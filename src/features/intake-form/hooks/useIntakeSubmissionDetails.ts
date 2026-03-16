@@ -2,7 +2,7 @@ import { useFetch } from "@/shared/hooks/useFetch";
 import { IntakeSubmissionPayload } from "../types/intake-form";
 
 export const useIntakeSubmissionDetails = (submissionId?: string) => {
-    const { data, loading, error } = useFetch<IntakeSubmissionPayload>({
+    const { data, loading, error, execute } = useFetch<IntakeSubmissionPayload>({
         url: "/api/intake-form/submission/get",
         options: {
             method: "POST",
@@ -17,5 +17,6 @@ export const useIntakeSubmissionDetails = (submissionId?: string) => {
         submission: data,
         loading,
         error,
+        refetch: () => execute(),
     };
 };

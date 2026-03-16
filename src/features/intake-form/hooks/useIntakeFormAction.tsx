@@ -11,6 +11,7 @@ interface UseIntakeFormActionProps {
     registerType: string;
     sections?: IntakeFormSection[] | null;
     submissionId?: string | null;
+    onSuccess?: () => void;
 }
 
 export const useIntakeFormAction = ({
@@ -18,7 +19,8 @@ export const useIntakeFormAction = ({
     tabId,
     registerType,
     sections,
-    submissionId = null
+    submissionId = null,
+    onSuccess
 }: UseIntakeFormActionProps) => {
     const router = useRouter();
     const { execute: executeSave } = useFetch({ enabled: false });
@@ -42,12 +44,22 @@ export const useIntakeFormAction = ({
     const performSave = async (values: any, action: 'submit' | 'draft') => {
         if (!sections || !registerId) return;
 
-        const sectionPayloads = sections.map(section => ({
-            section_id: section.section_id,
-            intake_form_section_payload: values[section.section_register_id] || {}
-        }));
+        const sectionPayloads = sections.map(section => {
+            const sectionData = values?.[section.section_register_id];
 
-        console.log(sectionPayloads,"sectionPayloads")
+            let payload: any[] = [];
+
+            if (Array.isArray(sectionData?.records)) {
+                payload = sectionData.records;
+            } else if (sectionData) {
+                payload = [sectionData];
+            }
+
+            return {
+                section_id: section.section_id,
+                intake_form_section_payload: payload
+            };
+        });
 
         const draftPayload = {
             submission_id: submissionId,
@@ -65,17 +77,26 @@ export const useIntakeFormAction = ({
                 body: JSON.stringify(draftPayload)
             });
 
-            console.log(draftResult,"*************draftresult")
-
             if (!draftResult) {
                 toast.error('Operation failed');
                 return;
             }
 
+            const handleSuccessClose = (isDraft: boolean) => {
+                closeModal();
+                if (!submissionId) {
+                    if (isDraft && draftResult?.submission_id) {
+                        router.push(`/intake-form/${registerType}/submission/${draftResult.submission_id}`);
+                    } else {
+                        router.push(`/intake-form/${registerType}`);
+                    }
+                } else {
+                    if (onSuccess) onSuccess();
+                }
+            };
+
             if (action === 'submit') {
-                const finalSubmissionId = draftResult?.response?.response_payload?.submission_id ||
-                    draftResult?.response_payload?.submission_id ||
-                    draftResult?.submission_id;
+                const finalSubmissionId = draftResult?.submission_id 
 
                 if (!finalSubmissionId) {
                     toast.error('Draft saved, but could not finalize without submission ID');
@@ -86,11 +107,6 @@ export const useIntakeFormAction = ({
                     method: 'POST',
                     body: JSON.stringify({
                         submission_id: finalSubmissionId,
-                        current_page: 0,
-                        page_size: 10,
-                        sort_by: "",
-                        filter_by: "",
-                        search_text: ""
                     })
                 });
 
@@ -102,14 +118,8 @@ export const useIntakeFormAction = ({
                         subtitle: 'Your form submitted successfully, Thank you.',
                         confirmText: 'Close',
                         hideCancel: true,
-                        onClose: () => {
-                            closeModal();
-                            router.push(`/intake-form/${registerType}`);
-                        },
-                        onConfirm: () => {
-                            closeModal();
-                            router.push(`/intake-form/${registerType}`);
-                        }
+                        onClose: () => handleSuccessClose(false),
+                        onConfirm: () => handleSuccessClose(false)
                     });
                 } else {
                     toast.error('Submission failed');
@@ -119,17 +129,11 @@ export const useIntakeFormAction = ({
                     isOpen: true,
                     type: 'success',
                     title: 'Draft Saved',
-                    subtitle: 'Your info saved as draft you can restart your application again',
+                    subtitle: 'Your info saved as draft. You can continue updating your application.',
                     confirmText: 'Close',
                     hideCancel: true,
-                    onClose: () => {
-                        closeModal();
-                        router.push(`/intake-form/${registerType}`);
-                    },
-                    onConfirm: () => {
-                        closeModal();
-                        router.push(`/intake-form/${registerType}`);
-                    }
+                    onClose: () => handleSuccessClose(true),
+                    onConfirm: () => handleSuccessClose(true)
                 });
             }
         } catch (error) {

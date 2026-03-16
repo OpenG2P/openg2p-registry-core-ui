@@ -168,6 +168,8 @@
     "address_proof": "Proof of Address",
     "dobProof": "Date of Birth",
     "common": {
+        "sectionModified": "Modified",
+        "sectionSaved": "Saved",
         "previous": "previous",
         "required": "*",
         "optional": "Optional",

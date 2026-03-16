@@ -26,20 +26,18 @@ export default function IntakeVerificationCard({ submission, isPending }: Props)
         addVerification
     } = useVerifications(undefined, submission?.submission_id);
 
-    console.log(verifications, "verifications**********************");
-
     return (
         <div className="rounded-lg space-y-4">
             <div className="bg-[#F2BA1A] px-6 py-4 rounded-[10px] flex justify-between items-center shadow-sm">
                 <h4 className="text-[24px] font-semibold text-black">
-                    {t("Verifications")}
+                    {t("verifications")}
                 </h4>
                 {isPending && (
                     <button
                         onClick={() => setShowForm(!showForm)}
                         className="flex items-center gap-2 text-[14px] px-4 py-1 rounded-[10px] bg-black text-white hover:bg-gray-800 transition-colors"
                     >
-                        <span>{t("Add")}</span>
+                        <span>{t("add")}</span>
                         <Image
                             src="/images/common/plus.png"
                             alt="Add"

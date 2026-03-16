@@ -17,9 +17,10 @@ const statusClassMap: Record<string, string> = {
 
 interface Props {
     submission?: IntakeSubmissionPayload | null;
+    onActionComplete?: () => void;
 }
 
-export default function SubmissionHeader({ submission }: Props) {
+export default function SubmissionHeader({ submission, onActionComplete }: Props) {
     const t = useTranslations();
     const { execute, loading: loadingAction } = useFetch({ enabled: false });
 
@@ -28,16 +29,17 @@ export default function SubmissionHeader({ submission }: Props) {
 
         try {
             const url = type === 'approve'
-                ? '/api/intake-form-data/approve_submission'
-                : '/api/intake-form-data/reject_submission';
+                ? '/api/intake-form/submission/approve'
+                : '/api/intake-form/submission/reject';
 
             const result = await execute(url, {
                 method: 'POST',
                 body: JSON.stringify({ submission_id: submission.submission_id }),
             });
 
-            if (result) {
+            if (result?.approval_status=="APPROVED" || result?.approval_status=="REJECTED") {
                 toast.success(`Submission ${type}d successfully`);
+                onActionComplete?.();
             } else {
                 toast.error(`Failed to ${type} submission`);
             }
