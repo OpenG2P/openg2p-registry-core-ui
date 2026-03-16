@@ -4,6 +4,9 @@ import { toast } from 'react-toastify';
 import { IntakeFormSection } from '../types/intake-form';
 import { useState } from 'react';
 import ActionModal from '@/components/shared/ActionModal';
+import type { SectionChanges } from '@openg2p/registry-widgets';
+import { extractFilesFromSection } from '@/features/register/utils';
+import { UploadedDocument } from '@/shared/types';
 
 interface UseIntakeFormActionProps {
     registerId?: string;
@@ -23,7 +26,8 @@ export const useIntakeFormAction = ({
     onSuccess
 }: UseIntakeFormActionProps) => {
     const router = useRouter();
-    const { execute: executeSave } = useFetch({ enabled: false });
+    const { execute: executeSave } = useFetch();
+    const { execute: uploadDocumentRequest } = useFetch();
 
     const [modalConfig, setModalConfig] = useState<{
         isOpen: boolean;
@@ -41,25 +45,62 @@ export const useIntakeFormAction = ({
         setModalConfig(null);
     };
 
-    const performSave = async (values: any, action: 'submit' | 'draft') => {
+    const performSave = async (sectionChanges: SectionChanges[], action: 'submit' | 'draft') => {
         if (!sections || !registerId) return;
 
-        const sectionPayloads = sections.map(section => {
-            const sectionData = values?.[section.section_register_id];
 
-            let payload: any[] = [];
+        const sectionPayloads = [];
 
-            if (Array.isArray(sectionData?.records)) {
-                payload = sectionData.records;
-            } else if (sectionData) {
-                payload = [sectionData];
+        for (let i = 0; i < sections.length; i++) {
+            const section = sections[i];
+            const change = sectionChanges[i];
+            const files = change?.files ?? [];
+            const { filesToUpload = [], fileLabels = [] } =
+                extractFilesFromSection(files) || {};
+
+            let documentsResponse: UploadedDocument[] = [];
+
+            if (filesToUpload.length > 0) {
+                try {
+                    for (let j = 0; j < filesToUpload.length; j++) {
+                        const formData = new FormData();
+                        formData.append("document_label", fileLabels[j]);
+                        formData.append("documents", filesToUpload[j]);
+
+                        const uploadResult = await uploadDocumentRequest(
+                            "/api/change-request/upload-document",
+                            {
+                                method: "POST",
+                                body: formData,
+                            }
+                        );
+
+                        if (Array.isArray(uploadResult)) {
+                            documentsResponse.push(...uploadResult);
+                        } else if (uploadResult) {
+                            documentsResponse.push(uploadResult);
+                        }
+                    }
+                } catch (error) {
+                    toast.error(`Failed to upload files. Please try again.`, {
+                        position: "top-right",
+                        autoClose: 6000,
+                    });
+                    console.error("File upload error:", error);
+                    return;
+                }
             }
 
-            return {
+            // Keep existing documents that are already uploaded
+            const existingDocuments = (change?.files || []).filter(file => file && typeof file === 'object' && ('document_store_id' in file));
+            documentsResponse = [...existingDocuments as UploadedDocument[], ...documentsResponse];
+
+            sectionPayloads.push({
                 section_id: section.section_id,
-                intake_form_section_payload: payload
-            };
-        });
+                intake_form_section_payload: change?.records || [],
+                // documents: documentsResponse
+            });
+        }
 
         const draftPayload = {
             submission_id: submissionId,
@@ -68,7 +109,7 @@ export const useIntakeFormAction = ({
             foundational_id: null,
             link_foundational_id: null,
             no_of_verifications_required: 0,
-            section_payloads: sectionPayloads
+            section_payloads: sectionPayloads,
         };
 
         try {
@@ -96,7 +137,7 @@ export const useIntakeFormAction = ({
             };
 
             if (action === 'submit') {
-                const finalSubmissionId = draftResult?.submission_id 
+                const finalSubmissionId = draftResult?.submission_id
 
                 if (!finalSubmissionId) {
                     toast.error('Draft saved, but could not finalize without submission ID');
@@ -124,7 +165,7 @@ export const useIntakeFormAction = ({
                 } else {
                     toast.error('Submission failed');
                 }
-            } else {
+            } else if(draftResult?.submission_id){
                 setModalConfig({
                     isOpen: true,
                     type: 'success',
@@ -141,7 +182,7 @@ export const useIntakeFormAction = ({
         }
     };
 
-    const handleAction = async (values: any, action: 'submit' | 'draft') => {
+    const handleAction = async (sectionChanges: SectionChanges[], action: 'submit' | 'draft') => {
         if (!sections || !registerId) return;
 
         if (action === 'submit') {
@@ -155,11 +196,11 @@ export const useIntakeFormAction = ({
                 onClose: closeModal,
                 onConfirm: () => {
                     closeModal();
-                    performSave(values, 'submit');
+                    performSave(sectionChanges, 'submit');
                 }
             });
         } else {
-            await performSave(values, 'draft');
+            await performSave(sectionChanges, 'draft');
         }
     };
 

@@ -5,7 +5,7 @@ import {
   WidgetProvider,
   createWidgetStore,
 } from '@openg2p/registry-widgets';
-import type { SectionsFormHandle } from '@openg2p/registry-widgets';
+import type { SectionsFormHandle, SectionChanges } from '@openg2p/registry-widgets';
 import { dataSourceRequestHandler } from '@/features/register/utils/dataSourceRequestHandler';
 import { IntakeFormSection } from '../types/intake-form';
 
@@ -14,7 +14,7 @@ export type SectionStatus = 'Saved' | 'Draft' | null;
 export interface AccordionFormsProps {
   sections: IntakeFormSection[];
   schemaData?: any;
-  onAction?: (values: any, type: 'submit' | 'draft') => void;
+  onAction?: (sectionChanges: SectionChanges[], type: 'submit' | 'draft') => void;
   onCancel?: () => void;
   showActions?: boolean;
 }
@@ -40,21 +40,17 @@ export default function MultiSectionAccordionForms({
 
   const handleDraft = () => {
     if (!formHandle) return;
-    const values = formHandle.getFormData();
-    console.log(values,"draft values **************************************")
-
-    onAction?.(values, 'draft');
+    // Get structured section data (records + files) without validation
+    const sectionChanges = formHandle.getStructuredData();
+    onAction?.(sectionChanges, 'draft');
   };
 
   const handleSubmit = async () => {
     if (!formHandle) return;
     try {
-      // Validate all sections before submission
-      const isValid = await formHandle.validate();
-      if (!isValid) return;
-
-      const values = formHandle.getFormData();
-      onAction?.(values, 'submit');
+      // Validate all sections and get structured data (records + files)
+      const sectionChanges = await formHandle.validateAndGetData();
+      onAction?.(sectionChanges, 'submit');
     } catch (e) {
       console.error('Submission validation failed', e);
     }
