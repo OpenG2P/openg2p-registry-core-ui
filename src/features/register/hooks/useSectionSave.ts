@@ -65,6 +65,19 @@ export const useSectionSave = (
                                 }
                             );
 
+                            if (!uploadResult || 
+                                !uploadResult?.uploaded_documents ||
+                                uploadResult.uploaded_documents.length === 0) {
+                                toast.error(
+                                    "Document upload failed. Change request was not created.",
+                                    {
+                                        position: "top-right",
+                                        autoClose: 6000,
+                                    }
+                                );
+                                return;
+                            }
+
                             if (Array.isArray(uploadResult)) {
                                 documentsResponse.push(...uploadResult);
                             } else if (uploadResult) {
@@ -72,10 +85,14 @@ export const useSectionSave = (
                             }
                         }
 
-                        toast.success(`${filesToUpload.length} file(s) uploaded successfully!`, {
-                            position: "top-right",
-                            autoClose: 4000,
-                        });
+                        toast.success(
+                            `${documentsResponse.length} file(s) uploaded successfully!`,
+                            {
+                                position: "top-right",
+                                autoClose: 4000,
+                            }
+                        );
+
                     } catch (error) {
                         toast.error(`Failed to upload files. Please try again.`, {
                             position: "top-right",
