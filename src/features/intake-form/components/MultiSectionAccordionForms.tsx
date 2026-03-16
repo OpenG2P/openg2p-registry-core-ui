@@ -1,6 +1,11 @@
 import { useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { SectionRenderer, WidgetProvider, createWidgetStore } from '@openg2p/registry-widgets';
+import {
+  SectionsContainer,
+  WidgetProvider,
+  createWidgetStore,
+} from '@openg2p/registry-widgets';
+import type { SectionsFormHandle, SectionChanges } from '@openg2p/registry-widgets';
 import { dataSourceRequestHandler } from '@/features/register/utils/dataSourceRequestHandler';
 import { IntakeFormSection } from '../types/intake-form';
 
@@ -9,10 +14,11 @@ export type SectionStatus = 'Saved' | 'Draft' | null;
 export interface AccordionFormsProps {
   sections: IntakeFormSection[];
   schemaData?: any;
-  onAction?: (values: any, type: 'submit' | 'draft') => void;
+  onAction?: (sectionChanges: SectionChanges[], type: 'submit' | 'draft') => void;
   onCancel?: () => void;
   showActions?: boolean;
 }
+
 export default function MultiSectionAccordionForms({
   sections,
   schemaData = {},
@@ -22,22 +28,32 @@ export default function MultiSectionAccordionForms({
 }: AccordionFormsProps) {
   const t = useTranslations();
   const widgetStore = useMemo(() => createWidgetStore(), []);
+  const [formHandle, setFormHandle] = useState<SectionsFormHandle | null>(null);
 
-  const [openId, setOpenId] = useState<string | null>(sections[0]?.section_id || null);
-
-  const expandedIndex = useMemo(() =>
-    sections.findIndex(s => s.section_id === openId),
-    [sections, openId]
+  const sectionsConfig = useMemo(
+    () =>
+      sections.map((section) => ({
+        ...section.section_ui_schema,
+      })),
+    [sections]
   );
 
   const handleDraft = () => {
-    const values = (widgetStore.getState() as any).widget.values;
-    onAction?.(values, 'draft');
+    if (!formHandle) return;
+    // Get structured section data (records + files) without validation
+    const sectionChanges = formHandle.getStructuredData();
+    onAction?.(sectionChanges, 'draft');
   };
 
-  const handleSubmit = () => {
-    const values = (widgetStore.getState() as any).widget.values;
-    onAction?.(values, 'submit');
+  const handleSubmit = async () => {
+    if (!formHandle) return;
+    try {
+      // Validate all sections and get structured data (records + files)
+      const sectionChanges = await formHandle.validateAndGetData();
+      onAction?.(sectionChanges, 'submit');
+    } catch (e) {
+      console.error('Submission validation failed', e);
+    }
   };
 
   const handleCancel = () => {
@@ -53,36 +69,12 @@ export default function MultiSectionAccordionForms({
         dataSourceRequestHandler={dataSourceRequestHandler}
       >
         <div className="flex flex-col gap-4">
-          <div className="flex flex-col gap-4">
-            {sections.map((section, index) => (
-              <SectionRenderer
-                key={section.section_id}
-                section={section.section_ui_schema}
-                dbSectionId={section.section_id}
-                sectionRegisterId={section.section_register_id}
-                mode="IntakeForm"
-                sectionIndex={index}
-                sectionCount={sections.length}
-                expandedSectionIndex={expandedIndex === -1 ? null : expandedIndex}
-                onExpandSection={(idx) => {
-                  const clickedId = sections[idx].section_id;
-                  setOpenId((prev) => (prev === clickedId ? null : clickedId));
-                }}
-                onPreviousSection={(idx) => {
-                  if (idx > 0) setOpenId(sections[idx - 1].section_id);
-                }}
-                onSectionSaveSuccess={(idx) => {
-                  if (idx < sections.length - 1) {
-                    setOpenId(sections[idx + 1].section_id);
-                  }
-                }}
-                onSectionSave={(changes) => {
-                  console.log(`Section ${index} save triggered:`, changes);
-                }}
-                isDraft={showActions}
-              />
-            ))}
-          </div>
+          <SectionsContainer
+            sections={sectionsConfig}
+            mode="IntakeForm"
+            isDraft={showActions}
+            onFormReady={setFormHandle}
+          />
 
           {/* Action Buttons */}
           {showActions && (

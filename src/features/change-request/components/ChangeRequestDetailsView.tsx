@@ -2,9 +2,8 @@
 
 import { useMemo, useState } from "react";
 
-import { TabsLayout } from "@/components/shared";
+import { TabsLayout, ActionModal } from "@/components/shared";
 import {
-    ActionPopup,
     ChangeRequestHeader,
     RejectReasonPopup,
     VerificationForm,
@@ -56,8 +55,8 @@ export default function ChangeRequestDetailsView({ changeId, breadcrumb }: Props
     const sectionRegisterId = details?.section_register_id || "";
     const isListSection = details?.is_list || false;
 
-    const { sectionUISchema, loadingSchema } = useRegisterSectionsFromCR({sectionId});
-    
+    const { sectionUISchema, loadingSchema } = useRegisterSectionsFromCR({ sectionId });
+
     const newSectionData = useMemo(() => {
         if (!details?.change_payload?.length) return undefined;
 
@@ -157,13 +156,6 @@ export default function ChangeRequestDetailsView({ changeId, breadcrumb }: Props
                     loading={loadingAction}
                 />
             )}
-
-            {/* {popupVisible && (popupType === "approve" || popupType === "reject") && (
-                <ActionPopup
-                    type={popupType}
-                    onClose={() => setPopupVisible(false)}
-                />
-            )} */}
         </TabsLayout>
     );
 }

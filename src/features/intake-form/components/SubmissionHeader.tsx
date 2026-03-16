@@ -5,6 +5,9 @@ import { useTranslations } from "next-intl";
 import { IntakeSubmissionPayload } from "../types/intake-form";
 import { toast } from "react-toastify";
 import { useFetch } from "@/shared/hooks/useFetch";
+import { useMemo } from "react";
+import { useIntakeFormDocuments } from "../hooks/useIntakeFormDocuments";
+import { UploadedDocument } from "@/shared/types";
 
 const statusClassMap: Record<string, string> = {
     REJECTED: "text-red-500",
@@ -17,27 +20,41 @@ const statusClassMap: Record<string, string> = {
 
 interface Props {
     submission?: IntakeSubmissionPayload | null;
+    onActionComplete?: () => void;
 }
 
-export default function SubmissionHeader({ submission }: Props) {
+export default function SubmissionHeader({ submission, onActionComplete }: Props) {
     const t = useTranslations();
     const { execute, loading: loadingAction } = useFetch({ enabled: false });
+
+    const documents = useMemo(() => {
+        const allDocs: UploadedDocument[] = [];
+        submission?.section_payloads?.forEach(section => {
+            if (section.documents) {
+                allDocs.push(...section.documents);
+            }
+        });
+        return allDocs;
+    }, [submission]);
+
+    const { documents: docsWithUrls } = useIntakeFormDocuments(documents);
 
     const handleAction = async (type: 'approve' | 'reject') => {
         if (!submission?.submission_id) return;
 
         try {
             const url = type === 'approve'
-                ? '/api/intake-form-data/approve_submission'
-                : '/api/intake-form-data/reject_submission';
+                ? '/api/intake-form/submission/approve'
+                : '/api/intake-form/submission/reject';
 
             const result = await execute(url, {
                 method: 'POST',
                 body: JSON.stringify({ submission_id: submission.submission_id }),
             });
 
-            if (result) {
+            if (result?.approval_status=="APPROVED" || result?.approval_status=="REJECTED") {
                 toast.success(`Submission ${type}d successfully`);
+                onActionComplete?.();
             } else {
                 toast.error(`Failed to ${type} submission`);
             }
@@ -50,8 +67,8 @@ export default function SubmissionHeader({ submission }: Props) {
         <div className="rounded-[10px] bg-[#F2BA1A33]/80 px-10 py-5 flex flex-col border border-dashed border-[#ED7C22]">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <InfoSection submission={submission} />
-                <VerificationStats submission={submission} />
-                <AttachedDocuments />
+                <VerificationStats submission={submission} documentsCount={documents.length} />
+                <AttachedDocuments documents={docsWithUrls} />
             </div>
 
             {submission?.approval_status === "PENDING" && (
@@ -126,7 +143,13 @@ const InfoSection = ({ submission }: { submission?: IntakeSubmissionPayload | nu
     );
 };
 
-const VerificationStats = ({ submission }: { submission?: IntakeSubmissionPayload | null }) => {
+const VerificationStats = ({ 
+    submission, 
+    documentsCount 
+}: { 
+    submission?: IntakeSubmissionPayload | null;
+    documentsCount: number;
+}) => {
     const t = useTranslations();
     return (
         <div className="space-y-2 text-[16px] text-[#00000080]">
@@ -152,7 +175,7 @@ const VerificationStats = ({ submission }: { submission?: IntakeSubmissionPayloa
                 <div>
                     {t('documents_attached')}:{" "}
                     <span className="text-black font-medium">
-                        {/* TODO: replace with actual api count */}0
+                        {documentsCount}
                     </span>
                 </div>
             </div>
@@ -160,8 +183,11 @@ const VerificationStats = ({ submission }: { submission?: IntakeSubmissionPayloa
     );
 };
 
-const AttachedDocuments = () => {
+const AttachedDocuments = ({ documents = [] }: { documents?: any[] }) => {
     const t = useTranslations();
+
+    const visibleDocs = documents.slice(0, 3);
+    const placeholdersCount = Math.max(0, 3 - visibleDocs.length);
 
     return (
         <div className="space-y-2 text-[16px] text-[#00000080]">
@@ -179,10 +205,20 @@ const AttachedDocuments = () => {
             </div>
 
             <div className="border-l border-[#F2BA1A] pl-6 flex flex-col gap-2 font-semibold min-h-[60px]">
-                {/* TODO: replace with actual attached documents */}
-                <span className="invisible">placeholder</span>
-                <span className="invisible">placeholder</span>
-                <span className="invisible">placeholder</span>
+                {visibleDocs.map((doc, index) => (
+                    <span
+                        key={index}
+                        onClick={() => doc.document_url && window.open(doc.document_url, '_blank', 'noopener,noreferrer')}
+                        className={`flex items-center gap-2 ${doc.document_url ? 'cursor-pointer hover:underline' : 'opacity-50'}`}
+                    >
+                        {doc.document_label}
+                        <Image src="/images/common/right_arrow.png" alt="arrow" width={14} height={14} />
+                    </span>
+                ))}
+
+                {Array.from({ length: placeholdersCount }).map((_, i) => (
+                    <span key={i} className="invisible">placeholder</span>
+                ))}
             </div>
         </div>
     );

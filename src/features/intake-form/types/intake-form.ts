@@ -1,3 +1,6 @@
+import { UploadedDocument } from '@/shared/types';
+
+
 export type IntakeFormStatus = 'DRAFT' | 'SUBMITTED' | 'FINALIZED';
 export type ApprovalStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
 
@@ -40,6 +43,7 @@ export interface IntakeFormSubmission {
 export interface IntakeSubmissionPayload {
     submission_id: string;
     submission_reference: number | string;
+    record_name: string;
     register_id: string;
     tab_id: string;
     foundational_id: string;
@@ -62,9 +66,13 @@ export interface IntakeSubmissionPayload {
     section_payloads: SectionPayload[];
 }
 
+
 export interface SectionPayload {
     section_id: string;
-    payload_json: any;
+    section_register_id: string;
+    is_list: boolean;
+    records: any[];
+    documents?: UploadedDocument[];
 }
 
 export interface SectionChanges {
