@@ -53,15 +53,17 @@ export default async function RootLayout({
 
     return (
         <html lang={locale}>
-            <body className={`${roboto.className} antialiased pt-17.5`}>
+            <body className={`${roboto.className} antialiased`}>
                 <NextIntlClientProvider messages={messages}>
                     <GlobalContextProvider>
                         <RuntimeConfigProvider initialConfig={config}>
                             <Header />
-                            <RegisterProvider>
-                                <ToastContainer />
-                                {children}
-                            </RegisterProvider>
+                            <div className="pt-17.5">
+                                <RegisterProvider>
+                                    <ToastContainer />
+                                    {children}
+                                </RegisterProvider>
+                            </div>
                         </RuntimeConfigProvider>
                     </GlobalContextProvider>
                 </NextIntlClientProvider>

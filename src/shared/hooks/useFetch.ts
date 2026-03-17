@@ -1,3 +1,4 @@
+import { useAuth } from "@/context/Authcontext";
 import { useState, useCallback, useRef, useEffect, useMemo } from "react";
 
 interface UseFetchConfig {
@@ -14,6 +15,8 @@ export function useFetch<T = any>({
     const [data, setData] = useState<T | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
+
+    const { handleUnauthorized } = useAuth()
 
     const controllerRef = useRef<AbortController | null>(null);
 
@@ -67,6 +70,11 @@ export function useFetch<T = any>({
                         },
                 signal: controller.signal,
             });
+
+            if (res.status === 401) {
+                handleUnauthorized();
+                return null;
+            }
 
             const result = await res.json();
             if (!res.ok) {

@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { useTranslations } from 'next-intl';
 import { useClickOutside } from "@/shared/hooks/useClickOutside";
+import { useAuth } from "@/context/Authcontext";
 
 export default function ProfileDropdown() {
     const [open, setOpen] = useState(false);
@@ -13,15 +14,16 @@ export default function ProfileDropdown() {
 
     const toggleDropdown = () => setOpen((prev) => !prev);
 
+    const { logout } = useAuth();
+
     const logoutHandler = () => {
-    //    handel logout logic
-        console.log("Logout button clicked")
+        logout();
     };
 
     useClickOutside(dropdownRef, () => setOpen(false), open);
 
     // set profile pictures
-    const avatarSrc =  "/images/common/user_image.png";
+    const avatarSrc = "/images/common/user_image.png";
 
     return (
         <div ref={dropdownRef} className="relative">
