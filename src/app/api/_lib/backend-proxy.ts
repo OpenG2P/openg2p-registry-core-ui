@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getBackendConfig } from "./backend-config";
 import { BackendResponse, RequestBody } from "./backend-types";
 import { createBackendRequest } from "./backend-request";
+import { requireAuth } from "./requireAuth";
 
 export type PayloadBuilder = (jsonBody: any) => RequestBody;
 export type ResponseTransformer = (responseBody: any) => any;
@@ -28,6 +29,9 @@ export async function proxyToBackend({
 }: BackendProxyOptions) {
 
 	const backendConfig = getBackendConfig()
+	const auth = requireAuth(req);
+	if (auth instanceof NextResponse) return auth;
+
 	try {
 		const contentType = req.headers.get("content-type") || "";
 		const isFormData = contentType.includes("multipart/form-data");
@@ -73,7 +77,8 @@ export async function proxyToBackend({
 			const backendRequest = createBackendRequest(payload);
 
 			fetchOptions.headers = {
-				"Content-Type": "application/json"
+				...auth.backendHeaders,
+				"Content-Type": "application/json",
 			};
 			fetchOptions.body = JSON.stringify(backendRequest);
 		}
