@@ -386,6 +386,7 @@
     "new": "New",
     "old": "Old",
     "newAndOldValues": "New & Old Values",
+    "possible_duplicates":"Possible Duplicates",
     "verifiedBy": "Verified by",
     "verifiedPerson": "Verified person",
     "message": "Message",
@@ -425,5 +426,6 @@
     "verifications_required": "Verifications Required",
     "verifications_done": "Verifications Done",
     "documents_attached": "Documents Attached",
-    "attached_forms": "Attached forms"
+    "attached_forms": "Attached forms",
+    "postal_code":"Postal code"
 }

@@ -1,4 +1,5 @@
 import { useMemo, useContext } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { RegisterContext } from '@/context/RegisterContext';
 import { RegisterTabsContext } from '@/context/RegisterTabsContext';
@@ -29,6 +30,7 @@ export function useBreadcrumb(options: BreadcrumbOptions) {
     const activeTab = tabsCtx?.activeTab;
     const activeTabId = tabsCtx?.activeTabId;
 
+    const searchParams = useSearchParams();
     const {
         registerType,
         functionalRecordId,
@@ -43,6 +45,7 @@ export function useBreadcrumb(options: BreadcrumbOptions) {
 
     return useMemo<BreadcrumbItem[]>(() => {
         const items: BreadcrumbItem[] = [];
+        const search = searchParams.toString();
 
         if (rootItem) {
             items.push(rootItem);
@@ -51,13 +54,13 @@ export function useBreadcrumb(options: BreadcrumbOptions) {
         if (currentRegister && registerType) {
             items.push({
                 label: t(currentRegister.register_subject) ?? currentRegister.register_subject,
-                href: `/register/${registerType}`,
+                href: `/register/${registerType}${search ? `?${search}` : ''}`,
             });
 
             if (internalRecordId && activeTab) {
                 items.push({
                     label: `${recordName} - ${functionalRecordId} - ${t(activeTab.tab_label) ?? activeTab.tab_label}`,
-                    href: `/register/${registerType}/${internalRecordId}`,
+                    href: `/register/${registerType}/${internalRecordId}${search ? `?${search}` : ''}`,
                 });
             }
 
@@ -93,5 +96,6 @@ export function useBreadcrumb(options: BreadcrumbOptions) {
         rootItem,
         recordName,
         t,
+        searchParams,
     ]);
 }

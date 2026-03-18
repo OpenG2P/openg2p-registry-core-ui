@@ -1,7 +1,6 @@
-
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useMemo, useCallback, useEffect } from 'react';
 import { useParams, useSearchParams } from 'next/navigation';
-import { useRouter } from '@/i18n/navigation';
+import { usePathname, useRouter } from '@/i18n/navigation';
 import { notFound } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useFilters } from '@/features/filter/hooks/useFilters';
@@ -13,13 +12,16 @@ import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
 export const useRegisterRecords = () => {
     const t = useTranslations();
     const router = useRouter();
+    const pathname = usePathname();
     const routeParams = useParams<{ type: string }>();
     const searchParams = useSearchParams();
 
-    const [currentPage, setCurrentPage] = useState(1);
-
     const { config } = useRuntimeConfig();
     const pageSize = config.pageSize || 10;
+
+    // Derive current page from URL
+    const pageFromUrl = searchParams.get('page');
+    const currentPage = pageFromUrl ? Math.max(1, parseInt(pageFromUrl)) : 1;
 
     const {
         appliedFilters,
@@ -42,11 +44,6 @@ export const useRegisterRecords = () => {
 
     const registerId = currentRegister?.register_id;
     const registerTypeLabel = t(registerType) ?? currentRegister?.register_subject;
-
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [appliedFilters]);
-
 
     const { data: recordsData, loading: isLoadingRecords } = useFetch<RegisterRecordsApiResponse>({
         url: `/api/register/records`,
@@ -79,8 +76,6 @@ export const useRegisterRecords = () => {
         const pageStart = (currentPage - 1) * pageSize + 1;
         const pageEnd = Math.min(
             currentPage * pageSize,
-            // Handle case where API might return number_of_items as total?
-            // PaginationResponse has number_of_items.
             paginationInfo.number_of_items || 0
         );
 
@@ -92,24 +87,32 @@ export const useRegisterRecords = () => {
     }, [paginationInfo, currentPage, pageSize]);
 
     const handlePreviousPage = useCallback(() => {
-        setCurrentPage(p => Math.max(1, p - 1));
-    }, []);
+        if (currentPage > 1) {
+            const params = new URLSearchParams(searchParams.toString());
+            params.set('page', (currentPage - 1).toString());
+            router.push(`${pathname}?${params.toString()}`);
+        }
+    }, [currentPage, searchParams, router, pathname]);
 
     const handleNextPage = useCallback(() => {
         const totalPages = paginationInfo?.number_of_pages ?? 1;
-        setCurrentPage(p => Math.min(totalPages, p + 1));
-    }, [paginationInfo]);
+        if (currentPage < totalPages) {
+            const params = new URLSearchParams(searchParams.toString());
+            params.set('page', (currentPage + 1).toString());
+            router.push(`${pathname}?${params.toString()}`);
+        }
+    }, [currentPage, paginationInfo, searchParams, router, pathname]);
 
     const handleSearch = useCallback((searchValue: string) => {
-        setCurrentPage(1);
         const params = new URLSearchParams(searchParams.toString());
         if (searchValue.trim()) {
             params.set('search', searchValue.trim());
         } else {
             params.delete('search');
         }
-        router.push(`/register/${registerType}?${params.toString()}`);
-    }, [searchParams, router, registerType]);
+        params.set('page', '1');
+        router.push(`${pathname}?${params.toString()}`);
+    }, [searchParams, router, pathname]);
 
     return {
         registerType,
