@@ -9,11 +9,10 @@ import {
     useCallback,
     ReactNode,
 } from 'react';
-import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import { useFetch } from '@/shared/hooks';
-import { TabsResponse, TabConfig } from '@/shared/types';
-import { useLocale } from 'next-intl';
-import { usePathname } from 'next/navigation';
+import { TabConfig } from '@/shared/types';
+import { usePathname, useRouter } from '@/i18n/navigation';
 import { useRegister } from './RegisterContext';
 
 
@@ -40,10 +39,9 @@ export const RegisterTabsContext =
 /* ------------------------------------------------------------------ */
 
 export function RegisterTabsProvider({ children }: { children: ReactNode }) {
-    const { type, id } = useParams<{ type: string; id?: string }>();
+    const { id } = useParams<{ type: string; id?: string }>();
     const searchParams = useSearchParams();
     const router = useRouter();
-    const locale = useLocale();
     const pathname = usePathname();
 
 
@@ -71,7 +69,9 @@ export function RegisterTabsProvider({ children }: { children: ReactNode }) {
         if (!tabs.length || !tabFromUrl) return;
 
         const index = tabs.findIndex(tab => tab.tab_id === tabFromUrl);
-        if (index >= 0) setActiveTabIndex(index);
+        if (index >= 0) {
+            setActiveTabIndex(index);
+        }
     }, [tabs, tabFromUrl]);
 
 
@@ -79,21 +79,31 @@ export function RegisterTabsProvider({ children }: { children: ReactNode }) {
     const activeTabId = activeTab?.tab_id;
 
     const updateUrl = useCallback(
-        (tabId: string) => {
+        (tabId: string, replace = false) => {
             if (!id) return;
 
-            router.push(`${pathname}?tab=${encodeURIComponent(tabId)}`);
+            const params = new URLSearchParams(searchParams.toString());
+            params.set('tab', tabId);
+            const search = params.toString();
+            const url = `${pathname}?${search}`;
+
+            if (replace) {
+                router.replace(url);
+            } else {
+                router.push(url);
+            }
         },
-        [router, pathname, id]
+        [router, pathname, id, searchParams]
     );
 
+    // Handle initial redirect to default tab if none specified in URL
     useEffect(() => {
         if (!tabs.length) return;
 
         if (tabFromUrl) return;
 
         setActiveTabIndex(0);
-        updateUrl(tabs[0].tab_id);
+        updateUrl(tabs[0].tab_id, true);
     }, [tabs, tabFromUrl, updateUrl]);
 
 

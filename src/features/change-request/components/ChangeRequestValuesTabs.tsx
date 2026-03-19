@@ -8,7 +8,7 @@ import {
 import { dataSourceRequestHandler } from "@/features/register/utils/dataSourceRequestHandler";
 import type { SectionConfig } from "@openg2p/registry-widgets";
 
-type TabType = "values" /* | "duplicates" */;
+type TabType = "values" | "duplicates";
 
 export function ChangeRequestValuesTabs({
     widgetStoreNew,
@@ -33,19 +33,18 @@ export function ChangeRequestValuesTabs({
                     {t("newAndOldValues")}
                 </button>
 
-                {/*
                 <button
                     onClick={() => setActiveTab("duplicates")}
-                    className={`ml-2 px-6 py-3 text-sm font-medium border rounded-t-lg -mb-px
+                    className={`ml-2 px-8 py-2 text-black text-[18px] font-medium rounded-t-[10px]
                         ${
                             activeTab === "duplicates"
-                                ? "bg-white border-gray-200 border-b-white text-primary"
-                                : "bg-gray-100 border-transparent text-gray-500 hover:text-gray-700"
+                                ? "bg-[#F2BA1A]"
+                                : "bg-[#DDDDDD]"
                         }`}
                 >
-                    Possible Duplicates
+                   {t("possible_duplicates")}
                 </button>
-                */}
+                
             </div>
 
             {/* Content */}

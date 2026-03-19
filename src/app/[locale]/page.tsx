@@ -75,6 +75,7 @@ export default function Home() {
         if (searchValue) {
             params.set('search', searchValue);
         }
+        params.set('page', '1');
 
         const query = params.toString();
 
