@@ -39,7 +39,7 @@ export const extractFilesFromSection = (files?: unknown[]) => {
  */
 export function normalizeEditActions(
     records: any[],
-    linkInternalRecordId = "Empty Internal RecordID"
+    linkInternalRecordId = ""
 ) {
     if (!Array.isArray(records)) return [];
 
@@ -56,6 +56,22 @@ export function normalizeEditActions(
             result.internal_record_id = "";
         }
 
+        return result;
+    });
+}
+
+
+export function intakeNormalisedRecords(records: any[]) {
+    if (!Array.isArray(records)) return [];
+
+    return records.map((record) => {
+        const result = { ...record };
+
+        if (result.edit_action == null) {
+            result.edit_action = "ADD";
+            result.link_internal_record_id = "";
+            result.internal_record_id = "";
+        }
         return result;
     });
 }

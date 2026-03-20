@@ -5,7 +5,7 @@ import { IntakeFormSection } from '../types/intake-form';
 import { useState } from 'react';
 import ActionModal from '@/components/shared/ActionModal';
 import type { SectionChanges } from '@openg2p/registry-widgets';
-import { extractFilesFromSection } from '@/features/register/utils';
+import { extractFilesFromSection, intakeNormalisedRecords } from '@/features/register/utils';
 import { UploadedDocument } from '@/shared/types';
 
 interface UseIntakeFormActionProps {
@@ -97,9 +97,11 @@ export const useIntakeFormAction = ({
 
             sectionPayloads.push({
                 section_id: section.section_id,
-                intake_form_section_payload: change?.records || [],
-                // documents: documentsResponse
+                intake_form_section_payload: intakeNormalisedRecords(change?.records || []),
+                documents: documentsResponse
             });
+
+
         }
 
         const draftPayload = {
@@ -109,6 +111,9 @@ export const useIntakeFormAction = ({
             foundational_id: null,
             link_foundational_id: null,
             no_of_verifications_required: 0,
+            // Currently all request through application submission 
+            // treated as add action to the register
+            edit_action: "ADD",
             section_payloads: sectionPayloads,
         };
 
@@ -165,7 +170,7 @@ export const useIntakeFormAction = ({
                 } else {
                     toast.error('Submission failed');
                 }
-            } else if(draftResult?.submission_id){
+            } else if (draftResult?.submission_id) {
                 setModalConfig({
                     isOpen: true,
                     type: 'success',

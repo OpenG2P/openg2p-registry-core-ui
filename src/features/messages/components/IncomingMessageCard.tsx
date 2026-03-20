@@ -7,23 +7,10 @@ import MessagePopup from './MessagePopup';
 import Link from 'next/link';
 import { useLocale } from 'next-intl';
 import { useIncomingMessagePayload } from '../hooks';
+import { formatDateTime } from '@/shared/utils/dateUtils';
 
 interface Props {
     message: IncomingMessage;
-}
-export function formatDateTime(value?: string | null) {
-    if (!value) return '-- -- ----';
-
-    const safeValue = value.includes('Z') ? value : `${value}Z`;
-
-    return new Date(safeValue).toLocaleString(undefined, {
-        day: '2-digit',
-        month: 'short',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: true,
-    });
 }
 
 export default function IncomingMessageCard({ message }: Props) {

@@ -2,22 +2,7 @@
 
 import { Link } from '@/i18n/navigation';
 import { IntakeFormSubmission } from '../types/intake-form';
-
-export function formatDateTime(value?: string | null) {
-    if (!value) return '-- -- ----';
-
-    const safeValue = value.includes('T') ? value : value.replace(' ', 'T');
-    const date = new Date(safeValue);
-
-    return date.toLocaleString(undefined, {
-        day: '2-digit',
-        month: 'short',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: true,
-    });
-}
+import { formatDateTime } from '@/shared/utils/dateUtils';
 
 interface IntakeFormSubmissionCardProps {
     submission: IntakeFormSubmission;

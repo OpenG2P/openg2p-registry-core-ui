@@ -8,6 +8,7 @@ import { useFetch } from "@/shared/hooks/useFetch";
 import { useMemo } from "react";
 import { useIntakeFormDocuments } from "../hooks/useIntakeFormDocuments";
 import { UploadedDocument } from "@/shared/types";
+import { formatDate } from "@/shared/utils/dateUtils";
 
 const statusClassMap: Record<string, string> = {
     REJECTED: "text-red-500",
@@ -52,7 +53,7 @@ export default function SubmissionHeader({ submission, onActionComplete }: Props
                 body: JSON.stringify({ submission_id: submission.submission_id }),
             });
 
-            if (result?.approval_status=="APPROVED" || result?.approval_status=="REJECTED") {
+            if (result?.approval_status == "APPROVED" || result?.approval_status == "REJECTED") {
                 toast.success(`Submission ${type}d successfully`);
                 onActionComplete?.();
             } else {
@@ -131,22 +132,17 @@ const InfoSection = ({ submission }: { submission?: IntakeSubmissionPayload | nu
             <div>
                 Created Date:{" "}
                 <span className="text-black font-medium">
-                    {submission?.created_at ? (() => {
-                        const [dp, tp] = submission.created_at.split(/[T ]/);
-                        const [y, m, d] = dp.split('-').map(Number);
-                        const [h, mi] = (tp || '00:00').split(':').map(Number);
-                        return new Date(y, m - 1, d, h, mi).toLocaleDateString();
-                    })() : '--'}
+                    {submission?.created_at ? formatDate(submission.created_at) : '--'}
                 </span>
             </div>
         </div>
     );
 };
 
-const VerificationStats = ({ 
-    submission, 
-    documentsCount 
-}: { 
+const VerificationStats = ({
+    submission,
+    documentsCount
+}: {
     submission?: IntakeSubmissionPayload | null;
     documentsCount: number;
 }) => {
@@ -204,21 +200,30 @@ const AttachedDocuments = ({ documents = [] }: { documents?: any[] }) => {
                 />
             </div>
 
-            <div className="border-l border-[#F2BA1A] pl-6 flex flex-col gap-2 font-semibold min-h-[60px]">
+            <div className="border-l border-[#F2BA1A] pl-6 flex flex-col gap-2 font-semibold min-h-15">
+
+
                 {visibleDocs.map((doc, index) => (
-                    <span
+
+                    <a
                         key={index}
-                        onClick={() => doc.document_url && window.open(doc.document_url, '_blank', 'noopener,noreferrer')}
-                        className={`flex items-center gap-2 ${doc.document_url ? 'cursor-pointer hover:underline' : 'opacity-50'}`}
+                        href={doc.document_url ? doc.document_url : "#"}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`flex items-center gap-2 ${doc.document_url
+                            ? 'cursor-pointer hover:underline text-black'
+                            : 'opacity-50 pointer-events-none'
+                            }`}
                     >
                         {doc.document_label}
                         <Image src="/images/common/right_arrow.png" alt="arrow" width={14} height={14} />
-                    </span>
+                    </a>
                 ))}
 
                 {Array.from({ length: placeholdersCount }).map((_, i) => (
                     <span key={i} className="invisible">placeholder</span>
                 ))}
+
             </div>
         </div>
     );

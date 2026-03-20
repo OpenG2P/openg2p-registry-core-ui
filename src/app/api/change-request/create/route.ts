@@ -20,13 +20,10 @@ export async function POST(request: NextRequest) {
                 tab_id: jsonBody.tab_id,
                 section_id: jsonBody.section_id,
                 internal_record_id: jsonBody.internal_record_id,
+                edit_action: jsonBody.edit_action,
                 change_payload: jsonBody.section_records,
                 documents: jsonBody.documents,
             },
         }),
     });
 }
-// UPDATE
-// ADD
-// DELETE
-// edit_action:

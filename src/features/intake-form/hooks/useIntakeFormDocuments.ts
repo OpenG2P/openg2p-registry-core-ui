@@ -8,7 +8,6 @@ export interface IntakeFormDocument extends UploadedDocument {
 
 export function useIntakeFormDocuments(documents: UploadedDocument[]) {
     const [docsWithUrls, setDocsWithUrls] = useState<IntakeFormDocument[]>([]);
-    const [loading, setLoading] = useState(false);
     const { execute: getUrl } = useFetch({ enabled: false });
 
     useEffect(() => {
@@ -18,33 +17,30 @@ export function useIntakeFormDocuments(documents: UploadedDocument[]) {
         }
 
         const fetchUrls = async () => {
-            setLoading(true);
             try {
-                const results = await Promise.all(
-                    documents.map(async (doc) => {
-                        try {
-                            const response = await getUrl('/api/intake-form/get-file-url', {
-                                method: 'POST',
-                                body: JSON.stringify({ document_store_id: doc.document_store_id }),
-                            });
-                            return { 
-                                ...doc, 
-                                document_url: response?.document_url 
-                            };
-                        } catch (e) {
-                            console.error('Failed to fetch URL for document:', doc.document_store_id, e);
-                            return { ...doc };
-                        }
-                    })
-                );
+                const results: IntakeFormDocument[] = [];
+                for (const doc of documents) {
+                    try {
+                        const response = await getUrl('/api/intake-form/get-file-url', {
+                            method: 'POST',
+                            body: JSON.stringify({ document_store_id: doc.document_store_id }),
+                        });
+                        results.push({
+                            ...doc,
+                            document_url: response?.file_url
+                        });
+                    } catch (e) {
+                        console.error('Failed to fetch URL for document:', doc.document_store_id, e);
+                        results.push({ ...doc });
+                    }
+                }
                 setDocsWithUrls(results);
             } finally {
-                setLoading(false);
             }
         };
 
         fetchUrls();
     }, [documents]);
 
-    return { documents: docsWithUrls, loading };
+    return { documents: docsWithUrls };
 }
