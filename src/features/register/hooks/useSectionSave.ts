@@ -101,6 +101,10 @@ export const useSectionSave = (
                         tab_id: activeTabId,
                         section_id: section_id,
                         section_records: records,
+                        // While creating change request 
+                        // via register always treated as
+                        // Update action at chage request lavel
+                        edit_action: "UPDATE",
                         documents: documentsResponse,
                     }),
                 });

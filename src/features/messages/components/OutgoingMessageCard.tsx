@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useState } from 'react';
 import { OutgoingMessage } from '../types';
 import Link from 'next/link';
+import { formatDateTime } from '@/shared/utils/dateUtils';
 
 interface Props {
     message: OutgoingMessage;
@@ -12,7 +13,6 @@ interface Props {
 export default function OutgoingMessageCard({ message }: Props) {
     const [showAllTopics, setShowAllTopics] = useState(false);
 
-    const formatDateTime = (dt?: string) => dt ?? '-- -- ----';
 
     const topicsToShow = showAllTopics ? message.topic_names : message.topic_names.slice(0, 4);
 
