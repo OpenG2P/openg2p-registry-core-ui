@@ -14,7 +14,7 @@ export default function ProfileDropdown() {
 
     const toggleDropdown = () => setOpen((prev) => !prev);
 
-    const { logout } = useAuth();
+    const { user, logout } = useAuth();
 
     const logoutHandler = () => {
         logout();
@@ -25,6 +25,8 @@ export default function ProfileDropdown() {
     // set profile pictures
     const avatarSrc = "/images/common/user_image.png";
 
+    const displayName = user?.name || t('user');
+
     return (
         <div ref={dropdownRef} className="relative">
             <button
@@ -33,7 +35,7 @@ export default function ProfileDropdown() {
             >
                 <span className="text-[16px] text-black font-normal">
                     {/* in place of use set the actual use name  */}
-                    <span className="font-semibold">{t('user')}</span>
+                    <span className="font-semibold">{displayName}</span>
                 </span>
 
                 <div className="w-9.5 h-9.5 rounded-full overflow-hidden drop-shadow-[0_4px_20px_rgba(0,0,0,0.25)]">
