@@ -8,4 +8,4 @@ export { default as VerificationList } from './VerificationList';
 export { default as ChangeRequestSkeleton } from './ChangeRequestSkeleton';
 export { default as RejectReasonPopup } from './RejectReasonPopup';
 export { default as VerificationCard } from './VerificationCard';
-
+export { default as DeduplicationCard } from './DeduplicationCard';

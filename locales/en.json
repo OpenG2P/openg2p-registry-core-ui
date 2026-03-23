@@ -386,7 +386,7 @@
     "new": "New",
     "old": "Old",
     "newAndOldValues": "New & Old Values",
-    "possible_duplicates":"Possible Duplicates",
+    "possible_duplicates": "Possible Duplicates",
     "verifiedBy": "Verified by",
     "verifiedPerson": "Verified person",
     "message": "Message",
@@ -427,5 +427,16 @@
     "verifications_done": "Verifications Done",
     "documents_attached": "Documents Attached",
     "attached_forms": "Attached forms",
-    "postal_code":"Postal code"
+    "postal_code": "Postal code",
+    "noDuplicatesFound": "No duplicates found",
+    "change_possible_duplicates": "Change Possible Duplicates",
+    "register_possible_duplicates": "Register Possible Duplicates",
+    "match": "Match",
+    "match_score": "Match Score",
+    "incoming": "Incoming",
+    "candidate": "Candidate",
+    "similarity": "Similarity",
+    "dedup_result_id": "Dedup Result ID",
+    "internal_record_id": "Internal Record ID",
+    "candidate_change_request_id": "Candidate Change Request ID"
 }

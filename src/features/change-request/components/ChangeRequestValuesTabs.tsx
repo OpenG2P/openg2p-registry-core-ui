@@ -6,9 +6,10 @@ import {
     SectionRenderer,
 } from "@openg2p/registry-widgets";
 import { dataSourceRequestHandler } from "@/features/register/utils/dataSourceRequestHandler";
-import type { SectionConfig } from "@openg2p/registry-widgets";
+import { useDeduplication } from "@/features/change-request/hooks";
+import DeduplicationCard from "./DeduplicationCard";
 
-type TabType = "values" | "duplicates";
+type TabType = "change_request_values" | "change_possible_duplicates" | "register_possible_duplicates";
 
 export function ChangeRequestValuesTabs({
     widgetStoreNew,
@@ -17,15 +18,19 @@ export function ChangeRequestValuesTabs({
     oldSectionData,
     sectionUISchema,
     t,
+    changeId,
 }: any) {
-    const [activeTab, setActiveTab] = useState<TabType>("values");
+    const [activeTab, setActiveTab] = useState<TabType>("change_request_values");
+
+    const { results: crResults, loading: crLoading } = useDeduplication(changeId, "change-request");
+    const { results: regResults, loading: regLoading } = useDeduplication(changeId, "register");
 
     return (
         <div className="mt-7.5">
             <div className="ml-7.5">
                 <button
-                    onClick={() => setActiveTab("values")}
-                    className={`px-8 py-2 text-black text-[18px] font-medium rounded-t-[10px] transition-all ${activeTab === "values"
+                    onClick={() => setActiveTab("change_request_values")}
+                    className={`px-8 py-2 text-black text-[18px] font-medium rounded-t-[10px] transition-all ${activeTab === "change_request_values"
                         ? 'bg-[#F2BA1A]'
                         : 'bg-[#DDDDDD]'
                         }`}
@@ -34,28 +39,45 @@ export function ChangeRequestValuesTabs({
                 </button>
 
                 <button
-                    onClick={() => setActiveTab("duplicates")}
-                    className={`ml-2 px-8 py-2 text-black text-[18px] font-medium rounded-t-[10px]
-                        ${
-                            activeTab === "duplicates"
-                                ? "bg-[#F2BA1A]"
-                                : "bg-[#DDDDDD]"
+                    onClick={() => setActiveTab("change_possible_duplicates")}
+                    className={`relative ml-2 px-8 py-2 text-black text-[18px] font-medium rounded-t-[10px]
+                        ${activeTab === "change_possible_duplicates"
+                            ? "bg-[#F2BA1A]"
+                            : "bg-[#DDDDDD]"
                         }`}
                 >
-                   {t("possible_duplicates")}
+                    {t("change_possible_duplicates")}
+                    {crResults.length > 0 && (
+                        <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[11px] font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                            {crResults.length}
+                        </span>
+                    )}
                 </button>
-                
+
+                <button
+                    onClick={() => setActiveTab("register_possible_duplicates")}
+                    className={`relative ml-2 px-8 py-2 text-black text-[18px] font-medium rounded-t-[10px]
+                        ${activeTab === "register_possible_duplicates"
+                            ? "bg-[#F2BA1A]"
+                            : "bg-[#DDDDDD]"
+                        }`}
+                >
+                    {t("register_possible_duplicates")}
+                    {regResults.length > 0 && (
+                        <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[11px] font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                            {regResults.length}
+                        </span>
+                    )}
+                </button>
             </div>
 
-            {/* Content */}
-            {/* <div className="border border-gray-200 rounded-b-lg rounded-tr-lg p-4 bg-white"> */}
-            {activeTab === "values" && newSectionData && sectionUISchema && (
+            {activeTab === "change_request_values" && newSectionData && sectionUISchema && (
                 <div className="flex flex-col gap-4">
                     <WidgetProvider
                         store={widgetStoreNew}
                         schemaData={newSectionData}
                         translate={t}
-                    dataSourceRequestHandler={dataSourceRequestHandler}
+                        dataSourceRequestHandler={dataSourceRequestHandler}
                     >
                         <SectionRenderer
                             section={sectionUISchema}
@@ -76,20 +98,18 @@ export function ChangeRequestValuesTabs({
                             hideEditButton={true}
                             mode="CRView"
                             changeRequestType="old"
-
                         />
                     </WidgetProvider>
                 </div>
             )}
 
-            {/*
-                {activeTab === "duplicates" && (
-                    <div>
-                        Possible duplicates renderer
-                    </div>
-                )}
-                */}
-            {/* </div> */}
+            {activeTab === "change_possible_duplicates" && (
+                <DeduplicationCard results={crResults} loading={crLoading} type="change-request" t={t} />
+            )}
+
+            {activeTab === "register_possible_duplicates" && (
+                <DeduplicationCard results={regResults} loading={regLoading} type="register" t={t} />
+            )}
         </div>
     );
 }
