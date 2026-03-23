@@ -125,6 +125,7 @@ export default function ChangeRequestDetailsView({ changeId, breadcrumb }: Props
                                 oldSectionData={oldSectionData}
                                 sectionUISchema={sectionUISchema}
                                 t={t}
+                                changeId={changeId}
                             />
                         )
                     )}
