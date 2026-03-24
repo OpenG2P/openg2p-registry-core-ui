@@ -24,10 +24,10 @@ interface RbacContextType {
 const RbacContext = createContext<RbacContextType | null>(null);
 
 const HARDCODED_ACTIONS: string[] = [
-    // "change_request.read",
+    "change_request.read",
     "intake_form.read",
-    // "change_request.approve",
-    // "change_request.reject",
+    "change_request.approve",
+    "change_request.reject",
     "verification.read",
     "verification.create"
 ];
