@@ -3,8 +3,8 @@ import { CHANGE_REQUEST_GROUPS } from "@/features/change-request/utils/changeReq
 
 export default function ChangeRequestLayout({ children }: { children: React.ReactNode }) {
     return (
-        <RequireAction anyOf={CHANGE_REQUEST_GROUPS.canAccess}>
+        // <RequireAction anyOf={CHANGE_REQUEST_GROUPS.canAccess}>
             {children}
-        </RequireAction>
+        // </RequireAction>
     );
 }

@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { useLocale, useTranslations } from 'next-intl';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
 import { ProfileDropdown, NotificationDropdown, ConfigurationButton } from '@/components/layout';
@@ -12,9 +12,19 @@ export default function Header() {
     const locale = useLocale();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const { config } = useRuntimeConfig();
+    const [isScrolled, setIsScrolled] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setIsScrolled(window.scrollY > 0);
+        };
+
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
 
     return (
-        <header className="w-full bg-white flex items-center justify-between px-3 py-3 fixed top-0 left-0 right-0 z-20 h-17.5">
+        <header className={`w-full bg-white flex items-center justify-between px-3 py-3 fixed top-0 left-0 right-0 z-20 h-17.5 ${isScrolled ? "shadow-[0px_4px_10px_0px_#00000026]" : ""}`}>
             <Link href={`/${locale}`} className="flex items-center gap-2 sm:gap-3">
                 <Image
                     src={config?.registryLogo || "/images/common/openg2p_logo.png"}
