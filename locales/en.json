@@ -438,5 +438,6 @@
     "similarity": "Similarity",
     "dedup_result_id": "Dedup Result ID",
     "internal_record_id": "Internal Record ID",
-    "candidate_change_request_id": "Candidate Change Request ID"
+    "candidate_change_request_id": "Candidate Change Request ID",
+    "created_at": "Created At"
 }
