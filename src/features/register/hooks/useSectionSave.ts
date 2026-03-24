@@ -65,9 +65,7 @@ export const useSectionSave = (
                                 }
                             );
 
-                            if (!uploadResult || 
-                                !uploadResult?.uploaded_documents ||
-                                uploadResult.uploaded_documents.length === 0) {
+                            if (!uploadResult || uploadResult.length === 0) {
                                 toast.error(
                                     "Document upload failed. Change request was not created.",
                                     {
