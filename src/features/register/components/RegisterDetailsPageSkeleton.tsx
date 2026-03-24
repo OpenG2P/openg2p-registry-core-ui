@@ -35,7 +35,7 @@ export default function RegisterDetailsPageSkeleton({ tabs = [] }: Props) {
                     </div>
 
                     <div className="grid grid-cols-3 gap-6">
-                        <div className="col-span-2 rounded-[30px] bg-white p-9.5 space-y-4 shadow-sm">
+                        <div className="col-span-2 rounded-[10px] bg-white p-9.5 space-y-4 shadow-sm">
                             <div className="h-6 w-40 rounded bg-gray-300 animate-pulse" />
                             <div className="space-y-2">
                                 <div className="h-5 w-full rounded bg-gray-300 animate-pulse" />
@@ -45,7 +45,7 @@ export default function RegisterDetailsPageSkeleton({ tabs = [] }: Props) {
                             <div className="h-10 w-40 rounded-full bg-gray-300 animate-pulse" />
                         </div>
 
-                        <div className="rounded-[30px] bg-white p-9.5 space-y-4 shadow-sm">
+                        <div className="rounded-[10px] bg-white p-9.5 space-y-4 shadow-sm">
                             <div className="h-6 w-28 rounded bg-gray-300 animate-pulse" />
                             <div className="space-y-2">
                                 <div className="h-5 w-full rounded bg-gray-300 animate-pulse" />

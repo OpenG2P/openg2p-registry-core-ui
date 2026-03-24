@@ -1,0 +1,58 @@
+'use client';
+
+import Image from 'next/image';
+import { Link } from '@/i18n/navigation';
+import { useTranslations } from 'next-intl';
+
+export default function Forbidden() {
+    const t = useTranslations();
+
+    return (
+        <div className="min-h-screen bg-[#F3F1E4]">
+            <div className="w-full h-17.5 flex justify-center items-center">
+                <div className="w-full px-7.5 flex justify-between items-center">
+                    <div className="flex items-end gap-2">
+                        <Link href="/" passHref>
+                            <div className="h-7.5 flex items-end pb-0.5 pr-2 cursor-pointer">
+                                <Image src="/images/common/home.png" width={22} height={22} alt="home" />
+                            </div>
+                        </Link>
+
+                        <div className="h-5.75 flex items-end font-medium text-[20px] leading-none">
+                            <span>403</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="flex flex-1 items-center justify-start px-7.5">
+                <div className="w-full bg-white rounded-[10px] py-16 flex flex-col items-center text-center">
+                    <Image
+                        src="/images/common/error.png"
+                        width={200}
+                        height={200}
+                        alt="Forbidden illustration"
+                        className="mb-6"
+                        priority
+                    />
+
+                    <h1 className="mb-4 text-[40px] font-semibold leading-11.75 text-[#ED7C22]">
+                        {t('access_denied')}
+                    </h1>
+
+                    <p className="mb-6 text-[20px] font-light leading-6 text-black/50 max-w-xl">
+                        {t('forbidden_subtitle')}
+                    </p>
+
+                    <Link href="/">
+                        <button
+                            className="mb-8 flex items-center justify-center rounded-full bg-black px-8 py-1.5 text-lg font-medium text-white transition-all hover:bg-gray-800"
+                        >
+                            {t('go_home')}
+                        </button>
+                    </Link>
+                </div>
+            </div>
+        </div>
+    );
+}

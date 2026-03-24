@@ -9,6 +9,7 @@ interface Props {
     onToggleForm: () => void;
     renderForm: () => React.ReactNode;
     isPending: boolean;
+    canAddVerification: boolean;
 }
 
 export default function VerificationList({
@@ -16,12 +17,13 @@ export default function VerificationList({
     showForm,
     onToggleForm,
     renderForm,
-    isPending
+    isPending,
+    canAddVerification
 }: Props) {
     const t = useTranslations();
     return (
         <div className="rounded-lg space-y-4">
-            {isPending && (
+            {isPending && canAddVerification && (
                 <div className="flex justify-between bg-[#F2BA1A] px-6 py-4 rounded-[10px] items-center">
                     <h4 className="text-[24px] font-semibold">
                         {t("verifications")}

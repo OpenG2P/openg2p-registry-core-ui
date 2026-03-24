@@ -21,6 +21,9 @@ import { ChangeRequestValuesTabs } from "./ChangeRequestValuesTabs";
 import CRHeaderSkeleton from "./CRHeaderSkeleton";
 import SectionSchemaSkeleton from "./SectionSchemaSkeleton";
 import VerificationListSkeleton from "./VerificationListSkeleton";
+import { CHANGE_REQUEST_ACTIONS } from "../utils/changeRequest.actions";
+import { VERIFICATION_ACTIONS } from "../utils/verification.actions";
+import { useRbac } from "@/context/RbacContext";
 
 interface Props {
     changeId: string;
@@ -46,6 +49,12 @@ export default function ChangeRequestDetailsView({ changeId, breadcrumb }: Props
     } = useChangeRequestManager(changeId);
 
     const { verifications, loadingVerifications, addVerification } = useVerifications(changeId, undefined);
+
+    const { can } = useRbac();
+
+    const canApprove = can(CHANGE_REQUEST_ACTIONS.approve);
+    const canReject = can(CHANGE_REQUEST_ACTIONS.reject);
+    const canAddVerification = can(VERIFICATION_ACTIONS.create);
 
     const verificationCount = verifications.length;
 
@@ -146,6 +155,7 @@ export default function ChangeRequestDetailsView({ changeId, breadcrumb }: Props
                                 />
                             )}
                             isPending={details?.approval_status === "PENDING"}
+                            canAddVerification={canAddVerification}
                         />
                     )}
                 </div>
