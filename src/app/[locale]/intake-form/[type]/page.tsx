@@ -71,7 +71,9 @@ export default function IntakeFormPage() {
     return (
         <div className="min-h-screen mx-auto bg-[#F3F1E4]">
             <TopBar
-                breadcrumb={[{ label: 'Intake Form', href: `/intake-form/${registerType}` }]}
+                breadcrumb={[{ label: `${currentRegister?.register_subject || 'Register'} - Intake Form` }]}
+
+
                 showFilters
                 showPagination
                 showCapsule={true}
