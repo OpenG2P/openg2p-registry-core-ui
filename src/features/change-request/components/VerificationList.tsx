@@ -16,7 +16,7 @@ export default function VerificationList({
     showForm,
     onToggleForm,
     renderForm,
-    isPending
+    isPending,
 }: Props) {
     const t = useTranslations();
     return (
