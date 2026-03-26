@@ -12,12 +12,17 @@ import { useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
 import { useIntakeFormAction } from '@/features/intake-form/hooks/useIntakeFormAction';
 import { RegisterFlattenedRecord } from '@/features/register/types';
+import { useRegister } from '@/context/RegisterContext';
+
 
 export default function IntakeFormSubmissionPage() {
     const t = useTranslations();
     const routeParams = useParams<{ type: string, submissionId: string }>();
     const submissionId = routeParams.submissionId;
     const registerType = routeParams.type;
+
+    const { currentRegister } = useRegister();
+
 
     const { submission, loading: loadingSubmission, refetch } = useIntakeSubmissionDetails(submissionId);
     const registerId = submission?.register_id;
@@ -59,15 +64,18 @@ export default function IntakeFormSubmissionPage() {
         return map;
     }, [submission?.section_payloads]);
 
-    console.log(sectionDataMap,"sectionsDataMap")
+    console.log(sectionDataMap, "sectionsDataMap")
 
     return (
         <div className="min-h-screen mx-auto bg-[#F3F1E4]">
             <TopBar
                 breadcrumb={[
-                    { label: 'Intake Form', href: `/intake-form/${registerType}` },
+                    { label: `${currentRegister?.register_subject || 'Register'} - Intake Form`, href: `/intake-form/${registerType}` },
                     { label: submission?.submission_reference ? 'Ref- ' + String(submission.submission_reference) : '' }
                 ]}
+
+
+
                 showFilters={false}
                 showPagination={false}
                 showCapsule={false}
@@ -85,10 +93,7 @@ export default function IntakeFormSubmissionPage() {
                                 <SubmissionHeader submission={submission} onActionComplete={refetch} />
                             )}
 
-                            <div className="bg-white rounded-[10px] p-6 border border-[#0000000D] space-y-2">
-                                <h3 className="text-[24px] font-semibold text-black px-4 pt-2">
-                                    {t('attached_forms')}
-                                </h3>
+                            <div className=" bg-[#FFFF] rounded-[10px] p-6 border border-[#0000000D] space-y-2">
                                 <MultiSectionAccordionForms
                                     sections={sections || []}
                                     schemaData={sectionDataMap}

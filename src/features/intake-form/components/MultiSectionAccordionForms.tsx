@@ -8,10 +8,12 @@ import {
 import type { SectionsFormHandle, SectionChanges } from '@openg2p/registry-widgets';
 import { dataSourceRequestHandler } from '@/features/register/utils/dataSourceRequestHandler';
 import { IntakeFormSection } from '../types/intake-form';
+import FormDetailsCard from './FormDetailsCard';
 
 export type SectionStatus = 'Saved' | 'Draft' | null;
 
 export interface AccordionFormsProps {
+  formDetailsCard?: boolean;
   sections: IntakeFormSection[];
   schemaData?: any;
   onAction?: (sectionChanges: SectionChanges[], type: 'submit' | 'draft') => void;
@@ -20,6 +22,8 @@ export interface AccordionFormsProps {
 }
 
 export default function MultiSectionAccordionForms({
+
+  formDetailsCard = false,
   sections,
   schemaData = {},
   onAction,
@@ -37,6 +41,14 @@ export default function MultiSectionAccordionForms({
       })),
     [sections]
   );
+
+  // NOTE: Intake form name and description contains
+  // all the sections not global level
+  // so here getting from first section
+  const intakeFormHeading = useMemo(() => sections?.[0]?.intake_form_name, [sections]);
+  const intakeFormDescription = useMemo(() => sections?.[0]?.intake_form_description, [sections]);
+
+
 
   const handleDraft = () => {
     if (!formHandle) return;
@@ -61,48 +73,86 @@ export default function MultiSectionAccordionForms({
   };
 
   return (
-    <div className="flex flex-col gap-4 mx-auto py-6">
-      <WidgetProvider
-        store={widgetStore}
-        schemaData={schemaData}
-        translate={t}
-        dataSourceRequestHandler={dataSourceRequestHandler}
-      >
-        <div className="flex flex-col gap-4">
-          <SectionsContainer
-            sections={sectionsConfig}
-            mode="IntakeForm"
-            isDraft={showActions}
-            onFormReady={setFormHandle}
-          />
+    <div className="mx-auto pt-0 pb-6 flex flex-col gap-4">
+      {(intakeFormHeading || intakeFormDescription) && (
+        <div className="pt-6 border-t-2 border-[#FFFFFF] mb-4">
 
-          {/* Action Buttons */}
-          {showActions && (
-            <div className="flex items-center justify-end gap-3 mt-8 pt-6 border-t border-[#0000000D]">
-              <button
-                onClick={handleCancel}
-                className="px-8 py-2.5 rounded-full bg-[#E1E1E1] text-[#717171] font-bold text-[14px] hover:bg-[#d4d4d4] transition-colors"
-              >
-                Cancel
-              </button>
 
-              <button
-                onClick={handleDraft}
-                className="px-8 py-2.5 rounded-full bg-black text-white font-bold text-[14px] hover:bg-gray-800 transition-colors"
-              >
-                Save Draft
-              </button>
-
-              <button
-                onClick={handleSubmit}
-                className="px-8 py-2.5 rounded-full bg-black text-white font-bold text-[14px] hover:bg-gray-800 shadow-sm transition-all active:scale-95"
-              >
-                Submit
-              </button>
+          {intakeFormHeading && (
+            <h3 className="text-[24px] font-medium leading-[100%] text-black mb-4">
+              {intakeFormHeading}
+            </h3>
+          )}
+          {intakeFormDescription && (
+            <div className="text-[#717171] text-[16px] font-normal leading-[100%] flex flex-col gap-4 whitespace-pre-wrap pr-10">
+              {intakeFormDescription}
             </div>
           )}
         </div>
-      </WidgetProvider>
+      )}
+
+
+
+      <div className="flex gap-10">
+        <div className={`flex-1 flex flex-col gap-4 ${formDetailsCard ? 'max-w-[calc(100%-380px)]' : ''}`}>
+          <WidgetProvider
+            store={widgetStore}
+            schemaData={schemaData}
+            translate={t}
+            dataSourceRequestHandler={dataSourceRequestHandler}
+          >
+            <div className="flex flex-col gap-1">
+
+              <SectionsContainer
+                sections={sectionsConfig}
+                mode="IntakeForm"
+                isDraft={showActions}
+                onFormReady={setFormHandle}
+              />
+
+              {/* Action Buttons */}
+              {showActions && (
+                <div className="flex items-center justify-end gap-3 pt-2">
+
+                  <button
+                    onClick={handleCancel}
+                    className="px-8 py-2.5 rounded-full bg-[#D9D9D9] text-black font-bold text-[14px] hover:bg-[#c9c9c9] transition-colors"
+                  >
+                    Cancel
+                  </button>
+
+                  <button
+                    onClick={handleDraft}
+                    className="px-8 py-2.5 rounded-full bg-black text-white font-bold text-[14px] hover:bg-gray-800 transition-colors"
+                  >
+                    Draft
+                  </button>
+
+                  <button
+                    onClick={handleSubmit}
+                    className="px-8 py-2.5 rounded-full bg-black text-white font-bold text-[14px]
+                   disabled:bg-[#D9D9D9] disabled:text-[#717171] disabled:cursor-not-allowed"
+                    disabled={formDetailsCard}
+                  >
+                    Submit
+                  </button>
+
+                </div>
+              )}
+            </div>
+          </WidgetProvider>
+        </div>
+
+        {formDetailsCard && (
+          <div className="shrink-0">
+            <FormDetailsCard
+              title={intakeFormHeading}
+              description={intakeFormDescription}
+            />
+
+          </div>
+        )}
+      </div>
     </div>
   );
 }

@@ -14,6 +14,10 @@ export interface IntakeFormSection {
     register_id: string;
     section_id: string;
     tab_id: string;
+    tab_label:string;
+    intake_form_name:string;
+    intake_form_description:string;
+    used_for_new_intake_form:boolean;
     section_mnemonic: string;
     section_description: string | null;
     section_ui_schema: any;

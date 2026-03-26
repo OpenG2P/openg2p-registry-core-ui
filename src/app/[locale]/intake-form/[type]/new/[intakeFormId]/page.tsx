@@ -29,9 +29,10 @@ export default function NewIntakeFormSubmissionPage() {
         <div className="min-h-screen mx-auto bg-[#F3F1E4]">
             <TopBar
                 breadcrumb={[
-                    { label: 'Intake Form', href: `/intake-form/${registerType}` },
-                    { label: `${intake_form_id}` }
+                    { label: `${currentRegister?.register_subject || 'Register'} - Intake Form`, href: `/intake-form/${registerType}` },
+                    { label: sections?.[0]?.intake_form_name || String(intake_form_id) }
                 ]}
+
                 showFilters={false}
                 showPagination={false}
                 showCapsule={false}
@@ -44,13 +45,15 @@ export default function NewIntakeFormSubmissionPage() {
                     </div>
                 ) : (
                     <MultiSectionAccordionForms
+                        formDetailsCard={true}
                         sections={sections || []}
                         onAction={handleAction}
                         onCancel={() => router.push(`/intake-form/${registerType}`)}
                     />
+
                 )}
             </div>
-            
+
             <FormActionModals />
         </div>
     );
