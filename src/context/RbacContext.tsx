@@ -23,15 +23,6 @@ interface RbacContextType {
 
 const RbacContext = createContext<RbacContextType | null>(null);
 
-const HARDCODED_ACTIONS: string[] = [
-    "change_request.read",
-    "intake_form.read",
-    "change_request.approve",
-    "change_request.reject",
-    "verification.read",
-    "verification.create"
-];
-
 export function RbacProvider({ children }: { children: ReactNode }) {
     const { isLoggedIn, handleUnauthorized } = useAuth();
     const [loading, setLoading] = useState(true);
@@ -46,16 +37,17 @@ export function RbacProvider({ children }: { children: ReactNode }) {
 
         setLoading(true);
         try {
-            // const res = await fetch("/api/actions", { cache: "no-store" });
+            const res = await fetch("/api/permissions", { cache: "no-store" });
 
-            // if (res.status === 401) {
-            //     handleUnauthorized();
-            //     return;
-            // }
+            if (res.status === 401) {
+                handleUnauthorized();
+                return;
+            }
 
-            // const data = await res.json();
-            // setActionSet(new Set<string>(data.actions ?? []));
-            setActionSet(new Set<string>(HARDCODED_ACTIONS));
+            const data = await res.json();
+            const permissions = Array.isArray(data) ? data.flatMap((app: any) => app.permissions || []) : [];
+
+            setActionSet(new Set<string>(permissions));
         } catch (err) {
             console.error("Failed to load RBAC actions:", err);
             setActionSet(new Set());
