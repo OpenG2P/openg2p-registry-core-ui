@@ -124,7 +124,7 @@ export default function RegisterSectionConfigView({
                             Is Core
                         </div>
                         <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
-                            No. of Verifications
+                            Is Primary
                         </div>
 
                         <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
@@ -151,10 +151,10 @@ export default function RegisterSectionConfigView({
                                     {section.section_order}
                                 </div>
                                 <div className="text-base font-medium text-gray-500">
-                                    {section.is_core_section}
+                                    {section.is_core_section ? 'True' : 'False'}
                                 </div>
                                 <div className="text-base font-medium text-gray-500">
-                                    {section.no_of_verifications_required}
+                                    {section.is_primary_section ? 'True' : 'False'}
                                 </div>
 
                                 <div className="text-base font-medium">
