@@ -2,6 +2,8 @@ import Image from "next/image";
 import { Verification } from "@/features/change-request/types/change-request";
 import { VerificationCard } from "@/features/change-request/components";
 import { useTranslations } from "next-intl";
+import { VERIFICATION_CHANGE_REQUEST_ACTIONS } from "../utils/verificationChangeRequest.actions";
+import Can from "@/components/shared/Can";
 
 interface Props {
     verifications: Verification[];
@@ -20,34 +22,40 @@ export default function VerificationList({
 }: Props) {
     const t = useTranslations();
     return (
-        <div className="rounded-lg space-y-4">
-            {isPending && (
-                <div className="flex justify-between bg-[#F2BA1A] px-6 py-4 rounded-[10px] items-center">
-                    <h4 className="text-[24px] font-semibold">
-                        {t("verifications")}
-                    </h4>
-                    <button
-                        onClick={onToggleForm}
-                        className="flex items-center gap-2 text-[14px] px-4 py-1 rounded-[10px] bg-black text-white"
-                    >
-                        <span className="pt-0.5">{t("add")}</span>
-                        <Image
-                            src="/images/common/plus.png"
-                            alt="Add"
-                            width={12}
-                            height={12}
-                            className="pb-0.5"
-                        />
-                    </button>
-                </div>)}
+        <Can action={VERIFICATION_CHANGE_REQUEST_ACTIONS.view}>
+            <div className="rounded-lg space-y-4">
+                {isPending && (
+                    <div className="flex justify-between bg-[#F2BA1A] px-6 py-4 rounded-[10px] items-center">
+                        <h4 className="text-[24px] font-semibold">
+                            {t("verifications")}
+                        </h4>
 
-            {showForm && renderForm()}
+                        <Can action={VERIFICATION_CHANGE_REQUEST_ACTIONS.create}>
+                            <button
+                                onClick={onToggleForm}
+                                className="flex items-center gap-2 text-[14px] px-4 py-1 rounded-[10px] bg-black text-white"
+                            >
+                                <span className="pt-0.5">{t("add")}</span>
+                                <Image
+                                    src="/images/common/plus.png"
+                                    alt="Add"
+                                    width={12}
+                                    height={12}
+                                    className="pb-0.5"
+                                />
+                            </button>
+                        </Can>
+                    </div>)}
 
-            <div className="space-y-3">
-                {verifications.map((v) => (
-                    <VerificationCard key={v.verification_id} verification={v} />
-                ))}
+                {showForm && renderForm()}
+
+                <div className="space-y-3">
+
+                    {verifications.map((v) => (
+                        <VerificationCard key={v.verification_id} verification={v} />
+                    ))}
+                </div>
             </div>
-        </div>
+        </Can>
     );
 };

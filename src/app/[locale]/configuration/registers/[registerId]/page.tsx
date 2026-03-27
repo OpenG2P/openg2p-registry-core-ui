@@ -20,6 +20,9 @@ import {
 import { ProgramApplicationConfigView } from '@/features/configuration/program-applications';
 import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
 import { usePagination } from '@/shared/hooks';
+import { useRbac } from '@/context/RbacContext';
+import { CONFIGURATION_TABS_ACTIONS } from '@/features/configuration/shared/utils/configurationTabs.actions';
+import { CONFIGURATION_REGISTERS_ACTIONS } from '@/features/configuration/shared/utils/configurationRegisters.actions';
 
 
 const RegisterConfigurationPage = () => {
@@ -28,6 +31,10 @@ const RegisterConfigurationPage = () => {
     const [isViewModalOpen, setIsViewModalOpen] = useState(false);
     const [activeTab, setActiveTab] = useState<'tabs_or_forms' | 'filter' | 'search' | 'deduplication'>('tabs_or_forms');
     const [isIntakeModalOpen, setIsIntakeModalOpen] = useState(false);
+
+    const { can } = useRbac();
+    const canEdit = can(CONFIGURATION_REGISTERS_ACTIONS.edit);
+    const canCreate = can(CONFIGURATION_TABS_ACTIONS.create);
 
     const { registers, loading, refresh } = useAllRegister(1, 100);
     const registerDetails = getRegisterDetails(registerId, registers);
@@ -90,7 +97,11 @@ const RegisterConfigurationPage = () => {
                 description={registerDetails?.register_description}
                 extraInfo1={registerDetails?.master_register_id || 'None'}
                 extraInfo2={registerDetails.register_purpose || 'None'}
-                onEdit={() => setIsEditModalOpen(true)}
+                onEdit={
+                    canEdit
+                        ? () => setIsEditModalOpen(true)
+                        : undefined
+                }
                 onView={() => setIsViewModalOpen(true)}
             />
 
@@ -108,10 +119,10 @@ const RegisterConfigurationPage = () => {
                             breadcrumb={[]}
                             showFilters={false}
                             showPagination={activeTab === 'tabs_or_forms'}
-                            showAddNewButton={activeTab === 'tabs_or_forms'}
+                            showAddNewButton={canCreate && (activeTab === 'tabs_or_forms')}
                             addNewButtonText={isProgramApplication ? "Add New Form" : "Add New Tab"}
                             onAddNewButton={() => setIsModalOpen(true)}
-                            showSecondaryButton={activeTab === 'tabs_or_forms'}
+                            showSecondaryButton={canCreate && (activeTab === 'tabs_or_forms')}
                             secondaryButtonText="Add Intake Form Tab"
                             onSecondaryButton={() => setIsIntakeModalOpen(true)}
                             pageStart={pagination.pageStart}

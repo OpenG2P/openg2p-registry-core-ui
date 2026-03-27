@@ -6,6 +6,8 @@ import Link from 'next/link';
 
 import { ProfileDropdown, NotificationDropdown, ConfigurationButton } from '@/components/layout';
 import { useRuntimeConfig } from "@/context/RuntimeConfigContext";
+import Can from "../shared/Can";
+import { CONFIG_VIEW_ACTIONS } from "@/features/configuration/shared/utils/configurationView.actions";
 
 export default function Header() {
     const t = useTranslations();
@@ -54,7 +56,9 @@ export default function Header() {
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-8">
-                <ConfigurationButton />
+                <Can anyOf={CONFIG_VIEW_ACTIONS}>
+                    <ConfigurationButton />
+                </Can>
                 <NotificationDropdown />
                 <ProfileDropdown />
             </div>
@@ -74,7 +78,9 @@ export default function Header() {
             {isMobileMenuOpen && (
                 <div className="md:hidden absolute top-17.5 left-0 right-0 bg-white border-b border-gray-200 shadow-lg z-30">
                     <div className="flex flex-col p-4 gap-4">
-                        <ConfigurationButton />
+                        <Can anyOf={CONFIG_VIEW_ACTIONS}>
+                            <ConfigurationButton />
+                        </Can>
                         <NotificationDropdown />
                         <ProfileDropdown />
                     </div>

@@ -18,6 +18,9 @@ import {
 import { useBreadcrumb } from '@/shared/hooks/useBreadcrumb';
 import { usePagination } from '@/shared/hooks/usePagination';
 import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
+import { useRbac } from '@/context/RbacContext';
+import { CONFIGURATION_TABS_ACTIONS } from '@/features/configuration/shared/utils/configurationTabs.actions';
+import { CONFIGURATION_SECTIONS_ACTIONS } from '@/features/configuration/shared/utils/configurationSections.actions';
 
 const TabConfigurationPage = () => {
     const { registerId, tabId } = useParams<{ registerId: string; tabId: string }>();
@@ -28,6 +31,10 @@ const TabConfigurationPage = () => {
     const { config } = useRuntimeConfig();
     const PAGE_SIZE = config.pageSize || 10;
     const [paginationInfo, setPaginationInfo] = useState({ totalItems: 0, currentCount: 0 });
+
+    const { can } = useRbac();
+    const canEdit = can(CONFIGURATION_TABS_ACTIONS.edit);
+    const canCreate = can(CONFIGURATION_SECTIONS_ACTIONS.create);
 
     const { registers, loading: registersLoading } = useAllRegister(1, 100);
     const { tabs, loading: tabsLoading, refresh: refreshTabs } = useConfigTabs(registerId, 1, 100);
@@ -81,13 +88,17 @@ const TabConfigurationPage = () => {
                 title={label_name || "None"}
                 extraInfo1={registerDetails.register_mnemonic || 'None'}
                 extraInfo2={String(tabDetails.tab_order ?? 0)}
-                onEdit={() => {
-                    if (tabDetails.used_for_new_intake_form) {
-                        setIsEditIntakeModalOpen(true);
-                    } else {
-                        setIsEditTabModalOpen(true);
-                    }
-                }}
+                onEdit={
+                    canEdit
+                        ? () => {
+                            if (tabDetails.used_for_new_intake_form) {
+                                setIsEditIntakeModalOpen(true);
+                            } else {
+                                setIsEditTabModalOpen(true);
+                            }
+                        }
+                        : undefined
+                }
             />
 
             <TopBar
@@ -96,7 +107,7 @@ const TabConfigurationPage = () => {
                 showPagination={true}
                 showSubHeading
                 subHeading={`Manage sections for ${label_name}`}
-                showAddNewButton={true}
+                showAddNewButton={canCreate}
                 addNewButtonText={"Add New Section"}
                 onAddNewButton={() => setIsModalOpen(true)}
                 pageStart={pagination.pageStart}

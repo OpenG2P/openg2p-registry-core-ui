@@ -6,6 +6,8 @@ import { RegistersConfigView } from '@/features/configuration/registers';
 import { useAllRegister } from '@/features/configuration/shared';
 import { usePagination } from '@/shared/hooks';
 import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
+import { useRbac } from '@/context/RbacContext';
+import { CONFIGURATION_REGISTERS_ACTIONS } from '@/features/configuration/shared/utils/configurationRegisters.actions';
 
 const RegistersConfigurationPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -13,6 +15,9 @@ const RegistersConfigurationPage = () => {
 
     // Env. variable config
     const { config } = useRuntimeConfig();
+
+    const { can } = useRbac();
+    const canCreate = can(CONFIGURATION_REGISTERS_ACTIONS.create);
 
     const { registers, pagination, loading, refresh } = useAllRegister(currentPage, config.pageSize);
 
@@ -37,7 +42,7 @@ const RegistersConfigurationPage = () => {
                 breadcrumb={[{ label: "Registers" }]}
                 showFilters={false}
                 showPagination
-                showAddNewButton
+                showAddNewButton={canCreate}
                 addNewButtonText={"Add New Register"}
                 onAddNewButton={() => setIsModalOpen(true)}
                 pageStart={pageStart}
