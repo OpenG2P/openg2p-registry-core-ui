@@ -134,15 +134,13 @@ export default function AddRegisterModal({ isOpen, onClose, onSuccess }: AddRegi
                             <label className="block text-sm font-semibold text-black mb-2">
                                 Register Name
                             </label>
-                            <div className="relative">
-                                <input
-                                    type="text"
-                                    placeholder="Enter Register Name"
-                                    value={formData.register_mnemonic}
-                                    onChange={(e) => setFormData({ ...formData, register_mnemonic: e.target.value })}
-                                    className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all text-gray-600 placeholder:text-gray-400"
-                                />
-                            </div>
+                            <input
+                                type="text"
+                                placeholder="Enter Register Name"
+                                value={formData.register_mnemonic}
+                                onChange={(e) => setFormData({ ...formData, register_mnemonic: e.target.value })}
+                                className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all text-gray-600 placeholder:text-gray-400"
+                            />
                         </div>
 
                         <div>

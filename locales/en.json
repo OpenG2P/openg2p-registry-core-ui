@@ -440,7 +440,7 @@
     "internal_record_id": "Internal Record ID",
     "candidate_change_request_id": "Candidate Change Request ID",
     "access_denied": "Access Denied",
-    "forbidden_subtitle": "You don't have permission to view this page.",
+    "forbidden_subtitle": "You don’t have permission to view this page.",
     "go_home": "Go Home",
     "created_at": "Created At"
 }

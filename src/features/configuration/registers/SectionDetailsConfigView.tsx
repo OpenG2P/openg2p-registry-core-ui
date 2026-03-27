@@ -8,12 +8,14 @@ interface SectionDetailsConfigViewProps {
     sectionUISchema: any;
     registerId: string;
     sectionId: string;
+    isCoreSection?: boolean;
 }
 
 export default function SectionDetailsConfigView({
     sectionUISchema,
     registerId,
     sectionId,
+    isCoreSection = true,
 }: SectionDetailsConfigViewProps) {
     const { execute: updateUISchema, loading } = useFetch();
 
@@ -22,6 +24,14 @@ export default function SectionDetailsConfigView({
     };
 
     const handleSave = async (updatedSection: SectionConfig) => {
+        if (isCoreSection) {
+            toast.info('This is a core section, UI schema cannot be modified.', {
+                position: "top-right",
+                className: 'rounded-[15px] shadow-xl border border-gray-100',
+            });
+            return;
+        }
+
         if (!registerId || !sectionId) {
             toast.error('Missing required section information');
             return;
