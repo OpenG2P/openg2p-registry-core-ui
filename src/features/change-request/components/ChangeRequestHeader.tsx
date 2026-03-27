@@ -1,6 +1,8 @@
 import Image from "next/image";
 import { ChangeRequest } from "../types/change-request";
 import { useTranslations } from "next-intl";
+import { CHANGE_REQUEST_ACTIONS } from "../utils/changeRequest.actions";
+import Can from "@/components/shared/Can";
 
 export interface ChangeRequestDocument {
     document_label: string;
@@ -53,7 +55,7 @@ export default function ChangeRequestHeader({
             </div>
 
             {details.approval_status === "PENDING" && (
-                <>
+                <Can action={CHANGE_REQUEST_ACTIONS.approve}>
                     <div className="my-4 border-t-2 border-[#F2BA1A]" />
                     <div className="flex items-center gap-4">
                         <button
@@ -74,7 +76,7 @@ export default function ChangeRequestHeader({
                             {t('approveChange')}
                         </button>
                     </div>
-                </>
+                </Can>
             )}
         </div>
     );

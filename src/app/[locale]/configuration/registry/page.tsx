@@ -7,6 +7,8 @@ import { EditRegistry } from '@/features/configuration/registry';
 import { useFetch } from '@/shared/hooks/useFetch';
 import { convertImageToBase64 } from '@/features/configuration/shared';
 import { toast } from 'react-toastify';
+import Can from '@/components/shared/Can';
+import { CONFIGURATION_REGISTRY_ACTIONS } from '@/features/configuration/shared/utils/configurationRegistry.actions';
 
 const RegistryConfigurationPage = () => {
 	const [isEditing, setIsEditing] = useState(false);
@@ -93,18 +95,19 @@ const RegistryConfigurationPage = () => {
 										{registryData?.registry_name || registryName}
 									</h1>
 								</div>
-
-								<div
-									onClick={startEditing}
-									className='bg-[#D9D9D980] h-8 w-8 rounded-[10px] flex items-center justify-center cursor-pointer hover:bg-[#D9D9D9CC] transition-colors'
-								>
-									<Image
-										src={"/images/config/pencil_icon.png"}
-										alt='Pencil Icon'
-										width={18}
-										height={18}
-									/>
-								</div>
+								<Can action={CONFIGURATION_REGISTRY_ACTIONS.edit}>
+									<div
+										onClick={startEditing}
+										className='bg-[#D9D9D980] h-8 w-8 rounded-[10px] flex items-center justify-center cursor-pointer hover:bg-[#D9D9D9CC] transition-colors'
+									>
+										<Image
+											src={"/images/config/pencil_icon.png"}
+											alt='Pencil Icon'
+											width={18}
+											height={18}
+										/>
+									</div>
+								</Can>
 							</div>
 						</div>
 					</div>

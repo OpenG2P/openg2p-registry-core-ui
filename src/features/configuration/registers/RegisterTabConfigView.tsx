@@ -9,6 +9,8 @@ import { useParams } from 'next/navigation';
 import { useConfigTabs } from '../shared/hooks/useConfigTabs';
 import { useFetch } from '@/shared/hooks';
 import { toast } from 'react-toastify';
+import { CONFIGURATION_TABS_ACTIONS } from '../shared/utils/configurationTabs.actions';
+import Can from '@/components/shared/Can';
 
 interface RegisterTabConfigViewProps {
 	onAddNewRegister: () => void;
@@ -144,19 +146,21 @@ export default function RegisterTabConfigView({
 								</div>
 
 								<div className="text-base font-medium">
-									<span
-										onClick={(e) => handleDelete(e, tab.tab_id)}
-										className="flex items-center text-[#00000080]"
-									>
-										Remove
-										<Image
-											src="/images/common/false_sign.png"
-											alt="Remove"
-											width={18}
-											height={18}
-											className="ml-4"
-										/>
-									</span>
+									<Can action={CONFIGURATION_TABS_ACTIONS.delete}>
+										<span
+											onClick={(e) => handleDelete(e, tab.tab_id)}
+											className="flex items-center text-[#00000080]"
+										>
+											Remove
+											<Image
+												src="/images/common/false_sign.png"
+												alt="Remove"
+												width={18}
+												height={18}
+												className="ml-4"
+											/>
+										</span>
+									</Can>
 								</div>
 							</div>
 						</Link>

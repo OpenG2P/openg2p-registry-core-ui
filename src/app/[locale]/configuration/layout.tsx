@@ -2,6 +2,8 @@
 
 import { usePathname } from 'next/navigation';
 import { ConfigLayout, type ConfigActiveOption } from '@/features/configuration/shared';
+import RequireAction from '@/components/shared/RequireAction';
+import { CONFIG_VIEW_ACTIONS } from '@/features/configuration/shared/utils/configurationView.actions';
 
 const SIDEBAR_OPTIONS: ConfigActiveOption[] = ['registry', 'registers', 'data-models', 'ingest-configurations', 'outgest-configurations'];
 
@@ -25,8 +27,10 @@ export default function ConfigurationLayout({
     const activeOption = getActiveOptionFromPathname(pathname);
 
     return (
-        <ConfigLayout activeOption={activeOption}>
-            {children}
-        </ConfigLayout>
+        <RequireAction anyOf={CONFIG_VIEW_ACTIONS}>
+            <ConfigLayout activeOption={activeOption}>
+                {children}
+            </ConfigLayout>
+        </RequireAction>
     );
 }

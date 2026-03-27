@@ -14,6 +14,13 @@ import Image from 'next/image';
 import { useRegister } from '@/context/RegisterContext';
 import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
 
+import { REGISTER_ACTIONS } from '@/features/register/utils/register.actions';
+import { INTAKE_FORM_ACTIONS } from '@/features/intake-form/utils/intakeForm.actions';
+import { CHANGE_REQUEST_ACTIONS } from '@/features/change-request/utils/changeRequest.actions';
+import { INCOMING_MESSAGE_ACTIONS } from '@/features/messages/utils/incomingMessage.actions';
+import { OUTGOING_MESSAGE_ACTIONS } from '@/features/messages/utils/outgoingMessage.actions';
+import Can from '@/components/shared/Can';
+
 
 type ActiveStatsCard =
     | 'registers'
@@ -126,6 +133,27 @@ export default function Home() {
             ? StatsCardSmall
             : StatsCardLarge;
 
+
+    const getViewAction = (
+        activeStatsCard: ActiveStatsCard,
+        selectedMessageType: string
+    ) => {
+        switch (activeStatsCard) {
+            case "registers":
+                return REGISTER_ACTIONS.view;
+            case "intake-form":
+                return INTAKE_FORM_ACTIONS.view;
+            case "change-request":
+                return CHANGE_REQUEST_ACTIONS.view;
+            case "messages":
+                return selectedMessageType === "incoming"
+                    ? INCOMING_MESSAGE_ACTIONS.view
+                    : OUTGOING_MESSAGE_ACTIONS.view;
+        }
+    };
+
+    const viewAction = getViewAction(activeStatsCard, selectedMessageType);
+
     return (
         <div className="min-h-screen bg-[#EABB13] pt-8 sm:pt-10 md:pt-12 overflow-hidden text-gray-900 bg-[url('/images/common/bg_pattern.png')]">
             <div className="relative">
@@ -147,31 +175,47 @@ export default function Home() {
                             </button>
                         ))}
                     </div>
+                    <Can
+                        action={viewAction}
+                        fallback={
+                            <div className="relative border border-[#ED7C22] flex h-14 w-4/5 items-center rounded-[10px] bg-white overflow-visible">
+                                <div className="relative flex items-center w-full h-full">
+                                    <SearchBar
+                                        placeholder={searchPlaceholders[activeStatsCard]}
+                                        category={selectedRegister}
+                                        onSearch={() => { }}
+                                    />
+                                    <div className="absolute inset-0 z-10 cursor-not-allowed" />
+                                </div>
+                            </div>
+                        }
+                    >
+                        <div className="relative border border-[#ED7C22] flex h-14 w-4/5 items-center rounded-[10px] bg-white overflow-visible">
 
-                    {/* Search Bar */}
-                    <div className="relative border border-[#ED7C22] flex h-14 w-4/5 items-center rounded-[10px] bg-white overflow-visible">
-                        {(activeStatsCard === 'registers' || activeStatsCard === 'intake-form') && registerList && registerList.length > 0 && (
-                            <SearchBarDropdown
-                                options={registerList}
-                                selected={selectedRegister}
-                                onChange={setSelectedRegister}
+                            {(activeStatsCard === 'registers' || activeStatsCard === 'intake-form') &&
+                                registerList?.length > 0 && (
+                                    <SearchBarDropdown
+                                        options={registerList}
+                                        selected={selectedRegister}
+                                        onChange={setSelectedRegister}
+                                    />
+                                )}
+
+                            {activeStatsCard === 'messages' && (
+                                <SearchBarDropdown
+                                    options={messageTypeOptions}
+                                    selected={selectedMessageType}
+                                    onChange={setSelectedMessageType}
+                                />
+                            )}
+
+                            <SearchBar
+                                placeholder={searchPlaceholders[activeStatsCard]}
+                                category={selectedRegister}
+                                onSearch={handleSearch}
                             />
-                        )}
-
-                        {activeStatsCard === 'messages' && (
-                            <SearchBarDropdown
-                                options={messageTypeOptions}
-                                selected={selectedMessageType}
-                                onChange={setSelectedMessageType}
-                            />
-                        )}
-
-                        <SearchBar
-                            placeholder={searchPlaceholders[activeStatsCard]}
-                            category={selectedRegister}
-                            onSearch={handleSearch}
-                        />
-                    </div>
+                        </div>
+                    </Can>
                 </div>
                 <div className="bottom-0 w-full px-4">
                     <Image

@@ -17,6 +17,8 @@ import {
     getSectionDetails
 } from '@/features/configuration/shared';
 import { useBreadcrumb } from '@/shared/hooks/useBreadcrumb';
+import { useRbac } from '@/context/RbacContext';
+import { CONFIGURATION_SECTIONS_ACTIONS } from '@/features/configuration/shared/utils/configurationSections.actions';
 
 const SectionConfigurationPage = () => {
     const { registerId, tabId, sectionId } = useParams<{
@@ -25,6 +27,10 @@ const SectionConfigurationPage = () => {
         sectionId: string;
     }>();
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+    const { can } = useRbac();
+    const canEdit = can(CONFIGURATION_SECTIONS_ACTIONS.edit);
+
 
     const { registers, loading: registersLoading } = useAllRegister(1, 100);
     const { tabs, loading: tabsLoading } = useConfigTabs(registerId, 1, 100);
@@ -64,7 +70,11 @@ const SectionConfigurationPage = () => {
                 description={sectionDetails.section_description || 'None'}
                 extraInfo1={String(sectionDetails.section_order || 0)}
                 extraInfo2={String(tabDetails.tab_label || 'None')}
-                onEdit={() => setIsEditModalOpen(true)}
+                onEdit={
+                    canEdit
+                        ? () => setIsEditModalOpen(true)
+                        : undefined
+                }
             />
 
             <SectionDetailsConfigView

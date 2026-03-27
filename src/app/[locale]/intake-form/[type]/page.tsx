@@ -14,6 +14,8 @@ import IntakeFormSubmissionList from '@/features/intake-form/components/Submissi
 import { usePagination } from '@/shared/hooks';
 import { useIntakeForms } from '@/features/intake-form/hooks/useIntakeForms';
 import { useIntakeSubmissions } from '@/features/intake-form/hooks/useIntakeSubmissions';
+import { INTAKE_FORM_ACTIONS } from '@/features/intake-form/utils/intakeForm.actions';
+import Can from '@/components/shared/Can';
 
 export default function IntakeFormPage() {
     const t = useTranslations();
@@ -78,14 +80,16 @@ export default function IntakeFormPage() {
                 showPagination
                 showCapsule={true}
                 capsule={
-                    <NewIntakeFormDropdown
-                        forms={forms || []}
-                        onSelectForm={(form) => {
-                            router.push(
-                                `/intake-form/${registerType}/new/${form.tab_id}`
-                            );
-                        }}
-                    />
+                    <Can action={INTAKE_FORM_ACTIONS.create}>
+                        <NewIntakeFormDropdown
+                            forms={forms || []}
+                            onSelectForm={(form) => {
+                                router.push(
+                                    `/intake-form/${registerType}/new/${form.tab_id}`
+                                );
+                            }}
+                        />
+                    </Can>
                 }
                 pageStart={pagination.pageStart}
                 pageEnd={pagination.pageEnd}
