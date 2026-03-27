@@ -70,8 +70,13 @@ const SectionConfigurationPage = () => {
                 description={sectionDetails.section_description || 'None'}
                 extraInfo1={String(sectionDetails.section_order || 0)}
                 extraInfo2={String(tabDetails.tab_label || tabDetails.intake_form_name || 'None')}
-                onEdit={() => setIsEditModalOpen(true)}
+                onEdit={
+                    canEdit
+                        ? () => setIsEditModalOpen(true)
+                        : undefined
+                }
             />
+
 
             <SectionDetailsConfigView
                 sectionUISchema={sectionDetails?.section_ui_schema}

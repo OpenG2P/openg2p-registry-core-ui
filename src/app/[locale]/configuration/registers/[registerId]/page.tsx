@@ -115,10 +115,10 @@ const RegisterConfigurationPage = () => {
                             breadcrumb={[]}
                             showFilters={false}
                             showPagination={activeTab === 'tabs'}
-                            showAddNewButton={activeTab === 'tabs'}
+                            showAddNewButton={canCreate && activeTab === 'tabs'}
                             addNewButtonText={"Add New Tab"}
                             onAddNewButton={() => setIsModalOpen(true)}
-                            showSecondaryButton={activeTab === 'tabs'}
+                            showSecondaryButton={canCreate && activeTab === 'tabs'}
                             secondaryButtonText="Add Intake Form"
                             onSecondaryButton={() => setIsIntakeModalOpen(true)}
                             pageStart={pagination.pageStart}

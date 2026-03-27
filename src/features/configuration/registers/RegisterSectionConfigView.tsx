@@ -158,19 +158,21 @@ export default function RegisterSectionConfigView({
                                 </div>
 
                                 <div className="text-base font-medium">
-                                    <span
-                                        onClick={(e) => handleDelete(e, section)}
-                                        className="flex items-center text-[#00000080]"
-                                    >
-                                        Remove
-                                        <Image
-                                            src="/images/common/false_sign.png"
-                                            alt="Remove"
-                                            width={18}
-                                            height={18}
-                                            className="ml-4"
-                                        />
-                                    </span>
+                                    <Can action={CONFIGURATION_SECTIONS_ACTIONS.delete}>
+                                        <span
+                                            onClick={(e) => handleDelete(e, section.section_id)}
+                                            className="flex items-center text-[#00000080]"
+                                        >
+                                            Remove
+                                            <Image
+                                                src="/images/common/false_sign.png"
+                                                alt="Remove"
+                                                width={18}
+                                                height={18}
+                                                className="ml-4"
+                                            />
+                                        </span>
+                                    </Can>
                                 </div>
                             </div>
                         </Link>

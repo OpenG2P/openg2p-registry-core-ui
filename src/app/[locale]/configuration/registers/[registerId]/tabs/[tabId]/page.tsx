@@ -108,7 +108,7 @@ const TabConfigurationPage = () => {
                 showPagination={true}
                 showSubHeading
                 subHeading={`${label_name} Sections`}
-                showAddNewButton={true}
+                showAddNewButton={canCreate}
                 addNewButtonText={"Add New Section"}
                 onAddNewButton={() => setIsModalOpen(true)}
                 pageStart={pagination.pageStart}
