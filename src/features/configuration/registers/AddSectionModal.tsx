@@ -32,6 +32,8 @@ export default function AddSectionModal({ isOpen, onClose, onSuccess }: AddSecti
         auto_approval: false,
         is_list: false,
         is_primary_section: false,
+        is_core_section: false,
+        section_order: '',
     });
 
     const handleSubmit = async () => {
@@ -58,6 +60,8 @@ export default function AddSectionModal({ isOpen, onClose, onSuccess }: AddSecti
                 auto_approval: formData.auto_approval,
                 is_list: formData.is_list,
                 is_primary_section: formData.is_primary_section,
+                is_core_section: formData.is_core_section,
+                section_order: Number(formData.section_order) || 0,
                 section_ui_schema: {}
             })
         });
@@ -73,6 +77,8 @@ export default function AddSectionModal({ isOpen, onClose, onSuccess }: AddSecti
                 auto_approval: false,
                 is_list: false,
                 is_primary_section: false,
+                is_core_section: false,
+                section_order: '',
             });
             if (onSuccess) onSuccess();
             onClose();
@@ -91,6 +97,8 @@ export default function AddSectionModal({ isOpen, onClose, onSuccess }: AddSecti
             auto_approval: false,
             is_list: false,
             is_primary_section: false,
+            is_core_section: false,
+            section_order: '',
         });
         onClose();
     };
@@ -117,18 +125,12 @@ export default function AddSectionModal({ isOpen, onClose, onSuccess }: AddSecti
                             <label className="block text-sm font-semibold text-black mb-1">
                                 Section Name
                             </label>
-                            <p className="text-[12px] text-gray-400 mb-2 italic">
-                                * Use lowercase and underscores only
-                            </p>
                             <div className="relative">
                                 <input
                                     type="text"
-                                    placeholder="e.g. personal_info"
+                                    placeholder="Enter Section Name"
                                     value={formData.section_mnemonic}
-                                    onChange={(e) => {
-                                        const value = e.target.value.toLowerCase().replace(/\s+/g, '_');
-                                        setFormData({ ...formData, section_mnemonic: value });
-                                    }}
+                                    onChange={(e) => setFormData({ ...formData, section_mnemonic: e.target.value })}
                                     className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all text-gray-600 placeholder:text-gray-400"
                                 />
                             </div>
@@ -249,6 +251,38 @@ export default function AddSectionModal({ isOpen, onClose, onSuccess }: AddSecti
                                     <select
                                         value={formData.is_primary_section ? "true" : "false"}
                                         onChange={(e) => setFormData({ ...formData, is_primary_section: e.target.value === "true" })}
+                                        className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all bg-white appearance-none cursor-pointer text-gray-600 pr-10"
+                                    >
+                                        <option value="true">True</option>
+                                        <option value="false">False</option>
+                                    </select>
+                                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-sm font-semibold text-black mb-2">
+                                    Section Order
+                                </label>
+                                <input
+                                    type="number"
+                                    placeholder="e.g. 0"
+                                    value={formData.section_order}
+                                    onChange={(e) => setFormData({ ...formData, section_order: e.target.value })}
+                                    className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all text-gray-600 placeholder:text-gray-400"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-semibold text-black mb-2">
+                                    Is Core Section
+                                </label>
+                                <div className="relative">
+                                    <select
+                                        value={formData.is_core_section ? "true" : "false"}
+                                        onChange={(e) => setFormData({ ...formData, is_core_section: e.target.value === "true" })}
                                         className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all bg-white appearance-none cursor-pointer text-gray-600 pr-10"
                                     >
                                         <option value="true">True</option>

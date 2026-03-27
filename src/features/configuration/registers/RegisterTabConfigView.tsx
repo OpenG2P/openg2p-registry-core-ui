@@ -112,12 +112,18 @@ export default function RegisterTabConfigView({
 			<div className="mx-7.5 bg-white rounded-[10px] p-8 overflow-x-visible">
 				<div>
 					{/* Header */}
-					<div className="grid grid-cols-3 gap-4 pb-2 px-4">
+					<div className="grid grid-cols-5 gap-4 pb-2 px-4">
 						<div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
 							Tab Label
 						</div>
 						<div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
 							Tab Order
+						</div>
+						<div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
+							Used for intake
+						</div>
+						<div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
+							Status
 						</div>
 
 						<div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
@@ -134,7 +140,7 @@ export default function RegisterTabConfigView({
 							className="block -mx-8"
 						>
 							<div
-								className={`grid grid-cols-3 h-15 gap-4 items-center px-12 py-4 transition-colors ${index % 2 === 0 ? 'bg-[#D9D9D940]' : 'bg-white'
+								className={`grid grid-cols-5 h-15 gap-4 items-center px-12 py-4 transition-colors ${index % 2 === 0 ? 'bg-[#D9D9D940]' : 'bg-white'
 									} cursor-pointer`}
 							>
 
@@ -143,6 +149,12 @@ export default function RegisterTabConfigView({
 								</div>
 								<div className="text-base font-medium text-gray-500">
 									{tab.tab_order}
+								</div>
+								<div className="text-base font-medium text-gray-500">
+									{tab.used_for_new_intake_form ? 'True' : 'False'}
+								</div>
+								<div className="text-base font-medium text-gray-500">
+									{tab.is_active ? 'Active' : 'Inactive'}
 								</div>
 
 								<div className="text-base font-medium">

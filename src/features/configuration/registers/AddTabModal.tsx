@@ -75,18 +75,12 @@ export default function AddTabModal({ isOpen, onClose, onSuccess }: AddTabModalP
                             <label className="block text-sm font-semibold text-black mb-1">
                                 Tab Name
                             </label>
-                            <p className="text-[15px] text-gray-400 mb-2 italic">
-                                * Use lowercase and underscores only (e.g., test_tab)
-                            </p>
                             <div className="relative">
                                 <input
                                     type="text"
-                                    placeholder="e.g. test_tab"
+                                    placeholder="Enter Tab Label"
                                     value={formData.tabName}
-                                    onChange={(e) => {
-                                        const value = e.target.value.toLowerCase().replace(/\s+/g, '_');
-                                        setFormData({ ...formData, tabName: value });
-                                    }}
+                                    onChange={(e) => setFormData({ ...formData, tabName: e.target.value })}
                                     className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all text-gray-600 placeholder:text-gray-400"
                                 />
                             </div>

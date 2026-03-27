@@ -49,7 +49,8 @@ const TabConfigurationPage = () => {
     const registerDetails = getRegisterDetails(registerId, registers);
     const tabDetails = getTabDetails(tabId, tabs);
 
-    const label_name = tabDetails.tab_label || tabDetails.intake_form_name;
+    const rawLabel = tabDetails.tab_label || tabDetails.intake_form_name || '';
+    const label_name = rawLabel.charAt(0).toUpperCase() + rawLabel.slice(1);
 
     const breadcrumb = useBreadcrumb({
         rootItem: { label: 'Registers', href: '/configuration/registers' },
@@ -106,7 +107,7 @@ const TabConfigurationPage = () => {
                 showFilters={false}
                 showPagination={true}
                 showSubHeading
-                subHeading={`Manage sections for ${label_name}`}
+                subHeading={`${label_name} Sections`}
                 showAddNewButton={canCreate}
                 addNewButtonText={"Add New Section"}
                 onAddNewButton={() => setIsModalOpen(true)}

@@ -70,7 +70,7 @@ export const useRegisterSections = (onChangeRequestCreated: () => void) => {
         if (!tabSections) return [];
 
         return [...tabSections]
-            .sort((a, b) => (a.section_order ?? 0) - (b.section_order ?? 0))
+            .sort((a, b) => (b.section_order ?? 0) - (a.section_order ?? 0))
             .map((section) => {
                 const {
                     section_id,

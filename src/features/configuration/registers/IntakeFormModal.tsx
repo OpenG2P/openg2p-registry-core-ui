@@ -82,7 +82,7 @@ export default function IntakeFormModal({ isOpen, onClose, onSuccess }: Props) {
                     </button>
 
                     <h2 className="text-2xl font-bold text-orange-500 mb-4">
-                        Intake Form Settings
+                        Add New Intake Form
                     </h2>
 
                     <div className="space-y-4">
@@ -92,7 +92,7 @@ export default function IntakeFormModal({ isOpen, onClose, onSuccess }: Props) {
                             </label>
                             <input
                                 type="text"
-                                placeholder="e.g. household_intake"
+                                placeholder="Enter Intake Form Name"
                                 value={formData.intake_form_name}
                                 onChange={(e) =>
                                     setFormData({ ...formData, intake_form_name: e.target.value })

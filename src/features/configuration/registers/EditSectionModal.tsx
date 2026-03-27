@@ -3,8 +3,6 @@ import { X, ChevronDown } from 'lucide-react';
 import { useFetch } from '@/shared/hooks';
 import { useParams } from 'next/navigation';
 import { toast } from 'react-toastify';
-
-
 import { Section } from '../shared/types';
 
 interface EditSectionModalProps {
@@ -25,6 +23,9 @@ export default function EditSectionModal({ isOpen, onClose, onSuccess, initialDa
         no_of_verifications_required: '',
         auto_approval: false,
         is_list: false,
+        is_primary_section: false,
+        is_core_section: false,
+        section_order: '',
     });
 
     useEffect(() => {
@@ -36,6 +37,9 @@ export default function EditSectionModal({ isOpen, onClose, onSuccess, initialDa
                 no_of_verifications_required: initialData.no_of_verifications_required?.toString() || '0',
                 auto_approval: !!initialData.auto_approval,
                 is_list: !!initialData.is_list,
+                is_primary_section: !!initialData.is_primary_section,
+                is_core_section: !!initialData.is_core_section,
+                section_order: initialData.section_order?.toString() || '0',
             });
         }
     }, [initialData, isOpen]);
@@ -50,6 +54,7 @@ export default function EditSectionModal({ isOpen, onClose, onSuccess, initialDa
             method: 'POST',
             body: JSON.stringify({
                 section_id: sectionId,
+                register_id: registerId,
                 tab_id: tabId,
                 section_mnemonic: formData.section_mnemonic,
                 section_description: formData.section_description,
@@ -57,6 +62,9 @@ export default function EditSectionModal({ isOpen, onClose, onSuccess, initialDa
                 no_of_verifications_required: Number(formData.no_of_verifications_required) || 0,
                 auto_approval: formData.auto_approval,
                 is_list: formData.is_list,
+                is_primary_section: formData.is_primary_section,
+                is_core_section: formData.is_core_section,
+                section_order: Number(formData.section_order) || 0,
             })
         });
 
@@ -73,13 +81,11 @@ export default function EditSectionModal({ isOpen, onClose, onSuccess, initialDa
         onClose();
     };
 
-
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 bg-black/80  z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
             <div className="relative w-full max-w-200 max-h-[95vh] bg-[#F2BA1A] rounded-[10px] overflow-hidden flex p-1">
-
                 <div className="flex-1 w-full bg-white p-10 relative rounded-[10px] overflow-y-auto">
                     <button
                         onClick={handleCancel}
@@ -95,18 +101,12 @@ export default function EditSectionModal({ isOpen, onClose, onSuccess, initialDa
                             <label className="block text-sm font-semibold text-black mb-1">
                                 Section Name
                             </label>
-                            <p className="text-[12px] text-gray-400 mb-2 italic">
-                                * Use lowercase and underscores only (e.g., test_section)
-                            </p>
                             <div className="relative">
                                 <input
                                     type="text"
-                                    placeholder="e.g. personal_info"
+                                    placeholder="Enter Section Name"
                                     value={formData.section_mnemonic}
-                                    onChange={(e) => {
-                                        const value = e.target.value.toLowerCase().replace(/\s+/g, '_');
-                                        setFormData({ ...formData, section_mnemonic: value });
-                                    }}
+                                    onChange={(e) => setFormData({ ...formData, section_mnemonic: e.target.value })}
                                     className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all text-gray-600 placeholder:text-gray-400"
                                 />
                             </div>
@@ -193,24 +193,73 @@ export default function EditSectionModal({ isOpen, onClose, onSuccess, initialDa
                             </div>
                         </div>
 
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-sm font-semibold text-black mb-2">
+                                    Is Primary Section
+                                </label>
+                                <div className="relative">
+                                    <select
+                                        value={formData.is_primary_section ? "true" : "false"}
+                                        onChange={(e) => setFormData({ ...formData, is_primary_section: e.target.value === "true" })}
+                                        className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all bg-white appearance-none cursor-pointer text-gray-600 pr-10"
+                                    >
+                                        <option value="true">True</option>
+                                        <option value="false">False</option>
+                                    </select>
+                                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
+                                </div>
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-semibold text-black mb-2">
+                                    Section Order
+                                </label>
+                                <input
+                                    type="number"
+                                    placeholder="e.g. 0"
+                                    value={formData.section_order}
+                                    onChange={(e) => setFormData({ ...formData, section_order: e.target.value })}
+                                    className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all text-gray-600 placeholder:text-gray-400"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-sm font-semibold text-black mb-2">
+                                    Is Core Section
+                                </label>
+                                <div className="relative">
+                                    <select
+                                        value={formData.is_core_section ? "true" : "false"}
+                                        onChange={(e) => setFormData({ ...formData, is_core_section: e.target.value === "true" })}
+                                        className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all bg-white appearance-none cursor-pointer text-gray-600 pr-10"
+                                    >
+                                        <option value="true">True</option>
+                                        <option value="false">False</option>
+                                    </select>
+                                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
+                                </div>
+                            </div>
+                        </div>
+
                         <div className="flex gap-4 pt-6">
                             <button
                                 onClick={handleCancel}
-                                className="px-12 py-2.5 bg-gray-300 text-gray-700 rounded-[10px]"
+                                className="px-12 py-2.5 bg-gray-300 text-gray-700 rounded-[10px] hover:bg-gray-400 transition-colors"
                             >
                                 Cancel
                             </button>
                             <button
                                 onClick={handleSubmit}
-                                className="px-12 py-2.5 bg-black text-white rounded-[10px]"
+                                className="px-12 py-2.5 bg-black text-white rounded-[10px] hover:bg-gray-800 transition-colors"
                             >
                                 Update
                             </button>
                         </div>
                     </div>
                 </div>
-
-
             </div>
         </div>
     );

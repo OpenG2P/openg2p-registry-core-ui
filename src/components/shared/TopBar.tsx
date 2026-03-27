@@ -119,7 +119,7 @@ export default function TopBar({
                     {showSecondaryButton && (
                         <button
                             onClick={onSecondaryButton}
-                            className="h-8.5 px-6 bg-[#ED7C22] rounded-[10px] flex items-center gap-2 hover:bg-[#d96d1d] transition-colors"
+                            className="h-8.5 px-6 bg-[#F2BA1A] rounded-[10px] flex items-center gap-2 "
                         >
                             <span className="text-[16px] font-medium text-black">
                                 {secondaryButtonText}
@@ -133,7 +133,7 @@ export default function TopBar({
                     {showAddNewButton && (
                         <button
                             onClick={onAddNewButton}
-                            className="h-8.5 px-6 bg-[#ED7C22] rounded-[10px] flex items-center gap-2 hover:bg-[#d96d1d] transition-colors"
+                            className="h-8.5 px-6 bg-[#F2BA1A] rounded-[10px] flex items-center gap-2 "
                         >
                             <span className="text-[16px] font-medium text-black">
                                 {addNewButtonText}

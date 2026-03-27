@@ -53,10 +53,19 @@ export default function RegisterSectionConfigView({
         }
     };
 
-    const handleDelete = (e: React.MouseEvent, sectionId: string) => {
+    const handleDelete = (e: React.MouseEvent, section: any) => {
         e.preventDefault();
         e.stopPropagation();
 
+        if (section.is_core_section) {
+            toast.warn('This is a core section and cannot be deleted.', {
+                position: "top-right",
+                className: 'rounded-[15px] shadow-xl border border-gray-100',
+            });
+            return;
+        }
+
+        const sectionId = section.section_id;
         toast.info(
             ({ closeToast }) => (
                 <div className="p-1">
@@ -104,12 +113,18 @@ export default function RegisterSectionConfigView({
             <div className="mx-7.5 bg-white rounded-[10px] p-8 overflow-x-visible">
                 <div>
                     {/* Header */}
-                    <div className="grid grid-cols-3 gap-4 pb-2 px-4">
+                    <div className="grid grid-cols-5 gap-4 pb-2 px-4">
                         <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
                             Section Name
                         </div>
                         <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
-                            Description
+                            Section Order
+                        </div>
+                        <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
+                            Is Core
+                        </div>
+                        <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
+                            No. of Verifications
                         </div>
 
                         <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
@@ -126,14 +141,20 @@ export default function RegisterSectionConfigView({
                             className="block -mx-8"
                         >
                             <div
-                                className={`grid grid-cols-3 gap-4 items-center h-15 px-12 py-4 transition-colors ${index % 2 === 0 ? 'bg-[#D9D9D940]' : 'bg-white'
+                                className={`grid grid-cols-5 gap-4 items-center h-15 px-12 py-4 transition-colors ${index % 2 === 0 ? 'bg-[#D9D9D940]' : 'bg-white'
                                     } cursor-pointer`}
                             >
                                 <div className="text-base font-medium">
                                     {section.section_mnemonic}
                                 </div>
                                 <div className="text-base font-medium text-gray-500">
-                                    {section.section_description}
+                                    {section.section_order}
+                                </div>
+                                <div className="text-base font-medium text-gray-500">
+                                    {section.is_core_section}
+                                </div>
+                                <div className="text-base font-medium text-gray-500">
+                                    {section.no_of_verifications_required}
                                 </div>
 
                                 <div className="text-base font-medium">

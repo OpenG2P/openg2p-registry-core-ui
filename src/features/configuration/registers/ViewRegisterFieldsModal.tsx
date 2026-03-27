@@ -90,12 +90,33 @@ export default function ViewRegisterFieldsModal({
                         </div>
 
                         <div className="flex items-start">
+                            <div className="w-55 text-[16px] text-gray-400 font-medium shrink-0">Program ID</div>
+                            <div className="flex-1 text-[16px] text-black font-bold truncate">
+                                {data.program_id || '-'}
+                            </div>
+                        </div>
+
+                        <div className="flex items-start">
+                            <div className="w-55 text-[16px] text-gray-400 font-medium shrink-0">Has Image</div>
+                            <div className="flex-1 text-[16px] text-black font-bold">
+                                {data.has_image ? 'True' : 'False'}
+                            </div>
+                        </div>
+
+                        <div className="flex items-start">
+                            <div className="w-55 text-[16px] text-gray-400 font-medium shrink-0">Has Data</div>
+                            <div className="flex-1 text-[16px] text-black font-bold">
+                                {data.has_data ? 'True' : 'False'}
+                            </div>
+                        </div>
+
+                        <div className="flex items-start">
                             <div className="w-55 text-[16px] text-gray-400 font-medium shrink-0">Register Icon</div>
                             <div className="flex-1">
                                 {data.register_icon ? (
                                     <div className="w-20 h-20 bg-gray-50 border border-gray-100 rounded-2xl overflow-hidden shadow-inner flex items-center justify-center p-2">
                                         <Image
-                                            src={data.register_icon}
+                                            src={data.register_icon.startsWith('data:') ? data.register_icon : `data:image/png;base64,${data.register_icon}`}
                                             alt="Registry Logo"
                                             width={120}
                                             height={120}
