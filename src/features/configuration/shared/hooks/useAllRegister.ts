@@ -19,8 +19,9 @@ export function useAllRegister(page?: number, pageSize?: number) {
         }
     });
 
+    // Ascending order
     const registers = (data?.registers || [])
-        .sort((a, b) => (b.register_rank ?? 0) - (a.register_rank ?? 0));
+        .sort((a, b) => (a.register_rank ?? 0) - (b.register_rank ?? 0));
 
     return {
         registers,

@@ -20,8 +20,10 @@ export function useConfigSections(registerId: string, tabId: string, page: numbe
             })
         }
     });
+
+    // Acending Order
     const sections = [...(data?.sections || [])]
-        .sort((a, b) => (b.section_order ?? 0) - (a.section_order ?? 0));
+        .sort((a, b) => (a.section_order ?? 0) - (b.section_order ?? 0));
 
     return {
         sections,
