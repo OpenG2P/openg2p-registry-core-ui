@@ -15,7 +15,7 @@ export default function SectionDetailsConfigView({
     sectionUISchema,
     registerId,
     sectionId,
-    isCoreSection = true,
+    isCoreSection = false,
 }: SectionDetailsConfigViewProps) {
     const { execute: updateUISchema, loading } = useFetch();
 
