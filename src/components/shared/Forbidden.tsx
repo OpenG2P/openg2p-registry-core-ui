@@ -26,11 +26,11 @@ export default function Forbidden() {
             </div>
 
             <div className="flex flex-1 items-center justify-start px-7.5">
-                <div className="w-full bg-white rounded-[10px] py-16 flex flex-col items-center text-center">
+                <div className="w-full bg-white rounded-[10px] py-36 flex flex-col items-center text-center">
                     <Image
-                        src="/images/common/error.png"
-                        width={200}
-                        height={200}
+                        src="/images/common/forbidden.png"
+                        width={140}
+                        height={140}
                         alt="Forbidden illustration"
                         className="mb-6"
                         priority
@@ -46,9 +46,16 @@ export default function Forbidden() {
 
                     <Link href="/">
                         <button
-                            className="mb-8 flex items-center justify-center rounded-full bg-black px-8 py-1.5 text-lg font-medium text-white transition-all hover:bg-gray-800"
+                            className="flex items-center gap-3 rounded-full bg-black px-6 py-2.5 text-[16px] font-semibold text-white"
                         >
-                            {t('go_home')}
+                            <Image
+                                src="/images/common/left_white_arrow.png"
+                                width={16}
+                                height={14}
+                                alt="left arrow"
+                                priority
+                            />
+                            {t('go_back')}
                         </button>
                     </Link>
                 </div>

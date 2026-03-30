@@ -37,8 +37,15 @@ export default function RequireAction({
 
     if (loading) {
         return (
-            <div className="w-full min-h-[50vh] flex items-center justify-center">
-                <div className="w-9 h-9 border-4 border-[#E9BC19] border-t-transparent rounded-full animate-spin" />
+            <div className="w-full min-h-screen flex items-center justify-center bg-white">
+                <div className="flex flex-col items-center gap-4">
+                    <img
+                        src="/images/common/loading.gif"
+                        alt="Loading"
+                        className="w-12 h-12"
+                    />
+                    <p className="text-black/50 text-[20px]">Loading the admin UI</p>
+                </div>
             </div>
         );
     }
