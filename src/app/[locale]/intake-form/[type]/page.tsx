@@ -42,9 +42,7 @@ export default function IntakeFormPage() {
         clearAllFilters,
     } = useFilters("/api/register/filters");
 
-    const tabId = "intake_form_tab_1"
     const { submissions, loading: submissionsLoading } = useIntakeSubmissions(registerId, {
-        tabId,
         searchText: searchQuery,
         currentPage,
         pageSize,
