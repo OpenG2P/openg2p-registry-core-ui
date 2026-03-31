@@ -11,6 +11,7 @@ export function getBackendConfig() {
         keycloakLogoutUrl: process.env.KEYCLOAK_LOGOUT_URL ?? "",
         loginProviderId: process.env.LOGIN_PROVIDER_ID ?? "",
         applicationMnemonic: process.env.APPLICATION_MNEMONIC ?? "openg2p-registry",
-        cookieDomain: process.env.COOKIE_DOMAIN ?? ""
+        cookieDomain: process.env.COOKIE_DOMAIN ?? "",
+        redirectUrl: process.env.REDIRECT_URL
     };
 }

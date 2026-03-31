@@ -443,5 +443,6 @@
     "access_denied": "Access Denied",
     "forbidden_subtitle": "You don’t have permission to view this page.",
     "go_home": "Go Home",
-    "created_at": "Created At"
+    "created_at": "Created At",
+    "go_back": "Go Back"
 }
