@@ -1,6 +1,8 @@
 import "server-only";
 import { getBackendConfig } from "./backend-config";
 import { createBackendRequest } from "./backend-request";
+import { requireAuthFromCookies } from "./requireAuth";
+
 
 
 type ClientSafeConfigShape = {
@@ -40,13 +42,18 @@ class ClientSafeConfig {
         const backendUrl = `${backendConfig.backendApiUrl}/registry-config/get_registry_configuration`;
 
         try {
+            const auth = await requireAuthFromCookies();
+            if (!auth) return this.config;
+
             const backendRequest = createBackendRequest({
                 request_payload: {}
             });
 
             const response = await fetch(backendUrl, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    ...auth.backendHeaders,
+                },
                 body: JSON.stringify(backendRequest),
                 next: {
                     revalidate: 0,

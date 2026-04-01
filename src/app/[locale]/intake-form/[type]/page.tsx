@@ -42,9 +42,7 @@ export default function IntakeFormPage() {
         clearAllFilters,
     } = useFilters("/api/register/filters");
 
-    const tabId = "intake_form_tab_1"
     const { submissions, loading: submissionsLoading } = useIntakeSubmissions(registerId, {
-        tabId,
         searchText: searchQuery,
         currentPage,
         pageSize,
@@ -76,7 +74,7 @@ export default function IntakeFormPage() {
                 breadcrumb={[{ label: `${currentRegister?.register_subject || 'Register'} - Intake Form` }]}
 
 
-                showFilters
+                showFilters={false}
                 showPagination
                 showCapsule={true}
                 capsule={
@@ -99,10 +97,14 @@ export default function IntakeFormPage() {
                 onApplyFilters={applyFilters}
                 appliedFilters={appliedFilters}
                 filterConfig={filterConfig}
+                showSearch
+                searchValue={searchQuery || ''}
+                searchPlaceholder={t('search')}
+                onSearch={handleSearch}
             />
 
             <div className="px-7.5">
-                <SelectedFilters
+                {/* <SelectedFilters
                     appliedFilters={appliedFilters}
                     filterConfig={filterConfig}
                     removeFilter={removeFilter}
@@ -111,7 +113,7 @@ export default function IntakeFormPage() {
                     searchPlaceholder={t('search')}
                     onSearch={handleSearch}
                     pxClass="px-0.5"
-                />
+                /> */}
                 {formsLoading || submissionsLoading ? (
                     <div className="space-y-4">
                         {[...Array(3)].map((_, i) => (

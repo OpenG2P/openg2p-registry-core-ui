@@ -7,15 +7,15 @@ export async function POST(req: NextRequest) {
         targetEndpoint: '/register-data/get_subject_record',
         buildPayload: (body) => ({
             pagination_request: {
-                current_page: body.current_page,
-                page_size: body.page_size,
-                sort_by: body.sort_by,
-                filter_by: body.filter_by,
-                search_text: body.search_text,
+                current_page: body.current_page ?? 1,
+                page_size: body.page_size ?? 20,
+                sort_by: body.sort_by ?? "",
+                filter_by: body.filter_by ?? "",
+                search_text: body.search_text ?? "",
             },
             request_payload: {
-                subject_register_id: body.subject_register_id,
-                subject_record_id: body.subject_record_id,
+                subject_register_id: body.subject_register_id ?? "",
+                subject_record_id: body.subject_record_id ?? "",
             },
         }),
     });

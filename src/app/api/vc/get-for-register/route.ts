@@ -8,11 +8,11 @@ export async function POST(request: NextRequest) {
 
         buildPayload: (body) => ({
             pagination_request: {
-                current_page: 1,
-                page_size: 100, // fetch all VC configs
-                sort_by: "",
-                filter_by: undefined,
-                search_text: "",
+                current_page: body.current_page ?? 1,
+                page_size: body.page_size ?? 20,
+                sort_by: body.sort_by ?? "",
+                filter_by: body.filter_by ?? "",
+                search_text: body.search_text ?? "",
             },
             request_payload: {
                 register_id: body.register_id,
@@ -22,7 +22,5 @@ export async function POST(request: NextRequest) {
             },
         }),
 
-        transformResponse: (responseBody) =>
-            responseBody.response_payload,
     });
 }

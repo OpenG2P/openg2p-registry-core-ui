@@ -8,11 +8,14 @@ export async function POST(req: NextRequest) {
 		targetEndpoint: '/geo/get_g2p_geo_levels',
 		buildPayload: (body) => ({
 			pagination_request: {
-				current_page: 1,
-				page_size: 100,
+				current_page: body.current_page ?? 1,
+				page_size: body.page_size ?? 20,
+				sort_by: body.sort_by ?? "",
+				filter_by: body.filter_by ?? "",
+				search_text: body.search_text ?? "",
 			},
 			request_payload: {
-				parent_level_id: body.parent_level_id,
+				parent_level_id: body.parent_level_id ?? "",
 			}
 		})
 	});

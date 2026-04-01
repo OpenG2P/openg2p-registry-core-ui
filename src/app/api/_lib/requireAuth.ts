@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
 
 export interface AuthContext {
     accessToken: string;
@@ -50,6 +51,22 @@ export function requireAuth(req: NextRequest): AuthContext | NextResponse {
             'Content-Type': 'application/json',
             accept: 'application/json',
             Authorization: `Bearer ${accessToken}`,
+        },
+    };
+}
+
+export async function requireAuthFromCookies(): Promise<AuthContext | null> {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(TOKEN_COOKIE)?.value;
+
+    if (!token) return null;
+
+    return {
+        token,
+        backendHeaders: {
+            'Content-Type': 'application/json',
+            accept: 'application/json',
+            Authorization: `Bearer ${token}`,
         },
     };
 }
