@@ -15,6 +15,7 @@ import { validateFilters } from "@/features/filter/utils";
 
 interface FilterDropdownProps {
     onApply: (filters: FilterRule[]) => void;
+    onClose?: () => void;
     appliedFilters?: FilterRule[];
     filterConfig?: FilterConfig[];
 }
@@ -38,6 +39,7 @@ const OPERATOR_LABELS: Record<string, string> = {
 
 export default function FilterDropdown({
     onApply,
+    onClose,
     appliedFilters = [],
     filterConfig = [],
 }: FilterDropdownProps) {
@@ -68,8 +70,7 @@ export default function FilterDropdown({
     useEffect(() => {
         if (!selectedFilter) return;
 
-        const firstOperator = selectedFilter.allowed_operators[0] || "";
-        setOperator(firstOperator);
+        setOperator("");
     }, [selectedFieldName, selectedFilter]);
 
     useEffect(() => {
@@ -134,6 +135,7 @@ export default function FilterDropdown({
             value,
             operator,
             onChange: setValue,
+            placeholder: `Search ${selectedFilter.display_label}`,
         };
 
         switch (selectedFilter.filter_type) {
@@ -156,18 +158,29 @@ export default function FilterDropdown({
 
             case "boolean":
                 return (
-                    <select
-                        className="border rounded-lg px-3 py-2 text-sm w-full"
-                        value={value === true ? "true" : value === false ? "false" : ""}
-                        onChange={e => {
-                            if (e.target.value === "") return setValue("");
-                            setValue(e.target.value === "true");
-                        }}
-                    >
-                        <option value="">Select</option>
-                        <option value="true">True</option>
-                        <option value="false">False</option>
-                    </select>
+                    <div className="relative w-full">
+                        <select
+                            className="border border-[#D1D5DB] rounded-[10px] px-3 py-2 text-sm w-full appearance-none bg-white pr-10 focus:outline-none focus:border-gray-400 text-[#00000080] font-['Roboto'] font-normal h-10"
+                            value={value === true ? "true" : value === false ? "false" : ""}
+                            onChange={e => {
+                                if (e.target.value === "") return setValue("");
+                                setValue(e.target.value === "true");
+                            }}
+                        >
+                            <option value="">Select</option>
+                            <option value="true">True</option>
+                            <option value="false">False</option>
+                        </select>
+                        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                            <Image
+                                src="/images/common/down_arrow.png"
+                                alt=""
+                                width={14}
+                                height={8}
+                                className="aspect-[7/4]"
+                            />
+                        </div>
+                    </div>
                 );
 
             default:
@@ -176,74 +189,99 @@ export default function FilterDropdown({
     };
 
     return (
-        <div className="flex bg-white rounded-[10px] shadow-lg overflow-hidden min-w-110">
-            <div className="w-40 bg-gray-50 p-3 space-y-1">
-                {sortedConfig.map(filter => (
-                    <button
-                        key={filter.field_name}
-                        onClick={() => setSelectedFieldName(filter.field_name)}
-                        className={`w-full text-left px-3 py-2 rounded-lg text-sm
-                        ${filter.field_name === selectedFieldName
-                                ? "bg-[#F2BA1A] text-black"
-                                : "hover: bg-[#F2BA2D] text-black"}`}
-                    >
-                        {filter.display_label}
-                    </button>
-                ))}
+        <div
+            className="flex bg-white rounded-[10px] min-w-[500px] w-max min-h-[300px] font-['Roboto'] relative border border-[#F2BA1A]"
+            style={{ boxShadow: '0 0 8px 0 rgba(0, 0, 0, 0.25)' }}
+        >
+            {/* Close Button */}
+            <button
+                onClick={onClose}
+                className="absolute top-4 right-4 z-10"
+            >
+                <Image
+                    src="/images/common/filter_close.png"
+                    alt="Close"
+                    width={20}
+                    height={20}
+                />
+            </button>
+
+            {/* Left Sidebar */}
+            <div className="w-[148.9px] shrink-0 bg-[#D9D9D980] px-3 pt-[63.3px] pb-4 flex flex-col gap-2 rounded-l-[10px]">
+                {sortedConfig.map(filter => {
+                    const isActive = filter.field_name === selectedFieldName;
+                    return (
+                        <button
+                            key={filter.field_name}
+                            onClick={() => setSelectedFieldName(filter.field_name)}
+                            className={`w-full text-left px-4 h-10 flex items-center text-[16px] font-medium leading-[40px] capitalize transition-colors
+                            ${isActive
+                                    ? "bg-[#F2BA1A] text-black rounded-full"
+                                    : "text-[#00000080] rounded-full"}`}
+                        >
+                            {filter.display_label}
+                        </button>
+                    );
+                })}
             </div>
 
-            <div className="w-px bg-gray-200 my-4" />
-
-            <div className="flex-1 p-5 space-y-6 justify-center">
-                <div className="text-xl font-semibold">
-                    {selectedFilter && `Search by ${selectedFilter.display_label.toLowerCase()}`}
+            {/* Right Side Content */}
+            <div className="flex-1 p-6 flex flex-col">
+                <div className="text-[18px] font-medium text-[#ED7C22] leading-[20px] mb-6">
+                    {selectedFilter && `Search by ${selectedFilter.display_label}`}
                 </div>
 
                 {selectedFilter && (
-                    <>
-                        <div className="flex gap-4 items-center">
-                            <label className="w-20 text-sm font-medium">Operator</label>
+                    <div className="flex-1 space-y-4">
+                        {/* Name Label/Input */}
+                        <div className="flex flex-col gap-1.5">
+                            <label className="text-[16px] font-normal text-black leading-none">
+                                {selectedFilter.display_label}
+                            </label>
+                            {renderValueInput()}
+                        </div>
+
+                        {/* Operator Label/Input */}
+                        <div className="flex flex-col gap-1.5">
+                            <label className="text-[16px] font-normal text-black leading-none">
+                                Select Type
+                            </label>
                             <div className="relative w-full">
                                 <select
-                                    className="border rounded-lg px-3 py-2 text-sm w-full appearance-none bg-white pr-10 outline-0"
+                                    className="border border-[#D1D5DB] rounded-[10px] px-3 text-[16px] font-normal w-full appearance-none bg-white pr-10 outline-0 h-[36px] text-[#00000080]"
                                     value={operator}
                                     onChange={e => setOperator(e.target.value)}
                                 >
+                                    <option value="" disabled hidden>Select</option>
                                     {selectedFilter.allowed_operators.map(op => (
                                         <option key={op} value={op}>
                                             {OPERATOR_LABELS[op] ?? op}
                                         </option>
                                     ))}
                                 </select>
-                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 opacity-50">
                                     <Image
                                         src="/images/common/down_arrow.png"
                                         alt=""
                                         width={14}
-                                        height={14}
-                                        className=""
+                                        height={8}
                                     />
                                 </div>
                             </div>
                         </div>
 
-                        <div className="flex gap-4 items-center">
-                            <label className="w-20 text-sm font-medium">Value</label>
-                            {renderValueInput()}
-                        </div>
                         {error && (
-                            <p className="text-sm text-red-500 ml-20">
+                            <p className="text-xs text-red-500">
                                 {error}
                             </p>
                         )}
-
-                    </>
+                    </div>
                 )}
 
-                <div className="flex justify-start">
+                <div className="mt-4">
                     <button
                         onClick={applyFilter}
-                        className="bg-black text-white px-5 py-2.5 rounded-lg text-sm text-center"
+                        className="bg-black text-white px-8 py-2 rounded-full text-[16px] font-medium h-10 flex items-center justify-center transition-opacity hover:opacity-90"
                     >
                         Apply
                     </button>

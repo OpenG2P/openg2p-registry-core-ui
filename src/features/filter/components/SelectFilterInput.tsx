@@ -29,22 +29,22 @@ export default function SelectFilterInput({
         const selectedValues = Array.isArray(value) ? value : [];
 
         return (
-            <div className="border rounded-lg p-3 w-full space-y-2">
+            <div className="border border-[#D1D5DB] rounded-[10px] p-3 w-full space-y-2 font-['Roboto'] overflow-y-auto max-h-[100px]">
                 {options_source.length === 0 ? (
                     <p className="text-sm text-gray-500">No options available</p>
                 ) : (
                     options_source.map(opt => (
                         <label
                             key={opt.value}
-                            className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-1 rounded"
+                            className="flex items-center gap-2 cursor-pointer hover:bg-black/5 p-1 px-2 rounded"
                         >
                             <input
                                 type="checkbox"
                                 checked={selectedValues.includes(opt.value)}
                                 onChange={() => handleMultiSelectChange(opt.value)}
-                                className="rounded border-gray-300"
+                                className="rounded border-gray-300 h-4 w-4"
                             />
-                            <span className="text-sm">{opt.label}</span>
+                            <span className="text-[16px] font-normal text-black">{opt.label}</span>
                         </label>
                     ))
                 )}
@@ -53,9 +53,9 @@ export default function SelectFilterInput({
     }
 
     return (
-        <div className="relative w-full">
+        <div className="relative w-full font-['Roboto']">
             <select
-                className="border rounded-lg px-3 py-2 text-sm w-full appearance-none bg-white pr-10 outline-0"
+                className="border border-[#D1D5DB] rounded-[10px] px-3 text-[16px] font-normal w-full appearance-none bg-white pr-10 outline-0 h-[36px] text-[#00000080]"
                 value={value || ""}
                 onChange={e => onChange(e.target.value)}
             >

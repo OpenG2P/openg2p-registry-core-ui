@@ -31,4 +31,5 @@ export interface ValueInputProps {
     value: any;
     operator: string;
     onChange: (value: any) => void;
+    placeholder?: string;
 }
