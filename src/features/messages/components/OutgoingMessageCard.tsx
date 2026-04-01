@@ -64,7 +64,7 @@ export default function OutgoingMessageCard({ message }: Props) {
                         >
                             {"View More"}
                             <Image
-                                src="/images/common/right_arrow.png"
+                                src="/images/common/arrow_next_01.png"
                                 alt="Arrow"
                                 width={14}
                                 height={14}

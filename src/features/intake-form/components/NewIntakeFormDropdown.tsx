@@ -23,7 +23,7 @@ export default function NewIntakeFormDropdown({
         <div ref={ref} className="relative">
             <button
                 onClick={() => setOpen(o => !o)}
-                className={`flex border-b items-center gap-2 px-4 py-1 mt-2 rounded-[10px] bg-white ${open ? '' : 'border border-[#F77F57]'
+                className={`flex items-center gap-2 px-4 py-1 mt-2 rounded-[10px] bg-white ${open ? '' : 'border border-[#F77F57]'
                     }`}
             >
                 <span className="text-[16px] font-medium text-[#1E1E1E]">
@@ -55,6 +55,12 @@ export default function NewIntakeFormDropdown({
                             onClick={() => setOpen(false)}
                         />
                     </div>
+
+                    {forms.length === 0 && (
+                        <div className="px-4 py-3 text-sm text-gray-500">
+                            No options available
+                        </div>
+                    )}
 
                     {forms.map(form => (
                         <DropdownItem

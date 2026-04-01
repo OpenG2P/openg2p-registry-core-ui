@@ -59,7 +59,7 @@ export default function RegisterChangeRequestCard({
 
     if (loading) {
         return (
-            <div className="relative rounded-[10px] bg-[#F2BA1A] px-8 pt-4 pb-7 overflow-hidden animate-pulse">
+            <div className="relative rounded-[10px] bg-[#F2BA1A] px-7.25 pt-4 pb-7.25 overflow-hidden animate-pulse">
                 <div className="flex items-center justify-between">
                     <div className="h-6 w-40 rounded bg-black/20" />
                     <div className="h-15 w-20 rounded-[20px] bg-black/20" />
@@ -75,13 +75,13 @@ export default function RegisterChangeRequestCard({
     }
 
     return (
-        <div className="relative rounded-[10px] bg-[#F2BA1A] px-8 pt-5 pb-8 overflow-hidden">
+        <div className="relative rounded-[10px] bg-[#F2BA1A] px-7.25 pt-5 pb-7.25 overflow-hidden">
             <div className="flex items-center justify-between">
                 <h3 className="text-[24px] font-semibold text-black leading-none">
                     {t("changeRequest")}
                 </h3>
                 <div className="flex h-15 w-20 items-center justify-center rounded-[10px] border-3 border-white bg-[#F2BA1A] text-[34px] font-bold text-black">
-                    {count}
+                    {count.toString().padStart(2, '0')}
                 </div>
             </div>
 

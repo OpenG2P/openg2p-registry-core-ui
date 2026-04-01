@@ -216,7 +216,7 @@ const AttachedDocuments = ({ documents = [] }: { documents?: any[] }) => {
                             }`}
                     >
                         {doc.document_label}
-                        <Image src="/images/common/right_arrow.png" alt="arrow" width={14} height={14} />
+                        <Image src="/images/common/arrow_next_01.png" alt="arrow" width={14} height={14} />
                     </a>
                 ))}
 

@@ -37,7 +37,7 @@ export default function ViewAll({
             >
                 {label}
                 <Image
-                    src="/images/common/right_arrow.png"
+                    src="/images/common/arrow_next_01.png"
                     alt="arrow"
                     width={12}
                     height={12}
