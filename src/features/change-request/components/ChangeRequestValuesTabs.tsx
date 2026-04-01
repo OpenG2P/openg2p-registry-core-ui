@@ -48,7 +48,7 @@ export function ChangeRequestValuesTabs({
                 >
                     {t("change_possible_duplicates")}
                     {crResults.length > 0 && (
-                        <span className="absolute -top-3 right-3 bg-[#ED6C6C] text-white text-[12px] font-bold rounded-[10px] w-[24px] h-[24px] flex items-center justify-center shadow-sm">
+                        <span className="absolute -top-3 right-3 bg-[#ED6C6C] text-white text-[12px] font-bold rounded-[10px] w-6 h-6 flex items-center justify-center shadow-sm">
                             {String(crResults.length).padStart(2, "0")}
                         </span>
                     )}
@@ -64,7 +64,7 @@ export function ChangeRequestValuesTabs({
                 >
                     {t("register_possible_duplicates")}
                     {regResults.length > 0 && (
-                        <span className="absolute -top-3 right-3 bg-[#ED6C6C] text-white text-[12px] font-bold rounded-[10px] w-[24px] h-[24px] flex items-center justify-center shadow-sm">
+                        <span className="absolute -top-3 right-3 bg-[#ED6C6C] text-white text-[12px] font-bold rounded-[10px] w-6 h-6 flex items-center justify-center shadow-sm">
                             {String(regResults.length).padStart(2, "0")}
                         </span>
                     )}

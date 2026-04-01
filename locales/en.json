@@ -353,7 +353,7 @@
     "No": "No",
     "family_information": "Family Information",
     "family_members_records": "Family Members Records",
-    "birth_date": "Birth Date",
+    "birth_date": "Date of Birth",
     "role_in_household": "Role in Household",
     "Head": "Head",
     "Dependent": "Dependent",
@@ -444,5 +444,7 @@
     "forbidden_subtitle": "You don’t have permission to view this page.",
     "go_home": "Go Home",
     "created_at": "Created At",
-    "go_back": "Go Back"
+    "go_back": "Go Back",
+    "add_new_record": "Add New Record",
+    "poverty_information": "Socio-Economic Profile"
 }
