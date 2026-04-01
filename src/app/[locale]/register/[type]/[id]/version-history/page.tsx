@@ -11,7 +11,7 @@ import { CapsuleDropdown, TabsLayout } from '@/components/shared';
 import { VerificationCard } from '@/features/change-request/components';
 import { useTranslations } from 'next-intl';
 import { useRegisterTabs } from '@/context/RegisterTabsContext';
-import { useBreadcrumb } from '@/shared/hooks';
+import { useBreadcrumb, useFetch } from '@/shared/hooks';
 import { useChangeRequest, useVerifications } from '@/features/change-request/hooks';
 import { useRecordHistoryDates, useRecordHistoryChanges } from '@/features/register/hooks/useRecordHistory';
 import { useEffect, useMemo, useReducer, useRef } from 'react';
@@ -141,6 +141,19 @@ export default function VersionHistoryPage() {
         internal_record_id: internalRecordId || '',
         tab_id: activeTabId,
         truncated_created_date: selectedDate,
+    });
+
+    const { data: versionHistory, loading } = useFetch<any>({
+        url: `/api/register/versions`,
+        enabled: !!registerId && !!internalRecordId && !!activeTabId,
+        options: {
+            method: "POST",
+            body: JSON.stringify({
+                register_id: registerId,
+                internal_record_id: internalRecordId,
+                tab_id: activeTabId
+            }),
+        },
     });
 
     // Here selectedVersionId is the change request id 
@@ -285,33 +298,40 @@ export default function VersionHistoryPage() {
                 <div className={`flex gap-6 transition-opacity duration-200 ${isContentLoading ? 'opacity-60 pointer-events-none' : 'opacity-100'}`}>
                     <div className="w-[75%] flex flex-col gap-6">
                         {hasVersionHistory && (
-                            <div className="bg-white rounded-[10px] px-6 py-5 flex items-center gap-6">
-                                <CapsuleDropdown
-                                    label={t("selectDate")}
-                                    items={dateOptions}
-                                    value={selectedDate ?? undefined}
-                                    onChange={onDateSelect}
-                                />
+                            <div className="bg-white rounded-[10px] px-6 py-5 flex items-center justify-between">
+                                <div className="flex items-center gap-6">
+                                    <CapsuleDropdown
+                                        label={t("selectDate")}
+                                        items={dateOptions}
+                                        value={selectedDate ?? undefined}
+                                        onChange={onDateSelect}
+                                    />
 
-                                <CapsuleDropdown
-                                    label={t("selectSection")}
-                                    items={sectionOptions.map(s => s.label)}
-                                    value={
-                                        selectedSectionId
-                                            ? sectionOptions.find(s => s.id === selectedSectionId)?.label
-                                            : undefined
-                                    }
-                                    onChange={onSectionSelect}
-                                    key={selectedDate ?? 'date'}
-                                />
+                                    <CapsuleDropdown
+                                        label={t("selectSection")}
+                                        items={sectionOptions.map(s => s.label)}
+                                        value={
+                                            selectedSectionId
+                                                ? sectionOptions.find(s => s.id === selectedSectionId)?.label
+                                                : undefined
+                                        }
+                                        onChange={onSectionSelect}
+                                        key={selectedDate ?? 'date'}
+                                    />
 
-                                <CapsuleDropdown
-                                    label={t("selectVersion")}
-                                    items={versionOptions.map(v => v.label)}
-                                    value={versionOptions.find(v => v.value === selectedVersionId)?.label}
-                                    onChange={onVersionSelect}
-                                    key={`${selectedDate}-${selectedSectionId}`}
-                                />
+                                    <CapsuleDropdown
+                                        label={t("selectVersion")}
+                                        items={versionOptions.map(v => v.label)}
+                                        value={versionOptions.find(v => v.value === selectedVersionId)?.label}
+                                        onChange={onVersionSelect}
+                                        key={`${selectedDate}-${selectedSectionId}`}
+                                    />
+                                </div>
+
+                                <div className="text-[16px] text-black font-medium">
+                                    Total Versions <span className="text-[20px] font-bold text-[#ED7C22]">{versionHistory.number_of_versions}</span>
+                                </div>
+
                             </div>
                         )}
 
@@ -326,6 +346,7 @@ export default function VersionHistoryPage() {
                                     <SectionRenderer
                                         section={stableSectionUISchema}
                                         hideEditButton
+                                        mode="CRView"
                                     />
                                 </WidgetProvider>
                             </div>
