@@ -14,10 +14,10 @@ export interface IntakeFormSection {
     register_id: string;
     section_id: string;
     tab_id: string;
-    tab_label:string;
-    intake_form_name:string;
-    intake_form_description:string;
-    used_for_new_intake_form:boolean;
+    tab_label: string;
+    intake_form_name: string;
+    intake_form_description: string;
+    used_for_new_intake_form: boolean;
     section_mnemonic: string;
     section_description: string | null;
     section_ui_schema: any;
@@ -26,6 +26,7 @@ export interface IntakeFormSection {
 }
 
 export interface IntakeFormSubmission {
+    record_name: string;
     submission_id: string;
     submission_reference: string;
     intake_form_status: IntakeFormStatus;

@@ -54,19 +54,31 @@ export function requireAuth(req: NextRequest): AuthContext | NextResponse {
         },
     };
 }
-
+// TODO: Required a public api that will provide registry logo and name
 export async function requireAuthFromCookies(): Promise<AuthContext | null> {
     const cookieStore = await cookies();
-    const token = cookieStore.get(TOKEN_COOKIE)?.value;
+    const accessToken = cookieStore.get('X-Access-Token')?.value;
+    const idToken = cookieStore.get('X-ID-Token')?.value;
 
-    if (!token) return null;
+
+    if (!accessToken && !idToken) {
+        return null;
+    }
+
+    if (!accessToken && idToken) {
+        return null;
+    }
+
+    if (!accessToken) {
+        return null;
+    }
 
     return {
-        token,
+        accessToken,
         backendHeaders: {
             'Content-Type': 'application/json',
             accept: 'application/json',
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${accessToken}`,
         },
     };
 }

@@ -10,10 +10,10 @@ export default function NumberFilterInput({
     if (operator === "between") {
         const [min, max] = Array.isArray(value) ? value : ["", ""];
         return (
-            <div className="flex items-center gap-2 w-full">
+            <div className="flex items-center gap-2 w-full font-['Roboto']">
                 <input
                     type="number"
-                    className="border rounded-lg px-3 py-2 text-sm w-1/2 outline-0"
+                    className="border border-[#D1D5DB] rounded-[10px] px-3 text-[16px] font-normal w-1/2 outline-0 h-[36px] text-[#00000080]"
                     placeholder="Min"
                     value={min || ""}
                     onChange={e => onChange([e.target.value, max])}
@@ -21,7 +21,7 @@ export default function NumberFilterInput({
                 <span className="text-gray-400">-</span>
                 <input
                     type="number"
-                    className="border rounded-lg px-3 py-2 text-sm w-1/2 outline-0"
+                    className="border border-[#D1D5DB] rounded-[10px] px-3 text-[16px] font-normal w-1/2 outline-0 h-[36px] text-[#00000080]"
                     placeholder="Max"
                     value={max || ""}
                     onChange={e => onChange([min, e.target.value])}
@@ -33,7 +33,7 @@ export default function NumberFilterInput({
     return (
         <input
             type="number"
-            className="border rounded-lg px-3 py-2 text-sm w-full outline-0"
+            className="border border-[#D1D5DB] rounded-[10px] px-3 text-[16px] font-normal w-full outline-0 h-[36px] text-[#00000080] font-['Roboto']"
             value={value || ""}
             onChange={e => onChange(e.target.value)}
         />

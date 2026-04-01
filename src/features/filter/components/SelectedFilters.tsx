@@ -65,14 +65,14 @@ export default function SelectedFilters({
                 </span>
 
                 {appliedFilters.length === 0 ? (
-                    <div className="h-8.5 flex items-center bg-[#fcf0d6] rounded-[10px] px-3 text-sm">
+                    <div className="h-8.5 flex items-center bg-[#F2BA1A40] rounded-[10px] px-3 text-[#00000080] font-['Roboto'] text-[14px] not-italic font-normal leading-normal">
                         None
                     </div>
                 ) : (
                     appliedFilters.map((filter, index) => (
                         <div
                             key={index}
-                            className="h-8.5 flex items-center bg-[#fcf0d6] rounded-[10px] px-3 text-sm gap-2"
+                            className="h-8.5 flex items-center bg-[#F2BA1A40] rounded-[10px] px-3 gap-2 text-[#00000080] text-[14px] font-normal leading-normal"
                         >
                             <span>{getFilterLabel(filter)}</span>
                             <button

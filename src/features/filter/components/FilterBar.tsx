@@ -38,23 +38,28 @@ export default function FilterBar({
         <div className="relative inline-block items-center" ref={dropdownRef}>
             <button
                 onClick={() => setOpen((prev) => !prev)}
-                className="h-7.5 flex items-center gap-8 px-4 rounded-[10px] bg-[#F2BA1A]"
+                className="w-[130px] h-[34px] flex items-center justify-between px-4 rounded-[10px] bg-[#F2BA1A]"
                 disabled={filterLoading}
-            >   <span className="font-medium text-[16px] leading-none tracking-normal text-[#1E1E1E]">
+            >   <span className=" text-[16px] font-medium leading-normal text-[#1E1E1E]">
                     {filterLoading ? t('loading') : t('filters')}
                 </span>
 
-                <Image src="/images/common/filter_icon.png" width={16} height={16} alt={t('filters')} />
+                <Image src="/images/common/filters_icon.png" width={24} height={24} alt={t('filters')} />
             </button>
 
             {open && !filterLoading && (
-                <div className="absolute -right-15 top-9 mt-3 bg-white border border-gray-200 rounded-[10px] z-50 flex flex-col shadow-lg">
-                    <div className="absolute -top-2.5 right-17.5 w-5 h-5 bg-white border-l border-t border-gray-200 rotate-45" />
-                    <FilterDropdown
-                        onApply={handleApply}
-                        appliedFilters={appliedFilters}
-                        filterConfig={filterConfig}
+                <div className="absolute -right-8 top-12 z-50">
+                    <div
+                        className="absolute -top-[9px] right-[45px] z-20 bg-[#FFFFFF] border-t border-r border-[#F2BA1A] w-[20px] h-[20px] -rotate-45 rounded-[2px] shadow-[0_0_4px_0_rgba(0,0,0,0.25)] [clip-path:polygon(-20px_-20px,_40px_-20px,_40px_40px)]"
                     />
+                    <div className="relative z-10">
+                        <FilterDropdown
+                            onApply={handleApply}
+                            onClose={() => setOpen(false)}
+                            appliedFilters={appliedFilters}
+                            filterConfig={filterConfig}
+                        />
+                    </div>
                 </div>
             )}
         </div>
