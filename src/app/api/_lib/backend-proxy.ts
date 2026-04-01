@@ -5,7 +5,7 @@ import { BackendResponse, RequestBody } from "./backend-types";
 import { createBackendRequest } from "./backend-request";
 import { requireAuth } from "./requireAuth";
 
-export type PayloadBuilder = (jsonBody: any) => RequestBody;
+export type PayloadBuilder = (body: any) => RequestBody;
 export type ResponseTransformer = (responseBody: any) => any;
 
 interface BackendProxyOptions {
