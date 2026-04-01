@@ -40,7 +40,7 @@ export default function ChangeRequestHeader({
         ? t(rawTitle, { default: rawTitle })
         : t('changeRequest');
     return (
-        <div className="rounded-[10px] bg-[#F2BA1A33]/80 px-10 py-5 flex flex-col border border-dashed border-[#ED7C22]">
+        <div className="rounded-[10px] bg-[#F2BA1A33]/80 px-10 pt-5 pb-4 flex flex-col border border-dashed border-[#ED7C22]">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <InfoSection
                     title={title}
@@ -56,13 +56,13 @@ export default function ChangeRequestHeader({
 
             {details.approval_status === "PENDING" && (
                 <Can action={CHANGE_REQUEST_ACTIONS.approve}>
-                    <div className="my-4 border-t-2 border-[#F2BA1A]" />
+                    <div className="my-3 border-t border-[#F2BA1A]" />
                     <div className="flex items-center gap-4">
                         <button
                             type="button"
                             disabled={loadingAction}
                             onClick={onReject}
-                            className="px-4 py-2 text-[14px] font-medium rounded-[10px] bg-white text-black/50"
+                            className="px-4 py-1.5 text-[14px] font-medium rounded-[10px] bg-white text-black/50"
                         >
                             {t('rejectChange')}
                         </button>
@@ -71,7 +71,7 @@ export default function ChangeRequestHeader({
                             type="button"
                             disabled={loadingAction}
                             onClick={onApprove}
-                            className="px-4 py-2 text-[14px] font-medium rounded-[10px] bg-black text-white"
+                            className="px-4 py-1.5 text-[14px] font-medium rounded-[10px] bg-black text-white"
                         >
                             {t('approveChange')}
                         </button>
@@ -188,7 +188,7 @@ const AttachedDocuments = ({ documents = [] }: { documents?: ChangeRequestDocume
                         className="flex items-center gap-2 cursor-pointer"
                     >
                         {doc.document_label}
-                        <Image src="/images/common/right_arrow.png" alt="arrow" width={14} height={14} />
+                        <Image src="/images/common/arrow_next_01.png" alt="arrow" width={14} height={14} />
                     </span>
                 ))}
 

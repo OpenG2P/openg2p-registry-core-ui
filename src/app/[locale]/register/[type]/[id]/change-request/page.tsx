@@ -84,7 +84,7 @@ export default function ChangeRequestPage() {
                     <span className="text-[18px] font-medium text-black">
                         {t('pendingRequests')}
                     </span>
-                    <span className="text-[24px] font-bold text-[#F2BA1A]">
+                    <span className="text-[24px] font-bold text-[#ED7C22]">
                         {pendingRequestsCount.toString().padStart(2, '0')}
                     </span>
                 </div>

@@ -101,7 +101,7 @@ export default function DeduplicationCard({ results, loading, type, t }: Props) 
                                 onClick={() => setExpandedIndex(index)}
                                 className="flex items-center gap-1 text-[14px] text-black/60 cursor-pointer"
                             >
-                                View More <Image src="/images/common/right_arrow.png" alt="more" width={14} height={14} className="rotate-90 opacity-[0.5]" />
+                                View More <Image src="/images/common/arrow_next_01.png" alt="more" width={14} height={14} className="rotate-90 opacity-[0.5]" />
                             </button>
                         )}
 
@@ -134,7 +134,7 @@ export default function DeduplicationCard({ results, loading, type, t }: Props) 
                                     onClick={() => setExpandedIndex(null)}
                                     className="flex items-center gap-1 text-[14px] text-black/60 cursor-pointer"
                                 >
-                                    View Less <Image src="/images/common/right_arrow.png" alt="less" width={14} height={14} className="-rotate-90 opacity-[0.5]" />
+                                    View Less <Image src="/images/common/arrow_next_01.png" alt="less" width={14} height={14} className="-rotate-90 opacity-[0.5]" />
                                 </button>
                             </div>
                         )}

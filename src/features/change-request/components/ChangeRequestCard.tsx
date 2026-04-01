@@ -31,6 +31,11 @@ export default function ChangeRequestCard({
         ? t(rawTitle, { default: rawTitle })
         : t('changeRequestFallback', { index: index + 1 });
 
+    // const title = `${(index + 1).toString().padStart(2, '0')} ${rawTitle
+    //         ? t(rawTitle, { default: rawTitle })
+    //         : t('changeRequestFallback', { index: index + 1 })
+    //     }`;
+
     const statusClass = statusClassMap[changeRequest.approval_status] ?? "text-gray-500";
 
     const { documents, loading } =
@@ -117,7 +122,7 @@ export default function ChangeRequestCard({
                             >
                                 {doc.document_label}
                                 <Image
-                                    src="/images/common/right_arrow.png"
+                                    src="/images/common/arrow_next_01.png"
                                     alt="arrow"
                                     width={14}
                                     height={14}
@@ -161,7 +166,7 @@ export default function ChangeRequestCard({
                 >
                     {t('viewDetails')}
                     <Image
-                        src="/images/common/right_arrow.png"
+                        src="/images/common/arrow_next_01.png"
                         alt="arrow"
                         width={14}
                         height={14}
