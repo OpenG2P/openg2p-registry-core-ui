@@ -44,6 +44,7 @@ export default function IntakeFormSubmissionPage() {
         }
     });
     // TODO: Recheck the data structure for submission
+    // Also check the response of get_submission api.
     const sectionDataMap = useMemo(() => {
         if (!submission?.section_payloads) return {};
 
@@ -55,10 +56,21 @@ export default function IntakeFormSubmissionPage() {
         for (const section of submission.section_payloads) {
             if (!section.records?.length) continue;
 
+            const existing = map[section.section_register_id];
+
             if (section.is_list === true) {
-                map[section.section_register_id] = { records: section.records };
+                if (existing && 'records' in existing) {
+                    const existingList = existing as { records: RegisterFlattenedRecord[] };
+                    existingList.records = [...existingList.records, ...section.records];
+                } else {
+                    map[section.section_register_id] = { records: [...section.records] };
+                }
             } else {
-                map[section.section_register_id] = section.records[0];
+                if (existing && !('records' in existing)) {
+                    map[section.section_register_id] = { ...existing, ...section.records[0] };
+                } else if (!existing) {
+                    map[section.section_register_id] = { ...section.records[0] };
+                }
             }
         }
 
