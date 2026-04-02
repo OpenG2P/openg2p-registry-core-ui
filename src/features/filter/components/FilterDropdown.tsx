@@ -214,10 +214,10 @@ export default function FilterDropdown({
                         <button
                             key={filter.field_name}
                             onClick={() => setSelectedFieldName(filter.field_name)}
-                            className={`w-full text-left px-4 h-10 flex items-center text-[16px] font-medium leading-[40px] capitalize transition-colors
-                            ${isActive
-                                    ? "bg-[#F2BA1A] text-black rounded-full"
-                                    : "text-[#00000080] rounded-full"}`}
+                            className={`w-full text-left py-2 px-4 min-h-[40px] flex items-center text-[14px] font-medium leading-tight capitalize transition-colors truncate
+    ${isActive
+                                    ? "bg-[#F2BA1A] text-black rounded-[20px]"
+                                    : "text-[#00000080] rounded-[20px]"}`}
                         >
                             {filter.display_label}
                         </button>

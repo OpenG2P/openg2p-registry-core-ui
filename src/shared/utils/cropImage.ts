@@ -61,5 +61,5 @@ export default async function getCroppedImg(
     canvas.width = pixelCrop.width;
     canvas.height = pixelCrop.height;
     ctx.putImageData(data, 0, 0);
-    return canvas.toDataURL('image/jpeg');
+    return canvas.toDataURL('image/png');
 }
