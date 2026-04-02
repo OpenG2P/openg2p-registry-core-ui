@@ -383,5 +383,17 @@
     "intakeForms": "Vstupní formuláře",
     "pendingSubmissions": "Čekající odeslání",
     "draftSubmissions": "Koncepty odeslání",
-    "messages": "Zprávy"
+    "messages": "Zprávy",
+    "loadingAdmin": "Načítání administrátorského rozhraní",
+    "genericErrorTitle": "Něco se pokazilo",
+    "genericErrorDescription": "Došlo k neočekávané chybě. Zkuste to prosím později.",
+    "tokenSizeTitle": "Překročen limit velikosti tokenu",
+    "tokenSizeDescription": "Přístupový token překračuje maximální povolenou velikost (limit cookie 4KB) a nelze jej zpracovat.",
+    "tokenSizeCause": "Příčina: nadměrné role zahrnuté v tokenu.",
+    "requiredAction": "Požadovaná akce (Admin)",
+    "stepReduceRoles": "Snižte počet rolí přiřazených uživateli",
+    "stepOptimizeClaims": "Optimalizujte token (odstraňte zbytečná data)",
+    "stepReissueToken": "Znovu vystavte token po úpravě rolí",
+    "accessDenied": "Přístup odepřen",
+    "noPermission": "Nemáte oprávnění k zobrazení této aplikace."
 }
