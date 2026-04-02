@@ -43,6 +43,7 @@ export default function IntakeFormSubmissionPage() {
             if (refetch) refetch();
         }
     });
+    // TODO: Recheck the data structure for submission
     const sectionDataMap = useMemo(() => {
         if (!submission?.section_payloads) return {};
 
