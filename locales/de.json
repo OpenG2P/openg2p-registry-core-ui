@@ -384,5 +384,17 @@
     "intakeForms": "Formulare",
     "pendingSubmissions": "Ausstehende Einreichungen",
     "draftSubmissions": "Entwürfe",
-    "messages": "Nachrichten"
+    "messages": "Nachrichten",
+    "loadingAdmin": "Admin-Oberfläche wird geladen",
+    "genericErrorTitle": "Etwas ist schiefgelaufen",
+    "genericErrorDescription": "Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.",
+    "tokenSizeTitle": "Token-Größenlimit überschritten",
+    "tokenSizeDescription": "Das Zugriffstoken überschreitet die maximal zulässige Größe (4KB Cookie-Limit) und kann nicht verarbeitet werden.",
+    "tokenSizeCause": "Ursache: Zu viele Rollenansprüche im Token enthalten.",
+    "requiredAction": "Erforderliche Maßnahmen (Admin)",
+    "stepReduceRoles": "Reduzieren Sie die Anzahl der dem Benutzer zugewiesenen Rollen",
+    "stepOptimizeClaims": "Optimieren Sie die Token-Claims (unnötige Daten entfernen)",
+    "stepReissueToken": "Token nach Anpassung der Rollen neu ausstellen",
+    "accessDenied": "Zugriff verweigert",
+    "noPermission": "Sie haben keine Berechtigung, diese Anwendung anzuzeigen."
 }

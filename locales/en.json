@@ -441,7 +441,7 @@
     "internal_record_id": "Internal Record ID",
     "candidate_change_request_id": "Candidate Change Request ID",
     "access_denied": "Access Denied",
-    "forbidden_subtitle": "You don’t have permission to view this page.",
+    "forbidden_subtitle": "You don't have permission to view this page.",
     "go_home": "Go Home",
     "created_at": "Created At",
     "go_back": "Go Back",
@@ -461,5 +461,18 @@
     "number_of_female_members": "Number of Female Members",
     "number_of_male_members": "Number of Male Members",
     "other_land_owner": "Other Land Owner",
-    "functional_record_id": "Functional Record ID"
+    "functional_record_id": "Functional Record ID",
+    "forbidden_subtitle_application": "You don't have permission to view this application.",
+    "loadingAdmin": "Loading the admin UI",
+    "genericErrorTitle": "Something went wrong",
+    "genericErrorDescription": "An unexpected error occurred. Please try again later.",
+    "tokenSizeTitle": "Token Size Limit Exceeded",
+    "tokenSizeDescription": "The access token exceeds the maximum allowed size (4KB cookie limit) and cannot be processed.",
+    "tokenSizeCause": "Root cause: excessive role claims included in the token payload.",
+    "requiredAction": "Required Action (Admin)",
+    "stepReduceRoles": "Reduce the number of roles assigned to the user",
+    "stepOptimizeClaims": "Optimize token claims (remove unnecessary data)",
+    "stepReissueToken": "Reissue the token after role adjustment",
+    "accessDenied": "Access Denied",
+    "noPermission": "You don't have permission to view this application."
 }

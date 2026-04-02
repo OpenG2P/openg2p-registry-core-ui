@@ -11,6 +11,7 @@ import {
 } from "react";
 
 import { useAuth } from "@/context/Authcontext";
+import { useTranslations } from "next-intl";
 
 interface RbacContextType {
     loading: boolean;
@@ -27,6 +28,7 @@ export function RbacProvider({ children }: { children: ReactNode }) {
     const { isLoggedIn, handleUnauthorized } = useAuth();
     const [loading, setLoading] = useState(true);
     const [actionSet, setActionSet] = useState<Set<string>>(new Set());
+    const t = useTranslations();
 
     const loadActions = useCallback(async () => {
         if (!isLoggedIn) {
@@ -96,7 +98,7 @@ export function RbacProvider({ children }: { children: ReactNode }) {
                         alt="Loading"
                         className="w-12 h-12"
                     />
-                    <p className="text-black/50 text-[20px]">Loading the admin UI</p>
+                    <p className="text-black/50 text-[20px]">{t('loadingAdmin')}</p>
                 </div>
             </div>
         );
