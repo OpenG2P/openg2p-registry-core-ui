@@ -176,7 +176,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         );
     }
 
-    if (errorCode === 'G2P-AUT-403' || !isLoggedIn) {
+    if (errorCode === 'G2P-AUT-403') {
         return (
             <div className="w-full min-h-screen flex items-center justify-center bg-white px-4">
                 <div className="flex flex-1 items-center justify-start">
@@ -202,6 +202,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             </div>
         );
     }
+
+    if (!isLoggedIn) return null;
 
     return (
         <AuthContext.Provider value={{ isLoggedIn, user, logout, handleUnauthorized }}>
