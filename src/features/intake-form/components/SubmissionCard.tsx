@@ -51,10 +51,10 @@ export function IntakeFormSubmissionCard({ submission, registerType }: IntakeFor
                     <div className="space-y-4">
                         <h3 className="text-[18px] font-semibold text-[#ED7C22]">&nbsp;</h3>
                         <div className="space-y-2 border-l-2 border-[#D9D9D9] pl-6">
-
                             <KeyValue label="Submission No of Attempts" value={String(submission.submission_no_of_attempts ?? 0)} />
                             <KeyValue label="No of Verifications Required" value={String(submission.no_of_verifications_required)} />
                             <KeyValue label="No of Verifications Done" value={String(submission.no_of_verifications_done)} />
+                            <div className="invisible" aria-hidden="true"><KeyValue label="Fake label" value="Fake value" /></div>
                         </div>
                     </div>
 
