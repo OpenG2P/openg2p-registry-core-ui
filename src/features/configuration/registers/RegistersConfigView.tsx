@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Link } from '@/i18n/navigation';
+import { useTranslations } from 'next-intl';
 import AddRegisterModal from './AddRegisterModal';
 import ViewRegisterFieldsModal from './ViewRegisterFieldsModal';
 import { Register } from '../shared/types';
@@ -31,6 +32,7 @@ export default function RegistersConfigView({
     isModalOpen,
     onCloseModal,
 }: RegistersConfigViewProps) {
+    const t = useTranslations();
     const { execute: deleteRegister } = useFetch();
     const [isViewModalOpen, setIsViewModalOpen] = useState(false);
     const [viewData, setViewData] = useState<Register | undefined>(undefined);
@@ -43,13 +45,13 @@ export default function RegistersConfigView({
             });
 
             if (result) {
-                toast.success(`Register "${name}" deleted successfully`);
+                toast.success(t('toast_register_deleted', { name }));
                 refresh();
             } else {
-                toast.error('Failed to delete register');
+                toast.error(t('toast_register_delete_failed'));
             }
         } catch (error) {
-            toast.error('An error occurred while deleting the register');
+            toast.error(t('toast_register_delete_error'));
         }
     };
 
@@ -58,7 +60,7 @@ export default function RegistersConfigView({
         e.stopPropagation();
 
         if (register.has_data) {
-            toast.error('Cannot delete register because it has associated data.');
+            toast.error(t('toast_register_delete_has_data'));
             return;
         }
 
@@ -67,7 +69,7 @@ export default function RegistersConfigView({
         toast.info(
             ({ closeToast }) => (
                 <div className="p-1">
-                    <p className="font-bold text-gray-800 mb-3">Are you sure you want to delete the register "{name}"?</p>
+                    <p className="font-bold text-gray-800 mb-3">{t('confirm_delete_register', { name })}</p>
                     <div className="flex gap-3">
                         <button
                             onClick={async () => {
@@ -76,13 +78,13 @@ export default function RegistersConfigView({
                             }}
                             className="bg-[#ED7C22] text-white px-4 py-1.5 rounded-full text-sm font-semibold hover:bg-[#d66a1a] transition-colors shadow-sm"
                         >
-                            Remove
+                            {t('remove')}
                         </button>
                         <button
                             onClick={closeToast}
                             className="bg-gray-100 text-gray-600 px-4 py-1.5 rounded-full text-sm font-semibold hover:bg-gray-200 transition-colors"
                         >
-                            Cancel
+                            {t('cancel')}
                         </button>
                     </div>
                 </div>
@@ -121,22 +123,22 @@ export default function RegistersConfigView({
                     {/* Header */}
                     <div className="grid grid-cols-6 gap-4 pb-2 px-8 border-b border-gray-100">
                         <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
-                            Icon
+                            {t('icon')}
                         </div>
                         <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
-                            Mnemonic
+                            {t('mnemonic')}
                         </div>
                         <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
-                            Master Register
+                            {t('master_register')}
                         </div>
                         <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
-                            Rank
+                            {t('rank')}
                         </div>
                         <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
-                            Purpose
+                            {t('purpose')}
                         </div>
                         <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
-                            Actions
+                            {t('actions')}
                         </div>
                     </div>
 
@@ -181,12 +183,12 @@ export default function RegistersConfigView({
                                     <button
                                         onClick={(e) => handleView(e, register)}
                                         className="flex items-center text-[#1cc9b7] cursor-pointer hover:opacity-80 transition-opacity"
-                                        title="View Details"
+                                        title={t('view')}
                                     >
-                                        <span className="text-sm font-medium">View</span>
+                                        <span className="text-sm font-medium">{t('view')}</span>
                                         <Image
                                             src="/images/common/view.png"
-                                            alt="View"
+                                            alt={t('view')}
                                             width={18}
                                             height={18}
                                             className="ml-2"
@@ -196,12 +198,12 @@ export default function RegistersConfigView({
                                         <button
                                             onClick={(e) => handleDelete(e, register)}
                                             className="flex items-center text-[#1cc9b7] cursor-pointer hover:opacity-80 transition-opacity"
-                                            title="Remove Register"
+                                            title={t('remove')}
                                         >
-                                            <span className="tsmext- font-medium text-[#00000080]">Remove</span>
+                                            <span className="tsmext- font-medium text-[#00000080]">{t('remove')}</span>
                                             <Image
                                                 src="/images/common/false_sign.png"
-                                                alt="Remove"
+                                                alt={t('remove')}
                                                 width={18}
                                                 height={18}
                                                 className="ml-2"

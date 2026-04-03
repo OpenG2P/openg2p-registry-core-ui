@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useFetch } from "@/shared/hooks";
 import { toast } from "react-toastify";
 import { Tab } from "../shared/types";
@@ -21,7 +22,7 @@ export default function EditIntakeFormModal({
     initialData,
     registerId
 }: Props) {
-
+    const t = useTranslations();
     const { execute: updateIntakeForm, loading } = useFetch();
 
     const [formData, setFormData] = useState({
@@ -95,13 +96,13 @@ export default function EditIntakeFormModal({
                     </button>
 
                     <h2 className="text-2xl font-bold text-orange-500 mb-4">
-                        Edit Intake Form
+                        {t('edit_intake_form')}
                     </h2>
 
                     <div className="space-y-4">
                         <div>
                             <label className="block text-sm font-semibold mb-2">
-                                Intake Form Name
+                                {t('intake_form_name')}
                             </label>
 
                             <input
@@ -119,7 +120,7 @@ export default function EditIntakeFormModal({
 
                         <div>
                             <label className="block text-sm font-semibold mb-2">
-                                Description
+                                {t('description')}
                             </label>
 
                             <textarea
@@ -136,7 +137,7 @@ export default function EditIntakeFormModal({
 
                         <div>
                             <label className="block text-sm font-semibold mb-2">
-                                No. of Verifications Required
+                                {t('no_of_verifications_required_label')}
                             </label>
 
                             <input
@@ -164,7 +165,7 @@ export default function EditIntakeFormModal({
                                         })
                                     }
                                 />
-                                <span>Auto Approve</span>
+                                <span>{t('auto_approve')}</span>
                             </label>
 
                             <label className="flex flex-1 items-center gap-2">
@@ -178,7 +179,7 @@ export default function EditIntakeFormModal({
                                         })
                                     }
                                 />
-                                <span>Is Active</span>
+                                <span>{t('is_active')}</span>
                             </label>
                         </div>
 
@@ -187,14 +188,14 @@ export default function EditIntakeFormModal({
                                 onClick={handleCancel}
                                 className="px-12 py-2.5 bg-gray-300 rounded-[10px]"
                             >
-                                Cancel
+                                {t('cancel')}
                             </button>
 
                             <button
                                 onClick={handleSubmit}
                                 className="px-12 py-2.5 bg-black text-white rounded-[10px]"
                             >
-                                Update
+                                {t('update')}
                             </button>
                         </div>
                     </div>

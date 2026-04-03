@@ -27,24 +27,24 @@ export default function Header() {
     return (
         <header className={`w-full bg-white fixed top-0 left-0 right-0 z-20 flex justify-center ${isScrolled ? "shadow-[0px_4px_10px_0px_#00000026]" : ""}`}>
             <div className="w-full h-17.5 flex items-center justify-between px-3">
-            <Link href={`/${locale}`} className="flex items-center gap-2 sm:gap-3">
-                <Image
-                    src={config?.registryLogo || "/images/common/openg2p_logo.png"}
-                    alt="Registry Logo"
-                    width={40}
-                    height={40}
-                    className="w-10 h-10 shrink-0 object-contain"
-                    unoptimized
-                />
-                <div className="flex items-center gap-3">
-                    <span
-                        className="text-black text-[20px] font-medium not-italic leading-normal"
-                        style={{ fontFamily: 'Roboto' }}
-                    >
-                        {config?.registryName || t('registryGen2')}
-                    </span>
+                <Link href={`/${locale}`} className="flex items-center gap-2 sm:gap-3">
+                    <Image
+                        src={config?.registryLogo || "/images/common/openg2p_logo.png"}
+                        alt="Registry Logo"
+                        width={40}
+                        height={40}
+                        className="w-10 h-10 shrink-0 object-contain"
+                        unoptimized
+                    />
+                    <div className="flex items-center gap-3">
+                        <span
+                            className="text-black text-[20px] font-medium not-italic leading-normal"
+                            style={{ fontFamily: 'Roboto' }}
+                        >
+                            {t(`${config?.registryName}`) || t('registry')}
+                        </span>
 
-                    {/* <span className="h-8 w-0.5 bg-[#D9D9D9]" />
+                        {/* <span className="h-8 w-0.5 bg-[#D9D9D9]" />
 
                     <div className="flex flex-col leading-tight">
                         <span className="text-[14px] text-black/50">
@@ -54,17 +54,17 @@ export default function Header() {
                             OpenG2P
                         </span>
                     </div> */}
-                </div>
-            </Link>
+                    </div>
+                </Link>
 
-            {/* Desktop Navigation */}
-            <div className="flex items-center gap-8 translate-y-0.5">
-                <Can anyOf={CONFIG_VIEW_ACTIONS}>
-                    <ConfigurationButton />
-                </Can>
-                <NotificationDropdown />
-                <ProfileDropdown />
-            </div>
+                {/* Desktop Navigation */}
+                <div className="flex items-center gap-8 translate-y-0.5">
+                    <Can anyOf={CONFIG_VIEW_ACTIONS}>
+                        <ConfigurationButton />
+                    </Can>
+                    <NotificationDropdown />
+                    <ProfileDropdown />
+                </div>
             </div>
         </header>
     );

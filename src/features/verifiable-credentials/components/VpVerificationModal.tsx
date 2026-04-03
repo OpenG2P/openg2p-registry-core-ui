@@ -6,6 +6,7 @@ import { OpenID4VPVerification } from 'inji-sdk';
 import { buildPayloadFromDecodedJWT, decodeSdJwtToken } from '@/features/verifiable-credentials/utils';
 import { PayloadView, StatusView } from '@/features/verifiable-credentials/components';
 import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
+import { useTranslations } from 'next-intl';
 
 interface Props {
     descriptorSchema: any;
@@ -16,7 +17,7 @@ export default function VpVerificationModal({
     descriptorSchema,
     onClose,
 }: Props) {
-
+    const t = useTranslations();
     const { config } = useRuntimeConfig();
 
     const [verificationComplete, setVerificationComplete] = useState(false);
@@ -151,7 +152,7 @@ export default function VpVerificationModal({
                     <h2
                         className={`text-xl font-semibold transition-all ${verificationComplete ? 'text-left' : 'text-center'}`}
                     >
-                        Verify Credential
+                        {t('verify_credential') || 'Verify Credential'}
                     </h2>
 
                     <button
@@ -168,22 +169,22 @@ export default function VpVerificationModal({
                             <Image src="/images/common/verified.png" alt="success" width={60} height={60} />
 
                             <h3 className="text-[22px] font-semibold mt-4">
-                                Import Successful
+                                {t('import_successful') || 'Import Successful'}
                             </h3>
 
                             <p className="text-gray-600 mt-2">
-                                Credential was successfully ingested
+                                {t('import_success_msg') || 'Credential was successfully ingested'}
                             </p>
 
                             <div className="mt-6 w-full bg-gray-50 rounded-[20px] p-4 text-center text-sm">
                                 <p>
-                                    <span className="font-medium">Status:</span>{' '}
+                                    <span className="font-medium">{t('status') || 'Status'}:</span>{' '}
                                     <span className="text-green-600">
                                         {importResult.message.ack_status}
                                     </span>
                                 </p>
                                 <p>
-                                    <span className="font-medium">Correlation ID:</span>{' '}
+                                    <span className="font-medium">{t('correlation_id') || 'Correlation ID'}:</span>{' '}
                                     {importResult.message.correlation_id}
                                 </p>
                             </div>
@@ -192,7 +193,7 @@ export default function VpVerificationModal({
                                 onClick={onClose}
                                 className="mt-6 bg-black text-white px-10 py-2 rounded-[20px]"
                             >
-                                Close
+                                {t('close') || 'Close'}
                             </button>
                         </div>
                     ) : verificationStatus === 'success' && verificationResult ? (
@@ -205,7 +206,7 @@ export default function VpVerificationModal({
                                         : 'bg-gray-200 text-black'
                                         }`}
                                 >
-                                    Status
+                                    {t('status') || 'Status'}
                                 </button>
 
                                 <button
@@ -215,7 +216,7 @@ export default function VpVerificationModal({
                                         : 'bg-gray-200 text-black'
                                         }`}
                                 >
-                                    Payload
+                                    {t('payload') || 'Payload'}
                                 </button>
                             </div>
 
@@ -231,7 +232,7 @@ export default function VpVerificationModal({
                                     disabled={isImporting}
                                     className="bg-black text-white px-10 py-2 rounded-[20px] disabled:opacity-50"
                                 >
-                                    {isImporting ? 'Importing…' : 'Import'}
+                                    {isImporting ? t('importing') || 'Importing…' : t('import') || 'Import'}
                                 </button>
 
                             </div>
@@ -239,7 +240,7 @@ export default function VpVerificationModal({
                     ) : verificationStatus === 'error' ? (
                         <div className="flex flex-col items-center justify-center h-full text-center px-6">
                             <p className="text-[18px] text-gray-800 mb-6">
-                                {error || 'We could not verify the credential. Please try scanning again.'}
+                                {error || t('verify_error_msg') || 'We could not verify the credential. Please try scanning again.'}
                             </p>
 
                             <div className="flex gap-4">
@@ -247,7 +248,7 @@ export default function VpVerificationModal({
                                     onClick={handleReset}
                                     className="bg-black text-white px-8 py-2 rounded-[20px]"
                                 >
-                                    Try again
+                                    {t('try_again') || 'Try again'}
                                 </button>
                             </div>
                         </div>
@@ -276,8 +277,8 @@ export default function VpVerificationModal({
                                 }}
                             />
                             <div className="flex flex-col items-center gap-3">
-                                <p className="font-medium">Importing your data</p>
-                                <p className="text-sm text-gray-500">Please wait a few moments</p>
+                                <p className="font-medium">{t('importing_data') || 'Importing your data'}</p>
+                                <p className="text-sm text-gray-500">{t('please_wait') || 'Please wait a few moments'}</p>
                             </div>
                         </div>
                     )}

@@ -38,12 +38,12 @@ export default function RejectReasonPopup({
                 </div>
 
                 <h3 className="text-[24px] font-semibold text-centser">
-                    {t("rejectTitle")}
+                    {t("reject_title")}
                 </h3>
 
                 <div className="w-full max-w-105 mt-2">
                     <p className="text-[16px] text-black mb-1">
-                        {t("rejectDescription")}
+                        {t("reject_description")}
 
                     </p>
 
@@ -51,7 +51,7 @@ export default function RejectReasonPopup({
                         <input
                             value={reason}
                             onChange={(e) => setReason(e.target.value)}
-                            placeholder={t("rejectPlaceholder")}
+                            placeholder={t("reject_placeholder")}
                             className="flex-1 border-2 border-black/20 rounded-[10px] px-4 py-2 focus:outline-none"
                         />
                         <button

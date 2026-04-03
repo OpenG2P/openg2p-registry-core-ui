@@ -21,8 +21,10 @@ import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
 import { useRbac } from '@/context/RbacContext';
 import { CONFIGURATION_TABS_ACTIONS } from '@/features/configuration/shared/utils/configurationTabs.actions';
 import { CONFIGURATION_SECTIONS_ACTIONS } from '@/features/configuration/shared/utils/configurationSections.actions';
+import { useTranslations } from 'next-intl';
 
 const TabConfigurationPage = () => {
+    const t = useTranslations();
     const { registerId, tabId } = useParams<{ registerId: string; tabId: string }>();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditTabModalOpen, setIsEditTabModalOpen] = useState(false);
@@ -53,7 +55,7 @@ const TabConfigurationPage = () => {
     const label_name = rawLabel.charAt(0).toUpperCase() + rawLabel.slice(1);
 
     const breadcrumb = useBreadcrumb({
-        rootItem: { label: 'Registers', href: '/configuration/registers' },
+        rootItem: { label: t('registers'), href: '/configuration/registers' },
         customItems: [
             { label: registerDetails.register_mnemonic || '', href: `/configuration/registers/${registerId}` },
             { label: label_name || '', href: `/configuration/registers/${registerId}/tabs/${tabId}` }
@@ -107,9 +109,9 @@ const TabConfigurationPage = () => {
                 showFilters={false}
                 showPagination={true}
                 showSubHeading
-                subHeading={`${label_name} Sections`}
+                subHeading={`${label_name} ${t('sections')}`}
                 showAddNewButton={canCreate}
-                addNewButtonText={"Add New Section"}
+                addNewButtonText={t('add_new_section')}
                 onAddNewButton={() => setIsModalOpen(true)}
                 pageStart={pagination.pageStart}
                 pageEnd={pagination.pageEnd}

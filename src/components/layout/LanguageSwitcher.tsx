@@ -9,8 +9,8 @@ import { useClickOutside } from '@/shared/hooks/useClickOutside';
 
 const flagMap: Record<string, string> = {
     en: '/images/common/flags/en_flag.png',
-    de: '/images/common/flags/de_flag.png',
-    cs: '/images/common/flags/cs_flag.png',
+    fr: '/images/common/flags/fr_flag.png',
+    es: '/images/common/flags/es_flag.png',
 };
 
 export default function LanguageSwitcher() {
@@ -91,7 +91,7 @@ export default function LanguageSwitcher() {
                             {index === 0 && (
                                 <Image
                                     src="/images/common/down_arrow.png"
-                                    alt="selected"
+                                    alt={t('selected')}
                                     width={14}
                                     height={14}
                                     className="rotate-180"

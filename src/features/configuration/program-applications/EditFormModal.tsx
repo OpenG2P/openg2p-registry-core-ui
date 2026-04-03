@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useFetch } from '@/shared/hooks';
 import { toast } from 'react-toastify';
 import { Tab } from '../shared/types';
@@ -15,6 +16,7 @@ interface EditFormModalProps {
 }
 
 export default function EditFormModal({ isOpen, onClose, onSuccess, initialData, registerId }: EditFormModalProps) {
+    const t = useTranslations();
     const { execute: updateForm, loading } = useFetch();
     const [formData, setFormData] = useState({
         tab_label: '',
@@ -47,11 +49,11 @@ export default function EditFormModal({ isOpen, onClose, onSuccess, initialData,
         });
 
         if (result) {
-            toast.success('Form updated successfully');
+            toast.success(t('toast_form_updated'));
             onSuccess();
             onClose();
         } else {
-            toast.error('Failed to update form');
+            toast.error(t('toast_form_update_failed'));
         }
     };
 
@@ -65,11 +67,11 @@ export default function EditFormModal({ isOpen, onClose, onSuccess, initialData,
                         <X size={40} />
                     </button>
 
-                    <h2 className="text-2xl font-bold text-orange-500 mb-6">Edit Form</h2>
+                    <h2 className="text-2xl font-bold text-orange-500 mb-6">{t('edit_form')}</h2>
 
                     <div className="space-y-4">
                         <div>
-                            <label className="block text-sm font-semibold text-black mb-1">Form Label</label>
+                            <label className="block text-sm font-semibold text-black mb-1">{t('form_label')}</label>
                             <input
                                 type="text"
                                 value={formData.tab_label}
@@ -79,7 +81,7 @@ export default function EditFormModal({ isOpen, onClose, onSuccess, initialData,
                         </div>
 
                         <div>
-                            <label className="block text-sm font-semibold text-black mb-1">Form Order</label>
+                            <label className="block text-sm font-semibold text-black mb-1">{t('form_order')}</label>
                             <input
                                 type="number"
                                 value={formData.tab_order}
@@ -89,8 +91,8 @@ export default function EditFormModal({ isOpen, onClose, onSuccess, initialData,
                         </div>
 
                         <div className="flex gap-4 pt-6">
-                            <button onClick={onClose} className="px-12 py-2.5 bg-gray-300 text-gray-700 rounded-[10px]">Cancel</button>
-                            <button onClick={handleSubmit} disabled={loading} className="px-12 py-2.5 bg-black text-white rounded-[10px]">Save Changes</button>
+                            <button onClick={onClose} className="px-12 py-2.5 bg-gray-300 text-gray-700 rounded-[10px]">{t('cancel')}</button>
+                            <button onClick={handleSubmit} disabled={loading} className="px-12 py-2.5 bg-black text-white rounded-[10px]">{t('save_changes')}</button>
                         </div>
                     </div>
                 </div>

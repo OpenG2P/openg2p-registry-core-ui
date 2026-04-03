@@ -3,6 +3,7 @@ import { useRegisterSchema } from '../shared/hooks/useRegisterSchema';
 import { useState, useEffect } from 'react';
 import { useFetch } from '@/shared/hooks';
 import { toast } from 'react-toastify';
+import { useTranslations } from 'next-intl';
 
 interface RegisterSchemaViewProps {
     registerId: string;
@@ -13,6 +14,7 @@ export default function RegisterSchemaView({
     registerId,
     activeTab,
 }: RegisterSchemaViewProps) {
+    const t = useTranslations();
     const { schema, loading, refresh } = useRegisterSchema(registerId);
     const [editableSchema, setEditableSchema] = useState<string>('');
     const { execute: updateSchema, loading: updating } = useFetch();
@@ -36,7 +38,7 @@ export default function RegisterSchemaView({
         try {
             parsedSchema = JSON.parse(editableSchema);
         } catch (error) {
-            toast.error('Invalid JSON schema. Please fix the syntax before saving.');
+            toast.error(t('toast_invalid_schema'));
             return;
         }
 
@@ -51,10 +53,10 @@ export default function RegisterSchemaView({
         });
 
         if (result) {
-            toast.success('Schema updated successfully');
+            toast.success(t('toast_schema_updated'));
             refresh?.();
         } else {
-            toast.error('Failed to update schema');
+            toast.error(t('toast_schema_update_failed'));
         }
     };
 
@@ -68,20 +70,20 @@ export default function RegisterSchemaView({
 
 
     if (!schema) {
-        return <div className="p-6 text-gray-500">No schema found</div>;
+        return <div className="p-6 text-gray-500">{t('no_schema_found') || "No schema found"}</div>;
     }
 
     return (
         <div className="mx-7.5 bg-white rounded-[10px] p-6 relative">
             <div className="flex justify-between items-center mb-4">
                 <h3 className="text-lg font-semibold text-gray-700 capitalize">
-                    {activeTab} Schema
+                    {activeTab} {t('schema') || "Schema"}
                 </h3>
                 <button
                     onClick={handleSave}
                     className="bg-black text-white px-4 py-2 rounded-[10px] font-semibold"
                 >
-                    Save Schema
+                    {t('save_schema') || "Save Schema"}
                 </button>
             </div>
             <div className="border border-gray-200 rounded-[10px] bg-[#D9D9D933] overflow-hidden">

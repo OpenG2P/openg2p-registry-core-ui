@@ -54,8 +54,8 @@ export default function Home() {
     const [selectedMessageType, setSelectedMessageType] = useState('incoming');
 
     const messageTypeOptions = [
-        { value: 'incoming', label: t('incomingMessages') },
-        { value: 'outgoing', label: t('outgoingMessages') },
+        { value: 'incoming', label: t('incoming_messages') },
+        { value: 'outgoing', label: t('outgoing_messages') },
     ];
 
 
@@ -69,10 +69,10 @@ export default function Home() {
 
 
     const searchPlaceholders: Record<ActiveStatsCard, string> = {
-        'registers': t('searchRegisters'),
-        'intake-form': t('searchIntakeForm'),
-        'change-request': t('searchChangeRequests'),
-        'messages': t('searchMessages')
+        'registers': t('search_registers'),
+        'intake-form': t('search_intake_form'),
+        'change-request': t('search_change_requests'),
+        'messages': t('search_messages')
     };
 
     const handleSearch = (value: string, register?: string) => {
@@ -220,7 +220,7 @@ export default function Home() {
                 <div className="bottom-0 w-full px-4">
                     <Image
                         src="/images/common/people.svg"
-                        alt={t('peoplesImageAlt')}
+                        alt={t('peoples_image_alt')}
                         width={1200}
                         height={600}
                         className="w-full h-auto select-none"

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { X } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useFetch } from '@/shared/hooks';
 import { useParams } from 'next/navigation';
 import { toast } from 'react-toastify';
@@ -11,6 +12,7 @@ interface AddFormModalProps {
 }
 
 export default function AddFormModal({ isOpen, onClose, onSuccess }: AddFormModalProps) {
+    const t = useTranslations();
     const { registerId } = useParams<{ registerId: string }>();
     const { execute: createForm, loading } = useFetch();
 
@@ -35,12 +37,12 @@ export default function AddFormModal({ isOpen, onClose, onSuccess }: AddFormModa
         });
 
         if (result?.tab_id) {
-            toast.success('Form created successfully');
+            toast.success(t('toast_form_created'));
             setFormData({ formName: '', formOrder: '' });
             if (onSuccess) onSuccess();
             onClose();
         } else {
-            toast.error('Failed to create form');
+            toast.error(t('toast_form_create_failed'));
         }
     };
 
@@ -67,15 +69,15 @@ export default function AddFormModal({ isOpen, onClose, onSuccess }: AddFormModa
                         <X size={40} strokeWidth={2} />
                     </button>
 
-                    <h2 className="text-2xl font-bold text-orange-500 mb-4">Add New Form</h2>
+                    <h2 className="text-2xl font-bold text-orange-500 mb-4">{t('add_new_form')}</h2>
 
                     <div className="space-y-4">
                         <div>
                             <label className="block text-sm font-semibold text-black mb-1">
-                                Form Name
+                                {t('form_name')}
                             </label>
                             <p className="text-[15px] text-gray-400 mb-2 italic">
-                                * Use lowercase and underscores only (e.g., test_form)
+                                {t('form_name_hint')}
                             </p>
                             <div className="relative">
                                 <input
@@ -93,7 +95,7 @@ export default function AddFormModal({ isOpen, onClose, onSuccess }: AddFormModa
 
                         <div>
                             <label className="block text-sm font-semibold text-black mb-2">
-                                Form Order
+                                {t('form_order')}
                             </label>
                             <input
                                 type="number"
@@ -109,13 +111,13 @@ export default function AddFormModal({ isOpen, onClose, onSuccess }: AddFormModa
                                 onClick={handleCancel}
                                 className="px-12 py-2.5 bg-gray-300 text-gray-700 rounded-[10px]"
                             >
-                                Cancel
+                                {t('cancel')}
                             </button>
                             <button
                                 onClick={handleSubmit}
                                 className="px-12 py-2.5 bg-black text-white rounded-[10px]"
                             >
-                                Save
+                                {t('save')}
                             </button>
                         </div>
                     </div>

@@ -9,11 +9,13 @@ import { convertImageToBase64 } from '@/features/configuration/shared';
 import { toast } from 'react-toastify';
 import Can from '@/components/shared/Can';
 import { CONFIGURATION_REGISTRY_ACTIONS } from '@/features/configuration/shared/utils/configurationRegistry.actions';
+import { useTranslations } from 'next-intl';
 
 const RegistryConfigurationPage = () => {
+	const t = useTranslations();
 	const [isEditing, setIsEditing] = useState(false);
 	const [configurationId, setConfigurationId] = useState<string | null>(null);
-	const [registryName, setRegistryName] = useState('Registry Name');
+	const [registryName, setRegistryName] = useState(t('registry_name'));
 	const [image, setImage] = useState('/images/config/blank_image.png');
 
 	const { data: registryData, execute: fetchRegistry } = useFetch({ url: '/api/configuration/registry/get' });
@@ -24,7 +26,7 @@ const RegistryConfigurationPage = () => {
 	const startEditing = () => {
 		if (registryData) {
 			setConfigurationId(registryData.configuration_id);
-			setRegistryName(registryData.registry_name || 'Registry Name');
+			setRegistryName(registryData.registry_name || t('registry_name'));
 			setImage(registryData.registry_logo || '/images/config/blank_image.png');
 		}
 		setIsEditing(true);
@@ -51,17 +53,17 @@ const RegistryConfigurationPage = () => {
 			setRegistryName(newName);
 			setImage(newImage);
 			setIsEditing(false);
-			toast.success(`Registry configuration saved successfully`);
+			toast.success(t('toast_registry_config_saved'));
 			fetchRegistry(); // Refresh view data
 		} else {
-			toast.error('Failed to save registry configuration');
+			toast.error(t('toast_registry_config_save_failed'));
 		}
 	};
 
 	return (
 		<>
 			<TopBar
-				breadcrumb={[{ label: "Registry" }]}
+				breadcrumb={[{ label: t('registry') }]}
 				showFilters={false}
 				showPagination={false}
 				showAddNewButton={false}
@@ -81,7 +83,7 @@ const RegistryConfigurationPage = () => {
 							<div className="w-25 h-25 relative shrink-0 rounded overflow-hidden flex items-center justify-center">
 								<Image
 									src={registryData?.registry_logo || image}
-									alt='Registry Logo'
+									alt={t('registry_logo_alt')}
 									width={100}
 									height={100}
 									className="object-contain w-full h-full"
@@ -90,7 +92,7 @@ const RegistryConfigurationPage = () => {
 							</div>
 							<div className="flex items-center gap-4">
 								<div className='flex flex-col items-start gap-2'>
-									<span className='text-black text-[16px] font-normal  tracking-normal m-0'>Registry Name</span>
+									<span className='text-black text-[16px] font-normal  tracking-normal m-0'>{t('registry_name')}</span>
 									<h1 className="text-[#ED7C22] text-xl m-0">
 										{registryData?.registry_name || registryName}
 									</h1>
@@ -102,7 +104,7 @@ const RegistryConfigurationPage = () => {
 									>
 										<Image
 											src={"/images/config/pencil_icon.png"}
-											alt='Pencil Icon'
+											alt={t('pencil_icon_alt')}
 											width={18}
 											height={18}
 										/>

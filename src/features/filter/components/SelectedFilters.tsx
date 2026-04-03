@@ -3,22 +3,23 @@
 import Image from "next/image";
 import { FilterConfig, FilterRule } from "@/features/filter/types";
 import { SearchBar } from "@/components/ui";
+import { useTranslations } from "next-intl";
 
-const OPERATOR_LABELS: Record<string, string> = {
-    eq: "Equals",
-    neq: "Not equals",
-    in: "In",
-    nin: "Not in",
-    contains: "Contains",
-    ncontains: "Does not contain",
-    startsWith: "Starts with",
-    endsWith: "Ends with",
-    gt: "Greater than",
-    gte: "Greater than or equal",
-    lt: "Less than",
-    lte: "Less than or equal",
-    isNull: "Is null",
-    between: "Between",
+const OPERATOR_KEYS: Record<string, string> = {
+    eq: "filter_operator_eq",
+    neq: "filter_operator_neq",
+    in: "filter_operator_in",
+    nin: "filter_operator_nin",
+    contains: "filter_operator_contains",
+    ncontains: "filter_operator_ncontains",
+    startsWith: "filter_operator_startsWith",
+    endsWith: "filter_operator_endsWith",
+    gt: "filter_operator_gt",
+    gte: "filter_operator_gte",
+    lt: "filter_operator_lt",
+    lte: "filter_operator_lte",
+    isNull: "filter_operator_isNull",
+    between: "filter_operator_between",
 };
 
 interface SelectedFiltersProps {
@@ -38,10 +39,13 @@ export default function SelectedFilters({
     removeFilter,
     clearAllFilters,
     searchValue = '',
-    searchPlaceholder = 'Search',
+    searchPlaceholder,
     onSearch,
     pxClass
 }: SelectedFiltersProps) {
+    const t = useTranslations();
+    const resolvedSearchPlaceholder = searchPlaceholder || t('search');
+
     const getFilterLabel = (rule: FilterRule) => {
         const config = filterConfig.find((f) => f.field_name === rule.field_name);
         let valueLabel = rule.value;
@@ -51,22 +55,22 @@ export default function SelectedFilters({
             const option = config.options_source.find((o) => o.value === rule.value);
             valueLabel = option?.label || rule.value;
         } else if (config?.filter_type === 'boolean' && typeof rule.value === 'boolean') {
-            valueLabel = rule.value ? 'True' : 'False';
+            valueLabel = rule.value ? t('true') : t('false');
         }
 
-        return `${config?.display_label}: ${OPERATOR_LABELS[rule.operator] ?? rule.operator} ${valueLabel || ''}`;
+        return `${t(config?.display_label || '')}: ${t(OPERATOR_KEYS[rule.operator] ?? rule.operator)} ${valueLabel || ''}`;
     };
 
     return (
         <div className="bg-white px-4 py-4 mb-2 flex items-center rounded-[10px] gap-4">
             <div className="flex flex-wrap items-center gap-4 flex-1">
                 <span className="w-27.5 font-normal text-[16px] text-black pl-1">
-                    Selected filters
+                    {t('selected_filters')}
                 </span>
 
                 {appliedFilters.length === 0 ? (
                     <div className="h-8.5 flex items-center bg-[#F2BA1A40] rounded-[10px] px-3 text-[#00000080] font-['Roboto'] text-[14px] not-italic font-normal leading-normal">
-                        None
+                        {t('none')}
                     </div>
                 ) : (
                     appliedFilters.map((filter, index) => (
@@ -77,9 +81,9 @@ export default function SelectedFilters({
                             <span>{getFilterLabel(filter)}</span>
                             <button
                                 onClick={() => removeFilter(index)}
-                                aria-label="Remove filter"
+                                aria-label={t('remove')}
                             >
-                                <Image src="/images/common/close.png" width={16} height={16} alt="clear" />
+                                <Image src="/images/common/close.png" width={16} height={16} alt={t('common.remove')} />
                             </button>
                         </div>
                     ))
@@ -90,7 +94,7 @@ export default function SelectedFilters({
                         onClick={clearAllFilters}
                         className="text-[#ED7C22] text-sm"
                     >
-                        Clear All
+                        {t('clear_all')}
                     </button>
                 )}
             </div>
@@ -98,7 +102,7 @@ export default function SelectedFilters({
             {onSearch && (
                 <div className="ml-auto shrink-0 border border-[#ED7C22] rounded-[10px] h-8.5 flex items-center bg-white">
                     <SearchBar
-                        placeholder={searchPlaceholder}
+                        placeholder={resolvedSearchPlaceholder}
                         category=""
                         searchValue={searchValue}
                         iconSize={16}

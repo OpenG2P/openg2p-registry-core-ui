@@ -21,9 +21,11 @@ import { usePagination } from '@/shared/hooks';
 import { useRbac } from '@/context/RbacContext';
 import { CONFIGURATION_TABS_ACTIONS } from '@/features/configuration/shared/utils/configurationTabs.actions';
 import { CONFIGURATION_REGISTERS_ACTIONS } from '@/features/configuration/shared/utils/configurationRegisters.actions';
+import { useTranslations } from 'next-intl';
 
 
 const RegisterConfigurationPage = () => {
+    const t = useTranslations();
     const { registerId } = useParams<{ registerId: string }>();
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isViewModalOpen, setIsViewModalOpen] = useState(false);
@@ -37,15 +39,15 @@ const RegisterConfigurationPage = () => {
     const { registers, loading, refresh } = useAllRegister(1, 100);
     const registerDetails = getRegisterDetails(registerId, registers);
 
-    const tabLabels = {
-        tabs: 'Tabs',
-        filter: 'Filter Schema',
-        search: 'Search Schema',
-        deduplication: 'Deduplication Schema',
+    const tabLabels: Record<string, string> = {
+        tabs: t('tabs'),
+        filter: t('filter_schema'),
+        search: t('search_schema'),
+        deduplication: t('deduplication_schema'),
     };
 
     const breadcrumb = useBreadcrumb({
-        rootItem: { label: 'Registers', href: '/configuration/registers' },
+        rootItem: { label: t('registers'), href: '/configuration/registers' },
         customItems: [
             { label: `${registerDetails?.register_mnemonic || ''} - ${tabLabels[activeTab]}`, href: `/configuration/registers/${registerId}` }
         ]
@@ -89,10 +91,10 @@ const RegisterConfigurationPage = () => {
             </div>
 
             <ConfigDetailsSummary
-                title={registerDetails?.register_mnemonic || 'None'}
+                title={registerDetails?.register_mnemonic || t('none')}
                 description={registerDetails?.register_description}
-                extraInfo1={registerDetails?.master_register_mnemonic || 'None'}
-                extraInfo2={registerDetails.register_purpose || 'None'}
+                extraInfo1={registerDetails?.master_register_mnemonic || t('none')}
+                extraInfo2={registerDetails.register_purpose || t('none')}
                 onEdit={
                     canEdit
                         ? () => setIsEditModalOpen(true)
@@ -116,10 +118,10 @@ const RegisterConfigurationPage = () => {
                             showFilters={false}
                             showPagination={activeTab === 'tabs'}
                             showAddNewButton={canCreate && activeTab === 'tabs'}
-                            addNewButtonText={"Add New Tab"}
+                            addNewButtonText={t('add_new_tab')}
                             onAddNewButton={() => setIsModalOpen(true)}
                             showSecondaryButton={canCreate && activeTab === 'tabs'}
-                            secondaryButtonText="Add Intake Form"
+                            secondaryButtonText={t('add_intake_form')}
                             onSecondaryButton={() => setIsIntakeModalOpen(true)}
                             pageStart={pagination.pageStart}
                             pageEnd={pagination.pageEnd}

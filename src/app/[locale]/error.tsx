@@ -13,6 +13,7 @@ export default function Error({
     reset: () => void;
 }) {
     const t = useTranslations('common');
+    const tRoot = useTranslations();
 
     useEffect(() => {
         console.error("Rendering Error", error);
@@ -31,7 +32,7 @@ export default function Error({
                         </Link>
 
                         <div className="h-5.75 flex items-end font-medium text-[20px] leading-none">
-                            <span>{"Error"}</span>
+                            <span>{tRoot("error")}</span>
                         </div>
                     </div>
                 </div>

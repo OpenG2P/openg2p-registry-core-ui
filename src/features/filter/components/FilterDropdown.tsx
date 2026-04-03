@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { FilterConfig, FilterRule } from "@/features/filter/types";
 
 import {
@@ -12,7 +13,6 @@ import {
 } from "@/features/filter/components";
 import { validateFilters } from "@/features/filter/utils";
 
-
 interface FilterDropdownProps {
     onApply: (filters: FilterRule[]) => void;
     onClose?: () => void;
@@ -20,21 +20,21 @@ interface FilterDropdownProps {
     filterConfig?: FilterConfig[];
 }
 
-const OPERATOR_LABELS: Record<string, string> = {
-    eq: "Equals",
-    neq: "Not equals",
-    in: "In",
-    nin: "Not in",
-    contains: "Contains",
-    ncontains: "Does not contain",
-    startsWith: "Starts with",
-    endsWith: "Ends with",
-    gt: "Greater than",
-    gte: "Greater than or equal",
-    lt: "Less than",
-    lte: "Less than or equal",
-    isNull: "Is null",
-    between: "Between",
+const OPERATOR_KEYS: Record<string, string> = {
+    eq: "filter_operator_eq",
+    neq: "filter_operator_neq",
+    in: "filter_operator_in",
+    nin: "filter_operator_nin",
+    contains: "filter_operator_contains",
+    ncontains: "filter_operator_ncontains",
+    startsWith: "filter_operator_startsWith",
+    endsWith: "filter_operator_endsWith",
+    gt: "filter_operator_gt",
+    gte: "filter_operator_gte",
+    lt: "filter_operator_lt",
+    lte: "filter_operator_lte",
+    isNull: "filter_operator_isNull",
+    between: "filter_operator_between",
 };
 
 export default function FilterDropdown({
@@ -43,6 +43,7 @@ export default function FilterDropdown({
     appliedFilters = [],
     filterConfig = [],
 }: FilterDropdownProps) {
+    const t = useTranslations();
     const [selectedFieldName, setSelectedFieldName] = useState("");
     const [operator, setOperator] = useState("");
     const [value, setValue] = useState<any>("");
@@ -123,7 +124,7 @@ export default function FilterDropdown({
     if (filterConfig.length === 0) {
         return (
             <div className="flex items-center justify-center p-10 min-w-110">
-                <p className="text-gray-500">Loading filters...</p>
+                <p className="text-gray-500">{t("filter_loading")}</p>
             </div>
         );
     }
@@ -135,7 +136,7 @@ export default function FilterDropdown({
             value,
             operator,
             onChange: setValue,
-            placeholder: `Search ${selectedFilter.display_label}`,
+            placeholder: t("filter_search_placeholder", { field: t(selectedFilter.display_label) }),
         };
 
         switch (selectedFilter.filter_type) {
@@ -167,9 +168,9 @@ export default function FilterDropdown({
                                 setValue(e.target.value === "true");
                             }}
                         >
-                            <option value="">Select</option>
-                            <option value="true">True</option>
-                            <option value="false">False</option>
+                            <option value="">{t("common.select")}</option>
+                            <option value="true">{t("true")}</option>
+                            <option value="false">{t("false")}</option>
                         </select>
                         <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
                             <Image
@@ -200,7 +201,7 @@ export default function FilterDropdown({
             >
                 <Image
                     src="/images/common/filter_close.png"
-                    alt="Close"
+                    alt={t("filter_close")}
                     width={20}
                     height={20}
                 />
@@ -219,7 +220,7 @@ export default function FilterDropdown({
                                     ? "bg-[#F2BA1A] text-black rounded-[20px]"
                                     : "text-[#00000080] rounded-[20px]"}`}
                         >
-                            {filter.display_label}
+                            {t(filter.display_label)}
                         </button>
                     );
                 })}
@@ -228,7 +229,7 @@ export default function FilterDropdown({
             {/* Right Side Content */}
             <div className="flex-1 p-6 flex flex-col">
                 <div className="text-[18px] font-medium text-[#ED7C22] leading-[20px] mb-6">
-                    {selectedFilter && `Search by ${selectedFilter.display_label}`}
+                    {selectedFilter && t("filter_search_by", { field: t(selectedFilter.display_label) })}
                 </div>
 
                 {selectedFilter && (
@@ -236,7 +237,7 @@ export default function FilterDropdown({
                         {/* Operator Label/Input */}
                         <div className="flex flex-col gap-1.5">
                             <label className="text-[16px] font-normal text-black leading-none">
-                                Select Operator
+                                {t("select_operator")}
                             </label>
                             <div className="relative w-full">
                                 <select
@@ -244,10 +245,10 @@ export default function FilterDropdown({
                                     value={operator}
                                     onChange={e => setOperator(e.target.value)}
                                 >
-                                    <option value="" disabled hidden>Select</option>
+                                    <option value="" disabled hidden>{t("common.select")}</option>
                                     {selectedFilter.allowed_operators.map(op => (
                                         <option key={op} value={op}>
-                                            {OPERATOR_LABELS[op] ?? op}
+                                            {t(OPERATOR_KEYS[op] ?? op)}
                                         </option>
                                     ))}
                                 </select>
@@ -265,7 +266,7 @@ export default function FilterDropdown({
                         {/* Name Label/Input */}
                         <div className="flex flex-col gap-1.5">
                             <label className="text-[16px] font-normal text-black leading-none">
-                                {selectedFilter.display_label}
+                                {t(selectedFilter.display_label)}
                             </label>
                             {renderValueInput()}
                         </div>
@@ -283,7 +284,7 @@ export default function FilterDropdown({
                         onClick={applyFilter}
                         className="bg-black text-white px-8 py-2 rounded-full text-[16px] font-medium h-10 flex items-center justify-center transition-opacity hover:opacity-90"
                     >
-                        Apply
+                        {t("apply")}
                     </button>
                 </div>
             </div>

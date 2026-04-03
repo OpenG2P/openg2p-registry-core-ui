@@ -77,14 +77,17 @@ export default function IntakeFormSubmissionPage() {
         return map;
     }, [submission?.section_payloads]);
 
-    console.log(sectionDataMap, "sectionsDataMap")
+    // console.log(sectionDataMap, "sectionsDataMap")
 
     return (
         <div className="min-h-screen mx-auto bg-[#F3F1E4]">
             <TopBar
                 breadcrumb={[
-                    { label: `${currentRegister?.register_subject || 'Register'} - Intake Form`, href: `/intake-form/${registerType}` },
-                    { label: submission?.submission_reference ? 'Ref- ' + String(submission.submission_reference) : '' }
+                    { 
+                        label: t("register_intake_form", { subject: currentRegister?.register_subject || t("register") }), 
+                        href: `/intake-form/${registerType}` 
+                    },
+                    { label: submission?.submission_reference ? t("ref") + String(submission.submission_reference) : "" }
                 ]}
 
 
@@ -97,7 +100,7 @@ export default function IntakeFormSubmissionPage() {
             <div className="mx-7.5 py-6 space-y-6">
                 {loading ? (
                     <div className="flex items-center justify-center py-20">
-                        <span className="text-gray-500">Loading...</span>
+                        <span className="text-gray-500">{t('loading')}</span>
                     </div>
                 ) : (
                     <div className="flex flex-col lg:flex-row gap-7.5">

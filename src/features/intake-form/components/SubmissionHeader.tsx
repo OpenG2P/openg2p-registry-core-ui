@@ -54,13 +54,13 @@ export default function SubmissionHeader({ submission, onActionComplete }: Props
             });
 
             if (result?.approval_status == "APPROVED" || result?.approval_status == "REJECTED") {
-                toast.success(`Submission ${type}d successfully`);
+                toast.success(t('toast_submission_success', { type }));
                 onActionComplete?.();
             } else {
-                toast.error(`Failed to ${type} submission`);
+                toast.error(t('toast_submission_fail', { type }));
             }
         } catch (error) {
-            toast.error(`An error occurred while trying to ${type} the submission`);
+            toast.error(t('toast_submission_error', { type }));
         }
     };
 
@@ -106,31 +106,31 @@ const InfoSection = ({ submission }: { submission?: IntakeSubmissionPayload | nu
                 {t('intake_submission')}
             </h3>
             <div>
-                Reference No:{" "}
+                {t('reference_no')}:{" "}
                 <span className="text-black font-medium">
                     {submission?.submission_reference}
                 </span>
             </div>
             <div>
-                Form Status:{" "}
+                {t('form_status')}:{" "}
                 <span className={`font-medium ${statusClassMap[submission?.intake_form_status || ''] ?? "text-gray-500"}`}>
                     {submission?.intake_form_status}
                 </span>
             </div>
             <div>
-                CR Status:{" "}
+                {t('cr_status')}:{" "}
                 <span className="text-black font-medium">
-                    {submission?.change_request_submission_status ?? 'N/A'}
+                    {submission?.change_request_submission_status ?? t('n_a')}
                 </span>
             </div>
             <div>
-                Approval Status:{" "}
+                {t('approval_status')}:{" "}
                 <span className={`font-medium ${statusClassMap[submission?.approval_status || ''] ?? "text-gray-500"}`}>
                     {submission?.approval_status}
                 </span>
             </div>
             <div>
-                Created Date:{" "}
+                {t('created_date')}:{" "}
                 <span className="text-black font-medium">
                     {submission?.created_at ? formatDate(submission.created_at) : '--'}
                 </span>
@@ -149,8 +149,8 @@ const VerificationStats = ({
     const t = useTranslations();
     return (
         <div className="space-y-2 text-[16px] text-[#00000080]">
-            <h3 className="text-lg font-semibold text-black invisible">
-                Verification
+            <h3 className="text-lg font-semibold text-black ">
+                {t('verification')}
             </h3>
 
             <div className="border-l border-[#F2BA1A] pl-6 space-y-2">
@@ -193,7 +193,7 @@ const AttachedDocuments = ({ documents = [] }: { documents?: any[] }) => {
                 </span>
                 <Image
                     src="/images/changerequest/attached_doc_icon.png"
-                    alt="doc"
+                    alt={t('document_icon_alt')}
                     width={14}
                     height={14}
                     className="ml-1 mb-1"
@@ -216,7 +216,7 @@ const AttachedDocuments = ({ documents = [] }: { documents?: any[] }) => {
                             }`}
                     >
                         {doc.document_label}
-                        <Image src="/images/common/arrow_next_01.png" alt="arrow" width={14} height={14} />
+                        <Image src="/images/common/arrow_next_01.png" alt={t('arrow')} width={14} height={14} />
                     </a>
                 ))}
 

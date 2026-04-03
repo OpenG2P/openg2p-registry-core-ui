@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
 
     const backendConfig = getBackendConfig();
 
-    const idToken = req.cookies.get('X-ID-Token')?.value;
+    const idToken = req.cookies.get('x_id__token')?.value;
 
     const redirectUri = `${backendConfig.redirectUrl}`;
 

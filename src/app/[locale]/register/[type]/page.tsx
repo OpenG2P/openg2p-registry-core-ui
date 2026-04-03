@@ -117,7 +117,7 @@ export default function RegisterTypePage() {
                             ))}
                         </div>
                     ) : records.length === 0 ? (
-                        <div className="text-center py-10 text-gray-500">{t('noItemsFound')}</div>
+                        <div className="text-center py-10 text-gray-500">{t('no_items_found')}</div>
                     ) : (
                         records.map((record: RegisterRecord, index: number) => (
                             <RegisterRecordCard

@@ -3,10 +3,12 @@ import { toast } from "react-toastify";
 import { useFetch } from "@/shared/hooks/useFetch";
 import type { ChangeRequest } from "@/features/change-request/types/change-request";
 import { ChangeRequestDocument } from "../components/ChangeRequestHeader";
+import { useTranslations } from "next-intl";
 
 type PopupType = "approve" | "reject-input" | "reject" | null;
 
 export function useChangeRequestManager(changeId: string) {
+    const t = useTranslations();
     const [details, setDetails] = useState<ChangeRequest | null>(null);
     const [documents, setDocuments] = useState<ChangeRequestDocument[]>([]);
 
@@ -57,15 +59,15 @@ export function useChangeRequestManager(changeId: string) {
                 body: JSON.stringify({ change_request_id: changeId }),
             });
 
-            if ("error" in res) {
-                toast.error(res.error, {
+            if ("error" in res && res.error) {
+                toast.error(t('toast_operation_error', { error: res.error }), {
                     position: "top-right",
                     autoClose: 5000,
                 });
                 return;
             }
             if (res.approval_status === "APPROVED") {
-                toast.success("Change request approved successfully", {
+                toast.success(t('toast_cr_approved'), {
                     position: "top-right",
                     autoClose: 4000,
                 });
@@ -76,7 +78,7 @@ export function useChangeRequestManager(changeId: string) {
                 });
             }
         } catch {
-            toast.error("Failed to approve change request", {
+            toast.error(t('toast_cr_approve_failed'), {
                 autoClose: 5000,
             });
         } finally {
@@ -101,7 +103,7 @@ export function useChangeRequestManager(changeId: string) {
                 if (res) {
                     setPopupVisible(false);
 
-                    toast.success("Change request rejected", {
+                    toast.success(t('toast_cr_rejected'), {
                         position: "top-right",
                         autoClose: 4000,
                     });
@@ -112,7 +114,7 @@ export function useChangeRequestManager(changeId: string) {
                     });
                 }
             } catch {
-                toast.error("Failed to reject change request", {
+                toast.error(t('toast_cr_reject_failed'), {
                     autoClose: 5000,
                 });
             } finally {

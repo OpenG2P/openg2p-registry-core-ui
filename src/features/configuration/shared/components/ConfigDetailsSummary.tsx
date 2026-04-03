@@ -1,5 +1,6 @@
 import React from 'react';
 import { Pencil, Eye, Check, X, ChevronDown } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { CONFIGURATION_REGISTERS_ACTIONS } from '../utils/configurationRegisters.actions';
 import Can from '@/components/shared/Can';
 
@@ -20,6 +21,7 @@ export default function ConfigDetailsSummary({
     onEdit,
     onView
 }: ConfigDetailsSummaryProps) {
+    const t = useTranslations();
     const [isEditing, setIsEditing] = React.useState(false);
 
     return (
@@ -54,7 +56,7 @@ export default function ConfigDetailsSummary({
                         <button
                             onClick={onView}
                             className="bg-white p-2 rounded-[10px] hover:bg-gray-50 transition-colors shadow-sm flex items-center justify-center shrink-0"
-                            title="View Details"
+                            title={t('view_details') || "View Details"}
                         >
                             <Eye size={16} className="text-gray-700" />
                         </button>
@@ -63,7 +65,7 @@ export default function ConfigDetailsSummary({
                         <button
                             onClick={onEdit}
                             className="bg-white p-2 rounded-[10px] hover:bg-gray-50 transition-colors shadow-sm flex items-center justify-center shrink-0"
-                            title="Edit"
+                            title={t('common.edit') || "Edit"}
                         >
                             <Pencil size={16} className="text-gray-700" />
                         </button>

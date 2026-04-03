@@ -7,11 +7,12 @@ import { useRegisterRecord } from "@/context/RegisterRecordContext";
 import { SectionChanges } from "@openg2p/registry-widgets";
 import { extractFilesFromSection, normalizeEditActions } from "../utils";
 import { toast } from "react-toastify";
-
+import { useTranslations } from "next-intl";
 
 export const useSectionSave = (
     onChangeRequestCreated: () => void
 ) => {
+    const t = useTranslations();
     const { internalRecordId } = useRegisterRecord();
     const { activeTabId } = useRegisterTabs();
     const { currentRegister } = useRegister();
@@ -40,7 +41,7 @@ export const useSectionSave = (
 
                 if (!section_id && !section_register_id) {
                     console.error(
-                        "Missing identifiers: both section_id and section_register_id are undefined.",
+                        t("toast_section_info_missing"),
                         { section_id, section_register_id }
                     );
                     return;
@@ -67,7 +68,7 @@ export const useSectionSave = (
 
                             if (!uploadResult || uploadResult.length === 0) {
                                 toast.error(
-                                    "Document upload failed. Change request was not created.",
+                                    t("toast_upload_failed_cr_not_created"),
                                     {
                                         position: "top-right",
                                         autoClose: 6000,
@@ -84,7 +85,7 @@ export const useSectionSave = (
                         }
 
                         toast.success(
-                            `${documentsResponse.length} file(s) uploaded successfully!`,
+                            t("toast_upload_success", { count: documentsResponse.length }),
                             {
                                 position: "top-right",
                                 autoClose: 4000,
@@ -92,7 +93,7 @@ export const useSectionSave = (
                         );
 
                     } catch (error) {
-                        toast.error(`Failed to upload files. Please try again.`, {
+                        toast.error(t("toast_upload_failed"), {
                             position: "top-right",
                             autoClose: 6000,
                         });
@@ -125,14 +126,14 @@ export const useSectionSave = (
                 });
 
                 if (change_request_response?.change_request_id) {
-                    toast.success(`Change request created successfully!`, {
+                    toast.success(t("toast_cr_created"), {
                         position: "top-right",
                         autoClose: 6000,
                     });
                     // Update the Pending change request count
                     onChangeRequestCreated();
                 } else {
-                    toast.error(`Failed to create change request!`, {
+                    toast.error(t("toast_cr_create_failed"), {
                         position: "top-right",
                         autoClose: 6000,
                     });
@@ -148,6 +149,7 @@ export const useSectionSave = (
             activeTabId,
             uploadDocumentRequest,
             onChangeRequestCreated,
+            t,
         ]
     );
 

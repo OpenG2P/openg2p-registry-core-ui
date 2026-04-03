@@ -41,7 +41,7 @@ export default function FilterBar({
                 className="w-[130px] h-[34px] flex items-center justify-between px-4 rounded-[10px] bg-[#F2BA1A]"
                 disabled={filterLoading}
             >   <span className=" text-[16px] font-medium leading-normal text-[#1E1E1E]">
-                    {filterLoading ? t('loading') : t('filters')}
+                    {filterLoading ? t('filter_loading') : t('filters')}
                 </span>
 
                 <Image src="/images/common/filters_icon.png" width={24} height={24} alt={t('filters')} />

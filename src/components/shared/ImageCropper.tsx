@@ -3,6 +3,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import Cropper, { Area, Point } from 'react-easy-crop';
 import { X, Minus, Plus, RotateCw } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import getCroppedImg from '@/shared/utils/cropImage';
 
 interface ImageCropperProps {
@@ -12,6 +13,7 @@ interface ImageCropperProps {
 }
 
 export default function ImageCropper({ image, onCropComplete, onCancel }: ImageCropperProps) {
+    const t = useTranslations();
     const [crop, setCrop] = useState<Point>({ x: 0, y: 0 });
     const [zoom, setZoom] = useState(1);
     const [rotation, setRotation] = useState(0);
@@ -59,7 +61,7 @@ export default function ImageCropper({ image, onCropComplete, onCancel }: ImageC
             <div className="relative w-full max-w-175 bg-white rounded-[10px] overflow-hidden border-4 border-[#F2BA1A]">
                 {/* Header */}
                 <div className="flex items-center justify-between px-8 py-6">
-                    <h2 className="text-[#ED7C22] text-2xl font-bold font-roboto">Edit Image</h2>
+                    <h2 className="text-[#ED7C22] text-2xl font-bold font-roboto">{t('edit_image')}</h2>
                     <button
                         onClick={onCancel}
                         className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -121,7 +123,7 @@ export default function ImageCropper({ image, onCropComplete, onCancel }: ImageC
 
                     {/* Aspect Ratio*/}
                     <div className="flex items-center gap-2 shrink-0">
-                        <span className="text-xs text-gray-500 font-semibold">Width</span>
+                        <span className="text-xs text-gray-500 font-semibold">{t('width')}</span>
                         <input
                             type="number"
                             value={inputWidth}
@@ -131,7 +133,7 @@ export default function ImageCropper({ image, onCropComplete, onCancel }: ImageC
 
                         <span className="text-gray-400 font-bold">:</span>
 
-                        <span className="text-xs text-gray-500 font-semibold">Height</span>
+                        <span className="text-xs text-gray-500 font-semibold">{t('height')}</span>
                         <input
                             type="number"
                             value={inputHeight}
@@ -154,7 +156,7 @@ export default function ImageCropper({ image, onCropComplete, onCancel }: ImageC
                         onClick={handleApply}
                         className="bg-black text-white px-8 py-2 rounded-[10px] font-bold text-sm hover:bg-gray-800 transition-colors shadow-lg shrink-0"
                     >
-                        Apply
+                        {t('apply')}
                     </button>
 
                 </div>
