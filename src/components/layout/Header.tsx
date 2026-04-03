@@ -4,7 +4,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
-import { ProfileDropdown, NotificationDropdown, ConfigurationButton } from '@/components/layout';
+import { ProfileDropdown, NotificationDropdown, ConfigurationButton, LanguageSwitcher } from '@/components/layout';
 import { useRuntimeConfig } from "@/context/RuntimeConfigContext";
 import Can from "../shared/Can";
 import { CONFIG_VIEW_ACTIONS } from "@/features/configuration/shared/utils/configurationView.actions";
@@ -62,6 +62,7 @@ export default function Header() {
                 <Can anyOf={CONFIG_VIEW_ACTIONS}>
                     <ConfigurationButton />
                 </Can>
+                <LanguageSwitcher/>
                 <NotificationDropdown />
                 <ProfileDropdown />
             </div>

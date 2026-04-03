@@ -62,9 +62,7 @@ export default function ChangeRequestCard({
                     <div>
                         {t('status')}:{' '}
                         <span className={`font-medium ${statusClass}`}>
-                            {t(changeRequest.approval_status, {
-                                default: changeRequest.approval_status,
-                            })}
+                            {changeRequest.approval_status}
                         </span>
                     </div>
 

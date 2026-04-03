@@ -700,5 +700,10 @@
   "First Name": "Prénom",
   "Last Name": "Nom de famille",
   "Gender": "Genre",
-  "Birthdate": "Date de naissance"
+  "Birthdate": "Date de naissance",
+  "Enter address line 1": "Entrer la ligne d'adresse 1",
+  "Enter address line 2": "Entrer la ligne d'adresse 2",
+  "Enter latitude": "Entrer la latitude",
+  "Enter longitude": "Entrer la longitude",
+  "Enter altitude": "Entrer l'altitude"
 }
