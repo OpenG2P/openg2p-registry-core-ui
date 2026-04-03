@@ -125,10 +125,10 @@ const StatsCardSmall = ({
                         </div>
                     ) : (
                         <>
-                            <h2 className="font-roboto text-[45px] font-bold leading-none">
+                            <h2 className="font-roboto text-[45px] font-bold leading-none truncate overflow-hidden whitespace-nowrap">
                                 {totalCount}
                             </h2>
-                            <h3 className="font-roboto text-[22px] font-bold leading-7">
+                            <h3 className="font-roboto text-[22px] font-bold leading-7 truncate overflow-hidden whitespace-nowrap">
                                 {title}
                             </h3>
                         </>
@@ -159,12 +159,12 @@ const StatsCardSmall = ({
                                 )}
 
                                 {/* value */}
-                                <span className="font-roboto text-[16px] font-bold leading-7">
+                                <span className="font-roboto text-[16px] font-bold leading-7 truncate overflow-hidden whitespace-nowrap">
                                     {row.value}
                                 </span>
 
                                 {/* label */}
-                                <span className="font-roboto text-[16px] font-medium leading-7 opacity-80">
+                                <span className="font-roboto text-[16px] font-medium leading-7 opacity-80 truncate overflow-hidden whitespace-nowrap">
                                     {row.label}
                                 </span>
                             </li>
