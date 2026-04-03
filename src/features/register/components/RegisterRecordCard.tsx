@@ -50,23 +50,27 @@ export function RegisterRecordCard({ record, registerType, isEven }: RegisterRec
                     const firstField = sortedFields[startIndex];
                     const secondField = sortedFields[startIndex + 1];
 
-                    if (!firstField) return null;
-
                     return (
                         <div key={startIndex} className="flex-1 min-w-0">
-                            <p className="text-[16px] text-black truncate">
-                                <span className="font-normal text-gray-600">
-                                    {t(firstField.field_name)}:{' '}
-                                </span>
-                                <span className="font-medium">{firstField.value}</span>
-                            </p>
-                            {secondField && (
+                            {firstField ? (
+                                <p className="text-[16px] text-black truncate">
+                                    <span className="font-normal text-gray-600">
+                                        {t(firstField.field_name)}:{' '}
+                                    </span>
+                                    <span className="font-medium">{firstField.value}</span>
+                                </p>
+                            ) : (
+                                <p className="text-[16px] invisible">&nbsp;</p>
+                            )}
+                            {secondField ? (
                                 <p className="text-[16px] text-black truncate">
                                     <span className="font-normal text-gray-600">
                                         {t(secondField.field_name)}:{' '}
                                     </span>
                                     <span className="font-medium">{secondField.value}</span>
                                 </p>
+                            ) : (
+                                <p className="text-[16px] invisible">&nbsp;</p>
                             )}
                         </div>
                     );
