@@ -35,7 +35,7 @@ export function formatDate(value?: string | null) {
     }
 
     const [dp, tp] = safeValue.split(/[T ]/);
-    const [y, m, d] = dp.split('_').map(Number);
+    const [y, m, d] = dp.split('-').map(Number);
     const [h, mi] = (tp || '00:00').split(':').map(Number);
 
     const date = new Date(y, m - 1, d, h, mi);

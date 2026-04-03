@@ -33,7 +33,7 @@ export async function proxyToBackend({
 	if (auth instanceof NextResponse) return auth;
 
 	try {
-		const contentType = req.headers.get("content_type") || "";
+		const contentType = req.headers.get("content-type") || "";
 		const isFormData = contentType.includes("multipart/form-data");
 
 		let body: any = {};

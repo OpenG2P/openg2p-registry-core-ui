@@ -149,8 +149,8 @@ const VerificationStats = ({
     const t = useTranslations();
     return (
         <div className="space-y-2 text-[16px] text-[#00000080]">
-            <h3 className="text-lg font-semibold text-black ">
-                {t('verification')}
+            <h3 className="text-lg font-semibold text-black invisible">
+                Verification
             </h3>
 
             <div className="border-l border-[#F2BA1A] pl-6 space-y-2">
