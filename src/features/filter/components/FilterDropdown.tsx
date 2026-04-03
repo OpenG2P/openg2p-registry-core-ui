@@ -233,18 +233,10 @@ export default function FilterDropdown({
 
                 {selectedFilter && (
                     <div className="flex-1 space-y-4">
-                        {/* Name Label/Input */}
-                        <div className="flex flex-col gap-1.5">
-                            <label className="text-[16px] font-normal text-black leading-none">
-                                {selectedFilter.display_label}
-                            </label>
-                            {renderValueInput()}
-                        </div>
-
                         {/* Operator Label/Input */}
                         <div className="flex flex-col gap-1.5">
                             <label className="text-[16px] font-normal text-black leading-none">
-                                Select Type
+                                Select Operator
                             </label>
                             <div className="relative w-full">
                                 <select
@@ -268,6 +260,14 @@ export default function FilterDropdown({
                                     />
                                 </div>
                             </div>
+                        </div>
+
+                        {/* Name Label/Input */}
+                        <div className="flex flex-col gap-1.5">
+                            <label className="text-[16px] font-normal text-black leading-none">
+                                {selectedFilter.display_label}
+                            </label>
+                            {renderValueInput()}
                         </div>
 
                         {error && (

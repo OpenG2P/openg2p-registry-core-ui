@@ -30,7 +30,7 @@ export default function NewIntakeFormSubmissionPage() {
             <TopBar
                 breadcrumb={[
                     { label: `${currentRegister?.register_subject || 'Register'} - Intake Form`, href: `/intake-form/${registerType}` },
-                    { label: sections?.[0]?.intake_form_name || String(intake_form_id) }
+                    { label: sections?.[0]?.intake_form_name || '' }
                 ]}
 
                 showFilters={false}
