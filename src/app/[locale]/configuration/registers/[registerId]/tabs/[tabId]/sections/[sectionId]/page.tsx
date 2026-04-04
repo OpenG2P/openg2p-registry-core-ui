@@ -19,8 +19,10 @@ import {
 import { useBreadcrumb } from '@/shared/hooks/useBreadcrumb';
 import { useRbac } from '@/context/RbacContext';
 import { CONFIGURATION_SECTIONS_ACTIONS } from '@/features/configuration/shared/utils/configurationSections.actions';
+import { useTranslations } from 'next-intl';
 
 const SectionConfigurationPage = () => {
+    const t = useTranslations();
     const { registerId, tabId, sectionId } = useParams<{
         registerId: string;
         tabId: string;
@@ -41,7 +43,7 @@ const SectionConfigurationPage = () => {
     const sectionDetails = getSectionDetails(sectionId, sections);
 
     const breadcrumb = useBreadcrumb({
-        rootItem: { label: 'Registers', href: '/configuration/registers' },
+        rootItem: { label: t('registers'), href: '/configuration/registers' },
         customItems: [
             { label: registerDetails.register_mnemonic || '', href: `/configuration/registers/${registerId}` },
             { label: tabDetails.tab_label || tabDetails.intake_form_name || '', href: `/configuration/registers/${registerId}/tabs/${tabId}` },

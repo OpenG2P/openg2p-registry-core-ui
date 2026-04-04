@@ -35,7 +35,7 @@ export function ChangeRequestValuesTabs({
                         : 'bg-[#DDDDDD]'
                         }`}
                 >
-                    {t("newAndOldValues")}
+                    {t("new_and_old_values")}
                 </button>
 
                 <button

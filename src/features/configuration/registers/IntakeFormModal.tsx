@@ -4,6 +4,7 @@ import { useParams } from 'next/navigation';
 import { useState } from "react";
 import { X } from "lucide-react";
 import { toast } from 'react-toastify';
+import { useTranslations } from "next-intl";
 
 interface Props {
     isOpen: boolean;
@@ -12,6 +13,7 @@ interface Props {
 }
 
 export default function IntakeFormModal({ isOpen, onClose, onSuccess }: Props) {
+    const t = useTranslations();
     const { registerId } = useParams<{ registerId: string }>();
     const { execute: createIntakeForm, loading } = useFetch();
     const [formData, setFormData] = useState({
@@ -24,7 +26,7 @@ export default function IntakeFormModal({ isOpen, onClose, onSuccess }: Props) {
 
     const handleSubmit = async () => {
         if (!formData.intake_form_name) {
-            toast.warn('Intake Form Name is required');
+            toast.warn(t('intake_form_name_required') || 'Intake Form Name is required');
             return;
         }
 
@@ -42,7 +44,7 @@ export default function IntakeFormModal({ isOpen, onClose, onSuccess }: Props) {
         });
 
         if (result?.tab_id) {
-            toast.success('Intake Form created successfully');
+            toast.success(t('toast_intake_form_created'));
             setFormData({
                 intake_form_name: "",
                 intake_form_description: "",
@@ -53,7 +55,7 @@ export default function IntakeFormModal({ isOpen, onClose, onSuccess }: Props) {
             if (onSuccess) onSuccess();
             onClose();
         } else {
-            toast.error('Failed to create intake form');
+            toast.error(t('toast_intake_form_create_failed'));
         }
     };
 
@@ -82,17 +84,17 @@ export default function IntakeFormModal({ isOpen, onClose, onSuccess }: Props) {
                     </button>
 
                     <h2 className="text-2xl font-bold text-orange-500 mb-4">
-                        Add New Intake Form
+                        {t('add_intake_form')}
                     </h2>
 
                     <div className="space-y-4">
                         <div>
                             <label className="block text-sm font-semibold text-black mb-1">
-                                Intake Form Name
+                                {t('intake_form_name')}
                             </label>
                             <input
                                 type="text"
-                                placeholder="Enter Intake Form Name"
+                                placeholder={t('enter_intake_form_name') || "Enter Intake Form Name"}
                                 value={formData.intake_form_name}
                                 onChange={(e) =>
                                     setFormData({ ...formData, intake_form_name: e.target.value })
@@ -103,10 +105,10 @@ export default function IntakeFormModal({ isOpen, onClose, onSuccess }: Props) {
 
                         <div>
                             <label className="block text-sm font-semibold text-black mb-2">
-                                Intake Form Description
+                                {t('intake_form_description')}
                             </label>
                             <textarea
-                                placeholder="Enter description"
+                                placeholder={t('enter_description') || "Enter description"}
                                 value={formData.intake_form_description}
                                 onChange={(e) =>
                                     setFormData({ ...formData, intake_form_description: e.target.value })
@@ -117,11 +119,11 @@ export default function IntakeFormModal({ isOpen, onClose, onSuccess }: Props) {
 
                         <div>
                             <label className="block text-sm font-semibold text-black mb-2">
-                                No. of Verifications Required
+                                {t('no_of_verifications_required_label')}
                             </label>
                             <input
                                 type="number"
-                                placeholder="e.g. 0"
+                                placeholder="0"
                                 value={formData.no_of_verifications_required}
                                 onChange={(e) =>
                                     setFormData({
@@ -147,7 +149,7 @@ export default function IntakeFormModal({ isOpen, onClose, onSuccess }: Props) {
                                     className="h-4 w-4"
                                 />
                                 <span className="text-sm font-medium text-gray-700">
-                                    Auto Approve Intake Form
+                                    {t('auto_approve')}
                                 </span>
                             </label>
 
@@ -164,7 +166,7 @@ export default function IntakeFormModal({ isOpen, onClose, onSuccess }: Props) {
                                     className="h-4 w-4"
                                 />
                                 <span className="text-sm font-medium text-gray-700">
-                                    Is Active
+                                    {t('active')}
                                 </span>
                             </label>
                         </div>
@@ -174,14 +176,14 @@ export default function IntakeFormModal({ isOpen, onClose, onSuccess }: Props) {
                                 onClick={handleCancel}
                                 className="px-12 py-2.5 bg-gray-300 text-gray-700 rounded-[10px]"
                             >
-                                Cancel
+                                {t('cancel')}
                             </button>
 
                             <button
                                 onClick={handleSubmit}
                                 className="px-12 py-2.5 bg-black text-white rounded-[10px]"
                             >
-                                Save
+                                {t('save')}
                             </button>
                         </div>
                     </div>

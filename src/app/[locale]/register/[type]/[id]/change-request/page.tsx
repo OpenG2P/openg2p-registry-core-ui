@@ -82,7 +82,7 @@ export default function ChangeRequestPage() {
             {pendingRequestsCount !== undefined && (
                 <div className="flex items-center gap-2">
                     <span className="text-[18px] font-medium text-black">
-                        {t('pendingRequests')}
+                        {t('pending_requests')}
                     </span>
                     <span className="text-[24px] font-bold text-[#ED7C22]">
                         {pendingRequestsCount.toString().padStart(2, '0')}
@@ -128,7 +128,7 @@ export default function ChangeRequestPage() {
             ) : changeRequests.length === 0 ? (
                 <div className="px-6 py-5 flex items-center justify-center text-center">
                     <div className="text-[16px] text-black/50 font-medium">
-                        {t("noChangeRequest")}
+                        {t("no_change_request")}
                     </div>
                 </div>
             ) : (

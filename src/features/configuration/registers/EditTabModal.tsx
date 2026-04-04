@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useFetch } from '@/shared/hooks';
 import { toast } from 'react-toastify';
 import { Tab } from '../shared/types';
@@ -13,6 +14,7 @@ interface EditTabModalProps {
 }
 
 export default function EditTabModal({ isOpen, onClose, onSuccess, initialData, registerId }: EditTabModalProps) {
+    const t = useTranslations();
     const { execute: updateTab, loading } = useFetch();
 
     const [formData, setFormData] = useState({
@@ -71,17 +73,17 @@ export default function EditTabModal({ isOpen, onClose, onSuccess, initialData, 
                         <X size={40} strokeWidth={2} />
                     </button>
 
-                    <h2 className="text-2xl font-bold text-orange-500 mb-4">Edit Tab</h2>
+                    <h2 className="text-2xl font-bold text-orange-500 mb-4">{t('edit_tab')}</h2>
 
                     <div className="space-y-4">
                         <div>
                             <label className="block text-sm font-semibold text-black mb-2">
-                                Tab Label
+                                {t('tab_label')}
                             </label>
                             <div className="relative">
                                 <input
                                     type="text"
-                                    placeholder="Enter Tab Label"
+                                    placeholder={t('enter_tab_label')}
                                     value={formData.tab_label}
                                     onChange={(e) => setFormData({ ...formData, tab_label: e.target.value })}
                                     className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all text-gray-600 placeholder:text-gray-400"
@@ -91,7 +93,7 @@ export default function EditTabModal({ isOpen, onClose, onSuccess, initialData, 
 
                         <div>
                             <label className="block text-sm font-semibold text-black mb-2">
-                                Tab Order
+                                {t('tab_order')}
                             </label>
                             <input
                                 type="number"
@@ -107,13 +109,13 @@ export default function EditTabModal({ isOpen, onClose, onSuccess, initialData, 
                                 onClick={handleCancel}
                                 className="px-12 py-2.5 bg-gray-300 text-gray-700 rounded-[10px] hover:bg-gray-400 transition-colors"
                             >
-                                Cancel
+                                {t('cancel')}
                             </button>
                             <button
                                 onClick={handleSubmit}
                                 className="px-12 py-2.5 bg-black text-white rounded-[10px] hover:bg-gray-800 transition-colors disabled:opacity-50"
                             >
-                                Update
+                                {t('update')}
                             </button>
                         </div>
                     </div>

@@ -8,8 +8,10 @@ import { usePagination } from '@/shared/hooks';
 import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
 import { useRbac } from '@/context/RbacContext';
 import { CONFIGURATION_REGISTERS_ACTIONS } from '@/features/configuration/shared/utils/configurationRegisters.actions';
+import { useTranslations } from 'next-intl';
 
 const RegistersConfigurationPage = () => {
+    const t = useTranslations();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -39,11 +41,11 @@ const RegistersConfigurationPage = () => {
     return (
         <>
             <TopBar
-                breadcrumb={[{ label: "Registers" }]}
+                breadcrumb={[{ label: t('registers') }]}
                 showFilters={false}
                 showPagination
                 showAddNewButton={canCreate}
-                addNewButtonText={"Add New Register"}
+                addNewButtonText={t('add_new_register')}
                 onAddNewButton={() => setIsModalOpen(true)}
                 pageStart={pageStart}
                 pageEnd={pageEnd}

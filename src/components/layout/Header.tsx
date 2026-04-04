@@ -4,7 +4,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
-import { ProfileDropdown, NotificationDropdown, ConfigurationButton } from '@/components/layout';
+import { ProfileDropdown, NotificationDropdown, ConfigurationButton, LanguageSwitcher } from '@/components/layout';
 import { useRuntimeConfig } from "@/context/RuntimeConfigContext";
 import Can from "../shared/Can";
 import { CONFIG_VIEW_ACTIONS } from "@/features/configuration/shared/utils/configurationView.actions";
@@ -44,7 +44,7 @@ export default function Header() {
                         {config?.registryName || t('registryGen2')}
                     </span>
 
-                    {/* <span className="h-8 w-0.5 bg-[#D9D9D9]" />
+                        {/* <span className="h-8 w-0.5 bg-[#D9D9D9]" />
 
                     <div className="flex flex-col leading-tight">
                         <span className="text-[14px] text-black/50">
@@ -54,14 +54,15 @@ export default function Header() {
                             OpenG2P
                         </span>
                     </div> */}
-                </div>
-            </Link>
+                    </div>
+                </Link>
 
             {/* Desktop Navigation */}
             <div className="flex items-center gap-8">
                 <Can anyOf={CONFIG_VIEW_ACTIONS}>
                     <ConfigurationButton />
                 </Can>
+                <LanguageSwitcher/>
                 <NotificationDropdown />
                 <ProfileDropdown />
             </div>

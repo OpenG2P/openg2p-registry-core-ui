@@ -15,11 +15,11 @@ export default function ChangeRequestDetailsPage() {
     const breadcrumb = useMemo(
         () => [
             {
-                label: t("changeRequest"),
+                label: t("change_request"),
                 href: "/change-request",
             },
             {
-                label: t("changeIdBreadcrumb", { id: changeId }),
+                label: t("change_id_breadcrumb", { id: changeId }),
             },
         ],
         [changeId, t]

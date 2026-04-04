@@ -84,7 +84,7 @@ export default function VersionHistoryCard({
         <div className="relative rounded-[10px] bg-[#E0E0E0] px-7.25 pt-5 pb-7.25 overflow-hidden">
             <div className="flex items-center justify-between mb-5">
                 <h3 className="text-[24px] font-semibold text-black leading-none">
-                    {t("versionHistory")}
+                    {t("version_history")}
                 </h3>
                 <div className="flex h-15 w-20 items-center justify-center rounded-[10px] border-3 border-white bg-[#D9D9D9] text-[34px] font-bold text-black">
                     {count.toString().padStart(2, '0')}
@@ -92,7 +92,7 @@ export default function VersionHistoryCard({
             </div>
 
             <div className="space-y-1 text-[16px] text-black font-normal">
-                <p className="font-medium">{t("lastUpdatedBy")}</p>
+                <p className="font-medium">{t("last_updated_by")}</p>
                 <div className="flex items-center gap-2">
                     <Image
                         src="/images/register/version_profile.png"
@@ -117,7 +117,7 @@ export default function VersionHistoryCard({
 
             {payload.last_approved_by && payload.last_approved_at && (
                 <div className="mt-4 space-y-1 text-[16px] text-black">
-                    <p className="font-medium">{t("lastApprovedBy")}</p>
+                    <p className="font-medium">{t("last_approved_by")}</p>
                     <div className="flex items-center gap-2">
                         <Image
                             src="/images/register/version_profile.png"
@@ -146,7 +146,7 @@ export default function VersionHistoryCard({
                 <ViewAll
                     href={href}
                     bgColor="#B0B0AD"
-                    label={t("knowMore")}
+                    label={t("know_more")}
                 />
             </div>
         </div>

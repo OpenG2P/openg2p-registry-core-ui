@@ -54,7 +54,7 @@ export default function ChangeRequestPage() {
     return (
         <div className="min-h-screen mx-auto bg-[#F3F1E4]">
             <TopBar
-                breadcrumb={[{ label: t("changeRequest") }]}
+                breadcrumb={[{ label: t("change_request") }]}
                 showSearch
                 searchValue={searchQuery || ''}
                 searchPlaceholder={t('search')}
@@ -78,7 +78,7 @@ export default function ChangeRequestPage() {
                     </div>
                 ) : changeRequests.length === 0 ? (
                     <div className="text-sm text-gray-400 text-center py-6">
-                        No change requests found
+                        {t('no_change_requests_found')}
                     </div>
                 ) : (
                     <ChangeRequestList

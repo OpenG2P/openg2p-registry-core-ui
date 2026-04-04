@@ -46,7 +46,7 @@ export default function RequireAction({
                         alt="Loading"
                         className="w-12 h-12"
                     />
-                    <p className="text-black/50 text-[20px]">{t('loadingAdmin')}</p>
+                    <p className="text-black/50 text-[20px]">{t('loading_admin')}</p>
                 </div>
             </div>
         );

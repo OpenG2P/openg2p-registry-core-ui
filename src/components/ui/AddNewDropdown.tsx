@@ -74,7 +74,7 @@ export default function AddNewDropdown({
 
                     {mechanisms.length === 0 && (
                         <div className="px-4 py-3 text-sm text-gray-500">
-                            No options available
+                            {t('no_options_available')}
                         </div>
                     )}
 

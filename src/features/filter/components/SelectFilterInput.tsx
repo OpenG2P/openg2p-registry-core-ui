@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { SelectOption, ValueInputProps } from "@/features/filter/types";
+import { useTranslations } from "next-intl";
 
 interface SelectFilterInputProps extends ValueInputProps {
     options_source?: SelectOption[];
@@ -13,6 +14,7 @@ export default function SelectFilterInput({
     onChange,
     options_source = [],
 }: SelectFilterInputProps) {
+    const t = useTranslations();
     const isMultiSelect = operator === "in" || operator === "nin";
 
     const handleMultiSelectChange = (optionValue: string) => {
@@ -31,7 +33,7 @@ export default function SelectFilterInput({
         return (
             <div className="border border-[#D1D5DB] rounded-[10px] p-3 w-full space-y-2 font-['Roboto'] overflow-y-auto max-h-[100px]">
                 {options_source.length === 0 ? (
-                    <p className="text-sm text-gray-500">No options available</p>
+                    <p className="text-sm text-gray-500">{t("no_options_available")}</p>
                 ) : (
                     options_source.map(opt => (
                         <label
@@ -59,7 +61,7 @@ export default function SelectFilterInput({
                 value={value || ""}
                 onChange={e => onChange(e.target.value)}
             >
-                <option value="">Select</option>
+                <option value="">{t("common.select")}</option>
                 {options_source.map(opt => (
                     <option key={opt.value} value={opt.value}>
                         {opt.label}

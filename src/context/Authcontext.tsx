@@ -99,7 +99,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                         alt="Loading"
                         className="w-12 h-12"
                     />
-                    <p className="text-black/50 text-[20px]">{t('loadingAdmin')}</p>
+                    <p className="text-black/50 text-[20px]">{t('loading_admin')}</p>
                 </div>
             </div>
         );
@@ -115,9 +115,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                         </svg>
                     </div>
 
-                    <h1 className="text-2xl font-semibold text-black">{t('genericErrorTitle')}</h1>
+                    <h1 className="text-2xl font-semibold text-black">{t('generic_error_title')}</h1>
                     <p className="text-black mt-4 text-lg leading-relaxed">
-                        {t('genericErrorDescription')}
+                        {t('generic_error_description')}
                     </p>
                 </div>
             </div>
@@ -136,27 +136,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                     </div>
 
                     <h1 className="text-2xl font-semibold text-black">
-                        {t('tokenSizeTitle')}
+                        {t('token_size_title')}
                     </h1>
 
                     <p className="text-black mt-4 text-lg leading-relaxed">
-                        {t('tokenSizeDescription')}
+                        {t('token_size_description')}
                     </p>
 
                     <p className="text-black mt-2 text-base leading-relaxed">
-                        {t('tokenSizeCause')}
+                        {t('token_size_cause')}
                     </p>
 
                     <div className="mt-6 text-left bg-white border border-black/20 rounded-[10px] p-5">
                         <p className="text-base font-semibold text-black mb-3">
-                            {t('requiredAction')}
+                            {t('required_action')}
                         </p>
 
                         <ol className="space-y-3">
                             {[
-                                t('steps.reduceRoles'),
-                                t('steps.optimizeClaims'),
-                                t('steps.reissueToken'),
+                                t('step_reduce_roles'),
+                                t('step_optimize_claims'),
+                                t('step_reissue_token'),
                             ].map((step, i) => (
                                 <li key={i} className="flex items-start gap-3">
                                     <span className="w-6 h-6 rounded-full bg-black text-white text-xs font-semibold flex items-center justify-center shrink-0 mt-0.5">
@@ -191,11 +191,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                         />
 
                         <h1 className="mb-4 text-[40px] font-semibold leading-11.75 text-[#ED7C22]">
-                            {t('accessDenied')}
+                            {t('access_denied')}
                         </h1>
 
                         <p className="mb-6 text-[20px] font-light leading-6 text-black/50 max-w-xl">
-                            {t('noPermission')}
+                            {t('no_permission')}
                         </p>
                     </div>
                 </div>

@@ -71,7 +71,7 @@ export default function IntakeFormPage() {
     return (
         <div className="min-h-screen mx-auto bg-[#F3F1E4]">
             <TopBar
-                breadcrumb={[{ label: `${currentRegister?.register_subject || 'Register'} - Intake Form` }]}
+                breadcrumb={[{ label: t("register_intake_form", { subject: currentRegister?.register_subject || t("register") }) }]}
 
 
                 showFilters={false}
@@ -137,7 +137,7 @@ export default function IntakeFormPage() {
                     />
                 ) : (
                     <div className="text-sm text-gray-400 text-center py-6">
-                        No submissions found
+                        {t('no_submissions')}
                     </div>
                 )}
             </div>

@@ -121,7 +121,7 @@ export default function NotificationDropdown() {
 
                         {!isLoading && notifications.length === 0 && (
                             <div className="text-center py-6 text-sm text-gray-500">
-                                {t('noNotifications')}
+                                {t('no_notifications')}
                             </div>
                         )}
                     </div>
@@ -131,7 +131,7 @@ export default function NotificationDropdown() {
                     <div className="mt-auto pb-4 ml-6">
                         <ViewAll
                             href="/notifications"
-                            label={t('viewAllNotifications')}
+                            label={t('view_all_notifications')}
                             bgColor="#F5F5F5"
                             hoverBgColor="#ED7C22"
                             hoverTextColor="#FFFFFF"

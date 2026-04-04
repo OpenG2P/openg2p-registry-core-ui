@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 interface SearchBarProps {
     placeholder: string;
@@ -22,6 +23,7 @@ const SearchBar = ({
     pxClass = "px-2",
     textClass = "text-[20px]"
 }: SearchBarProps) => {
+    const t = useTranslations();
     const [value, setValue] = useState(searchValue || "");
 
     return (
@@ -43,7 +45,7 @@ const SearchBar = ({
                     src="/images/common/search_icon.png"
                     width={iconSize}
                     height={iconSize}
-                    alt="Search"
+                    alt={t('search')}
                 />
             </button>
         </div>

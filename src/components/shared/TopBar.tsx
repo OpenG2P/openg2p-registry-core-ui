@@ -138,7 +138,7 @@ export default function TopBar({
                             <span className="text-[16px] font-medium text-black truncate overflow-hidden whitespace-nowrap">
                                 {addNewButtonText}
                             </span>
-                            <span className=" text-[20px] font-bold text-black leading-none">
+                            <span className=" text-[20px] font-bold text-black leading-none ">
                                 +
                             </span>
 

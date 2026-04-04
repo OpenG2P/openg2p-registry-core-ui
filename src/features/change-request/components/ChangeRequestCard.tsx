@@ -29,11 +29,11 @@ export default function ChangeRequestCard({
 
     const title = rawTitle
         ? t(rawTitle, { default: rawTitle })
-        : t('changeRequestFallback', { index: index + 1 });
+        : t('change_request_fallback', { index: index + 1 });
 
     // const title = `${(index + 1).toString().padStart(2, '0')} ${rawTitle
     //         ? t(rawTitle, { default: rawTitle })
-    //         : t('changeRequestFallback', { index: index + 1 })
+    //         : t('change_request_fallback', { index: index + 1 })
     //     }`;
 
     const statusClass = statusClassMap[changeRequest.approval_status] ?? "text-gray-500";
@@ -55,21 +55,19 @@ export default function ChangeRequestCard({
                     </h3>
 
                     <div>
-                        {t('changeId')}:{' '}
+                        {t('change_id')}:{' '}
                         <span className="text-black font-medium">{changeRequest.change_request_id}</span>
                     </div>
 
                     <div>
                         {t('status')}:{' '}
                         <span className={`font-medium ${statusClass}`}>
-                            {t(changeRequest.approval_status, {
-                                default: changeRequest.approval_status,
-                            })}
+                            {changeRequest.approval_status}
                         </span>
                     </div>
 
                     <div>
-                        {t('changeDate')}:{' '}
+                        {t('change_date')}:{' '}
                         <span className="text-black font-medium">
                             {new Date(changeRequest.created_at).toLocaleDateString()}
                         </span>
@@ -82,19 +80,19 @@ export default function ChangeRequestCard({
                     </h3>
                     <div className="border-l space-y-2 border-[#D9D9D9] pl-6">
                         <div>
-                            {t('verificationsRequired')}:{' '}
+                            {t('verifications_required')}:{' '}
                             <span className="text-black font-medium">
                                 {changeRequest.no_of_verifications_required}
                             </span>
                         </div>
                         <div>
-                            {t('verificationsDone')}:{' '}
+                            {t('verifications_done')}:{' '}
                             <span className="text-black font-medium">
                                 {changeRequest.no_of_verifications_done}
                             </span>
                         </div>
                         <div>
-                            {t('documentsAttached')}:{' '}
+                            {t('documents_attached')}:{' '}
                             <span className="text-black font-medium">{documents.length}</span>
                         </div>
                     </div>
@@ -103,7 +101,7 @@ export default function ChangeRequestCard({
                 <div className="space-y-2 text-[16px] text-[#00000080]">
                     <div className="pl-6 flex items-center gap-0 leading-none mt-2">
                         <span className="text-[16px] font-medium text-black">
-                            {t('attachedDocuments')}
+                            {t('attached_documents')}
                         </span>
                         <Image
                             src="/images/changerequest/attached_doc_icon.png"
@@ -164,7 +162,7 @@ export default function ChangeRequestCard({
                     onClick={onViewDetails}
                     className="text-[14px] text-black font-normal flex items-center gap-2 opacity-60 hover:opacity-100 transition"
                 >
-                    {t('viewDetails')}
+                    {t('view_details')}
                     <Image
                         src="/images/common/arrow_next_01.png"
                         alt="arrow"

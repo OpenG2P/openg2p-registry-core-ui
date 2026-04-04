@@ -1,5 +1,6 @@
 import { Link } from '@/i18n/navigation';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 
 interface SubOption {
     id: string;
@@ -18,48 +19,49 @@ interface SidebarOption {
 const sidebarOptions: SidebarOption[] = [
     {
         id: 'registry',
-        label: 'Registry',
+        label: 'registry',
         iconUrl: "/images/config/menu_registry_01.png",
         path: '/configuration/registry'
     },
     {
         id: 'registers',
-        label: 'Registers',
+        label: 'registers',
         iconUrl: "/images/config/menu_registers_02.png",
         path: '/configuration/registers'
     },
     {
         id: 'data-models',
-        label: 'Data Models',
+        label: 'data_models',
         iconUrl: "/images/config/menu_data_models_03.png",
         path: '/configuration/data-models'
     },
     {
         id: 'ingest-configurations',
-        label: 'Ingest Configurations',
+        label: 'ingest_configurations',
         iconUrl: "/images/config/menu_ingest_config_04.png",
         path: '/configuration/ingest-configurations',
         subOptions: [
-            { id: 'ingest-partners', label: 'Partners', path: '/configuration/ingest-configurations/partners' },
-            { id: 'ingest-signature-paths', label: 'Signature Paths', path: '/configuration/ingest-configurations/signature-paths' },
-            { id: 'ingest-symmetric-expressions', label: 'Symmetric Expressions', path: '/configuration/ingest-configurations/symmetric-expressions' },
-            { id: 'ingest-templates', label: 'Templates', path: '/configuration/ingest-configurations/templates' },
-            { id: 'ingest-payload-enrichers', label: 'Payload Enrichers', path: '/configuration/ingest-configurations/payload-enrichers' },
+            { id: 'ingest-partners', label: 'ingest_partners', path: '/configuration/ingest-configurations/partners' },
+            { id: 'ingest-signature-paths', label: 'ingest_signature_paths', path: '/configuration/ingest-configurations/signature-paths' },
+            { id: 'ingest-symmetric-expressions', label: 'ingest_symmetric_expressions', path: '/configuration/ingest-configurations/symmetric-expressions' },
+            { id: 'ingest-templates', label: 'ingest_templates', path: '/configuration/ingest-configurations/templates' },
+            { id: 'ingest-payload-enrichers', label: 'ingest_payload_enrichers', path: '/configuration/ingest-configurations/payload-enrichers' },
         ]
     },
     {
         id: 'outgest-configurations',
-        label: 'Outgest Configurations',
+        label: 'outgest_configurations',
         iconUrl: "/images/config/menu_outgest_config_05.png",
         path: '/configuration/outgest-configurations',
         subOptions: [
-            { id: 'outgest-topics', label: 'Topics', path: '/configuration/outgest-configurations/topics' },
-            { id: 'outgest-templates', label: 'Templates', path: '/configuration/outgest-configurations/templates' },
+            { id: 'outgest-topics', label: 'outgest_topics', path: '/configuration/outgest-configurations/topics' },
+            { id: 'outgest-templates', label: 'outgest_templates', path: '/configuration/outgest-configurations/templates' },
         ]
     }
 ];
 
 export default function ConfigSidebar({ activeOption }: { activeOption: string }) {
+    const t = useTranslations();
     return (
         <div className="w-full h-full bg-[#F2BA1A] rounded-r-[10px] p-4 pt-8">
             <div className="space-y-2">
@@ -93,7 +95,7 @@ export default function ConfigSidebar({ activeOption }: { activeOption: string }
                                         </div>
                                     </div>
                                     <span className={`ml-3 text-base font-medium leading-tight ${isActive ? 'font-bold' : ''} max-w-30`}>
-                                        {option.label}
+                                        {t(option.label)}
                                     </span>
                                 </Link>
 
@@ -108,7 +110,7 @@ export default function ConfigSidebar({ activeOption }: { activeOption: string }
                                                     : 'text-black font-medium hover:text-white'
                                                     }`}
                                             >
-                                                {sub.label}
+                                                {t(sub.label)}
                                             </Link>
                                         ))}
                                     </div>

@@ -3,6 +3,7 @@
 import { useState, useRef } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { useClickOutside } from '@/shared/hooks';
+import { useTranslations } from 'next-intl';
 
 interface ConfigurationTabsProps {
     activeTab: string;
@@ -28,6 +29,7 @@ const TabsDropdown = ({
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const isActiveInDropdown = options.includes(activeTab);
+    const t = useTranslations();
 
     useClickOutside(dropdownRef, () => setIsOpen(false), isOpen);
 
@@ -42,7 +44,7 @@ const TabsDropdown = ({
                         }`}
                 >
                     <span className="truncate">
-                        {isActiveInDropdown ? labelMap[activeTab] : (isMore ? 'More' : labelMap[activeTab])}
+                        {isActiveInDropdown ? labelMap[activeTab] : (isMore ? (t('more') || 'More') : labelMap[activeTab])}
                     </span>
                     <ChevronDown className={`ml-2 h-6 w-6 shrink-0 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
                 </button>

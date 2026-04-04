@@ -118,14 +118,14 @@ export default function MultiSectionAccordionForms({
                     onClick={handleCancel}
                     className="px-8 py-2.5 rounded-full bg-[#D9D9D9] text-black font-bold text-[14px] hover:bg-[#c9c9c9] transition-colors"
                   >
-                    Cancel
+                    {t('cancel')}
                   </button>
 
                   <button
                     onClick={handleDraft}
                     className="px-8 py-2.5 rounded-full bg-black text-white font-bold text-[14px] hover:bg-gray-800 transition-colors"
                   >
-                    Draft
+                    {t('save_draft')}
                   </button>
 
                   <button
@@ -134,7 +134,7 @@ export default function MultiSectionAccordionForms({
                    disabled:bg-[#D9D9D9] disabled:text-[#717171] disabled:cursor-not-allowed"
                     disabled={formDetailsCard}
                   >
-                    Submit
+                    {t('submit')}
                   </button>
 
                 </div>

@@ -5,7 +5,7 @@ import { IncomingMessage } from '@/features/messages/types';
 import { useState } from 'react';
 import MessagePopup from './MessagePopup';
 import Link from 'next/link';
-import { useLocale } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { useIncomingMessagePayload } from '../hooks';
 import { formatDateTime } from '@/shared/utils/dateUtils';
 
@@ -16,6 +16,7 @@ interface Props {
 export default function IncomingMessageCard({ message }: Props) {
     const [openPopup, setOpenPopup] = useState(false);
     const locale = useLocale();
+    const t = useTranslations();
 
     const {
         fetchAll,
@@ -32,10 +33,10 @@ export default function IncomingMessageCard({ message }: Props) {
                 {/* Column 1: Raw */}
                 <div className="space-y-4">
                     <h3 className="text-[18px] font-semibold text-[#ED7C22] flex justify-between items-center">
-                        <span>Raw</span>
+                        <span>{t('raw') || 'Raw'}</span>
                         <Image
                             src="/images/messages/chat.png"
-                            alt="Raw Icon"
+                            alt={t('raw') || 'Raw'}
                             width={19}
                             height={20}
                             onClick={() => {
@@ -47,20 +48,20 @@ export default function IncomingMessageCard({ message }: Props) {
                     </h3>
 
                     <div className="space-y-2">
-                        <KeyValue label="ID" value={message.ingest_id} />
-                        <KeyValue label="Partner" value={message?.partner_mnemonic} />
-                        <KeyValue label="Data Model" value={message?.data_model_mnemonic} />
-                        <KeyValue label="Date & Time" value={formatDateTime(message.receipt_date_time)} />
+                        <KeyValue label={t('id') || 'ID'} value={message.ingest_id} />
+                        <KeyValue label={t('partner') || 'Partner'} value={message?.partner_mnemonic} />
+                        <KeyValue label={t('data_model') || 'Data Model'} value={message?.data_model_mnemonic} />
+                        <KeyValue label={t('date_and_time') || 'Date & Time'} value={formatDateTime(message.receipt_date_time)} />
                     </div>
                 </div>
 
                 {/* Column 2: Classification */}
                 <div className="border-l-2 space-y-4 border-[#D9D9D9] pl-6">
-                    <h3 className="text-[18px] font-semibold text-[#ED7C22]">Classification</h3>
+                    <h3 className="text-[18px] font-semibold text-[#ED7C22]">{t('classification') || 'Classification'}</h3>
                     <div className="space-y-2">
-                        <KeyValue label="Status" value={message.classification_status} />
-                        <KeyValue label="Date & Time" value={formatDateTime(message.classification_date_time)} />
-                        <KeyValue label="Target Register" value={message.register_mnemonic ?? '-- -- --'} />
+                        <KeyValue label={t('status') || 'Status'} value={message.classification_status} />
+                        <KeyValue label={t('date_and_time') || 'Date & Time'} value={formatDateTime(message.classification_date_time)} />
+                        <KeyValue label={t('target_register') || 'Target Register'} value={message.register_mnemonic ?? '-- -- --'} />
 
                     </div>
 
@@ -70,10 +71,10 @@ export default function IncomingMessageCard({ message }: Props) {
                 {/* Column 3: Transformation */}
                 <div className="border-l-2 space-y-4 border-[#D9D9D9] pl-6">
                     <h3 className="text-[18px] font-semibold text-[#ED7C22] flex justify-between items-center">
-                        <span>Transformation</span>
+                        <span>{t('transformation') || 'Transformation'}</span>
                         <Image
                             src="/images/messages/chat.png"
-                            alt="Raw Icon"
+                            alt={t('transformation') || 'Transformation'}
                             width={19}
                             height={20}
                             onClick={() => {
@@ -85,9 +86,9 @@ export default function IncomingMessageCard({ message }: Props) {
                     </h3>
 
                     <div className="space-y-2">
-                        <KeyValue label="Status" value={message.transformation_status ?? 'N/A'} />
-                        <KeyValue label="Date & Time" value={formatDateTime(message.transformation_date_time)} />
-                        <KeyValue label="Template" value={message.template_file_id ?? 'N/A'} />
+                        <KeyValue label={t('status') || 'Status'} value={message.transformation_status ?? t('n_a') ?? 'N/A'} />
+                        <KeyValue label={t('date_and_time') || 'Date & Time'} value={formatDateTime(message.transformation_date_time)} />
+                        <KeyValue label={t('template') || 'Template'} value={message.template_file_id ?? t('n_a') ?? 'N/A'} />
                     </div>
 
 
@@ -95,15 +96,15 @@ export default function IncomingMessageCard({ message }: Props) {
 
                 {/* Column 4: Ingestion */}
                 <div className="border-l-2 space-y-4 border-[#D9D9D9] pl-6">
-                    <h3 className="text-[18px] font-semibold text-[#ED7C22]">Ingestion</h3>
+                    <h3 className="text-[18px] font-semibold text-[#ED7C22]">{t('ingestion') || 'Ingestion'}</h3>
                     <div className="space-y-2">
-                        <KeyValue label="Status" value={message.ingestion_status ?? 'N/A'} />
-                        <KeyValue label="Date & Time" value={formatDateTime(message.ingestion_date_time)} />
+                        <KeyValue label={t('status') || 'Status'} value={message.ingestion_status ?? t('n_a') ?? 'N/A'} />
+                        <KeyValue label={t('date_and_time') || 'Date & Time'} value={formatDateTime(message.ingestion_date_time)} />
                     </div>
 
                     <div className="space-y-2">
                         <div className="text-black">
-                            <span className="text-black/50 text-[16px]">CR: </span>
+                            <span className="text-black/50 text-[16px]">{t('cr') || 'CR'}: </span>
                             {message.change_request_id ? (
                                 <Link
                                     href={`/${locale}/incoming-messages/change-request/${message.change_request_id}`}
@@ -119,7 +120,7 @@ export default function IncomingMessageCard({ message }: Props) {
                                     />
                                 </Link>
                             ) : (
-                                <span className="font-semibold">N/A</span>
+                                <span className="font-semibold">{t('n_a') || 'N/A'}</span>
                             )}
                         </div>
                     </div>

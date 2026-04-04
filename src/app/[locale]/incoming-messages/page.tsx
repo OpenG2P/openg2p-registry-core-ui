@@ -52,7 +52,7 @@ export default function IncomingMessagesPage() {
     return (
         <div className="min-h-screen mx-auto bg-[#F3F1E4]">
             <TopBar
-                breadcrumb={[{ label: 'Incoming Messages' }]}
+                breadcrumb={[{ label: t('incoming_messages') }]}
                 showSearch
                 searchValue={searchQuery || ''}
                 searchPlaceholder={t('search')}
@@ -76,7 +76,7 @@ export default function IncomingMessagesPage() {
                     </div>
                 ) : messages.length === 0 ? (
                     <div className="text-sm text-gray-400 text-center py-6">
-                        No incoming messages found
+                        {t('no_incoming_messages')}
                     </div>
                 ) : (
                     <IncomingMessageList

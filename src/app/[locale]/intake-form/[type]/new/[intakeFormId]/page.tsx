@@ -6,8 +6,10 @@ import MultiSectionAccordionForms from '@/features/intake-form/components/MultiS
 import { useRegister } from '@/context/RegisterContext';
 import { useIntakeFormDetails } from '@/features/intake-form/hooks/useIntakeFormDetails';
 import { useIntakeFormAction } from '@/features/intake-form/hooks/useIntakeFormAction';
+import { useTranslations } from 'next-intl';
 
 export default function NewIntakeFormSubmissionPage() {
+    const t = useTranslations();
     const router = useRouter();
     const routeParams = useParams<{ type: string, intakeFormId: string }>();
     const intake_form_id = routeParams.intakeFormId;
@@ -29,8 +31,11 @@ export default function NewIntakeFormSubmissionPage() {
         <div className="min-h-screen mx-auto bg-[#F3F1E4]">
             <TopBar
                 breadcrumb={[
-                    { label: `${currentRegister?.register_subject || 'Register'} - Intake Form`, href: `/intake-form/${registerType}` },
-                    { label: sections?.[0]?.intake_form_name || '' }
+                    { 
+                        label: t("register_intake_form", { subject: currentRegister?.register_subject || t("register") }), 
+                        href: `/intake-form/${registerType}` 
+                    },
+                    { label: sections?.[0]?.intake_form_name || "" }
                 ]}
 
                 showFilters={false}
@@ -41,7 +46,7 @@ export default function NewIntakeFormSubmissionPage() {
             <div className="mx-7.5">
                 {loading ? (
                     <div className="flex items-center justify-center py-20">
-                        <span className="text-gray-500">Loading...</span>
+                        <span className="text-gray-500">{t('loading')}</span>
                     </div>
                 ) : (
                     <MultiSectionAccordionForms

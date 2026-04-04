@@ -2,8 +2,10 @@ import { useState, useEffect, useCallback } from "react";
 import { useFetch } from "@/shared/hooks/useFetch";
 import { toast } from "react-toastify";
 import { Verification } from "@/features/change-request/types/change-request";
+import { useTranslations } from "next-intl";
 
 export const useVerifications = (changeId?: string, intakeFormSubmissionId?: string) => {
+    const t = useTranslations();
     const [verifications, setVerifications] = useState<Verification[]>([]);
     const [loadingVerifications, setLoadingVerifications] = useState(true);
 
@@ -55,7 +57,7 @@ export const useVerifications = (changeId?: string, intakeFormSubmissionId?: str
 
                 if (newVerification) {
                     setVerifications((prev) => [newVerification, ...prev]);
-                    toast.success("Verification added successfully", {
+                    toast.success(t('toast_verification_added'), {
                         position: "top-right",
                         autoClose: 4000,
                     });
@@ -63,7 +65,7 @@ export const useVerifications = (changeId?: string, intakeFormSubmissionId?: str
                 }
                 return false;
             } catch (error) {
-                toast.error("Something went wrong while adding verification", {
+                toast.error(t('toast_verification_add_failed'), {
                     autoClose: 5000,
                 });
                 return false;

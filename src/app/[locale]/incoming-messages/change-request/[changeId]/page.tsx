@@ -2,9 +2,11 @@
 
 import { useMemo } from "react";
 import { useParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { ChangeRequestDetailsView } from "@/features/change-request/components";
 
 export default function ChangeRequestDetailsPage() {
+  const t = useTranslations();
   const { changeId } = useParams<{
     changeId: string;
   }>();
@@ -12,16 +14,16 @@ export default function ChangeRequestDetailsPage() {
   const breadcrumb = useMemo(
     () => [
       {
-        label: "Incoming Messages",
+        label: t("incoming_messages"),
         href: `/incoming-messages`,
       },
       {
-        label: "Change Request",
+        label: t("change_request"),
         // href: `/change-request`,
       },
       { label: changeId },
     ],
-    [changeId]
+    [changeId, t]
   );
 
   return (
