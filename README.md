@@ -1,2 +1,2 @@
-# openg2p-registry-gen2-ui
-UI Project for OpenG2P Registry Gen 2
+# OpenG2P Registry Staff Portal UI
+Registry portal UI for the staff users
