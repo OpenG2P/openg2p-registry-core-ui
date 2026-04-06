@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { X, ChevronDown } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useFetch } from '@/shared/hooks';
 import { useParams } from 'next/navigation';
 import { toast } from 'react-toastify';
@@ -17,6 +18,7 @@ interface AddSectionModalProps {
 }
 
 export default function AddSectionModal({ isOpen, onClose, onSuccess }: AddSectionModalProps) {
+    const t = useTranslations();
     const { registerId, tabId } = useParams<{ registerId: string; tabId: string }>();
     const { config } = useRuntimeConfig();
     const { execute: createSection, loading } = useFetch();
@@ -32,6 +34,8 @@ export default function AddSectionModal({ isOpen, onClose, onSuccess }: AddSecti
         auto_approval: false,
         is_list: false,
         is_primary_section: false,
+        is_core_section: false,
+        section_order: '',
     });
 
     const handleSubmit = async () => {
@@ -58,6 +62,8 @@ export default function AddSectionModal({ isOpen, onClose, onSuccess }: AddSecti
                 auto_approval: formData.auto_approval,
                 is_list: formData.is_list,
                 is_primary_section: formData.is_primary_section,
+                is_core_section: formData.is_core_section,
+                section_order: Number(formData.section_order) || 0,
                 section_ui_schema: {}
             })
         });
@@ -73,6 +79,8 @@ export default function AddSectionModal({ isOpen, onClose, onSuccess }: AddSecti
                 auto_approval: false,
                 is_list: false,
                 is_primary_section: false,
+                is_core_section: false,
+                section_order: '',
             });
             if (onSuccess) onSuccess();
             onClose();
@@ -91,6 +99,8 @@ export default function AddSectionModal({ isOpen, onClose, onSuccess }: AddSecti
             auto_approval: false,
             is_list: false,
             is_primary_section: false,
+            is_core_section: false,
+            section_order: '',
         });
         onClose();
     };
@@ -110,25 +120,19 @@ export default function AddSectionModal({ isOpen, onClose, onSuccess }: AddSecti
                         <X size={40} strokeWidth={2} />
                     </button>
 
-                    <h2 className="text-2xl font-bold text-orange-500 mb-4">Add New Section</h2>
+                    <h2 className="text-2xl font-bold text-orange-500 mb-4">{t('add_new_section')}</h2>
 
                     <div className="space-y-4">
                         <div>
                             <label className="block text-sm font-semibold text-black mb-1">
-                                Section Name
+                                {t('section_name')}
                             </label>
-                            <p className="text-[12px] text-gray-400 mb-2 italic">
-                                * Use lowercase and underscores only
-                            </p>
                             <div className="relative">
                                 <input
                                     type="text"
-                                    placeholder="e.g. personal_info"
+                                    placeholder={t('enter_section_name')}
                                     value={formData.section_mnemonic}
-                                    onChange={(e) => {
-                                        const value = e.target.value.toLowerCase().replace(/\s+/g, '_');
-                                        setFormData({ ...formData, section_mnemonic: value });
-                                    }}
+                                    onChange={(e) => setFormData({ ...formData, section_mnemonic: e.target.value })}
                                     className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all text-gray-600 placeholder:text-gray-400"
                                 />
                             </div>
@@ -138,10 +142,10 @@ export default function AddSectionModal({ isOpen, onClose, onSuccess }: AddSecti
 
                         <div>
                             <label className="block text-sm font-semibold text-black mb-2">
-                                Description
+                                {t('description')}
                             </label>
                             <textarea
-                                placeholder="Type your message here..."
+                                placeholder={t('type_your_message')}
                                 value={formData.section_description}
                                 onChange={(e) => setFormData({ ...formData, section_description: e.target.value })}
                                 rows={2}
@@ -152,7 +156,7 @@ export default function AddSectionModal({ isOpen, onClose, onSuccess }: AddSecti
                         <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <label className="block text-sm font-semibold text-black mb-2">
-                                    No of Verifications Required
+                                    {t('no_of_verifications_required')}
                                 </label>
                                 <input
                                     type="number"
@@ -165,7 +169,7 @@ export default function AddSectionModal({ isOpen, onClose, onSuccess }: AddSecti
 
                             <div>
                                 <label className="block text-sm font-semibold text-black mb-2">
-                                    Documents Required
+                                    {t('documents_required')}
                                 </label>
                                 <div className="relative">
                                     <select
@@ -173,8 +177,8 @@ export default function AddSectionModal({ isOpen, onClose, onSuccess }: AddSecti
                                         onChange={(e) => setFormData({ ...formData, documents_required: e.target.value === "true" })}
                                         className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all bg-white appearance-none cursor-pointer text-gray-600 pr-10"
                                     >
-                                        <option value="true">True</option>
-                                        <option value="false">False</option>
+                                        <option value="true">{t('true')}</option>
+                                        <option value="false">{t('false')}</option>
                                     </select>
                                     <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
                                 </div>
@@ -184,7 +188,7 @@ export default function AddSectionModal({ isOpen, onClose, onSuccess }: AddSecti
                         <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <label className="block text-sm font-semibold text-black mb-2">
-                                    Auto Approval
+                                    {t('auto_approval')}
                                 </label>
                                 <div className="relative">
                                     <select
@@ -192,8 +196,8 @@ export default function AddSectionModal({ isOpen, onClose, onSuccess }: AddSecti
                                         onChange={(e) => setFormData({ ...formData, auto_approval: e.target.value === "true" })}
                                         className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all bg-white appearance-none cursor-pointer text-gray-600 pr-10"
                                     >
-                                        <option value="true">True</option>
-                                        <option value="false">False</option>
+                                        <option value="true">{t('true')}</option>
+                                        <option value="false">{t('false')}</option>
                                     </select>
                                     <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
                                 </div>
@@ -201,7 +205,7 @@ export default function AddSectionModal({ isOpen, onClose, onSuccess }: AddSecti
 
                             <div>
                                 <label className="block text-sm font-semibold text-black mb-2">
-                                    Is List
+                                    {t('is_list')}
                                 </label>
                                 <div className="relative">
                                     <select
@@ -209,8 +213,8 @@ export default function AddSectionModal({ isOpen, onClose, onSuccess }: AddSecti
                                         onChange={(e) => setFormData({ ...formData, is_list: e.target.value === "true" })}
                                         className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all bg-white appearance-none cursor-pointer text-gray-600 pr-10"
                                     >
-                                        <option value="true">True</option>
-                                        <option value="false">False</option>
+                                        <option value="true">{t('true')}</option>
+                                        <option value="false">{t('false')}</option>
                                     </select>
                                     <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
                                 </div>
@@ -220,7 +224,7 @@ export default function AddSectionModal({ isOpen, onClose, onSuccess }: AddSecti
                         <div className="grid grid-cols-2 gap-4" >
                             <div>
                                 <label className="block text-sm font-semibold text-black mb-1">
-                                    Section Register
+                                    {t('section_register')}
                                 </label>
                                 <div className="relative">
                                     <select
@@ -229,7 +233,7 @@ export default function AddSectionModal({ isOpen, onClose, onSuccess }: AddSecti
                                         className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all bg-white appearance-none cursor-pointer text-gray-600 pr-10"
                                         disabled={registersLoading}
                                     >
-                                        <option value="">Select Register</option>
+                                        <option value="">{t('select_register')}</option>
                                         {registers.map((reg: Register) => (
                                             <option key={reg.register_id} value={reg.register_id}>
                                                 {reg.register_mnemonic}
@@ -243,7 +247,7 @@ export default function AddSectionModal({ isOpen, onClose, onSuccess }: AddSecti
 
                             <div>
                                 <label className="block text-sm font-semibold text-black mb-2">
-                                    Is Primary Section
+                                    {t('is_primary_section')}
                                 </label>
                                 <div className="relative">
                                     <select
@@ -251,8 +255,40 @@ export default function AddSectionModal({ isOpen, onClose, onSuccess }: AddSecti
                                         onChange={(e) => setFormData({ ...formData, is_primary_section: e.target.value === "true" })}
                                         className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all bg-white appearance-none cursor-pointer text-gray-600 pr-10"
                                     >
-                                        <option value="true">True</option>
-                                        <option value="false">False</option>
+                                        <option value="true">{t('true')}</option>
+                                        <option value="false">{t('false')}</option>
+                                    </select>
+                                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-sm font-semibold text-black mb-2">
+                                    {t('section_order')}
+                                </label>
+                                <input
+                                    type="number"
+                                    placeholder="e.g. 0"
+                                    value={formData.section_order}
+                                    onChange={(e) => setFormData({ ...formData, section_order: e.target.value })}
+                                    className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all text-gray-600 placeholder:text-gray-400"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-semibold text-black mb-2">
+                                    {t('is_core_section')}
+                                </label>
+                                <div className="relative">
+                                    <select
+                                        value={formData.is_core_section ? "true" : "false"}
+                                        onChange={(e) => setFormData({ ...formData, is_core_section: e.target.value === "true" })}
+                                        className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all bg-white appearance-none cursor-pointer text-gray-600 pr-10"
+                                    >
+                                        <option value="true">{t('true')}</option>
+                                        <option value="false">{t('false')}</option>
                                     </select>
                                     <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
                                 </div>
@@ -264,13 +300,13 @@ export default function AddSectionModal({ isOpen, onClose, onSuccess }: AddSecti
                                 onClick={handleCancel}
                                 className="px-12 py-2.5 bg-gray-300 text-gray-700 rounded-[10px]"
                             >
-                                Cancel
+                                {t('cancel')}
                             </button>
                             <button
                                 onClick={handleSubmit}
                                 className="px-12 py-2.5 bg-black text-white rounded-[10px]"
                             >
-                                Save
+                                {t('save')}
                             </button>
                         </div>
                     </div>

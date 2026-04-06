@@ -1,5 +1,6 @@
-import { X, AlertCircle, CheckCircle } from 'lucide-react';
+import { X } from 'lucide-react';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 
 interface ActionModalProps {
     isOpen: boolean;
@@ -20,10 +21,14 @@ export default function ActionModal({
     subtitle,
     onClose,
     onConfirm,
-    confirmText = 'Save',
-    cancelText = 'Cancel',
+    confirmText,
+    cancelText,
     hideCancel = false,
 }: ActionModalProps) {
+    const t = useTranslations();
+    const finalConfirmText = confirmText || t('save');
+    const finalCancelText = cancelText || t('cancel');
+
     if (!isOpen) return null;
 
     const borderColor = type === 'warning' ? 'border-[#F2BA1A]' : type === 'error' ? 'border-[#EF8F93]' : 'border-[#10C469]';
@@ -49,7 +54,7 @@ export default function ActionModal({
                         <div className="w-20 h-20 relative rounded-full flex items-center justify-center border-10 border-[#EF8F93]/10 bg-[#EF8F93]/80">
                             <Image
                                 src="/images/common/wrongsymbol.png"
-                                alt="Error"
+                                alt={t('error')}
                                 width={41}
                                 height={30}
                                 className="object-contain"
@@ -59,7 +64,7 @@ export default function ActionModal({
                         <div className="w-20 h-20 relative rounded-full flex items-center justify-center border-10 border-[#77D79B]/10 bg-[#77D79B]/80">
                             <Image
                                 src="/images/common/rightsymbol.png"
-                                alt="Success"
+                                alt={t('success')}
                                 width={41}
                                 height={30}
                                 className="object-contain"
@@ -79,7 +84,7 @@ export default function ActionModal({
                             onClick={onClose}
                             className="px-8 py-2.5 bg-[#E1E1E1] text-black font-semibold rounded-full hover:bg-gray-300 transition-colors text-[14px]"
                         >
-                            {cancelText}
+                            {finalCancelText}
                         </button>
                     )}
                     {onConfirm && (
@@ -87,7 +92,7 @@ export default function ActionModal({
                             onClick={onConfirm}
                             className="px-8 py-2.5 bg-black text-white font-semibold rounded-full hover:bg-gray-800 transition-colors text-[14px]"
                         >
-                            {confirmText}
+                            {finalConfirmText}
                         </button>
                     )}
                 </div>

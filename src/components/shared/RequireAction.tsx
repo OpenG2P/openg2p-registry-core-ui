@@ -5,6 +5,7 @@ import { useRouter } from "@/i18n/navigation";
 import Forbidden from "./Forbidden";
 import { useRbac } from "@/context/RbacContext";
 import { checkPermission } from "@/shared/utils/checkPermission";
+import { useTranslations } from "next-intl";
 
 
 interface RequireActionProps {
@@ -26,6 +27,7 @@ export default function RequireAction({
 }: RequireActionProps) {
     const router = useRouter();
     const { loading, can, canAny, canAll } = useRbac();
+    const t = useTranslations();
 
     const allowed = loading || checkPermission({ action, anyOf, allOf }, { can, canAny, canAll });
 
@@ -37,8 +39,15 @@ export default function RequireAction({
 
     if (loading) {
         return (
-            <div className="w-full min-h-[50vh] flex items-center justify-center">
-                <div className="w-9 h-9 border-4 border-[#E9BC19] border-t-transparent rounded-full animate-spin" />
+            <div className="w-full min-h-screen flex items-center justify-center bg-white">
+                <div className="flex flex-col items-center gap-4">
+                    <img
+                        src="/images/common/loading.gif"
+                        alt="Loading"
+                        className="w-12 h-12"
+                    />
+                    <p className="text-black/50 text-[20px]">{t('loading_admin')}</p>
+                </div>
             </div>
         );
     }

@@ -30,7 +30,7 @@ export async function generateMetadata({
     const config = clientSafeConfig.getAll();
 
     return {
-        title: config.registryName || t('title'),
+        title: config.registryName || t('registry'),
         description: "",
         icons: {
             icon: config.registryLogo || "/images/common/openg2p_logo.png",

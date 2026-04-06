@@ -47,7 +47,7 @@ export default function NotFound() {
 
                     <button
                         onClick={() => router.back()}
-                        className="flex items-center gap-2 rounded-full bg-black px-8 py-2.5 text-[16px] font-semibold text-white"
+                        className="flex items-center gap-3 rounded-full bg-black px-6 py-2.5 text-[16px] font-semibold text-white"
                     >
                         <Image
                             src="/images/common/left_white_arrow.png"

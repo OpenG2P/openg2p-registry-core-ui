@@ -1,8 +1,10 @@
 import React from 'react'
+import { useTranslations } from 'next-intl';
 
 const page = () => {
+    const t = useTranslations();
     return (
-        <div className='text-center mt-10'>Data Models Page..</div>
+        <div className='text-center mt-10'>{t('data_models_page')}</div>
     )
 }
 

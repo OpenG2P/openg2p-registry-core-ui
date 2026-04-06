@@ -3,6 +3,7 @@
 import { useClickOutside } from "@/shared/hooks";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 
 interface CapsuleDropdownProps {
     label: string;
@@ -14,7 +15,9 @@ interface CapsuleDropdownProps {
 }
 
 export default function CapsuleDropdown(props: CapsuleDropdownProps) {
-    const { label, items, value, onChange, onOpen, emptyMessage = "No items available" } = props;
+    const t = useTranslations();
+    const { label, items, value, onChange, onOpen, emptyMessage } = props;
+    const fallbackEmptyMessage = emptyMessage || t('no_items_available');
 
     const [open, setOpen] = useState(false);
     const [selected, setSelected] = useState<string | undefined>(undefined);
@@ -56,7 +59,7 @@ export default function CapsuleDropdown(props: CapsuleDropdownProps) {
                     className={`flex items-center justify-between gap-3 px-3 py-1 min-w-35 w-auto rounded-[10px] cursor-pointer bg-white border border-[#F77F57] ${open ? "invisible" : ""}`}
                 >
                     <span className="text-[16px] text-black/50 font-medium">
-                        {selected ?? "Select"}
+                        {selected ?? t('select')}
                     </span>
 
                     <Image
@@ -80,7 +83,7 @@ export default function CapsuleDropdown(props: CapsuleDropdownProps) {
                             className="flex items-center justify-between gap-3 px-3 py-1 cursor-pointer"
                         >
                             <span className="text-[16px] text-black/50 font-medium">
-                                Select
+                                {t('select')}
                             </span>
                             <Image
                                 src="/images/common/down_arrow.png"
@@ -95,7 +98,7 @@ export default function CapsuleDropdown(props: CapsuleDropdownProps) {
                                 (
                                     <div className="flex items-center gap-3 px-3 py-1">
                                         <span className="text-[16px] text-black/50 font-medium">
-                                            {emptyMessage}
+                                            {fallbackEmptyMessage}
                                         </span>
                                     </div>
                                 )

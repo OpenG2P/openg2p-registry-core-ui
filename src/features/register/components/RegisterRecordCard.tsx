@@ -35,12 +35,12 @@ export function RegisterRecordCard({ record, registerType, isEven }: RegisterRec
                 )}
 
                 <div className="flex-1 min-w-0">
-                    <h3 className="font-bold text-[#ED7C22] text-sm sm:text-base mb-0.5">
+                    <h3 className="font-medium text-[#ED7C22] text-[16px] mb-0.5">
                         {record.record_name}
                     </h3>
-                    <p className="text-xs sm:text-sm text-gray-600">
-                        <span className="font-bold">{t('id')} :</span>{' '}
-                        <span className="font-bold text-gray-900">
+                    <p className="text-[16px] text-gray-600">
+                        <span className="font-normal">{t('id')} :</span>{' '}
+                        <span className="font-medium text-black">
                             {record.functional_record_id}
                         </span>
                     </p>
@@ -50,23 +50,27 @@ export function RegisterRecordCard({ record, registerType, isEven }: RegisterRec
                     const firstField = sortedFields[startIndex];
                     const secondField = sortedFields[startIndex + 1];
 
-                    if (!firstField) return null;
-
                     return (
                         <div key={startIndex} className="flex-1 min-w-0">
-                            <p className="text-xs sm:text-sm text-gray-900 truncate">
-                                <span className="font-bold text-gray-600">
-                                    {t(firstField.field_name)}:{' '}
-                                </span>
-                                <span className="font-bold">{firstField.value}</span>
-                            </p>
-                            {secondField && (
-                                <p className="text-xs sm:text-sm text-gray-900 truncate">
-                                    <span className="font-bold text-gray-600">
+                            {firstField ? (
+                                <p className="text-[16px] text-black truncate">
+                                    <span className="font-normal text-gray-600">
+                                        {t(firstField.field_name)}:{' '}
+                                    </span>
+                                    <span className="font-medium">{firstField.value}</span>
+                                </p>
+                            ) : (
+                                <p className="text-[16px] invisible">&nbsp;</p>
+                            )}
+                            {secondField ? (
+                                <p className="text-[16px] text-black truncate">
+                                    <span className="font-normal text-gray-600">
                                         {t(secondField.field_name)}:{' '}
                                     </span>
-                                    <span className="font-bold">{secondField.value}</span>
+                                    <span className="font-medium">{secondField.value}</span>
                                 </p>
+                            ) : (
+                                <p className="text-[16px] invisible">&nbsp;</p>
                             )}
                         </div>
                     );

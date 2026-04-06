@@ -11,7 +11,7 @@ import { CapsuleDropdown, TabsLayout } from '@/components/shared';
 import { VerificationCard } from '@/features/change-request/components';
 import { useTranslations } from 'next-intl';
 import { useRegisterTabs } from '@/context/RegisterTabsContext';
-import { useBreadcrumb } from '@/shared/hooks';
+import { useBreadcrumb, useFetch } from '@/shared/hooks';
 import { useChangeRequest, useVerifications } from '@/features/change-request/hooks';
 import { useRecordHistoryDates, useRecordHistoryChanges } from '@/features/register/hooks/useRecordHistory';
 import { useEffect, useMemo, useReducer, useRef } from 'react';
@@ -143,6 +143,19 @@ export default function VersionHistoryPage() {
         truncated_created_date: selectedDate,
     });
 
+    const { data: versionHistory, loading } = useFetch<any>({
+        url: `/api/register/versions`,
+        enabled: !!registerId && !!internalRecordId && !!activeTabId,
+        options: {
+            method: "POST",
+            body: JSON.stringify({
+                register_id: registerId,
+                internal_record_id: internalRecordId,
+                tab_id: activeTabId
+            }),
+        },
+    });
+
     // Here selectedVersionId is the change request id 
     const changeRequestId = selectedVersionId ?? '';
     const { details: changeRequestData, loading: loadingChangeRequestData } =
@@ -265,7 +278,7 @@ export default function VersionHistoryPage() {
         includeActiveTab: true,
         includeChangeRequest: false,
         customItems: [
-            { label: t('versionHistory') ?? 'Version History', href: '#' },
+            { label: t('version_history') ?? 'Version History', href: '#' },
         ],
     });
 
@@ -285,33 +298,40 @@ export default function VersionHistoryPage() {
                 <div className={`flex gap-6 transition-opacity duration-200 ${isContentLoading ? 'opacity-60 pointer-events-none' : 'opacity-100'}`}>
                     <div className="w-[75%] flex flex-col gap-6">
                         {hasVersionHistory && (
-                            <div className="bg-white rounded-[10px] px-6 py-5 flex items-center gap-6">
-                                <CapsuleDropdown
-                                    label={t("selectDate")}
-                                    items={dateOptions}
-                                    value={selectedDate ?? undefined}
-                                    onChange={onDateSelect}
-                                />
+                            <div className="bg-white rounded-[10px] px-6 py-5 flex items-center justify-between">
+                                <div className="flex items-center gap-6">
+                                    <CapsuleDropdown
+                                        label={t("select_date")}
+                                        items={dateOptions}
+                                        value={selectedDate ?? undefined}
+                                        onChange={onDateSelect}
+                                    />
 
-                                <CapsuleDropdown
-                                    label={t("selectSection")}
-                                    items={sectionOptions.map(s => s.label)}
-                                    value={
-                                        selectedSectionId
-                                            ? sectionOptions.find(s => s.id === selectedSectionId)?.label
-                                            : undefined
-                                    }
-                                    onChange={onSectionSelect}
-                                    key={selectedDate ?? 'date'}
-                                />
+                                    <CapsuleDropdown
+                                        label={t("select_section")}
+                                        items={sectionOptions.map(s => s.label)}
+                                        value={
+                                            selectedSectionId
+                                                ? sectionOptions.find(s => s.id === selectedSectionId)?.label
+                                                : undefined
+                                        }
+                                        onChange={onSectionSelect}
+                                        key={selectedDate ?? 'date'}
+                                    />
 
-                                <CapsuleDropdown
-                                    label={t("selectVersion")}
-                                    items={versionOptions.map(v => v.label)}
-                                    value={versionOptions.find(v => v.value === selectedVersionId)?.label}
-                                    onChange={onVersionSelect}
-                                    key={`${selectedDate}-${selectedSectionId}`}
-                                />
+                                    <CapsuleDropdown
+                                        label={t("select_version")}
+                                        items={versionOptions.map(v => v.label)}
+                                        value={versionOptions.find(v => v.value === selectedVersionId)?.label}
+                                        onChange={onVersionSelect}
+                                        key={`${selectedDate}-${selectedSectionId}`}
+                                    />
+                                </div>
+
+                                <div className="text-[16px] text-black font-medium">
+                                    {t("total_versions")} <span className="text-[20px] font-bold text-[#ED7C22]">{versionHistory.number_of_versions}</span>
+                                </div>
+
                             </div>
                         )}
 
@@ -326,6 +346,7 @@ export default function VersionHistoryPage() {
                                     <SectionRenderer
                                         section={stableSectionUISchema}
                                         hideEditButton
+                                        mode="CRView"
                                     />
                                 </WidgetProvider>
                             </div>
@@ -333,7 +354,7 @@ export default function VersionHistoryPage() {
                         {!hasVersionHistory && !isLoading && tabs.length > 0 && (
                             <div className="bg-white rounded-[10px] px-6 py-5 flex items-center justify-center text-center">
                                 <div className="text-[16px] text-black/50 font-medium">
-                                    {t("noVersionHistory")}
+                                    {t("no_version_history")}
                                 </div>
                             </div>
                         )}
@@ -351,7 +372,7 @@ export default function VersionHistoryPage() {
                             ) : (
                                 <div className="bg-[#E0E0E0] rounded-[10px] p-6 space-y-3">
                                     <div className="font-semibold text-[14px] text-black/50">
-                                        {t("verifiedBy")}
+                                        {t("verified_by")}
                                     </div>
 
                                     <div className="flex items-center gap-3">
@@ -378,7 +399,7 @@ export default function VersionHistoryPage() {
                                             {t("message")}
                                         </div>
                                         <div className="text-[16px] text-black/50">
-                                            {t("noVerifierAssigned")}
+                                            {t("no_verifier_assigned")}
                                         </div>
                                     </div>
                                 </div>

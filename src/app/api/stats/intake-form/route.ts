@@ -5,12 +5,13 @@ export async function GET(req: NextRequest) {
     return proxyToBackend({
         req,
         targetEndpoint: '/intake-form-data/get_intake_form_submissions_summary',
-        buildPayload: () => ({
+        buildPayload: (body) => ({
             pagination_request: {
-                current_page: 1,
-                page_size: 1,
-                sort_by: "",
-                search_text: ""
+                current_page: body.current_page ?? 1,
+                page_size: body.page_size ?? 20,
+                sort_by: body.sort_by ?? "",
+                filter_by: body.filter_by ?? "",
+                search_text: body.search_text ?? ""
             },
             request_payload: {},
         })

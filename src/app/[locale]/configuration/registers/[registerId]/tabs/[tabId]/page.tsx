@@ -18,8 +18,13 @@ import {
 import { useBreadcrumb } from '@/shared/hooks/useBreadcrumb';
 import { usePagination } from '@/shared/hooks/usePagination';
 import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
+import { useRbac } from '@/context/RbacContext';
+import { CONFIGURATION_TABS_ACTIONS } from '@/features/configuration/shared/utils/configurationTabs.actions';
+import { CONFIGURATION_SECTIONS_ACTIONS } from '@/features/configuration/shared/utils/configurationSections.actions';
+import { useTranslations } from 'next-intl';
 
 const TabConfigurationPage = () => {
+    const t = useTranslations();
     const { registerId, tabId } = useParams<{ registerId: string; tabId: string }>();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditTabModalOpen, setIsEditTabModalOpen] = useState(false);
@@ -28,6 +33,10 @@ const TabConfigurationPage = () => {
     const { config } = useRuntimeConfig();
     const PAGE_SIZE = config.pageSize || 10;
     const [paginationInfo, setPaginationInfo] = useState({ totalItems: 0, currentCount: 0 });
+
+    const { can } = useRbac();
+    const canEdit = can(CONFIGURATION_TABS_ACTIONS.edit);
+    const canCreate = can(CONFIGURATION_SECTIONS_ACTIONS.create);
 
     const { registers, loading: registersLoading } = useAllRegister(1, 100);
     const { tabs, loading: tabsLoading, refresh: refreshTabs } = useConfigTabs(registerId, 1, 100);
@@ -42,10 +51,11 @@ const TabConfigurationPage = () => {
     const registerDetails = getRegisterDetails(registerId, registers);
     const tabDetails = getTabDetails(tabId, tabs);
 
-    const label_name = tabDetails.tab_label || tabDetails.intake_form_name;
+    const rawLabel = tabDetails.tab_label || tabDetails.intake_form_name || '';
+    const label_name = rawLabel.charAt(0).toUpperCase() + rawLabel.slice(1);
 
     const breadcrumb = useBreadcrumb({
-        rootItem: { label: 'Registers', href: '/configuration/registers' },
+        rootItem: { label: t('registers'), href: '/configuration/registers' },
         customItems: [
             { label: registerDetails.register_mnemonic || '', href: `/configuration/registers/${registerId}` },
             { label: label_name || '', href: `/configuration/registers/${registerId}/tabs/${tabId}` }
@@ -81,13 +91,17 @@ const TabConfigurationPage = () => {
                 title={label_name || "None"}
                 extraInfo1={registerDetails.register_mnemonic || 'None'}
                 extraInfo2={String(tabDetails.tab_order ?? 0)}
-                onEdit={() => {
-                    if (tabDetails.used_for_new_intake_form) {
-                        setIsEditIntakeModalOpen(true);
-                    } else {
-                        setIsEditTabModalOpen(true);
-                    }
-                }}
+                onEdit={
+                    canEdit
+                        ? () => {
+                            if (tabDetails.used_for_new_intake_form) {
+                                setIsEditIntakeModalOpen(true);
+                            } else {
+                                setIsEditTabModalOpen(true);
+                            }
+                        }
+                        : undefined
+                }
             />
 
             <TopBar
@@ -95,9 +109,9 @@ const TabConfigurationPage = () => {
                 showFilters={false}
                 showPagination={true}
                 showSubHeading
-                subHeading={`Manage sections for ${label_name}`}
-                showAddNewButton={true}
-                addNewButtonText={"Add New Section"}
+                subHeading={`${label_name} ${t('sections')}`}
+                showAddNewButton={canCreate}
+                addNewButtonText={t('add_new_section')}
                 onAddNewButton={() => setIsModalOpen(true)}
                 pageStart={pagination.pageStart}
                 pageEnd={pagination.pageEnd}

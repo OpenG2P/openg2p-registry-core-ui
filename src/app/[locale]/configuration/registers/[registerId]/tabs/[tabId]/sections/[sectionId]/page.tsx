@@ -17,14 +17,22 @@ import {
     getSectionDetails
 } from '@/features/configuration/shared';
 import { useBreadcrumb } from '@/shared/hooks/useBreadcrumb';
+import { useRbac } from '@/context/RbacContext';
+import { CONFIGURATION_SECTIONS_ACTIONS } from '@/features/configuration/shared/utils/configurationSections.actions';
+import { useTranslations } from 'next-intl';
 
 const SectionConfigurationPage = () => {
+    const t = useTranslations();
     const { registerId, tabId, sectionId } = useParams<{
         registerId: string;
         tabId: string;
         sectionId: string;
     }>();
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+    const { can } = useRbac();
+    const canEdit = can(CONFIGURATION_SECTIONS_ACTIONS.edit);
+
 
     const { registers, loading: registersLoading } = useAllRegister(1, 100);
     const { tabs, loading: tabsLoading } = useConfigTabs(registerId, 1, 100);
@@ -35,10 +43,10 @@ const SectionConfigurationPage = () => {
     const sectionDetails = getSectionDetails(sectionId, sections);
 
     const breadcrumb = useBreadcrumb({
-        rootItem: { label: 'Registers', href: '/configuration/registers' },
+        rootItem: { label: t('registers'), href: '/configuration/registers' },
         customItems: [
             { label: registerDetails.register_mnemonic || '', href: `/configuration/registers/${registerId}` },
-            { label: tabDetails.tab_label || '', href: `/configuration/registers/${registerId}/tabs/${tabId}` },
+            { label: tabDetails.tab_label || tabDetails.intake_form_name || '', href: `/configuration/registers/${registerId}/tabs/${tabId}` },
             { label: sectionDetails.section_mnemonic || '', href: `/configuration/registers/${registerId}/tabs/${tabId}/sections/${sectionId}` }
         ]
     });
@@ -63,14 +71,20 @@ const SectionConfigurationPage = () => {
                 title={sectionDetails.section_mnemonic || 'None'}
                 description={sectionDetails.section_description || 'None'}
                 extraInfo1={String(sectionDetails.section_order || 0)}
-                extraInfo2={String(tabDetails.tab_label || 'None')}
-                onEdit={() => setIsEditModalOpen(true)}
+                extraInfo2={String(tabDetails.tab_label || tabDetails.intake_form_name || 'None')}
+                onEdit={
+                    canEdit
+                        ? () => setIsEditModalOpen(true)
+                        : undefined
+                }
             />
+
 
             <SectionDetailsConfigView
                 sectionUISchema={sectionDetails?.section_ui_schema}
                 registerId={sectionDetails?.section_register_id || ''}
                 sectionId={sectionDetails?.section_id || ''}
+                isCoreSection={sectionDetails?.is_core_section}
             />
 
             <EditSectionModal

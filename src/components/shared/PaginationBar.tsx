@@ -52,11 +52,10 @@ export default function PaginationBar({
                         }`}
                 >
                     <Image
-                        src="/images/common/right_arrow.png"
-                        width={14}
-                        height={14}
+                        src="/images/common/arrow_back_01.png"
+                        width={12}
+                        height={12}
                         alt="prev"
-                        className="rotate-180"
                     />
                 </button>
 
@@ -70,9 +69,9 @@ export default function PaginationBar({
                         }`}
                 >
                     <Image
-                        src="/images/common/right_arrow.png"
-                        width={14}
-                        height={14}
+                        src="/images/common/arrow_next_01.png"
+                        width={12}
+                        height={12}
                         alt="next"
                     />
                 </button>

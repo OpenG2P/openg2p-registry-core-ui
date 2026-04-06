@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { X } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useFetch } from '@/shared/hooks';
 import { useParams } from 'next/navigation';
 import { toast } from 'react-toastify';
@@ -11,6 +12,7 @@ interface AddTabModalProps {
 }
 
 export default function AddTabModal({ isOpen, onClose, onSuccess }: AddTabModalProps) {
+    const t = useTranslations();
     const { registerId } = useParams<{ registerId: string }>();
     const { execute: createTab, loading } = useFetch();
 
@@ -68,25 +70,19 @@ export default function AddTabModal({ isOpen, onClose, onSuccess }: AddTabModalP
                         <X size={40} strokeWidth={2} />
                     </button>
 
-                    <h2 className="text-2xl font-bold text-orange-500 mb-4">Add New Tab</h2>
+                    <h2 className="text-2xl font-bold text-orange-500 mb-4">{t('add_new_tab')}</h2>
 
                     <div className="space-y-4">
                         <div>
                             <label className="block text-sm font-semibold text-black mb-1">
-                                Tab Name
+                                {t('tab_name')}
                             </label>
-                            <p className="text-[15px] text-gray-400 mb-2 italic">
-                                * Use lowercase and underscores only (e.g., test_tab)
-                            </p>
                             <div className="relative">
                                 <input
                                     type="text"
-                                    placeholder="e.g. test_tab"
+                                    placeholder={t('enter_tab_label')}
                                     value={formData.tabName}
-                                    onChange={(e) => {
-                                        const value = e.target.value.toLowerCase().replace(/\s+/g, '_');
-                                        setFormData({ ...formData, tabName: value });
-                                    }}
+                                    onChange={(e) => setFormData({ ...formData, tabName: e.target.value })}
                                     className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all text-gray-600 placeholder:text-gray-400"
                                 />
                             </div>
@@ -94,7 +90,7 @@ export default function AddTabModal({ isOpen, onClose, onSuccess }: AddTabModalP
 
                         <div>
                             <label className="block text-sm font-semibold text-black mb-2">
-                                Tab Order
+                                {t('tab_order')}
                             </label>
                             <input
                                 type="number"
@@ -110,13 +106,13 @@ export default function AddTabModal({ isOpen, onClose, onSuccess }: AddTabModalP
                                 onClick={handleCancel}
                                 className="px-12 py-2.5 bg-gray-300 text-gray-700 rounded-[10px]"
                             >
-                                Cancel
+                                {t('cancel')}
                             </button>
                             <button
                                 onClick={handleSubmit}
                                 className="px-12 py-2.5 bg-black text-white rounded-[10px]"
                             >
-                                Save
+                                {t('save')}
                             </button>
                         </div>
                     </div>

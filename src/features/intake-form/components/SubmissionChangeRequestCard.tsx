@@ -68,7 +68,7 @@ export default function SubmissionChangeRequestCard({
         <div className="relative rounded-[10px] bg-[#EDC227] px-8 pt-5 pb-8 overflow-hidden">
             <div className="flex items-center justify-between">
                 <h3 className="text-[24px] font-semibold text-black leading-none">
-                    {t("changeRequest")}
+                    {t("change_request")}
                 </h3>
                 <div className="flex h-15 w-20 items-center justify-center rounded-[10px] border-3 border-white bg-[#EDC227] text-[34px] font-bold text-black">
                     {count}
@@ -77,8 +77,8 @@ export default function SubmissionChangeRequestCard({
 
             <p className="mt-3 text-[16px] text-black font-normal">
                 {count > 0
-                    ? t("pendingChanges")
-                    : t("noPendingChanges")}
+                    ? t("pending_changes")
+                    : t("no_pending_changes")}
             </p>
 
             <div className="mt-25">
@@ -88,7 +88,7 @@ export default function SubmissionChangeRequestCard({
                     <ViewAll
                         href={href}
                         bgColor="#D9D9D9"
-                        label={t("knowMore")}
+                        label={t("know_more")}
                     />
                 </div>
                 <Image

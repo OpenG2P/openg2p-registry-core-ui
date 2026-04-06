@@ -1,6 +1,8 @@
 import Image from "next/image";
 import { ChangeRequest } from "../types/change-request";
 import { useTranslations } from "next-intl";
+import { CHANGE_REQUEST_ACTIONS } from "../utils/changeRequest.actions";
+import Can from "@/components/shared/Can";
 
 export interface ChangeRequestDocument {
     document_label: string;
@@ -36,9 +38,9 @@ export default function ChangeRequestHeader({
 
     const title = rawTitle
         ? t(rawTitle, { default: rawTitle })
-        : t('changeRequest');
+        : t('change_request');
     return (
-        <div className="rounded-[10px] bg-[#F2BA1A33]/80 px-10 py-5 flex flex-col border border-dashed border-[#ED7C22]">
+        <div className="rounded-[10px] bg-[#F2BA1A33]/80 px-10 pt-5 pb-4 flex flex-col border border-dashed border-[#ED7C22]">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <InfoSection
                     title={title}
@@ -53,28 +55,28 @@ export default function ChangeRequestHeader({
             </div>
 
             {details.approval_status === "PENDING" && (
-                <>
-                    <div className="my-4 border-t-2 border-[#F2BA1A]" />
+                <Can action={CHANGE_REQUEST_ACTIONS.approve}>
+                    <div className="my-3 border-t border-[#F2BA1A]" />
                     <div className="flex items-center gap-4">
                         <button
                             type="button"
                             disabled={loadingAction}
                             onClick={onReject}
-                            className="px-4 py-2 text-[14px] font-medium rounded-[10px] bg-white text-black/50"
+                            className="px-4 py-1.5 text-[14px] font-medium rounded-[10px] bg-white text-black/50"
                         >
-                            {t('rejectChange')}
+                            {t('reject_change')}
                         </button>
 
                         <button
                             type="button"
                             disabled={loadingAction}
                             onClick={onApprove}
-                            className="px-4 py-2 text-[14px] font-medium rounded-[10px] bg-black text-white"
+                            className="px-4 py-1.5 text-[14px] font-medium rounded-[10px] bg-black text-white"
                         >
-                            {t('approveChange')}
+                            {t('approve_change')}
                         </button>
                     </div>
-                </>
+                </Can>
             )}
         </div>
     );
@@ -91,7 +93,7 @@ const InfoSection = ({
         <div className="space-y-2 text-[16px] text-[#00000080]">
             <h3 className="text-[24px] font-medium text-black">{title}</h3>
             <div>
-                {t('changeId')}:{" "}
+                {t('change_id')}:{" "}
                 <span className="text-black font-medium">
                     {details.change_request_id}
                 </span>
@@ -105,7 +107,7 @@ const InfoSection = ({
                 </span>
             </div>
             <div>
-                {t("changeDate")}:{" "}
+                {t("change_date")}:{" "}
                 <span className="text-black font-medium">
                     {new Date(details.created_at).toLocaleDateString()}
                 </span>
@@ -133,21 +135,21 @@ const VerificationStats = ({
 
             <div className="border-l border-[#F2BA1A] pl-6 space-y-2">
                 <div>
-                    {t('verificationsRequired')}:{" "}
+                    {t('verifications_required')}:{" "}
                     <span className="text-black font-medium">
                         {details.no_of_verifications_required}
                     </span>
                 </div>
 
                 <div>
-                    {t('verificationsDone')}:{" "}
+                    {t('verifications_done')}:{" "}
                     <span className="text-black font-medium">
                         {verificationCount}
                     </span>
                 </div>
 
                 <div>
-                    {t('documentsAttached')}:{" "}
+                    {t('documents_attached')}:{" "}
                     <span className="text-black font-medium">
                         {documentsCount}
                     </span>
@@ -167,7 +169,7 @@ const AttachedDocuments = ({ documents = [] }: { documents?: ChangeRequestDocume
         <div className="space-y-2 text-[16px] text-[#00000080]">
             <div className="pl-6 flex items-center leading-none mt-2">
                 <span className="text-[16px] font-medium text-black">
-                    {t('attachedDocuments')}
+                    {t('attached_documents')}
                 </span>
                 <Image
                     src="/images/changerequest/attached_doc_icon.png"
@@ -186,7 +188,7 @@ const AttachedDocuments = ({ documents = [] }: { documents?: ChangeRequestDocume
                         className="flex items-center gap-2 cursor-pointer"
                     >
                         {doc.document_label}
-                        <Image src="/images/common/right_arrow.png" alt="arrow" width={14} height={14} />
+                        <Image src="/images/common/arrow_next_01.png" alt="arrow" width={14} height={14} />
                     </span>
                 ))}
 

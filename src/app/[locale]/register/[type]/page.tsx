@@ -92,7 +92,7 @@ export default function RegisterTypePage() {
                     />
                 </div>
 
-                <div className="">
+                <div className="rounded-b-[10px]">
                     {isLoadingRecords ? (
                         <div className="space-y-2">
                             {[...Array(5)].map((_, i) => (
@@ -117,7 +117,7 @@ export default function RegisterTypePage() {
                             ))}
                         </div>
                     ) : records.length === 0 ? (
-                        <div className="text-center py-10 text-gray-500">{t('noItemsFound')}</div>
+                        <div className="text-center py-10 text-gray-500">{t('no_items_found')}</div>
                     ) : (
                         records.map((record: RegisterRecord, index: number) => (
                             <RegisterRecordCard
@@ -128,8 +128,12 @@ export default function RegisterTypePage() {
                             />
                         ))
                     )}
+                    <div className={`h-6.25 rounded-b-[10px] ${records.length % 2 !== 0 ? 'bg-white' : 'bg-[#D9D9D940]'}`}>
+                        &nbsp;
+                    </div>
                 </div>
             </div>
+            <div className='h-15'>&nbsp;</div>
             <>
                 {openVC && selectedVC && (
                     <VpVerificationModal

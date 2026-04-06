@@ -64,7 +64,7 @@ export default function OutgoingMessagesPage() {
     return (
         <div className="min-h-screen mx-auto bg-[#F3F1E4]">
             <TopBar
-                breadcrumb={[{ label: 'Outgoing Messages' }]}
+                breadcrumb={[{ label: t('outgoing_messages') }]}
                 showFilters
                 showPagination
                 pageStart={pageStart}
@@ -98,7 +98,7 @@ export default function OutgoingMessagesPage() {
                     </div>
                 ) : messages.length === 0 ? (
                     <div className="text-sm text-gray-400 text-center py-6">
-                        No outgoing messages found
+                        {t('no_outgoing_messages')}
                     </div>
                 ) : (
                     <OutgoingMessageList messages={messages} />

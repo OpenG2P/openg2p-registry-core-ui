@@ -2,13 +2,17 @@
 
 import Image from 'next/image';
 import { Link } from '@/i18n/navigation';
+import { useTranslations } from 'next-intl';
 import AddSectionModal from './AddSectionModal';
+import { Section } from '../shared/types';
 import { useParams } from 'next/navigation';
 import { useConfigSections } from '../shared/hooks/useConfigSections';
 import { useFetch } from '@/shared/hooks';
 import { toast } from 'react-toastify';
 
 import { useEffect } from 'react';
+import Can from '@/components/shared/Can';
+import { CONFIGURATION_SECTIONS_ACTIONS } from '../shared/utils/configurationSections.actions';
 
 interface RegisterSectionConfigViewProps {
     isModalOpen: boolean;
@@ -25,6 +29,7 @@ export default function RegisterSectionConfigView({
     pageSize = 10,
     onDataLoaded,
 }: RegisterSectionConfigViewProps) {
+    const t = useTranslations();
     const { registerId, tabId } = useParams<{ registerId: string; tabId: string }>();
     const { sections, loading, refresh, pagination } = useConfigSections(registerId, tabId, page, pageSize);
 
@@ -44,21 +49,30 @@ export default function RegisterSectionConfigView({
         });
 
         if (result) {
-            toast.success('Section removed successfully');
+            toast.success(t('toast_section_removed'));
             refresh();
         } else {
-            toast.error('Failed to remove section');
+            toast.error(t('toast_section_remove_failed'));
         }
     };
 
-    const handleDelete = (e: React.MouseEvent, sectionId: string) => {
+    const handleDelete = (e: React.MouseEvent, section: Section) => {
         e.preventDefault();
         e.stopPropagation();
 
+        if (section.is_core_section) {
+            toast.warn('This is a core section and cannot be deleted.', {
+                position: "top-right",
+                className: 'rounded-[15px] shadow-xl border border-gray-100',
+            });
+            return;
+        }
+
+        const sectionId = section.section_id;
         toast.info(
             ({ closeToast }) => (
                 <div className="p-1">
-                    <p className="font-bold text-gray-800 mb-3">Are you sure to remove this section?</p>
+                    <p className="font-bold text-gray-800 mb-3">{t('confirm_remove_section')}</p>
                     <div className="flex gap-3">
                         <button
                             onClick={async () => {
@@ -67,13 +81,13 @@ export default function RegisterSectionConfigView({
                             }}
                             className="bg-[#ED7C22] text-white px-4 py-1.5 rounded-full text-sm font-semibold hover:bg-[#d66a1a] transition-colors shadow-sm"
                         >
-                            Remove
+                            {t('remove')}
                         </button>
                         <button
                             onClick={closeToast}
                             className="bg-gray-100 text-gray-600 px-4 py-1.5 rounded-full text-sm font-semibold hover:bg-gray-200 transition-colors"
                         >
-                            Cancel
+                            {t('cancel')}
                         </button>
                     </div>
                 </div>
@@ -102,16 +116,22 @@ export default function RegisterSectionConfigView({
             <div className="mx-7.5 bg-white rounded-[10px] p-8 overflow-x-visible">
                 <div>
                     {/* Header */}
-                    <div className="grid grid-cols-3 gap-4 pb-2 px-4">
+                    <div className="grid grid-cols-5 gap-4 pb-2 px-4">
                         <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
-                            Section Name
+                            {t('section_name')}
                         </div>
                         <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
-                            Description
+                            {t('section_order')}
+                        </div>
+                        <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
+                            {t('is_core')}
+                        </div>
+                        <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
+                            {t('is_primary')}
                         </div>
 
                         <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
-                            Actions
+                            {t('actions')}
                         </div>
 
                     </div>
@@ -124,30 +144,38 @@ export default function RegisterSectionConfigView({
                             className="block -mx-8"
                         >
                             <div
-                                className={`grid grid-cols-3 gap-4 items-center h-15 px-12 py-4 transition-colors ${index % 2 === 0 ? 'bg-[#D9D9D940]' : 'bg-white'
+                                className={`grid grid-cols-5 gap-4 items-center h-15 px-12 py-4 transition-colors ${index % 2 === 0 ? 'bg-[#D9D9D940]' : 'bg-white'
                                     } cursor-pointer`}
                             >
                                 <div className="text-base font-medium">
                                     {section.section_mnemonic}
                                 </div>
                                 <div className="text-base font-medium text-gray-500">
-                                    {section.section_description}
+                                    {section.section_order}
+                                </div>
+                                <div className="text-base font-medium text-gray-500">
+                                    {section.is_core_section ? 'True' : 'False'}
+                                </div>
+                                <div className="text-base font-medium text-gray-500">
+                                    {section.is_primary_section ? 'True' : 'False'}
                                 </div>
 
                                 <div className="text-base font-medium">
-                                    <span
-                                        onClick={(e) => handleDelete(e, section.section_id)}
-                                        className="flex items-center text-[#00000080]"
-                                    >
-                                        Remove
-                                        <Image
-                                            src="/images/common/false_sign.png"
-                                            alt="Remove"
-                                            width={18}
-                                            height={18}
-                                            className="ml-4"
-                                        />
-                                    </span>
+                                    <Can action={CONFIGURATION_SECTIONS_ACTIONS.delete}>
+                                        <span
+                                            onClick={(e) => handleDelete(e, section)}
+                                            className="flex items-center text-[#00000080]"
+                                        >
+                                            {t('remove')}
+                                            <Image
+                                                src="/images/common/false_sign.png"
+                                                alt={t('remove')}
+                                                width={18}
+                                                height={18}
+                                                className="ml-4"
+                                            />
+                                        </span>
+                                    </Can>
                                 </div>
                             </div>
                         </Link>

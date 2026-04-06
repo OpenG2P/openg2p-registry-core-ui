@@ -3,6 +3,7 @@
 import { useClickOutside } from '@/shared/hooks';
 import Image from 'next/image';
 import { useRef, useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { IntakeForm } from '../types/intake-form';
 
 interface NewIntakeFormDropdownProps {
@@ -16,6 +17,7 @@ export default function NewIntakeFormDropdown({
 }: NewIntakeFormDropdownProps) {
     const [open, setOpen] = useState(false);
     const ref = useRef<HTMLDivElement>(null);
+    const t = useTranslations();
 
     useClickOutside(ref, () => setOpen(false), open);
 
@@ -23,11 +25,11 @@ export default function NewIntakeFormDropdown({
         <div ref={ref} className="relative">
             <button
                 onClick={() => setOpen(o => !o)}
-                className={`flex border-b items-center gap-2 px-4 py-1 mt-2 rounded-[10px] bg-white ${open ? '' : 'border border-[#F77F57]'
+                className={`flex items-center gap-2 px-4 py-1 mt-2 rounded-[10px] bg-white ${open ? '' : 'border border-[#F77F57]'
                     }`}
             >
                 <span className="text-[16px] font-medium text-[#1E1E1E]">
-                    New Intake
+                    {t('new_intake')}
                 </span>
 
                 <Image
@@ -43,7 +45,7 @@ export default function NewIntakeFormDropdown({
                 <div className="absolute left-0 top-0 mt-1.5 w-60 rounded-[10px] bg-white border border-[#ED7C22] z-50 overflow-hidden">
                     <div className="flex items-center justify-between px-4 py-1">
                         <span className="text-[16px] font-medium text-[#1E1E1E]">
-                            New Intake
+                            {t('new_intake')}
                         </span>
 
                         <Image
@@ -55,6 +57,12 @@ export default function NewIntakeFormDropdown({
                             onClick={() => setOpen(false)}
                         />
                     </div>
+
+                    {forms.length === 0 && (
+                        <div className="px-4 py-3 text-sm text-gray-500">
+                            {t('no_options_available')}
+                        </div>
+                    )}
 
                     {forms.map(form => (
                         <DropdownItem

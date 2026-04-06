@@ -2,6 +2,7 @@
 
 import { X } from 'lucide-react';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 import { Register } from '../shared/types';
 
 interface ViewRegisterFieldsModalProps {
@@ -15,6 +16,8 @@ export default function ViewRegisterFieldsModal({
     onClose,
     data,
 }: ViewRegisterFieldsModalProps) {
+    const t = useTranslations();
+
     if (!isOpen || !data) return null;
 
     return (
@@ -29,74 +32,95 @@ export default function ViewRegisterFieldsModal({
                     </button>
 
                     <h2 className="text-2xl font-bold text-orange-500 mb-6">
-                        {data.register_mnemonic} Details
+                        {data.register_mnemonic} {t('details')}
                     </h2>
 
                     <div className="space-y-6">
                         <div className="flex items-start">
-                            <div className="w-55 text-[16px] text-gray-400 font-medium shrink-0">Register Name</div>
+                            <div className="w-55 text-[16px] text-gray-400 font-medium shrink-0">{t('registry_name')}</div>
                             <div className="flex-1 text-[16px] text-black font-bold">
                                 {data.register_mnemonic || '-'}
                             </div>
                         </div>
 
                         <div className="flex items-start">
-                            <div className="w-55 text-[16px] text-gray-400 font-medium shrink-0">Register Subject</div>
+                            <div className="w-55 text-[16px] text-gray-400 font-medium shrink-0">{t('register_subject')}</div>
                             <div className="flex-1 text-[16px] text-black font-bold">
                                 {data.register_subject || '-'}
                             </div>
                         </div>
 
                         <div className="flex items-start">
-                            <div className="w-55 text-[16px] text-gray-400 font-medium shrink-0">Description</div>
+                            <div className="w-55 text-[16px] text-gray-400 font-medium shrink-0">{t('description')}</div>
                             <div className="flex-1 text-[16px] text-black font-semibold leading-relaxed text-wrap wrap-break-word">
                                 {data.register_description || '-'}
                             </div>
                         </div>
 
                         <div className="flex items-start">
-                            <div className="w-55 text-[16px] text-gray-400 font-medium shrink-0">Register Purpose</div>
+                            <div className="w-55 text-[16px] text-gray-400 font-medium shrink-0">{t('register_purpose')}</div>
                             <div className="flex-1 text-[16px] text-black font-bold uppercase">
                                 {data.register_purpose || '-'}
                             </div>
                         </div>
 
                         <div className="flex items-start">
-                            <div className="w-55 text-[16px] text-gray-400 font-medium shrink-0">Master Register</div>
+                            <div className="w-55 text-[16px] text-gray-400 font-medium shrink-0">{t('master_register')}</div>
                             <div className="flex-1 text-[16px] text-black font-bold">
                                 {data.master_register_mnemonic || data.master_register_id || '-'}
                             </div>
                         </div>
 
                         <div className="flex items-start">
-                            <div className="w-55 text-[16px] text-gray-400 font-medium shrink-0">Deduplication Enabled</div>
+                            <div className="w-55 text-[16px] text-gray-400 font-medium shrink-0">{t('deduplication_enabled')}</div>
                             <div className="flex-1 text-[16px] text-black font-bold">
-                                {data.dedup_is_enabled ? 'True' : 'False'}
+                                {data.dedup_is_enabled ? t('true') : t('false')}
                             </div>
                         </div>
 
                         <div className="flex items-start">
-                            <div className="w-55 text-[16px] text-gray-400 font-medium shrink-0">Dedup Threshold Score</div>
+                            <div className="w-55 text-[16px] text-gray-400 font-medium shrink-0">{t('dedup_threshold_score')}</div>
                             <div className="flex-1 text-[16px] text-black font-bold">
                                 {data.dedup_threshold_score ?? 0}
                             </div>
                         </div>
 
                         <div className="flex items-start">
-                            <div className="w-55 text-[16px] text-gray-400 font-medium shrink-0">Register Rank</div>
+                            <div className="w-55 text-[16px] text-gray-400 font-medium shrink-0">{t('register_rank')}</div>
                             <div className="flex-1 text-[16px] text-black font-bold">
                                 {data.register_rank ?? 0}
                             </div>
                         </div>
 
                         <div className="flex items-start">
-                            <div className="w-55 text-[16px] text-gray-400 font-medium shrink-0">Register Icon</div>
+                            <div className="w-55 text-[16px] text-gray-400 font-medium shrink-0">{t('program_id')}</div>
+                            <div className="flex-1 text-[16px] text-black font-bold truncate">
+                                {data.program_id || '-'}
+                            </div>
+                        </div>
+
+                        <div className="flex items-start">
+                            <div className="w-55 text-[16px] text-gray-400 font-medium shrink-0">{t('has_image')}</div>
+                            <div className="flex-1 text-[16px] text-black font-bold">
+                                {data.has_image ? t('true') : t('false')}
+                            </div>
+                        </div>
+
+                        <div className="flex items-start">
+                            <div className="w-55 text-[16px] text-gray-400 font-medium shrink-0">{t('has_data')}</div>
+                            <div className="flex-1 text-[16px] text-black font-bold">
+                                {data.has_data ? t('true') : t('false')}
+                            </div>
+                        </div>
+
+                        <div className="flex items-start">
+                            <div className="w-55 text-[16px] text-gray-400 font-medium shrink-0">{t('register_icon')}</div>
                             <div className="flex-1">
                                 {data.register_icon ? (
                                     <div className="w-20 h-20 bg-gray-50 border border-gray-100 rounded-2xl overflow-hidden shadow-inner flex items-center justify-center p-2">
                                         <Image
-                                            src={data.register_icon}
-                                            alt="Registry Logo"
+                                            src={data.register_icon.startsWith('data:') ? data.register_icon : `data:image/png;base64,${data.register_icon}`}
+                                            alt={t('register_logo_alt')}
                                             width={120}
                                             height={120}
                                             className="object-contain"
@@ -104,7 +128,7 @@ export default function ViewRegisterFieldsModal({
                                         />
                                     </div>
                                 ) : (
-                                    <span className="text-gray-500 italic text-sm">No icon uploaded</span>
+                                    <span className="text-gray-500 italic text-sm">{t('no_icon_uploaded')}</span>
                                 )}
                             </div>
                         </div>
@@ -115,7 +139,7 @@ export default function ViewRegisterFieldsModal({
                             onClick={onClose}
                             className="px-12 py-2.5 bg-gray-300 text-gray-700 rounded-[10px] hover:bg-gray-400 transition-colors font-semibold"
                         >
-                            Close
+                            {t('close')}
                         </button>
                     </div>
                 </div>

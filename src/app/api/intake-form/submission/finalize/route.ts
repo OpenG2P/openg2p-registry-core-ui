@@ -5,10 +5,10 @@ export async function POST(request: NextRequest) {
     return proxyToBackend({
         req: request,
         targetEndpoint: "/intake-form-data/finalize_submission",
-        buildPayload: (jsonBody) => ({
+        buildPayload: (body) => ({
             pagination_request: undefined,
             request_payload: {
-                submission_id: jsonBody.submission_id,
+                submission_id: body.submission_id,
             },
         }),
     });

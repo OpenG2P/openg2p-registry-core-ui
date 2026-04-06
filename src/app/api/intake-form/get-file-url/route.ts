@@ -5,16 +5,16 @@ export async function POST(request: NextRequest) {
     return proxyToBackend({
         req: request,
         targetEndpoint: "/documents/get_file_url",
-        buildPayload: (jsonBody) => ({
+        buildPayload: (body) => ({
             pagination_request: {
-                current_page: 1,
-                page_size: 5,
-                sort_by: jsonBody.sort_by ?? "",
-                filter_by: jsonBody.filter_by ?? "",
-                search_text: jsonBody.search_text ?? "",
+                current_page: body.current_page ?? 1,
+                page_size: body.page_size ?? 20,
+                sort_by: body.sort_by ?? "",
+                filter_by: body.filter_by ?? "",
+                search_text: body.search_text ?? "",
             },
             request_payload: {
-                document_store_id: jsonBody.document_store_id,
+                document_store_id: body.document_store_id,
             },
         }),
     });

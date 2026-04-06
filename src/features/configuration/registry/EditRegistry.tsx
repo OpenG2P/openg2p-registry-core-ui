@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { useState } from 'react';
 import { Upload, Trash2, Image as ImageIcon } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import ImageCropper from '@/components/shared/ImageCropper';
 
 interface EditRegistryProps {
@@ -18,6 +19,7 @@ export default function EditRegistry({
     onSave,
     onCancel,
 }: EditRegistryProps) {
+    const t = useTranslations();
     const [name, setName] = useState(initialName);
     const [image, setImage] = useState(initialImage);
     const [croppingImage, setCroppingImage] = useState<string | null>(null);
@@ -68,7 +70,7 @@ export default function EditRegistry({
                             {image && image !== '/images/config/blank_image.png' ? (
                                 <Image
                                     src={image}
-                                    alt="Registry Logo"
+                                    alt={t('register_logo_alt')}
                                     width={120}
                                     height={120}
                                     className="object-contain"
@@ -87,14 +89,14 @@ export default function EditRegistry({
                                     className="flex items-center justify-center gap-2 w-23.75 py-1.5 bg-white rounded-[10px] text-[#ED7C22] shadow-md hover:bg-gray-50 transition-all active:scale-95"
                                 >
                                     <Upload size={15} strokeWidth={2.5} />
-                                    <span className="text-[13px] leading-none">Upload</span>
+                                    <span className="text-[13px] leading-none">{t('upload')}</span>
                                 </button>
                                 <button
                                     onClick={() => setImage('/images/config/blank_image.png')}
                                     className="flex items-center justify-center gap-2 w-23.75 py-1.5 bg-white rounded-[10px] text-[#ED7C22] shadow-md hover:bg-gray-50 transition-all active:scale-95"
                                 >
                                     <Trash2 size={15} strokeWidth={2.5} />
-                                    <span className="text-[13px] leading-none">Remove</span>
+                                    <span className="text-[13px] leading-none">{t('remove')}</span>
                                 </button>
                             </div>
                         </div>
@@ -103,12 +105,12 @@ export default function EditRegistry({
                         <div className="flex-1 flex items-center gap-4">
                             <div className="w-75">
                                 <div className='flex flex-col items-start gap-1'>
-                                    <span className='text-black text-[16px] font-normal leading-5.5 tracking-normal m-0'>Registry Name</span>
+                                    <span className='text-black text-[16px] font-normal leading-5.5 tracking-normal m-0'>{t('registry_name')}</span>
                                     <input
                                         type="text"
                                         value={name}
                                         onChange={(e) => setName(e.target.value)}
-                                        placeholder="Registry Name"
+                                        placeholder={t('registry_name')}
                                         className="w-full h-10 px-4 rounded-[10px] border-none text-[16px] font-medium text-black/50 bg-white outline-none placeholder:text-black/50"
                                     />
 
@@ -128,13 +130,13 @@ export default function EditRegistry({
                                 onClick={onCancel}
                                 className="w-20 h-10 bg-[#DDDDDD] text-black/50 rounded-[10px] text-[16px] font-medium hover:bg-gray-300 transition-colors"
                             >
-                                Cancel
+                                {t('cancel')}
                             </button>
                             <button
                                 onClick={() => onSave(name, image)}
                                 className="w-20 h-10 bg-black text-white rounded-[10px] text-[16px] font-medium hover:bg-black/90 transition-colors flex items-center justify-center"
                             >
-                                Save
+                                {t('save')}
                             </button>
                         </div>
                     </div>

@@ -37,14 +37,14 @@ export default function VerificationForm({ onSubmit, onClose }: Props) {
             </button>
 
             <div className="font-semibold text-black/50">
-                {t("newVerification")}
+                {t("new_verification")}
             </div>
 
             <div className="flex items-center gap-3">
                 <div className="w-10 h-10 relative">
                     <Image
                         src="/images/common/verified_person.png"
-                        alt={t("verifiedPerson")}
+                        alt={t("verified_person")}
                         fill
                         className="rounded-full object-cover"
                     />
@@ -68,7 +68,7 @@ export default function VerificationForm({ onSubmit, onClose }: Props) {
                     value={observation}
                     onChange={(e) => setObservation(e.target.value)}
                     rows={1}
-                    placeholder={t("typeYourMessage")}
+                    placeholder={t("type_your_message")}
                     className="w-full border border-black/25 rounded-[10px] p-2 text-sm resize-none focus:outline-none"
                 />
             </div>
@@ -81,7 +81,7 @@ export default function VerificationForm({ onSubmit, onClose }: Props) {
                         onClick={() => setIsApproved(true)}
                     />
                     <CheckboxOption
-                        label={t("notOk")}
+                        label={t("not_ok")}
                         checked={!isApproved}
                         onClick={() => setIsApproved(false)}
                     />

@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 
 import { Link } from '@/i18n/navigation';
 import { AddTabModal, IntakeFormModal } from '@/features/configuration/registers';
@@ -9,6 +10,8 @@ import { useParams } from 'next/navigation';
 import { useConfigTabs } from '../shared/hooks/useConfigTabs';
 import { useFetch } from '@/shared/hooks';
 import { toast } from 'react-toastify';
+import { CONFIGURATION_TABS_ACTIONS } from '../shared/utils/configurationTabs.actions';
+import Can from '@/components/shared/Can';
 
 interface RegisterTabConfigViewProps {
 	onAddNewRegister: () => void;
@@ -31,6 +34,7 @@ export default function RegisterTabConfigView({
 	pageSize = 10,
 	onDataLoaded,
 }: RegisterTabConfigViewProps) {
+	const t = useTranslations();
 	const { registerId } = useParams<{ registerId: string }>();
 	const { tabs, loading, refresh, pagination } = useConfigTabs(registerId, page, pageSize);
 
@@ -52,10 +56,10 @@ export default function RegisterTabConfigView({
 		});
 
 		if (result) {
-			toast.success('Tab removed successfully');
+			toast.success(t('toast_tab_removed'));
 			refresh();
 		} else {
-			toast.error('Failed to remove tab');
+			toast.error(t('toast_tab_remove_failed'));
 		}
 	};
 
@@ -66,7 +70,7 @@ export default function RegisterTabConfigView({
 		toast.info(
 			({ closeToast }) => (
 				<div className="p-1">
-					<p className="font-bold text-gray-800 mb-3">Are you sure to remove this tab?</p>
+					<p className="font-bold text-gray-800 mb-3">{t('confirm_remove_tab')}</p>
 					<div className="flex gap-3">
 						<button
 							onClick={async () => {
@@ -75,13 +79,13 @@ export default function RegisterTabConfigView({
 							}}
 							className="bg-[#ED7C22] text-white px-4 py-1.5 rounded-full text-sm font-semibold hover:bg-[#d66a1a] transition-colors shadow-sm"
 						>
-							Remove
+							{t('remove')}
 						</button>
 						<button
 							onClick={closeToast}
 							className="bg-gray-100 text-gray-600 px-4 py-1.5 rounded-full text-sm font-semibold hover:bg-gray-200 transition-colors"
 						>
-							Cancel
+							{t('cancel')}
 						</button>
 					</div>
 				</div>
@@ -110,16 +114,22 @@ export default function RegisterTabConfigView({
 			<div className="mx-7.5 bg-white rounded-[10px] p-8 overflow-x-visible">
 				<div>
 					{/* Header */}
-					<div className="grid grid-cols-3 gap-4 pb-2 px-4">
+					<div className="grid grid-cols-5 gap-4 pb-2 px-4">
 						<div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
-							Tab Label
+							{t('tab_label')}
 						</div>
 						<div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
-							Tab Order
+							{t('tab_order')}
+						</div>
+						<div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
+							{t('used_for_intake')}
+						</div>
+						<div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
+							Status
 						</div>
 
 						<div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
-							Actions
+							{t('actions')}
 						</div>
 
 					</div>
@@ -132,7 +142,7 @@ export default function RegisterTabConfigView({
 							className="block -mx-8"
 						>
 							<div
-								className={`grid grid-cols-3 h-15 gap-4 items-center px-12 py-4 transition-colors ${index % 2 === 0 ? 'bg-[#D9D9D940]' : 'bg-white'
+								className={`grid grid-cols-5 h-15 gap-4 items-center px-12 py-4 transition-colors ${index % 2 === 0 ? 'bg-[#D9D9D940]' : 'bg-white'
 									} cursor-pointer`}
 							>
 
@@ -142,21 +152,29 @@ export default function RegisterTabConfigView({
 								<div className="text-base font-medium text-gray-500">
 									{tab.tab_order}
 								</div>
+								<div className="text-base font-medium text-gray-500">
+									{tab.used_for_new_intake_form ? t('true') : t('false')}
+								</div>
+								<div className="text-base font-medium text-gray-500">
+									{tab.is_active ? t('active') : t('inactive')}
+								</div>
 
 								<div className="text-base font-medium">
-									<span
-										onClick={(e) => handleDelete(e, tab.tab_id)}
-										className="flex items-center text-[#00000080]"
-									>
-										Remove
-										<Image
-											src="/images/common/false_sign.png"
-											alt="Remove"
-											width={18}
-											height={18}
-											className="ml-4"
-										/>
-									</span>
+									<Can action={CONFIGURATION_TABS_ACTIONS.delete}>
+										<span
+											onClick={(e) => handleDelete(e, tab.tab_id)}
+											className="flex items-center text-[#00000080]"
+										>
+											{t('remove')}
+											<Image
+												src="/images/common/false_sign.png"
+												alt={t('remove')}
+												width={18}
+												height={18}
+												className="ml-4"
+											/>
+										</span>
+									</Can>
 								</div>
 							</div>
 						</Link>

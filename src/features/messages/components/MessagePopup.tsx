@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 
 interface MessagePopupProps {
     onClose: () => void;
@@ -18,12 +19,13 @@ export default function MessagePopup({
     enrichedJson,
     loading,
 }: MessagePopupProps) {
+    const t = useTranslations();
     const [activeTab, setActiveTab] = useState(0);
 
     const tabs = [
-        { id: 'raw', label: 'Raw Message', data: rawJson },
-        { id: 'enriched', label: 'Enriched Message', data: enrichedJson },
-        { id: 'transformed', label: 'Transformed Message', data: transformedJson },
+        { id: 'raw', label: t('raw_message') || 'Raw Message', data: rawJson },
+        { id: 'enriched', label: t('enriched_message') || 'Enriched Message', data: enrichedJson },
+        { id: 'transformed', label: t('transformed_message') || 'Transformed Message', data: transformedJson },
     ];
 
     return (
@@ -33,7 +35,7 @@ export default function MessagePopup({
                     className="absolute top-10 right-10 opacity-50"
                     onClick={onClose}
                 >
-                    <Image src="/images/changerequest/cr_close.png" alt="Close" width={30} height={30} />
+                    <Image src="/images/changerequest/cr_close.png" alt={t('close') || "Close"} width={30} height={30} />
                 </button>
 
                 <div className="pb-3">
@@ -55,7 +57,7 @@ export default function MessagePopup({
 
                 <div className="flex-1 bg-[#D9D9D980] px-6 py-3 overflow-y-auto overflow-x-auto message-json-scroll">
                     {loading ? (
-                        <div className="text-center py-10">Loading...</div>
+                        <div className="text-center py-10">{t('loading') || 'Loading...'}</div>
                     ) : (
                         <pre className="text-[14px] text-black whitespace-pre">
                             {JSON.stringify(tabs[activeTab]?.data, null, 2)}
@@ -67,7 +69,7 @@ export default function MessagePopup({
                     onClick={onClose}
                     className="mt-4 bg-black text-[16px] text-white px-10 py-2 rounded-[10px] w-fit self-start"
                 >
-                    Close
+                    {t('close') || 'Close'}
                 </button>
             </div>
         </div>

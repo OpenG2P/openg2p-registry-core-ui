@@ -6,13 +6,20 @@ import { RegistersConfigView } from '@/features/configuration/registers';
 import { useAllRegister } from '@/features/configuration/shared';
 import { usePagination } from '@/shared/hooks';
 import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
+import { useRbac } from '@/context/RbacContext';
+import { CONFIGURATION_REGISTERS_ACTIONS } from '@/features/configuration/shared/utils/configurationRegisters.actions';
+import { useTranslations } from 'next-intl';
 
 const RegistersConfigurationPage = () => {
+    const t = useTranslations();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
 
     // Env. variable config
     const { config } = useRuntimeConfig();
+
+    const { can } = useRbac();
+    const canCreate = can(CONFIGURATION_REGISTERS_ACTIONS.create);
 
     const { registers, pagination, loading, refresh } = useAllRegister(currentPage, config.pageSize);
 
@@ -34,11 +41,11 @@ const RegistersConfigurationPage = () => {
     return (
         <>
             <TopBar
-                breadcrumb={[{ label: "Registers" }]}
+                breadcrumb={[{ label: t('registers') }]}
                 showFilters={false}
                 showPagination
-                showAddNewButton
-                addNewButtonText={"Add New Register"}
+                showAddNewButton={canCreate}
+                addNewButtonText={t('add_new_register')}
                 onAddNewButton={() => setIsModalOpen(true)}
                 pageStart={pageStart}
                 pageEnd={pageEnd}

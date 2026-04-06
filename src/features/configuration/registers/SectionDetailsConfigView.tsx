@@ -3,18 +3,22 @@ import { SectionBuilder } from '@openg2p/registry-widgets';
 import type { SectionConfig } from '@openg2p/registry-widgets';
 import { useFetch } from '@/shared/hooks';
 import { toast } from 'react-toastify';
+import { useTranslations } from "next-intl";
 
 interface SectionDetailsConfigViewProps {
     sectionUISchema: any;
     registerId: string;
     sectionId: string;
+    isCoreSection?: boolean;
 }
 
 export default function SectionDetailsConfigView({
     sectionUISchema,
     registerId,
     sectionId,
+    isCoreSection = false,
 }: SectionDetailsConfigViewProps) {
+    const t = useTranslations();
     const { execute: updateUISchema, loading } = useFetch();
 
     const handleSectionChange = (updatedSection: SectionConfig) => {
@@ -22,8 +26,16 @@ export default function SectionDetailsConfigView({
     };
 
     const handleSave = async (updatedSection: SectionConfig) => {
+        if (isCoreSection) {
+            toast.info(t('core_section_warning') || 'This is a core section, UI schema cannot be modified.', {
+                position: "top-right",
+                className: 'rounded-[15px] shadow-xl border border-gray-100',
+            });
+            return;
+        }
+
         if (!registerId || !sectionId) {
-            toast.error('Missing required section information');
+            toast.error(t('toast_section_info_missing') || 'Missing required section information');
             return;
         }
 
@@ -37,9 +49,9 @@ export default function SectionDetailsConfigView({
         });
 
         if (result?.section_id) {
-            toast.success('Section UI schema updated successfully');
+            toast.success(t('toast_section_ui_updated') || 'Section UI schema updated successfully');
         } else {
-            toast.error('Failed to update section UI schema');
+            toast.error(t('toast_section_ui_update_failed') || 'Failed to update section UI schema');
         }
     };
 

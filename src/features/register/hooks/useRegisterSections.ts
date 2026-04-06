@@ -9,11 +9,14 @@ import {
     TabSectionData,
 } from "@/features/register/types";
 import { useSectionSave } from "./useSectionSave";
+import { useRbac } from "@/context/RbacContext";
+import { CHANGE_REQUEST_ACTIONS } from "@/features/change-request/utils/changeRequest.actions";
 
 export const useRegisterSections = (onChangeRequestCreated: () => void) => {
     const { internalRecordId } = useRegisterRecord();
     const { activeTabId } = useRegisterTabs();
     const { currentRegister } = useRegister();
+    const { can } = useRbac();
 
     // list of tab sections
     const { data: tabSections, loading: loadingSections } = useFetch<TabSection[]>({
@@ -67,7 +70,7 @@ export const useRegisterSections = (onChangeRequestCreated: () => void) => {
         if (!tabSections) return [];
 
         return [...tabSections]
-            .sort((a, b) => (a.section_order ?? 0) - (b.section_order ?? 0))
+            .sort((a, b) => (b.section_order ?? 0) - (a.section_order ?? 0))
             .map((section) => {
                 const {
                     section_id,
@@ -90,6 +93,11 @@ export const useRegisterSections = (onChangeRequestCreated: () => void) => {
                     register_relation !== "DESCENDANT"
                 ) {
                     hideEditButton = true;
+                }
+
+                if(!can(CHANGE_REQUEST_ACTIONS.create))
+                {
+                    hideEditButton = true
                 }
 
                 return {

@@ -5,23 +5,23 @@ export async function POST(request: NextRequest) {
     return proxyToBackend({
         req: request,
         targetEndpoint: "/register-metadata/create_register",
-        buildPayload: (jsonBody) => ({
+        buildPayload: (body) => ({
             pagination_request: {
-                current_page: 1,
-                page_size: 1,
-                sort_by: "",
-                filter_by: undefined,
-                search_text: ""
+                current_page: body.current_page ?? 1,
+                page_size: body.page_size ?? 20,
+                sort_by: body.sort_by ?? "",
+                filter_by: body.filter_by ?? "",
+                search_text: body.search_text ?? ""
             },
             request_payload: {
-                register_mnemonic: jsonBody.register_mnemonic,
-                register_description: jsonBody.register_description,
-                master_register_id: jsonBody.master_register_id,
-                dedup_is_enabled: jsonBody.dedup_is_enabled ?? false,
-                dedup_threshold_score: jsonBody.dedup_threshold_score ?? 0,
-                register_purpose: jsonBody.register_purpose,
-                register_rank: jsonBody.register_rank ?? 0,
-                register_icon: jsonBody.register_icon,
+                register_mnemonic: body.register_mnemonic,
+                register_description: body.register_description,
+                master_register_id: body.master_register_id,
+                dedup_is_enabled: body.dedup_is_enabled ?? false,
+                dedup_threshold_score: body.dedup_threshold_score ?? 0,
+                register_purpose: body.register_purpose,
+                register_rank: body.register_rank ?? 0,
+                register_icon: body.register_icon,
             },
 
         }),

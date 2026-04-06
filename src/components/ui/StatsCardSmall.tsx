@@ -36,7 +36,7 @@ const StatsCardSmall = ({
 
         if (stats_endpoint.includes("change")) {
             return {
-                title: t('changeRequests'),
+                title: t('change_requests'),
                 rows: [
                     {
                         id: "approved",
@@ -56,17 +56,17 @@ const StatsCardSmall = ({
 
         if (stats_endpoint.includes("intake")) {
             return {
-                title: t('intakeForms'),
+                title: t('intake_forms'),
                 rows: [
                     {
                         id: "pendingSubmissions",
-                        label: t('pendingSubmissions'),
+                        label: t('pending_submissions'),
                         value: data.total_approval_pending_submissions,
                         imageUrl: "/images/register/statsIcon/topics.png",
                     },
                     {
                         id: "draftSubmissions",
-                        label: t('draftSubmissions'),
+                        label: t('draft_submissions'),
                         value: data.total_draft_submissions,
                         imageUrl: "/images/register/statsIcon/data_models.png",
                     },
@@ -80,13 +80,13 @@ const StatsCardSmall = ({
                 rows: [
                     {
                         id: "incomingMessages",
-                        label: t('incomingMessages'),
+                        label: t('incoming_messages'),
                         value: data.incoming,
                         imageUrl: "/images/messages/message_icon.png",
                     },
                     {
                         id: "outgoingMessages",
-                        label: t('outgoingMessages'),
+                        label: t('outgoing_messages'),
                         value: data.outgoing,
                         imageUrl: "/images/messages/message_icon.png",
                     },
@@ -125,10 +125,10 @@ const StatsCardSmall = ({
                         </div>
                     ) : (
                         <>
-                            <h2 className="font-roboto text-[45px] font-bold leading-none">
+                            <h2 className="font-roboto text-[45px] font-bold leading-none truncate overflow-hidden whitespace-nowrap">
                                 {totalCount}
                             </h2>
-                            <h3 className="font-roboto text-[22px] font-bold leading-7">
+                            <h3 className="font-roboto text-[22px] font-bold leading-7 truncate overflow-hidden whitespace-nowrap">
                                 {title}
                             </h3>
                         </>
@@ -142,7 +142,7 @@ const StatsCardSmall = ({
                         <div className="h-5 w-32 rounded bg-gray-300 dark:bg-gray-700"></div>
                     </div>
                 ) : error ? (
-                    <p className="text-sm text-red-500">{t('failedToLoad')}</p>
+                    <p className="text-sm text-red-500">{t('failed_to_load')}</p>
                 ) : (
                     // items
                     <ul>
@@ -159,12 +159,12 @@ const StatsCardSmall = ({
                                 )}
 
                                 {/* value */}
-                                <span className="font-roboto text-[16px] font-bold leading-7">
+                                <span className="font-roboto text-[16px] font-bold leading-7 truncate overflow-hidden whitespace-nowrap">
                                     {row.value}
                                 </span>
 
                                 {/* label */}
-                                <span className="font-roboto text-[16px] font-medium leading-7 opacity-80">
+                                <span className="font-roboto text-[16px] font-medium leading-7 opacity-80 truncate overflow-hidden whitespace-nowrap">
                                     {row.label}
                                 </span>
                             </li>

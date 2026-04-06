@@ -7,6 +7,7 @@ import ActionModal from '@/components/shared/ActionModal';
 import type { SectionChanges } from '@openg2p/registry-widgets';
 import { extractFilesFromSection, intakeNormalisedRecords } from '@/features/register/utils';
 import { UploadedDocument } from '@/shared/types';
+import { useTranslations } from 'next-intl';
 
 interface UseIntakeFormActionProps {
     registerId?: string;
@@ -25,6 +26,7 @@ export const useIntakeFormAction = ({
     submissionId = null,
     onSuccess
 }: UseIntakeFormActionProps) => {
+    const t = useTranslations();
     const router = useRouter();
     const { execute: executeSave } = useFetch();
     const { execute: uploadDocumentRequest } = useFetch();
@@ -82,7 +84,7 @@ export const useIntakeFormAction = ({
                         }
                     }
                 } catch (error) {
-                    toast.error(`Failed to upload files. Please try again.`, {
+                    toast.error(t('toast_upload_failed'), {
                         position: "top-right",
                         autoClose: 6000,
                     });
@@ -124,7 +126,7 @@ export const useIntakeFormAction = ({
             });
 
             if (!draftResult) {
-                toast.error('Operation failed');
+                toast.error(t('toast_operation_failed'));
                 return;
             }
 
@@ -145,7 +147,7 @@ export const useIntakeFormAction = ({
                 const finalSubmissionId = draftResult?.submission_id
 
                 if (!finalSubmissionId) {
-                    toast.error('Draft saved, but could not finalize without submission ID');
+                    toast.error(t('toast_draft_saved_warning'));
                     return;
                 }
 
@@ -160,30 +162,30 @@ export const useIntakeFormAction = ({
                     setModalConfig({
                         isOpen: true,
                         type: 'success',
-                        title: 'Submitted successfully',
-                        subtitle: 'Your form submitted successfully, Thank you.',
-                        confirmText: 'Close',
+                        title: t('submitted_successfully'),
+                        subtitle: t('submitted_successfully_subtitle'),
+                        confirmText: t('close'),
                         hideCancel: true,
                         onClose: () => handleSuccessClose(false),
                         onConfirm: () => handleSuccessClose(false)
                     });
                 } else {
-                    toast.error('Submission failed');
+                    toast.error(t('toast_submission_failed'));
                 }
             } else if (draftResult?.submission_id) {
                 setModalConfig({
                     isOpen: true,
                     type: 'success',
-                    title: 'Draft Saved',
-                    subtitle: 'Your info saved as draft. You can continue updating your application.',
-                    confirmText: 'Close',
+                    title: t('draft_saved_successfully'),
+                    subtitle: t('draft_saved_successfully_subtitle'),
+                    confirmText: t('close'),
                     hideCancel: true,
                     onClose: () => handleSuccessClose(true),
                     onConfirm: () => handleSuccessClose(true)
                 });
             }
         } catch (error) {
-            toast.error('Error occured while saving form');
+            toast.error(t('toast_form_save_error'));
         }
     };
 
@@ -194,10 +196,10 @@ export const useIntakeFormAction = ({
             setModalConfig({
                 isOpen: true,
                 type: 'warning',
-                title: 'Are you sure ?',
-                subtitle: 'If you submit your application you cannot modified further.',
-                confirmText: 'Submit',
-                cancelText: 'Cancel',
+                title: t('are_you_sure'),
+                subtitle: t('submit_confirmation_subtitle'),
+                confirmText: t('submit'),
+                cancelText: t('cancel'),
                 onClose: closeModal,
                 onConfirm: () => {
                     closeModal();

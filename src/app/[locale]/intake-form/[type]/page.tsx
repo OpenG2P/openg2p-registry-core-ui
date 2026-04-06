@@ -14,6 +14,8 @@ import IntakeFormSubmissionList from '@/features/intake-form/components/Submissi
 import { usePagination } from '@/shared/hooks';
 import { useIntakeForms } from '@/features/intake-form/hooks/useIntakeForms';
 import { useIntakeSubmissions } from '@/features/intake-form/hooks/useIntakeSubmissions';
+import { INTAKE_FORM_ACTIONS } from '@/features/intake-form/utils/intakeForm.actions';
+import Can from '@/components/shared/Can';
 
 export default function IntakeFormPage() {
     const t = useTranslations();
@@ -40,9 +42,7 @@ export default function IntakeFormPage() {
         clearAllFilters,
     } = useFilters("/api/register/filters");
 
-    const tabId = "intake_form_tab_1"
     const { submissions, loading: submissionsLoading } = useIntakeSubmissions(registerId, {
-        tabId,
         searchText: searchQuery,
         currentPage,
         pageSize,
@@ -71,21 +71,23 @@ export default function IntakeFormPage() {
     return (
         <div className="min-h-screen mx-auto bg-[#F3F1E4]">
             <TopBar
-                breadcrumb={[{ label: `${currentRegister?.register_subject || 'Register'} - Intake Form` }]}
+                breadcrumb={[{ label: t("register_intake_form", { subject: currentRegister?.register_subject || t("register") }) }]}
 
 
-                showFilters
+                showFilters={false}
                 showPagination
                 showCapsule={true}
                 capsule={
-                    <NewIntakeFormDropdown
-                        forms={forms || []}
-                        onSelectForm={(form) => {
-                            router.push(
-                                `/intake-form/${registerType}/new/${form.tab_id}`
-                            );
-                        }}
-                    />
+                    <Can action={INTAKE_FORM_ACTIONS.create}>
+                        <NewIntakeFormDropdown
+                            forms={forms || []}
+                            onSelectForm={(form) => {
+                                router.push(
+                                    `/intake-form/${registerType}/new/${form.tab_id}`
+                                );
+                            }}
+                        />
+                    </Can>
                 }
                 pageStart={pagination.pageStart}
                 pageEnd={pagination.pageEnd}
@@ -95,10 +97,14 @@ export default function IntakeFormPage() {
                 onApplyFilters={applyFilters}
                 appliedFilters={appliedFilters}
                 filterConfig={filterConfig}
+                showSearch
+                searchValue={searchQuery || ''}
+                searchPlaceholder={t('search')}
+                onSearch={handleSearch}
             />
 
             <div className="px-7.5">
-                <SelectedFilters
+                {/* <SelectedFilters
                     appliedFilters={appliedFilters}
                     filterConfig={filterConfig}
                     removeFilter={removeFilter}
@@ -107,7 +113,7 @@ export default function IntakeFormPage() {
                     searchPlaceholder={t('search')}
                     onSearch={handleSearch}
                     pxClass="px-0.5"
-                />
+                /> */}
                 {formsLoading || submissionsLoading ? (
                     <div className="space-y-4">
                         {[...Array(3)].map((_, i) => (
@@ -131,10 +137,11 @@ export default function IntakeFormPage() {
                     />
                 ) : (
                     <div className="text-sm text-gray-400 text-center py-6">
-                        No submissions found
+                        {t('no_submissions')}
                     </div>
                 )}
             </div>
+            <div className='h-15'>&nbsp;</div>
         </div>
     );
 }

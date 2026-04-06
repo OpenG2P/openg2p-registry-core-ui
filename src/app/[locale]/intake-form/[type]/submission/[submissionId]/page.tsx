@@ -43,6 +43,8 @@ export default function IntakeFormSubmissionPage() {
             if (refetch) refetch();
         }
     });
+    // TODO: Recheck the data structure for submission
+    // Also check the response of get_submission api.
     const sectionDataMap = useMemo(() => {
         if (!submission?.section_payloads) return {};
 
@@ -54,24 +56,38 @@ export default function IntakeFormSubmissionPage() {
         for (const section of submission.section_payloads) {
             if (!section.records?.length) continue;
 
+            const existing = map[section.section_register_id];
+
             if (section.is_list === true) {
-                map[section.section_register_id] = { records: section.records };
+                if (existing && 'records' in existing) {
+                    const existingList = existing as { records: RegisterFlattenedRecord[] };
+                    existingList.records = [...existingList.records, ...section.records];
+                } else {
+                    map[section.section_register_id] = { records: [...section.records] };
+                }
             } else {
-                map[section.section_register_id] = section.records[0];
+                if (existing && !('records' in existing)) {
+                    map[section.section_register_id] = { ...existing, ...section.records[0] };
+                } else if (!existing) {
+                    map[section.section_register_id] = { ...section.records[0] };
+                }
             }
         }
 
         return map;
     }, [submission?.section_payloads]);
 
-    console.log(sectionDataMap, "sectionsDataMap")
+    // console.log(sectionDataMap, "sectionsDataMap")
 
     return (
         <div className="min-h-screen mx-auto bg-[#F3F1E4]">
             <TopBar
                 breadcrumb={[
-                    { label: `${currentRegister?.register_subject || 'Register'} - Intake Form`, href: `/intake-form/${registerType}` },
-                    { label: submission?.submission_reference ? 'Ref- ' + String(submission.submission_reference) : '' }
+                    { 
+                        label: t("register_intake_form", { subject: currentRegister?.register_subject || t("register") }), 
+                        href: `/intake-form/${registerType}` 
+                    },
+                    { label: submission?.submission_reference ? t("ref") + String(submission.submission_reference) : "" }
                 ]}
 
 
@@ -84,7 +100,7 @@ export default function IntakeFormSubmissionPage() {
             <div className="mx-7.5 py-6 space-y-6">
                 {loading ? (
                     <div className="flex items-center justify-center py-20">
-                        <span className="text-gray-500">Loading...</span>
+                        <span className="text-gray-500">{t('loading')}</span>
                     </div>
                 ) : (
                     <div className="flex flex-col lg:flex-row gap-7.5">

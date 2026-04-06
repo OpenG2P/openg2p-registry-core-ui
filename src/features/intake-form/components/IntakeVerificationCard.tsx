@@ -9,6 +9,8 @@ import {
 } from "@/features/change-request/components";
 import { useVerifications } from "@/features/change-request/hooks";
 import { IntakeSubmissionPayload } from "@/features/intake-form/types";
+import { VERIFICATION_INTAKE_FORM_ACTIONS } from "../utils/verificationIntakeForm.actions";
+import Can from "@/components/shared/Can";
 
 interface Props {
     submission?: IntakeSubmissionPayload | null;
@@ -27,47 +29,51 @@ export default function IntakeVerificationCard({ submission, isPending }: Props)
     } = useVerifications(undefined, submission?.submission_id);
 
     return (
-        <div className="rounded-lg space-y-4">
-            <div className="bg-[#F2BA1A] px-6 py-4 rounded-[10px] flex justify-between items-center shadow-sm">
-                <h4 className="text-[24px] font-semibold text-black">
-                    {t("verifications")}
-                </h4>
-                {isPending && (
-                    <button
-                        onClick={() => setShowForm(!showForm)}
-                        className="flex items-center gap-2 text-[14px] px-4 py-1 rounded-[10px] bg-black text-white hover:bg-gray-800 transition-colors"
-                    >
-                        <span>{t("add")}</span>
-                        <Image
-                            src="/images/common/plus.png"
-                            alt="Add"
-                            width={12}
-                            height={12}
-                        />
-                    </button>
-                )}
-            </div>
+        <Can action={VERIFICATION_INTAKE_FORM_ACTIONS.view}>
+            <div className="rounded-lg space-y-4">
+                <div className="bg-[#F2BA1A] px-6 py-4 rounded-[10px] flex justify-between items-center shadow-sm">
+                    <h4 className="text-[24px] font-semibold text-black">
+                        {t("verifications")}
+                    </h4>
+                    {isPending && (
+                        <Can action={VERIFICATION_INTAKE_FORM_ACTIONS.create}>
+                            <button
+                                onClick={() => setShowForm(!showForm)}
+                                className="flex items-center gap-2 text-[14px] px-4 py-1 rounded-[10px] bg-black text-white hover:bg-gray-800 transition-colors"
+                            >
+                                <span>{t("add")}</span>
+                                <Image
+                                    src="/images/common/plus.png"
+                                    alt="Add"
+                                    width={12}
+                                    height={12}
+                                />
+                            </button>
+                        </Can>
+                    )}
+                </div>
 
-            {showForm && (
-                <VerificationForm
-                    onSubmit={async (obs, approved) => {
-                        const success = await addVerification(obs, approved);
-                        if (success) setShowForm(false);
-                        return success;
-                    }}
-                    onClose={() => setShowForm(false)}
-                />
-            )}
-
-            <div className="space-y-3">
-                {loadingVerifications ? (
-                    <div className="py-4 text-center text-gray-500">Loading verifications...</div>
-                ) : (
-                    verifications.map((v) => (
-                        <VerificationCard key={v.verification_id} verification={v} />
-                    ))
+                {showForm && (
+                    <VerificationForm
+                        onSubmit={async (obs, approved) => {
+                            const success = await addVerification(obs, approved);
+                            if (success) setShowForm(false);
+                            return success;
+                        }}
+                        onClose={() => setShowForm(false)}
+                    />
                 )}
+
+                <div className="space-y-3">
+                    {loadingVerifications ? (
+                        <div className="py-4 text-center text-gray-500">Loading verifications...</div>
+                    ) : (
+                        verifications.map((v) => (
+                            <VerificationCard key={v.verification_id} verification={v} />
+                        ))
+                    )}
+                </div>
             </div>
-        </div>
+        </Can>
     );
 }

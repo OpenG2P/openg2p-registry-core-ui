@@ -12,7 +12,7 @@ export default function VerificationCard(props: VerificationCardProps) {
     return (
         <div className="bg-[#E0E0E0] rounded-[10px] p-6 space-y-3">
             <div className="font-normal text-[14px] text-black/50">
-                {t("verifiedBy")}
+                {t("verified_by")}
             </div>
 
             <div className="flex items-center gap-3">
@@ -49,7 +49,7 @@ export default function VerificationCard(props: VerificationCardProps) {
                     isActive={verification.is_approved}
                 />
                 <StatusIndicator
-                    label={t("notOk")}
+                    label={t("not_ok")}
                     isActive={!verification.is_approved}
                 />
             </div>

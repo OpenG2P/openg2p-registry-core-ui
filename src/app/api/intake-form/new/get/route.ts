@@ -5,17 +5,17 @@ export async function POST(request: NextRequest) {
     return proxyToBackend({
         req: request,
         targetEndpoint: "/intake-form-metadata/get_intake_form",
-        buildPayload: (jsonBody) => ({
+        buildPayload: (body) => ({
             pagination_request: {
-                current_page: 1,
-                page_size: 5,
-                sort_by: jsonBody.sort_by ?? "",
-                filter_by: jsonBody.filter_by ?? "",
-                search_text: jsonBody.search_text ?? "",
+                current_page: body.current_page ?? 1,
+                page_size: body.page_size ?? 20,
+                sort_by: body.sort_by ?? "",
+                filter_by: body.filter_by ?? "",
+                search_text: body.search_text ?? "",
             },
             request_payload: {
-                register_id: jsonBody.register_id,
-                intake_form_id: jsonBody.intake_form_id,
+                register_id: body.register_id,
+                intake_form_id: body.intake_form_id,
             },
         }),
     });

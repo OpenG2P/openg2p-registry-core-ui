@@ -7,10 +7,10 @@ import Image from 'next/image';
 import React, { useRef, useState, useTransition } from 'react';
 import { useClickOutside } from '@/shared/hooks/useClickOutside';
 
-const flagMap: Record<string, string> = {
-    en: '/images/common/flags/en_flag.png',
-    de: '/images/common/flags/de_flag.png',
-    cs: '/images/common/flags/cs_flag.png',
+const LANGUAGE_CONFIG: Record<string, { label: string; flag: string }> = {
+    en: { label: 'English', flag: '/images/common/flags/en_flag.png' },
+    fr: { label: 'French', flag: '/images/common/flags/fr_flag.png' },
+    es: { label: 'Spanish', flag: '/images/common/flags/es_flag.png' },
 };
 
 export default function LanguageSwitcher() {
@@ -32,7 +32,7 @@ export default function LanguageSwitcher() {
         });
     };
 
-    const currentFlag = flagMap[locale] || '/images/common/flags/en_flag.png';
+    const currentLanguage = LANGUAGE_CONFIG[locale] || LANGUAGE_CONFIG.en;
 
     return (
         <div className="relative inline-block" ref={dropdownRef}>
@@ -44,16 +44,16 @@ export default function LanguageSwitcher() {
                 <div className="flex items-center gap-2">
                     <div className="w-6 h-4 relative rounded-sm overflow-hidden shrink-0 border">
                         <Image
-                            src={currentFlag}
-                            alt={locale}
+                            src={currentLanguage.flag}
+                            alt={currentLanguage.label}
                             fill
                             sizes="28px"
                             className="object-cover"
                         />
                     </div>
 
-                    <span className="text-black text-[18px]">
-                        {t(locale)}
+                    <span className="text-black text-[14px] font-normal leading-normal">
+                        {currentLanguage.label}
                     </span>
                 </div>
 
@@ -68,39 +68,35 @@ export default function LanguageSwitcher() {
 
             {open && (
                 <div
-                    className="absolute top-0 left-0 min-w-35 ring-1 ring-black/10 rounded-[10px] bg-white overflow-hidden z-50"
+                    className="absolute top-full left-0 mt-2 min-w-35 ring-1 ring-black/10 rounded-[10px] bg-white overflow-hidden z-50"
                 >
-                    {routing.locales.map((loc, index) => (
-                        <button
-                            key={loc}
-                            onClick={() => handleLanguageChange(loc)}
-                            className="flex items-center justify-between gap-2 px-4 py-2 min-w-35 text-[16px] font-medium cursor-pointer transition-all focus:outline-none"
-                        >
-                            <div className="flex items-center gap-2">
-                                <div className="w-6 h-4 relative rounded-sm overflow-hidden shrink-0 border">
-                                    <Image
-                                        src={flagMap[loc] || '/images/common/flags/en_flag.png'}
-                                        alt={loc}
-                                        fill
-                                        sizes="28px"
-                                        className="object-cover"
-                                    />
+                    {routing.locales.map((loc, index) => {
+                        const lang = LANGUAGE_CONFIG[loc] || { label: loc, flag: LANGUAGE_CONFIG.en.flag };
+                        return (
+                            <button
+                                key={loc}
+                                onClick={() => handleLanguageChange(loc)}
+                                className="flex items-center justify-between gap-2 px-4 py-2 min-w-35 text-[16px] font-medium cursor-pointer transition-all focus:outline-none"
+                            >
+                                <div className="flex items-center gap-2">
+                                    <div className="w-6 h-4 relative rounded-sm overflow-hidden shrink-0 border">
+                                        <Image
+                                            src={lang.flag}
+                                            alt={lang.label}
+                                            width={27}
+                                            height={18}
+                                            className="object-cover"
+                                        />
+                                    </div>
+                                    <span className="text-black text-[14px] font-normal leading-normal">{lang.label}</span>
                                 </div>
-                                <span className='text-black text-[18px]'>{t(loc)}</span>
-                            </div>
-                            {index === 0 && (
-                                <Image
-                                    src="/images/common/down_arrow.png"
-                                    alt="selected"
-                                    width={14}
-                                    height={14}
-                                    className="rotate-180"
-                                />
-                            )}
-                        </button>
-                    ))}
+
+                            </button>
+                        );
+                    })}
                 </div>
             )}
         </div>
     );
 }
+

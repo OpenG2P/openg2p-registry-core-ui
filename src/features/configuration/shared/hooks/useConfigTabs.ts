@@ -20,8 +20,12 @@ export function useConfigTabs(registerId: string, page: number = 1, pageSize: nu
         }
     });
 
+    // Ascending order
+    const tabs = [...(data?.tabs || [])]
+        .sort((a, b) => (a.tab_order ?? 0) - (b.tab_order ?? 0));
+
     return {
-        tabs: data?.tabs || [],
+        tabs,
         pagination: data?.pagination,
         loading,
         error,

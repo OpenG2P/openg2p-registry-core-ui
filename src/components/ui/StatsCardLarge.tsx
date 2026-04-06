@@ -37,7 +37,7 @@ const StatsCardLarge = ({
 
         if (stats_endpoint.includes("change")) {
             return {
-                title: t('changeRequests'),
+                title: t('change_requests'),
                 rows: [
                     {
                         id: "approved",
@@ -103,7 +103,7 @@ const StatsCardLarge = ({
                         <div className={`h-4 w-24 rounded ${pulseBg}`} />
                     </div>
                 ) : error ? (
-                    <p className="text-[16px] text-red-500">{t('failedToLoad')}</p>
+                    <p className="text-[16px] text-red-500">{t('failed_to_load')}</p>
                 ) : (
                     rows.map((row) => (
                         <div key={row.id} className="flex items-center gap-3">

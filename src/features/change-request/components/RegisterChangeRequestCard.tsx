@@ -59,7 +59,7 @@ export default function RegisterChangeRequestCard({
 
     if (loading) {
         return (
-            <div className="relative rounded-[10px] bg-[#EDC227] px-8 pt-4 pb-7 overflow-hidden animate-pulse">
+            <div className="relative rounded-[10px] bg-[#F2BA1A] px-7.25 pt-4 pb-7.25 overflow-hidden animate-pulse">
                 <div className="flex items-center justify-between">
                     <div className="h-6 w-40 rounded bg-black/20" />
                     <div className="h-15 w-20 rounded-[20px] bg-black/20" />
@@ -75,20 +75,20 @@ export default function RegisterChangeRequestCard({
     }
 
     return (
-        <div className="relative rounded-[10px] bg-[#EDC227] px-8 pt-5 pb-8 overflow-hidden">
+        <div className="relative rounded-[10px] bg-[#F2BA1A] px-7.25 pt-5 pb-7.25 overflow-hidden">
             <div className="flex items-center justify-between">
                 <h3 className="text-[24px] font-semibold text-black leading-none">
-                    {t("changeRequest")}
+                    {t("change_request")}
                 </h3>
-                <div className="flex h-15 w-20 items-center justify-center rounded-[10px] border-3 border-white bg-[#EDC227] text-[34px] font-bold text-black">
-                    {count}
+                <div className="flex h-15 w-20 items-center justify-center rounded-[10px] border-3 border-white bg-[#F2BA1A] text-[34px] font-bold text-black">
+                    {count.toString().padStart(2, '0')}
                 </div>
             </div>
 
             <p className="mt-3 text-[16px] text-black font-normal">
                 {count > 0
-                    ? t("pendingChanges")
-                    : t("noPendingChanges")}
+                    ? t("pending_changes")
+                    : t("no_pending_changes")}
             </p>
 
             <div className="mt-25">
@@ -98,7 +98,7 @@ export default function RegisterChangeRequestCard({
                     <ViewAll
                         href={href}
                         bgColor="#D9D9D9"
-                        label={t("knowMore")}
+                        label={t("know_more")}
                     />
                 </div>
                 <Image

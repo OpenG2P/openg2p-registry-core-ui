@@ -11,4 +11,6 @@ export interface Register {
     dedup_is_enabled?: boolean;
     dedup_threshold_score?: number;
     has_data?: boolean;
+    has_image?: boolean;
+    program_id?: string;
 }

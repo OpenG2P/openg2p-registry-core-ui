@@ -1,6 +1,7 @@
 'use client';
 
 import { useClickOutside } from '@/shared/hooks';
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { useRef, useState } from 'react';
 
@@ -34,8 +35,12 @@ export default function AddNewDropdown({
 }: AddNewDropdownProps) {
     const [open, setOpen] = useState(false);
     const ref = useRef<HTMLDivElement>(null);
+    const t = useTranslations();
 
     useClickOutside(ref, () => setOpen(false), open);
+
+    // refine logic when addition of new methods of import 
+    // if (!vcOptions || vcOptions.length === 0) return null;
 
     return (
         <div ref={ref} className="relative">
@@ -43,7 +48,7 @@ export default function AddNewDropdown({
                 onClick={() => setOpen(o => !o)}
                 className={`flex items-center gap-2 px-4 py-1 mt-2 rounded-[10px] bg-white ${open ? '' : 'border border-[#F77F57]'}`}
             >
-                <span className="text-[16px] font-medium text-[#1E1E1E]">Add New</span>
+                <span className="text-[16px] font-medium text-[#1E1E1E]">{t('add_new_record')}</span>
                 <Image
                     src="/images/common/down_arrow.png"
                     alt="open"
@@ -56,7 +61,7 @@ export default function AddNewDropdown({
             {open && (
                 <div className="absolute left-0 top-0 mt-1.5 w-45 rounded-[10px] bg-white border border-[#ED7C22] z-50 overflow-hidden">
                     <div className="flex items-center justify-between px-4 py-1">
-                        <span className="text-[16px] font-medium text-[#1E1E1E]">Add New</span>
+                        <span className="text-[16px] font-medium text-[#1E1E1E]">{t('add_new_record')}</span>
                         <Image
                             src="/images/common/down_arrow.png"
                             alt="close"
@@ -66,6 +71,12 @@ export default function AddNewDropdown({
                             onClick={() => setOpen(false)}
                         />
                     </div>
+
+                    {mechanisms.length === 0 && (
+                        <div className="px-4 py-3 text-sm text-gray-500">
+                            {t('no_options_available')}
+                        </div>
+                    )}
 
                     {mechanisms.map((mech, index) => {
                         const showDivider = mechanisms.length > 2 && index < mechanisms.length - 1;

@@ -8,8 +8,7 @@ import {
     useAllRegister,
     ConfigDetailsSummary,
     getRegisterDetails,
-    ConfigurationTabs,
-    convertImageToBase64
+    ConfigurationTabs
 } from '@/features/configuration/shared';
 import {
     EditRegisterModal,
@@ -17,32 +16,38 @@ import {
     RegisterTabConfigView,
     RegisterSchemaView
 } from '@/features/configuration/registers';
-import { ProgramApplicationConfigView } from '@/features/configuration/program-applications';
 import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
 import { usePagination } from '@/shared/hooks';
+import { useRbac } from '@/context/RbacContext';
+import { CONFIGURATION_TABS_ACTIONS } from '@/features/configuration/shared/utils/configurationTabs.actions';
+import { CONFIGURATION_REGISTERS_ACTIONS } from '@/features/configuration/shared/utils/configurationRegisters.actions';
+import { useTranslations } from 'next-intl';
 
 
 const RegisterConfigurationPage = () => {
+    const t = useTranslations();
     const { registerId } = useParams<{ registerId: string }>();
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isViewModalOpen, setIsViewModalOpen] = useState(false);
-    const [activeTab, setActiveTab] = useState<'tabs_or_forms' | 'filter' | 'search' | 'deduplication'>('tabs_or_forms');
+    const [activeTab, setActiveTab] = useState<'tabs' | 'filter' | 'search' | 'deduplication'>('tabs');
     const [isIntakeModalOpen, setIsIntakeModalOpen] = useState(false);
+
+    const { can } = useRbac();
+    const canEdit = can(CONFIGURATION_REGISTERS_ACTIONS.edit);
+    const canCreate = can(CONFIGURATION_TABS_ACTIONS.create);
 
     const { registers, loading, refresh } = useAllRegister(1, 100);
     const registerDetails = getRegisterDetails(registerId, registers);
 
-    const isProgramApplication = registerDetails.register_purpose === 'PROGRAM_APPLICATION';
-
-    const tabLabels = {
-        tabs_or_forms: isProgramApplication ? 'Forms' : 'Tabs',
-        filter: 'Filter Schema',
-        search: 'Search Schema',
-        deduplication: 'Deduplication Schema',
+    const tabLabels: Record<string, string> = {
+        tabs: t('tabs'),
+        filter: t('filter_schema'),
+        search: t('search_schema'),
+        deduplication: t('deduplication_schema'),
     };
 
     const breadcrumb = useBreadcrumb({
-        rootItem: { label: 'Registers', href: '/configuration/registers' },
+        rootItem: { label: t('registers'), href: '/configuration/registers' },
         customItems: [
             { label: `${registerDetails?.register_mnemonic || ''} - ${tabLabels[activeTab]}`, href: `/configuration/registers/${registerId}` }
         ]
@@ -86,11 +91,15 @@ const RegisterConfigurationPage = () => {
             </div>
 
             <ConfigDetailsSummary
-                title={registerDetails?.register_mnemonic || 'None'}
+                title={registerDetails?.register_mnemonic || t('none')}
                 description={registerDetails?.register_description}
-                extraInfo1={registerDetails?.master_register_id || 'None'}
-                extraInfo2={registerDetails.register_purpose || 'None'}
-                onEdit={() => setIsEditModalOpen(true)}
+                extraInfo1={registerDetails?.master_register_mnemonic || t('none')}
+                extraInfo2={registerDetails.register_purpose || t('none')}
+                onEdit={
+                    canEdit
+                        ? () => setIsEditModalOpen(true)
+                        : undefined
+                }
                 onView={() => setIsViewModalOpen(true)}
             />
 
@@ -107,12 +116,12 @@ const RegisterConfigurationPage = () => {
                         <TopBar
                             breadcrumb={[]}
                             showFilters={false}
-                            showPagination={activeTab === 'tabs_or_forms'}
-                            showAddNewButton={activeTab === 'tabs_or_forms'}
-                            addNewButtonText={isProgramApplication ? "Add New Form" : "Add New Tab"}
+                            showPagination={activeTab === 'tabs'}
+                            showAddNewButton={canCreate && activeTab === 'tabs'}
+                            addNewButtonText={t('add_new_tab')}
                             onAddNewButton={() => setIsModalOpen(true)}
-                            showSecondaryButton={activeTab === 'tabs_or_forms'}
-                            secondaryButtonText="Add Intake Form Tab"
+                            showSecondaryButton={canCreate && activeTab === 'tabs'}
+                            secondaryButtonText={t('add_intake_form')}
                             onSecondaryButton={() => setIsIntakeModalOpen(true)}
                             pageStart={pagination.pageStart}
                             pageEnd={pagination.pageEnd}
@@ -128,16 +137,8 @@ const RegisterConfigurationPage = () => {
 
             {/* Tab Content */}
             <div className="mt-0">
-                {activeTab === 'tabs_or_forms' ? (
-                    isProgramApplication ? (
-                        <ProgramApplicationConfigView
-                            isModalOpen={isModalOpen}
-                            onCloseModal={() => setIsModalOpen(false)}
-                            page={currentPage}
-                            pageSize={PAGE_SIZE}
-                            onDataLoaded={(totalItems, currentCount) => setPaginationInfo({ totalItems, currentCount })}
-                        />
-                    ) : (
+                {activeTab === 'tabs' ? (
+                    (
                         <RegisterTabConfigView
                             onAddNewRegister={() => setIsModalOpen(true)}
                             isModalOpen={isModalOpen}
