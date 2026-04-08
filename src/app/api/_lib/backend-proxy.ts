@@ -18,6 +18,13 @@ interface BackendProxyOptions {
 	backend?: "default" | "masterdata";
 }
 
+const errorCodeMap: Record<string, number> = {
+	"G2P-AUT-401": 401,
+	"G2P-AUT-403": 403,
+	"G2P-AUT-404": 404,
+};
+
+
 export async function proxyToBackend({
 	req,
 	backend,
@@ -84,16 +91,23 @@ export async function proxyToBackend({
 		}
 
 		const response = await fetch(backendUrl, fetchOptions);
-		// console.log(response,"**************************",backendUrl)
 
 		const backendResponse: BackendResponse = await response.json();
-		// console.log(backendResponse,"backendResponse",targetEndpoint)
-
 
 		if (backendResponse.response_header?.response_status === 'ERROR') {
+			const errorCode = backendResponse.response_header.response_error_code;
+
+			const status = errorCodeMap[errorCode] || 400;
+
 			return NextResponse.json(
-				{ error: backendResponse.response_header.response_error_message },
-				{ status: 400, headers: responseHeaders }
+				{
+					error: backendResponse.response_header.response_error_message,
+					code: errorCode,
+				},
+				{
+					status,
+					headers: responseHeaders,
+				}
 			);
 		}
 
