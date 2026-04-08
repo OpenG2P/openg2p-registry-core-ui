@@ -6,8 +6,6 @@ export interface RuntimeConfig {
     partnerImportExportEnable: boolean;
     verifyServiceUrl: string;
     vpClientId: string;
-    vpPresentationId: string;
-    vpPurpose: string;
     pageSize: number;
     partnerIngestUrl: string;
     registryName: string;
