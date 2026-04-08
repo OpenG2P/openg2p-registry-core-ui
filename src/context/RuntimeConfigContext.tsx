@@ -3,7 +3,6 @@
 import React, { createContext, useContext, ReactNode } from "react";
 
 export interface RuntimeConfig {
-    appMnemonic: string;
     partnerImportExportEnable: boolean;
     verifyServiceUrl: string;
     vpClientId: string;

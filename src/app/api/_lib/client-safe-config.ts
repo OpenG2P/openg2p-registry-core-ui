@@ -6,7 +6,6 @@ import { requireAuthFromCookies } from "./requireAuth";
 
 
 type ClientSafeConfigShape = {
-    appMnemonic: string;
     partnerImportExportEnable: boolean;
     verifyServiceUrl: string;
     vpClientId: string;
@@ -23,7 +22,6 @@ class ClientSafeConfig {
 
     constructor() {
         this.config = {
-            appMnemonic: process.env.APP_MNEMONIC ?? "",
             partnerImportExportEnable:
                 process.env.PARTNER_IMPORT_EXPORT_ENABLE === "true",
             verifyServiceUrl: process.env.VERIFY_SERVICE_URL ?? "",
@@ -37,7 +35,7 @@ class ClientSafeConfig {
         };
     }
 
-    async fetchRegistryConfig(): Promise<ClientSafeConfigShape> {
+    async fetchRegistryConfig(origin: string): Promise<ClientSafeConfigShape> {
         const backendConfig = getBackendConfig();
         const backendUrl = `${backendConfig.backendApiUrl}/registry-config/get_registry_configuration`;
 
@@ -45,9 +43,7 @@ class ClientSafeConfig {
             const auth = await requireAuthFromCookies();
             if (!auth) return this.config;
 
-            const backendRequest = createBackendRequest({
-                request_payload: {}
-            });
+            const backendRequest = createBackendRequest({ request_payload: {} }, origin);
 
             const response = await fetch(backendUrl, {
                 method: "POST",
