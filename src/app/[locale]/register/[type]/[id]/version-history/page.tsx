@@ -204,9 +204,8 @@ export default function VersionHistoryPage() {
     }, [selectedSectionId, sectionsWithChanges]);
 
     const versionOptions = useMemo(() => {
-        const total = currentSectionChanges.length;
         return currentSectionChanges.map((cr, index) => ({
-            label: `V${total - index}`,
+            label: `V${index}`,
             value: cr.change_request_id,
         }));
     }, [currentSectionChanges]);
@@ -325,6 +324,7 @@ export default function VersionHistoryPage() {
                                         value={versionOptions.find(v => v.value === selectedVersionId)?.label}
                                         onChange={onVersionSelect}
                                         key={`${selectedDate}-${selectedSectionId}`}
+                                        maxWidth='w-20'
                                     />
                                 </div>
 
