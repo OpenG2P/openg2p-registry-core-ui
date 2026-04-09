@@ -9,8 +9,11 @@ import { extractFilesFromSection, normalizeEditActions } from "../utils";
 import { toast } from "react-toastify";
 import { useTranslations } from "next-intl";
 
+import { TabSection } from "@/features/register/types";
+
 export const useSectionSave = (
-    onChangeRequestCreated: () => void
+    onChangeRequestCreated: () => void,
+    tabSections?: TabSection[]
 ) => {
     const t = useTranslations();
     const { internalRecordId } = useRegisterRecord();
@@ -106,7 +109,14 @@ export const useSectionSave = (
                     sectionChangeRecords,
                     internalRecordId
                 )
-                const change_request_response = await submitChangeRequest(`/api/change-request/create`, {
+
+                const section = tabSections?.find(
+                    (section) => section.section_id === section_id
+                );
+                
+                const endpoint = section?.is_core_section ? `/api/change-request/core-section/create` : `/api/change-request/create`;
+
+                const change_request_response = await submitChangeRequest(endpoint, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
@@ -150,6 +160,7 @@ export const useSectionSave = (
             uploadDocumentRequest,
             onChangeRequestCreated,
             t,
+            tabSections,
         ]
     );
 

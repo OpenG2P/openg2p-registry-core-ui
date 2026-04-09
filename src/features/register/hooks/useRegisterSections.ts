@@ -95,8 +95,7 @@ export const useRegisterSections = (onChangeRequestCreated: () => void) => {
                     hideEditButton = true;
                 }
 
-                if(!can(CHANGE_REQUEST_ACTIONS.create))
-                {
+                if (!can(CHANGE_REQUEST_ACTIONS.create)) {
                     hideEditButton = true
                 }
 
@@ -111,6 +110,7 @@ export const useRegisterSections = (onChangeRequestCreated: () => void) => {
 
     const { handleSectionSave } = useSectionSave(
         onChangeRequestCreated,
+        tabSections ?? undefined
     );
 
     const isSchemaStale =
