@@ -27,7 +27,7 @@ export default function NotFound() {
             </div>
 
             <div className="flex flex-1 items-center justify-start px-8">
-                <div className="w-full bg-white rounded-[28px] py-20 flex flex-col items-center text-center">
+                <div className="w-full bg-white rounded-[10px] py-36 flex flex-col items-center text-center">
                     <Image
                         src="/images/common/404.png"
                         width={200}
