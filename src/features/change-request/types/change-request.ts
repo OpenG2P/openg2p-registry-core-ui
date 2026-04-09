@@ -26,6 +26,8 @@ export interface ChangeRequest {
     is_list: boolean;
     change_payload: any;
     current_register_data: any;
+    is_core_section: boolean;
+    is_primary_section: boolean;
 }
 
 export type PopupType = "approve" | "reject" | "reject-input";

@@ -53,7 +53,8 @@ export function useChangeRequestManager(changeId: string) {
     const handleApprove = useCallback(async () => {
         setLoadingAction(true);
         try {
-            const res = await executeApprove("/api/change-request/approve", {
+            const endpoint = (details as ChangeRequest)?.is_core_section ? "/api/change-request/core-section/approve" : "/api/change-request/approve";
+            const res = await executeApprove(endpoint, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ change_request_id: changeId }),
@@ -84,7 +85,7 @@ export function useChangeRequestManager(changeId: string) {
         } finally {
             setLoadingAction(false);
         }
-    }, [changeId, executeApprove]);
+    }, [changeId, executeApprove, details]);
 
     const handleRejectClick = useCallback(() => {
         setPopupType("reject-input");
@@ -95,11 +96,13 @@ export function useChangeRequestManager(changeId: string) {
         async (reason: string) => {
             setLoadingAction(true);
             try {
-                const res = await executeReject("/api/change-request/reject", {
+                const endpoint = (details as ChangeRequest)?.is_core_section ? "/api/change-request/core-section/reject" : "/api/change-request/reject";
+                const res = await executeReject(endpoint, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ change_request_id: changeId, rejection_reason: reason }),
                 });
+
                 if (res) {
                     setPopupVisible(false);
 
@@ -121,7 +124,7 @@ export function useChangeRequestManager(changeId: string) {
                 setLoadingAction(false);
             }
         },
-        [changeId, executeReject]
+        [changeId, executeReject, details]
     );
 
     return {
