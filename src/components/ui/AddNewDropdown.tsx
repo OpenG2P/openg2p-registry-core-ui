@@ -39,16 +39,16 @@ export default function AddNewDropdown({
 
     useClickOutside(ref, () => setOpen(false), open);
 
-    // refine logic when addition of new methods of import 
-    // if (!vcOptions || vcOptions.length === 0) return null;
-
     return (
-        <div ref={ref} className="relative">
+        <div ref={ref} className="relative mt-2 w-45 z-10">
             <button
                 onClick={() => setOpen(o => !o)}
-                className={`flex items-center gap-2 px-4 py-1 mt-2 rounded-[10px] bg-white ${open ? '' : 'border border-[#F77F57]'}`}
+                className={`w-full flex items-center gap-2.5 px-4 py-1 bg-white border border-[#ED7C22] rounded-[10px] truncate ${open ? 'border-b-transparent rounded-b-none ' : ''}`}
+                title={t('add_new_record')}
             >
-                <span className="text-[16px] font-medium text-[#1E1E1E]">{t('add_new_record')}</span>
+                <span className={`text-[16px] font-medium ${open ? 'text-[#1E1E1E]/50' : 'text-[#1E1E1E]'} truncate`}>
+                    {t('add_new_record')}
+                </span>
                 <Image
                     src="/images/common/down_arrow.png"
                     alt="open"
@@ -59,21 +59,10 @@ export default function AddNewDropdown({
             </button>
 
             {open && (
-                <div className="absolute left-0 top-0 mt-1.5 w-45 rounded-[10px] bg-white border border-[#ED7C22] z-50 overflow-hidden">
-                    <div className="flex items-center justify-between px-4 py-1">
-                        <span className="text-[16px] font-medium text-[#1E1E1E]">{t('add_new_record')}</span>
-                        <Image
-                            src="/images/common/down_arrow.png"
-                            alt="close"
-                            width={14}
-                            height={8}
-                            className="rotate-180 cursor-pointer"
-                            onClick={() => setOpen(false)}
-                        />
-                    </div>
-
+                <div className="absolute left-0 py-1 top-full w-full bg-white border border-[#ED7C22] border-t-0 rounded-b-[10px] overflow-hidden">
+                    <Divider />
                     {mechanisms.length === 0 && (
-                        <div className="px-4 py-3 text-sm text-gray-500">
+                        <div className="px-4 py-3 text-[16px] text-[#1E1E1E] truncate" title={t('no_options_available')}>
                             {t('no_options_available')}
                         </div>
                     )}
@@ -148,7 +137,8 @@ function DropdownItem({
     return (
         <div
             onClick={onClick}
-            className={`px-4 py-2 text-[14px] cursor-pointer hover:bg-[#F3F1E4] ${flag ? 'text-[16px] text-black font-semibold' : 'text-black/50'}`}
+            className={`px-4 py-1 text-[16px] cursor-pointer hover:bg-[#F3F1E4] ${flag ? 'text-[16px] text-[#1E1E1E] font-medium' : 'text-[#1E1E1E]/50 font-normal'} truncate`}
+            title={label}
         >
             {label}
         </div>
@@ -157,7 +147,7 @@ function DropdownItem({
 
 function SectionHeading({ title }: { title: string }) {
     return (
-        <div className="px-4 py-2 text-[16px] font-semibold text-black hover:bg-[#F3F1E4]">
+        <div className="px-4 py-1 text-[16px] font-semibold text-[#1E1E1E] hover:bg-[#F3F1E4] truncate" title={title}>
             {title}
         </div>
     );
