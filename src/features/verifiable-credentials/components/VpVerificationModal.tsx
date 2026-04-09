@@ -27,10 +27,11 @@ export default function VpVerificationModal({
 
     const [error, setError] = useState<string | null>(null);
 
+    // Todo: get the id and purpose from backend once the implementation is done!
     const presentationDefinition = useMemo(() => {
         return {
-            id: config.vpPresentationId!,
-            purpose: config.vpPurpose!,
+            id: "7f3c2a91-bb84-4d1f-9a6e-41c8e5a0d9f2",
+            purpose: "Digital identity verification for registry onboarding",
             format: {
                 ldp_vc: {
                     proof_type: ["Ed25519Signature2020", "EdDSA", "ES256"],

@@ -12,11 +12,12 @@ interface CapsuleDropdownProps {
     onChange?: (value: string) => void;
     onOpen?: () => void;
     emptyMessage?: string;
+    maxWidth?: string;
 }
 
 export default function CapsuleDropdown(props: CapsuleDropdownProps) {
     const t = useTranslations();
-    const { label, items, value, onChange, onOpen, emptyMessage } = props;
+    const { label, items, value, onChange, onOpen, emptyMessage, maxWidth } = props;
     const fallbackEmptyMessage = emptyMessage || t('no_items_available');
 
     const [open, setOpen] = useState(false);
@@ -49,16 +50,17 @@ export default function CapsuleDropdown(props: CapsuleDropdownProps) {
 
     return (
         <div className="flex items-center gap-3">
-            <span className="text-[16px] text-black font-medium whitespace-nowrap">
+            <span className="text-[16px] w-25 text-black font-medium whitespace-nowrap truncate" title={label}>
                 {label}
             </span>
 
-            <div ref={dropdownRef} className="relative">
+            <div ref={dropdownRef} className={`relative z-10 ${maxWidth || 'w-35'}`}>
                 <div
                     onClick={handleToggle}
-                    className={`flex items-center justify-between gap-3 px-3 py-1 min-w-35 w-auto rounded-[10px] cursor-pointer bg-white border border-[#F77F57] ${open ? "invisible" : ""}`}
+                    className={`w-full flex items-center justify-between gap-2.5 px-4 py-1 bg-white border border-[#ED7C22] rounded-[10px] truncate ${open ? 'border-b-transparent rounded-b-none ' : ''}`}
+                    title={selected}
                 >
-                    <span className="text-[16px] text-black/50 font-medium">
+                    <span className={`text-[16px] font-medium ${open ? 'text-[#1E1E1E]/50' : 'text-[#1E1E1E]'} truncate`}>
                         {selected ?? t('select')}
                     </span>
 
@@ -66,40 +68,18 @@ export default function CapsuleDropdown(props: CapsuleDropdownProps) {
                         src="/images/common/down_arrow.png"
                         alt="open"
                         width={14}
-                        height={14}
+                        height={8}
+                        className={`transition-transform ${open ? 'rotate-180' : ''}`}
                     />
                 </div>
 
                 {open && (
-                    <div
-                        className="absolute left-0 top-0 min-w-35 w-auto rounded-[10px] bg-white border border-[#F77F57] z-50 overflow-hidden"
-                        style={{ transform: "translateY(0)" }}
-                    >
-                        <div
-                            onClick={() => {
-                                setSelected(undefined);
-                                setOpen(false);
-                            }}
-                            className="flex items-center justify-between gap-3 px-3 py-1 cursor-pointer"
-                        >
-                            <span className="text-[16px] text-black/50 font-medium">
-                                {t('select')}
-                            </span>
-                            <Image
-                                src="/images/common/down_arrow.png"
-                                alt="open"
-                                width={14}
-                                height={14}
-                                className="rotate-180"
-                            />
-                        </div>
+                    <div className="absolute left-0 py-1 top-full w-full bg-white border border-[#ED7C22] border-t-0 rounded-b-[10px] overflow-hidden">
                         {(
                             items.length === 0 ?
                                 (
-                                    <div className="flex items-center gap-3 px-3 py-1">
-                                        <span className="text-[16px] text-black/50 font-medium">
-                                            {fallbackEmptyMessage}
-                                        </span>
+                                    <div className="px-4 py-3 text-[16px] text-[#1E1E1E] truncate" title={fallbackEmptyMessage}>
+                                        {fallbackEmptyMessage}
                                     </div>
                                 )
                                 : (
@@ -107,11 +87,10 @@ export default function CapsuleDropdown(props: CapsuleDropdownProps) {
                                         <div
                                             key={item}
                                             onClick={() => handleSelect(item)}
-                                            className="flex items-center gap-3 px-3 py-1 cursor-pointer hover:bg-gray-50"
+                                            className="px-4 py-1 text-[16px] cursor-pointer hover:bg-[#F3F1E4] text-[#1E1E1E] font-medium truncate"
+                                            title={item}
                                         >
-                                            <span className="text-[16px] text-black/50 font-medium">
-                                                {item}
-                                            </span>
+                                            {item}
                                         </div>
                                     ))
                                 )

@@ -64,7 +64,7 @@ export default function SelectedFilters({
     return (
         <div className="bg-white px-4 py-4 mb-2 flex items-center rounded-[10px] gap-4">
             <div className="flex flex-wrap items-center gap-4 flex-1">
-                <span className="w-27.5 font-normal text-[16px] text-black pl-1">
+                <span className="w-27.5 font-normal text-[16px] text-black pl-1 truncate" title={t('selected_filters')}>
                     {t('selected_filters')}
                 </span>
 

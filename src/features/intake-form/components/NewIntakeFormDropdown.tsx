@@ -22,13 +22,13 @@ export default function NewIntakeFormDropdown({
     useClickOutside(ref, () => setOpen(false), open);
 
     return (
-        <div ref={ref} className="relative">
+        <div ref={ref} className="relative mt-2 w-35 z-10">
             <button
                 onClick={() => setOpen(o => !o)}
-                className={`flex items-center gap-2 px-4 py-1 mt-2 rounded-[10px] bg-white ${open ? '' : 'border border-[#F77F57]'
-                    }`}
+                className={`w-full flex items-center gap-2.5 px-4 py-1 bg-white border border-[#ED7C22] rounded-[10px] truncate ${open ? 'border-b-transparent rounded-b-none ' : ''}`}
+                title={t('new_intake')}
             >
-                <span className="text-[16px] font-medium text-[#1E1E1E]">
+               <span className={`text-[16px] font-medium ${open ? 'text-[#1E1E1E]/50' : 'text-[#1E1E1E]'} truncate`}>
                     {t('new_intake')}
                 </span>
 
@@ -42,24 +42,10 @@ export default function NewIntakeFormDropdown({
             </button>
 
             {open && (
-                <div className="absolute left-0 top-0 mt-1.5 w-60 rounded-[10px] bg-white border border-[#ED7C22] z-50 overflow-hidden">
-                    <div className="flex items-center justify-between px-4 py-1">
-                        <span className="text-[16px] font-medium text-[#1E1E1E]">
-                            {t('new_intake')}
-                        </span>
-
-                        <Image
-                            src="/images/common/down_arrow.png"
-                            alt="close"
-                            width={14}
-                            height={8}
-                            className="rotate-180 cursor-pointer"
-                            onClick={() => setOpen(false)}
-                        />
-                    </div>
-
+               <div className="absolute left-0 py-1 top-full w-full bg-white border border-[#ED7C22] border-t-0 rounded-b-[10px] overflow-hidden">
+                    <div className="h-px bg-[#ED7C22] my-1" />
                     {forms.length === 0 && (
-                        <div className="px-4 py-3 text-sm text-gray-500">
+                        <div className="px-4 py-3 text-[16px] text-[#1E1E1E] truncate" title={t('no_options_available')}>
                             {t('no_options_available')}
                         </div>
                     )}
@@ -90,7 +76,8 @@ function DropdownItem({
     return (
         <div
             onClick={onClick}
-            className="px-4 py-2 text-[14px]  cursor-pointer text-black/50 hover:bg-[#F3F1E4]"
+            className="px-4 py-1 text-[16px] cursor-pointer hover:bg-[#F3F1E4] text-[#1E1E1E] font-medium truncate"
+            title={label}
         >
             {label}
         </div>

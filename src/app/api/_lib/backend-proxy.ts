@@ -79,9 +79,13 @@ export async function proxyToBackend({
 			});
 
 			const payload = (buildPayload || defaultPayloadBuilder)(body);
-			// console.log(payload,"payload",targetEndpoint)
 
-			const backendRequest = createBackendRequest(payload);
+			const h = req.headers;
+			const host = h.get("x-forwarded-host") || h.get("host");
+			const proto = h.get("x-forwarded-proto") || "https";
+			const origin = h.get("origin") || `${proto}://${host}`;
+
+			const backendRequest = createBackendRequest(payload, origin);
 
 			fetchOptions.headers = {
 				...auth.backendHeaders,
