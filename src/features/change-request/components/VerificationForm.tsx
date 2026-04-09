@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
+import { useAuth } from "@/context/Authcontext";
 
 interface Props {
     onSubmit: (observation: string, isApproved: boolean) => Promise<boolean>;
@@ -11,6 +12,8 @@ export default function VerificationForm({ onSubmit, onClose }: Props) {
     const t = useTranslations();
     const [observation, setObservation] = useState("");
     const [isApproved, setIsApproved] = useState(true);
+
+    const { user } = useAuth();
 
     const handleSubmit = async () => {
         const success = await onSubmit(observation, isApproved);
@@ -51,7 +54,7 @@ export default function VerificationForm({ onSubmit, onClose }: Props) {
                 </div>
                 <div className="flex flex-col">
                     <span className="text-[20px] font-medium text-black">
-                        John Smith
+                        {user.name}
                         <span className="ml-2 text-[14px] text-black/50">{t("you")}</span>
                     </span>
                     <span className="text-[14px] text-black/50">
