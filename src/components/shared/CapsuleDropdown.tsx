@@ -50,11 +50,10 @@ export default function CapsuleDropdown(props: CapsuleDropdownProps) {
 
     return (
         <div className="flex items-center gap-3">
-            <span className="text-[16px] text-black font-medium whitespace-nowrap">
+            <span className="text-[16px] w-25 text-black font-medium whitespace-nowrap truncate" title={label}>
                 {label}
             </span>
 
-            {/* <div ref={dropdownRef} className="relative w-35 z-10"> */}
             <div ref={dropdownRef} className={`relative z-10 ${maxWidth || 'w-35'}`}>
                 <div
                     onClick={handleToggle}
@@ -79,11 +78,6 @@ export default function CapsuleDropdown(props: CapsuleDropdownProps) {
                         {(
                             items.length === 0 ?
                                 (
-                                    // <div className="flex items-center gap-3 px-3 py-1">
-                                    //     <span className="text-[16px] text-[#1E1E1E]/50 font-medium truncate">
-                                    //         {fallbackEmptyMessage}
-                                    //     </span>
-                                    // </div>
                                     <div className="px-4 py-3 text-[16px] text-[#1E1E1E] truncate" title={fallbackEmptyMessage}>
                                         {fallbackEmptyMessage}
                                     </div>
@@ -96,9 +90,7 @@ export default function CapsuleDropdown(props: CapsuleDropdownProps) {
                                             className="px-4 py-1 text-[16px] cursor-pointer hover:bg-[#F3F1E4] text-[#1E1E1E] font-medium truncate"
                                             title={item}
                                         >
-                                            {/* <span className="text-[16px] text-[#1E1E1E]/50 font-medium"> */}
                                             {item}
-                                            {/* </span> */}
                                         </div>
                                     ))
                                 )
