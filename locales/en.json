@@ -117,7 +117,7 @@
   "verifications_done": "Verifications Done",
   "documents_attached": "Documents Attached",
   "no_duplicates_found": "No duplicates found",
-  "change_possible_duplicates": "Change Possible Duplicates",
+  "cr_possible_duplicates": "CR Possible Duplicates",
   "register_possible_duplicates": "Register Possible Duplicates",
   "match": "Match",
   "incoming": "Incoming",

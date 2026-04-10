@@ -91,24 +91,24 @@ const InfoSection = ({
     const t = useTranslations();
     return (
         <div className="space-y-2 text-[16px] text-[#00000080]">
-            <h3 className="text-[24px] font-medium text-black">{title}</h3>
-            <div>
-                {t('change_id')}:{" "}
-                <span className="text-black font-medium">
+            <h3 className="text-[24px] font-medium text-black truncate" title={title}>{title}</h3>
+            <div className="flex w-full overflow-hidden">
+                <span className="w-1/2 truncate" title={t('change_id')}>{t('change_id')}:</span>
+                <span className="w-1/2 pl-4 text-black font-medium truncate" title={details.change_request_id}>
                     {details.change_request_id}
                 </span>
             </div>
-            <div>
-                {t("status")}:{" "}
-                <span className={`font-medium ${statusClassMap[details.approval_status] ?? "text-gray-500"}`}>
+            <div className="flex w-full overflow-hidden">
+                <span className="w-1/2 truncate" title={t("status")}>{t("status")}:</span>
+                <span className={`w-1/2 pl-4 font-medium truncate ${statusClassMap[details.approval_status] ?? "text-gray-500"}`} title={details.approval_status}>
                     {t(details.approval_status, {
                         default: details.approval_status,
                     })}
                 </span>
             </div>
-            <div>
-                {t("change_date")}:{" "}
-                <span className="text-black font-medium">
+            <div className="flex w-full overflow-hidden">
+                <span className="w-1/2 truncate" title={t("change_date")}>{t("change_date")}:</span>
+                <span className="w-1/2 pl-4 text-black font-medium truncate" title={new Date(details.created_at).toLocaleDateString()}>
                     {new Date(details.created_at).toLocaleDateString()}
                 </span>
             </div>
@@ -134,23 +134,23 @@ const VerificationStats = ({
             </h3>
 
             <div className="border-l border-[#F2BA1A] pl-6 space-y-2">
-                <div>
-                    {t('verifications_required')}:{" "}
-                    <span className="text-black font-medium">
+                <div className="flex w-full overflow-hidden">
+                    <span className="w-1/2 truncate" title={t('verifications_required')}>{t('verifications_required')}:</span>
+                    <span className="w-1/2 pl-4 text-black font-medium truncate" title={details.no_of_verifications_required?.toString()}>
                         {details.no_of_verifications_required}
                     </span>
                 </div>
 
-                <div>
-                    {t('verifications_done')}:{" "}
-                    <span className="text-black font-medium">
+                <div className="flex w-full overflow-hidden">
+                    <span className="w-1/2 truncate" title={t('verifications_done')}>{t('verifications_done')}:</span>
+                    <span className="w-1/2 pl-4 text-black font-medium truncate" title={verificationCount.toString()}>
                         {verificationCount}
                     </span>
                 </div>
 
-                <div>
-                    {t('documents_attached')}:{" "}
-                    <span className="text-black font-medium">
+                <div className="flex w-full overflow-hidden">
+                    <span className="w-1/2 truncate" title={t('documents_attached')}>{t('documents_attached')}:</span>
+                    <span className="w-1/2 pl-4 text-black font-medium truncate" title={documentsCount.toString()}>
                         {documentsCount}
                     </span>
                 </div>

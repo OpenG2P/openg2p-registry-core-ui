@@ -117,7 +117,7 @@
   "verifications_done": "Vérifications effectuées",
   "documents_attached": "Documents joints",
   "no_duplicates_found": "Aucun doublon trouvé",
-  "change_possible_duplicates": "Modifier les doublons possibles",
+  "cr_possible_duplicates": "Modifier les doublons possibles",
   "register_possible_duplicates": "Enregistrer les doublons possibles",
   "match": "Correspondance",
   "incoming": "Entrant",

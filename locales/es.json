@@ -117,7 +117,7 @@
   "verifications_done": "Verificaciones realizadas",
   "documents_attached": "Documentos adjuntos",
   "no_duplicates_found": "No se encontraron duplicados",
-  "change_possible_duplicates": "Cambiar posibles duplicados",
+  "cr_possible_duplicates": "Cambiar posibles duplicados",
   "register_possible_duplicates": "Duplicados posibles del registro",
   "match": "Coincidencia",
   "incoming": "Entrante",

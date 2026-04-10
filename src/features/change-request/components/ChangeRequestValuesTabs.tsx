@@ -9,7 +9,7 @@ import { dataSourceRequestHandler } from "@/features/register/utils/dataSourceRe
 import { useDeduplication } from "@/features/change-request/hooks";
 import DeduplicationCard from "./DeduplicationCard";
 
-type TabType = "change_request_values" | "change_possible_duplicates" | "register_possible_duplicates";
+type TabType = "change_request_values" | "cr_possible_duplicates" | "register_possible_duplicates";
 
 export function ChangeRequestValuesTabs({
     widgetStoreNew,
@@ -39,14 +39,14 @@ export function ChangeRequestValuesTabs({
                 </button>
 
                 <button
-                    onClick={() => setActiveTab("change_possible_duplicates")}
+                    onClick={() => setActiveTab("cr_possible_duplicates")}
                     className={`relative ml-2 px-8 py-2 text-black text-[18px] font-medium rounded-t-[10px]
-                        ${activeTab === "change_possible_duplicates"
+                        ${activeTab === "cr_possible_duplicates"
                             ? "bg-[#F2BA1A]"
                             : "bg-[#DDDDDD]"
                         }`}
                 >
-                    {t("change_possible_duplicates")}
+                    {t("cr_possible_duplicates")}
                     {crResults.length > 0 && (
                         <span className="absolute -top-3 right-3 bg-[#ED6C6C] text-white text-[12px] font-bold rounded-[10px] w-6 h-6 flex items-center justify-center shadow-sm">
                             {String(crResults.length).padStart(2, "0")}
@@ -103,7 +103,7 @@ export function ChangeRequestValuesTabs({
                 </div>
             )}
 
-            {activeTab === "change_possible_duplicates" && (
+            {activeTab === "cr_possible_duplicates" && (
                 <DeduplicationCard results={crResults} loading={crLoading} type="change-request" t={t} />
             )}
 

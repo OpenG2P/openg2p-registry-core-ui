@@ -13,9 +13,9 @@ interface Props {
 
 function KeyValue({ label, value }: { label: string; value: string }) {
     return (
-        <div className="text-black font-normal leading-[26px]">
-            <span className="text-black/50 text-[16px]">{label} : </span>
-            <span className="text-black font-normal text-[16px]">{value}</span>
+        <div className="flex w-full overflow-hidden text-black font-normal leading-[26px]">
+            <span className="w-1/2 text-black/50 text-[16px] truncate" title={label}>{label} : </span>
+            <span className="w-1/2 pl-4 text-black font-normal text-[16px] truncate" title={value}>{value}</span>
         </div>
     );
 }
@@ -75,7 +75,7 @@ export default function DeduplicationCard({ results, loading, type, t }: Props) 
                             : "bg-white border border-gray-200 z-0 rounded-[10px]"
                             }`}
                     >
-                        <h3 className="text-[20px] font-medium text-black mb-4 leading-none">
+                        <h3 className="text-[20px] font-medium text-black mb-4 leading-none truncate" title={t("match") + "  #" + String(index + 1).padStart(2, "0")}>
                             {t("match") + "  #" + String(index + 1).padStart(2, "0")}
                         </h3>
 
@@ -114,7 +114,7 @@ export default function DeduplicationCard({ results, loading, type, t }: Props) 
                                             className={`space-y-0 py-2 ${i === 2 ? "" : "pr-10"} ${i > 0 ? "pl-10" : ""}`}
                                         >
                                             <div className={i > 0 ? "pl-6" : ""}>
-                                                <h4 className="text-[20px] font-medium text-black leading-none mb-1">
+                                                <h4 className="text-[20px] font-medium text-black leading-none mb-1 truncate" title={t(fieldKey)}>
                                                     {t(fieldKey)}
                                                 </h4>
                                             </div>
