@@ -1,11 +1,268 @@
-import React from 'react'
-import { useTranslations } from 'next-intl';
+'use client';
 
-const page = () => {
-    const t = useTranslations();
-    return (
-        <div className='text-center mt-10'>{t('data_models_page')}</div>
-    )
+import Image from 'next/image';
+import { Link } from '@/i18n/navigation';
+import { useState } from 'react';
+import { TopBar } from '@/components/shared';
+// import { RegistersConfigView } from '@/features/configuration/registers';
+// import { useAllRegister } from '@/features/configuration/shared';
+import { useFetch, usePagination } from '@/shared/hooks';
+import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
+import { useRbac } from '@/context/RbacContext';
+// import { CONFIGURATION_REGISTERS_ACTIONS } from '@/features/configuration/shared/utils/configurationRegisters.actions';
+import { useTranslations } from 'next-intl';
+import ConfirmRemovePopup from '@/features/configuration/data-models/ConfirmRemovePopup';
+import AddDataModelModal from '@/features/configuration/data-models/AddDataModelModal';
+import { Pencil } from 'lucide-react';
+// import { useAllDataModels } from '@/features/configuration/shared/hooks/useAllDataModels';
+
+
+const loading = false;
+
+const dataModels = [
+    {
+        data_model_id: '1',
+        data_model_mnemonic: 'data_model_1',
+        pattern_for_data_model: 'pattern1',
+        response_template_file_id: 'template_1',
+        is_active: true,
+    },
+    {
+        data_model_id: '2',
+        data_model_mnemonic: 'data_model_2',
+        pattern_for_data_model: 'pattern2',
+        response_template_file_id: 'template_2',
+        is_active: false,
+    },
+    {
+        data_model_id: '3',
+        data_model_mnemonic: 'data_model_3',
+        pattern_for_data_model: 'pattern3',
+        response_template_file_id: 'template_3',
+        is_active: true,
+    },
+];
+
+const pagination = {
+    number_of_items: 3,
+    number_of_pages: 1,
+};
+
+const refresh = () => { };
+
+export function useAllDataModels() {
+    return {
+        dataModels: [
+            {
+                data_model_id: '1',
+                data_model_mnemonic: 'USER_PROFILE',
+                pattern_for_data_model: 'UP-{id}',
+                response_template_file_id: 'template_001',
+                is_active: true,
+            },
+        ],
+        pagination: {
+            number_of_items: 1,
+            number_of_pages: 1,
+        },
+        loading: false,
+        error: null,
+        refresh: () => { },
+    };
 }
 
-export default page
+type DataModel = {
+    data_model_id: string;
+    data_model_mnemonic: string;
+    pattern_for_data_model: string;
+    response_template_file_id: string;
+    is_active: boolean;
+};
+
+const DataModelsConfigurationPage = () => {
+    const t = useTranslations();
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const [selectedItem, setSelectedItem] = useState<DataModel | null>(null);
+    const [showPopup, setShowPopup] = useState(false);
+
+    const { execute: deleteDataModel } = useFetch();
+
+    const proceedDelete = async (id: string, name: string) => {
+        try {
+            const result = await deleteDataModel('/api/configuration/data-models/delete', {
+                method: 'POST',
+                body: JSON.stringify({ data_model_id: id })
+            });
+
+            if (result) {
+                console.log(`Deleted: ${name}`);
+                refresh(); // same as registers
+            } else {
+                console.error('Delete failed');
+            }
+        } catch (error) {
+            console.error('Delete error');
+        }
+    };
+
+    const handleDelete = (
+        e: React.MouseEvent<HTMLButtonElement>,
+        item: DataModel
+    ) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        setSelectedItem(item);
+        setShowPopup(true);
+    };
+
+    const confirmDelete = async () => {
+        if (!selectedItem) return;
+
+        const { data_model_id, data_model_mnemonic } = selectedItem;
+
+        await proceedDelete(data_model_id, data_model_mnemonic);
+
+        setShowPopup(false);
+        setSelectedItem(null);
+    };
+
+    const { config } = useRuntimeConfig();
+
+    const { can } = useRbac();
+    const canCreate = true || can("*********");
+
+    // const { dataModels, pagination, loading, refresh } = useAllDataModels(currentPage, config.pageSize);
+
+    const { pageStart, pageEnd, total } = usePagination({
+        totalItems: pagination?.number_of_items || 0,
+        currentPage: currentPage,
+        pageSize: config.pageSize || 10,
+        currentCount: dataModels.length,
+    });
+
+
+    const handlePrev = () => {
+        setCurrentPage((prev) => Math.max(1, prev - 1));
+    };
+
+    const handleNext = () => {
+        setCurrentPage((prev) => prev + 1);
+    };
+
+    return (
+        <>
+            <TopBar
+                breadcrumb={[{ label: t('data_models') }]}
+                showFilters={false}
+                showPagination
+                showAddNewButton={canCreate}
+                addNewButtonText={t('add_new_data_model')}
+                onAddNewButton={() => setIsModalOpen(true)}
+                pageStart={pageStart}
+                pageEnd={pageEnd}
+                total={total}
+                onPrev={handlePrev}
+                onNext={handleNext}
+            />
+
+            <div className="mx-7.5 bg-white rounded-[10px] p-4 pt-8 overflow-hidden">
+                <div>
+                    <div className="grid grid-cols-5 gap-4 pb-2 px-8 border-b border-gray-100">
+                        <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
+                            {t('mnemonic')}
+                        </div>
+                        <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
+                            {t('pattern')}
+                        </div>
+                        <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
+                            {t('template_id')}
+                        </div>
+                        <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
+                            {t('status')}
+                        </div>
+                        <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
+                            {t('actions')}
+                        </div>
+                    </div>
+
+                    {dataModels.map((item, index) => (
+                        <div
+                            className={`grid grid-cols-5 gap-4 items-center -mx-8 px-16 h-15 transition-colors ${index % 2 === 0 ? 'bg-[#D9D9D940]' : 'bg-white'} cursor-pointer`}
+                        >
+                            <div className="text-base font-medium truncate">
+                                {item.data_model_mnemonic}
+                            </div>
+
+                            <div className="text-base font-medium truncate">
+                                {item.pattern_for_data_model}
+                            </div>
+
+                            <div className="text-base font-medium truncate">
+                                {item.response_template_file_id}
+                            </div>
+
+                            <div className="text-base font-medium">
+                                {item.is_active ? (
+                                    <span className="text-[#77D79B]">{t('active')}</span>
+                                ) : (
+                                    <span className="text-[#EB656A]">{t('inactive')}</span>
+                                )}
+                            </div>
+
+                            <div className="flex items-center gap-6">
+                                <button
+                                        // onClick={(e) => handleView(e, item)}
+                                        className="flex items-center text-black cursor-pointer gap-2 hover:opacity-80 transition-opacity"
+                                        title={t('common.edit')}
+                                    >
+                                        <span className="font-medium text-[#00000080]">{t('common.edit')}</span>
+                                        <Pencil size={16} className='opacity-60'/>
+                                    </button>
+
+                                <button
+                                    onClick={(e) => handleDelete(e, item)}
+                                    className="flex items-center cursor-pointer hover:opacity-80 transition-opacity"
+                                    title={t('remove')}
+                                >
+                                    <span className="font-medium text-[#00000080]">
+                                        {t('remove')}
+                                    </span>
+                                    <Image
+                                        src="/images/common/false_sign.png"
+                                        alt={t('remove')}
+                                        width={18}
+                                        height={18}
+                                        className="ml-2"
+                                    />
+                                </button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            {showPopup && (
+                <ConfirmRemovePopup
+                    onClose={() => {
+                        setShowPopup(false);
+                        setSelectedItem(null);
+                    }}
+                    onConfirm={confirmDelete}
+                />
+            )}
+
+            <AddDataModelModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onSuccess={() => {
+                    refresh();
+                }}
+            />
+        </>
+    );
+};
+
+export default DataModelsConfigurationPage;
