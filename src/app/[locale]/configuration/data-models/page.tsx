@@ -14,6 +14,7 @@ import { useTranslations } from 'next-intl';
 import ConfirmRemovePopup from '@/features/configuration/data-models/ConfirmRemovePopup';
 import AddDataModelModal from '@/features/configuration/data-models/AddDataModelModal';
 import { Pencil } from 'lucide-react';
+import EditDataModelModal from '@/features/configuration/data-models/EditDataModelModal';
 // import { useAllDataModels } from '@/features/configuration/shared/hooks/useAllDataModels';
 
 
@@ -84,6 +85,8 @@ const DataModelsConfigurationPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
 
+    const [isEditOpen, setIsEditOpen] = useState(false);
+
     const [selectedItem, setSelectedItem] = useState<DataModel | null>(null);
     const [showPopup, setShowPopup] = useState(false);
 
@@ -98,7 +101,7 @@ const DataModelsConfigurationPage = () => {
 
             if (result) {
                 console.log(`Deleted: ${name}`);
-                refresh(); // same as registers
+                refresh();
             } else {
                 console.error('Delete failed');
             }
@@ -214,13 +217,18 @@ const DataModelsConfigurationPage = () => {
 
                             <div className="flex items-center gap-6">
                                 <button
-                                        // onClick={(e) => handleView(e, item)}
-                                        className="flex items-center text-black cursor-pointer gap-2 hover:opacity-80 transition-opacity"
-                                        title={t('common.edit')}
-                                    >
-                                        <span className="font-medium text-[#00000080]">{t('common.edit')}</span>
-                                        <Pencil size={16} className='opacity-60'/>
-                                    </button>
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        setSelectedItem(item);
+                                        setIsEditOpen(true);
+                                    }}
+                                    className="flex items-center text-black cursor-pointer gap-2 hover:opacity-80 transition-opacity"
+                                    title={t('common.edit')}
+                                >
+                                    <span className="font-medium text-[#00000080]">{t('common.edit')}</span>
+                                    <Pencil size={16} className='opacity-60' />
+                                </button>
 
                                 <button
                                     onClick={(e) => handleDelete(e, item)}
@@ -257,6 +265,17 @@ const DataModelsConfigurationPage = () => {
             <AddDataModelModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
+                onSuccess={() => {
+                    refresh();
+                }}
+            />
+            <EditDataModelModal
+                isOpen={isEditOpen}
+                data={selectedItem}
+                onClose={() => {
+                    setIsEditOpen(false);
+                    setSelectedItem(null);
+                }}
                 onSuccess={() => {
                     refresh();
                 }}

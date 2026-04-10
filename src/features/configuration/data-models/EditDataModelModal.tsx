@@ -1,25 +1,27 @@
 'use client';
 
-import { useState } from 'react';
-import { useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Upload, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useFetch } from '@/shared/hooks';
 import { toast } from 'react-toastify';
 
-interface AddDataModelModalProps {
+interface EditDataModelModalProps {
     isOpen: boolean;
     onClose: () => void;
     onSuccess?: () => void;
+    data?: any;
 }
 
-export default function AddDataModelModal({
+export default function EditDataModelModal({
     isOpen,
     onClose,
     onSuccess,
-}: AddDataModelModalProps) {
+    data,
+}: EditDataModelModalProps) {
     const t = useTranslations();
-    const { execute: createDataModel, loading } = useFetch();
+    const { execute: updateDataModel } = useFetch();
+    const { execute: uploadFile } = useFetch();
 
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [uploading, setUploading] = useState(false);
@@ -31,7 +33,17 @@ export default function AddDataModelModal({
         is_active: true,
     });
 
-    const { execute: uploadFile } = useFetch();
+    useEffect(() => {
+        if (data) {
+            setFormData({
+                data_model_mnemonic: data.data_model_mnemonic || '',
+                pattern_for_data_model: data.pattern_for_data_model || '',
+                response_template_file_id:
+                    data.response_template_file_id || '',
+                is_active: data.is_active ?? true,
+            });
+        }
+    }, [data]);
 
     const handleFileUpload = async (file: File) => {
         try {
@@ -53,26 +65,15 @@ export default function AddDataModelModal({
                     ...prev,
                     response_template_file_id: result.file_id,
                 }));
-
                 toast.success('File uploaded successfully');
             } else {
-                throw new Error('Invalid response');
+                throw new Error();
             }
-        } catch (err) {
-            console.error(err);
+        } catch {
             toast.error('Upload failed');
         } finally {
             setUploading(false);
         }
-    };
-
-    const handleFileChange = async (
-        e: React.ChangeEvent<HTMLInputElement>
-    ) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
-
-        await handleFileUpload(file);
     };
 
     const handleSubmit = async () => {
@@ -81,38 +82,27 @@ export default function AddDataModelModal({
             return;
         }
 
-        const result = await createDataModel(
-            '/api/configuration/data-models/create',
+        const result = await updateDataModel(
+            '/api/configuration/data-models/update',
             {
                 method: 'POST',
-                body: JSON.stringify(formData),
+                body: JSON.stringify({
+                    ...formData,
+                    data_model_id: data?.data_model_id,
+                }),
             }
         );
 
-        if (result?.data_model_id) {
-            toast.success(`"${formData.data_model_mnemonic}" created`);
-
-            setFormData({
-                data_model_mnemonic: '',
-                pattern_for_data_model: '',
-                response_template_file_id: '',
-                is_active: true,
-            });
-
+        if (result) {
+            toast.success(`Updated "${formData.data_model_mnemonic}"`);
             onSuccess?.();
             onClose();
         } else {
-            toast.error('Failed to create data model');
+            toast.error('Update failed');
         }
     };
 
     const handleCancel = () => {
-        setFormData({
-            data_model_mnemonic: '',
-            pattern_for_data_model: '',
-            response_template_file_id: '',
-            is_active: true,
-        });
         onClose();
     };
 
@@ -129,7 +119,7 @@ export default function AddDataModelModal({
                 </button>
 
                 <h2 className="text-[24px] text-[#ED7C22] font-medium mb-4">
-                    {t('add_new_data_model')}
+                    {t('edit_data_model')}
                 </h2>
 
                 <div className="space-y-4">
@@ -138,7 +128,6 @@ export default function AddDataModelModal({
                             {t('mnemonic')}
                         </label>
                         <input
-                            placeholder={t('mnemonic')}
                             value={formData.data_model_mnemonic}
                             onChange={(e) =>
                                 setFormData({
@@ -146,16 +135,15 @@ export default function AddDataModelModal({
                                     data_model_mnemonic: e.target.value,
                                 })
                             }
-                            className="mt-2 w-full border border-[#F77F57] p-2 rounded-[10px] outline-none"
+                            className="mt-2 w-full border border-[#F77F57] p-2 rounded-[10px]"
                         />
                     </div>
+
                     <div>
                         <label className="text-[16px] font-medium text-black">
-                           {t('pattern')}
+                            {t('pattern')}
                         </label>
-
                         <input
-                            placeholder={t('pattern')}
                             value={formData.pattern_for_data_model}
                             onChange={(e) =>
                                 setFormData({
@@ -163,10 +151,9 @@ export default function AddDataModelModal({
                                     pattern_for_data_model: e.target.value,
                                 })
                             }
-                            className="mt-2 w-full border border-[#F77F57] p-2 rounded-[10px] outline-none"
+                            className="mt-2 w-full border border-[#F77F57] p-2 rounded-[10px]"
                         />
                     </div>
-
                     <div className="grid grid-cols-2 gap-6">
                         <div>
                             <label className="text-[16px] font-medium text-black">
@@ -184,7 +171,9 @@ export default function AddDataModelModal({
                                 <input
                                     type="file"
                                     ref={fileInputRef}
-                                    onChange={handleFileChange}
+                                    onChange={(e) =>
+                                        handleFileUpload(e.target.files![0])
+                                    }
                                     className="hidden"
                                 />
 
@@ -207,20 +196,6 @@ export default function AddDataModelModal({
                                         </p>
                                     )}
                                 </div>
-
-                                {formData.response_template_file_id && (
-                                    <button
-                                        onClick={() =>
-                                            setFormData((prev) => ({
-                                                ...prev,
-                                                response_template_file_id: '',
-                                            }))
-                                        }
-                                        className="text-xs text-red-500 hover:underline"
-                                    >
-                                        Remove
-                                    </button>
-                                )}
                             </div>
                         </div>
 
@@ -261,7 +236,7 @@ export default function AddDataModelModal({
                             onClick={handleSubmit}
                             className="px-4 py-2 bg-black text-white rounded-[10px]"
                         >
-                            Save
+                            Update
                         </button>
                     </div>
                 </div>

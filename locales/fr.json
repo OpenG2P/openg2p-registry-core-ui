@@ -708,5 +708,6 @@
   "Enter altitude": "Entrer l'altitude",
   "add_new_data_model": "Ajouter un nouveau modèle de données",
   "pattern": "Modèle",
-  "confirm_remove_data_model": "Êtes-vous sûr de vouloir supprimer le modèle de données ?"
+  "confirm_remove_data_model": "Êtes-vous sûr de vouloir supprimer le modèle de données ?",
+  "edit_data_model": "Modifier le modèle de données"
 }
