@@ -71,6 +71,12 @@ export const useRegisterSections = (onChangeRequestCreated: () => void) => {
 
         return [...tabSections]
             .sort((a, b) => (b.section_order ?? 0) - (a.section_order ?? 0))
+            .filter((section) =>
+                section.section_ui_schema &&
+                Object.keys(section.section_ui_schema).length > 0 &&
+                Array.isArray(section.section_ui_schema.panels) &&
+                section.section_ui_schema.panels.length > 0
+            )
             .map((section) => {
                 const {
                     section_id,
