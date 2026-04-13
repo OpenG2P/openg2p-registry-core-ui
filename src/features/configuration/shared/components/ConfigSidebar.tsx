@@ -103,9 +103,9 @@ export default function ConfigSidebar({ activeOption }: { activeOption: string }
                                             <Link
                                                 key={sub.id}
                                                 href={sub.path}
-                                                className={`block text-sm transition-colors ${(activeOption === sub.id || (isParentActive && index === 0))
+                                                className={`block text-sm transition-colors ${activeOption === sub.id
                                                     ? 'text-white font-bold'
-                                                    : 'text-black font-medium hover:text-white'
+                                                    : 'text-black font-medium'
                                                     }`}
                                             >
                                                 {t(sub.label)}

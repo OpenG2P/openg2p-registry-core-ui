@@ -15,13 +15,13 @@ export async function POST(request: NextRequest) {
             },
             request_payload: {
                 key_path_id: body.key_path_id,
-                keypath_for_message_id: body.keypath_for_message_id,
+                key_path_for_message_id: body.key_path_for_message_id,
                 data_model_id: body.data_model_id,
                 key_path_for_sender: body.key_path_for_sender,
                 key_path_for_signature: body.key_path_for_signature,
                 key_path_for_signature_payload: body.key_path_for_signature_payload,
                 is_list: body.is_list,
-                keypath_for_list_elements: body.keypath_for_list_elements,
+                key_path_for_list_elements: body.key_path_for_list_elements,
             }
         }),
     });
@@ -31,11 +31,11 @@ export async function POST(request: NextRequest) {
 "response_payload": {
   "key_path_id": "string",
   "data_model_id": "string",
-  "keypath_for_message_id": "string",
+  "key_path_for_message_id": "string",
   "key_path_for_sender": "string",
   "key_path_for_signature": "string",
   "key_path_for_signature_payload": "string",
   "is_list": true,
-  "keypath_for_list_elements": "string"
+  "key_path_for_list_elements": "string"
 }
 */

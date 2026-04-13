@@ -1,26 +1,25 @@
 import { useFetch } from '@/shared/hooks';
 
-export interface IncomingKeyPath {
-    key_path_id: string;
+export interface IncomingSemanticPattern {
+    semantic_pattern_id: string;
     data_model_id: string;
-    data_model_mnemonic?: string;
-    key_path_for_message_id?: string;
-    key_path_for_sender?: string;
-    key_path_for_signature?: string;
-    key_path_for_signature_payload?: string;
-    is_list: boolean;
-    key_path_for_list_elements?: string;
+    register_id: string;
+    section_id: string;
+    pattern_for_register: string;
+    pattern_for_section: string;
+    key_path_for_business_payload: string;
+    raw_payload_enricher_class: string;
 }
 
-export function useIncomingKeyPaths(page?: number, pageSize?: number) {
+export function useSemanticPatterns(page?: number, pageSize?: number) {
     const { data, loading, error, execute } = useFetch<{
-        key_paths: IncomingKeyPath[];
+        semantic_patterns: IncomingSemanticPattern[];
         pagination?: {
             number_of_items: number;
             number_of_pages: number;
         };
     }>({
-        url: '/api/configuration/ingest/all-key-paths',
+        url: '/api/configuration/ingest/get-semantic-pattern',
         options: {
             method: 'POST',
             body: JSON.stringify({
@@ -30,10 +29,10 @@ export function useIncomingKeyPaths(page?: number, pageSize?: number) {
         }
     });
 
-    const keyPaths = data?.key_paths || [];
+    const semanticPatterns = data?.semantic_patterns || [];
 
     return {
-        keyPaths,
+        semanticPatterns,
         pagination: data?.pagination,
         loading,
         error,

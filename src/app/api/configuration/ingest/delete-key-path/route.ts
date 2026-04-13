@@ -24,11 +24,11 @@ export async function POST(request: NextRequest) {
 "response_payload": {
   "key_path_id": "string",
   "data_model_id": "string",
-  "keypath_for_message_id": "string",
+  "key_path_for_message_id": "string",
   "key_path_for_sender": "string",
   "key_path_for_signature": "string",
   "key_path_for_signature_payload": "string",
   "is_list": true,
-  "keypath_for_list_elements": "string"
+  "key_path_for_list_elements": "string"
 }
 */
