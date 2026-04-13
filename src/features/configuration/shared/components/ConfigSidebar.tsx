@@ -50,7 +50,7 @@ const sidebarOptions: SidebarOption[] = [
         id: 'outgest-configurations',
         label: 'outgest_configurations',
         iconUrl: "/images/config/menu_outgest_config_05.png",
-        path: '/configuration/outgest-configurations',
+        path: '/configuration/outgest-configurations/topics',
         subOptions: [
             { id: 'outgest-topics', label: 'outgest_topics', path: '/configuration/outgest-configurations/topics' },
             { id: 'outgest-templates', label: 'outgest_templates', path: '/configuration/outgest-configurations/templates' },
@@ -78,10 +78,7 @@ export default function ConfigSidebar({ activeOption }: { activeOption: string }
                                     href={option.path}
                                     className="flex items-center px-4 py-3 cursor-pointer"
                                 >
-                                    <div className={`
-                    w-10 h-10 rounded-full flex items-center justify-center shrink-0
-                    ${isActive ? 'bg-black' : 'bg-white'}
-                  `}>
+                                    <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${isActive ? 'bg-black' : 'bg-white'} `}>
                                         <div className="flex items-center justify-center">
                                             <Image
                                                 src={option.iconUrl}
@@ -98,7 +95,7 @@ export default function ConfigSidebar({ activeOption }: { activeOption: string }
                                 </Link>
 
                                 {isActive && option.subOptions && (
-                                    <div className="ml-14 pb-4 pr-4 space-y-2">
+                                    <div className="ml-17 pr-4 pb-4 space-y-2">
                                         {option.subOptions.map((sub, index) => (
                                             <Link
                                                 key={sub.id}

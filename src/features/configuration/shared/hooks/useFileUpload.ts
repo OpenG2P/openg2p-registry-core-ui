@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useFetch } from '@/shared/hooks';
 import { toast } from 'react-toastify';
 
-export const useFileUpload = () => {
+export const useFileUpload = (apiPath: string) => {
     const { execute } = useFetch();
     const [uploading, setUploading] = useState(false);
     const [uploadedFileName, setUploadedFileName] = useState('');
@@ -16,13 +16,10 @@ export const useFileUpload = () => {
             const formData = new FormData();
             formData.append('template_file', file);
 
-            const result = await execute(
-                '/api/configuration/data-models/template-upload',
-                {
-                    method: 'POST',
-                    body: formData,
-                }
-            );
+            const result = await execute(apiPath, {
+                method: 'POST',
+                body: formData,
+            });
 
             if (
                 !Array.isArray(result) ||

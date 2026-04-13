@@ -743,5 +743,10 @@
   "select_tab": "Sélectionner l'onglet",
   "tab": "Onglet",
   "semantic_pattern_details": "Détails du modèle sémantique",
-  "section": "Section"
+  "section": "Section",
+  "confirm_remove_outgestion_template": "Êtes-vous sûr de vouloir supprimer ce modèle d’outgestion ?",
+  "confirm_remove_outgestion_topic": "Êtes-vous sûr de vouloir supprimer ce sujet d’outgestion ?",
+  "edit_outgestion_templates": "Modifier le modèle d’outgestion",
+  "add_new_outgestion_template": "Ajouter un nouveau modèle d’outgestion",
+  "add_new_outgestion_topic": "Ajouter un nouveau sujet d’outgestion"
 }

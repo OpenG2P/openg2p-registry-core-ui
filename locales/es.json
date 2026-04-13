@@ -743,5 +743,10 @@
   "select_tab": "Seleccionar pestaña",
   "tab": "Pestaña",
   "semantic_pattern_details": "Detalles del patrón semántico",
-  "section": "Sección"
+  "section": "Sección",
+  "confirm_remove_outgestion_template": "¿Está seguro de que desea eliminar esta plantilla de outgestión?",
+  "confirm_remove_outgestion_topic": "¿Está seguro de que desea eliminar este tema de outgestión?",
+  "edit_outgestion_templates": "Editar plantilla de outgestión",
+  "add_new_outgestion_template": "Agregar nueva plantilla de outgestión",
+  "add_new_outgestion_topic": "Agregar nuevo tema de outgestión"
 }
