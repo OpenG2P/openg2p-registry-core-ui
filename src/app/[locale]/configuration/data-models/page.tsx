@@ -134,69 +134,80 @@ const DataModelsConfigurationPage = () => {
                             {t('actions')}
                         </div>
                     </div>
-
-                    {dataModels.map((item, index) => (
-                        <div
-                            key={item.data_model_id}
-                            className={`grid grid-cols-5 gap-4 items-center -mx-8 px-16 h-15 transition-colors ${index % 2 === 0 ? 'bg-[#D9D9D940]' : 'bg-white'} cursor-pointer`}
-                        >
-                            <div className="text-base font-medium truncate">
-                                {item.data_model_mnemonic}
-                            </div>
-
-                            <div className="text-base font-medium truncate">
-                                {item.pattern_for_data_model}
-                            </div>
-
-                            <div className="text-base font-medium truncate">
-                                {item.response_template_file_id}
-                            </div>
-
-                            <div className="text-base font-medium">
-                                {item.is_active ? (
-                                    <span className="text-[#77D79B]">{t('active')}</span>
-                                ) : (
-                                    <span className="text-[#EB656A]">{t('inactive')}</span>
-                                )}
-                            </div>
-
-                            <div className="flex items-center gap-6">
-                                <Can action={CONFIGURATION_DATA_MODELS_ACTIONS.edit}>
-                                    <button
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            e.stopPropagation();
-                                            setSelectedItem(item);
-                                            setIsEditOpen(true);
-                                        }}
-                                        className="flex items-center text-black cursor-pointer gap-2 hover:opacity-80 transition-opacity"
-                                        title={t('common.edit')}
-                                    >
-                                        <span className="font-medium text-[#00000080]">{t('common.edit')}</span>
-                                        <Pencil size={16} className='opacity-60' />
-                                    </button>
-                                </Can>
-                                <Can action={CONFIGURATION_DATA_MODELS_ACTIONS.edit}>
-                                    <button
-                                        onClick={(e) => handleDelete(e, item)}
-                                        className="flex items-center cursor-pointer hover:opacity-80 transition-opacity"
-                                        title={t('remove')}
-                                    >
-                                        <span className="font-medium text-[#00000080]">
-                                            {t('remove')}
-                                        </span>
-                                        <Image
-                                            src="/images/common/false_sign.png"
-                                            alt={t('remove')}
-                                            width={18}
-                                            height={18}
-                                            className="ml-2"
-                                        />
-                                    </button>
-                                </Can>
+                    {loading ? (
+                        <div className="flex justify-center items-center py-60">
+                            <div className="flex flex-col items-center gap-4">
+                                <img
+                                    src="/images/common/loading.gif"
+                                    alt="Loading"
+                                    className="w-12 h-12"
+                                />
                             </div>
                         </div>
-                    ))}
+                    ) : (
+                        dataModels.map((item, index) => (
+                            <div
+                                key={item.data_model_id}
+                                className={`grid grid-cols-5 gap-4 items-center -mx-8 px-16 h-15 transition-colors ${index % 2 === 0 ? 'bg-[#D9D9D940]' : 'bg-white'} cursor-pointer`}
+                            >
+                                <div className="text-base font-medium truncate">
+                                    {item.data_model_mnemonic}
+                                </div>
+
+                                <div className="text-base font-medium truncate">
+                                    {item.pattern_for_data_model}
+                                </div>
+
+                                <div className="text-base font-medium truncate">
+                                    {item.response_template_file_id}
+                                </div>
+
+                                <div className="text-base font-medium">
+                                    {item.is_active ? (
+                                        <span className="text-[#77D79B]">{t('active')}</span>
+                                    ) : (
+                                        <span className="text-[#EB656A]">{t('inactive')}</span>
+                                    )}
+                                </div>
+
+                                <div className="flex items-center gap-6">
+                                    <Can action={CONFIGURATION_DATA_MODELS_ACTIONS.edit}>
+                                        <button
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+                                                setSelectedItem(item);
+                                                setIsEditOpen(true);
+                                            }}
+                                            className="flex items-center text-black cursor-pointer gap-2 hover:opacity-80 transition-opacity"
+                                            title={t('common.edit')}
+                                        >
+                                            <span className="font-medium text-[#00000080]">{t('common.edit')}</span>
+                                            <Pencil size={16} className='opacity-60' />
+                                        </button>
+                                    </Can>
+                                    <Can action={CONFIGURATION_DATA_MODELS_ACTIONS.edit}>
+                                        <button
+                                            onClick={(e) => handleDelete(e, item)}
+                                            className="flex items-center cursor-pointer hover:opacity-80 transition-opacity"
+                                            title={t('remove')}
+                                        >
+                                            <span className="font-medium text-[#00000080]">
+                                                {t('remove')}
+                                            </span>
+                                            <Image
+                                                src="/images/common/false_sign.png"
+                                                alt={t('remove')}
+                                                width={18}
+                                                height={18}
+                                                className="ml-2"
+                                            />
+                                        </button>
+                                    </Can>
+                                </div>
+                            </div>
+                        ))
+                    )}
                 </div>
             </div>
 
