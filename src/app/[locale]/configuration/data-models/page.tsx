@@ -1,76 +1,20 @@
 'use client';
 
 import Image from 'next/image';
-import { Link } from '@/i18n/navigation';
 import { useState } from 'react';
 import { TopBar } from '@/components/shared';
-// import { RegistersConfigView } from '@/features/configuration/registers';
-// import { useAllRegister } from '@/features/configuration/shared';
 import { useFetch, usePagination } from '@/shared/hooks';
 import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
 import { useRbac } from '@/context/RbacContext';
-// import { CONFIGURATION_REGISTERS_ACTIONS } from '@/features/configuration/shared/utils/configurationRegisters.actions';
 import { useTranslations } from 'next-intl';
 import ConfirmRemovePopup from '@/features/configuration/data-models/ConfirmRemovePopup';
 import AddDataModelModal from '@/features/configuration/data-models/AddDataModelModal';
 import { Pencil } from 'lucide-react';
 import EditDataModelModal from '@/features/configuration/data-models/EditDataModelModal';
-// import { useAllDataModels } from '@/features/configuration/shared/hooks/useAllDataModels';
-
-
-const loading = false;
-
-const dataModels = [
-    {
-        data_model_id: '1',
-        data_model_mnemonic: 'data_model_1',
-        pattern_for_data_model: 'pattern1',
-        response_template_file_id: 'template_1',
-        is_active: true,
-    },
-    {
-        data_model_id: '2',
-        data_model_mnemonic: 'data_model_2',
-        pattern_for_data_model: 'pattern2',
-        response_template_file_id: 'template_2',
-        is_active: false,
-    },
-    {
-        data_model_id: '3',
-        data_model_mnemonic: 'data_model_3',
-        pattern_for_data_model: 'pattern3',
-        response_template_file_id: 'template_3',
-        is_active: true,
-    },
-];
-
-const pagination = {
-    number_of_items: 3,
-    number_of_pages: 1,
-};
-
-const refresh = () => { };
-
-export function useAllDataModels() {
-    return {
-        dataModels: [
-            {
-                data_model_id: '1',
-                data_model_mnemonic: 'USER_PROFILE',
-                pattern_for_data_model: 'UP-{id}',
-                response_template_file_id: 'template_001',
-                is_active: true,
-            },
-        ],
-        pagination: {
-            number_of_items: 1,
-            number_of_pages: 1,
-        },
-        loading: false,
-        error: null,
-        refresh: () => { },
-    };
-}
+import { useAllDataModels } from '@/features/configuration/shared/hooks/useAllDataModels';
+import { CONFIGURATION_DATA_MODELS_ACTIONS } from '@/features/configuration/shared/utils/configurationDataModels.actions';
+import Can from '@/components/shared/Can';
+import { toast } from 'react-toastify';
 
 type DataModel = {
     data_model_id: string;
@@ -100,7 +44,7 @@ const DataModelsConfigurationPage = () => {
             });
 
             if (result) {
-                console.log(`Deleted: ${name}`);
+                toast.success(`"${name}" deleted successfully`);
                 refresh();
             } else {
                 console.error('Delete failed');
@@ -135,9 +79,9 @@ const DataModelsConfigurationPage = () => {
     const { config } = useRuntimeConfig();
 
     const { can } = useRbac();
-    const canCreate = true || can("*********");
+    const canCreate = can(CONFIGURATION_DATA_MODELS_ACTIONS.create)
 
-    // const { dataModels, pagination, loading, refresh } = useAllDataModels(currentPage, config.pageSize);
+    const { dataModels, pagination, loading, refresh } = useAllDataModels(currentPage, config.pageSize);
 
     const { pageStart, pageEnd, total } = usePagination({
         totalItems: pagination?.number_of_items || 0,
@@ -164,11 +108,11 @@ const DataModelsConfigurationPage = () => {
                 showAddNewButton={canCreate}
                 addNewButtonText={t('add_new_data_model')}
                 onAddNewButton={() => setIsModalOpen(true)}
-                pageStart={pageStart}
-                pageEnd={pageEnd}
-                total={total}
-                onPrev={handlePrev}
-                onNext={handleNext}
+            // pageStart={pageStart}
+            // pageEnd={pageEnd}
+            // total={total}
+            // onPrev={handlePrev}
+            // onNext={handleNext}
             />
 
             <div className="mx-7.5 bg-white rounded-[10px] p-4 pt-8 overflow-hidden">
@@ -193,6 +137,7 @@ const DataModelsConfigurationPage = () => {
 
                     {dataModels.map((item, index) => (
                         <div
+                            key={item.data_model_id}
                             className={`grid grid-cols-5 gap-4 items-center -mx-8 px-16 h-15 transition-colors ${index % 2 === 0 ? 'bg-[#D9D9D940]' : 'bg-white'} cursor-pointer`}
                         >
                             <div className="text-base font-medium truncate">
@@ -216,36 +161,39 @@ const DataModelsConfigurationPage = () => {
                             </div>
 
                             <div className="flex items-center gap-6">
-                                <button
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        e.stopPropagation();
-                                        setSelectedItem(item);
-                                        setIsEditOpen(true);
-                                    }}
-                                    className="flex items-center text-black cursor-pointer gap-2 hover:opacity-80 transition-opacity"
-                                    title={t('common.edit')}
-                                >
-                                    <span className="font-medium text-[#00000080]">{t('common.edit')}</span>
-                                    <Pencil size={16} className='opacity-60' />
-                                </button>
-
-                                <button
-                                    onClick={(e) => handleDelete(e, item)}
-                                    className="flex items-center cursor-pointer hover:opacity-80 transition-opacity"
-                                    title={t('remove')}
-                                >
-                                    <span className="font-medium text-[#00000080]">
-                                        {t('remove')}
-                                    </span>
-                                    <Image
-                                        src="/images/common/false_sign.png"
-                                        alt={t('remove')}
-                                        width={18}
-                                        height={18}
-                                        className="ml-2"
-                                    />
-                                </button>
+                                <Can action={CONFIGURATION_DATA_MODELS_ACTIONS.edit}>
+                                    <button
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            setSelectedItem(item);
+                                            setIsEditOpen(true);
+                                        }}
+                                        className="flex items-center text-black cursor-pointer gap-2 hover:opacity-80 transition-opacity"
+                                        title={t('common.edit')}
+                                    >
+                                        <span className="font-medium text-[#00000080]">{t('common.edit')}</span>
+                                        <Pencil size={16} className='opacity-60' />
+                                    </button>
+                                </Can>
+                                <Can action={CONFIGURATION_DATA_MODELS_ACTIONS.edit}>
+                                    <button
+                                        onClick={(e) => handleDelete(e, item)}
+                                        className="flex items-center cursor-pointer hover:opacity-80 transition-opacity"
+                                        title={t('remove')}
+                                    >
+                                        <span className="font-medium text-[#00000080]">
+                                            {t('remove')}
+                                        </span>
+                                        <Image
+                                            src="/images/common/false_sign.png"
+                                            alt={t('remove')}
+                                            width={18}
+                                            height={18}
+                                            className="ml-2"
+                                        />
+                                    </button>
+                                </Can>
                             </div>
                         </div>
                     ))}

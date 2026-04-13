@@ -4,7 +4,7 @@ import { proxyToBackend } from "@/app/api/_lib/backend-proxy";
 export async function POST(req: NextRequest) {
     return proxyToBackend({
         req,
-        targetEndpoint: '/ingestion-config/get_all_data_models',
+        targetEndpoint: '/data-model/get_all_data_models',
         buildPayload: (body) => ({
             pagination_request: {
                 current_page: body.current_page ?? 1,
@@ -16,8 +16,8 @@ export async function POST(req: NextRequest) {
             request_payload: {}
         }),
         transformResponse: (responseBody) => ({
-            data_models: responseBody?.response_body?.response_payload || [],
-            pagination: responseBody?.response_body?.pagination_response
+            data_models: responseBody?.response_payload || [],
+            pagination: responseBody?.pagination_response
         }),
     });
 }

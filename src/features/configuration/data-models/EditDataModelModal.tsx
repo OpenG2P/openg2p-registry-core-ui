@@ -5,6 +5,7 @@ import { Upload, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useFetch } from '@/shared/hooks';
 import { toast } from 'react-toastify';
+import { useFileUpload } from '../shared/hooks/useFileUpload';
 
 interface EditDataModelModalProps {
     isOpen: boolean;
@@ -21,10 +22,8 @@ export default function EditDataModelModal({
 }: EditDataModelModalProps) {
     const t = useTranslations();
     const { execute: updateDataModel } = useFetch();
-    const { execute: uploadFile } = useFetch();
 
     const fileInputRef = useRef<HTMLInputElement>(null);
-    const [uploading, setUploading] = useState(false);
 
     const [formData, setFormData] = useState({
         data_model_mnemonic: '',
@@ -45,35 +44,28 @@ export default function EditDataModelModal({
         }
     }, [data]);
 
+    const { uploadFile, uploading, uploadedFileName } = useFileUpload();
+
     const handleFileUpload = async (file: File) => {
-        try {
-            setUploading(true);
+        const documentId = await uploadFile(file);
 
-            const formDataUpload = new FormData();
-            formDataUpload.append('file', file);
+        if (!documentId) return;
 
-            const result = await uploadFile(
-                '/api/configuration/data-models/document-upload',
-                {
-                    method: 'POST',
-                    body: formDataUpload,
-                }
-            );
+        setFormData((prev) => ({
+            ...prev,
+            response_template_file_id: documentId,
+        }));
+    };
 
-            if (result?.file_id) {
-                setFormData((prev) => ({
-                    ...prev,
-                    response_template_file_id: result.file_id,
-                }));
-                toast.success('File uploaded successfully');
-            } else {
-                throw new Error();
-            }
-        } catch {
-            toast.error('Upload failed');
-        } finally {
-            setUploading(false);
-        }
+    const handleFileChange = async (
+        e: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        await handleFileUpload(file);
+
+        e.target.value = '';
     };
 
     const handleSubmit = async () => {
@@ -171,12 +163,9 @@ export default function EditDataModelModal({
                                 <input
                                     type="file"
                                     ref={fileInputRef}
-                                    onChange={(e) =>
-                                        handleFileUpload(e.target.files![0])
-                                    }
+                                    onChange={handleFileChange}
                                     className="hidden"
                                 />
-
                                 <div className="flex-1">
                                     <button
                                         type="button"
@@ -192,10 +181,23 @@ export default function EditDataModelModal({
 
                                     {formData.response_template_file_id && (
                                         <p className="text-[#77D79B] mt-1 text-xs">
-                                            File uploaded
+                                            {uploadedFileName}
                                         </p>
                                     )}
                                 </div>
+                                {formData.response_template_file_id && (
+                                    <button
+                                        onClick={() =>
+                                            setFormData((prev) => ({
+                                                ...prev,
+                                                response_template_file_id: '',
+                                            }))
+                                        }
+                                        className="text-xs text-red-500 hover:underline"
+                                    >
+                                        Remove
+                                    </button>
+                                )}
                             </div>
                         </div>
 

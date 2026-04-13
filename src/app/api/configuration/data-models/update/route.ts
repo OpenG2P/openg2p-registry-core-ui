@@ -4,7 +4,7 @@ import { proxyToBackend } from "@/app/api/_lib/backend-proxy";
 export async function POST(req: NextRequest) {
     return proxyToBackend({
         req,
-        targetEndpoint: "/data-model/create_data_model",
+        targetEndpoint: "/data-model/update_data_model",
         buildPayload: (body) => ({
             pagination_request: {
                 current_page: body.current_page ?? 1,

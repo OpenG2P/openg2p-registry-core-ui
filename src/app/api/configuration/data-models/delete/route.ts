@@ -4,7 +4,7 @@ import { proxyToBackend } from "@/app/api/_lib/backend-proxy";
 export async function POST(req: NextRequest) {
     return proxyToBackend({
         req,
-        targetEndpoint: '/ingestion-config/delete_data_model',
+        targetEndpoint: '/data-model/delete_data_model',
         buildPayload: (body) => ({
             pagination_request: {
                 current_page: body.current_page ?? 1,

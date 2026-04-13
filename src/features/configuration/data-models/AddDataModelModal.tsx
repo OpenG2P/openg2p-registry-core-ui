@@ -6,6 +6,7 @@ import { Upload, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useFetch } from '@/shared/hooks';
 import { toast } from 'react-toastify';
+import { useFileUpload } from '../shared/hooks/useFileUpload';
 
 interface AddDataModelModalProps {
     isOpen: boolean;
@@ -22,7 +23,6 @@ export default function AddDataModelModal({
     const { execute: createDataModel, loading } = useFetch();
 
     const fileInputRef = useRef<HTMLInputElement>(null);
-    const [uploading, setUploading] = useState(false);
 
     const [formData, setFormData] = useState({
         data_model_mnemonic: '',
@@ -31,39 +31,17 @@ export default function AddDataModelModal({
         is_active: true,
     });
 
-    const { execute: uploadFile } = useFetch();
+    const { uploadFile, uploading, uploadedFileName } = useFileUpload();
 
     const handleFileUpload = async (file: File) => {
-        try {
-            setUploading(true);
+        const documentId = await uploadFile(file);
 
-            const formDataUpload = new FormData();
-            formDataUpload.append('file', file);
+        if (!documentId) return;
 
-            const result = await uploadFile(
-                '/api/configuration/data-models/document-upload',
-                {
-                    method: 'POST',
-                    body: formDataUpload,
-                }
-            );
-
-            if (result?.file_id) {
-                setFormData((prev) => ({
-                    ...prev,
-                    response_template_file_id: result.file_id,
-                }));
-
-                toast.success('File uploaded successfully');
-            } else {
-                throw new Error('Invalid response');
-            }
-        } catch (err) {
-            console.error(err);
-            toast.error('Upload failed');
-        } finally {
-            setUploading(false);
-        }
+        setFormData((prev) => ({
+            ...prev,
+            response_template_file_id: documentId,
+        }));
     };
 
     const handleFileChange = async (
@@ -73,6 +51,8 @@ export default function AddDataModelModal({
         if (!file) return;
 
         await handleFileUpload(file);
+
+        e.target.value = '';
     };
 
     const handleSubmit = async () => {
@@ -151,7 +131,7 @@ export default function AddDataModelModal({
                     </div>
                     <div>
                         <label className="text-[16px] font-medium text-black">
-                           {t('pattern')}
+                            {t('pattern')}
                         </label>
 
                         <input
@@ -203,7 +183,7 @@ export default function AddDataModelModal({
 
                                     {formData.response_template_file_id && (
                                         <p className="text-[#77D79B] mt-1 text-xs">
-                                            File uploaded
+                                            {uploadedFileName}
                                         </p>
                                     )}
                                 </div>

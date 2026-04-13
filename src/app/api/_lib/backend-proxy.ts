@@ -69,10 +69,14 @@ export async function proxyToBackend({
 		};
 
 		if (isFormData) {
+			fetchOptions.headers = {
+				...auth.backendHeaders,
+			};
 			fetchOptions.body = body;
 			// When sending FormData, the browser/runtime will automatically set
 			// the Content-Type header with the correct boundary.
-		} else {
+		} 
+		else {
 			const defaultPayloadBuilder: PayloadBuilder = (b) => ({
 				pagination_request: undefined,
 				request_payload: b
