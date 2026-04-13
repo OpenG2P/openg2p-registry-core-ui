@@ -41,11 +41,9 @@ const sidebarOptions: SidebarOption[] = [
         iconUrl: "/images/config/menu_ingest_config_04.png",
         path: '/configuration/ingest-configurations',
         subOptions: [
-            { id: 'ingest-partners', label: 'ingest_partners', path: '/configuration/ingest-configurations/partners' },
-            { id: 'ingest-signature-paths', label: 'ingest_signature_paths', path: '/configuration/ingest-configurations/signature-paths' },
-            { id: 'ingest-symmetric-expressions', label: 'ingest_symmetric_expressions', path: '/configuration/ingest-configurations/symmetric-expressions' },
-            { id: 'ingest-templates', label: 'ingest_templates', path: '/configuration/ingest-configurations/templates' },
-            { id: 'ingest-payload-enrichers', label: 'ingest_payload_enrichers', path: '/configuration/ingest-configurations/payload-enrichers' },
+            { id: 'ingest-key-paths', label: 'ingest_key_paths', path: '/configuration/ingest-configurations/key-paths' },
+            { id: 'ingest-semantic-patterns', label: 'ingest_semantic_patterns', path: '/configuration/ingest-configurations/semantic-patterns' },
+            { id: 'ingest-manage-subscription', label: 'ingest_manage_subscription', path: '/configuration/ingest-configurations/manage-subscription' },
         ]
     },
     {
@@ -105,9 +103,9 @@ export default function ConfigSidebar({ activeOption }: { activeOption: string }
                                             <Link
                                                 key={sub.id}
                                                 href={sub.path}
-                                                className={`block text-sm transition-colors ${(activeOption === sub.id || (isParentActive && index === 0))
+                                                className={`block text-sm transition-colors ${activeOption === sub.id
                                                     ? 'text-white font-bold'
-                                                    : 'text-black font-medium hover:text-white'
+                                                    : 'text-black font-medium'
                                                     }`}
                                             >
                                                 {t(sub.label)}

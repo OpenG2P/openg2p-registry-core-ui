@@ -12,15 +12,7 @@ interface RegisterSchema {
 export const useRegisterSchema = (
     registerId: string
 ) => {
-    // const { data, loading, execute } = useFetch<RegisterSchema>({
-    //     url: '/api/configuration/registers/register-schema',
-    //     options: {
-    //         method: 'POST',
-    //         body: JSON.stringify({
-    //             register_id: registerId,
-    //         }),
-    //     },
-    // });
+
     const { data, loading, execute } = useFetch<RegisterSchema>({
         url: '/api/configuration/registers/register-schema',
         options: {
