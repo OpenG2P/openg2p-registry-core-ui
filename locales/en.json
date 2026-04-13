@@ -705,5 +705,9 @@
   "Enter address line 2": "Enter address line 2",
   "Enter latitude": "Enter latitude",
   "Enter longitude": "Enter longitude",
-  "Enter altitude": "Enter altitude"
+  "Enter altitude": "Enter altitude",
+  "add_new_data_model": "Add New Data Model",
+  "pattern": "Pattern",
+  "confirm_remove_data_model": "Are you sure you want to remove the data model?",
+  "edit_data_model": "Edit Data Model"
 }

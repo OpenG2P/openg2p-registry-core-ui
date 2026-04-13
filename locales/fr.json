@@ -705,5 +705,9 @@
   "Enter address line 2": "Entrer la ligne d'adresse 2",
   "Enter latitude": "Entrer la latitude",
   "Enter longitude": "Entrer la longitude",
-  "Enter altitude": "Entrer l'altitude"
+  "Enter altitude": "Entrer l'altitude",
+  "add_new_data_model": "Ajouter un nouveau modèle de données",
+  "pattern": "Modèle",
+  "confirm_remove_data_model": "Êtes-vous sûr de vouloir supprimer le modèle de données ?",
+  "edit_data_model": "Modifier le modèle de données"
 }
