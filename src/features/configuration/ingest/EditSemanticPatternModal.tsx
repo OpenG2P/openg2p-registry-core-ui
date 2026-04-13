@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl';
 import { useFetch } from '@/shared/hooks';
 import { toast } from 'react-toastify';
 import { IncomingSemanticPattern } from '@/features/configuration/shared/hooks/useAllSemanticPatterns';
-import { useAllRegister, useConfigTabs, useConfigSections } from '@/features/configuration/shared';
+import { useAllRegister, useConfigTabs, useConfigSections, useAllDataModels } from '@/features/configuration/shared';
 
 interface EditSemanticPatternModalProps {
     isOpen: boolean;
@@ -24,6 +24,7 @@ export default function EditSemanticPatternModal({
     const t = useTranslations();
     const { execute: updatePattern } = useFetch();
     const { registers } = useAllRegister(1, 100);
+    const { dataModels } = useAllDataModels(1, 100);
 
     const [formData, setFormData] = useState({
         semantic_pattern_id: '',
@@ -118,14 +119,21 @@ export default function EditSemanticPatternModal({
                             </div>
                             <div>
                                 <label className="block text-sm font-semibold text-black mb-2">
-                                    {t('data_model_id')}
+                                    {t('data_model')}
                                 </label>
-                                <input
-                                    type="text"
-                                    value={formData.data_model_id}
-                                    disabled
-                                    className="w-full px-4 py-2 border border-gray-200 rounded-lg bg-gray-50 outline-none text-gray-400 cursor-not-allowed"
-                                />
+                                <div className="relative">
+                                    <select
+                                        value={formData.data_model_id}
+                                        disabled
+                                        className="w-full px-4 py-2 border border-gray-200 rounded-lg bg-gray-50 outline-none text-gray-400 cursor-not-allowed appearance-none"
+                                    >
+                                        <option value="">{t('select_data_model')}</option>
+                                        {dataModels.map((dm) => (
+                                            <option key={dm.data_model_id} value={dm.data_model_id}>{dm.data_model_mnemonic}</option>
+                                        ))}
+                                    </select>
+                                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
+                                </div>
                             </div>
                         </div>
 
@@ -150,8 +158,8 @@ export default function EditSemanticPatternModal({
                                     <select
                                         value={selectedTabId}
                                         onChange={(e) => setSelectedTabId(e.target.value)}
-                                        disabled={loadingTabs}
-                                        className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all bg-white appearance-none cursor-pointer text-gray-600 pr-10 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                                        disabled
+                                        className="w-full px-4 py-2 border border-gray-200 rounded-lg bg-gray-50 outline-none text-gray-400 cursor-not-allowed appearance-none"
                                     >
                                         <option value="">{t('select_tab')}</option>
                                         {tabs.filter(tab => !tab.used_for_new_intake_form).map((tab) => (
@@ -170,8 +178,8 @@ export default function EditSemanticPatternModal({
                                     <select
                                         value={formData.section_id}
                                         onChange={(e) => setFormData({ ...formData, section_id: e.target.value })}
-                                        disabled={!selectedTabId || loadingSections}
-                                        className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all bg-white appearance-none cursor-pointer text-gray-600 pr-10 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                                        disabled
+                                        className="w-full px-4 py-2 border border-gray-200 rounded-lg bg-gray-50 outline-none text-gray-400 cursor-not-allowed appearance-none"
                                     >
                                         <option value="">{t('select_section')}</option>
                                         {sections.map((sec) => (

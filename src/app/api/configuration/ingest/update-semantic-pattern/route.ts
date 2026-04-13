@@ -14,6 +14,7 @@ export async function POST(request: NextRequest) {
                 search_text: body.search_text ?? ""
             },
             request_payload: {
+                semantic_pattern_id: body.semantic_pattern_id,
                 pattern_for_register: body.pattern_for_register,
                 pattern_for_section: body.pattern_for_section,
                 key_path_for_business_payload: body.key_path_for_business_payload,

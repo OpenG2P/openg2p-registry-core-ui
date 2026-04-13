@@ -146,6 +146,7 @@
   "sections": "Sections",
   "master_register": "Master Register",
   "select_master_register": "Select Master Register",
+  "select_data_model": "Select Data Model",
   "deduplication_enabled": "Deduplication Enabled",
   "available_register_rank": "Available Register Rank",
   "view_existing_ranks": "View Existing Ranks",

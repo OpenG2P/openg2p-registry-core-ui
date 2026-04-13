@@ -5,6 +5,7 @@ import { X, ChevronDown } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useFetch } from '@/shared/hooks';
 import { toast } from 'react-toastify';
+import { useAllDataModels } from '@/features/configuration/shared';
 
 interface AddKeyPathModalProps {
     isOpen: boolean;
@@ -15,6 +16,7 @@ interface AddKeyPathModalProps {
 export default function AddKeyPathModal({ isOpen, onClose, onSuccess }: AddKeyPathModalProps) {
     const t = useTranslations();
     const { execute: createKeyPath } = useFetch();
+    const { dataModels } = useAllDataModels(1, 100);
 
     const [formData, setFormData] = useState({
         data_model_id: '',
@@ -91,15 +93,21 @@ export default function AddKeyPathModal({ isOpen, onClose, onSuccess }: AddKeyPa
                     <div className="space-y-4">
                         <div>
                             <label className="block text-sm font-semibold text-black mb-2">
-                                {t('data_model_id')}
+                                {t('data_model')}
                             </label>
-                            <input
-                                type="text"
-                                placeholder={t('data_model_id')}
-                                value={formData.data_model_id}
-                                onChange={(e) => setFormData({ ...formData, data_model_id: e.target.value })}
-                                className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all text-gray-600 placeholder:text-gray-400"
-                            />
+                            <div className="relative">
+                                <select
+                                    value={formData.data_model_id}
+                                    onChange={(e) => setFormData({ ...formData, data_model_id: e.target.value })}
+                                    className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all bg-white appearance-none cursor-pointer text-gray-600 pr-10"
+                                >
+                                    <option value="">{t('select_data_model')}</option>
+                                    {dataModels.map((dm) => (
+                                        <option key={dm.data_model_id} value={dm.data_model_id}>{dm.data_model_mnemonic}</option>
+                                    ))}
+                                </select>
+                                <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
+                            </div>
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">

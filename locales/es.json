@@ -146,6 +146,7 @@
   "sections": "Secciones",
   "master_register": "Registro maestro",
   "select_master_register": "Seleccionar registro maestro",
+  "select_data_model": "Seleccionar modelo de datos",
   "deduplication_enabled": "Deduplicación habilitada",
   "available_register_rank": "Rango de registro disponible",
   "view_existing_ranks": "Ver rangos existentes",

@@ -12,6 +12,9 @@ import AddKeyPathModal from '@/features/configuration/ingest/AddKeyPathModal';
 import ViewKeyPathModal from '@/features/configuration/ingest/ViewKeyPathModal';
 import EditKeyPathModal from '@/features/configuration/ingest/EditKeyPathModal';
 import { toast } from 'react-toastify';
+import { useRbac } from '@/context/RbacContext';
+import { CONFIGURATION_KEY_PATHS_ACTIONS } from '@/features/configuration/shared/utils/configurationKeyPaths.actions';
+import Can from '@/components/shared/Can';
 
 const KeyPathsPage = () => {
     const t = useTranslations();
@@ -21,6 +24,7 @@ const KeyPathsPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
 
     const { config } = useRuntimeConfig();
+    const { can } = useRbac();
     const { execute: deleteKeyPath } = useFetch();
     const { selectedKeyPath, fetchKeyPath } = useIncomingKeyPath();
     const { keyPaths, pagination, loading, refresh } = useAllIncomingKeyPaths(currentPage, config.pageSize);
@@ -115,7 +119,7 @@ const KeyPathsPage = () => {
                 breadcrumb={[{ label: t('ingest_configurations') }, { label: t('ingest_key_paths') }]}
                 showFilters={false}
                 showPagination
-                showAddNewButton={true}
+                showAddNewButton={can(CONFIGURATION_KEY_PATHS_ACTIONS.create)}
                 addNewButtonText={t('add_new_key_path')}
                 onAddNewButton={() => setIsAddModalOpen(true)}
                 pageStart={pageStart}
@@ -170,56 +174,60 @@ const KeyPathsPage = () => {
                                             {keyPath.is_list ? t('true') : t('false')}
                                         </div>
                                         <div className="flex items-center gap-6">
-                                        <button
-                                            onClick={() => handleView(keyPath)}
-                                            className="flex items-center text-[#1cc9b7] cursor-pointer hover:opacity-80 transition-opacity"
-                                            title={t('view')}
-                                        >
-                                            <span className="text-sm font-medium">{t('view')}</span>
-                                            <Image
-                                                src="/images/common/view.png"
-                                                alt={t('view')}
-                                                width={18}
-                                                height={18}
-                                                className="ml-2"
-                                            />
-                                        </button>
-                                        <button
-                                            onClick={() => handleUpdate(keyPath)}
-                                            className="flex items-center text-[#1cc9b7] cursor-pointer hover:opacity-80 transition-opacity"
-                                            title={t('update')}
-                                        >
-                                            <span className="text-sm font-medium">{t('update')}</span>
-                                            <Image
-                                                src="/images/common/edit.png"
-                                                alt={t('update')}
-                                                width={18}
-                                                height={18}
-                                                className="ml-2"
-                                            />
-                                        </button>
-                                        <button
-                                            onClick={() => handleDelete(keyPath)}
-                                            className="flex items-center text-[#1cc9b7] cursor-pointer hover:opacity-80 transition-opacity"
-                                            title={t('remove')}
-                                        >
-                                            <span className="text-sm font-medium text-[#00000080]">{t('remove')}</span>
-                                            <Image
-                                                src="/images/common/false_sign.png"
-                                                alt={t('remove')}
-                                                width={18}
-                                                height={18}
-                                                className="ml-2"
-                                            />
-                                        </button>
+                                            <button
+                                                onClick={() => handleView(keyPath)}
+                                                className="flex items-center text-[#1cc9b7] cursor-pointer hover:opacity-80 transition-opacity"
+                                                title={t('view')}
+                                            >
+                                                <span className="text-sm font-medium">{t('view')}</span>
+                                                <Image
+                                                    src="/images/common/view.png"
+                                                    alt={t('view')}
+                                                    width={18}
+                                                    height={18}
+                                                    className="ml-2"
+                                                />
+                                            </button>
+                                            <Can action={CONFIGURATION_KEY_PATHS_ACTIONS.edit}>
+                                                <button
+                                                    onClick={() => handleUpdate(keyPath)}
+                                                    className="flex items-center text-[#1cc9b7] cursor-pointer hover:opacity-80 transition-opacity"
+                                                    title={t('update')}
+                                                >
+                                                    <span className="text-sm font-medium">{t('update')}</span>
+                                                    <Image
+                                                        src="/images/common/edit.png"
+                                                        alt={t('update')}
+                                                        width={18}
+                                                        height={18}
+                                                        className="ml-2"
+                                                    />
+                                                </button>
+                                            </Can>
+                                            <Can action={CONFIGURATION_KEY_PATHS_ACTIONS.delete}>
+                                                <button
+                                                    onClick={() => handleDelete(keyPath)}
+                                                    className="flex items-center text-[#1cc9b7] cursor-pointer hover:opacity-80 transition-opacity"
+                                                    title={t('remove')}
+                                                >
+                                                    <span className="text-sm font-medium text-[#00000080]">{t('remove')}</span>
+                                                    <Image
+                                                        src="/images/common/false_sign.png"
+                                                        alt={t('remove')}
+                                                        width={18}
+                                                        height={18}
+                                                        className="ml-2"
+                                                    />
+                                                </button>
+                                            </Can>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))
-                    )}
-                </div>
-            )}
-        </div>
+                            ))
+                        )}
+                    </div>
+                )}
+            </div>
 
             <AddKeyPathModal
                 isOpen={isAddModalOpen}
