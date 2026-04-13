@@ -266,6 +266,7 @@
   "toast_upload_failed": "Failed to upload files. Please try again.",
   "toast_upload_failed_cr_not_created": "Document upload failed. Change request was not created.",
   "toast_upload_success": "{count} file(s) uploaded successfully!",
+  "toast_profile_image_upload_success": "Profile image uploaded successfully!",
   "toast_submission_success": "Submission {type}d successfully",
   "toast_submission_fail": "Failed to {type} submission",
   "toast_submission_error": "An error occurred while trying to {type} the submission",
