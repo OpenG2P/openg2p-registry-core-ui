@@ -2,7 +2,7 @@
 
 import { X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { IncomingKeyPath } from '@/features/configuration/shared/hooks/useIncomingKeyPaths';
+import { IncomingKeyPath } from '@/features/configuration/shared/hooks/useAllIncomingKeyPaths';
 
 interface ViewKeyPathModalProps {
     isOpen: boolean;
@@ -43,16 +43,16 @@ export default function ViewKeyPathModal({
                         </div>
 
                         <div className="flex items-start">
-                            <div className="w-55 text-[16px] text-gray-400 font-medium shrink-0">{t('data_model_id')}</div>
+                            <div className="w-55 text-[16px] text-gray-400 font-medium shrink-0">{t('data_model')}</div>
                             <div className="flex-1 text-[16px] text-black font-bold">
-                                {data.data_model_id}
+                                {data.data_model_mnemonic || '-'}
                             </div>
                         </div>
 
                         <div className="flex items-start">
-                            <div className="w-55 text-[16px] text-gray-400 font-medium shrink-0">{t('data_model_mnemonic')}</div>
+                            <div className="w-55 text-[16px] text-gray-400 font-medium shrink-0">{t('data_model_id')}</div>
                             <div className="flex-1 text-[16px] text-black font-bold">
-                                {data.data_model_mnemonic || '-'}
+                                {data.data_model_id}
                             </div>
                         </div>
 

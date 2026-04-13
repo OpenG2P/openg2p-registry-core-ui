@@ -3,11 +3,11 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { TopBar } from '@/components/shared';
-import { useIncomingKeyPaths } from '@/features/configuration/shared';
+import { useAllIncomingKeyPaths, useIncomingKeyPath } from '@/features/configuration/shared';
 import { usePagination, useFetch } from '@/shared/hooks';
 import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
 import { useTranslations } from 'next-intl';
-import { IncomingKeyPath } from '@/features/configuration/shared/hooks/useIncomingKeyPaths';
+import { IncomingKeyPath } from '@/features/configuration/shared/hooks/useAllIncomingKeyPaths';
 import AddKeyPathModal from '@/features/configuration/ingest/AddKeyPathModal';
 import ViewKeyPathModal from '@/features/configuration/ingest/ViewKeyPathModal';
 import EditKeyPathModal from '@/features/configuration/ingest/EditKeyPathModal';
@@ -18,14 +18,12 @@ const KeyPathsPage = () => {
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [isViewModalOpen, setIsViewModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-    const [viewData, setViewData] = useState<IncomingKeyPath | undefined>(undefined);
-    const [editData, setEditData] = useState<IncomingKeyPath | undefined>(undefined);
     const [currentPage, setCurrentPage] = useState(1);
 
     const { config } = useRuntimeConfig();
     const { execute: deleteKeyPath } = useFetch();
-
-    const { keyPaths, pagination, loading, refresh } = useIncomingKeyPaths(currentPage, config.pageSize);
+    const { selectedKeyPath, fetchKeyPath } = useIncomingKeyPath();
+    const { keyPaths, pagination, loading, refresh } = useAllIncomingKeyPaths(currentPage, config.pageSize);
 
     const { pageStart, pageEnd, total } = usePagination({
         totalItems: pagination?.number_of_items || 0,
@@ -42,14 +40,18 @@ const KeyPathsPage = () => {
         setCurrentPage((prev) => prev + 1);
     };
 
-    const handleView = (keyPath: IncomingKeyPath) => {
-        setViewData(keyPath);
-        setIsViewModalOpen(true);
+    const handleView = async (keyPath: IncomingKeyPath) => {
+        const result = await fetchKeyPath(keyPath.key_path_id);
+        if (result) {
+            setIsViewModalOpen(true);
+        }
     };
 
-    const handleEdit = (keyPath: IncomingKeyPath) => {
-        setEditData(keyPath);
-        setIsEditModalOpen(true);
+    const handleUpdate = async (keyPath: IncomingKeyPath) => {
+        const result = await fetchKeyPath(keyPath.key_path_id);
+        if (result) {
+            setIsEditModalOpen(true);
+        }
     };
 
     const proceedDelete = async (id: string) => {
@@ -59,7 +61,7 @@ const KeyPathsPage = () => {
                 body: JSON.stringify({ key_path_id: id })
             });
 
-            if (result) {
+            if (result?.key_path_id) {
                 toast.success(t('toast_key_path_removed'));
                 refresh();
             } else {
@@ -131,15 +133,12 @@ const KeyPathsPage = () => {
                 ) : (
                     <div>
                         {/* Header */}
-                        <div className="grid grid-cols-5 gap-4 pb-2 px-8">
+                        <div className="grid grid-cols-4 gap-4 pb-2 px-8">
                             <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
                                 {t('key_path_id')}
                             </div>
                             <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
-                                {t('data_model_id')}
-                            </div>
-                            <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
-                                {t('data_model_mnemonic')}
+                                {t('data_model')}
                             </div>
                             <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
                                 {t('is_list')}
@@ -156,24 +155,21 @@ const KeyPathsPage = () => {
                             </div>
                         ) : (
                             keyPaths.map((keyPath: IncomingKeyPath, index: number) => (
-                                <div
-                                    key={keyPath.key_path_id}
-                                    className={`grid grid-cols-5 gap-4 items-center px-8 h-15 transition-colors ${index % 2 === 0 ? 'bg-[#D9D9D940]' : 'bg-white'
-                                        }`}
-                                >
-                                    <div className="text-base font-medium truncate">
-                                        {keyPath.key_path_id}
-                                    </div>
-                                    <div className="text-base font-medium truncate">
-                                        {keyPath.data_model_id}
-                                    </div>
-                                    <div className="text-base font-medium truncate">
-                                        {keyPath.data_model_mnemonic}
-                                    </div>
-                                    <div className="text-base font-medium">
-                                        {keyPath.is_list ? t('true') : t('false')}
-                                    </div>
-                                    <div className="flex items-center gap-6">
+                                <div key={keyPath.key_path_id} className="block -mx-8">
+                                    <div
+                                        className={`grid grid-cols-4 gap-4 items-center px-16 h-15 transition-colors ${index % 2 === 0 ? 'bg-[#D9D9D940]' : 'bg-white'
+                                            }`}
+                                    >
+                                        <div className="text-base font-medium truncate">
+                                            {keyPath.key_path_id}
+                                        </div>
+                                        <div className="text-base font-medium truncate">
+                                            {keyPath.data_model_mnemonic || keyPath.data_model_id}
+                                        </div>
+                                        <div className="text-base font-medium">
+                                            {keyPath.is_list ? t('true') : t('false')}
+                                        </div>
+                                        <div className="flex items-center gap-6">
                                         <button
                                             onClick={() => handleView(keyPath)}
                                             className="flex items-center text-[#1cc9b7] cursor-pointer hover:opacity-80 transition-opacity"
@@ -189,14 +185,14 @@ const KeyPathsPage = () => {
                                             />
                                         </button>
                                         <button
-                                            onClick={() => handleEdit(keyPath)}
+                                            onClick={() => handleUpdate(keyPath)}
                                             className="flex items-center text-[#1cc9b7] cursor-pointer hover:opacity-80 transition-opacity"
-                                            title={t('edit')}
+                                            title={t('update')}
                                         >
-                                            <span className="text-sm font-medium">{t('edit')}</span>
+                                            <span className="text-sm font-medium">{t('update')}</span>
                                             <Image
                                                 src="/images/common/edit.png"
-                                                alt={t('edit')}
+                                                alt={t('update')}
                                                 width={18}
                                                 height={18}
                                                 className="ml-2"
@@ -218,11 +214,12 @@ const KeyPathsPage = () => {
                                         </button>
                                     </div>
                                 </div>
-                            ))
-                        )}
-                    </div>
-                )}
-            </div>
+                            </div>
+                        ))
+                    )}
+                </div>
+            )}
+        </div>
 
             <AddKeyPathModal
                 isOpen={isAddModalOpen}
@@ -233,13 +230,13 @@ const KeyPathsPage = () => {
             <ViewKeyPathModal
                 isOpen={isViewModalOpen}
                 onClose={() => setIsViewModalOpen(false)}
-                data={viewData}
+                data={selectedKeyPath}
             />
 
             <EditKeyPathModal
                 isOpen={isEditModalOpen}
                 onClose={() => setIsEditModalOpen(false)}
-                initialData={editData}
+                initialData={selectedKeyPath}
                 onSuccess={refresh}
             />
         </>

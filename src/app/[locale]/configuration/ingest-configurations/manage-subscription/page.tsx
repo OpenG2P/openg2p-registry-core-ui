@@ -3,11 +3,11 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { TopBar } from '@/components/shared';
-import { useSubscriptionActivityLogs } from '@/features/configuration/shared';
+import { useAllSubscriptionActivityLogs, useSubscriptionActivityLog } from '@/features/configuration/shared';
 import { usePagination } from '@/shared/hooks';
 import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
 import { useTranslations } from 'next-intl';
-import { SubscriptionActivityLog } from '@/features/configuration/shared/hooks/useSubscriptionActivityLogs';
+import { SubscriptionActivityLog } from '@/features/configuration/shared/hooks/useAllSubscriptionActivityLogs';
 import AddSubscriptionActivityLogModal from '@/features/configuration/ingest/AddSubscriptionActivityLogModal';
 import ViewSubscriptionActivityLogModal from '@/features/configuration/ingest/ViewSubscriptionActivityLogModal';
 
@@ -15,16 +15,16 @@ const ManageSubscriptionPage = () => {
     const t = useTranslations();
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [isViewModalOpen, setIsViewModalOpen] = useState(false);
-    const [viewData, setViewData] = useState<SubscriptionActivityLog | undefined>(undefined);
     const [currentPage, setCurrentPage] = useState(1);
-
     const { config } = useRuntimeConfig();
-    const { activityLogs, pagination, loading, refresh } = useSubscriptionActivityLogs(currentPage, config.pageSize);
+
+    const { activityLogs, pagination, loading, refresh } = useAllSubscriptionActivityLogs(currentPage, config.pageSize);
+    const { selectedActivityLog, fetchActivityLog } = useSubscriptionActivityLog();
 
     const { pageStart, pageEnd, total } = usePagination({
         totalItems: pagination?.number_of_items || 0,
         currentPage: currentPage,
-        pageSize: config.pageSize || 10,
+        pageSize: config?.pageSize || 10,
         currentCount: activityLogs.length,
     });
 
@@ -36,9 +36,11 @@ const ManageSubscriptionPage = () => {
         setCurrentPage((prev) => prev + 1);
     };
 
-    const handleView = (log: SubscriptionActivityLog) => {
-        setViewData(log);
-        setIsViewModalOpen(true);
+    const handleView = async (log: SubscriptionActivityLog) => {
+        const result = await fetchActivityLog(log.subscription_activity_log_id);
+        if (result) {
+            setIsViewModalOpen(true);
+        }
     };
 
     return (
@@ -90,38 +92,39 @@ const ManageSubscriptionPage = () => {
                             </div>
                         ) : (
                             activityLogs.map((log: SubscriptionActivityLog, index: number) => (
-                                <div
-                                    key={log.subscription_activity_log_id}
-                                    className={`grid grid-cols-5 gap-4 items-center px-8 h-15 transition-colors ${index % 2 === 0 ? 'bg-[#D9D9D940]' : 'bg-white'
-                                        }`}
-                                >
-                                    <div className="text-base font-medium truncate">
-                                        {log.subscription_activity_log_id}
-                                    </div>
-                                    <div className="text-base font-medium truncate">
-                                        {log.partner_id}
-                                    </div>
-                                    <div className="text-base font-medium">
-                                        {log.is_unsubscribe ? t('true') : t('false')}
-                                    </div>
-                                    <div className="text-base font-medium truncate">
-                                        {new Date(log.date_time).toLocaleString()}
-                                    </div>
-                                    <div className="flex items-center gap-6">
-                                        <button
-                                            onClick={() => handleView(log)}
-                                            className="flex items-center text-[#1cc9b7] cursor-pointer hover:opacity-80 transition-opacity"
-                                            title={t('view')}
-                                        >
-                                            <span className="text-sm font-medium">{t('view')}</span>
-                                            <Image
-                                                src="/images/common/view.png"
-                                                alt={t('view')}
-                                                width={18}
-                                                height={18}
-                                                className="ml-2"
-                                            />
-                                        </button>
+                                <div key={log.subscription_activity_log_id} className="block -mx-8">
+                                    <div
+                                        className={`grid grid-cols-5 gap-4 items-center px-16 h-15 transition-colors ${index % 2 === 0 ? 'bg-[#D9D9D940]' : 'bg-white'
+                                            }`}
+                                    >
+                                        <div className="text-base font-medium truncate">
+                                            {log.subscription_activity_log_id}
+                                        </div>
+                                        <div className="text-base font-medium truncate">
+                                            {log.partner_id}
+                                        </div>
+                                        <div className="text-base font-medium">
+                                            {log.is_unsubscribe ? t('true') : t('false')}
+                                        </div>
+                                        <div className="text-base font-medium truncate">
+                                            {new Date(log.date_time).toLocaleString()}
+                                        </div>
+                                        <div className="flex items-center gap-6">
+                                            <button
+                                                onClick={() => handleView(log)}
+                                                className="flex items-center text-[#1cc9b7] cursor-pointer hover:opacity-80 transition-opacity"
+                                                title={t('view')}
+                                            >
+                                                <span className="text-sm font-medium">{t('view')}</span>
+                                                <Image
+                                                    src="/images/common/view.png"
+                                                    alt={t('view')}
+                                                    width={18}
+                                                    height={18}
+                                                    className="ml-2"
+                                                />
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             ))
@@ -139,7 +142,7 @@ const ManageSubscriptionPage = () => {
             <ViewSubscriptionActivityLogModal
                 isOpen={isViewModalOpen}
                 onClose={() => setIsViewModalOpen(false)}
-                data={viewData}
+                data={selectedActivityLog}
             />
         </>
     );

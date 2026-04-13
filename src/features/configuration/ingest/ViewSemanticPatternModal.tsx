@@ -2,7 +2,7 @@
 
 import { X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { IncomingSemanticPattern } from '@/features/configuration/shared/hooks/useSemanticPatterns';
+import { IncomingSemanticPattern } from '@/features/configuration/shared/hooks/useAllSemanticPatterns';
 
 interface ViewSemanticPatternModalProps {
     isOpen: boolean;
@@ -31,10 +31,23 @@ export default function ViewSemanticPatternModal({
                     </button>
 
                     <h2 className="text-2xl font-bold text-orange-500 mb-6">
-                        {t('semantic_pattern_id')}: {data.semantic_pattern_id}
+                        {t('semantic_pattern_details')}
                     </h2>
 
                     <div className="space-y-6">
+                        <div className="flex items-start">
+                            <div className="w-55 text-[16px] text-gray-400 font-medium shrink-0">{t('semantic_pattern_id')}</div>
+                            <div className="flex-1 text-[16px] text-black font-bold">
+                                {data.semantic_pattern_id}
+                            </div>
+                        </div>
+                        <div className="flex items-start">
+                            <div className="w-55 text-[16px] text-gray-400 font-medium shrink-0">{t('data_model')}</div>
+                            <div className="flex-1 text-[16px] text-black font-bold">
+                                {data.data_model_mnemonic || '-'}
+                            </div>
+                        </div>
+
                         <div className="flex items-start">
                             <div className="w-55 text-[16px] text-gray-400 font-medium shrink-0">{t('data_model_id')}</div>
                             <div className="flex-1 text-[16px] text-black font-bold">
@@ -43,9 +56,23 @@ export default function ViewSemanticPatternModal({
                         </div>
 
                         <div className="flex items-start">
+                            <div className="w-55 text-[16px] text-gray-400 font-medium shrink-0">{t('register')}</div>
+                            <div className="flex-1 text-[16px] text-black font-bold">
+                                {data.register_mnemonic || '-'}
+                            </div>
+                        </div>
+
+                        <div className="flex items-start">
                             <div className="w-55 text-[16px] text-gray-400 font-medium shrink-0">{t('register_id')}</div>
                             <div className="flex-1 text-[16px] text-black font-bold">
                                 {data.register_id}
+                            </div>
+                        </div>
+
+                        <div className="flex items-start">
+                            <div className="w-55 text-[16px] text-gray-400 font-medium shrink-0">{t('section')}</div>
+                            <div className="flex-1 text-[16px] text-black font-bold">
+                                {data.section_mnemonic || '-'}
                             </div>
                         </div>
 

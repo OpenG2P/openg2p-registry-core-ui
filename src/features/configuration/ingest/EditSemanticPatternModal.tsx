@@ -5,17 +5,24 @@ import { X, ChevronDown } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useFetch } from '@/shared/hooks';
 import { toast } from 'react-toastify';
+import { IncomingSemanticPattern } from '@/features/configuration/shared/hooks/useAllSemanticPatterns';
 import { useAllRegister, useConfigTabs, useConfigSections } from '@/features/configuration/shared';
 
-interface AddSemanticPatternModalProps {
+interface EditSemanticPatternModalProps {
     isOpen: boolean;
     onClose: () => void;
     onSuccess?: () => void;
+    initialData?: IncomingSemanticPattern;
 }
 
-export default function AddSemanticPatternModal({ isOpen, onClose, onSuccess }: AddSemanticPatternModalProps) {
+export default function EditSemanticPatternModal({
+    isOpen,
+    onClose,
+    onSuccess,
+    initialData
+}: EditSemanticPatternModalProps) {
     const t = useTranslations();
-    const { execute: createPattern } = useFetch();
+    const { execute: updatePattern } = useFetch();
     const { registers } = useAllRegister(1, 100);
 
     const [formData, setFormData] = useState({
@@ -35,30 +42,31 @@ export default function AddSemanticPatternModal({ isOpen, onClose, onSuccess }: 
     const { tabs, loading: loadingTabs } = useConfigTabs(formData.register_id, 1, 100);
     const { sections, loading: loadingSections } = useConfigSections(formData.register_id, selectedTabId, 1, 100);
 
-    // Reset Tab/Section when Register changes
     useEffect(() => {
-        setSelectedTabId('');
-        setFormData(prev => ({ ...prev, section_id: '' }));
-    }, [formData.register_id]);
-
-    // Reset Section when Tab changes
-    useEffect(() => {
-        setFormData(prev => ({ ...prev, section_id: '' }));
-    }, [selectedTabId]);
+        if (initialData && isOpen) {
+            setFormData({
+                semantic_pattern_id: initialData.semantic_pattern_id || '',
+                data_model_id: initialData.data_model_id || '',
+                register_id: initialData.register_id || '',
+                section_id: initialData.section_id || '',
+                pattern_for_register: initialData.pattern_for_register || '',
+                pattern_for_section: initialData.pattern_for_section || '',
+                key_path_for_business_payload: initialData.key_path_for_business_payload || '',
+                raw_payload_enricher_class: initialData.raw_payload_enricher_class || '',
+            });
+            // Reset selection to force the user to select tab -> section or implement lookup
+            setSelectedTabId('');
+        }
+    }, [initialData, isOpen]);
 
     const handleSubmit = async () => {
-        if (!formData.data_model_id || !formData.register_id) {
-            toast.warn(t('data_model_id') + ' and ' + t('register_id') + ' are required');
-            return;
-        }
+        if (!initialData?.semantic_pattern_id) return;
 
-        const result = await createPattern('/api/configuration/ingest/create-semantic-pattern', {
+        const result = await updatePattern('/api/configuration/ingest/update-semantic-pattern', {
             method: 'POST',
             body: JSON.stringify({
-                semantic_pattern_id: formData.semantic_pattern_id || null,
-                data_model_id: formData.data_model_id,
-                register_id: formData.register_id,
-                section_id: formData.section_id || null,
+                semantic_pattern_id: initialData.semantic_pattern_id,
+                section_id: formData.section_id || null, // Allow updating section via dropdown
                 pattern_for_register: formData.pattern_for_register || null,
                 pattern_for_section: formData.pattern_for_section || null,
                 key_path_for_business_payload: formData.key_path_for_business_payload || null,
@@ -67,31 +75,15 @@ export default function AddSemanticPatternModal({ isOpen, onClose, onSuccess }: 
         });
 
         if (result?.semantic_pattern_id) {
-            toast.success(t('toast_semantic_pattern_created'));
-            resetForm();
+            toast.success(t('toast_semantic_pattern_updated'));
             if (onSuccess) onSuccess();
             onClose();
         } else {
-            toast.error(t('toast_semantic_pattern_create_failed'));
+            toast.error(t('toast_semantic_pattern_update_failed'));
         }
     };
 
-    const resetForm = () => {
-        setFormData({
-            semantic_pattern_id: '',
-            data_model_id: '',
-            register_id: '',
-            section_id: '',
-            pattern_for_register: '',
-            pattern_for_section: '',
-            key_path_for_business_payload: '',
-            raw_payload_enricher_class: '',
-        });
-        setSelectedTabId('');
-    };
-
     const handleCancel = () => {
-        resetForm();
         onClose();
     };
 
@@ -109,20 +101,30 @@ export default function AddSemanticPatternModal({ isOpen, onClose, onSuccess }: 
                         <X size={40} strokeWidth={2} />
                     </button>
 
-                    <h2 className="text-2xl font-bold text-orange-500 mb-4">{t('add_new_semantic_pattern')}</h2>
+                    <h2 className="text-2xl font-bold text-orange-500 mb-4">{t('edit_semantic_pattern')}</h2>
 
                     <div className="space-y-4">
-                        <div className="grid grid-cols-1 gap-4">
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-sm font-semibold text-black mb-2">
+                                    {t('semantic_pattern_id')}
+                                </label>
+                                <input
+                                    type="text"
+                                    value={formData.semantic_pattern_id}
+                                    disabled
+                                    className="w-full px-4 py-2 border border-gray-200 rounded-lg bg-gray-50 outline-none text-gray-400 cursor-not-allowed"
+                                />
+                            </div>
                             <div>
                                 <label className="block text-sm font-semibold text-black mb-2">
                                     {t('data_model_id')}
                                 </label>
                                 <input
                                     type="text"
-                                    placeholder={t('data_model_id')}
                                     value={formData.data_model_id}
-                                    onChange={(e) => setFormData({ ...formData, data_model_id: e.target.value })}
-                                    className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all text-gray-600 placeholder:text-gray-400"
+                                    disabled
+                                    className="w-full px-4 py-2 border border-gray-200 rounded-lg bg-gray-50 outline-none text-gray-400 cursor-not-allowed"
                                 />
                             </div>
                         </div>
@@ -132,19 +134,12 @@ export default function AddSemanticPatternModal({ isOpen, onClose, onSuccess }: 
                                 <label className="block text-sm font-semibold text-black mb-2">
                                     {t('register')}
                                 </label>
-                                <div className="relative">
-                                    <select
-                                        value={formData.register_id}
-                                        onChange={(e) => setFormData({ ...formData, register_id: e.target.value })}
-                                        className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all bg-white appearance-none cursor-pointer text-gray-600 pr-10"
-                                    >
-                                        <option value="">{t('select_register')}</option>
-                                        {registers.map((r) => (
-                                            <option key={r.register_id} value={r.register_id}>{r.register_mnemonic}</option>
-                                        ))}
-                                    </select>
-                                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
-                                </div>
+                                <input
+                                    type="text"
+                                    value={initialData?.register_mnemonic || registers.find(r => r.register_id === formData.register_id)?.register_mnemonic || formData.register_id}
+                                    disabled
+                                    className="w-full px-4 py-2 border border-gray-200 rounded-lg bg-gray-50 outline-none text-gray-400 cursor-not-allowed"
+                                />
                             </div>
 
                             <div>
@@ -155,7 +150,7 @@ export default function AddSemanticPatternModal({ isOpen, onClose, onSuccess }: 
                                     <select
                                         value={selectedTabId}
                                         onChange={(e) => setSelectedTabId(e.target.value)}
-                                        disabled={!formData.register_id || loadingTabs}
+                                        disabled={loadingTabs}
                                         className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all bg-white appearance-none cursor-pointer text-gray-600 pr-10 disabled:bg-gray-100 disabled:cursor-not-allowed"
                                     >
                                         <option value="">{t('select_tab')}</option>
@@ -253,7 +248,7 @@ export default function AddSemanticPatternModal({ isOpen, onClose, onSuccess }: 
                                 onClick={handleSubmit}
                                 className="px-12 py-2.5 bg-black text-white rounded-[10px] hover:bg-gray-800 transition-colors"
                             >
-                                {t('save')}
+                                {t('update')}
                             </button>
                         </div>
                     </div>

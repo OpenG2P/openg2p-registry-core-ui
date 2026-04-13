@@ -4,7 +4,7 @@ import { proxyToBackend } from "@/app/api/_lib/backend-proxy";
 export async function POST(request: NextRequest) {
     return proxyToBackend({
         req: request,
-        targetEndpoint: "/ingestion-config/create_new_incoming_key_path",
+        targetEndpoint: "/ingestion-config/create_incoming_key_path",
         buildPayload: (body) => ({
             pagination_request: {
                 current_page: body.current_page ?? 1,
@@ -14,9 +14,8 @@ export async function POST(request: NextRequest) {
                 search_text: body.search_text ?? ""
             },
             request_payload: {
-                key_path_id: body.key_path_id,
-                key_path_for_message_id: body.key_path_for_message_id,
                 data_model_id: body.data_model_id,
+                key_path_for_message_id: body.key_path_for_message_id,
                 key_path_for_sender: body.key_path_for_sender,
                 key_path_for_signature: body.key_path_for_signature,
                 key_path_for_signature_payload: body.key_path_for_signature_payload,
@@ -29,7 +28,6 @@ export async function POST(request: NextRequest) {
 
 /*
 "response_payload": {
-  "key_path_id": "string",
   "data_model_id": "string",
   "key_path_for_message_id": "string",
   "key_path_for_sender": "string",

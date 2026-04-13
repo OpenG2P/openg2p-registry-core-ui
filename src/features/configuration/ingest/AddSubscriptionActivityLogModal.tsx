@@ -48,7 +48,7 @@ export default function AddSubscriptionActivityLogModal({ isOpen, onClose, onSuc
                 })
             });
 
-            if (result) {
+            if (result?.subscription_activity_log_id) {
                 toast.success(t('toast_subscription_log_created'));
                 resetForm();
                 if (onSuccess) onSuccess();

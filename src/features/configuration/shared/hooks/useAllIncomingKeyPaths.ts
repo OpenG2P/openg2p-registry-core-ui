@@ -12,7 +12,7 @@ export interface IncomingKeyPath {
     key_path_for_list_elements?: string;
 }
 
-export function useIncomingKeyPaths(page?: number, pageSize?: number) {
+export function useAllIncomingKeyPaths(page?: number, pageSize?: number) {
     const { data, loading, error, execute } = useFetch<{
         key_paths: IncomingKeyPath[];
         pagination?: {

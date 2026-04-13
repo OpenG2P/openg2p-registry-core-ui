@@ -2,7 +2,7 @@
 
 import { X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { SubscriptionActivityLog } from '@/features/configuration/shared/hooks/useSubscriptionActivityLogs';
+import { SubscriptionActivityLog } from '@/features/configuration/shared/hooks/useAllSubscriptionActivityLogs';
 
 interface ViewSubscriptionActivityLogModalProps {
     isOpen: boolean;

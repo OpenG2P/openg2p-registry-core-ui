@@ -5,7 +5,7 @@ import { X, ChevronDown } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useFetch } from '@/shared/hooks';
 import { toast } from 'react-toastify';
-import { IncomingKeyPath } from '@/features/configuration/shared/hooks/useIncomingKeyPaths';
+import { IncomingKeyPath } from '@/features/configuration/shared/hooks/useAllIncomingKeyPaths';
 
 interface EditKeyPathModalProps {
     isOpen: boolean;

@@ -13,7 +13,7 @@ export interface SubscriptionActivityLog {
     date_time: string;
 }
 
-export function useSubscriptionActivityLogs(page?: number, pageSize?: number) {
+export function useAllSubscriptionActivityLogs(page?: number, pageSize?: number) {
     const { data, loading, error, execute } = useFetch<{
         activity_logs: SubscriptionActivityLog[];
         pagination?: {

@@ -24,18 +24,15 @@ export async function POST(request: NextRequest) {
                 raw_payload_enricher_class: body.raw_payload_enricher_class,
             }
         }),
+        transformResponse: (responseBody) => ({
+            ...responseBody?.response_payload,
+            semantic_pattern_id: responseBody?.response_payload?.semantic_pattern_id,
+            data_model_id: responseBody?.response_payload?.data_model_id,
+            data_model_mnemonic: responseBody?.response_payload?.data_model_mnemonic,
+            register_id: responseBody?.response_payload?.register_id,
+            register_mnemonic: responseBody?.response_payload?.register_mnemonic,
+            section_id: responseBody?.response_payload?.section_id,
+            section_mnemonic: responseBody?.response_payload?.section_mnemonic,
+        }),
     });
 }
-
-/*
-"response_payload": {
-  "semantic_pattern_id": "string",
-  "data_model_id": "string",
-  "register_id": "string",
-  "section_id": "string",
-  "pattern_for_register": "string",
-  "pattern_for_section": "string",
-  "key_path_for_business_payload": "string",
-  "raw_payload_enricher_class": "string"
-}
-*/

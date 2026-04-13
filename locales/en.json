@@ -726,15 +726,20 @@
   "callback_url": "Callback URL",
   "toast_key_path_created": "Key Path created successfully",
   "toast_key_path_updated": "Key Path updated successfully",
+  "toast_key_path_removed": "Key Path removed successfully",
   "toast_key_path_remove_failed": "Failed to remove Key Path",
   "toast_key_path_update_failed": "Failed to update Key Path",
   "edit_key_path": "Edit Key Path",
   "toast_semantic_pattern_created": "Semantic Pattern created successfully",
   "toast_semantic_pattern_updated": "Semantic Pattern updated successfully",
-  "toast_semantic_pattern_removed": "Semantic Pattern removed successfully",
-  "toast_semantic_pattern_create_failed": "Failed to create Semantic Pattern",
   "toast_semantic_pattern_update_failed": "Failed to update Semantic Pattern",
+  "toast_semantic_pattern_removed": "Semantic Pattern removed successfully",
+  "toast_semantic_pattern_remove_failed": "Failed to remove Semantic Pattern",
   "toast_subscription_log_created": "Subscription Log created successfully",
   "toast_subscription_log_create_failed": "Failed to create Subscription Log",
-  "semantic_patterns": "Semantic Patterns"
+  "semantic_patterns": "Semantic Patterns",
+  "select_tab": "Select Tab",
+  "tab": "Tab",
+  "semantic_pattern_details": "Semantic Pattern Details",
+  "section": "Section"
 }
