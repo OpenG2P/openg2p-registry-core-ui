@@ -10,43 +10,43 @@ import { useTranslations } from 'next-intl';
 import { Pencil } from 'lucide-react';
 import Can from '@/components/shared/Can';
 import { toast } from 'react-toastify';
-import { CONFIGURATION_OUTGESTION_TOPICS_ACTIONS } from '@/features/configuration/shared/utils/configurationOutgestionTopics.actions';
-import { useAllOutgestTopics } from '@/features/configuration/shared/hooks/useAllOutgestTopics ';
-import AddOutgestionTopicModal from '@/features/configuration/outgest/AddOutgestionTopicModal';
-import EditOutgestionTopicModal from '@/features/configuration/outgest/EditOutgestionTopicModal';
+import { useAllOutgestTemplates } from '@/features/configuration/shared/hooks/useAllOutgestTemplates';
+import { CONFIGURATION_OUTGESTION_TEMPLATES_ACTIONS } from '@/features/configuration/shared/utils/configurationOutgestionTemplates.actions';
+import EditOutgestionTemplateModal from '@/features/configuration/outgest/EditOutgestionTemplateModal';
+import AddOutgestionTemplateModal from '@/features/configuration/outgest/AddOutgestionTemplateModal';
 import ConfirmRemovePopup from '@/features/configuration/shared/components/ConfirmRemovePopup';
-import ViewOutgestionTopicModal from '@/features/configuration/outgest/ViewOutgestionTopicModal';
+import ViewOutgestionTemplateModal from '@/features/configuration/outgest/ViewOutgestionTemplateModal';
 
-type OutgestTopic = {
-    topic_id: string;
+type OutgestTemplate = {
+    template_id: string;
     register_id: string;
     data_model_id: string;
-    websub_topic: string;
-    description: string;
+    template_file_id: string;
 }
 
 
-const OutgestTopicsPage = () => {
+const OutgestTemplatesPage = () => {
     const t = useTranslations();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [currentPage, setCurrentPage] = useState(1);
     const [isViewOpen, setIsViewOpen] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+
     const [isEditOpen, setIsEditOpen] = useState(false);
 
-    const [selectedItem, setSelectedItem] = useState<OutgestTopic | null>(null);
+    const [selectedItem, setSelectedItem] = useState<OutgestTemplate | null>(null);
     const [showPopup, setShowPopup] = useState(false);
 
-    const { execute: deleteOutgestionTopic } = useFetch();
+    const { execute: deleteOutgestionTemplate } = useFetch();
 
     const proceedDelete = async (id: string) => {
         try {
-            const result = await deleteOutgestionTopic('/api/configuration/outgest/delete-topic', {
+            const result = await deleteOutgestionTemplate('/api/configuration/outgestion-template/delete', {
                 method: 'POST',
-                body: JSON.stringify({ topic_id: id })
+                body: JSON.stringify({ template_id: id })
             });
 
             if (result) {
-                toast.success(t("topic_deleted_success"));
+                toast.success(t("template_deleted_success"));
                 refresh();
             } else {
                 console.error('Delete failed');
@@ -58,7 +58,7 @@ const OutgestTopicsPage = () => {
 
     const handleDelete = (
         e: React.MouseEvent<HTMLButtonElement>,
-        item: OutgestTopic
+        item: OutgestTemplate
     ) => {
         e.preventDefault();
         e.stopPropagation();
@@ -70,9 +70,9 @@ const OutgestTopicsPage = () => {
     const confirmDelete = async () => {
         if (!selectedItem) return;
 
-        const { topic_id } = selectedItem;
+        const { template_id } = selectedItem;
 
-        await proceedDelete(topic_id);
+        await proceedDelete(template_id);
 
         setShowPopup(false);
         setSelectedItem(null);
@@ -81,16 +81,16 @@ const OutgestTopicsPage = () => {
     const { config } = useRuntimeConfig();
 
     const { can } = useRbac();
-    const canCreate = can(CONFIGURATION_OUTGESTION_TOPICS_ACTIONS.create)
+    const canCreate = can(CONFIGURATION_OUTGESTION_TEMPLATES_ACTIONS.create)
 
-    const { topics, pagination, loading, refresh } = useAllOutgestTopics(currentPage, config.pageSize);
+    const { templates, pagination, loading, refresh } = useAllOutgestTemplates(currentPage, config.pageSize);
 
 
     const { pageStart, pageEnd, total } = usePagination({
         totalItems: pagination?.number_of_items || 0,
         currentPage: currentPage,
         pageSize: config.pageSize || 10,
-        currentCount: topics.length,
+        currentCount: templates.length,
     });
 
 
@@ -105,11 +105,11 @@ const OutgestTopicsPage = () => {
     return (
         <>
             <TopBar
-                breadcrumb={[{ label: t('outgest_configurations') }, { label: t('outgest_topics') }]}
+                breadcrumb={[{ label: t('outgest_configurations') }, { label: t('outgest_templates') }]}
                 showFilters={false}
                 showPagination
                 showAddNewButton={canCreate}
-                addNewButtonText={t('add_new_outgestion_topic')}
+                addNewButtonText={t('add_new_outgestion_template')}
                 onAddNewButton={() => setIsModalOpen(true)}
                 pageStart={pageStart}
                 pageEnd={pageEnd}
@@ -122,7 +122,7 @@ const OutgestTopicsPage = () => {
                 <div>
                     <div className="grid grid-cols-5 gap-4 pb-2 px-8 border-b border-gray-100">
                         <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
-                            {t('topic_id')}
+                            {t('template_id')}
                         </div>
                         <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
                             {t('register_mnemonic')}
@@ -131,7 +131,7 @@ const OutgestTopicsPage = () => {
                             {t('data_model_mnemonic')}
                         </div>
                         <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
-                            {t('websub_topic')}
+                            {t('template_file_id')}
                         </div>
                         <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
                             {t('actions')}
@@ -148,13 +148,13 @@ const OutgestTopicsPage = () => {
                             </div>
                         </div>
                     ) : (
-                        topics.map((item, index) => (
+                        templates.map((item, index) => (
                             <div
-                                key={item.topic_id}
+                                key={item.template_id}
                                 className={`grid grid-cols-5 gap-4 items-center -mx-8 px-16 h-15 transition-colors ${index % 2 === 0 ? 'bg-[#D9D9D940]' : 'bg-white'} cursor-pointer`}
                             >
                                 <div className="text-base font-medium truncate">
-                                    {item.topic_id}
+                                    {item.template_id}
                                 </div>
 
                                 <div className="text-base font-medium truncate">
@@ -166,7 +166,7 @@ const OutgestTopicsPage = () => {
                                 </div>
 
                                 <div className="text-base font-medium truncate">
-                                    {item.websub_topic}
+                                    {item.template_file_id}
                                 </div>
 
 
@@ -190,7 +190,7 @@ const OutgestTopicsPage = () => {
                                             className="ml-2"
                                         />
                                     </button>
-                                    <Can action={CONFIGURATION_OUTGESTION_TOPICS_ACTIONS.edit}>
+                                    <Can action={CONFIGURATION_OUTGESTION_TEMPLATES_ACTIONS.edit}>
                                         <button
                                             onClick={(e) => {
                                                 e.preventDefault();
@@ -205,7 +205,7 @@ const OutgestTopicsPage = () => {
                                             <Pencil size={16} className='opacity-60' />
                                         </button>
                                     </Can>
-                                    <Can action={CONFIGURATION_OUTGESTION_TOPICS_ACTIONS.delete}>
+                                    <Can action={CONFIGURATION_OUTGESTION_TEMPLATES_ACTIONS.delete}>
                                         <button
                                             onClick={(e) => handleDelete(e, item)}
                                             className="flex items-center cursor-pointer hover:opacity-80 transition-opacity"
@@ -237,11 +237,11 @@ const OutgestTopicsPage = () => {
                         setSelectedItem(null);
                     }}
                     onConfirm={confirmDelete}
-                    messageKey='confirm_remove_outgestion_topic'
+                    messageKey='confirm_remove_outgestion_template'
                 />
             )}
 
-            <ViewOutgestionTopicModal
+            <ViewOutgestionTemplateModal
                 isOpen={isViewOpen}
                 data={selectedItem}
                 onClose={() => {
@@ -250,14 +250,14 @@ const OutgestTopicsPage = () => {
                 }}
             />
 
-            <AddOutgestionTopicModal
+            <AddOutgestionTemplateModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 onSuccess={() => {
                     refresh();
                 }}
             />
-            <EditOutgestionTopicModal
+            <EditOutgestionTemplateModal
                 isOpen={isEditOpen}
                 data={selectedItem}
                 onClose={() => {
@@ -272,4 +272,4 @@ const OutgestTopicsPage = () => {
     );
 };
 
-export default OutgestTopicsPage;
+export default OutgestTemplatesPage;

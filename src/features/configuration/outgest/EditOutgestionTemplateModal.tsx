@@ -26,30 +26,11 @@ export default function EditOutgestionTemplateModal({
 }: EditOutgestionTemplateModalProps) {
     const t = useTranslations();
     const { execute: updateOutgestionTemplate } = useFetch();
-    const { config } = useRuntimeConfig();
-    const currentPage = 1;
-
-    const { registers, loading: registersLoading } = useAllRegister(currentPage, config.pageSize);
-    const { dataModels, loading: dataModelsLoading } = useAllDataModels(currentPage, config.pageSize);
-
-    const registerOptions =
-        registers?.map((item: any) => ({
-            label: t(item.register_subject),
-            value: item.register_id,
-        })) || [];
-
-    const dataModelOptions =
-        dataModels?.map((item: any) => ({
-            label: item.data_model_mnemonic,
-            value: item.data_model_id,
-        })) || [];
 
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const [formData, setFormData] = useState({
         template_id: '',
-        register_id: '',
-        data_model_id: '',
         template_file_id: '',
     });
 
@@ -57,14 +38,12 @@ export default function EditOutgestionTemplateModal({
         if (data) {
             setFormData({
                 template_id: data.template_id || '',
-                register_id: data.register_id || '',
-                data_model_id: data.data_model_id || '',
                 template_file_id: data.template_file_id || '',
             });
         }
     }, [data]);
 
-    const { uploadFile, uploading, uploadedFileName } = useFileUpload("/api/configuration/outgestion-template/template-upload");
+    const { uploadFile, uploading, uploadedFileName, setUploadedFileName } = useFileUpload("/api/configuration/outgest/upload-template");
 
     const handleFileUpload = async (file: File) => {
         const documentId = await uploadFile(file);
@@ -89,13 +68,8 @@ export default function EditOutgestionTemplateModal({
     };
 
     const handleSubmit = async () => {
-        if (!formData.register_id || !formData.data_model_id) {
-            toast.warn('Register Id & Data Model Id are required');
-            return;
-        }
-
         const result = await updateOutgestionTemplate(
-            '/api/configuration/outgestion-template/update',
+            '/api/configuration/outgest/update-template',
             {
                 method: 'POST',
                 body: JSON.stringify({
@@ -106,7 +80,12 @@ export default function EditOutgestionTemplateModal({
         );
 
         if (result) {
-            toast.success(`Updated "${formData.template_id}"`);
+            toast.success(t('template_updated', { id: formData.template_id }));
+            setFormData({
+                template_id: '',
+                template_file_id: '',
+            });
+            setUploadedFileName('');
             onSuccess?.();
             onClose();
         } else {
@@ -136,34 +115,20 @@ export default function EditOutgestionTemplateModal({
 
                 <div className="space-y-4">
                     <div>
-                        <CustomDropdown
-                            label={t('register_id')}
-                            options={registerOptions}
-                            value={formData.register_id}
-                            loading={registersLoading}
-                            disabled={registersLoading}
-                            onChange={(value) =>
-                                setFormData((prev) => ({
-                                    ...prev,
-                                    register_id: value,
-                                }))
-                            }
-                        />
+                        <label className="text-[16px] font-medium text-black">
+                            {t('register_mnemonic')}
+                        </label>
+                        <div className="mt-2 w-full border border-[#F77F57] p-2 px-4 rounded-[10px]">
+                            {data.register_mnemonic || '-'}
+                        </div>
                     </div>
                     <div>
-                        <CustomDropdown
-                            label={t('data_model_id')}
-                            options={dataModelOptions}
-                            value={formData.data_model_id}
-                            loading={dataModelsLoading}
-                            disabled={dataModelsLoading}
-                            onChange={(value) =>
-                                setFormData((prev) => ({
-                                    ...prev,
-                                    data_model_id: value,
-                                }))
-                            }
-                        />
+                        <label className="text-[16px] font-medium text-black">
+                            {t('data_model_mnemonic')}
+                        </label>
+                        <div className="mt-2 w-full border border-[#F77F57] p-2 px-4 rounded-[10px]">
+                            {data.data_model_mnemonic || '-'}
+                        </div>
                     </div>
                     <div>
                         <label className="text-[16px] font-medium text-black">
@@ -213,7 +178,7 @@ export default function EditOutgestionTemplateModal({
                                     }
                                     className="text-xs text-red-500 hover:underline"
                                 >
-                                    Remove
+                                    {t("remove")}
                                 </button>
                             )}
                         </div>
@@ -224,14 +189,14 @@ export default function EditOutgestionTemplateModal({
                             onClick={handleCancel}
                             className="px-4 py-2 bg-[#DDDDDD] text-[#00000080] rounded-[10px]"
                         >
-                            Cancel
+                            {t("cancel")}
                         </button>
 
                         <button
                             onClick={handleSubmit}
                             className="px-4 py-2 bg-black text-white rounded-[10px]"
                         >
-                            Update
+                            {t("update")}
                         </button>
                     </div>
                 </div>

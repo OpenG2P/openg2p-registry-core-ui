@@ -71,7 +71,7 @@ export default function EditOutgestionTopicModal({
         }
 
         const result = await updateOutgestionTemplate(
-            '/api/configuration/outgestion-topic/update',
+            '/api/configuration/outgest/update-topic',
             {
                 method: 'POST',
                 body: JSON.stringify({
@@ -82,11 +82,11 @@ export default function EditOutgestionTopicModal({
         );
 
         if (result) {
-            toast.success(`Updated "${formData.topic_id}"`);
+            toast.success(t('topic_updated', { id: formData.topic_id }));
             onSuccess?.();
             onClose();
         } else {
-            toast.error('Update failed');
+            toast.error(t('update_failed'));
         }
     };
 

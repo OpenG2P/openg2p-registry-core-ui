@@ -56,15 +56,15 @@ export default function AddOutgestionTopicModal({
         }
 
         const result = await createOutgestionTopic(
-            '/api/configuration/outgestion-topic/create',
+            '/api/configuration/outgest/create-topic',
             {
                 method: 'POST',
                 body: JSON.stringify(formData),
             }
         );
 
-        if (result[0]?.topic_id) {
-            toast.success(`"${result[0]?.topic_id}" created`);
+        if (result.topic_id) {
+            toast.success(t('topic_created', { id: result?.topic_id }));
 
             setFormData({
                 register_id: '',
@@ -76,7 +76,7 @@ export default function AddOutgestionTopicModal({
             onSuccess?.();
             onClose();
         } else {
-            toast.error('Failed to create data model');
+            toast.error('Failed to create Topic');
         }
     };
 

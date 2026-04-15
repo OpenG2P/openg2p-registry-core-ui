@@ -747,5 +747,21 @@
   "confirm_remove_outgestion_topic": "Are you sure you want to remove this outgestion topic?",
   "edit_outgestion_templates": "Edit Outgestion Template",
   "add_new_outgestion_template": "Add New Outgestion Template",
-  "add_new_outgestion_topic": "Add New Outgestion Topic"
+  "add_new_outgestion_topic": "Add New Outgestion Topic",
+  "template_deleted_success": "Template deleted successfully",
+  "topic_deleted_success": "Topic deleted successfully",
+  "delete_failed": "Delete failed",
+  "register_data_model_required": "Register Id & Data Model Id are required",
+  "topic_updated": "Updated \"{id}\"",
+  "template_updated": "Updated \"{id}\"",
+  "update_failed": "Update failed",
+  "topic_created": "\"{id}\" created",
+  "template_created": "\"{id}\" created",
+  "topic_create_failed": "Failed to create topic",
+  "template_create_failed": "Failed to create template",
+  "registryGen2": "Registry Gen 2",
+  "view_outgestion_template": "View Template",
+  "websub_register_error": "WebSub registration error",
+  "view_outgestion_topic": "View outgestion topic",
+  "websub_register_attempts": "WebSub registration attempts"
 }

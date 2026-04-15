@@ -12,9 +12,10 @@ import Can from '@/components/shared/Can';
 import { toast } from 'react-toastify';
 import { useAllOutgestTemplates } from '@/features/configuration/shared/hooks/useAllOutgestTemplates';
 import { CONFIGURATION_OUTGESTION_TEMPLATES_ACTIONS } from '@/features/configuration/shared/utils/configurationOutgestionTemplates.actions';
-import EditOutgestionTemplateModal from '@/features/configuration/outgestion-config/EditOutgestionTemplateModal';
-import AddOutgestionTemplateModal from '@/features/configuration/outgestion-config/AddOutgestionTemplateModal';
+import EditOutgestionTemplateModal from '@/features/configuration/outgest/EditOutgestionTemplateModal';
+import AddOutgestionTemplateModal from '@/features/configuration/outgest/AddOutgestionTemplateModal';
 import ConfirmRemovePopup from '@/features/configuration/shared/components/ConfirmRemovePopup';
+import ViewOutgestionTemplateModal from '@/features/configuration/outgest/ViewOutgestionTemplateModal';
 
 type OutgestTemplate = {
     template_id: string;
@@ -27,6 +28,7 @@ type OutgestTemplate = {
 const OutgestTemplatesPage = () => {
     const t = useTranslations();
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isViewOpen, setIsViewOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
 
     const [isEditOpen, setIsEditOpen] = useState(false);
@@ -38,13 +40,13 @@ const OutgestTemplatesPage = () => {
 
     const proceedDelete = async (id: string) => {
         try {
-            const result = await deleteOutgestionTemplate('/api/configuration/outgestion-template/delete', {
+            const result = await deleteOutgestionTemplate('/api/configuration/outgest/delete-template', {
                 method: 'POST',
                 body: JSON.stringify({ template_id: id })
             });
 
             if (result) {
-                toast.success(`Template deleted successfully`);
+                toast.success(t("template_deleted_success"));
                 refresh();
             } else {
                 console.error('Delete failed');
@@ -103,7 +105,7 @@ const OutgestTemplatesPage = () => {
     return (
         <>
             <TopBar
-                breadcrumb={[{ label: t('outgest_templates') }]}
+                breadcrumb={[{ label: t('outgest_configurations') }, { label: t('outgest_templates') }]}
                 showFilters={false}
                 showPagination
                 showAddNewButton={canCreate}
@@ -123,10 +125,10 @@ const OutgestTemplatesPage = () => {
                             {t('template_id')}
                         </div>
                         <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
-                            {t('register_id')}
+                            {t('register_mnemonic')}
                         </div>
                         <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
-                            {t('data_model_id')}
+                            {t('data_model_mnemonic')}
                         </div>
                         <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
                             {t('template_file_id')}
@@ -156,11 +158,11 @@ const OutgestTemplatesPage = () => {
                                 </div>
 
                                 <div className="text-base font-medium truncate">
-                                    {item.register_id}
+                                    {item.register_mnemonic}
                                 </div>
 
                                 <div className="text-base font-medium truncate">
-                                    {item.data_model_id}
+                                    {item.data_model_mnemonic}
                                 </div>
 
                                 <div className="text-base font-medium truncate">
@@ -169,6 +171,25 @@ const OutgestTemplatesPage = () => {
 
 
                                 <div className="flex items-center gap-6">
+                                    <button
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            setSelectedItem(item);
+                                            setIsViewOpen(true);
+                                        }}
+                                        className="flex items-center text-[#1cc9b7] cursor-pointer hover:opacity-80 transition-opacity"
+                                        title={t('view')}
+                                    >
+                                        <span className="text-sm font-medium">{t('view')}</span>
+                                        <Image
+                                            src="/images/common/view.png"
+                                            alt={t('view')}
+                                            width={18}
+                                            height={18}
+                                            className="ml-2"
+                                        />
+                                    </button>
                                     <Can action={CONFIGURATION_OUTGESTION_TEMPLATES_ACTIONS.edit}>
                                         <button
                                             onClick={(e) => {
@@ -219,6 +240,15 @@ const OutgestTemplatesPage = () => {
                     messageKey='confirm_remove_outgestion_template'
                 />
             )}
+
+            <ViewOutgestionTemplateModal
+                isOpen={isViewOpen}
+                data={selectedItem}
+                onClose={() => {
+                    setIsViewOpen(false);
+                    setSelectedItem(null);
+                }}
+            />
 
             <AddOutgestionTemplateModal
                 isOpen={isModalOpen}
