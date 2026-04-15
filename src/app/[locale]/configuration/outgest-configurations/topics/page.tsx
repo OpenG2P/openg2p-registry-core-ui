@@ -7,44 +7,45 @@ import { useFetch, usePagination } from '@/shared/hooks';
 import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
 import { useRbac } from '@/context/RbacContext';
 import { useTranslations } from 'next-intl';
-import AddDataModelModal from '@/features/configuration/data-models/AddDataModelModal';
 import { Pencil } from 'lucide-react';
-import EditDataModelModal from '@/features/configuration/data-models/EditDataModelModal';
-import { useAllDataModels } from '@/features/configuration/shared/hooks/useAllDataModels';
-import { CONFIGURATION_DATA_MODELS_ACTIONS } from '@/features/configuration/shared/utils/configurationDataModels.actions';
 import Can from '@/components/shared/Can';
 import { toast } from 'react-toastify';
+import { CONFIGURATION_OUTGESTION_TOPICS_ACTIONS } from '@/features/configuration/shared/utils/configurationOutgestionTopics.actions';
+import { useAllOutgestTopics } from '@/features/configuration/shared/hooks/useAllOutgestTopics ';
+import AddOutgestionTopicModal from '@/features/configuration/outgestion-config/AddOutgestionTopicModal';
+import EditOutgestionTopicModal from '@/features/configuration/outgestion-config/EditOutgestionTopicModal';
 import ConfirmRemovePopup from '@/features/configuration/shared/components/ConfirmRemovePopup';
 
-type DataModel = {
+type OutgestTopic = {
+    topic_id: string;
+    register_id: string;
     data_model_id: string;
-    data_model_mnemonic: string;
-    pattern_for_data_model: string;
-    response_template_file_id: string;
-    is_active: boolean;
-};
+    websub_topic: string;
+    description: string;
+}
 
-const DataModelsConfigurationPage = () => {
+
+const OutgestTopicsPage = () => {
     const t = useTranslations();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
 
     const [isEditOpen, setIsEditOpen] = useState(false);
 
-    const [selectedItem, setSelectedItem] = useState<DataModel | null>(null);
+    const [selectedItem, setSelectedItem] = useState<OutgestTopic | null>(null);
     const [showPopup, setShowPopup] = useState(false);
 
-    const { execute: deleteDataModel } = useFetch();
+    const { execute: deleteOutgestionTopic } = useFetch();
 
-    const proceedDelete = async (id: string, name: string) => {
+    const proceedDelete = async (id: string) => {
         try {
-            const result = await deleteDataModel('/api/configuration/data-models/delete', {
+            const result = await deleteOutgestionTopic('/api/configuration/outgestion-topic/delete', {
                 method: 'POST',
-                body: JSON.stringify({ data_model_id: id })
+                body: JSON.stringify({ topic_id: id })
             });
 
             if (result) {
-                toast.success(`"${name}" deleted successfully`);
+                toast.success(`Topic deleted successfully`);
                 refresh();
             } else {
                 console.error('Delete failed');
@@ -56,7 +57,7 @@ const DataModelsConfigurationPage = () => {
 
     const handleDelete = (
         e: React.MouseEvent<HTMLButtonElement>,
-        item: DataModel
+        item: OutgestTopic
     ) => {
         e.preventDefault();
         e.stopPropagation();
@@ -68,9 +69,9 @@ const DataModelsConfigurationPage = () => {
     const confirmDelete = async () => {
         if (!selectedItem) return;
 
-        const { data_model_id, data_model_mnemonic } = selectedItem;
+        const { topic_id } = selectedItem;
 
-        await proceedDelete(data_model_id, data_model_mnemonic);
+        await proceedDelete(topic_id);
 
         setShowPopup(false);
         setSelectedItem(null);
@@ -79,15 +80,16 @@ const DataModelsConfigurationPage = () => {
     const { config } = useRuntimeConfig();
 
     const { can } = useRbac();
-    const canCreate = can(CONFIGURATION_DATA_MODELS_ACTIONS.create)
+    const canCreate = can(CONFIGURATION_OUTGESTION_TOPICS_ACTIONS.create)
 
-    const { dataModels, pagination, loading, refresh } = useAllDataModels(currentPage, config.pageSize);
+    const { topics, pagination, loading, refresh } = useAllOutgestTopics(currentPage, config.pageSize);
+
 
     const { pageStart, pageEnd, total } = usePagination({
         totalItems: pagination?.number_of_items || 0,
         currentPage: currentPage,
         pageSize: config.pageSize || 10,
-        currentCount: dataModels.length,
+        currentCount: topics.length,
     });
 
 
@@ -102,33 +104,33 @@ const DataModelsConfigurationPage = () => {
     return (
         <>
             <TopBar
-                breadcrumb={[{ label: t('data_models') }]}
+                breadcrumb={[{ label: t('outgest_topics') }]}
                 showFilters={false}
                 showPagination
                 showAddNewButton={canCreate}
-                addNewButtonText={t('add_new_data_model')}
+                addNewButtonText={t('add_new_outgestion_topic')}
                 onAddNewButton={() => setIsModalOpen(true)}
-            // pageStart={pageStart}
-            // pageEnd={pageEnd}
-            // total={total}
-            // onPrev={handlePrev}
-            // onNext={handleNext}
+                // pageStart={pageStart}
+                // pageEnd={pageEnd}
+                // total={total}
+                // onPrev={handlePrev}
+                // onNext={handleNext}
             />
 
             <div className="mx-7.5 bg-white rounded-[10px] p-4 pt-8 overflow-hidden">
                 <div>
                     <div className="grid grid-cols-5 gap-4 pb-2 px-8 border-b border-gray-100">
                         <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
-                            {t('mnemonic')}
+                            {t('topic_id')}
                         </div>
                         <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
-                            {t('pattern')}
+                            {t('register_id')}
                         </div>
                         <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
-                            {t('template_id')}
+                            {t('data_model_id')}
                         </div>
                         <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
-                            {t('status')}
+                            {t('websub_topic')}
                         </div>
                         <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
                             {t('actions')}
@@ -145,33 +147,30 @@ const DataModelsConfigurationPage = () => {
                             </div>
                         </div>
                     ) : (
-                        dataModels.map((item, index) => (
+                        topics.map((item, index) => (
                             <div
-                                key={item.data_model_id}
+                                key={item.topic_id}
                                 className={`grid grid-cols-5 gap-4 items-center -mx-8 px-16 h-15 transition-colors ${index % 2 === 0 ? 'bg-[#D9D9D940]' : 'bg-white'} cursor-pointer`}
                             >
                                 <div className="text-base font-medium truncate">
-                                    {item.data_model_mnemonic}
+                                    {item.topic_id}
                                 </div>
 
                                 <div className="text-base font-medium truncate">
-                                    {item.pattern_for_data_model}
+                                    {item.register_id}
                                 </div>
 
                                 <div className="text-base font-medium truncate">
-                                    {item.response_template_file_id}
+                                    {item.data_model_id}
                                 </div>
 
-                                <div className="text-base font-medium">
-                                    {item.is_active ? (
-                                        <span className="text-[#77D79B]">{t('active')}</span>
-                                    ) : (
-                                        <span className="text-[#EB656A]">{t('inactive')}</span>
-                                    )}
+                                <div className="text-base font-medium truncate">
+                                    {item.websub_topic}
                                 </div>
+
 
                                 <div className="flex items-center gap-6">
-                                    <Can action={CONFIGURATION_DATA_MODELS_ACTIONS.edit}>
+                                    <Can action={CONFIGURATION_OUTGESTION_TOPICS_ACTIONS.edit}>
                                         <button
                                             onClick={(e) => {
                                                 e.preventDefault();
@@ -186,7 +185,7 @@ const DataModelsConfigurationPage = () => {
                                             <Pencil size={16} className='opacity-60' />
                                         </button>
                                     </Can>
-                                    <Can action={CONFIGURATION_DATA_MODELS_ACTIONS.delete}>
+                                    <Can action={CONFIGURATION_OUTGESTION_TOPICS_ACTIONS.delete}>
                                         <button
                                             onClick={(e) => handleDelete(e, item)}
                                             className="flex items-center cursor-pointer hover:opacity-80 transition-opacity"
@@ -218,18 +217,18 @@ const DataModelsConfigurationPage = () => {
                         setSelectedItem(null);
                     }}
                     onConfirm={confirmDelete}
-                    messageKey='confirm_remove_data_model'
+                    messageKey='confirm_remove_outgestion_topic'
                 />
             )}
 
-            <AddDataModelModal
+            <AddOutgestionTopicModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 onSuccess={() => {
                     refresh();
                 }}
             />
-            <EditDataModelModal
+            <EditOutgestionTopicModal
                 isOpen={isEditOpen}
                 data={selectedItem}
                 onClose={() => {
@@ -244,4 +243,4 @@ const DataModelsConfigurationPage = () => {
     );
 };
 
-export default DataModelsConfigurationPage;
+export default OutgestTopicsPage;

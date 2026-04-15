@@ -708,8 +708,8 @@
   "Enter altitude": "Enter altitude",
   "add_new_data_model": "Add New Data Model",
   "pattern": "Pattern",
-  "confirm_remove_data_model": "Are you sure you want to remove the data model?",
   "edit_data_model": "Edit Data Model",
+  "confirm_remove_data_model": "Are you sure you want to remove the data model?",
   "add_new_key_path": "Add New Key Path",
   "message_id": "Message ID",
   "sender": "Sender",
@@ -742,5 +742,10 @@
   "select_tab": "Select Tab",
   "tab": "Tab",
   "semantic_pattern_details": "Semantic Pattern Details",
-  "section": "Section"
+  "section": "Section",
+  "confirm_remove_outgestion_template": "Are you sure you want to remove this outgestion template?",
+  "confirm_remove_outgestion_topic": "Are you sure you want to remove this outgestion topic?",
+  "edit_outgestion_templates": "Edit Outgestion Template",
+  "add_new_outgestion_template": "Add New Outgestion Template",
+  "add_new_outgestion_topic": "Add New Outgestion Topic"
 }

@@ -7,12 +7,14 @@ interface Props {
     onConfirm: () => void;
     onClose: () => void;
     loading?: boolean;
+    messageKey: string;
 }
 
 export default function ConfirmRemovePopup({
     onConfirm,
     onClose,
     loading,
+    messageKey
 }: Props) {
     const t = useTranslations();
 
@@ -45,7 +47,7 @@ export default function ConfirmRemovePopup({
                 </h3>
 
                 <p className="text-[16px] text-center text-black/70">
-                    {t("confirm_remove_data_model")}
+                    {t(messageKey)}
                 </p>
 
                 <div className="flex gap-4 mt-2">

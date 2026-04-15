@@ -44,7 +44,7 @@ export default function EditDataModelModal({
         }
     }, [data]);
 
-    const { uploadFile, uploading, uploadedFileName } = useFileUpload();
+    const { uploadFile, uploading, uploadedFileName } = useFileUpload("/api/configuration/data-models/template-upload");
 
     const handleFileUpload = async (file: File) => {
         const documentId = await uploadFile(file);
@@ -127,7 +127,7 @@ export default function EditDataModelModal({
                                     data_model_mnemonic: e.target.value,
                                 })
                             }
-                            className="mt-2 w-full border border-[#F77F57] p-2 rounded-[10px]"
+                            className="mt-2 w-full border border-[#F77F57] p-2 px-4 rounded-[10px] outline-none"
                         />
                     </div>
 
@@ -143,7 +143,7 @@ export default function EditDataModelModal({
                                     pattern_for_data_model: e.target.value,
                                 })
                             }
-                            className="mt-2 w-full border border-[#F77F57] p-2 rounded-[10px]"
+                            className="mt-2 w-full border border-[#F77F57] p-2 px-4 rounded-[10px] outline-none"
                         />
                     </div>
                     <div className="grid grid-cols-2 gap-6">
