@@ -768,5 +768,9 @@
   "add_new_ingestion_template": "Add New Ingestion Template",
   "jsonld_expansion": "JSON-LD Expansion",
   "view_ingestion_template": "View Ingestion Template",
-  "edit_ingestion_templates": "Edit Ingestion Templates"
+  "edit_ingestion_templates": "Edit Ingestion Templates",
+  "deactivate": "Deactivate",
+  "topic_deactivated": "Topic deactivated successfully",
+  "topic_activated": "Topic activated successfully",
+  "confirm_remove_ingestion_template": "Are you sure you want to remove this ingestion template?"
 }

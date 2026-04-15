@@ -103,7 +103,7 @@ export default function AddOutgestionTopicModal({
                 </button>
 
                 <h2 className="text-[24px] text-[#ED7C22] font-medium mb-4">
-                    {t('add_new_outgestion_template')}
+                    {t('add_new_outgestion_topic')}
                 </h2>
 
                 <div className="space-y-4">

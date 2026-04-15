@@ -240,7 +240,7 @@ const IngestTemplatesPage = () => {
                         setSelectedItem(null);
                     }}
                     onConfirm={confirmDelete}
-                    messageKey='confirm_remove_outgestion_template'
+                    messageKey='confirm_remove_ingestion_template'
                 />
             )}
 

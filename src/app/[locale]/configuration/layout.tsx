@@ -26,6 +26,7 @@ function getActiveOptionFromPathname(pathname: string | null): ConfigActiveOptio
             if (subSegment === 'key-paths') return 'ingest-key-paths';
             if (subSegment === 'semantic-patterns') return 'ingest-semantic-patterns';
             if (subSegment === 'manage-subscription') return 'ingest-manage-subscription';
+            if (subSegment === 'templates') return 'ingest-templates';
         }
         if (parentSegment === 'outgest-configurations') {
             if (subSegment === 'topics') return 'outgest-topics';

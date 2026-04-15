@@ -48,7 +48,7 @@ export default function ViewOutgestionTopicModal({
                     <div className="space-y-4">
                         <Field label={t('websub_topic')} value={data?.websub_topic} />
                         <Field label={t('description')} value={data?.description} />
-                        <Field label={t('is_active')} value={data?.is_active ? 'Yes' : 'No'} />
+                        <Field label={t('is_active')} value={data?.is_active ?  t('true') :  t('false')} />
                         <Field label={t('websub_register_status')} value={data?.websub_register_status} />
                         <Field
                             label={t('websub_register_datetime')}

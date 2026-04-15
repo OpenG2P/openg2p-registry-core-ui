@@ -11,11 +11,11 @@ import { Pencil } from 'lucide-react';
 import Can from '@/components/shared/Can';
 import { toast } from 'react-toastify';
 import { CONFIGURATION_OUTGESTION_TOPICS_ACTIONS } from '@/features/configuration/shared/utils/configurationOutgestionTopics.actions';
-import { useAllOutgestTopics } from '@/features/configuration/shared/hooks/useAllOutgestTopics ';
 import AddOutgestionTopicModal from '@/features/configuration/outgest/AddOutgestionTopicModal';
 import EditOutgestionTopicModal from '@/features/configuration/outgest/EditOutgestionTopicModal';
 import ConfirmRemovePopup from '@/features/configuration/shared/components/ConfirmRemovePopup';
 import ViewOutgestionTopicModal from '@/features/configuration/outgest/ViewOutgestionTopicModal';
+import { useAllOutgestTopics } from '@/features/configuration/shared/hooks/useAllOutgestTopics';
 
 export interface OutgestTopic {
     topic_id: string;
@@ -44,6 +44,7 @@ const OutgestTopicsPage = () => {
     const [showPopup, setShowPopup] = useState(false);
 
     const { execute: deleteOutgestionTopic } = useFetch();
+    const { execute: toggleTopicStatus } = useFetch();
 
     const proceedDelete = async (id: string) => {
         try {
@@ -60,6 +61,39 @@ const OutgestTopicsPage = () => {
             }
         } catch (error) {
             console.error('Delete error');
+        }
+    };
+
+    const handleToggleStatus = async (
+        e: React.MouseEvent<HTMLButtonElement>,
+        item: OutgestTopic
+    ) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        try {
+            const result = await toggleTopicStatus(
+                '/api/configuration/outgest/toggle-topic-status',
+                {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        topic_id: item.topic_id,
+                    }),
+                }
+            );
+
+            if (result) {
+                toast.success(
+                    item.is_active
+                        ? t('topic_deactivated')
+                        : t('topic_activated')
+                );
+                refresh();
+            } else {
+                toast.error(t('update_failed'));
+            }
+        } catch (error) {
+            toast.error(t('update_failed'));
         }
     };
 
@@ -213,22 +247,41 @@ const OutgestTopicsPage = () => {
                                         </button>
                                     </Can>
                                     <Can action={CONFIGURATION_OUTGESTION_TOPICS_ACTIONS.delete}>
-                                        <button
-                                            onClick={(e) => handleDelete(e, item)}
-                                            className="flex items-center cursor-pointer hover:opacity-80 transition-opacity"
-                                            title={t('remove')}
-                                        >
-                                            <span className="font-medium text-[#00000080]">
-                                                {t('remove')}
-                                            </span>
-                                            <Image
-                                                src="/images/common/false_sign.png"
-                                                alt={t('remove')}
-                                                width={18}
-                                                height={18}
-                                                className="ml-2"
-                                            />
-                                        </button>
+                                        {item.is_active ? (
+                                            <button
+                                                onClick={(e) => handleToggleStatus(e, item)}
+                                                className="flex items-center cursor-pointer hover:opacity-80 transition-opacity"
+                                                title={t('deactivate')}
+                                            >
+                                                <span className="font-medium text-[#00000080]">
+                                                    {t('deactivate')}
+                                                </span>
+                                                <Image
+                                                    src="/images/common/false_sign.png"
+                                                    alt={t('deactivate')}
+                                                    width={18}
+                                                    height={18}
+                                                    className="ml-2"
+                                                />
+                                            </button>
+                                        ) : (
+                                            <button
+                                                onClick={(e) => handleDelete(e, item)}
+                                                className="flex items-center cursor-pointer hover:opacity-80 transition-opacity"
+                                                title={t('remove')}
+                                            >
+                                                <span className="font-medium text-[#00000080]">
+                                                    {t('remove')}
+                                                </span>
+                                                <Image
+                                                    src="/images/common/false_sign.png"
+                                                    alt={t('remove')}
+                                                    width={18}
+                                                    height={18}
+                                                    className="ml-2"
+                                                />
+                                            </button>
+                                        )}
                                     </Can>
                                 </div>
                             </div>
