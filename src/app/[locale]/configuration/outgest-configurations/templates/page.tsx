@@ -109,11 +109,11 @@ const OutgestTemplatesPage = () => {
                 showAddNewButton={canCreate}
                 addNewButtonText={t('add_new_outgestion_template')}
                 onAddNewButton={() => setIsModalOpen(true)}
-            // pageStart={pageStart}
-            // pageEnd={pageEnd}
-            // total={total}
-            // onPrev={handlePrev}
-            // onNext={handleNext}
+                pageStart={pageStart}
+                pageEnd={pageEnd}
+                total={total}
+                onPrev={handlePrev}
+                onNext={handleNext}
             />
 
             <div className="mx-7.5 bg-white rounded-[10px] p-4 pt-8 overflow-hidden">

@@ -1,12 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { useRef } from 'react';
-import { Upload, X } from 'lucide-react';
+import { X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useFetch } from '@/shared/hooks';
 import { toast } from 'react-toastify';
-import { useFileUpload } from '../shared/hooks/useFileUpload';
 import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
 import { useAllRegister } from '../shared';
 import { useAllDataModels } from '../shared/hooks/useAllDataModels';
@@ -65,8 +63,8 @@ export default function AddOutgestionTopicModal({
             }
         );
 
-        if (result?.template_id) {
-            toast.success(`"${result?.template_id}" created`);
+        if (result[0]?.topic_id) {
+            toast.success(`"${result[0]?.topic_id}" created`);
 
             setFormData({
                 register_id: '',
