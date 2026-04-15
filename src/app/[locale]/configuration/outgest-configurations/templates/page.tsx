@@ -12,10 +12,9 @@ import Can from '@/components/shared/Can';
 import { toast } from 'react-toastify';
 import { useAllOutgestTemplates } from '@/features/configuration/shared/hooks/useAllOutgestTemplates';
 import { CONFIGURATION_OUTGESTION_TEMPLATES_ACTIONS } from '@/features/configuration/shared/utils/configurationOutgestionTemplates.actions';
-import EditOutgestionTemplateModal from '@/features/configuration/outgest/EditOutgestionTemplateModal';
-import AddOutgestionTemplateModal from '@/features/configuration/outgest/AddOutgestionTemplateModal';
 import ConfirmRemovePopup from '@/features/configuration/shared/components/ConfirmRemovePopup';
-import ViewOutgestionTemplateModal from '@/features/configuration/outgest/ViewOutgestionTemplateModal';
+import { AddOutgestionTemplateModal, EditOutgestionTemplateModal, ViewOutgestionTemplateModal } from '@/features/configuration/outgest';
+
 
 type OutgestTemplate = {
     template_id: string;
@@ -27,13 +26,11 @@ type OutgestTemplate = {
 
 const OutgestTemplatesPage = () => {
     const t = useTranslations();
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isViewOpen, setIsViewOpen] = useState(false);
+    const [modalType, setModalType] = useState<'add' | 'edit' | 'view' | null>(null);
+    const [selectedItem, setSelectedItem] = useState<OutgestTemplate | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
 
-    const [isEditOpen, setIsEditOpen] = useState(false);
 
-    const [selectedItem, setSelectedItem] = useState<OutgestTemplate | null>(null);
     const [showPopup, setShowPopup] = useState(false);
 
     const { execute: deleteOutgestionTemplate } = useFetch();
@@ -110,7 +107,7 @@ const OutgestTemplatesPage = () => {
                 showPagination
                 showAddNewButton={canCreate}
                 addNewButtonText={t('add_new_outgestion_template')}
-                onAddNewButton={() => setIsModalOpen(true)}
+                onAddNewButton={() => setModalType('add')}
                 pageStart={pageStart}
                 pageEnd={pageEnd}
                 total={total}
@@ -176,7 +173,7 @@ const OutgestTemplatesPage = () => {
                                             e.preventDefault();
                                             e.stopPropagation();
                                             setSelectedItem(item);
-                                            setIsViewOpen(true);
+                                            setModalType('view');
                                         }}
                                         className="flex items-center text-[#1cc9b7] cursor-pointer hover:opacity-80 transition-opacity"
                                         title={t('view')}
@@ -196,7 +193,7 @@ const OutgestTemplatesPage = () => {
                                                 e.preventDefault();
                                                 e.stopPropagation();
                                                 setSelectedItem(item);
-                                                setIsEditOpen(true);
+                                                setModalType('edit');
                                             }}
                                             className="flex items-center text-black cursor-pointer gap-2 hover:opacity-80 transition-opacity"
                                             title={t('common.edit')}
@@ -241,33 +238,34 @@ const OutgestTemplatesPage = () => {
                 />
             )}
 
-            <ViewOutgestionTemplateModal
-                isOpen={isViewOpen}
-                data={selectedItem}
-                onClose={() => {
-                    setIsViewOpen(false);
-                    setSelectedItem(null);
-                }}
-            />
+            {modalType === 'view' && (
+                <ViewOutgestionTemplateModal
+                    data={selectedItem}
+                    onClose={() => {
+                        setModalType(null);
+                        setSelectedItem(null);
+                    }}
+                />)}
 
-            <AddOutgestionTemplateModal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                onSuccess={() => {
-                    refresh();
-                }}
-            />
-            <EditOutgestionTemplateModal
-                isOpen={isEditOpen}
-                data={selectedItem}
-                onClose={() => {
-                    setIsEditOpen(false);
-                    setSelectedItem(null);
-                }}
-                onSuccess={() => {
-                    refresh();
-                }}
-            />
+            {modalType === 'add' && (
+                <AddOutgestionTemplateModal
+                    onClose={() => setModalType(null)}
+                    onSuccess={refresh}
+                />
+            )}
+
+            {modalType === 'edit' && (
+                <EditOutgestionTemplateModal
+                    data={selectedItem}
+                    onClose={() => {
+                        setModalType(null);
+                        setSelectedItem(null);
+                    }}
+                    onSuccess={() => {
+                        refresh();
+                    }}
+                />
+            )}
         </>
     );
 };
