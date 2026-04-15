@@ -774,5 +774,6 @@
   "topic_deactivated": "Topic deactivated successfully",
   "topic_activated": "Topic activated successfully",
   "confirm_remove_ingestion_template": "Are you sure you want to remove this ingestion template?",
-  "edit_outgestion_topics": "Edit Outgestion Topics"
+  "edit_outgestion_topics": "Edit Outgestion Topics",
+  "confirm_remove_ingest_key_path": "Confirm remove ingest key path"
 }

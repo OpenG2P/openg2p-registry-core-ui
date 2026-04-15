@@ -1,27 +1,27 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
 import { TopBar } from '@/components/shared';
 import { useAllIncomingKeyPaths, useIncomingKeyPath } from '@/features/configuration/shared';
 import { usePagination, useFetch } from '@/shared/hooks';
 import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
 import { useTranslations } from 'next-intl';
 import { IncomingKeyPath } from '@/features/configuration/shared/hooks/useAllIncomingKeyPaths';
-import AddKeyPathModal from '@/features/configuration/ingest/AddKeyPathModal';
-import ViewKeyPathModal from '@/features/configuration/ingest/ViewKeyPathModal';
-import EditKeyPathModal from '@/features/configuration/ingest/EditKeyPathModal';
 import { toast } from 'react-toastify';
 import { useRbac } from '@/context/RbacContext';
 import { CONFIGURATION_KEY_PATHS_ACTIONS } from '@/features/configuration/shared/utils/configurationKeyPaths.actions';
 import Can from '@/components/shared/Can';
+import { DeleteButton, EditButton, ViewButton, DataTable } from '@/features/configuration/shared/components';
+import { AddKeyPathModal, EditKeyPathModal, ViewKeyPathModal } from '@/features/configuration/ingest';
+import ConfirmRemovePopup from '@/features/configuration/shared/components/ConfirmRemovePopup';
+
 
 const KeyPathsPage = () => {
     const t = useTranslations();
-    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-    const [isViewModalOpen, setIsViewModalOpen] = useState(false);
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [modalType, setModalType] = useState<'add' | 'edit' | 'view' | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
+    const [showPopup, setShowPopup] = useState(false);
+    const [selectedItem, setSelectedItem] = useState<IncomingKeyPath | null>(null);
 
     const { config } = useRuntimeConfig();
     const { can } = useRbac();
@@ -47,14 +47,14 @@ const KeyPathsPage = () => {
     const handleView = async (keyPath: IncomingKeyPath) => {
         const result = await fetchKeyPath(keyPath.key_path_id);
         if (result) {
-            setIsViewModalOpen(true);
+            setModalType('view');
         }
     };
 
     const handleUpdate = async (keyPath: IncomingKeyPath) => {
         const result = await fetchKeyPath(keyPath.key_path_id);
         if (result) {
-            setIsEditModalOpen(true);
+            setModalType('edit');
         }
     };
 
@@ -76,42 +76,38 @@ const KeyPathsPage = () => {
         }
     };
 
-    const handleDelete = (keyPath: IncomingKeyPath) => {
-        const { key_path_id: id } = keyPath;
+    const handleConfirmDelete = async () => {
+        if (!selectedItem) return;
 
-        toast.info(
-            ({ closeToast }) => (
-                <div className="p-1">
-                    <p className="font-bold text-gray-800 mb-3">{t('are_you_sure')} ({id})</p>
-                    <div className="flex gap-3">
-                        <button
-                            onClick={async () => {
-                                closeToast();
-                                await proceedDelete(id);
-                            }}
-                            className="bg-[#ED7C22] text-white px-4 py-1.5 rounded-full text-sm font-semibold hover:bg-[#d66a1a] transition-colors shadow-sm"
-                        >
-                            {t('remove')}
-                        </button>
-                        <button
-                            onClick={closeToast}
-                            className="bg-gray-100 text-gray-600 px-4 py-1.5 rounded-full text-sm font-semibold hover:bg-gray-200 transition-colors"
-                        >
-                            {t('cancel')}
-                        </button>
-                    </div>
-                </div>
-            ),
-            {
-                position: "top-right",
-                autoClose: false,
-                closeOnClick: false,
-                draggable: false,
-                closeButton: false,
-                className: 'rounded-[15px] shadow-xl border border-gray-100',
-            }
-        );
+        await proceedDelete(selectedItem.key_path_id);
+
+        setShowPopup(false);
+        setSelectedItem(null);
     };
+
+    const handleDelete = (keyPath: IncomingKeyPath) => {
+        setSelectedItem(keyPath);
+        setShowPopup(true);
+    };
+
+    const columns = [
+        {
+            key: 'key_path_id',
+            label: t('key_path_id'),
+        },
+        {
+            key: 'data_model',
+            label: t('data_model'),
+            render: (item: IncomingKeyPath) =>
+                item.data_model_mnemonic || item.data_model_id,
+        },
+        {
+            key: 'is_list',
+            label: t('is_list'),
+            render: (item: IncomingKeyPath) =>
+                item.is_list ? t('true') : t('false'),
+        },
+    ];
 
     return (
         <>
@@ -121,7 +117,7 @@ const KeyPathsPage = () => {
                 showPagination
                 showAddNewButton={can(CONFIGURATION_KEY_PATHS_ACTIONS.create)}
                 addNewButtonText={t('add_new_key_path')}
-                onAddNewButton={() => setIsAddModalOpen(true)}
+                onAddNewButton={() => setModalType('add')}
                 pageStart={pageStart}
                 pageEnd={pageEnd}
                 total={total}
@@ -129,124 +125,66 @@ const KeyPathsPage = () => {
                 onNext={handleNext}
             />
 
-            <div className="mx-7.5 bg-white rounded-[10px] p-4 pt-8 overflow-hidden">
-                {loading ? (
-                    <div className="flex items-center justify-center p-8">
-                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#ED7C22]"></div>
-                    </div>
-                ) : (
-                    <div>
-                        {/* Header */}
-                        <div className="grid grid-cols-4 gap-4 pb-2 px-8">
-                            <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
-                                {t('key_path_id')}
-                            </div>
-                            <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
-                                {t('data_model')}
-                            </div>
-                            <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
-                                {t('is_list')}
-                            </div>
-                            <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
-                                {t('actions')}
-                            </div>
-                        </div>
+            <DataTable
+                columns={columns}
+                data={keyPaths}
+                loading={loading}
+                rowKey={(item) => item.key_path_id}
+                actions={(item) => (
+                    <>
+                        <ViewButton
+                            label={t('view')}
+                            onClick={() => handleView(item)}
+                        />
 
-                        {/* Data Rows */}
-                        {keyPaths.length === 0 ? (
-                            <div className="text-center py-8 text-gray-400">
-                                {t('no_items_found')}
-                            </div>
-                        ) : (
-                            keyPaths.map((keyPath: IncomingKeyPath, index: number) => (
-                                <div key={keyPath.key_path_id} className="block -mx-8">
-                                    <div
-                                        className={`grid grid-cols-4 gap-4 items-center px-16 h-15 transition-colors ${index % 2 === 0 ? 'bg-[#D9D9D940]' : 'bg-white'
-                                            }`}
-                                    >
-                                        <div className="text-base font-medium truncate">
-                                            {keyPath.key_path_id}
-                                        </div>
-                                        <div className="text-base font-medium truncate">
-                                            {keyPath.data_model_mnemonic || keyPath.data_model_id}
-                                        </div>
-                                        <div className="text-base font-medium">
-                                            {keyPath.is_list ? t('true') : t('false')}
-                                        </div>
-                                        <div className="flex items-center gap-6">
-                                            <button
-                                                onClick={() => handleView(keyPath)}
-                                                className="flex items-center text-[#1cc9b7] cursor-pointer hover:opacity-80 transition-opacity"
-                                                title={t('view')}
-                                            >
-                                                <span className="text-sm font-medium">{t('view')}</span>
-                                                <Image
-                                                    src="/images/common/view.png"
-                                                    alt={t('view')}
-                                                    width={18}
-                                                    height={18}
-                                                    className="ml-2"
-                                                />
-                                            </button>
-                                            <Can action={CONFIGURATION_KEY_PATHS_ACTIONS.edit}>
-                                                <button
-                                                    onClick={() => handleUpdate(keyPath)}
-                                                    className="flex items-center text-[#1cc9b7] cursor-pointer hover:opacity-80 transition-opacity"
-                                                    title={t('update')}
-                                                >
-                                                    <span className="text-sm font-medium">{t('update')}</span>
-                                                    <Image
-                                                        src="/images/common/edit.png"
-                                                        alt={t('update')}
-                                                        width={18}
-                                                        height={18}
-                                                        className="ml-2"
-                                                    />
-                                                </button>
-                                            </Can>
-                                            <Can action={CONFIGURATION_KEY_PATHS_ACTIONS.delete}>
-                                                <button
-                                                    onClick={() => handleDelete(keyPath)}
-                                                    className="flex items-center text-[#1cc9b7] cursor-pointer hover:opacity-80 transition-opacity"
-                                                    title={t('remove')}
-                                                >
-                                                    <span className="text-sm font-medium text-[#00000080]">{t('remove')}</span>
-                                                    <Image
-                                                        src="/images/common/false_sign.png"
-                                                        alt={t('remove')}
-                                                        width={18}
-                                                        height={18}
-                                                        className="ml-2"
-                                                    />
-                                                </button>
-                                            </Can>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))
-                        )}
-                    </div>
+                        <Can action={CONFIGURATION_KEY_PATHS_ACTIONS.edit}>
+                            <EditButton
+                                label={t('common.edit')}
+                                onClick={() => handleUpdate(item)}
+                            />
+                        </Can>
+
+                        <Can action={CONFIGURATION_KEY_PATHS_ACTIONS.delete}>
+                            <DeleteButton
+                                label={t('remove')}
+                                onClick={() => handleDelete(item)}
+                            />
+                        </Can>
+                    </>
                 )}
-            </div>
-
-            <AddKeyPathModal
-                isOpen={isAddModalOpen}
-                onClose={() => setIsAddModalOpen(false)}
-                onSuccess={refresh}
             />
 
-            <ViewKeyPathModal
-                isOpen={isViewModalOpen}
-                onClose={() => setIsViewModalOpen(false)}
-                data={selectedKeyPath}
-            />
+            {showPopup && (
+                <ConfirmRemovePopup
+                    onClose={() => {
+                        setShowPopup(false);
+                        setSelectedItem(null);
+                    }}
+                    onConfirm={handleConfirmDelete}
+                    messageKey='confirm_remove_ingest_key_path'
+                />
+            )}
 
-            <EditKeyPathModal
-                isOpen={isEditModalOpen}
-                onClose={() => setIsEditModalOpen(false)}
-                initialData={selectedKeyPath}
-                onSuccess={refresh}
-            />
+            {modalType === 'add' && (
+                <AddKeyPathModal
+                    onClose={() => setModalType(null)}
+                    onSuccess={refresh}
+                />
+            )}
+
+            {modalType === 'view' && (
+                <ViewKeyPathModal
+                    onClose={() => setModalType(null)}
+                    data={selectedKeyPath}
+                />
+            )}
+            {modalType === 'edit' && (
+                <EditKeyPathModal
+                    onClose={() => setModalType(null)}
+                    initialData={selectedKeyPath}
+                    onSuccess={refresh}
+                />
+            )}
         </>
     );
 };

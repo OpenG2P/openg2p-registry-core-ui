@@ -167,6 +167,7 @@ const IngestTemplatesPage = () => {
                     messageKey='confirm_remove_ingestion_template'
                 />
             )}
+
             {modalType === 'view' && (
                 <ViewIngestionTemplateModal
                     data={selectedItem}
