@@ -772,5 +772,6 @@
   "deactivate": "Desactivar",
   "topic_deactivated": "Tema desactivado correctamente",
   "topic_activated": "Tema activado correctamente",
-  "confirm_remove_ingestion_template": "¿Está seguro de que desea eliminar esta plantilla de ingestión?"
+  "confirm_remove_ingestion_template": "¿Está seguro de que desea eliminar esta plantilla de ingestión?",
+  "edit_outgestion_topics": "Editar temas de outgestión"
 }

@@ -772,5 +772,6 @@
   "deactivate": "Désactiver",
   "topic_deactivated": "Sujet désactivé avec succès",
   "topic_activated": "Sujet activé avec succès",
-  "confirm_remove_ingestion_template": "Êtes-vous sûr de vouloir supprimer ce modèle d’ingestion ?"
+  "confirm_remove_ingestion_template": "Êtes-vous sûr de vouloir supprimer ce modèle d’ingestion ?",
+  "edit_outgestion_topics": "Modifier les sujets d’outgestion"
 }

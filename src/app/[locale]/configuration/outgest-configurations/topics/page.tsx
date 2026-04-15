@@ -35,11 +35,9 @@ export interface OutgestTopic {
 
 const OutgestTopicsPage = () => {
     const t = useTranslations();
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [isViewOpen, setIsViewOpen] = useState(false);
-    const [isEditOpen, setIsEditOpen] = useState(false);
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const [modalType, setModalType] = useState<'add' | 'edit' | 'view' | null>(null);
     const [selectedItem, setSelectedItem] = useState<OutgestTopic | null>(null);
     const [showPopup, setShowPopup] = useState(false);
 
@@ -151,7 +149,7 @@ const OutgestTopicsPage = () => {
                 showPagination
                 showAddNewButton={canCreate}
                 addNewButtonText={t('add_new_outgestion_topic')}
-                onAddNewButton={() => setIsModalOpen(true)}
+                onAddNewButton={() => setModalType('add')}
                 pageStart={pageStart}
                 pageEnd={pageEnd}
                 total={total}
@@ -217,7 +215,7 @@ const OutgestTopicsPage = () => {
                                             e.preventDefault();
                                             e.stopPropagation();
                                             setSelectedItem(item);
-                                            setIsViewOpen(true);
+                                            setModalType('view');
                                         }}
                                         className="flex items-center text-[#1cc9b7] cursor-pointer hover:opacity-80 transition-opacity"
                                         title={t('view')}
@@ -237,7 +235,7 @@ const OutgestTopicsPage = () => {
                                                 e.preventDefault();
                                                 e.stopPropagation();
                                                 setSelectedItem(item);
-                                                setIsEditOpen(true);
+                                                setModalType('edit');
                                             }}
                                             className="flex items-center text-black cursor-pointer gap-2 hover:opacity-80 transition-opacity"
                                             title={t('common.edit')}
@@ -301,33 +299,37 @@ const OutgestTopicsPage = () => {
                 />
             )}
 
-            <ViewOutgestionTopicModal
-                isOpen={isViewOpen}
-                data={selectedItem}
-                onClose={() => {
-                    setIsViewOpen(false);
-                    setSelectedItem(null);
-                }}
-            />
+            {modalType === 'view' && (
+                <ViewOutgestionTopicModal
+                    data={selectedItem}
+                    onClose={() => {
+                        setModalType(null);
+                        setSelectedItem(null);
+                    }}
+                />
+            )}
 
-            <AddOutgestionTopicModal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                onSuccess={() => {
-                    refresh();
-                }}
-            />
-            <EditOutgestionTopicModal
-                isOpen={isEditOpen}
-                data={selectedItem}
-                onClose={() => {
-                    setIsEditOpen(false);
-                    setSelectedItem(null);
-                }}
-                onSuccess={() => {
-                    refresh();
-                }}
-            />
+            {modalType === 'add' && (
+                <AddOutgestionTopicModal
+                    onClose={() => setModalType(null)}
+                    onSuccess={() => {
+                        refresh();
+                    }}
+                />
+            )}
+
+            {modalType === 'edit' && (
+                <EditOutgestionTopicModal
+                    data={selectedItem}
+                    onClose={() => {
+                        setModalType(null);
+                        setSelectedItem(null);
+                    }}
+                    onSuccess={() => {
+                        refresh();
+                    }}
+                />
+            )}
         </>
     );
 };
