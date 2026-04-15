@@ -10,7 +10,7 @@ import { useFileUpload } from '../shared/hooks/useFileUpload';
 import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
 import { useAllRegister } from '../shared';
 import { useAllDataModels } from '../shared/hooks/useAllDataModels';
-import CustomDropdown from './CustomDropdown';
+import CustomDropdown from '../shared/components/CustomDropdown';
 
 interface AddOutgestionTemplateModalProps {
     isOpen: boolean;
@@ -51,7 +51,7 @@ export default function AddOutgestionTemplateModal({
         template_file_id: '',
     });
 
-    const { uploadFile, uploading, uploadedFileName } = useFileUpload("/api/configuration/outgestion-template/template-upload");
+    const { uploadFile, uploading, uploadedFileName, setUploadedFileName } = useFileUpload("/api/configuration/outgest/upload-template");
 
     const handleFileUpload = async (file: File) => {
         const documentId = await uploadFile(file);
@@ -82,7 +82,7 @@ export default function AddOutgestionTemplateModal({
         }
 
         const result = await createOutgestionTemplate(
-            '/api/configuration/outgestion-template/create',
+            '/api/configuration/outgest/create-template',
             {
                 method: 'POST',
                 body: JSON.stringify(formData),
@@ -90,18 +90,19 @@ export default function AddOutgestionTemplateModal({
         );
 
         if (result?.template_id) {
-            toast.success(`"${result?.template_id}" created`);
+            toast.success(t('template_created', { id: result?.template_id }));
 
             setFormData({
                 register_id: '',
                 data_model_id: '',
                 template_file_id: '',
             });
+            setUploadedFileName('');
 
             onSuccess?.();
             onClose();
         } else {
-            toast.error('Failed to create data model');
+            toast.error('Failed to create Template');
         }
     };
 
@@ -111,6 +112,7 @@ export default function AddOutgestionTemplateModal({
             data_model_id: '',
             template_file_id: '',
         });
+        
         onClose();
     };
 
@@ -211,7 +213,7 @@ export default function AddOutgestionTemplateModal({
                                     }
                                     className="text-xs text-red-500 hover:underline"
                                 >
-                                    Remove
+                                    {t("remove")}
                                 </button>
                             )}
                         </div>
@@ -222,14 +224,14 @@ export default function AddOutgestionTemplateModal({
                             onClick={handleCancel}
                             className="px-4 py-2 bg-[#DDDDDD] text-[#00000080] rounded-[10px]"
                         >
-                            Cancel
+                            {t("cancel")}
                         </button>
 
                         <button
                             onClick={handleSubmit}
                             className="px-4 py-2 bg-black text-white rounded-[10px]"
                         >
-                            Save
+                            {t("save")}
                         </button>
                     </div>
                 </div>

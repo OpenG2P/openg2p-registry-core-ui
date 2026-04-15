@@ -39,11 +39,12 @@ const sidebarOptions: SidebarOption[] = [
         id: 'ingest-configurations',
         label: 'ingest_configurations',
         iconUrl: "/images/config/menu_ingest_config_04.png",
-        path: '/configuration/ingest-configurations',
+        path: '/configuration/ingest-configurations/key-paths',
         subOptions: [
             { id: 'ingest-key-paths', label: 'ingest_key_paths', path: '/configuration/ingest-configurations/key-paths' },
             { id: 'ingest-semantic-patterns', label: 'ingest_semantic_patterns', path: '/configuration/ingest-configurations/semantic-patterns' },
             { id: 'ingest-manage-subscription', label: 'ingest_manage_subscription', path: '/configuration/ingest-configurations/manage-subscription' },
+            { id: 'ingest-templates', label: 'ingest_templates', path: '/configuration/ingest-configurations/templates' },
         ]
     },
     {

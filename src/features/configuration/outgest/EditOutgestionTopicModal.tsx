@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useFetch } from '@/shared/hooks';
@@ -8,21 +8,23 @@ import { toast } from 'react-toastify';
 import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
 import { useAllRegister } from '../shared';
 import { useAllDataModels } from '../shared/hooks/useAllDataModels';
-import CustomDropdown from './CustomDropdown';
+import CustomDropdown from '../shared/components/CustomDropdown';
 
-interface AddOutgestionTopicModalProps {
+interface EditOutgestionTopicModalProps {
     isOpen: boolean;
     onClose: () => void;
     onSuccess?: () => void;
+    data?: any;
 }
 
-export default function AddOutgestionTopicModal({
+export default function EditOutgestionTopicModal({
     isOpen,
     onClose,
     onSuccess,
-}: AddOutgestionTopicModalProps) {
+    data,
+}: EditOutgestionTopicModalProps) {
     const t = useTranslations();
-    const { execute: createOutgestionTopic, loading } = useFetch();
+    const { execute: updateOutgestionTemplate } = useFetch();
     const { config } = useRuntimeConfig();
     const currentPage = 1;
 
@@ -42,11 +44,24 @@ export default function AddOutgestionTopicModal({
         })) || [];
 
     const [formData, setFormData] = useState({
+        topic_id: '',
         register_id: '',
         data_model_id: '',
         websub_topic: '',
         description: ''
     });
+
+    useEffect(() => {
+        if (data) {
+            setFormData({
+                topic_id: data.topic_id || '',
+                register_id: data.register_id || '',
+                data_model_id: data.data_model_id || '',
+                websub_topic: data.websub_topic || '',
+                description: data.description || '',
+            });
+        }
+    }, [data]);
 
 
     const handleSubmit = async () => {
@@ -55,38 +70,27 @@ export default function AddOutgestionTopicModal({
             return;
         }
 
-        const result = await createOutgestionTopic(
-            '/api/configuration/outgestion-topic/create',
+        const result = await updateOutgestionTemplate(
+            '/api/configuration/outgest/update-topic',
             {
                 method: 'POST',
-                body: JSON.stringify(formData),
+                body: JSON.stringify({
+                    ...formData,
+                    topic_id: data?.topic_id,
+                }),
             }
         );
 
-        if (result[0]?.topic_id) {
-            toast.success(`"${result[0]?.topic_id}" created`);
-
-            setFormData({
-                register_id: '',
-                data_model_id: '',
-                websub_topic: '',
-                description: ''
-            });
-
+        if (result) {
+            toast.success(t('topic_updated', { id: formData.topic_id }));
             onSuccess?.();
             onClose();
         } else {
-            toast.error('Failed to create data model');
+            toast.error(t('update_failed'));
         }
     };
 
     const handleCancel = () => {
-        setFormData({
-            register_id: '',
-            data_model_id: '',
-            websub_topic: '',
-            description: ''
-        });
         onClose();
     };
 
@@ -103,7 +107,7 @@ export default function AddOutgestionTopicModal({
                 </button>
 
                 <h2 className="text-[24px] text-[#ED7C22] font-medium mb-4">
-                    {t('add_new_outgestion_template')}
+                    {t('edit_outgestion_templates')}
                 </h2>
 
                 <div className="space-y-4">
@@ -179,7 +183,7 @@ export default function AddOutgestionTopicModal({
                             onClick={handleSubmit}
                             className="px-4 py-2 bg-black text-white rounded-[10px]"
                         >
-                            Save
+                            Update
                         </button>
                     </div>
                 </div>

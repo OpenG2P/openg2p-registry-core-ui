@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import { X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useFetch } from '@/shared/hooks';
@@ -8,23 +8,21 @@ import { toast } from 'react-toastify';
 import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
 import { useAllRegister } from '../shared';
 import { useAllDataModels } from '../shared/hooks/useAllDataModels';
-import CustomDropdown from './CustomDropdown';
+import CustomDropdown from '../shared/components/CustomDropdown';
 
-interface EditOutgestionTopicModalProps {
+interface AddOutgestionTopicModalProps {
     isOpen: boolean;
     onClose: () => void;
     onSuccess?: () => void;
-    data?: any;
 }
 
-export default function EditOutgestionTopicModal({
+export default function AddOutgestionTopicModal({
     isOpen,
     onClose,
     onSuccess,
-    data,
-}: EditOutgestionTopicModalProps) {
+}: AddOutgestionTopicModalProps) {
     const t = useTranslations();
-    const { execute: updateOutgestionTemplate } = useFetch();
+    const { execute: createOutgestionTopic, loading } = useFetch();
     const { config } = useRuntimeConfig();
     const currentPage = 1;
 
@@ -44,24 +42,11 @@ export default function EditOutgestionTopicModal({
         })) || [];
 
     const [formData, setFormData] = useState({
-        topic_id: '',
         register_id: '',
         data_model_id: '',
         websub_topic: '',
         description: ''
     });
-
-    useEffect(() => {
-        if (data) {
-            setFormData({
-                topic_id: data.topic_id || '',
-                register_id: data.register_id || '',
-                data_model_id: data.data_model_id || '',
-                websub_topic: data.websub_topic || '',
-                description: data.description || '',
-            });
-        }
-    }, [data]);
 
 
     const handleSubmit = async () => {
@@ -70,27 +55,38 @@ export default function EditOutgestionTopicModal({
             return;
         }
 
-        const result = await updateOutgestionTemplate(
-            '/api/configuration/outgestion-topic/update',
+        const result = await createOutgestionTopic(
+            '/api/configuration/outgest/create-topic',
             {
                 method: 'POST',
-                body: JSON.stringify({
-                    ...formData,
-                    topic_id: data?.topic_id,
-                }),
+                body: JSON.stringify(formData),
             }
         );
 
-        if (result) {
-            toast.success(`Updated "${formData.topic_id}"`);
+        if (result.topic_id) {
+            toast.success(t('topic_created', { id: result?.topic_id }));
+
+            setFormData({
+                register_id: '',
+                data_model_id: '',
+                websub_topic: '',
+                description: ''
+            });
+
             onSuccess?.();
             onClose();
         } else {
-            toast.error('Update failed');
+            toast.error('Failed to create Topic');
         }
     };
 
     const handleCancel = () => {
+        setFormData({
+            register_id: '',
+            data_model_id: '',
+            websub_topic: '',
+            description: ''
+        });
         onClose();
     };
 
@@ -107,7 +103,7 @@ export default function EditOutgestionTopicModal({
                 </button>
 
                 <h2 className="text-[24px] text-[#ED7C22] font-medium mb-4">
-                    {t('edit_outgestion_templates')}
+                    {t('add_new_outgestion_topic')}
                 </h2>
 
                 <div className="space-y-4">
@@ -183,7 +179,7 @@ export default function EditOutgestionTopicModal({
                             onClick={handleSubmit}
                             className="px-4 py-2 bg-black text-white rounded-[10px]"
                         >
-                            Update
+                            Save
                         </button>
                     </div>
                 </div>
