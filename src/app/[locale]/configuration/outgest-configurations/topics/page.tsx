@@ -1,13 +1,11 @@
 'use client';
 
-import Image from 'next/image';
 import { useState } from 'react';
 import { TopBar } from '@/components/shared';
 import { useFetch, usePagination } from '@/shared/hooks';
 import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
 import { useRbac } from '@/context/RbacContext';
 import { useTranslations } from 'next-intl';
-import { Pencil } from 'lucide-react';
 import Can from '@/components/shared/Can';
 import { toast } from 'react-toastify';
 import { CONFIGURATION_OUTGESTION_TOPICS_ACTIONS } from '@/features/configuration/shared/utils/configurationOutgestionTopics.actions';
@@ -16,6 +14,8 @@ import EditOutgestionTopicModal from '@/features/configuration/outgest/EditOutge
 import ConfirmRemovePopup from '@/features/configuration/shared/components/ConfirmRemovePopup';
 import ViewOutgestionTopicModal from '@/features/configuration/outgest/ViewOutgestionTopicModal';
 import { useAllOutgestTopics } from '@/features/configuration/shared/hooks/useAllOutgestTopics';
+import { DeleteButton, EditButton, ViewButton, DataTable } from '@/features/configuration/shared/components';
+
 
 export interface OutgestTopic {
     topic_id: string;
@@ -141,6 +141,13 @@ const OutgestTopicsPage = () => {
         setCurrentPage((prev) => prev + 1);
     };
 
+    const topicColumns = [
+        { key: 'topic_id', label: t('topic_id') },
+        { key: 'register_mnemonic', label: t('register_mnemonic') },
+        { key: 'data_model_mnemonic', label: t('data_model_mnemonic') },
+        { key: 'websub_topic', label: t('websub_topic') },
+    ];
+
     return (
         <>
             <TopBar
@@ -157,136 +164,47 @@ const OutgestTopicsPage = () => {
                 onNext={handleNext}
             />
 
-            <div className="mx-7.5 bg-white rounded-[10px] p-4 pt-8 overflow-hidden">
-                <div>
-                    <div className="grid grid-cols-5 gap-4 pb-2 px-8 border-b border-gray-100">
-                        <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
-                            {t('topic_id')}
-                        </div>
-                        <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
-                            {t('register_mnemonic')}
-                        </div>
-                        <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
-                            {t('data_model_mnemonic')}
-                        </div>
-                        <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
-                            {t('websub_topic')}
-                        </div>
-                        <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
-                            {t('actions')}
-                        </div>
-                    </div>
-                    {loading ? (
-                        <div className="flex justify-center items-center py-60">
-                            <div className="flex flex-col items-center gap-4">
-                                <img
-                                    src="/images/common/loading.gif"
-                                    alt="Loading"
-                                    className="w-12 h-12"
+            <DataTable
+                columns={topicColumns}
+                data={topics}
+                loading={loading}
+                rowKey={(i) => i.topic_id}
+                actions={(item) => (
+                    <>
+                        <ViewButton
+                            label={t('view')}
+                            onClick={() => {
+                                setSelectedItem(item);
+                                setModalType('view');
+                            }}
+                        />
+
+                        <Can action={CONFIGURATION_OUTGESTION_TOPICS_ACTIONS.edit}>
+                            <EditButton
+                                label={t('common.edit')}
+                                onClick={() => {
+                                    setSelectedItem(item);
+                                    setModalType('edit');
+                                }}
+                            />
+                        </Can>
+
+                        <Can action={CONFIGURATION_OUTGESTION_TOPICS_ACTIONS.delete}>
+                            {item.is_active ? (
+                                <DeleteButton
+                                    label={t('deactivate')}
+                                    onClick={(e) => handleToggleStatus(e, item)}
                                 />
-                            </div>
-                        </div>
-                    ) : (
-                        topics.map((item, index) => (
-                            <div
-                                key={item.topic_id}
-                                className={`grid grid-cols-5 gap-4 items-center -mx-8 px-16 h-15 transition-colors ${index % 2 === 0 ? 'bg-[#D9D9D940]' : 'bg-white'} cursor-pointer`}
-                            >
-                                <div className="text-base font-medium truncate">
-                                    {item.topic_id}
-                                </div>
-
-                                <div className="text-base font-medium truncate">
-                                    {item.register_mnemonic}
-                                </div>
-
-                                <div className="text-base font-medium truncate">
-                                    {item.data_model_mnemonic}
-                                </div>
-
-                                <div className="text-base font-medium truncate">
-                                    {item.websub_topic}
-                                </div>
-
-
-                                <div className="flex items-center gap-6">
-                                    <button
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            e.stopPropagation();
-                                            setSelectedItem(item);
-                                            setModalType('view');
-                                        }}
-                                        className="flex items-center text-[#1cc9b7] cursor-pointer hover:opacity-80 transition-opacity"
-                                        title={t('view')}
-                                    >
-                                        <span className="text-sm font-medium">{t('view')}</span>
-                                        <Image
-                                            src="/images/common/view.png"
-                                            alt={t('view')}
-                                            width={18}
-                                            height={18}
-                                            className="ml-2"
-                                        />
-                                    </button>
-                                    <Can action={CONFIGURATION_OUTGESTION_TOPICS_ACTIONS.edit}>
-                                        <button
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                e.stopPropagation();
-                                                setSelectedItem(item);
-                                                setModalType('edit');
-                                            }}
-                                            className="flex items-center text-black cursor-pointer gap-2 hover:opacity-80 transition-opacity"
-                                            title={t('common.edit')}
-                                        >
-                                            <span className="font-medium text-[#00000080]">{t('common.edit')}</span>
-                                            <Pencil size={16} className='opacity-60' />
-                                        </button>
-                                    </Can>
-                                    <Can action={CONFIGURATION_OUTGESTION_TOPICS_ACTIONS.delete}>
-                                        {item.is_active ? (
-                                            <button
-                                                onClick={(e) => handleToggleStatus(e, item)}
-                                                className="flex items-center cursor-pointer hover:opacity-80 transition-opacity"
-                                                title={t('deactivate')}
-                                            >
-                                                <span className="font-medium text-[#00000080]">
-                                                    {t('deactivate')}
-                                                </span>
-                                                <Image
-                                                    src="/images/common/false_sign.png"
-                                                    alt={t('deactivate')}
-                                                    width={18}
-                                                    height={18}
-                                                    className="ml-2"
-                                                />
-                                            </button>
-                                        ) : (
-                                            <button
-                                                onClick={(e) => handleDelete(e, item)}
-                                                className="flex items-center cursor-pointer hover:opacity-80 transition-opacity"
-                                                title={t('remove')}
-                                            >
-                                                <span className="font-medium text-[#00000080]">
-                                                    {t('remove')}
-                                                </span>
-                                                <Image
-                                                    src="/images/common/false_sign.png"
-                                                    alt={t('remove')}
-                                                    width={18}
-                                                    height={18}
-                                                    className="ml-2"
-                                                />
-                                            </button>
-                                        )}
-                                    </Can>
-                                </div>
-                            </div>
-                        ))
-                    )}
-                </div>
-            </div>
+                            ) : (
+                                <DeleteButton
+                                    label={t('remove')}
+                                    onClick={(e) => handleDelete(e, item)}
+                                />
+                            )}
+                        </Can>
+                    </>
+                )}
+            />
 
             {showPopup && (
                 <ConfirmRemovePopup

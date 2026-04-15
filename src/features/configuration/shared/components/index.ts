@@ -9,3 +9,7 @@ export { default as BaseModal } from './BaseModal';
 export { default as CustomDropdown } from './CustomDropdown';
 export { default as InputField } from './InputField';
 export { default as CheckboxField } from './CheckboxField';
+export { default as ViewButton } from './ViewButton';
+export { default as EditButton } from './EditButton';
+export { default as DeleteButton } from './DeleteButton';
+export { default as DataTable } from './DataTable';
