@@ -8,4 +8,4 @@ export { default as FileUploadField } from './FileUploadField';
 export { default as BaseModal } from './BaseModal';
 export { default as CustomDropdown } from './CustomDropdown';
 export { default as InputField } from './InputField';
-
+export { default as CheckboxField } from './CheckboxField';

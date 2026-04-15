@@ -1,8 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import BaseModal from '../shared/components/BaseModal';
-import Field from '../shared/components/Field';
+import { BaseModal, Field } from '../shared/components';
 
 interface Props {
     onClose: () => void;

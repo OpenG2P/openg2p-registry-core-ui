@@ -30,12 +30,9 @@ type IngestTemplate = {
 
 const IngestTemplatesPage = () => {
     const t = useTranslations();
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isViewOpen, setIsViewOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
 
-    const [isEditOpen, setIsEditOpen] = useState(false);
-
+    const [modalType, setModalType] = useState<'add' | 'edit' | 'view' | null>(null);
     const [selectedItem, setSelectedItem] = useState<IngestTemplate | null>(null);
     const [showPopup, setShowPopup] = useState(false);
 
@@ -113,7 +110,7 @@ const IngestTemplatesPage = () => {
                 showPagination
                 showAddNewButton={canCreate}
                 addNewButtonText={t('add_new_ingestion_template')}
-                onAddNewButton={() => setIsModalOpen(true)}
+                onAddNewButton={() => setModalType('add')}
                 pageStart={pageStart}
                 pageEnd={pageEnd}
                 total={total}
@@ -179,7 +176,7 @@ const IngestTemplatesPage = () => {
                                             e.preventDefault();
                                             e.stopPropagation();
                                             setSelectedItem(item);
-                                            setIsViewOpen(true);
+                                            setModalType('view');
                                         }}
                                         className="flex items-center text-[#1cc9b7] cursor-pointer hover:opacity-80 transition-opacity"
                                         title={t('view')}
@@ -199,7 +196,7 @@ const IngestTemplatesPage = () => {
                                                 e.preventDefault();
                                                 e.stopPropagation();
                                                 setSelectedItem(item);
-                                                setIsEditOpen(true);
+                                                setModalType('edit');
                                             }}
                                             className="flex items-center text-black cursor-pointer gap-2 hover:opacity-80 transition-opacity"
                                             title={t('common.edit')}
@@ -243,34 +240,37 @@ const IngestTemplatesPage = () => {
                     messageKey='confirm_remove_ingestion_template'
                 />
             )}
+            {modalType === 'view' && (
+                <ViewIngestionTemplateModal
+                    data={selectedItem}
+                    onClose={() => {
+                        setModalType(null);
+                        setSelectedItem(null);
+                    }}
+                />
+            )}
 
-            <ViewIngestionTemplateModal
-                isOpen={isViewOpen}
-                data={selectedItem}
-                onClose={() => {
-                    setIsViewOpen(false);
-                    setSelectedItem(null);
-                }}
-            />
+            {modalType === 'add' && (
+                <AddIngestionTemplateModal
+                    onClose={() => setModalType(null)}
+                    onSuccess={() => {
+                        refresh();
+                    }}
+                />
+            )}
 
-            <AddIngestionTemplateModal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                onSuccess={() => {
-                    refresh();
-                }}
-            />
-            <EditIngestionTemplateModal
-                isOpen={isEditOpen}
-                data={selectedItem}
-                onClose={() => {
-                    setIsEditOpen(false);
-                    setSelectedItem(null);
-                }}
-                onSuccess={() => {
-                    refresh();
-                }}
-            />
+            {modalType === 'edit' && (
+                <EditIngestionTemplateModal
+                    data={selectedItem}
+                    onClose={() => {
+                        setModalType(null);
+                        setSelectedItem(null);
+                    }}
+                    onSuccess={() => {
+                        refresh();
+                    }}
+                />
+            )}
         </>
     );
 };

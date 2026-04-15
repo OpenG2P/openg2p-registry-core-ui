@@ -1,100 +1,38 @@
 'use client';
 
-import { X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { BaseModal, Field } from '../shared/components';
 
 interface Props {
-    isOpen: boolean;
     onClose: () => void;
     data?: any;
 }
 
 export default function ViewIngestionTemplateModal({
-    isOpen,
     onClose,
     data,
 }: Props) {
     const t = useTranslations();
 
-    if (!isOpen) return null;
-
     return (
-        <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
-            <div className="relative w-full max-w-150 bg-white rounded-[10px] border-5 border-[#F2BA1A] p-10">
-
-                <button
-                    onClick={onClose}
-                    className="absolute top-4 right-4 opacity-50"
-                >
-                    <X size={30} />
-                </button>
-
-                <h2 className="text-[24px] text-[#ED7C22] font-medium mb-6">
-                    {t('view_ingestion_template')}
-                </h2>
-
-                <div className="space-y-4">
-
-                    <div>
-                        <label className="text-[16px] font-medium">
-                            {t('template_id')}
-                        </label>
-                        <div className="mt-2 w-full border border-[#F77F57] p-2 px-4 rounded-[10px]">
-                            {data?.template_id || '-'}
-                        </div>
-                    </div>
-
-                    <div>
-                        <label className="text-[16px] font-medium">
-                            {t('register_mnemonic')}
-                        </label>
-                        <div className="mt-2 w-full border border-[#F77F57] p-2 px-4 rounded-[10px]">
-                            {data?.register_mnemonic || '-'}
-                        </div>
-                    </div>
-
-                    <div>
-                        <label className="text-[16px] font-medium">
-                            {t('data_model_mnemonic')}
-                        </label>
-                        <div className="mt-2 w-full border border-[#F77F57] p-2 px-4 rounded-[10px]">
-                            {data?.data_model_mnemonic || '-'}
-                        </div>
-                    </div>
-
-                    <div>
-                        <label className="text-[16px] font-medium">
-                            {t('template_file_id')}
-                        </label>
-                        <div className="mt-2 w-full border border-[#F77F57] p-2 px-4 rounded-[10px]">
-                            {data?.template_file_id || '-'}
-                        </div>
-                    </div>
-
-                    <div>
-                        <label className="text-[16px] font-medium">
-                            {t('jsonld_expansion')}
-                        </label>
-                        <div className="mt-2 w-full border border-[#F77F57] p-2 px-4 rounded-[10px]">
-                            {/* {data?.jsonld_expansion_required || '-'} */}
-                            {data?.jsonld_expansion_required === true
-                                ? t('true')
-                                : data?.jsonld_expansion_required === false
-                                    ? t('false')
-                                    : '-'}
-                        </div>
-                    </div>
-
-                    <div className="flex justify-start pt-6">
-                        <button
-                            onClick={onClose}
-                            className="px-4 py-2 bg-[#DDDDDD] text-[#00000080] rounded-[10px]"
-                        >
-                            {t('close')}
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <BaseModal
+            title={t('view_ingestion_template')}
+            onClose={onClose}
+        >
+            <Field label={t('template_id')} value={data?.template_id} />
+            <Field label={t('register_mnemonic')} value={data?.register_mnemonic} />
+            <Field label={t('data_model_mnemonic')} value={data?.data_model_mnemonic} />
+            <Field label={t('template_file_id')} value={data?.template_file_id} />
+            <Field
+                label={t('jsonld_expansion')}
+                value={
+                    data?.jsonld_expansion_required === true
+                        ? t('true')
+                        : data?.jsonld_expansion_required === false
+                            ? t('false')
+                            : '-'
+                }
+            />
+        </BaseModal >
     );
 }
