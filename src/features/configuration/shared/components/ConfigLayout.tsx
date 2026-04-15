@@ -12,6 +12,7 @@ export type ConfigActiveOption =
     | "ingest-key-paths"
     | "ingest-semantic-patterns"
     | "ingest-manage-subscription"
+    | "ingest-templates"
     | "outgest-topics"
     | "outgest-templates"
 

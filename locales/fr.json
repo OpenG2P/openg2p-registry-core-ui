@@ -764,5 +764,9 @@
   "view_outgestion_template": "Voir le modèle",
   "websub_register_error": "Erreur d'inscription WebSub",
   "view_outgestion_topic": "Voir le sujet d’outgestion",
-  "websub_register_attempts": "Tentatives d'inscription WebSub"
+  "websub_register_attempts": "Tentatives d'inscription WebSub",
+  "add_new_ingestion_template": "Ajouter un nouveau modèle d’ingestion",
+  "jsonld_expansion": "Expansion JSON-LD",
+  "view_ingestion_template": "Voir le modèle d’ingestion",
+  "edit_ingestion_templates": "Modifier les modèles d’ingestion"
 }

@@ -10,22 +10,25 @@ import { useTranslations } from 'next-intl';
 import { Pencil } from 'lucide-react';
 import Can from '@/components/shared/Can';
 import { toast } from 'react-toastify';
-import { useAllOutgestTemplates } from '@/features/configuration/shared/hooks/useAllOutgestTemplates';
-import { CONFIGURATION_OUTGESTION_TEMPLATES_ACTIONS } from '@/features/configuration/shared/utils/configurationOutgestionTemplates.actions';
-import EditOutgestionTemplateModal from '@/features/configuration/outgest/EditOutgestionTemplateModal';
-import AddOutgestionTemplateModal from '@/features/configuration/outgest/AddOutgestionTemplateModal';
 import ConfirmRemovePopup from '@/features/configuration/shared/components/ConfirmRemovePopup';
-import ViewOutgestionTemplateModal from '@/features/configuration/outgest/ViewOutgestionTemplateModal';
+import { CONFIGURATION_INGESTION_TEMPLATES_ACTIONS } from '@/features/configuration/shared/utils/configurationIngestionTemplates.actions';
+import { useAllIngestTemplates } from '@/features/configuration/shared/hooks/useAllIngestTemplates';
+import ViewIngestionTemplateModal from '@/features/configuration/ingest/ViewIngestionTemplateModal';
+import AddIngestionTemplateModal from '@/features/configuration/ingest/AddIngestionTemplateModal';
+import EditIngestionTemplateModal from '@/features/configuration/ingest/EditIngestionTemplateModal';
 
-type OutgestTemplate = {
+type IngestTemplate = {
     template_id: string;
     register_id: string;
+    register_mnemonic: string;
     data_model_id: string;
+    data_model_mnemonic: string;
     template_file_id: string;
+    jsonld_expansion_required: boolean;
 }
 
 
-const OutgestTemplatesPage = () => {
+const IngestTemplatesPage = () => {
     const t = useTranslations();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isViewOpen, setIsViewOpen] = useState(false);
@@ -33,14 +36,14 @@ const OutgestTemplatesPage = () => {
 
     const [isEditOpen, setIsEditOpen] = useState(false);
 
-    const [selectedItem, setSelectedItem] = useState<OutgestTemplate | null>(null);
+    const [selectedItem, setSelectedItem] = useState<IngestTemplate | null>(null);
     const [showPopup, setShowPopup] = useState(false);
 
-    const { execute: deleteOutgestionTemplate } = useFetch();
+    const { execute: deleteIngestionTemplate } = useFetch();
 
     const proceedDelete = async (id: string) => {
         try {
-            const result = await deleteOutgestionTemplate('/api/configuration/outgestion-template/delete', {
+            const result = await deleteIngestionTemplate('/api/configuration/ingest/delete-template', {
                 method: 'POST',
                 body: JSON.stringify({ template_id: id })
             });
@@ -58,7 +61,7 @@ const OutgestTemplatesPage = () => {
 
     const handleDelete = (
         e: React.MouseEvent<HTMLButtonElement>,
-        item: OutgestTemplate
+        item: IngestTemplate
     ) => {
         e.preventDefault();
         e.stopPropagation();
@@ -81,9 +84,9 @@ const OutgestTemplatesPage = () => {
     const { config } = useRuntimeConfig();
 
     const { can } = useRbac();
-    const canCreate = can(CONFIGURATION_OUTGESTION_TEMPLATES_ACTIONS.create)
+    const canCreate = can(CONFIGURATION_INGESTION_TEMPLATES_ACTIONS.create)
 
-    const { templates, pagination, loading, refresh } = useAllOutgestTemplates(currentPage, config.pageSize);
+    const { templates, pagination, loading, refresh } = useAllIngestTemplates(currentPage, config.pageSize);
 
 
     const { pageStart, pageEnd, total } = usePagination({
@@ -105,11 +108,11 @@ const OutgestTemplatesPage = () => {
     return (
         <>
             <TopBar
-                breadcrumb={[{ label: t('outgest_configurations') }, { label: t('outgest_templates') }]}
+                breadcrumb={[{ label: t('ingest_configurations') }, { label: t('ingest_templates') }]}
                 showFilters={false}
                 showPagination
                 showAddNewButton={canCreate}
-                addNewButtonText={t('add_new_outgestion_template')}
+                addNewButtonText={t('add_new_ingestion_template')}
                 onAddNewButton={() => setIsModalOpen(true)}
                 pageStart={pageStart}
                 pageEnd={pageEnd}
@@ -190,7 +193,7 @@ const OutgestTemplatesPage = () => {
                                             className="ml-2"
                                         />
                                     </button>
-                                    <Can action={CONFIGURATION_OUTGESTION_TEMPLATES_ACTIONS.edit}>
+                                    <Can action={CONFIGURATION_INGESTION_TEMPLATES_ACTIONS.edit}>
                                         <button
                                             onClick={(e) => {
                                                 e.preventDefault();
@@ -205,7 +208,7 @@ const OutgestTemplatesPage = () => {
                                             <Pencil size={16} className='opacity-60' />
                                         </button>
                                     </Can>
-                                    <Can action={CONFIGURATION_OUTGESTION_TEMPLATES_ACTIONS.delete}>
+                                    <Can action={CONFIGURATION_INGESTION_TEMPLATES_ACTIONS.delete}>
                                         <button
                                             onClick={(e) => handleDelete(e, item)}
                                             className="flex items-center cursor-pointer hover:opacity-80 transition-opacity"
@@ -241,7 +244,7 @@ const OutgestTemplatesPage = () => {
                 />
             )}
 
-            <ViewOutgestionTemplateModal
+            <ViewIngestionTemplateModal
                 isOpen={isViewOpen}
                 data={selectedItem}
                 onClose={() => {
@@ -250,14 +253,14 @@ const OutgestTemplatesPage = () => {
                 }}
             />
 
-            <AddOutgestionTemplateModal
+            <AddIngestionTemplateModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 onSuccess={() => {
                     refresh();
                 }}
             />
-            <EditOutgestionTemplateModal
+            <EditIngestionTemplateModal
                 isOpen={isEditOpen}
                 data={selectedItem}
                 onClose={() => {
@@ -272,4 +275,4 @@ const OutgestTemplatesPage = () => {
     );
 };
 
-export default OutgestTemplatesPage;
+export default IngestTemplatesPage;

@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
 import { useAllRegister } from '../shared';
 import { useAllDataModels } from '../shared/hooks/useAllDataModels';
-import CustomDropdown from './CustomDropdown';
+import CustomDropdown from '../shared/components/CustomDropdown';
 
 interface AddOutgestionTopicModalProps {
     isOpen: boolean;

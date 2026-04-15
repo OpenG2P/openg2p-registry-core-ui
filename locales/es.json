@@ -764,5 +764,9 @@
   "view_outgestion_template": "Ver plantilla",
   "websub_register_error": "Error de registro de WebSub",
   "view_outgestion_topic": "Ver el tema de outgestión",
-  "websub_register_attempts": "Intentos de registro de WebSub"
+  "websub_register_attempts": "Intentos de registro de WebSub",
+  "add_new_ingestion_template": "Agregar nueva plantilla de ingestión",
+  "jsonld_expansion": "Expansión JSON-LD",
+  "view_ingestion_template": "Ver plantilla de ingestión",
+  "edit_ingestion_templates": "Editar plantillas de ingestión"
 }

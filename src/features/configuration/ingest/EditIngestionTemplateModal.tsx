@@ -6,32 +6,29 @@ import { useTranslations } from 'next-intl';
 import { useFetch } from '@/shared/hooks';
 import { toast } from 'react-toastify';
 import { useFileUpload } from '../shared/hooks/useFileUpload';
-import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
-import { useAllRegister } from '../shared';
-import { useAllDataModels } from '../shared/hooks/useAllDataModels';
-import CustomDropdown from '../shared/components/CustomDropdown';
 
-interface EditOutgestionTemplateModalProps {
+interface EditIngestionTemplateModalProps {
     isOpen: boolean;
     onClose: () => void;
     onSuccess?: () => void;
     data?: any;
 }
 
-export default function EditOutgestionTemplateModal({
+export default function EditIngestionTemplateModal({
     isOpen,
     onClose,
     onSuccess,
     data,
-}: EditOutgestionTemplateModalProps) {
+}: EditIngestionTemplateModalProps) {
     const t = useTranslations();
-    const { execute: updateOutgestionTemplate } = useFetch();
+    const { execute: updateIngestionTemplate } = useFetch();
 
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const [formData, setFormData] = useState({
         template_id: '',
         template_file_id: '',
+        jsonld_expansion_required: false
     });
 
     useEffect(() => {
@@ -39,11 +36,12 @@ export default function EditOutgestionTemplateModal({
             setFormData({
                 template_id: data.template_id || '',
                 template_file_id: data.template_file_id || '',
+                jsonld_expansion_required: data.jsonld_expansion_required || false
             });
         }
     }, [data]);
 
-    const { uploadFile, uploading, uploadedFileName, setUploadedFileName } = useFileUpload("/api/configuration/outgest/upload-template");
+    const { uploadFile, uploading, uploadedFileName, setUploadedFileName } = useFileUpload("/api/configuration/ingest/upload-template");
 
     const handleFileUpload = async (file: File) => {
         const documentId = await uploadFile(file);
@@ -68,8 +66,8 @@ export default function EditOutgestionTemplateModal({
     };
 
     const handleSubmit = async () => {
-        const result = await updateOutgestionTemplate(
-            '/api/configuration/outgest/update-template',
+        const result = await updateIngestionTemplate(
+            '/api/configuration/ingest/update-template',
             {
                 method: 'POST',
                 body: JSON.stringify({
@@ -84,6 +82,7 @@ export default function EditOutgestionTemplateModal({
             setFormData({
                 template_id: '',
                 template_file_id: '',
+                jsonld_expansion_required: false
             });
             setUploadedFileName('');
             onSuccess?.();
@@ -110,7 +109,7 @@ export default function EditOutgestionTemplateModal({
                 </button>
 
                 <h2 className="text-[24px] text-[#ED7C22] font-medium mb-4">
-                    {t('edit_outgestion_templates')}
+                    {t('edit_ingestion_templates')}
                 </h2>
 
                 <div className="space-y-4">
@@ -130,57 +129,64 @@ export default function EditOutgestionTemplateModal({
                             {data.data_model_mnemonic || '-'}
                         </div>
                     </div>
-                    <div>
-                        <label className="text-[16px] font-medium text-black">
-                            {t('template_id')}
-                        </label>
+                    <div className='flex'>
+                        <div className="mt-2 flex-1 items-center gap-4">
+                            <label className="text-[16px] font-medium text-black">
+                                {t('template_id')}
+                            </label>
 
-                        <div className="mt-2 flex items-center gap-4">
-                            <div
-                                onClick={() => fileInputRef.current?.click()}
-                                className="w-10 h-10 border-2 border-dashed border-[#F77F57] rounded-[10px] flex items-center justify-center cursor-pointer hover:bg-orange-50 transition-colors shrink-0"
-                            >
-                                <Upload className="text-[#F77F57]" size={20} />
-                            </div>
-
-                            <input
-                                type="file"
-                                ref={fileInputRef}
-                                onChange={handleFileChange}
-                                className="hidden"
-                            />
-                            <div className="flex-1">
-                                <button
-                                    type="button"
+                            <div className="mt-2 flex items-center gap-4">
+                                <div
                                     onClick={() => fileInputRef.current?.click()}
-                                    className="text-[#F77F57] font-medium"
+                                    className="w-10 h-10 border-2 border-dashed border-[#F77F57] rounded-[10px] flex items-center justify-center cursor-pointer hover:bg-orange-50 transition-colors shrink-0"
                                 >
-                                    {uploading
-                                        ? 'Uploading...'
-                                        : formData.template_file_id
-                                            ? 'Change File'
-                                            : 'Upload File'}
-                                </button>
+                                    <Upload className="text-[#F77F57]" size={20} />
+                                </div>
 
-                                {formData.template_file_id && (
-                                    <p className="text-[#77D79B] mt-1 text-xs">
-                                        {uploadedFileName}
-                                    </p>
-                                )}
+                                <input
+                                    type="file"
+                                    ref={fileInputRef}
+                                    onChange={handleFileChange}
+                                    className="hidden"
+                                />
+                                <div className="flex-1">
+                                    <button
+                                        type="button"
+                                        onClick={() => fileInputRef.current?.click()}
+                                        className="text-[#F77F57] font-medium"
+                                    >
+                                        {uploading
+                                            ? 'Uploading...'
+                                            : formData.template_file_id
+                                                ? 'Change File'
+                                                : 'Upload File'}
+                                    </button>
+
+                                    {formData.template_file_id && (
+                                        <p className="text-[#77D79B] mt-1 text-xs">
+                                            {uploadedFileName}
+                                        </p>
+                                    )}
+                                </div>
                             </div>
-                            {formData.template_file_id && (
-                                <button
-                                    onClick={() =>
+                        </div>
+                        <div className="mt-2 flex-1 items-center gap-4">
+                            <label className="text-[16px] font-medium text-black">
+                                {t('jsonld_expansion')}
+                            </label>
+                            <div className="mt-2 flex items-center gap-4">
+                                <input
+                                    type="checkbox"
+                                    checked={formData.jsonld_expansion_required || false}
+                                    onChange={(e) =>
                                         setFormData((prev) => ({
                                             ...prev,
-                                            template_file_id: '',
+                                            jsonld_expansion_required: e.target.checked,
                                         }))
                                     }
-                                    className="text-xs text-red-500 hover:underline"
-                                >
-                                    {t("remove")}
-                                </button>
-                            )}
+                                    className="w-4 h-4 cursor-pointer"
+                                />
+                            </div>
                         </div>
                     </div>
 

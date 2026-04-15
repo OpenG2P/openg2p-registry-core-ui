@@ -763,5 +763,10 @@
   "view_outgestion_template": "View Template",
   "websub_register_error": "WebSub registration error",
   "view_outgestion_topic": "View outgestion topic",
-  "websub_register_attempts": "WebSub registration attempts"
+  "websub_register_attempts": "WebSub registration attempts",
+  "ingest_templates": "Templates",
+  "add_new_ingestion_template": "Add New Ingestion Template",
+  "jsonld_expansion": "JSON-LD Expansion",
+  "view_ingestion_template": "View Ingestion Template",
+  "edit_ingestion_templates": "Edit Ingestion Templates"
 }

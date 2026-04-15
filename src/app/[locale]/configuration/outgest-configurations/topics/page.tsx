@@ -17,12 +17,19 @@ import EditOutgestionTopicModal from '@/features/configuration/outgest/EditOutge
 import ConfirmRemovePopup from '@/features/configuration/shared/components/ConfirmRemovePopup';
 import ViewOutgestionTopicModal from '@/features/configuration/outgest/ViewOutgestionTopicModal';
 
-type OutgestTopic = {
+export interface OutgestTopic {
     topic_id: string;
     register_id: string;
+    register_mnemonic: string;
     data_model_id: string;
+    data_model_mnemonic: string;
     websub_topic: string;
     description: string;
+    is_active: boolean;
+    websub_register_status: string;
+    websub_register_datetime: string;
+    websub_register_number_of_attempts: string;
+    websub_register_latest_error_message: string;
 }
 
 
