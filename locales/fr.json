@@ -774,5 +774,6 @@
   "topic_activated": "Sujet activé avec succès",
   "confirm_remove_ingestion_template": "Êtes-vous sûr de vouloir supprimer ce modèle d’ingestion ?",
   "edit_outgestion_topics": "Modifier les sujets d’outgestion",
-  "confirm_remove_ingest_key_path": "Confirmer la suppression du chemin de clé d’ingestion"
+  "confirm_remove_ingest_key_path": "Confirmer la suppression du chemin de clé d’ingestion",
+  "confirm_remove_ingest_semantic_pattern": "Confirmer la suppression du modèle sémantique"
 }

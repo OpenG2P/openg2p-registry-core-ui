@@ -5,3 +5,7 @@ export { default as ViewIngestionTemplateModal } from './ViewIngestionTemplateMo
 export { default as AddKeyPathModal } from './AddKeyPathModal';
 export { default as EditKeyPathModal } from './EditKeyPathModal';
 export { default as ViewKeyPathModal } from './ViewKeyPathModal';
+
+export { default as AddSemanticPatternModal } from './AddSemanticPatternModal';
+export { default as EditSemanticPatternModal } from './EditSemanticPatternModal';
+export { default as ViewSemanticPatternModal } from './ViewSemanticPatternModal';

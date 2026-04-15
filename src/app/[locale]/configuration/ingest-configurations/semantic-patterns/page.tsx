@@ -1,24 +1,23 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
 import { TopBar } from '@/components/shared';
 import { useAllSemanticPatterns, useIncomingSemanticPattern } from '@/features/configuration/shared';
 import { usePagination, useFetch } from '@/shared/hooks';
 import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
 import { useTranslations } from 'next-intl';
 import { IncomingSemanticPattern } from '@/features/configuration/shared/hooks/useAllSemanticPatterns';
-import AddSemanticPatternModal from '@/features/configuration/ingest/AddSemanticPatternModal';
-import ViewSemanticPatternModal from '@/features/configuration/ingest/ViewSemanticPatternModal';
-import EditSemanticPatternModal from '@/features/configuration/ingest/EditSemanticPatternModal';
 import { toast } from 'react-toastify';
+import { DeleteButton, EditButton, ViewButton, DataTable } from '@/features/configuration/shared/components';
+import ConfirmRemovePopup from '@/features/configuration/shared/components/ConfirmRemovePopup';
+import { AddSemanticPatternModal, EditSemanticPatternModal, ViewSemanticPatternModal } from '@/features/configuration/ingest';
 
 const SemanticPatternsPage = () => {
     const t = useTranslations();
-    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-    const [isViewModalOpen, setIsViewModalOpen] = useState(false);
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [modalType, setModalType] = useState<'add' | 'edit' | 'view' | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
+    const [showPopup, setShowPopup] = useState(false);
+    const [selectedItem, setSelectedItem] = useState<IncomingSemanticPattern | null>(null);
 
     const { config } = useRuntimeConfig();
     const { semanticPatterns, pagination, loading, refresh } = useAllSemanticPatterns(currentPage, config.pageSize);
@@ -43,14 +42,14 @@ const SemanticPatternsPage = () => {
     const handleView = async (pattern: IncomingSemanticPattern) => {
         const result = await fetchSemanticPattern(pattern.semantic_pattern_id);
         if (result) {
-            setIsViewModalOpen(true);
+            setModalType('view');
         }
     };
 
     const handleUpdate = async (pattern: IncomingSemanticPattern) => {
         const result = await fetchSemanticPattern(pattern.semantic_pattern_id);
         if (result) {
-            setIsEditModalOpen(true);
+            setModalType('edit');
         }
     };
 
@@ -72,42 +71,38 @@ const SemanticPatternsPage = () => {
         }
     };
 
-    const handleDelete = (pattern: IncomingSemanticPattern) => {
-        const { semantic_pattern_id: id } = pattern;
+     const handleConfirmDelete = async () => {
+            if (!selectedItem) return;
+    
+            await proceedDelete(selectedItem.semantic_pattern_id);
+    
+            setShowPopup(false);
+            setSelectedItem(null);
+        };
+    
+        const handleDelete = (pattern: IncomingSemanticPattern) => {
+            setSelectedItem(pattern);
+            setShowPopup(true);
+        };
 
-        toast.info(
-            ({ closeToast }) => (
-                <div className="p-1">
-                    <p className="font-bold text-gray-800 mb-3">{t('are_you_sure')} ({id})</p>
-                    <div className="flex gap-3">
-                        <button
-                            onClick={async () => {
-                                closeToast();
-                                await proceedDelete(id);
-                            }}
-                            className="bg-[#ED7C22] text-white px-4 py-1.5 rounded-full text-sm font-semibold hover:bg-[#d66a1a] transition-colors shadow-sm"
-                        >
-                            {t('remove')}
-                        </button>
-                        <button
-                            onClick={closeToast}
-                            className="bg-gray-100 text-gray-600 px-4 py-1.5 rounded-full text-sm font-semibold hover:bg-gray-200 transition-colors"
-                        >
-                            {t('cancel')}
-                        </button>
-                    </div>
-                </div>
-            ),
-            {
-                position: "top-right",
-                autoClose: false,
-                closeOnClick: false,
-                draggable: false,
-                closeButton: false,
-                className: 'rounded-[15px] shadow-xl border border-gray-100',
-            }
-        );
-    };
+    const columns = [
+        {
+            key: 'semantic_pattern_id',
+            label: t('semantic_pattern_id'),
+        },
+        {
+            key: 'data_model_id',
+            label: t('data_model_id'),
+        },
+        {
+            key: 'register_mnemonic',
+            label: t('register'),
+        },
+        {
+            key: 'section_mnemonic',
+            label: t('section'),
+        },
+    ];
 
     return (
         <>
@@ -117,7 +112,7 @@ const SemanticPatternsPage = () => {
                 showPagination
                 showAddNewButton={true}
                 addNewButtonText={t('add_new_semantic_pattern')}
-                onAddNewButton={() => setIsAddModalOpen(true)}
+                onAddNewButton={() => setModalType('add')}
                 pageStart={pageStart}
                 pageEnd={pageEnd}
                 total={total}
@@ -125,126 +120,63 @@ const SemanticPatternsPage = () => {
                 onNext={handleNext}
             />
 
-            <div className="mx-7.5 bg-white rounded-[10px] p-4 pt-8 overflow-hidden">
-                {loading ? (
-                    <div className="flex items-center justify-center p-8">
-                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#ED7C22]"></div>
-                    </div>
-                ) : (
-                    <div>
-                        {/* Header */}
-                        <div className="grid grid-cols-5 gap-4 pb-2 px-8">
-                            <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
-                                {t('semantic_pattern_id')}
-                            </div>
-                            <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
-                                {t('data_model_id')}
-                            </div>
-                            <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
-                                {t('register')}
-                            </div>
-                            <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
-                                {t('section')}
-                            </div>
-                            <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
-                                {t('actions')}
-                            </div>
-                        </div>
+            <DataTable
+                columns={columns}
+                data={semanticPatterns}
+                loading={loading}
+                rowKey={(item) => item.semantic_pattern_id}
+                actions={(item) => (
+                    <>
+                        <ViewButton
+                            label={t('view')}
+                            onClick={() => handleView(item)}
+                        />
 
-                        {/* Data Rows */}
-                        {semanticPatterns.length === 0 ? (
-                            <div className="text-center py-8 text-gray-400">
-                                {t('no_items_found')}
-                            </div>
-                        ) : (
-                            semanticPatterns.map((pattern: IncomingSemanticPattern, index: number) => (
-                                <div key={pattern.semantic_pattern_id} className="block -mx-8">
-                                    <div
-                                        className={`grid grid-cols-5 gap-4 items-center px-16 h-15 transition-colors ${index % 2 === 0 ? 'bg-[#D9D9D940]' : 'bg-white'
-                                            }`}
-                                    >
-                                        <div className="text-base font-medium truncate">
-                                            {pattern.semantic_pattern_id}
-                                        </div>
-                                        <div className="text-base font-medium truncate">
-                                            {pattern.data_model_mnemonic}
-                                        </div>
-                                        <div className="text-base font-medium truncate">
-                                            {pattern.register_mnemonic}
-                                        </div>
-                                        <div className="text-base font-medium truncate">
-                                            {pattern.section_mnemonic}
-                                        </div>
-                                        <div className="flex items-center gap-6">
-                                            <button
-                                                onClick={() => handleView(pattern)}
-                                                className="flex items-center text-[#1cc9b7] cursor-pointer hover:opacity-80 transition-opacity"
-                                                title={t('view')}
-                                            >
-                                                <span className="text-sm font-medium">{t('view')}</span>
-                                                <Image
-                                                    src="/images/common/view.png"
-                                                    alt={t('view')}
-                                                    width={18}
-                                                    height={18}
-                                                    className="ml-2"
-                                                />
-                                            </button>
-                                            <button
-                                                onClick={() => handleUpdate(pattern)}
-                                                className="flex items-center text-[#1cc9b7] cursor-pointer hover:opacity-80 transition-opacity"
-                                                title={t('update')}
-                                            >
-                                                <span className="text-sm font-medium">{t('update')}</span>
-                                                <Image
-                                                    src="/images/common/edit.png"
-                                                    alt={t('update')}
-                                                    width={18}
-                                                    height={18}
-                                                    className="ml-2"
-                                                />
-                                            </button>
-                                            <button
-                                                onClick={() => handleDelete(pattern)}
-                                                className="flex items-center text-[#1cc9b7] cursor-pointer hover:opacity-80 transition-opacity"
-                                                title={t('remove')}
-                                            >
-                                                <span className="text-sm font-medium text-[#00000080]">{t('remove')}</span>
-                                                <Image
-                                                    src="/images/common/false_sign.png"
-                                                    alt={t('remove')}
-                                                    width={18}
-                                                    height={18}
-                                                    className="ml-2"
-                                                />
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))
-                        )}
-                    </div>
+                        <EditButton
+                            label={t('common.edit')}
+                            onClick={() => handleUpdate(item)}
+                        />
+
+                        <DeleteButton
+                            label={t('remove')}
+                            onClick={() => handleDelete(item)}
+                        />
+                    </>
                 )}
-            </div>
-
-            <AddSemanticPatternModal
-                isOpen={isAddModalOpen}
-                onClose={() => setIsAddModalOpen(false)}
-                onSuccess={refresh}
             />
 
-            <ViewSemanticPatternModal
-                isOpen={isViewModalOpen}
-                onClose={() => setIsViewModalOpen(false)}
-                data={selectedSemanticPattern}
-            />
+            {showPopup && (
+                <ConfirmRemovePopup
+                    onClose={() => {
+                        setShowPopup(false);
+                        setSelectedItem(null);
+                    }}
+                    onConfirm={handleConfirmDelete}
+                    messageKey='confirm_remove_ingest_semantic_pattern'
+                />
+            )}
 
-            <EditSemanticPatternModal
-                isOpen={isEditModalOpen}
-                onClose={() => setIsEditModalOpen(false)}
-                initialData={selectedSemanticPattern}
-                onSuccess={refresh}
-            />
+            {modalType === 'add' && (
+                <AddSemanticPatternModal
+                    onClose={() => setModalType(null)}
+                    onSuccess={refresh}
+                />
+            )}
+
+            {modalType === 'view' && (
+                <ViewSemanticPatternModal
+                    onClose={() => setModalType(null)}
+                    data={selectedSemanticPattern}
+                />
+            )}
+
+            {modalType === 'edit' && (
+                <EditSemanticPatternModal
+                    onClose={() => setModalType(null)}
+                    initialData={selectedSemanticPattern}
+                    onSuccess={refresh}
+                />
+            )}
         </>
     );
 };
