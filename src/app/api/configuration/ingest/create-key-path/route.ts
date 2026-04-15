@@ -26,14 +26,3 @@ export async function POST(request: NextRequest) {
     });
 }
 
-/*
-"response_payload": {
-  "data_model_id": "string",
-  "key_path_for_message_id": "string",
-  "key_path_for_sender": "string",
-  "key_path_for_signature": "string",
-  "key_path_for_signature_payload": "string",
-  "is_list": true,
-  "key_path_for_list_elements": "string"
-}
-*/

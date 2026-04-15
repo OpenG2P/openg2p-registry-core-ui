@@ -21,7 +21,7 @@ export function useAllSubscriptionActivityLogs(page?: number, pageSize?: number)
             number_of_pages: number;
         };
     }>({
-        url: '/api/configuration/ingest/get-subscription-activity-log-for-partner',
+        url: '/api/configuration/ingest/get-all-subscription-activity-logs',
         options: {
             method: 'POST',
             body: JSON.stringify({

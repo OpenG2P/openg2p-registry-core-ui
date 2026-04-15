@@ -27,19 +27,4 @@ export async function POST(request: NextRequest) {
     });
 }
 
-/*
-"response_payload": [
-  {
-    "subscription_activity_log_id": "string",
-    "is_unsubscribe": true,
-    "description": "string",
-    "partner_id": "string",
-    "subscription_url": "string",
-    "registry_callback_url": "string",
-    "header": { "additionalProp1": {} },
-    "payload": { "additionalProp1": {} },
-    "response": { "additionalProp1": {} },
-    "date_time": "2026-04-13T06:50:15.782Z"
-  }
-]
-*/
+

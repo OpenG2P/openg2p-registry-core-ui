@@ -21,14 +21,3 @@ export async function POST(request: NextRequest) {
         }),
     });
 }
-
-/*
-"response_payload": [
-  {
-    "key_path_id": "string",
-    "data_model_id": "string",
-    "data_model_mnemonic": "string",
-    "is_list": true
-  }
-]
-*/
