@@ -18,10 +18,10 @@ export default function ViewOutgestionTemplateModal({
         <BaseModal
             title={t('view_outgestion_template')}
             onClose={onClose}
+            maxWidth='max-w-200'
         >
-            <Field label={t('template_id')} value={data?.template_id} />
-            <Field label={t('register_mnemonic')} value={data?.register_mnemonic} />
             <Field label={t('data_model_mnemonic')} value={data?.data_model_mnemonic} />
+            <Field label={t('register_mnemonic')} value={data?.register_mnemonic} />
             <Field label={t('template_file_id')} value={data?.template_file_id} />
         </BaseModal>
     );

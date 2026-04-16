@@ -49,28 +49,21 @@ export default function AddOutgestionTemplateModal({
         template_file_id: '',
     });
 
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const { uploadFile, uploading, uploadedFileName, setUploadedFileName } = useFileUpload("/api/configuration/outgest/upload-template");
 
-    const handleFileUpload = async (file: File) => {
-        const documentId = await uploadFile(file);
-
-        if (!documentId) return;
-
-        setFormData((prev) => ({
-            ...prev,
-            template_file_id: documentId,
-        }));
-    };
-
-    const handleFileChange = async (
-        e: React.ChangeEvent<HTMLInputElement>
-    ) => {
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
 
-        await handleFileUpload(file);
-
+        setSelectedFile(file);
+        setUploadedFileName(file.name)
         e.target.value = '';
+    };
+
+    const handleRemoveFile = () => {
+        setSelectedFile(null);
+        setUploadedFileName('');
     };
 
     const handleSubmit = async () => {
@@ -79,11 +72,19 @@ export default function AddOutgestionTemplateModal({
             return;
         }
 
+        let documentId = formData.template_file_id;
+        if (selectedFile) {
+            documentId = await uploadFile(selectedFile);
+        }
+
         const result = await createOutgestionTemplate(
             '/api/configuration/outgest/create-template',
             {
                 method: 'POST',
-                body: JSON.stringify(formData),
+                body: JSON.stringify({
+                    ...formData,
+                    template_file_id: documentId
+                }),
             }
         );
 
@@ -120,20 +121,8 @@ export default function AddOutgestionTemplateModal({
             onClose={handleCancel}
             primaryActionLabel={t('save')}
             onPrimaryAction={handleSubmit}
+            maxWidth='max-w-200'
         >
-            <CustomDropdown
-                label={t('register_id')}
-                options={registerOptions}
-                value={formData.register_id}
-                loading={registersLoading}
-                disabled={registersLoading}
-                onChange={(value) =>
-                    setFormData((prev) => ({
-                        ...prev,
-                        register_id: value,
-                    }))
-                }
-            />
             <CustomDropdown
                 label={t('data_model_id')}
                 options={dataModelOptions}
@@ -147,6 +136,19 @@ export default function AddOutgestionTemplateModal({
                     }))
                 }
             />
+            <CustomDropdown
+                label={t('register_id')}
+                options={registerOptions}
+                value={formData.register_id}
+                loading={registersLoading}
+                disabled={registersLoading}
+                onChange={(value) =>
+                    setFormData((prev) => ({
+                        ...prev,
+                        register_id: value,
+                    }))
+                }
+            />
             <FileUploadField
                 label={t('template_id')}
                 fileInputRef={fileInputRef}
@@ -154,6 +156,7 @@ export default function AddOutgestionTemplateModal({
                 fileId={formData.template_file_id}
                 fileName={uploadedFileName}
                 onFileChange={handleFileChange}
+                onRemove={handleRemoveFile}
             />
         </BaseModal>
     );

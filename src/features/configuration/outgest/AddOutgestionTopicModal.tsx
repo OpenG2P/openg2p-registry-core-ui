@@ -63,7 +63,7 @@ export default function AddOutgestionTopicModal({
         );
 
         if (result.topic_id) {
-            toast.success(t('topic_created', { id: result?.topic_id }));
+            toast.success(t('topic_created'));
 
             setFormData({
                 register_id: '',
@@ -75,7 +75,7 @@ export default function AddOutgestionTopicModal({
             onSuccess?.();
             onClose();
         } else {
-            toast.error('Failed to create Topic');
+            toast.error(t('topic_creation_failed'));
         }
     };
 
@@ -95,20 +95,8 @@ export default function AddOutgestionTopicModal({
             onClose={handleCancel}
             primaryActionLabel={t('save')}
             onPrimaryAction={handleSubmit}
+            maxWidth='max-w-200'
         >
-            <CustomDropdown
-                label={t('register_id')}
-                options={registerOptions}
-                value={formData.register_id}
-                loading={registersLoading}
-                disabled={registersLoading}
-                onChange={(value) =>
-                    setFormData((prev) => ({
-                        ...prev,
-                        register_id: value,
-                    }))
-                }
-            />
             <CustomDropdown
                 label={t('data_model_id')}
                 options={dataModelOptions}
@@ -119,6 +107,19 @@ export default function AddOutgestionTopicModal({
                     setFormData((prev) => ({
                         ...prev,
                         data_model_id: value,
+                    }))
+                }
+            />
+            <CustomDropdown
+                label={t('register_id')}
+                options={registerOptions}
+                value={formData.register_id}
+                loading={registersLoading}
+                disabled={registersLoading}
+                onChange={(value) =>
+                    setFormData((prev) => ({
+                        ...prev,
+                        register_id: value,
                     }))
                 }
             />

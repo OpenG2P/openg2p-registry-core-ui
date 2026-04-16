@@ -15,6 +15,7 @@ import { toast } from 'react-toastify';
 import ConfirmRemovePopup from '@/features/configuration/shared/components/ConfirmRemovePopup';
 import { DeleteButton, EditButton, DataTable, ViewButton } from '@/features/configuration/shared/components';
 import ViewDataModelModal from '@/features/configuration/data-models/ViewDataModelModal';
+import FileLink from '@/features/configuration/shared/components/FileLink';
 
 
 type DataModel = {
@@ -42,10 +43,10 @@ const DataModelsConfigurationPage = () => {
             });
 
             if (result) {
-                toast.success(`"${name}" deleted successfully`);
+                toast.success(t('data_models_deleted_successfully'));
                 refresh();
             } else {
-                console.error('Delete failed');
+                toast.error(t('data_model_deletion_failed'));
             }
         } catch (error) {
             console.error('Delete error');
@@ -105,6 +106,11 @@ const DataModelsConfigurationPage = () => {
         {
             key: 'response_template_file_id',
             label: t('template_id'),
+            render: (item: DataModel) => (
+                <FileLink
+                    documentId={item.response_template_file_id}
+                />
+            ),
         },
         {
             key: 'is_active',

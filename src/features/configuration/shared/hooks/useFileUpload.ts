@@ -3,11 +3,13 @@
 import { useState } from 'react';
 import { useFetch } from '@/shared/hooks';
 import { toast } from 'react-toastify';
+import { useTranslations } from 'next-intl';
 
 export const useFileUpload = (apiPath: string) => {
     const { execute } = useFetch();
     const [uploading, setUploading] = useState(false);
     const [uploadedFileName, setUploadedFileName] = useState('');
+    const t = useTranslations();
 
     const uploadFile = async (file: File) => {
         try {
@@ -32,12 +34,11 @@ export const useFileUpload = (apiPath: string) => {
             const documentId = result[0].document_store_id;
 
             setUploadedFileName(file.name);
-            toast.success('File uploaded successfully');
+            toast.success(t('file_uploaded_successfully'));
 
             return documentId;
         } catch (err) {
-            console.error(err);
-            toast.error('Upload failed');
+            toast.error(t('failed_to_upload_file'));
             return null;
         } finally {
             setUploading(false);

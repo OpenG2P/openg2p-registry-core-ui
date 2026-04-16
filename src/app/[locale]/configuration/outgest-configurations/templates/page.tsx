@@ -13,6 +13,7 @@ import { CONFIGURATION_OUTGESTION_TEMPLATES_ACTIONS } from '@/features/configura
 import ConfirmRemovePopup from '@/features/configuration/shared/components/ConfirmRemovePopup';
 import { AddOutgestionTemplateModal, EditOutgestionTemplateModal, ViewOutgestionTemplateModal } from '@/features/configuration/outgest';
 import { DeleteButton, EditButton, ViewButton, DataTable } from '@/features/configuration/shared/components';
+import FileLink from '@/features/configuration/shared/components/FileLink';
 
 
 type OutgestTemplate = {
@@ -99,10 +100,23 @@ const OutgestTemplatesPage = () => {
     };
 
     const templateColumns = [
-        { key: 'template_id', label: t('template_id') },
-        { key: 'register_mnemonic', label: t('register_mnemonic') },
-        { key: 'data_model_mnemonic', label: t('data_model_mnemonic') },
-        { key: 'template_file_id', label: t('template_file_id') },
+        {
+            key: 'data_model_mnemonic',
+            label: t('data_model_mnemonic')
+        },
+        {
+            key: 'register_mnemonic',
+            label: t('register_mnemonic')
+        },
+        {
+            key: 'template_file_id',
+            label: t('template_file_id'),
+            render: (item: OutgestTemplate) => (
+                <FileLink
+                    documentId={item.template_file_id}
+                />
+            ),
+        },
     ];
 
     return (

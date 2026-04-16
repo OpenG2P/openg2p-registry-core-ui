@@ -82,11 +82,11 @@ export default function EditOutgestionTopicModal({
         );
 
         if (result) {
-            toast.success(t('topic_updated', { id: formData.topic_id }));
+            toast.success(t('topic_updated'));
             onSuccess?.();
             onClose();
         } else {
-            toast.error(t('update_failed'));
+            toast.error(t('topic_update_failed'));
         }
     };
 
@@ -100,6 +100,7 @@ export default function EditOutgestionTopicModal({
             onClose={handleCancel}
             primaryActionLabel={t('update')}
             onPrimaryAction={handleSubmit}
+            maxWidth='max-w-200'
         >
             <CustomDropdown
                 label={t('register_id')}

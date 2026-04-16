@@ -15,6 +15,7 @@ import ConfirmRemovePopup from '@/features/configuration/shared/components/Confi
 import ViewOutgestionTopicModal from '@/features/configuration/outgest/ViewOutgestionTopicModal';
 import { useAllOutgestTopics } from '@/features/configuration/shared/hooks/useAllOutgestTopics';
 import { DeleteButton, EditButton, ViewButton, DataTable } from '@/features/configuration/shared/components';
+import ToggleStatusSwitch from '@/features/configuration/shared/components/ToggleStatusSwitch';
 
 
 export interface OutgestTopic {
@@ -55,10 +56,10 @@ const OutgestTopicsPage = () => {
                 toast.success(t("topic_deleted_success"));
                 refresh();
             } else {
-                console.error('Delete failed');
+                toast.error(t('topic_deletion_failed'));
             }
         } catch (error) {
-            console.error('Delete error');
+            toast.error(t('topic_deletion_failed'));
         }
     };
 
@@ -81,17 +82,13 @@ const OutgestTopicsPage = () => {
             );
 
             if (result) {
-                toast.success(
-                    item.is_active
-                        ? t('topic_deactivated')
-                        : t('topic_activated')
-                );
+                toast.success(t('topic_toggle_success'));
                 refresh();
             } else {
-                toast.error(t('update_failed'));
+                toast.error(t('topic_toggle_failed'));
             }
         } catch (error) {
-            toast.error(t('update_failed'));
+            toast.error(t('topic_toggle_failed'));
         }
     };
 
@@ -142,10 +139,28 @@ const OutgestTopicsPage = () => {
     };
 
     const topicColumns = [
-        { key: 'topic_id', label: t('topic_id') },
-        { key: 'register_mnemonic', label: t('register_mnemonic') },
-        { key: 'data_model_mnemonic', label: t('data_model_mnemonic') },
-        { key: 'websub_topic', label: t('websub_topic') },
+        {
+            key: 'data_model_mnemonic',
+            label: t('data_model_mnemonic')
+        },
+        {
+            key: 'register_mnemonic',
+            label: t('register_mnemonic')
+        },
+        {
+            key: 'websub_topic',
+            label: t('websub_topic')
+        },
+        {
+            key: 'is_active',
+            label: t('status'),
+            render: (item: OutgestTopic) => (
+                <ToggleStatusSwitch
+                    isActive={item.is_active}
+                    onToggle={(e) => handleToggleStatus(e, item)}
+                />
+            ),
+        }
     ];
 
     return (
@@ -190,12 +205,7 @@ const OutgestTopicsPage = () => {
                         </Can>
 
                         <Can action={CONFIGURATION_OUTGESTION_TOPICS_ACTIONS.delete}>
-                            {item.is_active ? (
-                                <DeleteButton
-                                    label={t('deactivate')}
-                                    onClick={(e) => handleToggleStatus(e, item)}
-                                />
-                            ) : (
+                            {!item.is_active && (
                                 <DeleteButton
                                     label={t('remove')}
                                     onClick={(e) => handleDelete(e, item)}
