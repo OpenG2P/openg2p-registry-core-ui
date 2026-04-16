@@ -1,7 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
-import { X } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { useFetch } from '@/shared/hooks';
 import { toast } from 'react-toastify';
@@ -9,16 +8,17 @@ import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
 import { useAllRegister } from '../shared';
 import { useAllDataModels } from '../shared/hooks/useAllDataModels';
 import CustomDropdown from '../shared/components/CustomDropdown';
+import { BaseModal, InputField } from '../shared/components';
+
+
 
 interface EditOutgestionTopicModalProps {
-    isOpen: boolean;
     onClose: () => void;
     onSuccess?: () => void;
     data?: any;
 }
 
 export default function EditOutgestionTopicModal({
-    isOpen,
     onClose,
     onSuccess,
     data,
@@ -94,100 +94,59 @@ export default function EditOutgestionTopicModal({
         onClose();
     };
 
-    if (!isOpen) return null;
-
     return (
-        <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
-            <div className="relative w-full max-w-150 bg-white rounded-[10px] border-5 border-[#F2BA1A] p-10">
-                <button
-                    onClick={handleCancel}
-                    className="absolute top-4 right-4 opacity-50"
-                >
-                    <X size={30} />
-                </button>
-
-                <h2 className="text-[24px] text-[#ED7C22] font-medium mb-4">
-                    {t('edit_outgestion_templates')}
-                </h2>
-
-                <div className="space-y-4">
-                    <div>
-                        <CustomDropdown
-                            label={t('register_id')}
-                            options={registerOptions}
-                            value={formData.register_id}
-                            loading={registersLoading}
-                            disabled={registersLoading}
-                            onChange={(value) =>
-                                setFormData((prev) => ({
-                                    ...prev,
-                                    register_id: value,
-                                }))
-                            }
-                        />
-                    </div>
-                    <div>
-                        <CustomDropdown
-                            label={t('data_model_id')}
-                            options={dataModelOptions}
-                            value={formData.data_model_id}
-                            loading={dataModelsLoading}
-                            disabled={dataModelsLoading}
-                            onChange={(value) =>
-                                setFormData((prev) => ({
-                                    ...prev,
-                                    data_model_id: value,
-                                }))
-                            }
-                        />
-                    </div>
-                    <div>
-                        <label className="text-[16px] font-medium text-black">
-                            {t('websub_topic')}
-                        </label>
-                        <input
-                            value={formData.websub_topic}
-                            onChange={(e) =>
-                                setFormData({
-                                    ...formData,
-                                    websub_topic: e.target.value,
-                                })
-                            }
-                            className="mt-2 w-full border border-[#F77F57] p-2 px-4 rounded-[10px] outline-none"
-                        />
-                    </div>
-                    <div>
-                        <label className="text-[16px] font-medium text-black">
-                            {t('description')}
-                        </label>
-                        <input
-                            value={formData.description}
-                            onChange={(e) =>
-                                setFormData({
-                                    ...formData,
-                                    description: e.target.value,
-                                })
-                            }
-                            className="mt-2 w-full border border-[#F77F57] p-2 px-4 rounded-[10px] outline-none"
-                        />
-                    </div>
-                    <div className="flex gap-4 pt-4">
-                        <button
-                            onClick={handleCancel}
-                            className="px-4 py-2 bg-[#DDDDDD] text-[#00000080] rounded-[10px]"
-                        >
-                            Cancel
-                        </button>
-
-                        <button
-                            onClick={handleSubmit}
-                            className="px-4 py-2 bg-black text-white rounded-[10px]"
-                        >
-                            Update
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <BaseModal
+            title={t('edit_outgestion_topics')}
+            onClose={handleCancel}
+            primaryActionLabel={t('update')}
+            onPrimaryAction={handleSubmit}
+        >
+            <CustomDropdown
+                label={t('register_id')}
+                options={registerOptions}
+                value={formData.register_id}
+                loading={registersLoading}
+                disabled={registersLoading}
+                onChange={(value) =>
+                    setFormData((prev) => ({
+                        ...prev,
+                        register_id: value,
+                    }))
+                }
+            />
+            <CustomDropdown
+                label={t('data_model_id')}
+                options={dataModelOptions}
+                value={formData.data_model_id}
+                loading={dataModelsLoading}
+                disabled={dataModelsLoading}
+                onChange={(value) =>
+                    setFormData((prev) => ({
+                        ...prev,
+                        data_model_id: value,
+                    }))
+                }
+            />
+            <InputField
+                label={t('websub_topic')}
+                value={formData.websub_topic}
+                onChange={(value) =>
+                    setFormData((prev) => ({
+                        ...prev,
+                        websub_topic: value,
+                    }))
+                }
+            />
+            <InputField
+                label={t('description')}
+                value={formData.description}
+                onChange={(value) =>
+                    setFormData((prev) => ({
+                        ...prev,
+                        description: value,
+                    }))
+                }
+            />
+        </BaseModal>
     );
 }

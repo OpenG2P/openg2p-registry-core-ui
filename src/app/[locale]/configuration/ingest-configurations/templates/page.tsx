@@ -1,21 +1,18 @@
 'use client';
 
-import Image from 'next/image';
 import { useState } from 'react';
 import { TopBar } from '@/components/shared';
 import { useFetch, usePagination } from '@/shared/hooks';
 import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
 import { useRbac } from '@/context/RbacContext';
 import { useTranslations } from 'next-intl';
-import { Pencil } from 'lucide-react';
 import Can from '@/components/shared/Can';
 import { toast } from 'react-toastify';
 import ConfirmRemovePopup from '@/features/configuration/shared/components/ConfirmRemovePopup';
 import { CONFIGURATION_INGESTION_TEMPLATES_ACTIONS } from '@/features/configuration/shared/utils/configurationIngestionTemplates.actions';
 import { useAllIngestTemplates } from '@/features/configuration/shared/hooks/useAllIngestTemplates';
-import ViewIngestionTemplateModal from '@/features/configuration/ingest/ViewIngestionTemplateModal';
-import AddIngestionTemplateModal from '@/features/configuration/ingest/AddIngestionTemplateModal';
-import EditIngestionTemplateModal from '@/features/configuration/ingest/EditIngestionTemplateModal';
+import { DeleteButton, EditButton, ViewButton, DataTable } from '@/features/configuration/shared/components';
+import { AddIngestionTemplateModal, EditIngestionTemplateModal, ViewIngestionTemplateModal } from '@/features/configuration/ingest';
 
 type IngestTemplate = {
     template_id: string;
@@ -30,12 +27,9 @@ type IngestTemplate = {
 
 const IngestTemplatesPage = () => {
     const t = useTranslations();
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [isViewOpen, setIsViewOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
 
-    const [isEditOpen, setIsEditOpen] = useState(false);
-
+    const [modalType, setModalType] = useState<'add' | 'edit' | 'view' | null>(null);
     const [selectedItem, setSelectedItem] = useState<IngestTemplate | null>(null);
     const [showPopup, setShowPopup] = useState(false);
 
@@ -105,6 +99,13 @@ const IngestTemplatesPage = () => {
         setCurrentPage((prev) => prev + 1);
     };
 
+    const templateColumns = [
+        { key: 'template_id', label: t('template_id') },
+        { key: 'register_mnemonic', label: t('register_mnemonic') },
+        { key: 'data_model_mnemonic', label: t('data_model_mnemonic') },
+        { key: 'template_file_id', label: t('template_file_id') },
+    ];
+
     return (
         <>
             <TopBar
@@ -113,7 +114,7 @@ const IngestTemplatesPage = () => {
                 showPagination
                 showAddNewButton={canCreate}
                 addNewButtonText={t('add_new_ingestion_template')}
-                onAddNewButton={() => setIsModalOpen(true)}
+                onAddNewButton={() => setModalType('add')}
                 pageStart={pageStart}
                 pageEnd={pageEnd}
                 total={total}
@@ -121,117 +122,40 @@ const IngestTemplatesPage = () => {
                 onNext={handleNext}
             />
 
-            <div className="mx-7.5 bg-white rounded-[10px] p-4 pt-8 overflow-hidden">
-                <div>
-                    <div className="grid grid-cols-5 gap-4 pb-2 px-8 border-b border-gray-100">
-                        <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
-                            {t('template_id')}
-                        </div>
-                        <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
-                            {t('register_mnemonic')}
-                        </div>
-                        <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
-                            {t('data_model_mnemonic')}
-                        </div>
-                        <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
-                            {t('template_file_id')}
-                        </div>
-                        <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
-                            {t('actions')}
-                        </div>
-                    </div>
-                    {loading ? (
-                        <div className="flex justify-center items-center py-60">
-                            <div className="flex flex-col items-center gap-4">
-                                <img
-                                    src="/images/common/loading.gif"
-                                    alt="Loading"
-                                    className="w-12 h-12"
-                                />
-                            </div>
-                        </div>
-                    ) : (
-                        templates.map((item, index) => (
-                            <div
-                                key={item.template_id}
-                                className={`grid grid-cols-5 gap-4 items-center -mx-8 px-16 h-15 transition-colors ${index % 2 === 0 ? 'bg-[#D9D9D940]' : 'bg-white'} cursor-pointer`}
-                            >
-                                <div className="text-base font-medium truncate">
-                                    {item.template_id}
-                                </div>
+            <DataTable
+                columns={templateColumns}
+                data={templates}
+                loading={loading}
+                rowKey={(i) => i.template_id}
+                actions={(item) => (
+                    <>
+                        <ViewButton
+                            label={t('view')}
+                            onClick={() => {
+                                setSelectedItem(item);
+                                setModalType('view');
+                            }}
+                        />
 
-                                <div className="text-base font-medium truncate">
-                                    {item.register_mnemonic}
-                                </div>
+                        <Can action={CONFIGURATION_INGESTION_TEMPLATES_ACTIONS.edit}>
+                            <EditButton
+                                label={t('common.edit')}
+                                onClick={() => {
+                                    setSelectedItem(item);
+                                    setModalType('edit');
+                                }}
+                            />
+                        </Can>
 
-                                <div className="text-base font-medium truncate">
-                                    {item.data_model_mnemonic}
-                                </div>
-
-                                <div className="text-base font-medium truncate">
-                                    {item.template_file_id}
-                                </div>
-
-
-                                <div className="flex items-center gap-6">
-                                    <button
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            e.stopPropagation();
-                                            setSelectedItem(item);
-                                            setIsViewOpen(true);
-                                        }}
-                                        className="flex items-center text-[#1cc9b7] cursor-pointer hover:opacity-80 transition-opacity"
-                                        title={t('view')}
-                                    >
-                                        <span className="text-sm font-medium">{t('view')}</span>
-                                        <Image
-                                            src="/images/common/view.png"
-                                            alt={t('view')}
-                                            width={18}
-                                            height={18}
-                                            className="ml-2"
-                                        />
-                                    </button>
-                                    <Can action={CONFIGURATION_INGESTION_TEMPLATES_ACTIONS.edit}>
-                                        <button
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                e.stopPropagation();
-                                                setSelectedItem(item);
-                                                setIsEditOpen(true);
-                                            }}
-                                            className="flex items-center text-black cursor-pointer gap-2 hover:opacity-80 transition-opacity"
-                                            title={t('common.edit')}
-                                        >
-                                            <span className="font-medium text-[#00000080]">{t('common.edit')}</span>
-                                            <Pencil size={16} className='opacity-60' />
-                                        </button>
-                                    </Can>
-                                    <Can action={CONFIGURATION_INGESTION_TEMPLATES_ACTIONS.delete}>
-                                        <button
-                                            onClick={(e) => handleDelete(e, item)}
-                                            className="flex items-center cursor-pointer hover:opacity-80 transition-opacity"
-                                            title={t('remove')}
-                                        >
-                                            <span className="font-medium text-[#00000080]">
-                                                {t('remove')}
-                                            </span>
-                                            <Image
-                                                src="/images/common/false_sign.png"
-                                                alt={t('remove')}
-                                                width={18}
-                                                height={18}
-                                                className="ml-2"
-                                            />
-                                        </button>
-                                    </Can>
-                                </div>
-                            </div>
-                        ))
-                    )}
-                </div>
-            </div>
+                        <Can action={CONFIGURATION_INGESTION_TEMPLATES_ACTIONS.delete}>
+                            <DeleteButton
+                                label={t('remove')}
+                                onClick={(e) => handleDelete(e, item)}
+                            />
+                        </Can>
+                    </>
+                )}
+            />
 
             {showPopup && (
                 <ConfirmRemovePopup
@@ -244,33 +168,37 @@ const IngestTemplatesPage = () => {
                 />
             )}
 
-            <ViewIngestionTemplateModal
-                isOpen={isViewOpen}
-                data={selectedItem}
-                onClose={() => {
-                    setIsViewOpen(false);
-                    setSelectedItem(null);
-                }}
-            />
+            {modalType === 'view' && (
+                <ViewIngestionTemplateModal
+                    data={selectedItem}
+                    onClose={() => {
+                        setModalType(null);
+                        setSelectedItem(null);
+                    }}
+                />
+            )}
 
-            <AddIngestionTemplateModal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                onSuccess={() => {
-                    refresh();
-                }}
-            />
-            <EditIngestionTemplateModal
-                isOpen={isEditOpen}
-                data={selectedItem}
-                onClose={() => {
-                    setIsEditOpen(false);
-                    setSelectedItem(null);
-                }}
-                onSuccess={() => {
-                    refresh();
-                }}
-            />
+            {modalType === 'add' && (
+                <AddIngestionTemplateModal
+                    onClose={() => setModalType(null)}
+                    onSuccess={() => {
+                        refresh();
+                    }}
+                />
+            )}
+
+            {modalType === 'edit' && (
+                <EditIngestionTemplateModal
+                    data={selectedItem}
+                    onClose={() => {
+                        setModalType(null);
+                        setSelectedItem(null);
+                    }}
+                    onSuccess={() => {
+                        refresh();
+                    }}
+                />
+            )}
         </>
     );
 };

@@ -55,10 +55,9 @@ export default function CustomDropdown({
             )}
 
             <div ref={ref} className="relative mt-2">
-                {/* Trigger */}
                 <div
                     onClick={() => !disabled && setOpen((prev) => !prev)}
-                    className={`flex items-center justify-between gap-2.5 px-4 py-1 bg-white border border-[#F77F57] rounded-[10px] truncate ${open ? 'border-b-transparent rounded-b-none' : ''}`}
+                    className={`flex items-center justify-between gap-2.5 px-4 py-2 bg-white border border-[#F77F57] rounded-[10px] truncate ${open ? 'border-b-transparent rounded-b-none' : ''}`}
                 >
                     <span className="text-[16px] truncate">
                         {loading
