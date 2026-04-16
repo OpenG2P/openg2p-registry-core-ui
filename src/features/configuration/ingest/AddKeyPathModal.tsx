@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useFetch } from '@/shared/hooks';
 import { toast } from 'react-toastify';
 import { useAllDataModels } from '@/features/configuration/shared';
-import { BaseModal, CustomDropdown, InputField } from '../shared/components';
+import { BaseModal, CustomDropdown, InputField, TextAreaField } from '../shared/components';
 
 interface AddKeyPathModalProps {
     onClose: () => void;
@@ -85,24 +85,26 @@ export default function AddKeyPathModal({ onClose, onSuccess }: AddKeyPathModalP
             onClose={handleCancel}
             primaryActionLabel={t('save')}
             onPrimaryAction={handleSubmit}
+            maxWidth='max-w-3xl'
         >
-            <CustomDropdown
-                label={t('data_model')}
-                options={dataModelOptions}
-                value={formData.data_model_id}
-                loading={dataModelsLoading}
-                onChange={(value) =>
-                    setFormData((prev) => ({
-                        ...prev,
-                        data_model_id: value,
-                    }))
-                }
-            />
+            <div className="space-y-4">
+                <CustomDropdown
+                    label={t('data_model_mnemonic')}
+                    options={dataModelOptions}
+                    value={formData.data_model_id}
+                    loading={dataModelsLoading}
+                    onChange={(value) =>
+                        setFormData((prev) => ({
+                            ...prev,
+                            data_model_id: value,
+                        }))
+                    }
+                />
 
-            <div className="grid grid-cols-2 gap-4">
-                <InputField
-                    label={t('message_id')}
+                <TextAreaField
+                    label={t('key_path_for_message_id')}
                     value={formData.key_path_for_message_id}
+                    textareaClassName="h-16"
                     onChange={(value) =>
                         setFormData((prev) => ({
                             ...prev,
@@ -110,9 +112,10 @@ export default function AddKeyPathModal({ onClose, onSuccess }: AddKeyPathModalP
                         }))
                     }
                 />
-                <InputField
-                    label={t('sender')}
+                <TextAreaField
+                    label={t('key_path_for_sender')}
                     value={formData.key_path_for_sender}
+                    textareaClassName="h-16"
                     onChange={(value) =>
                         setFormData((prev) => ({
                             ...prev,
@@ -120,32 +123,7 @@ export default function AddKeyPathModal({ onClose, onSuccess }: AddKeyPathModalP
                         }))
                     }
                 />
-            </div>
 
-            <div className="grid grid-cols-2 gap-4">
-                <InputField
-                    label={t('signature')}
-                    value={formData.key_path_for_signature}
-                    onChange={(value) =>
-                        setFormData((prev) => ({
-                            ...prev,
-                            key_path_for_signature: value,
-                        }))
-                    }
-                />
-                <InputField
-                    label={t('signature_payload')}
-                    value={formData.key_path_for_signature_payload}
-                    onChange={(value) =>
-                        setFormData((prev) => ({
-                            ...prev,
-                            key_path_for_signature_payload: value,
-                        }))
-                    }
-                />
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
                 <CustomDropdown
                     label={t('is_list')}
                     options={[
@@ -160,11 +138,14 @@ export default function AddKeyPathModal({ onClose, onSuccess }: AddKeyPathModalP
                         }))
                     }
                 />
+            </div>
 
+            <div className="space-y-4 mt-4">
                 {formData.is_list && (
-                    <InputField
-                        label={t('list_elements')}
+                    <TextAreaField
+                        label={t('key_pat_for_list_elements')}
                         value={formData.key_path_for_list_elements}
+                        textareaClassName="h-16"
                         onChange={(value) =>
                             setFormData((prev) => ({
                                 ...prev,
@@ -173,6 +154,30 @@ export default function AddKeyPathModal({ onClose, onSuccess }: AddKeyPathModalP
                         }
                     />
                 )}
+
+                <TextAreaField
+                    label={t('key_path_for_signature')}
+                    value={formData.key_path_for_signature}
+                    textareaClassName="h-16"
+                    onChange={(value) =>
+                        setFormData((prev) => ({
+                            ...prev,
+                            key_path_for_signature: value,
+                        }))
+                    }
+                />
+
+                <TextAreaField
+                    label={t('key_path_for_signature_payload')}
+                    value={formData.key_path_for_signature_payload}
+                    textareaClassName="h-16"
+                    onChange={(value) =>
+                        setFormData((prev) => ({
+                            ...prev,
+                            key_path_for_signature_payload: value,
+                        }))
+                    }
+                />
             </div>
         </BaseModal>
     );

@@ -118,7 +118,7 @@ export default function EditRegisterModal({ isOpen, onClose, onSuccess, initialD
                     <div className="space-y-4">
                         <div>
                             <label className="block text-sm font-semibold text-black mb-2">
-                                {t('registry_name')}
+                                {t('register_mnemonic')}
                             </label>
                             <input
                                 type="text"
@@ -131,7 +131,7 @@ export default function EditRegisterModal({ isOpen, onClose, onSuccess, initialD
 
                         <div>
                             <label className="block text-sm font-semibold text-black mb-2">
-                                {t('description')}
+                                {t('register_description')}
                             </label>
                             <textarea
                                 placeholder={t('type_your_message')}

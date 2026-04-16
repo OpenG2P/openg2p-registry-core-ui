@@ -97,7 +97,7 @@ const KeyPathsPage = () => {
         },
         {
             key: 'data_model',
-            label: t('data_model'),
+            label: t('data_model_mnemonic'),
             render: (item: IncomingKeyPath) =>
                 item.data_model_mnemonic || item.data_model_id,
         },

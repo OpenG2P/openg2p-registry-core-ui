@@ -100,10 +100,18 @@ const IngestTemplatesPage = () => {
     };
 
     const templateColumns = [
-        { key: 'template_id', label: t('template_id') },
-        { key: 'register_mnemonic', label: t('register_mnemonic') },
-        { key: 'data_model_mnemonic', label: t('data_model_mnemonic') },
-        { key: 'template_file_id', label: t('template_file_id') },
+        {
+            key: 'template_id',
+            label: t('template_id'),
+        },
+        {
+            key: 'data_model_mnemonic',
+            label: t('data_model_mnemonic'),
+        },
+        {
+            key: 'register_mnemonic',
+            label: t('register_mnemonic'),
+        }
     ];
 
     return (

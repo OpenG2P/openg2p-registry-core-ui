@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { useFetch } from '@/shared/hooks';
 import { toast } from 'react-toastify';
-import { useAllRegister, useConfigTabs, useConfigSections, useAllDataModels } from '@/features/configuration/shared';
-import { BaseModal, CustomDropdown, InputField } from '../shared/components';
+import { useAllRegister, useRegisterSections, useAllDataModels } from '@/features/configuration/shared';
+import { BaseModal, CustomDropdown, InputField, TextAreaField } from '../shared/components';
 
 interface AddSemanticPatternModalProps {
     onClose: () => void;
@@ -19,50 +19,40 @@ export default function AddSemanticPatternModal({ onClose, onSuccess }: AddSeman
     const { dataModels, loading: loadingDataModels } = useAllDataModels(1, 100);
 
     const [formData, setFormData] = useState({
-        semantic_pattern_id: '',
         data_model_id: '',
+        data_model_mnemonic: '',
         register_id: '',
+        register_mnemonic: '',
         section_id: '',
+        section_mnemonic: '',
         pattern_for_register: '',
         pattern_for_section: '',
         key_path_for_business_payload: '',
         raw_payload_enricher_class: '',
     });
 
-    const [selectedTabId, setSelectedTabId] = useState('');
+    const { sections, loading: loadingSections } = useRegisterSections(formData.register_id);
 
-    // Dynamic data for dropdowns
-    const { tabs, loading: loadingTabs } = useConfigTabs(formData.register_id, 1, 100);
-    const { sections, loading: loadingSections } = useConfigSections(formData.register_id, selectedTabId, 1, 100);
-
-    // Reset Tab/Section when Register changes
     useEffect(() => {
-        setSelectedTabId('');
-        setFormData(prev => ({ ...prev, section_id: '' }));
+        setFormData(prev => ({ ...prev, section_id: '', section_mnemonic: '' }));
     }, [formData.register_id]);
-
-    // Reset Section when Tab changes
-    useEffect(() => {
-        setFormData(prev => ({ ...prev, section_id: '' }));
-    }, [selectedTabId]);
 
     const handleSubmit = async () => {
         if (!formData.data_model_id || !formData.register_id) {
-            toast.warn(t('data_model_id') + ' and ' + t('register_id') + ' are required');
+            toast.warn(t('data_model') + ' and ' + t('register') + ' are required');
             return;
         }
 
         const result = await createPattern('/api/configuration/ingest/create-semantic-pattern', {
             method: 'POST',
             body: JSON.stringify({
-                semantic_pattern_id: formData.semantic_pattern_id || null,
                 data_model_id: formData.data_model_id,
                 register_id: formData.register_id,
                 section_id: formData.section_id || null,
-                pattern_for_register: formData.pattern_for_register || null,
-                pattern_for_section: formData.pattern_for_section || null,
-                key_path_for_business_payload: formData.key_path_for_business_payload || null,
-                raw_payload_enricher_class: formData.raw_payload_enricher_class || null,
+                pattern_for_register: formData.pattern_for_register,
+                pattern_for_section: formData.pattern_for_section,
+                key_path_for_business_payload: formData.key_path_for_business_payload,
+                raw_payload_enricher_class: formData.raw_payload_enricher_class,
             })
         });
 
@@ -78,16 +68,17 @@ export default function AddSemanticPatternModal({ onClose, onSuccess }: AddSeman
 
     const resetForm = () => {
         setFormData({
-            semantic_pattern_id: '',
             data_model_id: '',
+            data_model_mnemonic: '',
             register_id: '',
+            register_mnemonic: '',
             section_id: '',
+            section_mnemonic: '',
             pattern_for_register: '',
             pattern_for_section: '',
             key_path_for_business_payload: '',
             raw_payload_enricher_class: '',
         });
-        setSelectedTabId('');
     };
 
     const handleCancel = () => {
@@ -101,85 +92,76 @@ export default function AddSemanticPatternModal({ onClose, onSuccess }: AddSeman
             onClose={handleCancel}
             primaryActionLabel={t('save')}
             onPrimaryAction={handleSubmit}
-            maxWidth='max-w-220'
+            maxWidth='max-w-3xl'
         >
-            <div className="grid grid-cols-1 gap-4">
+            <div className="space-y-4">
                 <CustomDropdown
-                    label={t('data_model')}
+                    label={t('data_model_mnemonic')}
                     options={dataModels.map(dm => ({
                         label: dm.data_model_mnemonic,
                         value: dm.data_model_id,
                     }))}
                     loading={loadingDataModels}
                     value={formData.data_model_id}
-                    onChange={(value) =>
-                        setFormData(prev => ({ ...prev, data_model_id: value }))
-                    }
+                    onChange={(value) => {
+                        const mnemonic = dataModels.find(dm => dm.data_model_id === value)?.data_model_mnemonic || '';
+                        setFormData(prev => ({ ...prev, data_model_id: value, data_model_mnemonic: mnemonic }))
+                    }}
                 />
-            </div>
 
-            <div className="grid grid-cols-3 gap-4">
                 <CustomDropdown
-                    label={t('register')}
+                    label={t('register_mnemonic')}
                     options={registers.map(r => ({
                         label: r.register_mnemonic,
                         value: r.register_id,
                     }))}
                     loading={loadingRegisters}
                     value={formData.register_id}
-                    onChange={(value) =>
-                        setFormData(prev => ({ ...prev, register_id: value }))
-                    }
+                    onChange={(value) => {
+                        const mnemonic = registers.find(r => r.register_id === value)?.register_mnemonic || '';
+                        setFormData(prev => ({ ...prev, register_id: value, register_mnemonic: mnemonic }))
+                    }}
                 />
+
                 <CustomDropdown
-                    label={t('tab')}
-                    options={tabs
-                        .filter(tab => !tab.used_for_new_intake_form)
-                        .map(tab => ({
-                            label: tab.tab_label,
-                            value: tab.tab_id,
-                        }))}
-                    loading={loadingTabs}
-                    value={selectedTabId}
-                    disabled={!formData.register_id || loadingTabs}
-                    onChange={setSelectedTabId}
-                />
-                <CustomDropdown
-                    label={t('section')}
+                    label={t('section_mnemonic')}
                     options={sections.map(sec => ({
                         label: sec.section_mnemonic,
                         value: sec.section_id,
                     }))}
                     loading={loadingSections}
                     value={formData.section_id}
-                    disabled={!selectedTabId || loadingSections}
-                    onChange={(value) =>
-                        setFormData(prev => ({ ...prev, section_id: value }))
-                    }
+                    disabled={!formData.register_id || loadingSections}
+                    onChange={(value) => {
+                        const mnemonic = sections.find(s => s.section_id === value)?.section_mnemonic || '';
+                        setFormData(prev => ({ ...prev, section_id: value, section_mnemonic: mnemonic }))
+                    }}
                 />
-            </div>
 
-            <div className="grid grid-cols-2 gap-4">
-                <InputField
+
+                <TextAreaField
                     label={t('pattern_for_register')}
                     value={formData.pattern_for_register}
+                    textareaClassName="h-16"
                     onChange={(value) =>
                         setFormData(prev => ({ ...prev, pattern_for_register: value }))
                     }
+                    rows={2}
                 />
-                <InputField
+                <TextAreaField
                     label={t('pattern_for_section')}
                     value={formData.pattern_for_section}
+                    textareaClassName="h-16"
                     onChange={(value) =>
                         setFormData(prev => ({ ...prev, pattern_for_section: value }))
                     }
+                    rows={2}
                 />
-            </div>
 
-            <div className="grid grid-cols-2 gap-4">
-                <InputField
-                    label={t('business_payload')}
+                <TextAreaField
+                    label={t('key_path_for_business_payload')}
                     value={formData.key_path_for_business_payload}
+                    textareaClassName="h-32"
                     onChange={(value) =>
                         setFormData(prev => ({
                             ...prev,
@@ -187,8 +169,9 @@ export default function AddSemanticPatternModal({ onClose, onSuccess }: AddSeman
                         }))
                     }
                 />
+
                 <InputField
-                    label={t('enricher_class')}
+                    label={t('raw_payload_enricher_class')}
                     value={formData.raw_payload_enricher_class}
                     onChange={(value) =>
                         setFormData(prev => ({
@@ -197,6 +180,7 @@ export default function AddSemanticPatternModal({ onClose, onSuccess }: AddSeman
                         }))
                     }
                 />
+
             </div>
         </BaseModal>
     );

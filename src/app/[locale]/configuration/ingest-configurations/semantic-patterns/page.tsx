@@ -71,19 +71,19 @@ const SemanticPatternsPage = () => {
         }
     };
 
-     const handleConfirmDelete = async () => {
-            if (!selectedItem) return;
-    
-            await proceedDelete(selectedItem.semantic_pattern_id);
-    
-            setShowPopup(false);
-            setSelectedItem(null);
-        };
-    
-        const handleDelete = (pattern: IncomingSemanticPattern) => {
-            setSelectedItem(pattern);
-            setShowPopup(true);
-        };
+    const handleConfirmDelete = async () => {
+        if (!selectedItem) return;
+
+        await proceedDelete(selectedItem.semantic_pattern_id);
+
+        setShowPopup(false);
+        setSelectedItem(null);
+    };
+
+    const handleDelete = (pattern: IncomingSemanticPattern) => {
+        setSelectedItem(pattern);
+        setShowPopup(true);
+    };
 
     const columns = [
         {
@@ -91,16 +91,16 @@ const SemanticPatternsPage = () => {
             label: t('semantic_pattern_id'),
         },
         {
-            key: 'data_model_id',
-            label: t('data_model_id'),
+            key: 'data_model_mnemonic',
+            label: t('data_model_mnemonic'),
         },
         {
             key: 'register_mnemonic',
-            label: t('register'),
+            label: t('register_mnemonic'),
         },
         {
             key: 'section_mnemonic',
-            label: t('section'),
+            label: t('section_mnemonic'),
         },
     ];
 

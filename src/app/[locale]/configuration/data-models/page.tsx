@@ -79,7 +79,7 @@ const DataModelsConfigurationPage = () => {
     const { can } = useRbac();
     const canCreate = can(CONFIGURATION_DATA_MODELS_ACTIONS.create)
 
-    const { dataModels, pagination, loading, refresh } = useAllDataModels(currentPage, config.pageSize);
+    const { dataModels, pagination, loading, refresh } = useAllDataModels(currentPage, config.pageSize || 100);
 
     const { pageStart, pageEnd, total } = usePagination({
         totalItems: pagination?.number_of_items || 0,

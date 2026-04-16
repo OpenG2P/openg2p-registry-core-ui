@@ -17,30 +17,22 @@ export default function ViewKeyPathModal({
 
     return (
         <BaseModal
-            title={`${t('ingest_key_paths')} ${t('details')}`}
+            title={`${t('view_ingest_key_path')}`}
             onClose={onClose}
-            maxWidth='max-w-200'
+            maxWidth='max-w-3xl'
+            secondaryActionLabel={t('close')}
         >
-            <div className="grid grid-cols-2 gap-6">
-                <Field label={t('key_path_id')} value={data?.key_path_id} />
-                <Field label={t('data_model')} value={data?.data_model_mnemonic || '-'} />
-
-                <Field label={t('data_model_id')} value={data?.data_model_id} />
-                <Field label={t('message_id')} value={data?.key_path_for_message_id || '-'} />
-
-                <Field label={t('sender')} value={data?.key_path_for_sender || '-'} />
-                <Field label={t('signature')} value={data?.key_path_for_signature || '-'} />
-
-                <Field label={t('signature_payload')} value={data?.key_path_for_signature_payload || '-'} />
+            <div className="bg-[#F5F5F5] rounded-[10px] p-8 -mx-2">
+                <Field label={t('data_model')} value={data?.data_model_mnemonic} />
+                <Field label={t('key_path_for_message_id')} value={data?.key_path_for_message_id} />
+                <Field label={t('key_path_for_sender')} value={data?.key_path_for_sender} />
+                <Field label={t('key_path_for_signature')} value={data?.key_path_for_signature} />
+                <Field label={t('key_path_for_signature_payload')} value={data?.key_path_for_signature_payload} />
                 <Field label={t('is_list')} value={data?.is_list ? t('true') : t('false')} />
+                {data?.is_list && (
+                    <Field label={t('key_path_for_list_elements')} value={data.key_path_for_list_elements} />
+                )}
             </div>
-
-            {data?.is_list && (
-                <Field
-                    label={t('list_elements')}
-                    value={data.key_path_for_list_elements || '-'}
-                />
-            )}
         </BaseModal>
     );
 }

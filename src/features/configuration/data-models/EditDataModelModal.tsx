@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl';
 import { useFetch } from '@/shared/hooks';
 import { toast } from 'react-toastify';
 import { useFileUpload } from '../shared/hooks/useFileUpload';
-import { BaseModal, InputField, FileUploadField, CheckboxField } from '../shared/components';
+import { BaseModal, InputField, FileUploadField, CheckboxField, TextAreaField } from '../shared/components';
 
 interface EditDataModelModalProps {
     onClose: () => void;
@@ -116,6 +116,17 @@ export default function EditDataModelModal({
                     }))
                 }
             />
+            <TextAreaField
+                label={t('pattern')}
+                value={formData.pattern_for_data_model}
+                onChange={(value) =>
+                    setFormData((prev) => ({
+                        ...prev,
+                        pattern_for_data_model: value,
+                    }))
+                }
+                rows={4}
+            />
 
             <div className="grid grid-cols-2 gap-6">
                 <FileUploadField
@@ -139,16 +150,7 @@ export default function EditDataModelModal({
                 />
             </div>
 
-            <InputField
-                label={t('pattern')}
-                value={formData.pattern_for_data_model}
-                onChange={(value) =>
-                    setFormData((prev) => ({
-                        ...prev,
-                        pattern_for_data_model: value,
-                    }))
-                }
-            />
+
         </BaseModal>
     );
 }

@@ -10,6 +10,7 @@ interface BaseModalProps {
     onPrimaryAction?: () => void;
     maxWidth?: string;
     hideCancel?: boolean;
+    secondaryActionLabel?: string;
 }
 
 export default function BaseModal({
@@ -20,6 +21,7 @@ export default function BaseModal({
     onPrimaryAction,
     maxWidth = 'max-w-150',
     hideCancel = false,
+    secondaryActionLabel,
 }: BaseModalProps) {
     return (
         <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center">
@@ -37,28 +39,27 @@ export default function BaseModal({
                     </button>
                 </div>
 
-                <div className="space-y-4">
+                <div className="space-y-4 max-h-[70vh] overflow-y-auto pr-2 custom-scrollbar">
                     {children}
-                </div>
+                    <div className="flex gap-4 pt-6">
+                        {!hideCancel && (
+                            <button
+                                onClick={onClose}
+                                className="px-6 py-2 bg-[#DDDDDD] text-[#00000080] text-[16px] font-bold rounded-[10px]"
+                            >
+                                {secondaryActionLabel || 'Cancel'}
+                            </button>
+                        )}
 
-                <div className="flex gap-4 pt-6">
-                    {!hideCancel && (
-                        <button
-                            onClick={onClose}
-                            className="px-4 py-2 bg-[#DDDDDD] text-[#00000080] rounded-[10px]"
-                        >
-                            Cancel
-                        </button>
-                    )}
-
-                    {primaryActionLabel && onPrimaryAction && (
-                        <button
-                            onClick={onPrimaryAction}
-                            className="px-4 py-2 bg-black text-white rounded-[10px]"
-                        >
-                            {primaryActionLabel}
-                        </button>
-                    )}
+                        {primaryActionLabel && onPrimaryAction && (
+                            <button
+                                onClick={onPrimaryAction}
+                                className="px-6 py-2 bg-black text-white text-[16px] font-bold rounded-[10px]"
+                            >
+                                {primaryActionLabel}
+                            </button>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>

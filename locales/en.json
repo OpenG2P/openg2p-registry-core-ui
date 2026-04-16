@@ -777,5 +777,9 @@
   "edit_outgestion_topics": "Edit Outgestion Topics",
   "confirm_remove_ingest_key_path": "Confirm remove ingest key path",
   "confirm_remove_ingest_semantic_pattern": "Confirm remove semantic pattern",
-  "view_data_model": "View Data Model"
+  "view_data_model": "View Data Model",
+  "key_pat_for_list_elements": "Key Path for List Elements",
+  "view_ingest_key_path": "View Ingest Key Path",
+  "view_semantic_pattern": "View Semantic Pattern",
+  "activity_log_id": "Activity Log ID"
 }

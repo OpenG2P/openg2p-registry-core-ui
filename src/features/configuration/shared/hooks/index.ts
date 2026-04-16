@@ -1,5 +1,6 @@
 export * from './useAllRegister';
 export * from './useConfigSections';
+export * from './useRegisterSections';
 export * from './useConfigTabs';
 export * from './useRegisterSchema';
 export * from './useAllIncomingKeyPaths';
