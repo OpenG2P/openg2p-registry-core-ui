@@ -107,23 +107,12 @@ export default function EditDataModelModal({
         >
 
             <InputField
-                label={t('mnemonic')}
+                label={t('data_model_mnemonic')}
                 value={formData.data_model_mnemonic}
                 onChange={(value) =>
                     setFormData((prev) => ({
                         ...prev,
                         data_model_mnemonic: value,
-                    }))
-                }
-            />
-
-            <InputField
-                label={t('pattern')}
-                value={formData.pattern_for_data_model}
-                onChange={(value) =>
-                    setFormData((prev) => ({
-                        ...prev,
-                        pattern_for_data_model: value,
                     }))
                 }
             />
@@ -149,6 +138,17 @@ export default function EditDataModelModal({
                     }
                 />
             </div>
+
+            <InputField
+                label={t('pattern')}
+                value={formData.pattern_for_data_model}
+                onChange={(value) =>
+                    setFormData((prev) => ({
+                        ...prev,
+                        pattern_for_data_model: value,
+                    }))
+                }
+            />
         </BaseModal>
     );
 }

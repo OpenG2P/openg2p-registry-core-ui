@@ -13,7 +13,8 @@ import { CONFIGURATION_DATA_MODELS_ACTIONS } from '@/features/configuration/shar
 import Can from '@/components/shared/Can';
 import { toast } from 'react-toastify';
 import ConfirmRemovePopup from '@/features/configuration/shared/components/ConfirmRemovePopup';
-import { DeleteButton, EditButton, DataTable } from '@/features/configuration/shared/components';
+import { DeleteButton, EditButton, DataTable, ViewButton } from '@/features/configuration/shared/components';
+import ViewDataModelModal from '@/features/configuration/data-models/ViewDataModelModal';
 
 
 type DataModel = {
@@ -99,11 +100,7 @@ const DataModelsConfigurationPage = () => {
     const columns = [
         {
             key: 'data_model_mnemonic',
-            label: t('mnemonic'),
-        },
-        {
-            key: 'pattern_for_data_model',
-            label: t('pattern'),
+            label: t('data_model_mnemonic'),
         },
         {
             key: 'response_template_file_id',
@@ -144,6 +141,13 @@ const DataModelsConfigurationPage = () => {
                 rowKey={(item) => item.data_model_id}
                 actions={(item) => (
                     <>
+                        <ViewButton
+                            label={t('view')}
+                            onClick={() => {
+                                setSelectedItem(item);
+                                setModalType('view');
+                            }}
+                        />
                         <Can action={CONFIGURATION_DATA_MODELS_ACTIONS.edit}>
                             <EditButton
                                 label={t('common.edit')}
@@ -174,6 +178,15 @@ const DataModelsConfigurationPage = () => {
                     messageKey='confirm_remove_data_model'
                 />
             )}
+
+            {modalType === 'view' && (
+                <ViewDataModelModal
+                    data={selectedItem}
+                    onClose={() => {
+                        setModalType(null);
+                        setSelectedItem(null);
+                    }}
+                />)}
 
             {modalType === 'add' && (
                 <AddDataModelModal

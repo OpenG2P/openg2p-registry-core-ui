@@ -776,5 +776,6 @@
   "confirm_remove_ingestion_template": "Are you sure you want to remove this ingestion template?",
   "edit_outgestion_topics": "Edit Outgestion Topics",
   "confirm_remove_ingest_key_path": "Confirm remove ingest key path",
-  "confirm_remove_ingest_semantic_pattern": "Confirm remove semantic pattern"
+  "confirm_remove_ingest_semantic_pattern": "Confirm remove semantic pattern",
+  "view_data_model": "View Data Model"
 }

@@ -775,5 +775,6 @@
   "confirm_remove_ingestion_template": "¿Está seguro de que desea eliminar esta plantilla de ingestión?",
   "edit_outgestion_topics": "Editar temas de outgestión",
   "confirm_remove_ingest_key_path": "Confirmar la eliminación del مسیر de clave de ingesta",
-  "confirm_remove_ingest_semantic_pattern": "Confirmar eliminación del patrón semántico"
+  "confirm_remove_ingest_semantic_pattern": "Confirmar eliminación del patrón semántico",
+  "view_data_model": "Ver modelo de datos"
 }
