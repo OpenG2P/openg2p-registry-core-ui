@@ -72,7 +72,7 @@ export default function EditOutgestionTemplateModal({
         );
 
         if (result) {
-            toast.success(t('template_updated', { id: formData.template_id }));
+            toast.success(t('outgest_template_updated'));
             setFormData({
                 template_id: '',
                 template_file_id: '',
@@ -81,7 +81,7 @@ export default function EditOutgestionTemplateModal({
             onSuccess?.();
             onClose();
         } else {
-            toast.error('Update failed');
+            toast.error(t('outgest_template_update_failed'));
         }
     };
 

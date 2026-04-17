@@ -40,31 +40,29 @@ export default function EditIngestionTemplateModal({
         }
     }, [data]);
 
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const { uploadFile, uploading, uploadedFileName, setUploadedFileName } = useFileUpload("/api/configuration/ingest/upload-template");
 
-    const handleFileUpload = async (file: File) => {
-        const documentId = await uploadFile(file);
-
-        if (!documentId) return;
-
-        setFormData((prev) => ({
-            ...prev,
-            template_file_id: documentId,
-        }));
-    };
-
-    const handleFileChange = async (
-        e: React.ChangeEvent<HTMLInputElement>
-    ) => {
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
 
-        await handleFileUpload(file);
-
+        setSelectedFile(file);
+        setUploadedFileName(file.name)
         e.target.value = '';
     };
 
+    const handleRemoveFile = () => {
+        setSelectedFile(null);
+        setUploadedFileName('');
+    };
+
     const handleSubmit = async () => {
+
+        let documentId = formData.template_file_id;
+        if (selectedFile) {
+            documentId = await uploadFile(selectedFile);
+        }
         const result = await updateIngestionTemplate(
             '/api/configuration/ingest/update-template',
             {
@@ -72,12 +70,13 @@ export default function EditIngestionTemplateModal({
                 body: JSON.stringify({
                     ...formData,
                     template_id: data?.template_id,
+                    template_file_id: documentId
                 }),
             }
         );
 
         if (result) {
-            toast.success(t('template_updated', { id: formData.template_id }));
+            toast.success(t('ingest_template_updated'));
             setFormData({
                 template_id: '',
                 template_file_id: '',
@@ -87,7 +86,7 @@ export default function EditIngestionTemplateModal({
             onSuccess?.();
             onClose();
         } else {
-            toast.error('Update failed');
+            toast.error(t('ingest_template_update_failed'));
         }
     };
 
@@ -113,6 +112,7 @@ export default function EditIngestionTemplateModal({
                         fileId={formData.template_file_id}
                         fileName={uploadedFileName}
                         onFileChange={handleFileChange}
+                        onRemove={handleRemoveFile}
                     />
                 </div>
 

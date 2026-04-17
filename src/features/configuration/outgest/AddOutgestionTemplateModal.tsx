@@ -89,7 +89,7 @@ export default function AddOutgestionTemplateModal({
         );
 
         if (result?.template_id) {
-            toast.success(t('template_created', { id: result?.template_id }));
+            toast.success(t('outgest_template_created'));
 
             setFormData({
                 register_id: '',
@@ -101,7 +101,7 @@ export default function AddOutgestionTemplateModal({
             onSuccess?.();
             onClose();
         } else {
-            toast.error('Failed to create Template');
+            toast.error(t('outgest_template_creation_failed'));
         }
     };
 

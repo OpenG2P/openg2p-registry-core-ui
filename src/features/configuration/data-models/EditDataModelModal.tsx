@@ -122,7 +122,7 @@ export default function EditDataModelModal({
                         pattern_for_data_model: value,
                     }))
                 }
-                rows={4}
+                rows={1}
             />
 
             <div className="grid grid-cols-2 gap-6">

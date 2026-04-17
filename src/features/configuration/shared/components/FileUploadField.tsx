@@ -61,7 +61,7 @@ export default function FileUploadField({
 
                     {fileName && (
                         <div className="flex items-center gap-2 mt-1">
-                            <p className="text-[#77D79B] text-xs truncate max-w-25">
+                            <p className="text-[#77D79B] text-[14px] truncate max-w-25">
                                 {fileName}
                             </p>
 

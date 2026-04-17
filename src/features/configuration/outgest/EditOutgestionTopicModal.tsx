@@ -8,7 +8,7 @@ import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
 import { useAllRegister } from '../shared';
 import { useAllDataModels } from '../shared/hooks/useAllDataModels';
 import CustomDropdown from '../shared/components/CustomDropdown';
-import { BaseModal, InputField } from '../shared/components';
+import { BaseModal, InputField, TextAreaField } from '../shared/components';
 
 
 
@@ -138,7 +138,7 @@ export default function EditOutgestionTopicModal({
                     }))
                 }
             />
-            <InputField
+            <TextAreaField
                 label={t('description')}
                 value={formData.description}
                 onChange={(value) =>
@@ -147,6 +147,7 @@ export default function EditOutgestionTopicModal({
                         description: value,
                     }))
                 }
+                rows={4}
             />
         </BaseModal>
     );

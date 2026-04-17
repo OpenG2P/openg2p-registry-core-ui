@@ -780,6 +780,12 @@
   "failed_to_update_data_model": "Error al actualizar el modelo de datos",
   "data_models_deleted_successfully": "Modelos de datos eliminados correctamente",
   "data_model_deletion_failed": "Error al eliminar el modelo de datos",
+  "outgest_template_created": "Plantilla creada con éxito",
+  "outgest_template_creation_failed": "Error al crear la plantilla",
+  "outgest_template_updated": "Plantilla actualizada con éxito",
+  "outgest_template_update_failed": "Error al actualizar la plantilla",
+  "outgest_template_deleted_success": "Plantilla eliminada con éxito",
+  "outgest_template_deletion_failed": "Error al eliminar la plantilla",
   "topic_created": "Tema creado correctamente",
   "topic_creation_failed": "Error al crear el tema",
   "topic_updated": "Tema actualizado correctamente",
@@ -790,5 +796,11 @@
   "topic_deactivated": "Tema desactivado correctamente",
   "topic_toggle_success": "Estado del tema actualizado correctamente",
   "topic_toggle_failed": "Error al actualizar el estado del tema",
-  "toggle_status": "Cambiar estado"
+  "toggle_status": "Cambiar estado",
+  "ingest_template_created": "Plantilla creada con éxito",
+  "ingest_template_creation_failed": "Error al crear la plantilla",
+  "ingest_template_updated": "Plantilla actualizada con éxito",
+  "ingest_template_update_failed": "Error al actualizar la plantilla",
+  "ingest_template_deleted_success": "Plantilla eliminada con éxito",
+  "ingest_template_deletion_failed": "Error al eliminar la plantilla"
 }

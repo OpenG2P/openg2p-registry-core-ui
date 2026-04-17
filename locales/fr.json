@@ -780,6 +780,12 @@
   "failed_to_update_data_model": "Échec de la mise à jour du modèle de données",
   "data_models_deleted_successfully": "Modèles de données supprimés avec succès",
   "data_model_deletion_failed": "Échec de la suppression du modèle de données",
+  "outgest_template_created": "Modèle créé avec succès",
+  "outgest_template_creation_failed": "Échec de la création du modèle",
+  "outgest_template_updated": "Modèle mis à jour avec succès",
+  "outgest_template_update_failed": "Échec de la mise à jour du modèle",
+  "outgest_template_deleted_success": "Modèle supprimé avec succès",
+  "outgest_template_deletion_failed": "Échec de la suppression du modèle",
   "topic_created": "Sujet créé avec succès",
   "topic_creation_failed": "Échec de la création du sujet",
   "topic_updated": "Sujet mis à jour avec succès",
@@ -790,5 +796,11 @@
   "topic_deactivated": "Sujet désactivé avec succès",
   "topic_toggle_success": "Statut du sujet mis à jour avec succès",
   "topic_toggle_failed": "Échec de la mise à jour du statut du sujet",
-  "toggle_status": "Basculer le statut"
+  "toggle_status": "Basculer le statut",
+  "ingest_template_created": "Modèle créé avec succès",
+  "ingest_template_creation_failed": "Échec de la création du modèle",
+  "ingest_template_updated": "Modèle mis à jour avec succès",
+  "ingest_template_update_failed": "Échec de la mise à jour du modèle",
+  "ingest_template_deleted_success": "Modèle supprimé avec succès",
+  "ingest_template_deletion_failed": "Échec de la suppression du modèle"
 }

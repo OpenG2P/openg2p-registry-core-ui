@@ -786,6 +786,12 @@
   "failed_to_update_data_model": "Failed to update data model",
   "data_models_deleted_successfully": "Data Model deleted successfully",
   "data_model_deletion_failed": "Data Model deletion failed",
+  "outgest_template_created": "Template created successfully",
+  "outgest_template_creation_failed": "Template creation failed",
+  "outgest_template_updated": "Template updated successfully",
+  "outgest_template_update_failed": "Template update failed",
+  "outgest_template_deleted_success": "Template deleted successfully",
+  "outgest_template_deletion_failed": "Template deletion failed",
   "topic_created": "Topic created successfully",
   "topic_creation_failed": "Topic creation failed",
   "topic_updated": "Topic updated successfully",
@@ -796,5 +802,11 @@
   "topic_deactivated": "Topic deactivated successfully",
   "topic_toggle_success": "Topic status updated successfully",
   "topic_toggle_failed": "Failed to update topic status",
-  "toggle_status": "Toggle status"
+  "toggle_status": "Toggle status",
+  "ingest_template_created": "Template created successfully",
+  "ingest_template_creation_failed": "Template creation failed",
+  "ingest_template_updated": "Template updated successfully",
+  "ingest_template_update_failed": "Template update failed",
+  "ingest_template_deleted_success": "Template deleted successfully",
+  "ingest_template_deletion_failed": "Template deletion failed"
 }
