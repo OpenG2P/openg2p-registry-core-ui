@@ -11,7 +11,7 @@ import { toast } from 'react-toastify';
 import ConfirmRemovePopup from '@/features/configuration/shared/components/ConfirmRemovePopup';
 import { CONFIGURATION_INGESTION_TEMPLATES_ACTIONS } from '@/features/configuration/shared/utils/configurationIngestionTemplates.actions';
 import { useAllIngestTemplates } from '@/features/configuration/shared/hooks/useAllIngestTemplates';
-import { DeleteButton, EditButton, ViewButton, DataTable } from '@/features/configuration/shared/components';
+import { DeleteButton, EditButton, ViewButton, DataTable, FileLink } from '@/features/configuration/shared/components';
 import { AddIngestionTemplateModal, EditIngestionTemplateModal, ViewIngestionTemplateModal } from '@/features/configuration/ingest';
 
 type IngestTemplate = {
@@ -43,10 +43,10 @@ const IngestTemplatesPage = () => {
             });
 
             if (result) {
-                toast.success(t("template_deleted_success"));
+                toast.success(t("ingest_template_deleted_success"));
                 refresh();
             } else {
-                console.error('Delete failed');
+                toast.error(t('ingest_template_deletion_failed'));
             }
         } catch (error) {
             console.error('Delete error');
@@ -111,6 +111,15 @@ const IngestTemplatesPage = () => {
         {
             key: 'register_mnemonic',
             label: t('register_mnemonic'),
+        },
+        {
+            key: 'template_file_id',
+            label: t('template_file_id'),
+            render: (item: IngestTemplate) => (
+                <FileLink
+                    documentId={item.template_file_id}
+                />
+            ),
         }
     ];
 

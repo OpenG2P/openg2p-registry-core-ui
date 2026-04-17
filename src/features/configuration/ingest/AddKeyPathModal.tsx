@@ -104,24 +104,24 @@ export default function AddKeyPathModal({ onClose, onSuccess }: AddKeyPathModalP
                 <TextAreaField
                     label={t('key_path_for_message_id')}
                     value={formData.key_path_for_message_id}
-                    textareaClassName="h-16"
                     onChange={(value) =>
                         setFormData((prev) => ({
                             ...prev,
                             key_path_for_message_id: value,
                         }))
                     }
+                    rows={1}
                 />
                 <TextAreaField
                     label={t('key_path_for_sender')}
                     value={formData.key_path_for_sender}
-                    textareaClassName="h-16"
                     onChange={(value) =>
                         setFormData((prev) => ({
                             ...prev,
                             key_path_for_sender: value,
                         }))
                     }
+                    rows={1}
                 />
 
                 <CustomDropdown
@@ -145,38 +145,38 @@ export default function AddKeyPathModal({ onClose, onSuccess }: AddKeyPathModalP
                     <TextAreaField
                         label={t('key_pat_for_list_elements')}
                         value={formData.key_path_for_list_elements}
-                        textareaClassName="h-16"
                         onChange={(value) =>
                             setFormData((prev) => ({
                                 ...prev,
                                 key_path_for_list_elements: value,
                             }))
                         }
+                        rows={3}
                     />
                 )}
 
                 <TextAreaField
                     label={t('key_path_for_signature')}
                     value={formData.key_path_for_signature}
-                    textareaClassName="h-16"
                     onChange={(value) =>
                         setFormData((prev) => ({
                             ...prev,
                             key_path_for_signature: value,
                         }))
                     }
+                    rows={1}
                 />
 
                 <TextAreaField
                     label={t('key_path_for_signature_payload')}
                     value={formData.key_path_for_signature_payload}
-                    textareaClassName="h-16"
                     onChange={(value) =>
                         setFormData((prev) => ({
                             ...prev,
                             key_path_for_signature_payload: value,
                         }))
                     }
+                    rows={1}
                 />
             </div>
         </BaseModal>

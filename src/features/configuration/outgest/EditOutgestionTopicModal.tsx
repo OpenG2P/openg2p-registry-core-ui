@@ -8,7 +8,7 @@ import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
 import { useAllRegister } from '../shared';
 import { useAllDataModels } from '../shared/hooks/useAllDataModels';
 import CustomDropdown from '../shared/components/CustomDropdown';
-import { BaseModal, InputField } from '../shared/components';
+import { BaseModal, InputField, TextAreaField } from '../shared/components';
 
 
 
@@ -82,11 +82,11 @@ export default function EditOutgestionTopicModal({
         );
 
         if (result) {
-            toast.success(t('topic_updated', { id: formData.topic_id }));
+            toast.success(t('topic_updated'));
             onSuccess?.();
             onClose();
         } else {
-            toast.error(t('update_failed'));
+            toast.error(t('topic_update_failed'));
         }
     };
 
@@ -100,6 +100,7 @@ export default function EditOutgestionTopicModal({
             onClose={handleCancel}
             primaryActionLabel={t('update')}
             onPrimaryAction={handleSubmit}
+            maxWidth='max-w-200'
         >
             <CustomDropdown
                 label={t('register_id')}
@@ -137,7 +138,7 @@ export default function EditOutgestionTopicModal({
                     }))
                 }
             />
-            <InputField
+            <TextAreaField
                 label={t('description')}
                 value={formData.description}
                 onChange={(value) =>
@@ -146,6 +147,7 @@ export default function EditOutgestionTopicModal({
                         description: value,
                     }))
                 }
+                rows={4}
             />
         </BaseModal>
     );

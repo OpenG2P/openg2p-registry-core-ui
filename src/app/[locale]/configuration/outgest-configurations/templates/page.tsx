@@ -12,7 +12,7 @@ import { useAllOutgestTemplates } from '@/features/configuration/shared/hooks/us
 import { CONFIGURATION_OUTGESTION_TEMPLATES_ACTIONS } from '@/features/configuration/shared/utils/configurationOutgestionTemplates.actions';
 import ConfirmRemovePopup from '@/features/configuration/shared/components/ConfirmRemovePopup';
 import { AddOutgestionTemplateModal, EditOutgestionTemplateModal, ViewOutgestionTemplateModal } from '@/features/configuration/outgest';
-import { DeleteButton, EditButton, ViewButton, DataTable } from '@/features/configuration/shared/components';
+import { DeleteButton, EditButton, ViewButton, DataTable, FileLink } from '@/features/configuration/shared/components';
 
 
 type OutgestTemplate = {
@@ -42,10 +42,10 @@ const OutgestTemplatesPage = () => {
             });
 
             if (result) {
-                toast.success(t("template_deleted_success"));
+                toast.success(t("outgest_template_deleted_success"));
                 refresh();
             } else {
-                console.error('Delete failed');
+               toast.error(t('outgest_template_deletion_failed'));
             }
         } catch (error) {
             console.error('Delete error');
@@ -99,10 +99,23 @@ const OutgestTemplatesPage = () => {
     };
 
     const templateColumns = [
-        { key: 'template_id', label: t('template_id') },
-        { key: 'register_mnemonic', label: t('register_mnemonic') },
-        { key: 'data_model_mnemonic', label: t('data_model_mnemonic') },
-        { key: 'template_file_id', label: t('template_file_id') },
+        {
+            key: 'data_model_mnemonic',
+            label: t('data_model_mnemonic')
+        },
+        {
+            key: 'register_mnemonic',
+            label: t('register_mnemonic')
+        },
+        {
+            key: 'template_file_id',
+            label: t('template_file_id'),
+            render: (item: OutgestTemplate) => (
+                <FileLink
+                    documentId={item.template_file_id}
+                />
+            ),
+        },
     ];
 
     return (

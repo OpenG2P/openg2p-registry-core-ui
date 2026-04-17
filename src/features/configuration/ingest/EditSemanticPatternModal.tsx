@@ -92,7 +92,7 @@ export default function EditSemanticPatternModal({
             onClose={handleCancel}
             primaryActionLabel={t('update')}
             onPrimaryAction={handleSubmit}
-            maxWidth='max-w-3xl'
+            maxWidth='max-w-220'
         >
             <div className="space-y-4">
                 <CustomDropdown

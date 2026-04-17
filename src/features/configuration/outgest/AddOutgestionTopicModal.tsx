@@ -8,7 +8,7 @@ import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
 import { useAllRegister } from '../shared';
 import { useAllDataModels } from '../shared/hooks/useAllDataModels';
 import CustomDropdown from '../shared/components/CustomDropdown';
-import { BaseModal, InputField } from '../shared/components';
+import { BaseModal, InputField, TextAreaField } from '../shared/components';
 
 
 interface AddOutgestionTopicModalProps {
@@ -63,7 +63,7 @@ export default function AddOutgestionTopicModal({
         );
 
         if (result.topic_id) {
-            toast.success(t('topic_created', { id: result?.topic_id }));
+            toast.success(t('topic_created'));
 
             setFormData({
                 register_id: '',
@@ -75,7 +75,7 @@ export default function AddOutgestionTopicModal({
             onSuccess?.();
             onClose();
         } else {
-            toast.error('Failed to create Topic');
+            toast.error(t('topic_creation_failed'));
         }
     };
 
@@ -95,20 +95,8 @@ export default function AddOutgestionTopicModal({
             onClose={handleCancel}
             primaryActionLabel={t('save')}
             onPrimaryAction={handleSubmit}
+            maxWidth='max-w-200'
         >
-            <CustomDropdown
-                label={t('register_id')}
-                options={registerOptions}
-                value={formData.register_id}
-                loading={registersLoading}
-                disabled={registersLoading}
-                onChange={(value) =>
-                    setFormData((prev) => ({
-                        ...prev,
-                        register_id: value,
-                    }))
-                }
-            />
             <CustomDropdown
                 label={t('data_model_id')}
                 options={dataModelOptions}
@@ -122,6 +110,19 @@ export default function AddOutgestionTopicModal({
                     }))
                 }
             />
+            <CustomDropdown
+                label={t('register_id')}
+                options={registerOptions}
+                value={formData.register_id}
+                loading={registersLoading}
+                disabled={registersLoading}
+                onChange={(value) =>
+                    setFormData((prev) => ({
+                        ...prev,
+                        register_id: value,
+                    }))
+                }
+            />
             <InputField
                 label={t('websub_topic')}
                 value={formData.websub_topic}
@@ -132,7 +133,7 @@ export default function AddOutgestionTopicModal({
                     }))
                 }
             />
-            <InputField
+            <TextAreaField
                 label={t('description')}
                 value={formData.description}
                 onChange={(value) =>
@@ -141,6 +142,7 @@ export default function AddOutgestionTopicModal({
                         description: value,
                     }))
                 }
+                rows={4}
             />
         </BaseModal >
     );

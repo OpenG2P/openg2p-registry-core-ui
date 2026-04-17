@@ -1,6 +1,6 @@
 'use client';
 
-import { Upload } from 'lucide-react';
+import { Upload, X } from 'lucide-react';
 
 interface Props {
     label: string;
@@ -10,6 +10,7 @@ interface Props {
     fileName?: string;
     onFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     disabled?: boolean;
+    onRemove?: () => void;
 }
 
 export default function FileUploadField({
@@ -20,6 +21,7 @@ export default function FileUploadField({
     fileName,
     onFileChange,
     disabled,
+    onRemove
 }: Props) {
     return (
         <div>
@@ -52,15 +54,25 @@ export default function FileUploadField({
                     >
                         {uploading
                             ? 'Uploading...'
-                            : fileId
+                            : (fileName || fileId)
                                 ? 'Change File'
                                 : 'Upload File'}
                     </button>
 
-                    {fileId && (
-                        <p className="text-[#77D79B] mt-1 text-xs">
-                            {fileName}
-                        </p>
+                    {fileName && (
+                        <div className="flex items-center gap-2 mt-1">
+                            <p className="text-[#77D79B] text-[14px] truncate max-w-25">
+                                {fileName}
+                            </p>
+
+                            <button
+                                type="button"
+                                onClick={onRemove}
+                                className="text-[#EB656A] hover:text-red-500"
+                            >
+                                <X size={14} />
+                            </button>
+                        </div>
                     )}
                 </div>
             </div>

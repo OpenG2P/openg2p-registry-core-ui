@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { Upload, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useFetch } from '@/shared/hooks';
 import { toast } from 'react-toastify';
@@ -43,34 +42,32 @@ export default function EditDataModelModal({
         }
     }, [data]);
 
-    const { uploadFile, uploading, uploadedFileName } = useFileUpload("/api/configuration/data-models/template-upload");
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const { uploadFile, uploading, uploadedFileName, setUploadedFileName } = useFileUpload("/api/configuration/data-models/template-upload");
 
-    const handleFileUpload = async (file: File) => {
-        const documentId = await uploadFile(file);
-
-        if (!documentId) return;
-
-        setFormData((prev) => ({
-            ...prev,
-            response_template_file_id: documentId,
-        }));
-    };
-
-    const handleFileChange = async (
-        e: React.ChangeEvent<HTMLInputElement>
-    ) => {
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
 
-        await handleFileUpload(file);
-
+        setSelectedFile(file);
+        setUploadedFileName(file.name)
         e.target.value = '';
+    };
+
+    const handleRemoveFile = () => {
+        setSelectedFile(null);
+        setUploadedFileName('');
     };
 
     const handleSubmit = async () => {
         if (!formData.data_model_mnemonic || !formData.pattern_for_data_model) {
             toast.warn('Mnemonic & Pattern are required');
             return;
+        }
+
+        let documentId = formData.response_template_file_id;
+        if (selectedFile) {
+            documentId = await uploadFile(selectedFile);
         }
 
         const result = await updateDataModel(
@@ -80,16 +77,17 @@ export default function EditDataModelModal({
                 body: JSON.stringify({
                     ...formData,
                     data_model_id: data?.data_model_id,
+                    response_template_file_id: documentId,
                 }),
             }
         );
 
         if (result) {
-            toast.success(`Updated "${formData.data_model_mnemonic}"`);
+            toast.success(t('data_model_updated_successfully'));
             onSuccess?.();
             onClose();
         } else {
-            toast.error('Update failed');
+            toast.error('failed_to_update_data_model');
         }
     };
 
@@ -103,9 +101,8 @@ export default function EditDataModelModal({
             onClose={handleCancel}
             primaryActionLabel={t('save')}
             onPrimaryAction={handleSubmit}
-            maxWidth="max-w-150"
+            maxWidth="max-w-200"
         >
-
             <InputField
                 label={t('data_model_mnemonic')}
                 value={formData.data_model_mnemonic}
@@ -125,7 +122,7 @@ export default function EditDataModelModal({
                         pattern_for_data_model: value,
                     }))
                 }
-                rows={4}
+                rows={1}
             />
 
             <div className="grid grid-cols-2 gap-6">
@@ -136,6 +133,7 @@ export default function EditDataModelModal({
                     fileId={formData.response_template_file_id}
                     fileName={uploadedFileName}
                     onFileChange={handleFileChange}
+                    onRemove={handleRemoveFile}
                 />
 
                 <CheckboxField

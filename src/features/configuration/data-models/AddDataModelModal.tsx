@@ -30,28 +30,22 @@ export default function AddDataModelModal({
         is_active: true,
     });
 
-    const { uploadFile, uploading, uploadedFileName } = useFileUpload("/api/configuration/data-models/template-upload");
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-    const handleFileUpload = async (file: File) => {
-        const documentId = await uploadFile(file);
+    const { uploadFile, uploading, uploadedFileName, setUploadedFileName } = useFileUpload("/api/configuration/data-models/template-upload");
 
-        if (!documentId) return;
-
-        setFormData((prev) => ({
-            ...prev,
-            response_template_file_id: documentId,
-        }));
-    };
-
-    const handleFileChange = async (
-        e: React.ChangeEvent<HTMLInputElement>
-    ) => {
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
 
-        await handleFileUpload(file);
-
+        setSelectedFile(file);
+        setUploadedFileName(file.name)
         e.target.value = '';
+    };
+
+    const handleRemoveFile = () => {
+        setSelectedFile(null);
+        setUploadedFileName('');
     };
 
     const handleSubmit = async () => {
@@ -60,16 +54,24 @@ export default function AddDataModelModal({
             return;
         }
 
+        let documentId = formData.response_template_file_id;
+        if (selectedFile) {
+            documentId = await uploadFile(selectedFile);
+        }
+
         const result = await createDataModel(
             '/api/configuration/data-models/create',
             {
                 method: 'POST',
-                body: JSON.stringify(formData),
+                body: JSON.stringify({
+                    ...formData,
+                    response_template_file_id: documentId,
+                }),
             }
         );
 
         if (result?.data_model_id) {
-            toast.success(`"${formData.data_model_mnemonic}" created`);
+            toast.success(t('data_model_created_successfully'));
 
             setFormData({
                 data_model_mnemonic: '',
@@ -81,7 +83,7 @@ export default function AddDataModelModal({
             onSuccess?.();
             onClose();
         } else {
-            toast.error('Failed to create data model');
+            toast.error(t('failed_to_create_data_model'));
         }
     };
 
@@ -101,7 +103,7 @@ export default function AddDataModelModal({
             onClose={handleCancel}
             primaryActionLabel={t('save')}
             onPrimaryAction={handleSubmit}
-            maxWidth="max-w-150"
+            maxWidth="max-w-200"
         >
 
             <InputField
@@ -124,7 +126,7 @@ export default function AddDataModelModal({
                         pattern_for_data_model: value,
                     }))
                 }
-                rows={4}
+                rows={1}
             />
 
             <div className="grid grid-cols-2 gap-6">
@@ -135,6 +137,7 @@ export default function AddDataModelModal({
                     fileId={formData.response_template_file_id}
                     fileName={uploadedFileName}
                     onFileChange={handleFileChange}
+                    onRemove={handleRemoveFile}
                 />
 
                 <CheckboxField

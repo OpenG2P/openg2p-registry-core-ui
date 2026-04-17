@@ -20,7 +20,7 @@ export default function ViewSemanticPatternModal({
         <BaseModal
             title={t("view_semantic_pattern")}
             onClose={onClose}
-            maxWidth='max-w-3xl'
+            maxWidth='max-w-220'
             secondaryActionLabel={t('close')}
         >
             <div className="bg-[#F5F5F5] rounded-[10px] p-8 -mx-2">

@@ -18,6 +18,7 @@ export default function ViewDataModelModal({
         <BaseModal
             title={t('view_data_model')}
             onClose={onClose}
+            maxWidth='max-w-200'
         >
             <Field label={t('data_model_mnemonic')} value={data?.data_model_mnemonic} />
             <Field label={t('template_id')} value={data?.response_template_file_id} />
