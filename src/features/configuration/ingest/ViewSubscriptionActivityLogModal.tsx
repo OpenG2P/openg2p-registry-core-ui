@@ -5,19 +5,15 @@ import { SubscriptionActivityLog } from '@/features/configuration/shared/hooks/u
 import { BaseModal, Field } from '../shared/components';
 
 interface ViewSubscriptionActivityLogModalProps {
-    isOpen: boolean;
     onClose: () => void;
     data?: SubscriptionActivityLog;
 }
 
 export default function ViewSubscriptionActivityLogModal({
-    isOpen,
     onClose,
     data,
 }: ViewSubscriptionActivityLogModalProps) {
     const t = useTranslations();
-
-    if (!isOpen || !data) return null;
 
     const renderJSON = (obj: any) => {
         try {
@@ -35,40 +31,37 @@ export default function ViewSubscriptionActivityLogModal({
 
     return (
         <BaseModal
-            title={t('log_id') + ': ' + data.subscription_activity_log_id}
+            title={t('view_subscription_activity_log')}
             onClose={onClose}
             maxWidth="max-w-4xl"
             secondaryActionLabel={t('close')}
         >
-            <div className="bg-[#F5F5F5] rounded-[10px] p-8 -mx-2 space-y-2">
-                <div className="grid grid-cols-2 gap-x-8">
-                    <Field label={t('partner_id')} value={data.partner_id} />
-                    <Field label={t('unsubscribe')} value={data.is_unsubscribe ? t('true') : t('false')} />
-                    <Field label={t('date_time')} value={new Date(data.date_time).toLocaleString()} />
-                    <Field label={t('subscription_url')} value={data.subscription_url} />
-                    <Field label={t('callback_url')} value={data.registry_callback_url} />
-                </div>
-
+            <div className="bg-[#F5F5F5] rounded-[10px] p-8 -mx-2">
+                <Field label={t('partner_id')} value={data?.partner_id} />
+                <Field label={t('unsubscribe')} value={data?.is_unsubscribe ? t('true') : t('false')} />
+                <Field label={t('date_time')} value={data?.date_time ? new Date(data.date_time).toLocaleString() : '-'} />
+                <Field label={t('subscription_url')} value={data?.subscription_url} />
+                <Field label={t('callback_url')} value={data?.registry_callback_url} />
                 <div className="pt-4">
                     <span className="text-[#808080] text-[16px] font-medium block mb-2">{t('description')}</span>
                     <div className="text-black text-[16px] font-bold bg-white p-4 rounded-lg border border-gray-100">
-                        {data.description || '-'}
+                        {data?.description || '-'}
                     </div>
                 </div>
 
-                <div className="grid grid-cols-3 gap-4 pt-6">
-                    <div>
-                        <span className="text-[#808080] text-[16px] font-medium block mb-2">{t('header')}</span>
-                        {renderJSON(data.header)}
-                    </div>
-                    <div>
-                        <span className="text-[#808080] text-[16px] font-medium block mb-2">{t('payload')}</span>
-                        {renderJSON(data.payload)}
-                    </div>
-                    <div>
-                        <span className="text-[#808080] text-[16px] font-medium block mb-2">{t('response')}</span>
-                        {renderJSON(data.response)}
-                    </div>
+                <div className="pt-6">
+                    <span className="text-[#808080] text-[16px] font-medium block mb-2">{t('header')}</span>
+                    {renderJSON(data?.header)}
+                </div>
+
+                <div className="pt-4">
+                    <span className="text-[#808080] text-[16px] font-medium block mb-2">{t('payload')}</span>
+                    {renderJSON(data?.payload)}
+                </div>
+
+                <div className="pt-4">
+                    <span className="text-[#808080] text-[16px] font-medium block mb-2">{t('response')}</span>
+                    {renderJSON(data?.response)}
                 </div>
             </div>
         </BaseModal>

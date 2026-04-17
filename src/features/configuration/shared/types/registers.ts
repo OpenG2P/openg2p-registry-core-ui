@@ -13,4 +13,5 @@ export interface Register {
     has_data?: boolean;
     has_image?: boolean;
     program_id?: string;
+    functional_id_generation_required?: boolean;
 }

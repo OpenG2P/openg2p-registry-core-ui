@@ -86,6 +86,13 @@ export default function ViewRegisterFieldsModal({
                         </div>
 
                         <div className="flex items-start">
+                            <div className="w-55 text-[16px] text-gray-400 font-medium shrink-0">{t('functional_id_generation_required')}</div>
+                            <div className="flex-1 text-[16px] text-black font-bold">
+                                {data.functional_id_generation_required ? t('true') : t('false')}
+                            </div>
+                        </div>
+
+                        <div className="flex items-start">
                             <div className="w-55 text-[16px] text-gray-400 font-medium shrink-0">{t('register_rank')}</div>
                             <div className="flex-1 text-[16px] text-black font-bold">
                                 {data.register_rank ?? 0}

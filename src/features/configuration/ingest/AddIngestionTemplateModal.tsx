@@ -125,7 +125,7 @@ export default function AddIngestionTemplateModal({
             onPrimaryAction={handleSubmit}
         >
             <CustomDropdown
-                label={t('register_id')}
+                label={t('register_mnemonic')}
                 options={registerOptions}
                 value={formData.register_id}
                 loading={registersLoading}
@@ -138,7 +138,7 @@ export default function AddIngestionTemplateModal({
                 }
             />
             <CustomDropdown
-                label={t('data_model_id')}
+                label={t('data_model_mnemonic')}
                 options={dataModelOptions}
                 value={formData.data_model_id}
                 loading={dataModelsLoading}

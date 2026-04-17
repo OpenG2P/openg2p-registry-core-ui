@@ -7,12 +7,11 @@ import { toast } from 'react-toastify';
 import { BaseModal, CustomDropdown, InputField, TextAreaField } from '../shared/components';
 
 interface AddSubscriptionActivityLogModalProps {
-    isOpen: boolean;
     onClose: () => void;
     onSuccess?: () => void;
 }
 
-export default function AddSubscriptionActivityLogModal({ isOpen, onClose, onSuccess }: AddSubscriptionActivityLogModalProps) {
+export default function AddSubscriptionActivityLogModal({ onClose, onSuccess }: AddSubscriptionActivityLogModalProps) {
     const t = useTranslations();
     const { execute: createLog } = useFetch();
 
@@ -79,8 +78,6 @@ export default function AddSubscriptionActivityLogModal({ isOpen, onClose, onSuc
         }
     };
 
-    if (!isOpen) return null;
-
     return (
         <BaseModal
             title={t('add_subscription_log')}
@@ -129,7 +126,7 @@ export default function AddSubscriptionActivityLogModal({ isOpen, onClose, onSuc
                     label={t('header') + ' (JSON)'}
                     value={formData.header}
                     onChange={(value) => setFormData({ ...formData, header: value })}
-                    rows={4}
+                    rows={8}
                     textareaClassName="font-mono text-xs"
                 />
 
@@ -137,7 +134,7 @@ export default function AddSubscriptionActivityLogModal({ isOpen, onClose, onSuc
                     label={t('payload') + ' (JSON)'}
                     value={formData.payload}
                     onChange={(value) => setFormData({ ...formData, payload: value })}
-                    rows={4}
+                    rows={18}
                     textareaClassName="font-mono text-xs"
                 />
 
@@ -145,8 +142,9 @@ export default function AddSubscriptionActivityLogModal({ isOpen, onClose, onSuc
                     label={t('response') + ' (JSON)'}
                     value={formData.response}
                     onChange={(value) => setFormData({ ...formData, response: value })}
-                    rows={4}
+                    rows={22}
                     textareaClassName="font-mono text-xs"
+                    
                 />
             </div>
         </BaseModal>

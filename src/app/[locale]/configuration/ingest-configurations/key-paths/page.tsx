@@ -91,10 +91,10 @@ const KeyPathsPage = () => {
     };
 
     const columns = [
-        {
-            key: 'key_path_id',
-            label: t('key_path_id'),
-        },
+        // {
+        //     key: 'key_path_id',
+        //     label: t('key_path_id'),
+        // },
         {
             key: 'data_model',
             label: t('data_model_mnemonic'),

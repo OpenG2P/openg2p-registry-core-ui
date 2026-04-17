@@ -92,17 +92,19 @@ const ManageSubscriptionPage = () => {
                 )}
             />
 
-            <AddSubscriptionActivityLogModal
-                isOpen={modalType === 'add'}
-                onClose={() => setModalType(null)}
-                onSuccess={refresh}
-            />
+            {modalType === 'add' && (
+                <AddSubscriptionActivityLogModal
+                    onClose={() => setModalType(null)}
+                    onSuccess={refresh}
+                />
+            )}
 
-            <ViewSubscriptionActivityLogModal
-                isOpen={modalType === 'view'}
-                onClose={() => setModalType(null)}
-                data={selectedActivityLog}
-            />
+            {modalType === 'view' && (
+                <ViewSubscriptionActivityLogModal
+                    onClose={() => setModalType(null)}
+                    data={selectedActivityLog}
+                />
+            )}
         </>
     );
 };

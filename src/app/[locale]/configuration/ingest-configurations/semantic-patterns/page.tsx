@@ -86,10 +86,10 @@ const SemanticPatternsPage = () => {
     };
 
     const columns = [
-        {
-            key: 'semantic_pattern_id',
-            label: t('semantic_pattern_id'),
-        },
+        // {
+        //     key: 'semantic_pattern_id',
+        //     label: t('semantic_pattern_id'),
+        // },
         {
             key: 'data_model_mnemonic',
             label: t('data_model_mnemonic'),
