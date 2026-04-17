@@ -9,6 +9,8 @@ import { useMemo } from "react";
 import { useIntakeFormDocuments } from "../hooks/useIntakeFormDocuments";
 import { UploadedDocument } from "@/shared/types";
 import { formatDate } from "@/shared/utils/dateUtils";
+import Can from "@/components/shared/Can";
+import { INTAKE_FORM_ACTIONS } from "../utils/intakeForm.actions";
 
 const statusClassMap: Record<string, string> = {
     REJECTED: "text-red-500",
@@ -73,7 +75,7 @@ export default function SubmissionHeader({ submission, onActionComplete }: Props
             </div>
 
             {submission?.approval_status === "PENDING" && (
-                <>
+                <Can action={INTAKE_FORM_ACTIONS.approve}>
                     <div className="my-4 border-t-2 border-[#F2BA1A]" />
                     <div className="flex items-center gap-4">
                         <button
@@ -92,7 +94,7 @@ export default function SubmissionHeader({ submission, onActionComplete }: Props
                             {t('approve_submission')}
                         </button>
                     </div>
-                </>
+                </Can>
             )}
         </div>
     );
