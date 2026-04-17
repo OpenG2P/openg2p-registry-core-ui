@@ -28,7 +28,7 @@ export default function DataTable<T>({
     return (
         <div className="mx-7.5 bg-white rounded-[10px] p-4 overflow-hidden">
             <div
-                className="grid gap-4 pb-2 px-8 border-b border-gray-100"
+                className="grid gap-4 pb-2 px-8"
                 style={{ gridTemplateColumns: `repeat(${gridCols}, minmax(0, 1fr))` }}
             >
                 {columns.map((col) => (

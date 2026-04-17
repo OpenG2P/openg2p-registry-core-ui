@@ -17,30 +17,53 @@ export default function ViewKeyPathModal({
 
     return (
         <BaseModal
-            title={`${t('ingest_key_paths')} ${t('details')}`}
+            title={`${t('view_ingest_key_path')}`}
             onClose={onClose}
-            maxWidth='max-w-200'
+            maxWidth='max-w-3xl'
+            secondaryActionLabel={t('close')}
         >
-            <div className="grid grid-cols-2 gap-6">
-                <Field label={t('key_path_id')} value={data?.key_path_id} />
-                <Field label={t('data_model')} value={data?.data_model_mnemonic || '-'} />
+            <div className="bg-[#F5F5F5] rounded-[10px] p-8 -mx-2">
+                <Field label={t('data_model')} value={data?.data_model_mnemonic} />
 
-                <Field label={t('data_model_id')} value={data?.data_model_id} />
-                <Field label={t('message_id')} value={data?.key_path_for_message_id || '-'} />
+                <div className="pt-6">
+                    <span className="text-[#808080] text-[16px] font-medium block mb-2">{t('key_path_for_message_id')}</span>
+                    <div className="text-black text-[16px] font-bold bg-white p-4 rounded-lg border border-gray-100">
+                        {data?.key_path_for_message_id || '-'}
+                    </div>
+                </div>
 
-                <Field label={t('sender')} value={data?.key_path_for_sender || '-'} />
-                <Field label={t('signature')} value={data?.key_path_for_signature || '-'} />
+                <div className="pt-4">
+                    <span className="text-[#808080] text-[16px] font-medium block mb-2">{t('key_path_for_sender')}</span>
+                    <div className="text-black text-[16px] font-bold bg-white p-4 rounded-lg border border-gray-100">
+                        {data?.key_path_for_sender || '-'}
+                    </div>
+                </div>
 
-                <Field label={t('signature_payload')} value={data?.key_path_for_signature_payload || '-'} />
+                <div className="pt-4">
+                    <span className="text-[#808080] text-[16px] font-medium block mb-2">{t('key_path_for_signature')}</span>
+                    <div className="text-black text-[16px] font-bold bg-white p-4 rounded-lg border border-gray-100">
+                        {data?.key_path_for_signature || '-'}
+                    </div>
+                </div>
+
+                <div className="pt-4">
+                    <span className="text-[#808080] text-[16px] font-medium block mb-2">{t('key_path_for_signature_payload')}</span>
+                    <div className="text-black text-[16px] font-bold bg-white p-4 rounded-lg border border-gray-100">
+                        {data?.key_path_for_signature_payload || '-'}
+                    </div>
+                </div>
+
                 <Field label={t('is_list')} value={data?.is_list ? t('true') : t('false')} />
-            </div>
 
-            {data?.is_list && (
-                <Field
-                    label={t('list_elements')}
-                    value={data.key_path_for_list_elements || '-'}
-                />
-            )}
+                {data?.is_list && (
+                    <div className="pt-4">
+                        <span className="text-[#808080] text-[16px] font-medium block mb-2">{t('key_path_for_list_elements')}</span>
+                        <div className="text-black text-[16px] font-bold bg-white p-4 rounded-lg border border-gray-100">
+                            {data.key_path_for_list_elements || '-'}
+                        </div>
+                    </div>
+                )}
+            </div>
         </BaseModal>
     );
 }

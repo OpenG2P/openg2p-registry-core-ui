@@ -3,38 +3,16 @@
 interface FieldProps {
     label: string;
     value?: any;
+    className?: string;
 }
 
-// export default function Field({ label, value }: FieldProps) {
-//     return (
-//         <div>
-//             <label className="text-[16px] font-medium">
-//                 {label}
-//             </label>
-//             <div
-//                 className="mt-2 w-full border border-[#F77F57] py-2 px-4 rounded-[10px] truncate"
-//                 title={value}
-//             >
-//                 {value ?? '-'}
-//             </div>
-//         </div>
-//     );
-// }
-
-export default function Field({ label, value }: FieldProps) {
+export default function Field({ label, value, className = '' }: FieldProps) {
     return (
-        <div className="flex gap-4 items-center">
-            <span
-                className="text-[16px] text-black/50 truncate"
-                title={label}
-            >
-                {label} :
+        <div className={`grid grid-cols-[1.2fr_2fr] gap-4 py-3 ${className}`}>
+            <span className="text-[#808080] text-[16px] font-medium truncate" title={label}>
+                {label}
             </span>
-
-            <div
-                className="text-base font-medium text-black truncate"
-                title={value}
-            >
+            <div className="text-black text-[16px] font-bold break-all">
                 {value ?? '-'}
             </div>
         </div>

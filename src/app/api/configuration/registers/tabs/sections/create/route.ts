@@ -24,6 +24,9 @@ export async function POST(request: NextRequest) {
 				auto_approval: body.auto_approval,
 				is_list: body.is_list,
 				section_ui_schema: body.section_ui_schema,
+				is_core_section: body.is_core_section,
+				is_primary_section: body.is_primary_section,
+				section_order: body.section_order,
 			},
 		}),
 	});
