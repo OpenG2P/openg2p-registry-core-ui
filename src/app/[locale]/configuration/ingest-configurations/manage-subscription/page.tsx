@@ -7,6 +7,8 @@ import { usePagination } from '@/shared/hooks';
 import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
 import { useTranslations } from 'next-intl';
 import { SubscriptionActivityLog } from '@/features/configuration/shared/hooks/useAllSubscriptionActivityLogs';
+import { useRbac } from '@/context/RbacContext';
+import { CONFIGURATION_SUBSCRIPTION_ACTIONS } from '@/features/configuration/shared/utils/configurationSubscription.actions';
 import AddSubscriptionActivityLogModal from '@/features/configuration/ingest/AddSubscriptionActivityLogModal';
 import ViewSubscriptionActivityLogModal from '@/features/configuration/ingest/ViewSubscriptionActivityLogModal';
 import { DataTable, ViewButton } from '@/features/configuration/shared/components';
@@ -16,6 +18,7 @@ const ManageSubscriptionPage = () => {
     const [modalType, setModalType] = useState<'add' | 'view' | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
     const { config } = useRuntimeConfig();
+    const { can } = useRbac();
 
     const { activityLogs, pagination, loading, refresh } = useAllSubscriptionActivityLogs(currentPage, config.pageSize);
     const { selectedActivityLog, fetchActivityLog } = useSubscriptionActivityLog();
@@ -69,7 +72,7 @@ const ManageSubscriptionPage = () => {
                 breadcrumb={[{ label: t('ingest_configurations') }, { label: t('subscription_logs') }]}
                 showFilters={false}
                 showPagination
-                showAddNewButton={true}
+                showAddNewButton={can(CONFIGURATION_SUBSCRIPTION_ACTIONS.create)}
                 addNewButtonText={t('add_subscription_log')}
                 onAddNewButton={() => setModalType('add')}
                 pageStart={pageStart}

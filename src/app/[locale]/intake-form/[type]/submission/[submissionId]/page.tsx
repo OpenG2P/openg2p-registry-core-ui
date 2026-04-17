@@ -13,6 +13,8 @@ import { useMemo, useState } from 'react';
 import { useIntakeFormAction } from '@/features/intake-form/hooks/useIntakeFormAction';
 import { RegisterFlattenedRecord } from '@/features/register/types';
 import { useRegister } from '@/context/RegisterContext';
+import { useRbac } from '@/context/RbacContext';
+import { INTAKE_FORM_ACTIONS } from '@/features/intake-form/utils/intakeForm.actions';
 
 
 export default function IntakeFormSubmissionPage() {
@@ -22,6 +24,8 @@ export default function IntakeFormSubmissionPage() {
     const registerType = routeParams.type;
 
     const { currentRegister } = useRegister();
+    const { can } = useRbac();
+    const canCreate = can(INTAKE_FORM_ACTIONS.create);
 
 
     const { submission, loading: loadingSubmission, refetch } = useIntakeSubmissionDetails(submissionId);
@@ -113,7 +117,7 @@ export default function IntakeFormSubmissionPage() {
                                 <MultiSectionAccordionForms
                                     sections={sections || []}
                                     schemaData={sectionDataMap}
-                                    showActions={isDraft}
+                                    showActions={isDraft && canCreate}
                                     onAction={handleAction}
                                 />
                             </div>

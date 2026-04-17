@@ -8,6 +8,9 @@ import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
 import { useTranslations } from 'next-intl';
 import { IncomingSemanticPattern } from '@/features/configuration/shared/hooks/useAllSemanticPatterns';
 import { toast } from 'react-toastify';
+import { useRbac } from '@/context/RbacContext';
+import { CONFIGURATION_SEMANTIC_PATTERNS_ACTIONS } from '@/features/configuration/shared/utils/configurationSemanticPatterns.actions';
+import Can from '@/components/shared/Can';
 import { DeleteButton, EditButton, ViewButton, DataTable } from '@/features/configuration/shared/components';
 import ConfirmRemovePopup from '@/features/configuration/shared/components/ConfirmRemovePopup';
 import { AddSemanticPatternModal, EditSemanticPatternModal, ViewSemanticPatternModal } from '@/features/configuration/ingest';
@@ -20,6 +23,7 @@ const SemanticPatternsPage = () => {
     const [selectedItem, setSelectedItem] = useState<IncomingSemanticPattern | null>(null);
 
     const { config } = useRuntimeConfig();
+    const { can } = useRbac();
     const { semanticPatterns, pagination, loading, refresh } = useAllSemanticPatterns(currentPage, config.pageSize);
     const { selectedSemanticPattern, fetchSemanticPattern } = useIncomingSemanticPattern();
     const { execute: deletePattern } = useFetch();
@@ -110,7 +114,7 @@ const SemanticPatternsPage = () => {
                 breadcrumb={[{ label: t('ingest_configurations') }, { label: t('semantic_patterns') }]}
                 showFilters={false}
                 showPagination
-                showAddNewButton={true}
+                showAddNewButton={can(CONFIGURATION_SEMANTIC_PATTERNS_ACTIONS.create)}
                 addNewButtonText={t('add_new_semantic_pattern')}
                 onAddNewButton={() => setModalType('add')}
                 pageStart={pageStart}
@@ -132,15 +136,19 @@ const SemanticPatternsPage = () => {
                             onClick={() => handleView(item)}
                         />
 
-                        <EditButton
-                            label={t('common.edit')}
-                            onClick={() => handleUpdate(item)}
-                        />
+                        <Can action={CONFIGURATION_SEMANTIC_PATTERNS_ACTIONS.edit}>
+                            <EditButton
+                                label={t('common.edit')}
+                                onClick={() => handleUpdate(item)}
+                            />
+                        </Can>
 
-                        <DeleteButton
-                            label={t('remove')}
-                            onClick={() => handleDelete(item)}
-                        />
+                        <Can action={CONFIGURATION_SEMANTIC_PATTERNS_ACTIONS.edit}>
+                            <DeleteButton
+                                label={t('remove')}
+                                onClick={() => handleDelete(item)}
+                            />
+                        </Can>
                     </>
                 )}
             />
