@@ -22,11 +22,14 @@ export default function ViewDataModelModal({
         >
             <div className="bg-[#D9D9D980] px-8 pt-2 pb-4">
                 <Field label={t('data_model_mnemonic')} value={data?.data_model_mnemonic} />
+
                 <Field label={t('template_id')} value={data?.response_template_file_id} />
+
                 <Field
                     label={t('status')}
                     value={data?.is_active ? t('active') : t('inactive')}
                 />
+
                 <Field label={t('pattern')} value={data?.pattern_for_data_model} />
             </div>
         </BaseModal>

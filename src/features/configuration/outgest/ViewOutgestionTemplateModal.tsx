@@ -20,9 +20,13 @@ export default function ViewOutgestionTemplateModal({
             onClose={onClose}
             maxWidth='max-w-200'
         >
-            <Field label={t('data_model_mnemonic')} value={data?.data_model_mnemonic} />
-            <Field label={t('register_mnemonic')} value={data?.register_mnemonic} />
-            <Field label={t('template_file_id')} value={data?.template_file_id} />
+            <div className="bg-[#D9D9D980] px-8 pt-2 pb-4">
+                <Field label={t('data_model_mnemonic')} value={data?.data_model_mnemonic} />
+
+                <Field label={t('register_mnemonic')} value={data?.register_mnemonic} />
+
+                <Field label={t('template_file_id')} value={data?.template_file_id} />
+            </div>
         </BaseModal>
     );
 }

@@ -97,9 +97,6 @@ export default function EditOutgestionTemplateModal({
             onPrimaryAction={handleSubmit}
             maxWidth='max-w-200'
         >
-            {/* <Field label={t('register_mnemonic')} value={data.register_mnemonic} />
-            <Field label={t('data_model_mnemonic')} value={data.data_model_mnemonic} /> */}
-
             <FileUploadField
                 label={t('template_id')}
                 fileInputRef={fileInputRef}

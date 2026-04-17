@@ -94,93 +94,93 @@ export default function EditSemanticPatternModal({
             onPrimaryAction={handleSubmit}
             maxWidth='max-w-220'
         >
-            <div className="space-y-4">
-                <CustomDropdown
-                    label={t('data_model_mnemonic')}
-                    options={dataModels.map((dm) => ({
-                        label: dm.data_model_mnemonic,
-                        value: dm.data_model_id,
-                    }))}
-                    value={formData.data_model_id}
-                    onChange={(value) => {
-                        const mnemonic = dataModels.find(dm => dm.data_model_id === value)?.data_model_mnemonic || '';
-                        setFormData((prev) => ({ ...prev, data_model_id: value, data_model_mnemonic: mnemonic }))
-                    }}
-                />
+            <CustomDropdown
+                label={t('data_model_mnemonic')}
+                options={dataModels.map((dm) => ({
+                    label: dm.data_model_mnemonic,
+                    value: dm.data_model_id,
+                }))}
+                value={formData.data_model_id}
+                onChange={(value) => {
+                    const mnemonic = dataModels.find(dm => dm.data_model_id === value)?.data_model_mnemonic || '';
+                    setFormData((prev) => ({ ...prev, data_model_id: value, data_model_mnemonic: mnemonic }))
+                }}
+            />
 
-                <CustomDropdown
-                    label={t('register_mnemonic')}
-                    options={registers.map((r) => ({
-                        label: r.register_mnemonic,
-                        value: r.register_id,
-                    }))}
-                    value={formData.register_id}
-                    onChange={(value) => {
-                        const mnemonic = registers.find(r => r.register_id === value)?.register_mnemonic || '';
-                        setFormData((prev) => ({ ...prev, register_id: value, register_mnemonic: mnemonic }))
-                    }}
-                />
+            <CustomDropdown
+                label={t('register_mnemonic')}
+                options={registers.map((r) => ({
+                    label: r.register_mnemonic,
+                    value: r.register_id,
+                }))}
+                value={formData.register_id}
+                onChange={(value) => {
+                    const mnemonic = registers.find(r => r.register_id === value)?.register_mnemonic || '';
+                    setFormData((prev) => ({ ...prev, register_id: value, register_mnemonic: mnemonic }))
+                }}
+            />
 
-                <CustomDropdown
-                    label={t('section_mnemonic')}
-                    options={sections.map((s) => ({
-                        label: s.section_mnemonic,
-                        value: s.section_id,
-                    }))}
-                    value={formData.section_id}
-                    loading={loadingSections}
-                    disabled={!formData.register_id}
-                    onChange={(value) => {
-                        const mnemonic = sections.find(s => s.section_id === value)?.section_mnemonic || '';
-                        setFormData((prev) => ({ ...prev, section_id: value, section_mnemonic: mnemonic }))
-                    }}
-                />
+            <CustomDropdown
+                label={t('section_mnemonic')}
+                options={sections.map((s) => ({
+                    label: s.section_mnemonic,
+                    value: s.section_id,
+                }))}
+                value={formData.section_id}
+                loading={loadingSections}
+                disabled={!formData.register_id}
+                onChange={(value) => {
+                    const mnemonic = sections.find(s => s.section_id === value)?.section_mnemonic || '';
+                    setFormData((prev) => ({ ...prev, section_id: value, section_mnemonic: mnemonic }))
+                }}
+            />
 
-                <TextAreaField
-                    label={t('pattern_for_register')}
-                    value={formData.pattern_for_register}
-                    textareaClassName="h-16"
-                    onChange={(value) =>
-                        setFormData((prev) => ({
-                            ...prev,
-                            pattern_for_register: value,
-                        }))
-                    }
-                />
-                <TextAreaField
-                    label={t('pattern_for_section')}
-                    value={formData.pattern_for_section}
-                    textareaClassName="h-16"
-                    onChange={(value) =>
-                        setFormData((prev) => ({
-                            ...prev,
-                            pattern_for_section: value,
-                        }))
-                    }
-                />
+            <TextAreaField
+                label={t('pattern_for_register')}
+                value={formData.pattern_for_register}
+                textareaClassName="h-16"
+                onChange={(value) =>
+                    setFormData((prev) => ({
+                        ...prev,
+                        pattern_for_register: value,
+                    }))
+                }
+            />
 
-                <TextAreaField
-                    label={t('key_path_for_business_payload')}
-                    value={formData.key_path_for_business_payload}
-                    textareaClassName="h-32"
-                    onChange={(value) =>
-                        setFormData((prev) => ({
-                            ...prev,
-                            key_path_for_business_payload: value,
-                        }))
-                    }
-                />
-                <InputField
-                    label={t('raw_payload_enricher_class')}
-                    value={formData.raw_payload_enricher_class}
-                    onChange={(value) =>
-                        setFormData((prev) => ({
-                            ...prev,
-                            raw_payload_enricher_class: value,
-                        }))
-                    }
-                />
-            </div>
+            <TextAreaField
+                label={t('pattern_for_section')}
+                value={formData.pattern_for_section}
+                textareaClassName="h-16"
+                onChange={(value) =>
+                    setFormData((prev) => ({
+                        ...prev,
+                        pattern_for_section: value,
+                    }))
+                }
+            />
+
+            <TextAreaField
+                label={t('key_path_for_business_payload')}
+                value={formData.key_path_for_business_payload}
+                textareaClassName="h-32"
+                onChange={(value) =>
+                    setFormData((prev) => ({
+                        ...prev,
+                        key_path_for_business_payload: value,
+                    }))
+                }
+            />
+
+            <InputField
+                label={t('raw_payload_enricher_class')}
+                value={formData.raw_payload_enricher_class}
+                onChange={(value) =>
+                    setFormData((prev) => ({
+                        ...prev,
+                        raw_payload_enricher_class: value,
+                    }))
+                }
+            />
         </BaseModal>
     );
 }

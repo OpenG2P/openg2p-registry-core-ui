@@ -26,7 +26,7 @@ export default function BaseModal({
     return (
         <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center">
             <div className={`relative w-full ${maxWidth} bg-white rounded-[10px] border-5 border-[#F2BA1A] px-8 py-6`}>
-                <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center justify-between mb-4">
                     <h2 className="text-[24px] text-[#ED7C22] font-medium">
                         {title}
                     </h2>

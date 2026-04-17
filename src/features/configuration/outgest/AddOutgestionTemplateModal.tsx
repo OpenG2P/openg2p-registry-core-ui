@@ -136,6 +136,7 @@ export default function AddOutgestionTemplateModal({
                     }))
                 }
             />
+
             <CustomDropdown
                 label={t('register_id')}
                 options={registerOptions}
@@ -149,6 +150,7 @@ export default function AddOutgestionTemplateModal({
                     }))
                 }
             />
+
             <FileUploadField
                 label={t('template_id')}
                 fileInputRef={fileInputRef}

@@ -124,6 +124,7 @@ export default function AddIngestionTemplateModal({
             onClose={handleCancel}
             primaryActionLabel={t('save')}
             onPrimaryAction={handleSubmit}
+            maxWidth='max-w-200'
         >
             <CustomDropdown
                 label={t('register_mnemonic')}

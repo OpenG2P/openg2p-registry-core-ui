@@ -110,6 +110,7 @@ export default function AddOutgestionTopicModal({
                     }))
                 }
             />
+
             <CustomDropdown
                 label={t('register_id')}
                 options={registerOptions}
@@ -123,6 +124,7 @@ export default function AddOutgestionTopicModal({
                     }))
                 }
             />
+
             <InputField
                 label={t('websub_topic')}
                 value={formData.websub_topic}
@@ -133,6 +135,7 @@ export default function AddOutgestionTopicModal({
                     }))
                 }
             />
+
             <TextAreaField
                 label={t('description')}
                 value={formData.description}

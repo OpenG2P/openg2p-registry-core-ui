@@ -105,7 +105,6 @@ export default function AddDataModelModal({
             onPrimaryAction={handleSubmit}
             maxWidth="max-w-200"
         >
-
             <InputField
                 label={t('data_model_mnemonic')}
                 value={formData.data_model_mnemonic}
@@ -151,7 +150,6 @@ export default function AddDataModelModal({
                     }
                 /> */}
             </div>
-
         </BaseModal>
     );
 }

@@ -19,7 +19,7 @@ export default function ViewKeyPathModal({
         <BaseModal
             title={`${t('view_ingest_key_path')}`}
             onClose={onClose}
-            maxWidth='max-w-3xl'
+            maxWidth='max-w-220'
             secondaryActionLabel={t('close')}
         >
             <div className="bg-[#D9D9D980] px-8 pt-2 pb-4">
@@ -49,31 +49,9 @@ export default function ViewKeyPathModal({
                     layout="column"
                 />
 
-                {/* <div className="pt-4">
-                    <span className="text-[#808080] text-[16px] font-medium block mb-2">{t('key_path_for_sender')}</span>
-                    <div className="text-black text-[16px] font-bold bg-white p-4 rounded-lg border border-gray-100">
-                        {data?.key_path_for_sender || '-'}
-                    </div>
-                </div>
-
-                <div className="pt-4">
-                    <span className="text-[#808080] text-[16px] font-medium block mb-2">{t('key_path_for_signature')}</span>
-                    <div className="text-black text-[16px] font-bold bg-white p-4 rounded-lg border border-gray-100">
-                        {data?.key_path_for_signature || '-'}
-                    </div>
-                </div>
-
-                <div className="pt-4">
-                    <span className="text-[#808080] text-[16px] font-medium block mb-2">{t('key_path_for_signature_payload')}</span>
-                    <div className="text-black text-[16px] font-bold bg-white p-4 rounded-lg border border-gray-100">
-                        {data?.key_path_for_signature_payload || '-'}
-                    </div>
-                </div> */}
-
                 <Field label={t('is_list')} value={data?.is_list ? t('true') : t('false')} />
 
                 {data?.is_list && (
-
                     <Field
                         label={t('key_path_for_list_elements')}
                         value={data?.key_path_for_list_elements}
