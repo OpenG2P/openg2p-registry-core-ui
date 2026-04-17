@@ -61,7 +61,7 @@ export default function FileUploadField({
 
                     {fileName && (
                         <div className="flex items-center gap-2 mt-1">
-                            <p className="text-[#77D79B] text-[14px] truncate max-w-25">
+                            <p className="text-black text-[14px] font-medium truncate max-w-25">
                                 {fileName}
                             </p>
 
@@ -70,7 +70,7 @@ export default function FileUploadField({
                                 onClick={onRemove}
                                 className="text-[#EB656A] hover:text-red-500"
                             >
-                                <X size={14} />
+                                <X size={16} />
                             </button>
                         </div>
                     )}

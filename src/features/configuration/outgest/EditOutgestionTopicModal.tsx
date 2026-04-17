@@ -115,6 +115,7 @@ export default function EditOutgestionTopicModal({
                     }))
                 }
             />
+
             <CustomDropdown
                 label={t('data_model_id')}
                 options={dataModelOptions}
@@ -128,6 +129,7 @@ export default function EditOutgestionTopicModal({
                     }))
                 }
             />
+
             <InputField
                 label={t('websub_topic')}
                 value={formData.websub_topic}
@@ -138,6 +140,7 @@ export default function EditOutgestionTopicModal({
                     }))
                 }
             />
+
             <TextAreaField
                 label={t('description')}
                 value={formData.description}

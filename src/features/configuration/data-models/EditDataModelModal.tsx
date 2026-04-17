@@ -113,6 +113,7 @@ export default function EditDataModelModal({
                     }))
                 }
             />
+
             <TextAreaField
                 label={t('pattern')}
                 value={formData.pattern_for_data_model}
@@ -147,8 +148,6 @@ export default function EditDataModelModal({
                     }
                 />
             </div>
-
-
         </BaseModal>
     );
 }

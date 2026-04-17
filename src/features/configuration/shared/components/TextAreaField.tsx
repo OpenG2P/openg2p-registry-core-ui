@@ -29,7 +29,7 @@ export default function TextAreaField({
                 onChange={(e) => onChange(e.target.value)}
                 rows={rows}
                 cols={cols}
-                className={`mt-2 w-full border border-[#F77F57] p-2 px-4 rounded-[10px] outline-none bg-[#F9F9F9] font-mono text-sm ${textareaClassName}`}
+                className={`mt-2 w-full border border-[#F77F57] py-2 px-4 rounded-[10px] outline-none text-[16px] ${textareaClassName}`}
             />
         </div>
     );

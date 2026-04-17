@@ -18,21 +18,26 @@ export default function ViewIngestionTemplateModal({
         <BaseModal
             title={t('view_ingestion_template')}
             onClose={onClose}
+            maxWidth='max-w-200'
         >
-            {/* <Field label={t('template_id')} value={data?.template_id} /> */}
-            <Field label={t('register_mnemonic')} value={data?.register_mnemonic} />
-            <Field label={t('data_model_mnemonic')} value={data?.data_model_mnemonic} />
-            <Field label={t('template_file_id')} value={data?.template_file_id} />
-            <Field
-                label={t('jsonld_expansion')}
-                value={
-                    data?.jsonld_expansion_required === true
-                        ? t('true')
-                        : data?.jsonld_expansion_required === false
-                            ? t('false')
-                            : '-'
-                }
-            />
+            <div className="bg-[#D9D9D980] px-8 pt-2 pb-4">
+                <Field label={t('register_mnemonic')} value={data?.register_mnemonic} />
+
+                <Field label={t('data_model_mnemonic')} value={data?.data_model_mnemonic} />
+
+                <Field label={t('template_file_id')} value={data?.template_file_id} />
+
+                <Field
+                    label={t('jsonld_expansion')}
+                    value={
+                        data?.jsonld_expansion_required === true
+                            ? t('true')
+                            : data?.jsonld_expansion_required === false
+                                ? t('false')
+                                : '-'
+                    }
+                />
+            </div>
         </BaseModal >
     );
 }
