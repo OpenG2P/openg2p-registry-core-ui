@@ -140,7 +140,7 @@ export default function AddDataModelModal({
                     onRemove={handleRemoveFile}
                 />
 
-                <CheckboxField
+                {/* <CheckboxField
                     label={t('status')}
                     checked={formData.is_active}
                     onChange={(value) =>
@@ -149,7 +149,7 @@ export default function AddDataModelModal({
                             is_active: value,
                         }))
                     }
-                />
+                /> */}
             </div>
 
         </BaseModal>

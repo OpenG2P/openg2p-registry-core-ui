@@ -15,7 +15,7 @@ export default function InputField({ label, value, onChange }: Props) {
             <input
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
-                className="mt-2 w-full border border-[#F77F57] p-2 px-4 rounded-[10px] outline-none"
+                className="mt-2 w-full border border-[#F77F57] py-2 px-4 rounded-[10px] outline-none"
             />
         </div>
     );

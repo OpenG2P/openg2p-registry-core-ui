@@ -39,9 +39,9 @@ export default function BaseModal({
                     </button>
                 </div>
 
-                <div className="space-y-4 max-h-[70vh] overflow-y-auto pr-2 custom-scrollbar">
+                <div className="space-y-4 max-h-[70vh] overflow-y-auto modal-scroll">
                     {children}
-                    <div className="flex gap-4 pt-6">
+                    <div className="flex gap-4 pt-2">
                         {!hideCancel && (
                             <button
                                 onClick={onClose}
