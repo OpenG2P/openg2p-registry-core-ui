@@ -35,12 +35,18 @@ export function RegisterRecordCard({ record, registerType, isEven }: RegisterRec
                 )}
 
                 <div className="flex-1 min-w-0">
-                    <h3 className="font-medium text-[#ED7C22] text-[16px] mb-0.5">
+                    <h3
+                        className="font-medium text-[#ED7C22] text-[16px] mb-0.5 truncate"
+                        title={record.record_name}
+                    >
                         {record.record_name}
                     </h3>
-                    <p className="text-[16px] text-gray-600">
-                        <span className="font-normal">{t('id')} :</span>{' '}
-                        <span className="font-medium text-black">
+                    <p
+                        className="text-[16px] text-gray-600 flex min-w-0 gap-1"
+                        title={`${t('id')} : ${record.functional_record_id}`}
+                    >
+                        <span className="font-normal shrink-0">{t('id')} :</span>
+                        <span className="font-medium text-black min-w-0 truncate">
                             {record.functional_record_id}
                         </span>
                     </p>
@@ -53,7 +59,10 @@ export function RegisterRecordCard({ record, registerType, isEven }: RegisterRec
                     return (
                         <div key={startIndex} className="flex-1 min-w-0">
                             {firstField ? (
-                                <p className="text-[16px] text-black truncate">
+                                <p
+                                    className="text-[16px] text-black truncate"
+                                    title={`${t(firstField.field_name)}: ${firstField.value}`}
+                                >
                                     <span className="font-normal text-gray-600">
                                         {t(firstField.field_name)}:{' '}
                                     </span>
@@ -63,7 +72,10 @@ export function RegisterRecordCard({ record, registerType, isEven }: RegisterRec
                                 <p className="text-[16px] invisible">&nbsp;</p>
                             )}
                             {secondField ? (
-                                <p className="text-[16px] text-black truncate">
+                                <p
+                                    className="text-[16px] text-black truncate"
+                                    title={`${t(secondField.field_name)}: ${secondField.value}`}
+                                >
                                     <span className="font-normal text-gray-600">
                                         {t(secondField.field_name)}:{' '}
                                     </span>
