@@ -118,6 +118,7 @@ const OutgestTopicsPage = () => {
 
     const { can } = useRbac();
     const canCreate = can(CONFIGURATION_OUTGESTION_TOPICS_ACTIONS.create)
+    const canEdit = can(CONFIGURATION_OUTGESTION_TOPICS_ACTIONS.edit);
 
     const { topics, pagination, loading, refresh } = useAllOutgestTopics(currentPage, config.pageSize);
 
@@ -156,6 +157,7 @@ const OutgestTopicsPage = () => {
             label: t('status'),
             render: (item: OutgestTopic) => (
                 <ToggleStatusSwitch
+                    disabled={!canEdit}
                     isActive={item.is_active}
                     onToggle={(e) => handleToggleStatus(e, item)}
                 />
