@@ -8,7 +8,6 @@ import { Tab } from "../shared/types";
 import { BaseModal, CheckboxField, InputField, TextAreaField } from "../shared/components";
 
 interface Props {
-    isOpen: boolean;
     onClose: () => void;
     onSuccess?: () => void;
     initialData?: Tab;
@@ -16,7 +15,6 @@ interface Props {
 }
 
 export default function EditIntakeFormModal({
-    isOpen,
     onClose,
     onSuccess,
     initialData,
@@ -34,7 +32,7 @@ export default function EditIntakeFormModal({
     });
 
     useEffect(() => {
-        if (initialData && isOpen) {
+        if (initialData) {
             setFormData({
                 intake_form_name: initialData.intake_form_name || "",
                 intake_form_description: initialData.intake_form_description || "",
@@ -43,7 +41,7 @@ export default function EditIntakeFormModal({
                 is_active: initialData.is_active ?? true
             });
         }
-    }, [initialData, isOpen]);
+    }, [initialData]);
 
     const handleSubmit = async () => {
 
@@ -81,8 +79,6 @@ export default function EditIntakeFormModal({
     const handleCancel = () => {
         onClose();
     };
-
-    if (!isOpen) return null;
 
     return (
         <BaseModal

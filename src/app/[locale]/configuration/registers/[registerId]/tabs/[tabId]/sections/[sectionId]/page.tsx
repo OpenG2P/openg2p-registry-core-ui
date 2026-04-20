@@ -87,12 +87,13 @@ const SectionConfigurationPage = () => {
                 isCoreSection={sectionDetails?.is_core_section}
             />
 
-            <EditSectionModal
-                isOpen={isEditModalOpen}
-                initialData={sectionDetails as any}
-                onClose={() => setIsEditModalOpen(false)}
-                onSuccess={refresh}
-            />
+            {isEditModalOpen && (
+                <EditSectionModal
+                    initialData={sectionDetails as any}
+                    onClose={() => setIsEditModalOpen(false)}
+                    onSuccess={refresh}
+                />
+            )}
         </>
     );
 };

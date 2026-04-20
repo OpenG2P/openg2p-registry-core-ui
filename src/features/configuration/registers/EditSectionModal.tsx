@@ -1,19 +1,18 @@
 import { useState, useEffect } from 'react';
-import { X, ChevronDown } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useFetch } from '@/shared/hooks';
 import { useParams } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { Section } from '../shared/types';
+import { BaseModal, CustomDropdown, InputField, TextAreaField } from '../shared/components';
 
 interface EditSectionModalProps {
-    isOpen: boolean;
     onClose: () => void;
     onSuccess?: () => void;
     initialData?: Section;
 }
 
-export default function EditSectionModal({ isOpen, onClose, onSuccess, initialData }: EditSectionModalProps) {
+export default function EditSectionModal({ onClose, onSuccess, initialData }: EditSectionModalProps) {
     const t = useTranslations();
     const { registerId, tabId, sectionId } = useParams<{ registerId: string; tabId: string; sectionId: string }>();
     const { execute: updateSection, loading } = useFetch();
@@ -31,7 +30,7 @@ export default function EditSectionModal({ isOpen, onClose, onSuccess, initialDa
     });
 
     useEffect(() => {
-        if (initialData && isOpen) {
+        if (initialData) {
             setFormData({
                 section_mnemonic: initialData.section_mnemonic || '',
                 section_description: initialData.section_description || '',
@@ -44,7 +43,7 @@ export default function EditSectionModal({ isOpen, onClose, onSuccess, initialDa
                 section_order: initialData.section_order?.toString() || '0',
             });
         }
-    }, [initialData, isOpen]);
+    }, [initialData]);
 
     const handleSubmit = async () => {
         if (!formData.section_mnemonic) {
@@ -82,187 +81,144 @@ export default function EditSectionModal({ isOpen, onClose, onSuccess, initialDa
     const handleCancel = () => {
         onClose();
     };
-
-    if (!isOpen) return null;
-
     return (
-        <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
-            <div className="relative w-full max-w-200 max-h-[95vh] bg-[#F2BA1A] rounded-[10px] overflow-hidden flex p-1">
-                <div className="flex-1 w-full bg-white p-10 relative rounded-[10px] overflow-y-auto">
-                    <button
-                        onClick={handleCancel}
-                        className="absolute top-6 right-6 text-gray-400 hover:text-gray-600 transition-colors"
-                    >
-                        <X size={40} strokeWidth={2} />
-                    </button>
+        <BaseModal
+            title={t('edit_section')}
+            onClose={handleCancel}
+            primaryActionLabel={t('save')}
+            onPrimaryAction={handleSubmit}
+            maxWidth="max-w-200"
+        >
+            <InputField
+                label={t('section_name')}
+                value={formData.section_mnemonic}
+                onChange={(value) =>
+                    setFormData((prev) => ({
+                        ...prev,
+                        section_mnemonic: value,
+                    }))
+                }
+            />
 
-                    <h2 className="text-2xl font-bold text-orange-500 mb-4">{t('edit_section')}</h2>
+            <TextAreaField
+                label={t('description')}
+                value={formData.section_description}
+                onChange={(value) =>
+                    setFormData((prev) => ({
+                        ...prev,
+                        section_description: value,
+                    }))
+                }
+                rows={1}
+            />
 
-                    <div className="space-y-4">
-                        <div>
-                            <label className="block text-sm font-semibold text-black mb-1">
-                                {t('section_name')}
-                            </label>
-                            <div className="relative">
-                                <input
-                                    type="text"
-                                    placeholder={t('enter_section_name')}
-                                    value={formData.section_mnemonic}
-                                    onChange={(e) => setFormData({ ...formData, section_mnemonic: e.target.value })}
-                                    className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all text-gray-600 placeholder:text-gray-400"
-                                />
-                            </div>
-                        </div>
+            <div className="grid grid-cols-2 gap-4">
+                <InputField
+                    label={t('no_of_verifications_required')}
+                    type='number'
+                    min={0}
+                    value={formData.no_of_verifications_required}
+                    onChange={(value) =>
+                        setFormData((prev) => ({
+                            ...prev,
+                            no_of_verifications_required: value,
+                        }))
+                    }
+                />
 
-                        <div>
-                            <label className="block text-sm font-semibold text-black mb-2">
-                                {t('description')}
-                            </label>
-                            <textarea
-                                placeholder={t('type_your_message')}
-                                value={formData.section_description}
-                                onChange={(e) => setFormData({ ...formData, section_description: e.target.value })}
-                                rows={2}
-                                className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all resize-none text-gray-600 placeholder:text-gray-400"
-                            />
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <label className="block text-sm font-semibold text-black mb-2">
-                                    {t('no_of_verifications_required')}
-                                </label>
-                                <input
-                                    type="number"
-                                    placeholder="e.g. 0"
-                                    value={formData.no_of_verifications_required}
-                                    onChange={(e) => setFormData({ ...formData, no_of_verifications_required: e.target.value })}
-                                    className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all text-gray-600 placeholder:text-gray-400"
-                                />
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-semibold text-black mb-2">
-                                    {t('documents_required')}
-                                </label>
-                                <div className="relative">
-                                    <select
-                                        value={formData.documents_required ? "true" : "false"}
-                                        onChange={(e) => setFormData({ ...formData, documents_required: e.target.value === "true" })}
-                                        className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all bg-white appearance-none cursor-pointer text-gray-600 pr-10"
-                                    >
-                                        <option value="true">{t('true')}</option>
-                                        <option value="false">{t('false')}</option>
-                                    </select>
-                                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <label className="block text-sm font-semibold text-black mb-2">
-                                    {t('auto_approval')}
-                                </label>
-                                <div className="relative">
-                                    <select
-                                        value={formData.auto_approval ? "true" : "false"}
-                                        onChange={(e) => setFormData({ ...formData, auto_approval: e.target.value === "true" })}
-                                        className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all bg-white appearance-none cursor-pointer text-gray-600 pr-10"
-                                    >
-                                        <option value="true">{t('true')}</option>
-                                        <option value="false">{t('false')}</option>
-                                    </select>
-                                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
-                                </div>
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-semibold text-black mb-2">
-                                    {t('is_list')}
-                                </label>
-                                <div className="relative">
-                                    <select
-                                        value={formData.is_list ? "true" : "false"}
-                                        onChange={(e) => setFormData({ ...formData, is_list: e.target.value === "true" })}
-                                        className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all bg-white appearance-none cursor-pointer text-gray-600 pr-10"
-                                    >
-                                        <option value="true">{t('true')}</option>
-                                        <option value="false">{t('false')}</option>
-                                    </select>
-                                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <label className="block text-sm font-semibold text-black mb-2">
-                                    {t('is_primary_section')}
-                                </label>
-                                <div className="relative">
-                                    <select
-                                        value={formData.is_primary_section ? "true" : "false"}
-                                        onChange={(e) => setFormData({ ...formData, is_primary_section: e.target.value === "true" })}
-                                        className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all bg-white appearance-none cursor-pointer text-gray-600 pr-10"
-                                    >
-                                        <option value="true">{t('true')}</option>
-                                        <option value="false">{t('false')}</option>
-                                    </select>
-                                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
-                                </div>
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-semibold text-black mb-2">
-                                    {t('section_order')}
-                                </label>
-                                <input
-                                    type="number"
-                                    placeholder="e.g. 0"
-                                    value={formData.section_order}
-                                    onChange={(e) => setFormData({ ...formData, section_order: e.target.value })}
-                                    className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all text-gray-600 placeholder:text-gray-400"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <label className="block text-sm font-semibold text-black mb-2">
-                                    {t('is_core_section')}
-                                </label>
-                                <div className="relative">
-                                    <select
-                                        value={formData.is_core_section ? "true" : "false"}
-                                        onChange={(e) => setFormData({ ...formData, is_core_section: e.target.value === "true" })}
-                                        className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all bg-white appearance-none cursor-pointer text-gray-600 pr-10"
-                                    >
-                                        <option value="true">{t('true')}</option>
-                                        <option value="false">{t('false')}</option>
-                                    </select>
-                                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="flex gap-4 pt-6">
-                            <button
-                                onClick={handleCancel}
-                                className="px-12 py-2.5 bg-gray-300 text-gray-700 rounded-[10px] hover:bg-gray-400 transition-colors"
-                            >
-                                {t('cancel')}
-                            </button>
-                            <button
-                                onClick={handleSubmit}
-                                className="px-12 py-2.5 bg-black text-white rounded-[10px] hover:bg-gray-800 transition-colors"
-                            >
-                                {t('update')}
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                <CustomDropdown
+                    label={t('documents_required')}
+                    value={formData.documents_required ? 'true' : 'false'}
+                    onChange={(value) =>
+                        setFormData((prev) => ({
+                            ...prev,
+                            documents_required: value === 'true',
+                        }))
+                    }
+                    options={[
+                        { label: t('true'), value: 'true' },
+                        { label: t('false'), value: 'false' },
+                    ]}
+                />
             </div>
-        </div>
+
+            <div className="grid grid-cols-2 gap-4">
+                <CustomDropdown
+                    label={t('auto_approval')}
+                    value={formData.auto_approval ? 'true' : 'false'}
+                    onChange={(value) =>
+                        setFormData((prev) => ({
+                            ...prev,
+                            auto_approval: value === 'true',
+                        }))
+                    }
+                    options={[
+                        { label: t('true'), value: 'true' },
+                        { label: t('false'), value: 'false' },
+                    ]}
+                />
+
+                <CustomDropdown
+                    label={t('is_list')}
+                    value={formData.is_list ? 'true' : 'false'}
+                    onChange={(value) =>
+                        setFormData((prev) => ({
+                            ...prev,
+                            is_list: value === 'true',
+                        }))
+                    }
+                    options={[
+                        { label: t('true'), value: 'true' },
+                        { label: t('false'), value: 'false' },
+                    ]}
+                />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+                <CustomDropdown
+                    label={t('is_primary_section')}
+                    value={formData.is_primary_section ? 'true' : 'false'}
+                    onChange={(value) =>
+                        setFormData((prev) => ({
+                            ...prev,
+                            is_primary_section: value === 'true',
+                        }))
+                    }
+                    options={[
+                        { label: t('true'), value: 'true' },
+                        { label: t('false'), value: 'false' },
+                    ]}
+                />
+
+                <InputField
+                    label={t('section_order')}
+                    type="number"
+                    value={formData.section_order}
+                    onChange={(value) =>
+                        setFormData((prev) => ({
+                            ...prev,
+                            section_order: value,
+                        }))
+                    }
+                />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+                <CustomDropdown
+                    label={t('is_core_section')}
+                    value={formData.is_core_section ? 'true' : 'false'}
+                    onChange={(value) =>
+                        setFormData((prev) => ({
+                            ...prev,
+                            is_core_section: value === 'true',
+                        }))
+                    }
+                    options={[
+                        { label: t('true'), value: 'true' },
+                        { label: t('false'), value: 'false' },
+                    ]}
+                />
+            </div>
+        </BaseModal>
     );
 }

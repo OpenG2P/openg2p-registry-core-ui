@@ -130,20 +130,20 @@ const TabConfigurationPage = () => {
 
             {isEditTabModalOpen && (
                 <EditTabModal
-                    // isOpen={isEditTabModalOpen}
                     initialData={tabDetails as any}
                     registerId={registerId}
                     onClose={() => setIsEditTabModalOpen(false)}
                     onSuccess={refreshTabs}
                 />
             )}
-            <EditIntakeFormModal
-                isOpen={isEditIntakeModalOpen}
-                initialData={tabDetails as any}
-                registerId={registerId}
-                onClose={() => setIsEditIntakeModalOpen(false)}
-                onSuccess={refreshTabs}
-            />
+            {isEditIntakeModalOpen && (
+                <EditIntakeFormModal
+                    initialData={tabDetails as any}
+                    registerId={registerId}
+                    onClose={() => setIsEditIntakeModalOpen(false)}
+                    onSuccess={refreshTabs}
+                />
+            )}
         </>
     );
 };
