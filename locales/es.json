@@ -184,9 +184,8 @@
   "edit_section": "Editar sección",
   "is_core": "Es núcleo",
   "is_primary": "Es primario",
-  "confirm_remove_section": "¿Estás seguro de eliminar esta sección?",
-  "confirm_remove_tab": "¿Estás seguro de eliminar esta pestaña?",
-  "confirm_delete_register": "¿Estás seguro de que deseas eliminar el registro \"{name}\"?",
+  "confirm_remove_section": "¿Desea eliminar esta sección?",
+  "confirm_remove_tab": "¿Desea eliminar esta pestaña?",
   "used_for_intake": "Usado para admisión",
   "active": "Activo",
   "inactive": "Inactivo",
@@ -802,5 +801,6 @@
   "ingest_template_updated": "Plantilla actualizada con éxito",
   "ingest_template_update_failed": "Error al actualizar la plantilla",
   "ingest_template_deleted_success": "Plantilla eliminada con éxito",
-  "ingest_template_deletion_failed": "Error al eliminar la plantilla"
+  "ingest_template_deletion_failed": "Error al eliminar la plantilla",
+  "confirm_delete_register": "¿Desea eliminar este registro?"
 }

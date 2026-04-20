@@ -10,9 +10,10 @@ import { useConfigSections } from '../shared/hooks/useConfigSections';
 import { useFetch } from '@/shared/hooks';
 import { toast } from 'react-toastify';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Can from '@/components/shared/Can';
 import { CONFIGURATION_SECTIONS_ACTIONS } from '../shared/utils/configurationSections.actions';
+import ConfirmRemovePopup from '../shared/components/ConfirmRemovePopup';
 
 interface RegisterSectionConfigViewProps {
     isModalOpen: boolean;
@@ -32,6 +33,8 @@ export default function RegisterSectionConfigView({
     const t = useTranslations();
     const { registerId, tabId } = useParams<{ registerId: string; tabId: string }>();
     const { sections, loading, refresh, pagination } = useConfigSections(registerId, tabId, page, pageSize);
+    const [showPopup, setShowPopup] = useState(false);
+    const [selectedSectionId, setSelectedSectionId] = useState<string | null>(null);
 
     useEffect(() => {
         if (pagination && onDataLoaded) {
@@ -56,51 +59,21 @@ export default function RegisterSectionConfigView({
         }
     };
 
-    const handleDelete = (e: React.MouseEvent, section: Section) => {
+    const handleDelete = (e: React.MouseEvent, sectionId: string) => {
         e.preventDefault();
         e.stopPropagation();
 
-        if (section.is_core_section) {
-            toast.warn('This is a core section and cannot be deleted.', {
-                position: "top-right",
-                className: 'rounded-[15px] shadow-xl border border-gray-100',
-            });
-            return;
-        }
+        setSelectedSectionId(sectionId);
+        setShowPopup(true);
+    };
 
-        const sectionId = section.section_id;
-        toast.info(
-            ({ closeToast }) => (
-                <div className="p-1">
-                    <p className="font-bold text-gray-800 mb-3">{t('confirm_remove_section')}</p>
-                    <div className="flex gap-3">
-                        <button
-                            onClick={async () => {
-                                closeToast();
-                                await proceedDelete(sectionId);
-                            }}
-                            className="bg-[#ED7C22] text-white px-4 py-1.5 rounded-full text-sm font-semibold hover:bg-[#d66a1a] transition-colors shadow-sm"
-                        >
-                            {t('remove')}
-                        </button>
-                        <button
-                            onClick={closeToast}
-                            className="bg-gray-100 text-gray-600 px-4 py-1.5 rounded-full text-sm font-semibold hover:bg-gray-200 transition-colors"
-                        >
-                            {t('cancel')}
-                        </button>
-                    </div>
-                </div>
-            ),
-            {
-                position: "top-right",
-                autoClose: false,
-                closeOnClick: false,
-                draggable: false,
-                closeButton: false,
-                className: 'rounded-[15px] shadow-xl border border-gray-100',
-            }
-        );
+    const confirmDelete = async () => {
+        if (!selectedSectionId) return;
+
+        await proceedDelete(selectedSectionId);
+
+        setShowPopup(false);
+        setSelectedSectionId(null);
     };
 
     if (loading) {
@@ -163,7 +136,7 @@ export default function RegisterSectionConfigView({
                                 <div className="text-base font-medium">
                                     <Can action={CONFIGURATION_SECTIONS_ACTIONS.delete}>
                                         <span
-                                            onClick={(e) => handleDelete(e, section)}
+                                            onClick={(e) => handleDelete(e, section.section_id)}
                                             className="flex items-center text-[#00000080]"
                                         >
                                             {t('remove')}
@@ -182,6 +155,17 @@ export default function RegisterSectionConfigView({
                     ))}
                 </div>
             </div>
+
+            {showPopup && (
+                <ConfirmRemovePopup
+                    onClose={() => {
+                        setShowPopup(false);
+                        setSelectedSectionId(null);
+                    }}
+                    onConfirm={confirmDelete}
+                    messageKey="confirm_remove_section"
+                />
+            )}
 
             {isModalOpen && (
                 <AddSectionModal

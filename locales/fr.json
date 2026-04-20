@@ -184,9 +184,8 @@
   "edit_section": "Modifier la section",
   "is_core": "Est Noyau",
   "is_primary": "Est Primaire",
-  "confirm_remove_section": "Êtes-vous sûr de supprimer cette section ?",
-  "confirm_remove_tab": "Êtes-vous sûr de supprimer cet onglet ?",
-  "confirm_delete_register": "Êtes-vous sûr de vouloir supprimer le registre \"{name}\" ?",
+  "confirm_remove_section": "Voulez-vous supprimer cette section ?",
+  "confirm_remove_tab": "Voulez-vous supprimer cet onglet ?",
   "used_for_intake": "Utilisé pour l'admission",
   "active": "Actif",
   "inactive": "Inactif",
@@ -802,5 +801,6 @@
   "ingest_template_updated": "Modèle mis à jour avec succès",
   "ingest_template_update_failed": "Échec de la mise à jour du modèle",
   "ingest_template_deleted_success": "Modèle supprimé avec succès",
-  "ingest_template_deletion_failed": "Échec de la suppression du modèle"
+  "ingest_template_deletion_failed": "Échec de la suppression du modèle",
+  "confirm_delete_register": "Voulez-vous supprimer ce registre ?"
 }

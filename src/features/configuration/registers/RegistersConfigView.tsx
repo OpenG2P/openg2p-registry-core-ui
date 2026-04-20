@@ -14,6 +14,7 @@ import { useFetch } from '@/shared/hooks';
 import { toast } from 'react-toastify';
 import { CONFIGURATION_REGISTERS_ACTIONS } from '../shared/utils/configurationRegisters.actions';
 import Can from '@/components/shared/Can';
+import ConfirmRemovePopup from '../shared/components/ConfirmRemovePopup';
 
 interface RegistersConfigViewProps {
     registers: Register[];
@@ -36,6 +37,8 @@ export default function RegistersConfigView({
     const { execute: deleteRegister } = useFetch();
     const [isViewModalOpen, setIsViewModalOpen] = useState(false);
     const [viewData, setViewData] = useState<Register | undefined>(undefined);
+    const [showPopup, setShowPopup] = useState(false);
+    const [selectedRegister, setSelectedRegister] = useState<Register | null>(null);
 
     const proceedDelete = async (id: string, name: string) => {
         try {
@@ -55,7 +58,7 @@ export default function RegistersConfigView({
         }
     };
 
-    const handleDelete = async (e: React.MouseEvent, register: Register) => {
+    const handleDelete = (e: React.MouseEvent, register: Register) => {
         e.preventDefault();
         e.stopPropagation();
 
@@ -64,40 +67,19 @@ export default function RegistersConfigView({
             return;
         }
 
-        const { register_id: id, register_mnemonic: name } = register;
+        setSelectedRegister(register);
+        setShowPopup(true);
+    };
 
-        toast.info(
-            ({ closeToast }) => (
-                <div className="p-1">
-                    <p className="font-bold text-gray-800 mb-3">{t('confirm_delete_register', { name })}</p>
-                    <div className="flex gap-3">
-                        <button
-                            onClick={async () => {
-                                closeToast();
-                                await proceedDelete(id, name);
-                            }}
-                            className="bg-[#ED7C22] text-white px-4 py-1.5 rounded-full text-sm font-semibold hover:bg-[#d66a1a] transition-colors shadow-sm"
-                        >
-                            {t('remove')}
-                        </button>
-                        <button
-                            onClick={closeToast}
-                            className="bg-gray-100 text-gray-600 px-4 py-1.5 rounded-full text-sm font-semibold hover:bg-gray-200 transition-colors"
-                        >
-                            {t('cancel')}
-                        </button>
-                    </div>
-                </div>
-            ),
-            {
-                position: "top-right",
-                autoClose: false,
-                closeOnClick: false,
-                draggable: false,
-                closeButton: false,
-                className: 'rounded-[15px] shadow-xl border border-gray-100',
-            }
-        );
+    const confirmDelete = async () => {
+        if (!selectedRegister) return;
+
+        const { register_id: id, register_mnemonic: name } = selectedRegister;
+
+        await proceedDelete(id, name);
+
+        setShowPopup(false);
+        setSelectedRegister(null);
     };
 
     const handleView = (e: React.MouseEvent, register: Register) => {
@@ -220,6 +202,17 @@ export default function RegistersConfigView({
                     )}
                 </div>
             </div>
+
+            {showPopup && (
+                <ConfirmRemovePopup
+                    onClose={() => {
+                        setShowPopup(false);
+                        setSelectedRegister(null);
+                    }}
+                    onConfirm={confirmDelete}
+                    messageKey="confirm_delete_register"
+                />
+            )}
 
             {isModalOpen && (
                 <AddRegisterModal

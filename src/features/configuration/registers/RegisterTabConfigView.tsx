@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 
@@ -12,6 +12,7 @@ import { useFetch } from '@/shared/hooks';
 import { toast } from 'react-toastify';
 import { CONFIGURATION_TABS_ACTIONS } from '../shared/utils/configurationTabs.actions';
 import Can from '@/components/shared/Can';
+import ConfirmRemovePopup from '../shared/components/ConfirmRemovePopup';
 
 interface RegisterTabConfigViewProps {
 	onAddNewRegister: () => void;
@@ -37,6 +38,8 @@ export default function RegisterTabConfigView({
 	const t = useTranslations();
 	const { registerId } = useParams<{ registerId: string }>();
 	const { tabs, loading, refresh, pagination } = useConfigTabs(registerId, page, pageSize);
+	const [showPopup, setShowPopup] = useState(false);
+	const [selectedTabId, setSelectedTabId] = useState<string | null>(null);
 
 
 	// Effect to notify parent of pagination info
@@ -67,38 +70,17 @@ export default function RegisterTabConfigView({
 		e.preventDefault();
 		e.stopPropagation();
 
-		toast.info(
-			({ closeToast }) => (
-				<div className="p-1">
-					<p className="font-bold text-gray-800 mb-3">{t('confirm_remove_tab')}</p>
-					<div className="flex gap-3">
-						<button
-							onClick={async () => {
-								closeToast();
-								await proceedDelete(tabId);
-							}}
-							className="bg-[#ED7C22] text-white px-4 py-1.5 rounded-full text-sm font-semibold hover:bg-[#d66a1a] transition-colors shadow-sm"
-						>
-							{t('remove')}
-						</button>
-						<button
-							onClick={closeToast}
-							className="bg-gray-100 text-gray-600 px-4 py-1.5 rounded-full text-sm font-semibold hover:bg-gray-200 transition-colors"
-						>
-							{t('cancel')}
-						</button>
-					</div>
-				</div>
-			),
-			{
-				position: "top-right",
-				autoClose: false,
-				closeOnClick: false,
-				draggable: false,
-				closeButton: false,
-				className: 'rounded-[15px] shadow-xl border border-gray-100',
-			}
-		);
+		setSelectedTabId(tabId);
+		setShowPopup(true);
+	};
+
+	const confirmDelete = async () => {
+		if (!selectedTabId) return;
+
+		await proceedDelete(selectedTabId);
+
+		setShowPopup(false);
+		setSelectedTabId(null);
 	};
 
 	if (loading) {
@@ -181,6 +163,17 @@ export default function RegisterTabConfigView({
 					))}
 				</div>
 			</div>
+
+			{showPopup && (
+				<ConfirmRemovePopup
+					onClose={() => {
+						setShowPopup(false);
+						setSelectedTabId(null);
+					}}
+					onConfirm={confirmDelete}
+					messageKey="confirm_remove_tab"
+				/>
+			)}
 
 			{isModalOpen && (
 				<AddTabModal
