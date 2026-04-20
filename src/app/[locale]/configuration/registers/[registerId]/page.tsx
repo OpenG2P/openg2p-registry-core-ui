@@ -165,11 +165,12 @@ const RegisterConfigurationPage = () => {
                 onSuccess={refresh}
             />
 
-            <ViewRegisterFieldsModal
-                isOpen={isViewModalOpen}
-                data={registerDetails as any}
-                onClose={() => setIsViewModalOpen(false)}
-            />
+            {isViewModalOpen && (
+                <ViewRegisterFieldsModal
+                    data={registerDetails as any}
+                    onClose={() => setIsViewModalOpen(false)}
+                />
+            )}
         </>
     );
 };
