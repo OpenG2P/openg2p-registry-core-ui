@@ -42,14 +42,14 @@ export default function IntakeFormPage() {
     //     clearAllFilters,
     // } = useFilters("/api/register/filters");
 
-    const { submissions, loading: submissionsLoading } = useIntakeSubmissions(registerId, {
+    const { submissions, paginationInfo, loading: submissionsLoading } = useIntakeSubmissions(registerId, {
         searchText: searchQuery,
         currentPage,
         pageSize,
     });
 
     const pagination = usePagination({
-        totalItems: submissions?.length || 0,
+        totalItems: paginationInfo?.number_of_items ?? 0,
         currentPage,
         pageSize,
         currentCount: submissions?.length || 0,

@@ -10,7 +10,7 @@ export const useIntakeSubmissions = (
         pageSize?: number;
     }
 ) => {
-    const { data, loading } = useFetch<IntakeFormSubmission[]>({
+    const { data, loading } = useFetch<any>({
         url: registerId ? "/api/intake-form/submission/search" : null,
         options: {
             method: "POST",
@@ -24,9 +24,11 @@ export const useIntakeSubmissions = (
         },
         enabled: !!registerId,
     });
-
+    const submissions = data?.records
+    const paginationInfo = data?.pagination;
     return {
-        submissions: data,
+        submissions,
+        paginationInfo,
         loading,
     };
 };
