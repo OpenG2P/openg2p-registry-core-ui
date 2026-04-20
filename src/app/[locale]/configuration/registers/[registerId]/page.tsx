@@ -158,12 +158,13 @@ const RegisterConfigurationPage = () => {
                 )}
             </div>
 
-            <EditRegisterModal
-                isOpen={isEditModalOpen}
-                initialData={registerDetails as any}
-                onClose={() => setIsEditModalOpen(false)}
-                onSuccess={refresh}
-            />
+            {isEditModalOpen && (
+                <EditRegisterModal
+                    initialData={registerDetails as any}
+                    onClose={() => setIsEditModalOpen(false)}
+                    onSuccess={refresh}
+                />
+            )}
 
             {isViewModalOpen && (
                 <ViewRegisterFieldsModal

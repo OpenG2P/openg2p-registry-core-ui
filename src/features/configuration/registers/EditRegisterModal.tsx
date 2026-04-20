@@ -1,22 +1,22 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { X, ChevronDown, Upload } from 'lucide-react';
+import { Upload } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useAllRegister } from '../shared/hooks/useAllRegister';
 import { useFetch } from '@/shared/hooks';
 import { toast } from 'react-toastify';
 import { Register } from '../shared/types';
 import { convertImageToBase64 } from '../shared/utils/convertImageToBase64';
+import { BaseModal, CustomDropdown, InputField, TextAreaField } from '../shared/components';
 
 interface EditRegisterModalProps {
-    isOpen: boolean;
     onClose: () => void;
     onSuccess?: () => void;
     initialData?: Register;
 }
 
-export default function EditRegisterModal({ isOpen, onClose, onSuccess, initialData }: EditRegisterModalProps) {
+export default function EditRegisterModal({ onClose, onSuccess, initialData }: EditRegisterModalProps) {
     const t = useTranslations();
     const { registers } = useAllRegister(1, 100);
     const { execute: updateRegister } = useFetch();
@@ -35,7 +35,7 @@ export default function EditRegisterModal({ isOpen, onClose, onSuccess, initialD
     });
 
     useEffect(() => {
-        if (initialData && isOpen) {
+        if (initialData) {
             setFormData({
                 register_mnemonic: initialData.register_mnemonic || '',
                 register_description: initialData.register_description || '',
@@ -48,7 +48,7 @@ export default function EditRegisterModal({ isOpen, onClose, onSuccess, initialD
                 functional_id_generation_required: initialData.functional_id_generation_required || false,
             });
         }
-    }, [initialData, isOpen]);
+    }, [initialData]);
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -103,237 +103,187 @@ export default function EditRegisterModal({ isOpen, onClose, onSuccess, initialD
         onClose();
     };
 
-    if (!isOpen) return null;
-
     return (
-        <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
-            <div className="relative w-full max-w-200 max-h-[95vh] bg-[#F2BA1A] rounded-[10px] overflow-hidden flex p-1">
-                <div className="flex-1 w-full bg-white relative rounded-[10px] p-10 overflow-y-auto">
-                    <button
-                        onClick={handleCancel}
-                        className="absolute top-6 right-6 text-gray-400 hover:text-gray-600 transition-colors"
+        <BaseModal
+            title={t('add_new_register')}
+            onClose={handleCancel}
+            primaryActionLabel={t('save')}
+            onPrimaryAction={handleSubmit}
+            maxWidth="max-w-200"
+        >
+            <InputField
+                label={t('register_mnemonic')}
+                value={formData.register_mnemonic}
+                onChange={(value) =>
+                    setFormData((prev) => ({
+                        ...prev,
+                        register_mnemonic: value,
+                    }))
+                }
+            />
+
+            <TextAreaField
+                label={t('register_description')}
+                value={formData.register_description}
+                onChange={(value) =>
+                    setFormData((prev) => ({
+                        ...prev,
+                        register_description: value,
+                    }))
+                }
+                rows={1}
+            />
+
+            <div className="grid grid-cols-2 gap-4">
+                <CustomDropdown
+                    label={t('register_purpose')}
+                    value={formData.register_purpose}
+                    options={[
+                        { label: 'REGISTER', value: 'REGISTER' },
+                        {
+                            label: 'PROGRAM_APPLICATION',
+                            value: 'PROGRAM_APPLICATION',
+                        },
+                        { label: 'TABLE', value: 'TABLE' },
+                    ]}
+                    onChange={(value) =>
+                        setFormData((prev) => ({
+                            ...prev,
+                            register_purpose: value,
+                        }))
+                    }
+                />
+
+                <CustomDropdown
+                    label={t('master_register')}
+                    value={formData.master_register_id}
+                    options={[
+                        {
+                            label: t('select_master_register'),
+                            value: '',
+                        },
+                        ...registers.map((r) => ({
+                            label: r.register_mnemonic,
+                            value: r.register_id,
+                        })),
+                    ]}
+                    onChange={(value) =>
+                        setFormData((prev) => ({
+                            ...prev,
+                            master_register_id: value,
+                        }))
+                    }
+                />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+                <CustomDropdown
+                    label={t('deduplication_enabled')}
+                    value={formData.dedup_is_enabled ? 'true' : 'false'}
+                    options={[
+                        { label: t('true'), value: 'true' },
+                        { label: t('false'), value: 'false' },
+                    ]}
+                    onChange={(value) =>
+                        setFormData((prev) => ({
+                            ...prev,
+                            dedup_is_enabled: value === 'true',
+                        }))
+                    }
+                />
+
+                <InputField
+                    label={t('dedup_threshold_score')}
+                    type="number"
+                    min={0}
+                    max={1}
+                    step={0.1}
+                    value={formData.dedup_threshold_score}
+                    disabled={!formData.dedup_is_enabled}
+                    onChange={(value) =>
+                        setFormData((prev) => ({
+                            ...prev,
+                            dedup_threshold_score: value,
+                        }))
+                    }
+                />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+                <CustomDropdown
+                    label={t('functional_id_generation_required')}
+                    value={
+                        formData.functional_id_generation_required
+                            ? 'true'
+                            : 'false'
+                    }
+                    options={[
+                        { label: t('true'), value: 'true' },
+                        { label: t('false'), value: 'false' },
+                    ]}
+                    onChange={(value) =>
+                        setFormData((prev) => ({
+                            ...prev,
+                            functional_id_generation_required:
+                                value === 'true',
+                        }))
+                    }
+                />
+                <InputField
+                    label={t('register_rank')}
+                    type="number"
+                    min={0}
+                    value={formData.register_rank}
+                    onChange={(value) =>
+                        setFormData((prev) => ({
+                            ...prev,
+                            register_rank: value,
+                        }))
+                    }
+                />
+            </div>
+            <div>
+                <label className="text-[16px] font-medium text-black">
+                    {t('register_icon')}
+                </label>
+                <div className="flex items-center gap-4 mt-2">
+                    <div
+                        onClick={() => fileInputRef.current?.click()}
+                        className="w-10 h-10 border-2 border-dashed border-[#F77F57] rounded-[10px] flex items-center justify-center cursor-pointer hover:bg-orange-50 transition-colors overflow-hidden shrink-0"
                     >
-                        <X size={40} strokeWidth={2} />
-                    </button>
-
-                    <h2 className="text-2xl font-bold text-orange-500 mb-4">{t('edit_register')}</h2>
-
-                    <div className="space-y-4">
-                        <div>
-                            <label className="block text-sm font-semibold text-black mb-2">
-                                {t('register_mnemonic')}
-                            </label>
-                            <input
-                                type="text"
-                                placeholder={t('enter_register_name')}
-                                value={formData.register_mnemonic}
-                                onChange={(e) => setFormData({ ...formData, register_mnemonic: e.target.value })}
-                                className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all text-gray-600 placeholder:text-gray-400"
-                            />
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-semibold text-black mb-2">
-                                {t('register_description')}
-                            </label>
-                            <textarea
-                                placeholder={t('type_your_message')}
-                                value={formData.register_description}
-                                onChange={(e) => setFormData({ ...formData, register_description: e.target.value })}
-                                rows={2}
-                                className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all resize-none text-gray-600 placeholder:text-gray-400"
-                            />
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <label className="block text-sm font-semibold text-black mb-2">
-                                    {t('register_purpose')}
-                                </label>
-                                <div className="relative">
-                                    <select
-                                        value={formData.register_purpose}
-                                        onChange={(e) => setFormData({ ...formData, register_purpose: e.target.value })}
-                                        className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all bg-white appearance-none cursor-pointer text-gray-600 pr-10"
-                                    >
-                                        <option value="REGISTER">REGISTER</option>
-                                        <option value="PROGRAM_APPLICATION">PROGRAM_APPLICATION</option>
-                                        <option value="TABLE">TABLE</option>
-                                    </select>
-                                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
-                                </div>
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-semibold text-black mb-2">
-                                    {t('master_register')}
-                                </label>
-                                <div className="relative">
-                                    <select
-                                        value={formData.master_register_id}
-                                        onChange={(e) => setFormData({ ...formData, master_register_id: e.target.value })}
-                                        className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all bg-white appearance-none cursor-pointer text-gray-600"
-                                    >
-                                        <option value="">{t('select_master_register')}</option>
-                                        {registers.map((register: Register) => (
-                                            <option key={register.register_id} value={register.register_id}>
-                                                {register.register_mnemonic}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-3 gap-4">
-                            <div>
-                                <label className="block text-sm font-semibold text-black mb-2">
-                                    {t('deduplication_enabled')}
-                                </label>
-                                <div className="relative">
-                                    <select
-                                        value={formData.dedup_is_enabled ? "true" : "false"}
-                                        onChange={(e) => setFormData({ ...formData, dedup_is_enabled: e.target.value === "true" })}
-                                        className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all bg-white appearance-none cursor-pointer text-gray-600 pr-10"
-                                    >
-                                        <option value="true">{t('true')}</option>
-                                        <option value="false">{t('false')}</option>
-                                    </select>
-                                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
-                                </div>
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-semibold text-black mb-2">
-                                    {t('dedup_threshold_score')}
-                                </label>
-                                <input
-                                    type="number"
-                                    min="0"
-                                    max="1"
-                                    step="0.1"
-                                    value={formData.dedup_threshold_score}
-                                    onChange={(e) => setFormData({ ...formData, dedup_threshold_score: e.target.value })}
-                                    disabled={!formData.dedup_is_enabled}
-                                    className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all text-gray-600 disabled:opacity-50 placeholder:text-gray-400"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-semibold text-black mb-2">
-                                    {t('functional_id_generation_required')}
-                                </label>
-                                <div className="relative">
-                                    <select
-                                        value={formData.functional_id_generation_required ? "true" : "false"}
-                                        onChange={(e) => setFormData({ ...formData, functional_id_generation_required: e.target.value === "true" })}
-                                        className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all bg-white appearance-none cursor-pointer text-gray-600 pr-10"
-                                    >
-                                        <option value="true">{t('true')}</option>
-                                        <option value="false">{t('false')}</option>
-                                    </select>
-                                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-3 gap-4">
-                            <div>
-                                <label className="block text-sm font-semibold text-black mb-2">
-                                    {t('available_register_rank')}
-                                </label>
-                                <div className="relative">
-                                    <select
-                                        className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all bg-white appearance-none cursor-pointer text-gray-600 pr-10"
-                                        value=""
-                                        onChange={() => { }}
-                                    >
-                                        <option value="">{t('view_existing_ranks')}</option>
-                                        {[...registers]
-                                            .sort((a, b) => (Number(a.register_rank) || 0) - (Number(b.register_rank) || 0))
-                                            .map((register: Register) => (
-                                                <option key={register.register_id} value={register.register_rank}>
-                                                    {register.register_mnemonic} (Rank: {register.register_rank})
-                                                </option>
-                                            ))}
-                                    </select>
-                                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
-                                </div>
-                            </div>
-                            <div>
-                                <label className="block text-sm font-semibold text-black mb-2">
-                                    {t('register_rank')}
-                                </label>
-                                <input
-                                    type="number"
-                                    placeholder="e.g. 0"
-                                    value={formData.register_rank}
-                                    onChange={(e) => setFormData({ ...formData, register_rank: e.target.value })}
-                                    className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all text-gray-600 placeholder:text-gray-400"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-semibold text-black mb-2">
-                                    {t('register_icon')}
-                                </label>
-                                <div className="flex items-center gap-4">
-                                    <div
-                                        onClick={() => fileInputRef.current?.click()}
-                                        className="w-10 h-10 border-2 border-dashed border-[#F77F57] rounded-lg flex items-center justify-center cursor-pointer hover:bg-orange-50 transition-colors overflow-hidden shrink-0"
-                                    >
-                                        {formData.register_icon ? (
-                                            <img src={formData.register_icon.startsWith('data:') ? formData.register_icon : `data:image/png;base64,${formData.register_icon}`} alt="icon" className="w-full h-full object-cover" />
-                                        ) : (
-                                            <Upload className="text-[#F77F57]" size={20} />
-                                        )}
-                                    </div>
-                                    <div className="flex-1">
-                                        <input
-                                            type="file"
-                                            ref={fileInputRef}
-                                            onChange={handleFileChange}
-                                            accept="image/*"
-                                            className="hidden"
-                                        />
-                                        <button
-                                            type="button"
-                                            onClick={() => fileInputRef.current?.click()}
-                                            className="text-sm text-[#F77F57] font-medium hover:underline"
-                                        >
-                                            {formData.register_icon ? t('change_icon') : t('upload_icon')}
-                                        </button>
-                                        <p className="text-[10px] text-gray-400">{t('max_size_2mb')}</p>
-                                    </div>
-                                    {formData.register_icon && (
-                                        <button
-                                            onClick={() => setFormData(prev => ({ ...prev, register_icon: '' }))}
-                                            className="text-[10px] text-red-500 hover:underline"
-                                        >
-                                            {t('remove')}
-                                        </button>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="flex gap-4 pt-6 pb-2">
-                            <button
-                                onClick={handleCancel}
-                                className="px-12 py-2.5 bg-gray-300 text-gray-700 rounded-[10px] hover:bg-gray-400 transition-colors"
-                            >
-                                {t('cancel')}
-                            </button>
-                            <button
-                                onClick={handleSubmit}
-                                className="px-12 py-2.5 bg-black text-white rounded-[10px] hover:bg-gray-800 transition-colors"
-                            >
-                                {t('update')}
-                            </button>
-
-                        </div>
+                        {formData.register_icon ? (
+                            <img src={formData.register_icon} alt="icon" className="w-full h-full object-cover" />
+                        ) : (
+                            <Upload className="text-[#F77F57]" size={20} />
+                        )}
                     </div>
+                    <div className="flex-1">
+                        <input
+                            type="file"
+                            ref={fileInputRef}
+                            onChange={handleFileChange}
+                            accept="image/*"
+                            className="hidden"
+                        />
+                        <button
+                            type="button"
+                            onClick={() => fileInputRef.current?.click()}
+                            className="text-[#F77F57] font-medium"
+                        >
+                            {formData.register_icon ? t('change_icon') : t('upload_icon')}
+                        </button>
+                        <p className="text-[10px] text-black/50">{t('max_size_2mb')}</p>
+                    </div>
+                    {formData.register_icon && (
+                        <button
+                            onClick={() => setFormData(prev => ({ ...prev, register_icon: '' }))}
+                            className="text-[14px] text-red-500 hover:underline"
+                        >
+                            {t('remove')}
+                        </button>
+                    )}
                 </div>
             </div>
-        </div>
+        </BaseModal>
     );
 }

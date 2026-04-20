@@ -1,15 +1,14 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { X, ChevronDown, Upload, Image as ImageIcon } from 'lucide-react';
+import { Upload } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useAllRegister } from '../shared/hooks/useAllRegister';
 import { useFetch } from '@/shared/hooks';
 
 import { toast } from 'react-toastify';
-import { Register } from '../shared/types';
 import { convertImageToBase64 } from '../shared/utils/convertImageToBase64';
-import { BaseModal, CustomDropdown, FileUploadField, InputField, TextAreaField } from '../shared/components';
+import { BaseModal, CustomDropdown, InputField, TextAreaField } from '../shared/components';
 
 
 interface AddRegisterModalProps {
