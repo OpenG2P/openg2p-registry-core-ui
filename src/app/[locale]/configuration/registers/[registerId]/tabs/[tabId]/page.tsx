@@ -128,13 +128,15 @@ const TabConfigurationPage = () => {
                 onDataLoaded={(totalItems, currentCount) => setPaginationInfo({ totalItems, currentCount })}
             />
 
-            <EditTabModal
-                isOpen={isEditTabModalOpen}
-                initialData={tabDetails as any}
-                registerId={registerId}
-                onClose={() => setIsEditTabModalOpen(false)}
-                onSuccess={refreshTabs}
-            />
+            {isEditTabModalOpen && (
+                <EditTabModal
+                    // isOpen={isEditTabModalOpen}
+                    initialData={tabDetails as any}
+                    registerId={registerId}
+                    onClose={() => setIsEditTabModalOpen(false)}
+                    onSuccess={refreshTabs}
+                />
+            )}
             <EditIntakeFormModal
                 isOpen={isEditIntakeModalOpen}
                 initialData={tabDetails as any}

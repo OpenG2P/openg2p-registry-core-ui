@@ -1,19 +1,18 @@
 import { useState, useEffect } from 'react';
-import { X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useFetch } from '@/shared/hooks';
 import { toast } from 'react-toastify';
 import { Tab } from '../shared/types';
+import { BaseModal, InputField } from '../shared/components';
 
 interface EditTabModalProps {
-    isOpen: boolean;
     onClose: () => void;
     onSuccess?: () => void;
     initialData?: Tab;
     registerId: string;
 }
 
-export default function EditTabModal({ isOpen, onClose, onSuccess, initialData, registerId }: EditTabModalProps) {
+export default function EditTabModal({ onClose, onSuccess, initialData, registerId }: EditTabModalProps) {
     const t = useTranslations();
     const { execute: updateTab, loading } = useFetch();
 
@@ -23,13 +22,13 @@ export default function EditTabModal({ isOpen, onClose, onSuccess, initialData, 
     });
 
     useEffect(() => {
-        if (initialData && isOpen) {
+        if (initialData) {
             setFormData({
                 tab_label: initialData.tab_label || '',
                 tab_order: initialData.tab_order?.toString() || '0',
             });
         }
-    }, [initialData, isOpen]);
+    }, [initialData]);
 
     const handleSubmit = async () => {
         if (!formData.tab_label) {
@@ -60,67 +59,36 @@ export default function EditTabModal({ isOpen, onClose, onSuccess, initialData, 
         onClose();
     };
 
-    if (!isOpen) return null;
-
     return (
-        <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
-            <div className="relative w-full max-w-200 max-h-150 bg-[#F2BA1A] rounded-[10px] overflow-hidden flex p-1">
-                <div className="flex-1 w-full bg-white p-10 relative rounded-[10px] overflow-y-auto">
-                    <button
-                        onClick={handleCancel}
-                        className="absolute top-6 right-6 text-gray-400 hover:text-gray-600 transition-colors"
-                    >
-                        <X size={40} strokeWidth={2} />
-                    </button>
-
-                    <h2 className="text-2xl font-bold text-orange-500 mb-4">{t('edit_tab')}</h2>
-
-                    <div className="space-y-4">
-                        <div>
-                            <label className="block text-sm font-semibold text-black mb-2">
-                                {t('tab_label')}
-                            </label>
-                            <div className="relative">
-                                <input
-                                    type="text"
-                                    placeholder={t('enter_tab_label')}
-                                    value={formData.tab_label}
-                                    onChange={(e) => setFormData({ ...formData, tab_label: e.target.value })}
-                                    className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all text-gray-600 placeholder:text-gray-400"
-                                />
-                            </div>
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-semibold text-black mb-2">
-                                {t('tab_order')}
-                            </label>
-                            <input
-                                type="number"
-                                placeholder="e.g. 0"
-                                value={formData.tab_order}
-                                onChange={(e) => setFormData({ ...formData, tab_order: e.target.value })}
-                                className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all text-gray-600 placeholder:text-gray-400"
-                            />
-                        </div>
-
-                        <div className="flex gap-4 pt-6">
-                            <button
-                                onClick={handleCancel}
-                                className="px-12 py-2.5 bg-gray-300 text-gray-700 rounded-[10px] hover:bg-gray-400 transition-colors"
-                            >
-                                {t('cancel')}
-                            </button>
-                            <button
-                                onClick={handleSubmit}
-                                className="px-12 py-2.5 bg-black text-white rounded-[10px] hover:bg-gray-800 transition-colors disabled:opacity-50"
-                            >
-                                {t('update')}
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <BaseModal
+            title={t('edit_tab')}
+            onClose={handleCancel}
+            primaryActionLabel={t('save')}
+            onPrimaryAction={handleSubmit}
+            maxWidth="max-w-200"
+        >
+            <InputField
+                label={t('tab_label')}
+                value={formData.tab_label}
+                onChange={(value) =>
+                    setFormData((prev) => ({
+                        ...prev,
+                        tab_label: value,
+                    }))
+                }
+            />
+            
+            <InputField
+                label={t('tab_order')}
+                value={formData.tab_order}
+                min={0}
+                onChange={(value) =>
+                    setFormData((prev) => ({
+                        ...prev,
+                        tab_order: value,
+                    }))
+                }
+            />
+        </BaseModal>
     );
 }
