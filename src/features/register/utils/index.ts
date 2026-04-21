@@ -17,7 +17,7 @@ export const extractFilesFromSection = (files?: unknown[]) => {
                     filesToUpload.push(realFile);
 
                     // Use embedded label if present, otherwise fallback to index-based label
-                    const label = (value as any).label || `file_${index}`;
+                    const label = (value as any).label ||(value as any).name || `file_${index}`;
                     fileLabels.push(label);
                 } catch (error) {
                     console.error('Failed to deserialize file:', error);
