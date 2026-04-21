@@ -105,11 +105,11 @@ export default function EditRegisterModal({ onClose, onSuccess, initialData }: E
 
     return (
         <BaseModal
-            title={t('add_new_register')}
+            title={t('edit_register')}
             onClose={handleCancel}
             primaryActionLabel={t('save')}
             onPrimaryAction={handleSubmit}
-            maxWidth="max-w-200"
+            maxWidth="max-w-220"
         >
             <InputField
                 label={t('register_mnemonic')}
@@ -176,7 +176,7 @@ export default function EditRegisterModal({ onClose, onSuccess, initialData }: E
                 />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-3 gap-4">
                 <CustomDropdown
                     label={t('deduplication_enabled')}
                     value={formData.dedup_is_enabled ? 'true' : 'false'}
@@ -207,9 +207,7 @@ export default function EditRegisterModal({ onClose, onSuccess, initialData }: E
                         }))
                     }
                 />
-            </div>
 
-            <div className="grid grid-cols-2 gap-4">
                 <CustomDropdown
                     label={t('functional_id_generation_required')}
                     value={
@@ -229,6 +227,27 @@ export default function EditRegisterModal({ onClose, onSuccess, initialData }: E
                         }))
                     }
                 />
+            </div>
+
+            <div className="grid grid-cols-3 gap-4">
+                <CustomDropdown
+                    label={t('available_register_rank')}
+                    value=""
+                    options={[
+                        ...[...registers]
+                            .sort(
+                                (a, b) =>
+                                    (Number(a.register_rank) || 0) -
+                                    (Number(b.register_rank) || 0)
+                            )
+                            .map((register) => ({
+                                label: `${register.register_mnemonic} (Rank: ${register.register_rank})`,
+                                value: String(register.register_rank),
+                            })),
+                    ]}
+                    onChange={() => { }}
+                />
+
                 <InputField
                     label={t('register_rank')}
                     type="number"
@@ -241,47 +260,48 @@ export default function EditRegisterModal({ onClose, onSuccess, initialData }: E
                         }))
                     }
                 />
-            </div>
-            <div>
-                <label className="text-[16px] font-medium text-black">
-                    {t('register_icon')}
-                </label>
-                <div className="flex items-center gap-4 mt-2">
-                    <div
-                        onClick={() => fileInputRef.current?.click()}
-                        className="w-10 h-10 border-2 border-dashed border-[#F77F57] rounded-[10px] flex items-center justify-center cursor-pointer hover:bg-orange-50 transition-colors overflow-hidden shrink-0"
-                    >
-                        {formData.register_icon ? (
-                            <img src={formData.register_icon} alt="icon" className="w-full h-full object-cover" />
-                        ) : (
-                            <Upload className="text-[#F77F57]" size={20} />
+
+                <div>
+                    <label className="text-[16px] font-medium text-black">
+                        {t('register_icon')}
+                    </label>
+                    <div className="flex items-center gap-4 mt-2">
+                        <div
+                            onClick={() => fileInputRef.current?.click()}
+                            className="w-10 h-10 border-2 border-dashed border-[#F77F57] rounded-[10px] flex items-center justify-center cursor-pointer hover:bg-orange-50 transition-colors overflow-hidden shrink-0"
+                        >
+                            {formData.register_icon ? (
+                                <img src={formData.register_icon} alt="icon" className="w-full h-full object-cover" />
+                            ) : (
+                                <Upload className="text-[#F77F57]" size={20} />
+                            )}
+                        </div>
+                        <div className="flex-1">
+                            <input
+                                type="file"
+                                ref={fileInputRef}
+                                onChange={handleFileChange}
+                                accept="image/*"
+                                className="hidden"
+                            />
+                            <button
+                                type="button"
+                                onClick={() => fileInputRef.current?.click()}
+                                className="text-[#F77F57] font-medium"
+                            >
+                                {formData.register_icon ? t('change_icon') : t('upload_icon')}
+                            </button>
+                            <p className="text-[10px] text-black/50">{t('max_size_2mb')}</p>
+                        </div>
+                        {formData.register_icon && (
+                            <button
+                                onClick={() => setFormData(prev => ({ ...prev, register_icon: '' }))}
+                                className="text-[14px] text-red-500 hover:underline"
+                            >
+                                {t('remove')}
+                            </button>
                         )}
                     </div>
-                    <div className="flex-1">
-                        <input
-                            type="file"
-                            ref={fileInputRef}
-                            onChange={handleFileChange}
-                            accept="image/*"
-                            className="hidden"
-                        />
-                        <button
-                            type="button"
-                            onClick={() => fileInputRef.current?.click()}
-                            className="text-[#F77F57] font-medium"
-                        >
-                            {formData.register_icon ? t('change_icon') : t('upload_icon')}
-                        </button>
-                        <p className="text-[10px] text-black/50">{t('max_size_2mb')}</p>
-                    </div>
-                    {formData.register_icon && (
-                        <button
-                            onClick={() => setFormData(prev => ({ ...prev, register_icon: '' }))}
-                            className="text-[14px] text-red-500 hover:underline"
-                        >
-                            {t('remove')}
-                        </button>
-                    )}
                 </div>
             </div>
         </BaseModal>
