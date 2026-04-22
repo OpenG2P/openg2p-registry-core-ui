@@ -69,20 +69,20 @@ export default function RegistersConfigView({
         toast.info(
             ({ closeToast }) => (
                 <div className="p-1">
-                    <p className="font-bold text-gray-800 mb-3">{t('confirm_delete_register', { name })}</p>
+                    <p className="font-bold text-neutral-first mb-3">{t('confirm_delete_register', { name })}</p>
                     <div className="flex gap-3">
                         <button
                             onClick={async () => {
                                 closeToast();
                                 await proceedDelete(id, name);
                             }}
-                            className="bg-[#ED7C22] text-white px-4 py-1.5 rounded-full text-sm font-semibold hover:bg-[#d66a1a] transition-colors shadow-sm"
+                            className="bg-primary-second text-neutral-second px-4 py-1.5 rounded-full text-sm font-semibold hover:bg-primary-second transition-colors shadow-sm"
                         >
                             {t('remove')}
                         </button>
                         <button
                             onClick={closeToast}
-                            className="bg-gray-100 text-gray-600 px-4 py-1.5 rounded-full text-sm font-semibold hover:bg-gray-200 transition-colors"
+                            className="bg-secondary-first text-neutral-first/70 px-4 py-1.5 rounded-full text-sm font-semibold hover:bg-secondary-second transition-colors"
                         >
                             {t('cancel')}
                         </button>
@@ -95,7 +95,7 @@ export default function RegistersConfigView({
                 closeOnClick: false,
                 draggable: false,
                 closeButton: false,
-                className: 'rounded-[15px] shadow-xl border border-gray-100',
+                className: 'rounded-[15px] shadow-xl border border-secondary-first',
             }
         );
     };
@@ -109,26 +109,26 @@ export default function RegistersConfigView({
 
     return (
         <>
-            <div className="mx-7.5 bg-white rounded-[10px] p-4 pt-8 overflow-hidden">
+            <div className="mx-7.5 bg-neutral-second rounded-[10px] p-4 pt-8 overflow-hidden">
                 <div>
                     {/* Header */}
-                    <div className="grid grid-cols-6 gap-4 pb-2 px-8 border-b border-gray-100">
-                        <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
+                    <div className="grid grid-cols-6 gap-4 pb-2 px-8 border-b border-secondary-first">
+                        <div className="py-3 text-left text-base font-semibold text-primary-second tracking-wider">
                             {t('icon')}
                         </div>
-                        <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
+                        <div className="py-3 text-left text-base font-semibold text-primary-second tracking-wider">
                             {t('mnemonic')}
                         </div>
-                        <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
+                        <div className="py-3 text-left text-base font-semibold text-primary-second tracking-wider">
                             {t('master_register')}
                         </div>
-                        <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
+                        <div className="py-3 text-left text-base font-semibold text-primary-second tracking-wider">
                             {t('rank')}
                         </div>
-                        <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
+                        <div className="py-3 text-left text-base font-semibold text-primary-second tracking-wider">
                             {t('purpose')}
                         </div>
-                        <div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
+                        <div className="py-3 text-left text-base font-semibold text-primary-second tracking-wider">
                             {t('actions')}
                         </div>
                     </div>
@@ -152,7 +152,7 @@ export default function RegistersConfigView({
                                 className="block -mx-8"
                             >
                                 <div
-                                    className={`grid grid-cols-6 gap-4 items-center px-16 h-15 transition-colors ${index % 2 === 0 ? 'bg-[#D9D9D940]' : 'bg-white'
+                                    className={`grid grid-cols-6 gap-4 items-center px-16 h-15 transition-colors ${index % 2 === 0 ? 'bg-secondary-second/25' : 'bg-neutral-second'
                                         } cursor-pointer`}
                                 >
                                     <div className="text-base font-medium flex items-center">
@@ -165,7 +165,7 @@ export default function RegistersConfigView({
                                                 className="rounded-md object-contain"
                                             />
                                         ) : (
-                                            <div className="w-8 h-8 bg-gray-300 border border-gray-200 rounded-md" />
+                                            <div className="w-8 h-8 bg-secondary-third border border-gray-200 rounded-md" />
                                         )}
                                     </div>
 
@@ -187,7 +187,7 @@ export default function RegistersConfigView({
                                             className="flex items-center text-[#1cc9b7] cursor-pointer hover:opacity-80 transition-opacity"
                                             title={t('view')}
                                         >
-                                            <span className="text-sm font-medium">{t('view')}</span>
+                                            <span className="font-medium text-neutral-first/50">{t('view')}</span>
                                             <Image
                                                 src="/images/common/view.png"
                                                 alt={t('view')}
@@ -199,10 +199,10 @@ export default function RegistersConfigView({
                                         <Can action={CONFIGURATION_REGISTERS_ACTIONS.delete}>
                                             <button
                                                 onClick={(e) => handleDelete(e, register)}
-                                                className="flex items-center text-[#1cc9b7] cursor-pointer hover:opacity-80 transition-opacity"
+                                                className="flex items-center text-toast-success cursor-pointer hover:opacity-80 transition-opacity"
                                                 title={t('remove')}
                                             >
-                                                <span className="tsmext- font-medium text-[#00000080]">{t('remove')}</span>
+                                                <span className=" font-medium text-neutral-first/50">{t('remove')}</span>
                                                 <Image
                                                     src="/images/common/false_sign.png"
                                                     alt={t('remove')}

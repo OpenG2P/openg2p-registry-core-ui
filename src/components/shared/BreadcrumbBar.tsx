@@ -26,8 +26,8 @@ export default function BreadcrumbBar({ breadcrumb = [] }: BreadcrumbBarProps) {
 
                 {[1, 2].map(i => (
                     <div key={i} className="flex items-end gap-2">
-                        <div className="h-5.75 w-20 rounded bg-gray-300" />
-                        <div className="h-5.75 w-20 rounded bg-gray-300" />
+                        <div className="h-5.75 w-20 rounded bg-secondary-third" />
+                        <div className="h-5.75 w-20 rounded bg-secondary-third" />
                     </div>
                 ))}
             </div>
@@ -44,11 +44,11 @@ export default function BreadcrumbBar({ breadcrumb = [] }: BreadcrumbBarProps) {
 
             {breadcrumb.map((item, index) => {
                 const isLast = index === breadcrumb.length - 1;
-                const textColor = isLast ? "text-black" : "text-black/50";
+                const textColor = isLast ? "text-neutral-first" : "text-neutral-first/50";
 
                 return (
                     <div key={index} className="flex items-end gap-2">
-                        {/* <div className="h-[23px] flex items-end font-medium text-[20px] text-black leading-none"> */}
+                        {/* <div className="h-[23px] flex items-end font-medium text-[20px] text-neutral-first leading-none"> */}
                         <div
                             className={`h-5.75 flex items-end font-medium text-[20px] leading-none ${textColor}`}
                         >

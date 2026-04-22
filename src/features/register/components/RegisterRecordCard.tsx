@@ -21,8 +21,8 @@ export function RegisterRecordCard({ record, registerType, isEven }: RegisterRec
             className="block w-full"
         >
             <div className={`flex items-center gap-4 sm:gap-6 px-4 sm:px-6 lg:px-8 p-4 w-full overflow-hidden ${isEven
-                ? 'bg-[#D9D9D940]'
-                : 'bg-white'
+                ? 'bg-secondary-second/25'
+                : 'bg-neutral-second'
                 }`}>
                 {record.record_image_url ? (
                     <img
@@ -31,16 +31,16 @@ export function RegisterRecordCard({ record, registerType, isEven }: RegisterRec
                         className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-md object-cover shrink-0"
                     />
                 ) : (
-                    <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gray-300 rounded-md shrink-0" />
+                    <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-secondary-third rounded-md shrink-0" />
                 )}
 
                 <div className="flex-1 min-w-0">
-                    <h3 className="font-medium text-[#ED7C22] text-[16px] mb-0.5">
+                    <h3 className="font-medium text-primary-second text-[16px] mb-0.5">
                         {record.record_name}
                     </h3>
-                    <p className="text-[16px] text-gray-600">
+                    <p className="text-[16px] text-neutral-first/70">
                         <span className="font-normal">{t('id')} :</span>{' '}
-                        <span className="font-medium text-black">
+                        <span className="font-medium text-neutral-first">
                             {record.functional_record_id}
                         </span>
                     </p>
@@ -53,8 +53,8 @@ export function RegisterRecordCard({ record, registerType, isEven }: RegisterRec
                     return (
                         <div key={startIndex} className="flex-1 min-w-0">
                             {firstField ? (
-                                <p className="text-[16px] text-black truncate">
-                                    <span className="font-normal text-gray-600">
+                                <p className="text-[16px] text-neutral-first truncate">
+                                    <span className="font-normal text-neutral-first/70">
                                         {t(firstField.field_name)}:{' '}
                                     </span>
                                     <span className="font-medium">{firstField.value}</span>
@@ -63,8 +63,8 @@ export function RegisterRecordCard({ record, registerType, isEven }: RegisterRec
                                 <p className="text-[16px] invisible">&nbsp;</p>
                             )}
                             {secondField ? (
-                                <p className="text-[16px] text-black truncate">
-                                    <span className="font-normal text-gray-600">
+                                <p className="text-[16px] text-neutral-first truncate">
+                                    <span className="font-normal text-neutral-first/70">
                                         {t(secondField.field_name)}:{' '}
                                     </span>
                                     <span className="font-medium">{secondField.value}</span>

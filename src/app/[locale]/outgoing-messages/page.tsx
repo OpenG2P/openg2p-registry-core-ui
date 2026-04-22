@@ -62,7 +62,7 @@ export default function OutgoingMessagesPage() {
     }, [searchParams]);
 
     return (
-        <div className="min-h-screen mx-auto bg-[#F3F1E4]">
+        <div className="min-h-screen mx-auto bg-secondary-first">
             <TopBar
                 breadcrumb={[{ label: t('outgoing_messages') }]}
                 showFilters
@@ -78,7 +78,7 @@ export default function OutgoingMessagesPage() {
             />
 
             <div className="px-7.5">
-                <div className="pl-4 pr-2 mb-4 bg-white rounded-[10px]">
+                <div className="pl-4 pr-2 mb-4 bg-neutral-second rounded-[10px]">
                     <SelectedFilters
                         appliedFilters={appliedFilters}
                         filterConfig={filterConfig}
@@ -97,7 +97,7 @@ export default function OutgoingMessagesPage() {
                         ))}
                     </div>
                 ) : messages.length === 0 ? (
-                    <div className="text-sm text-gray-400 text-center py-6">
+                    <div className="text-sm text-secondary-third text-center py-6">
                         {t('no_outgoing_messages')}
                     </div>
                 ) : (

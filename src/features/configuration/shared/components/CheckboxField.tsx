@@ -15,7 +15,7 @@ export default function CheckboxField({
 }: Props) {
     return (
         <div>
-            <label className="text-[16px] font-medium text-black">
+            <label className="text-[16px] font-medium text-neutral-first">
                 {label}
             </label>
 

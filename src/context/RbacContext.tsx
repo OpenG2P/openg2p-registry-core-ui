@@ -91,14 +91,14 @@ export function RbacProvider({ children }: { children: ReactNode }) {
 
     if (loading) {
         return (
-            <div className="w-full min-h-screen flex items-center justify-center bg-white">
+            <div className="w-full min-h-screen flex items-center justify-center bg-neutral-second">
                 <div className="flex flex-col items-center gap-4">
                     <img
                         src="/images/common/loading.gif"
                         alt="Loading"
                         className="w-12 h-12"
                     />
-                    <p className="text-black/50 text-[20px]">{t('loading_admin')}</p>
+                    <p className="text-neutral-first/50 text-[20px]">{t('loading_admin')}</p>
                 </div>
             </div>
         );

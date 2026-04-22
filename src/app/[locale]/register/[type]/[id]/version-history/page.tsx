@@ -297,7 +297,7 @@ export default function VersionHistoryPage() {
                 <div className={`flex gap-6 transition-opacity duration-200 ${isContentLoading ? 'opacity-60 pointer-events-none' : 'opacity-100'}`}>
                     <div className="w-[75%] flex flex-col gap-6">
                         {hasVersionHistory && (
-                            <div className="bg-white rounded-[10px] px-6 py-5 flex items-center justify-between">
+                            <div className="bg-neutral-second rounded-[10px] px-6 py-5 flex items-center justify-between">
                                 <div className="flex items-center gap-6">
                                     <CapsuleDropdown
                                         label={t("select_date")}
@@ -328,15 +328,15 @@ export default function VersionHistoryPage() {
                                     />
                                 </div>
 
-                                <div className="text-[16px] text-black font-medium">
-                                    {t("total_versions")} <span className="text-[20px] font-bold text-[#ED7C22]">{versionHistory.number_of_versions}</span>
+                                <div className="text-[16px] text-neutral-first font-medium">
+                                    {t("total_versions")} <span className="text-[20px] font-bold text-primary-second">{versionHistory.number_of_versions}</span>
                                 </div>
 
                             </div>
                         )}
 
                         {hasVersionHistory && stableSectionData && stableSectionUISchema && (
-                            <div className="bg-white rounded-[30px]">
+                            <div className="bg-neutral-second rounded-[30px]">
                                 <WidgetProvider
                                     store={widgetStore}
                                     schemaData={stableSectionData}
@@ -352,8 +352,8 @@ export default function VersionHistoryPage() {
                             </div>
                         )}
                         {!hasVersionHistory && !isLoading && tabs.length > 0 && (
-                            <div className="bg-white rounded-[10px] px-6 py-5 flex items-center justify-center text-center">
-                                <div className="text-[16px] text-black/50 font-medium">
+                            <div className="bg-neutral-second rounded-[10px] px-6 py-5 flex items-center justify-center text-center">
+                                <div className="text-[16px] text-neutral-first/50 font-medium">
                                     {t("no_version_history")}
                                 </div>
                             </div>
@@ -370,8 +370,8 @@ export default function VersionHistoryPage() {
                                     />
                                 ))
                             ) : (
-                                <div className="bg-[#E0E0E0] rounded-[10px] p-6 space-y-3">
-                                    <div className="font-semibold text-[14px] text-black/50">
+                                <div className="bg-secondary-second rounded-[10px] p-6 space-y-3">
+                                    <div className="font-semibold text-[14px] text-neutral-first/50">
                                         {t("verified_by")}
                                     </div>
 
@@ -385,20 +385,20 @@ export default function VersionHistoryPage() {
                                             />
                                         </div>
                                         <div className="flex flex-col">
-                                            <span className="text-[20px] font-medium text-black/20">
+                                            <span className="text-[20px] font-medium text-neutral-first/20">
                                                 —
                                             </span>
-                                            <span className="text-[14px] text-black/20">
+                                            <span className="text-[14px] text-neutral-first/20">
                                                 —
                                             </span>
                                         </div>
                                     </div>
 
                                     <div>
-                                        <div className="text-[14px] font-medium text-black/50 mb-1">
+                                        <div className="text-[14px] font-medium text-neutral-first/50 mb-1">
                                             {t("message")}
                                         </div>
-                                        <div className="text-[16px] text-black/50">
+                                        <div className="text-[16px] text-neutral-first/50">
                                             {t("no_verifier_assigned")}
                                         </div>
                                     </div>

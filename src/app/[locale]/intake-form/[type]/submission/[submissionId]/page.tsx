@@ -84,7 +84,7 @@ export default function IntakeFormSubmissionPage() {
     // console.log(sectionDataMap, "sectionsDataMap")
 
     return (
-        <div className="min-h-screen mx-auto bg-[#F3F1E4]">
+        <div className="min-h-screen mx-auto bg-secondary-first">
             <TopBar
                 breadcrumb={[
                     { 
@@ -104,7 +104,7 @@ export default function IntakeFormSubmissionPage() {
             <div className="mx-7.5 py-6 space-y-6">
                 {loading ? (
                     <div className="flex items-center justify-center py-20">
-                        <span className="text-gray-500">{t('loading')}</span>
+                        <span className="text-neutral-first/50">{t('loading')}</span>
                     </div>
                 ) : (
                     <div className="flex flex-col lg:flex-row gap-7.5">
@@ -113,7 +113,7 @@ export default function IntakeFormSubmissionPage() {
                                 <SubmissionHeader submission={submission} onActionComplete={refetch} />
                             )}
 
-                            <div className=" bg-[#FFFF] rounded-[10px] p-6 border border-[#0000000D] space-y-2">
+                            <div className=" bg-neutral-second rounded-[10px] p-6 border border-secondary-first/30 space-y-2">
                                 <MultiSectionAccordionForms
                                     sections={sections || []}
                                     schemaData={sectionDataMap}

@@ -143,9 +143,9 @@ export default function VpVerificationModal({
 
 
     return (
-        <div className="fixed inset-0 bg-black/80 flex justify-center items-center z-50">
+        <div className="fixed inset-0 bg-neutral-first/80 flex justify-center items-center z-50">
             <div
-                className={`relative bg-white rounded-[40px] p-10 border-10 border-[#F2BA1A] flex flex-col transition-all duration-300 ${verificationStatus === 'success' ? 'w-200 h-160' : 'w-150 h-120'}`}
+                className={`relative bg-neutral-second rounded-[40px] p-10 border-10 border-primary-first flex flex-col transition-all duration-300 ${verificationStatus === 'success' ? 'w-200 h-160' : 'w-150 h-120'}`}
             >
                 <div
                     className={`flex items-center mb-3 transition-all ${verificationComplete ? 'justify-between' : 'justify-center relative'}`}
@@ -173,14 +173,14 @@ export default function VpVerificationModal({
                                 {t('import_successful') || 'Import Successful'}
                             </h3>
 
-                            <p className="text-gray-600 mt-2">
+                            <p className="text-neutral-first/70 mt-2">
                                 {t('import_success_msg') || 'Credential was successfully ingested'}
                             </p>
 
-                            <div className="mt-6 w-full bg-gray-50 rounded-[20px] p-4 text-center text-sm">
+                            <div className="mt-6 w-full bg-secondary-first rounded-[20px] p-4 text-center text-sm">
                                 <p>
                                     <span className="font-medium">{t('status') || 'Status'}:</span>{' '}
-                                    <span className="text-green-600">
+                                    <span className="text-toast-success">
                                         {importResult.message.ack_status}
                                     </span>
                                 </p>
@@ -192,7 +192,7 @@ export default function VpVerificationModal({
 
                             <button
                                 onClick={onClose}
-                                className="mt-6 bg-black text-white px-10 py-2 rounded-[20px]"
+                                className="mt-6 bg-neutral-first text-neutral-second px-10 py-2 rounded-[20px]"
                             >
                                 {t('close') || 'Close'}
                             </button>
@@ -203,8 +203,8 @@ export default function VpVerificationModal({
                                 <button
                                     onClick={() => setActiveTab('status')}
                                     className={`px-8 py-2 rounded-t-[20px] text-[18px] font-medium ${activeTab === 'status'
-                                        ? 'bg-yellow-400 text-black'
-                                        : 'bg-gray-200 text-black'
+                                        ? 'bg-primary-first text-neutral-first'
+                                        : 'bg-secondary-second text-neutral-first'
                                         }`}
                                 >
                                     {t('status') || 'Status'}
@@ -213,8 +213,8 @@ export default function VpVerificationModal({
                                 <button
                                     onClick={() => setActiveTab('payload')}
                                     className={`px-8 py-2 rounded-t-[20px] text-[18px] font-medium ${activeTab === 'payload'
-                                        ? 'bg-yellow-400 text-black'
-                                        : 'bg-gray-200 text-black'
+                                        ? 'bg-primary-first text-neutral-first'
+                                        : 'bg-secondary-second text-neutral-first'
                                         }`}
                                 >
                                     {t('payload') || 'Payload'}
@@ -231,7 +231,7 @@ export default function VpVerificationModal({
                                 <button
                                     onClick={() => handleImport(verificationResult)}
                                     disabled={isImporting}
-                                    className="bg-black text-white px-10 py-2 rounded-[20px] disabled:opacity-50"
+                                    className="bg-neutral-first text-neutral-second px-10 py-2 rounded-[20px] disabled:opacity-50"
                                 >
                                     {isImporting ? t('importing') || 'Importing…' : t('import') || 'Import'}
                                 </button>
@@ -240,14 +240,14 @@ export default function VpVerificationModal({
                         </>
                     ) : verificationStatus === 'error' ? (
                         <div className="flex flex-col items-center justify-center h-full text-center px-6">
-                            <p className="text-[18px] text-gray-800 mb-6">
+                            <p className="text-[18px] text-neutral-first mb-6">
                                 {error || t('verify_error_msg') || 'We could not verify the credential. Please try scanning again.'}
                             </p>
 
                             <div className="flex gap-4">
                                 <button
                                     onClick={handleReset}
-                                    className="bg-black text-white px-8 py-2 rounded-[20px]"
+                                    className="bg-neutral-first text-neutral-second px-8 py-2 rounded-[20px]"
                                 >
                                     {t('try_again') || 'Try again'}
                                 </button>
@@ -273,13 +273,13 @@ export default function VpVerificationModal({
                                 qrCodeStyles={{
                                     size: 200,
                                     borderRadius: 16,
-                                    bgColor: '#ffffff',
-                                    fgColor: '#000000',
+                                    bgColor: 'var(--color-neutral-second)',
+                                    fgColor: 'var(--color-neutral-first)',
                                 }}
                             />
                             <div className="flex flex-col items-center gap-3">
                                 <p className="font-medium">{t('importing_data') || 'Importing your data'}</p>
-                                <p className="text-sm text-gray-500">{t('please_wait') || 'Please wait a few moments'}</p>
+                                <p className="text-sm text-neutral-first/50">{t('please_wait') || 'Please wait a few moments'}</p>
                             </div>
                         </div>
                     )}

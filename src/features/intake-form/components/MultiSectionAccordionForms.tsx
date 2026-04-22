@@ -75,16 +75,16 @@ export default function MultiSectionAccordionForms({
   return (
     <div className="mx-auto pt-0 pb-6 flex flex-col gap-4">
       {(intakeFormHeading || intakeFormDescription) && (
-        <div className="pt-6 border-t-2 border-[#FFFFFF] mb-4">
+        <div className="pt-6 border-t-2 border-neutral-second mb-4">
 
 
           {intakeFormHeading && (
-            <h3 className="text-[24px] font-medium leading-[100%] text-black mb-4">
+            <h3 className="text-[24px] font-medium leading-[100%] text-neutral-first mb-4">
               {intakeFormHeading}
             </h3>
           )}
           {intakeFormDescription && (
-            <div className="text-[#717171] text-[16px] font-normal leading-[100%] flex flex-col gap-4 whitespace-pre-wrap pr-10">
+            <div className="text-secondary-third text-[16px] font-normal leading-[100%] flex flex-col gap-4 whitespace-pre-wrap pr-10">
               {intakeFormDescription}
             </div>
           )}
@@ -116,22 +116,22 @@ export default function MultiSectionAccordionForms({
 
                   <button
                     onClick={handleCancel}
-                    className="px-8 py-2.5 rounded-full bg-[#D9D9D9] text-black font-bold text-[14px] hover:bg-[#c9c9c9] transition-colors"
+                    className="px-8 py-2.5 rounded-full bg-secondary-second text-neutral-first font-bold text-[14px] hover:bg-secondary-third transition-colors"
                   >
                     {t('cancel')}
                   </button>
 
                   <button
                     onClick={handleDraft}
-                    className="px-8 py-2.5 rounded-full bg-black text-white font-bold text-[14px] hover:bg-gray-800 transition-colors"
+                    className="px-8 py-2.5 rounded-full bg-neutral-first text-neutral-second font-bold text-[14px] hover:bg-secondary-second-800 transition-colors"
                   >
                     {t('save_draft')}
                   </button>
 
                   <button
                     onClick={handleSubmit}
-                    className="px-8 py-2.5 rounded-full bg-black text-white font-bold text-[14px]
-                   disabled:bg-[#D9D9D9] disabled:text-[#717171] disabled:cursor-not-allowed"
+                    className="px-8 py-2.5 rounded-full bg-neutral-first text-neutral-second font-bold text-[14px]
+                   disabled:bg-secondary-second disabled:text-secondary-third disabled:cursor-not-allowed"
                     disabled={formDetailsCard}
                   >
                     {t('submit')}

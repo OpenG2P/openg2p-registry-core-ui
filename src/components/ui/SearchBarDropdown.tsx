@@ -45,13 +45,13 @@ const SearchBarDropdown = ({
             <button
                 type="button"
                 onClick={() => setOpen((v) => !v)}
-                className={`flex h-14 w-full items-center justify-between rounded-[10px] border border-[#ED7C22] bg-white px-6 gap-5 text-[20px] font-semibold text-gray-800 transition-colors
+                className={`flex h-14 w-full items-center justify-between rounded-[10px] border border-primary-second bg-neutral-second px-6 gap-5 text-[20px] font-semibold text-neutral-first transition-colors
                 ${open
                     ? "rounded-b-none border-b-0"
-                    : `rounded-r-none border-r-0 after:absolute after:right-0 after:top-2.5 after:bottom-2.5 after:w-px after:bg-[#ED7C22] after:content-['']`}
+                    : `rounded-r-none border-r-0 after:absolute after:right-0 after:top-2.5 after:bottom-2.5 after:w-px after:bg-primary-second after:content-['']`}
                 `}
             >
-                <span className={`truncate text-[20px] ${open ? "text-black/50 font-medium" : "text-black font-medium"}`}>
+                <span className={`truncate text-[20px] ${open ? "text-neutral-first/50 font-medium" : "text-neutral-first font-medium"}`}>
                     {selectedLabel}
                 </span>
 
@@ -63,7 +63,7 @@ const SearchBarDropdown = ({
             {/* DROPDOWN (OVERLAY) */}
             {open && (
                 <div
-                    className="absolute w-full z-20 overflow-hidden rounded-b-[10px] border border-t-0 border-[#ED7C22] bg-white">
+                    className="absolute w-full z-20 overflow-hidden rounded-b-[10px] border border-t-0 border-primary-second bg-neutral-second">
                     {options.map((opt) => (
                         <button
                             key={opt.value}
@@ -72,7 +72,7 @@ const SearchBarDropdown = ({
                                 onChange(opt.value);
                                 setOpen(false);
                             }}
-                            className={`block w-full h-14 px-6 py-1 text-left text-[20px] font-medium transition-colors ${selected === opt.value ? "bg-gray-200" : ""}`}
+                            className={`block w-full h-14 px-6 py-1 text-left text-[20px] font-medium transition-colors ${selected === opt.value ? "bg-secondary-second" : ""}`}
                         >
                             {opt.label}
                         </button>

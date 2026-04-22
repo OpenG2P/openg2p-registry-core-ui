@@ -78,7 +78,7 @@ const RegistryConfigurationPage = () => {
 						onCancel={() => setIsEditing(false)}
 					/>
 				) : (
-					<div className="bg-white rounded-[10px] p-12">
+					<div className="bg-neutral-second rounded-[10px] p-12">
 						<div className="flex items-center gap-6">
 							<div className="w-25 h-25 relative shrink-0 rounded overflow-hidden flex items-center justify-center">
 								<Image
@@ -92,15 +92,15 @@ const RegistryConfigurationPage = () => {
 							</div>
 							<div className="flex items-center gap-4">
 								<div className='flex flex-col items-start gap-2'>
-									<span className='text-black text-[16px] font-normal  tracking-normal m-0'>{t('registry_name')}</span>
-									<h1 className="text-[#ED7C22] text-xl m-0">
+									<span className='text-neutral-first text-[16px] font-normal  tracking-normal m-0'>{t('registry_name')}</span>
+									<h1 className="text-primary-second text-xl m-0">
 										{registryData?.registry_name || registryName}
 									</h1>
 								</div>
 								<Can action={CONFIGURATION_REGISTRY_ACTIONS.edit}>
 									<div
 										onClick={startEditing}
-										className='bg-[#D9D9D980] h-8 w-8 rounded-[10px] flex items-center justify-center cursor-pointer hover:bg-[#D9D9D9CC] transition-colors'
+										className='bg-secondary-second/50 h-8 w-8 rounded-[10px] flex items-center justify-center cursor-pointer hover:bg-secondary-second/80 transition-colors'
 									>
 										<Image
 											src={"/images/config/pencil_icon.png"}

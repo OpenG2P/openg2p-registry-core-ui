@@ -29,7 +29,7 @@ export default function SectionDetailsConfigView({
         if (isCoreSection) {
             toast.info(t('core_section_warning') || 'This is a core section, UI schema cannot be modified.', {
                 position: "top-right",
-                className: 'rounded-[15px] shadow-xl border border-gray-100',
+                className: 'rounded-[15px] shadow-xl border border-secondary-first',
             });
             return;
         }
@@ -56,7 +56,7 @@ export default function SectionDetailsConfigView({
     };
 
     return (
-        <div className='mx-8 mt-6 bg-white rounded-[10px] px-8 pb-8 pt-12 mb-6 overflow-x-visible'>
+        <div className='mx-8 mt-6 bg-neutral-second rounded-[10px] px-8 pb-8 pt-12 mb-6 overflow-x-visible'>
             <SectionBuilder
                 initialSection={sectionUISchema}
                 onChange={handleSectionChange}

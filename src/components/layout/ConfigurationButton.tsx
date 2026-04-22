@@ -23,7 +23,7 @@ export default function ConfigurationButton() {
                 width={24}
                 height={24}
             />
-            <span className="text-[16px] text-black">
+            <span className="text-[16px] text-neutral-first">
                 {t('configuration')}
             </span>
         </button>

@@ -12,9 +12,9 @@ interface Props {
 }
 
 const statusClassMap: Record<string, string> = {
-    REJECTED: "text-red-500",
+    REJECTED: "text-toast-failed",
     PENDING: "text-amber-500",
-    APPROVED: "text-green-600",
+    APPROVED: "text-toast-success",
 };
 
 export default function ChangeRequestCard({
@@ -36,7 +36,7 @@ export default function ChangeRequestCard({
     //         : t('change_request_fallback', { index: index + 1 })
     //     }`;
 
-    const statusClass = statusClassMap[changeRequest.approval_status] ?? "text-gray-500";
+    const statusClass = statusClassMap[changeRequest.approval_status] ?? "text-neutral-first/50";
 
     const { documents, loading } =
         useChangeRequestDocuments(changeRequest.change_request_id);
@@ -44,14 +44,14 @@ export default function ChangeRequestCard({
     return (
         <div
             key={index}
-            className="rounded-[10px] bg-white px-10 py-5"
+            className="rounded-[10px] bg-neutral-second px-10 py-5"
         >
             <div
                 className="grid gap-6 grid-cols-4"
             >
-                <div className="space-y-2 text-[16px] text-[#00000080]">
+                <div className="space-y-2 text-[16px] text-neutral-first/50">
                     <h3
-                        className="text-[24px] font-medium text-black truncate"
+                        className="text-[24px] font-medium text-neutral-first truncate"
                         title={title}
                     >
                         {title}
@@ -59,7 +59,7 @@ export default function ChangeRequestCard({
 
                     <div className="flex w-full overflow-hidden">
                         <span className="w-1/2 truncate" title={t('change_id')}>{t('change_id')}:</span>
-                        <span className="w-1/2 pl-4 text-black font-medium truncate" title={changeRequest.change_request_id}>{changeRequest.change_request_id}</span>
+                        <span className="w-1/2 pl-4 text-neutral-first font-medium truncate" title={changeRequest.change_request_id}>{changeRequest.change_request_id}</span>
                     </div>
 
                     <div className="flex w-full overflow-hidden">
@@ -71,39 +71,39 @@ export default function ChangeRequestCard({
 
                     <div className="flex w-full overflow-hidden">
                         <span className="w-1/2 truncate" title={t('change_date')}>{t('change_date')}:</span>
-                        <span className="w-1/2 pl-4 text-black font-medium truncate" title={new Date(changeRequest.created_at).toLocaleDateString()}>
+                        <span className="w-1/2 pl-4 text-neutral-first font-medium truncate" title={new Date(changeRequest.created_at).toLocaleDateString()}>
                             {new Date(changeRequest.created_at).toLocaleDateString()}
                         </span>
                     </div>
                 </div>
 
-                <div className="space-y-2 text-[16px] text-[#00000080]">
-                    <h3 className="text-lg font-semibold text-black invisible">
+                <div className="space-y-2 text-[16px] text-neutral-first/50">
+                    <h3 className="text-lg font-semibold text-neutral-first invisible">
                         Verification
                     </h3>
-                    <div className="border-l space-y-2 border-[#D9D9D9] pl-6">
+                    <div className="border-l space-y-2 border-secondary-second pl-6">
                         <div className="flex w-full overflow-hidden">
                             <span className="w-1/2 truncate" title={t('verifications_required')}>{t('verifications_required')}:</span>
-                            <span className="w-1/2 pl-4 text-black font-medium truncate" title={changeRequest.no_of_verifications_required?.toString()}>
+                            <span className="w-1/2 pl-4 text-neutral-first font-medium truncate" title={changeRequest.no_of_verifications_required?.toString()}>
                                 {changeRequest.no_of_verifications_required}
                             </span>
                         </div>
                         <div className="flex w-full overflow-hidden">
                             <span className="w-1/2 truncate" title={t('verifications_done')}>{t('verifications_done')}:</span>
-                            <span className="w-1/2 pl-4 text-black font-medium truncate" title={changeRequest.no_of_verifications_done?.toString()}>
+                            <span className="w-1/2 pl-4 text-neutral-first font-medium truncate" title={changeRequest.no_of_verifications_done?.toString()}>
                                 {changeRequest.no_of_verifications_done}
                             </span>
                         </div>
                         <div className="flex w-full overflow-hidden">
                             <span className="w-1/2 truncate" title={t('documents_attached')}>{t('documents_attached')}:</span>
-                            <span className="w-1/2 pl-4 text-black font-medium truncate" title={documents.length.toString()}>{documents.length}</span>
+                            <span className="w-1/2 pl-4 text-neutral-first font-medium truncate" title={documents.length.toString()}>{documents.length}</span>
                         </div>
                     </div>
                 </div>
 
-                <div className="space-y-2 text-[16px] text-[#00000080]">
+                <div className="space-y-2 text-[16px] text-neutral-first/50">
                     <div className="pl-6 flex items-center gap-0 leading-none mt-2">
-                        <span className="text-[16px] font-medium text-black">
+                        <span className="text-[16px] font-medium text-neutral-first">
                             {t('attached_documents')}
                         </span>
                         <Image
@@ -114,7 +114,7 @@ export default function ChangeRequestCard({
                             className="ml-1 mb-1"
                         />
                     </div>
-                    <div className="flex flex-col gap-2 font-normal text-black/50 text-[16px] border-l border-[#D9D9D9] pl-6">
+                    <div className="flex flex-col gap-2 font-normal text-neutral-first/50 text-[16px] border-l border-secondary-second pl-6">
                         {documents.slice(0, 3).map((doc, index) => (
                             <span
                                 key={index}
@@ -148,7 +148,7 @@ export default function ChangeRequestCard({
                         <span className="text-lg font-semibold"> Empty </span>
                     </div>
 
-                    <div className="border-l border-[#D9D9D9] pl-6">
+                    <div className="border-l border-secondary-second pl-6">
                         <div className="flex flex-col gap-2 invisible">
                             <span>1</span>
                             <span>2</span>
@@ -158,12 +158,12 @@ export default function ChangeRequestCard({
                 </div>
             </div>
 
-            <div className="my-4 border-t border-[#D9D9D9]" />
+            <div className="my-4 border-t border-secondary-second" />
 
             <div className="flex items-center justify-between">
                 <button
                     onClick={onViewDetails}
-                    className="text-[14px] text-black font-normal flex items-center gap-2 opacity-60 hover:opacity-100 transition"
+                    className="text-[14px] text-neutral-first font-normal flex items-center gap-2 opacity-60 hover:opacity-100 transition"
                 >
                     {t('view_details')}
                     <Image

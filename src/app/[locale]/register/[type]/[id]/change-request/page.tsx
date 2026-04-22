@@ -81,10 +81,10 @@ export default function ChangeRequestPage() {
         <div className="flex items-center gap-10">
             {pendingRequestsCount !== undefined && (
                 <div className="flex items-center gap-2">
-                    <span className="text-[18px] font-medium text-black">
+                    <span className="text-[18px] font-medium text-neutral-first">
                         {t('pending_requests')}
                     </span>
-                    <span className="text-[24px] font-bold text-[#ED7C22]">
+                    <span className="text-[24px] font-bold text-primary-second">
                         {pendingRequestsCount.toString().padStart(2, '0')}
                     </span>
                 </div>
@@ -115,7 +115,7 @@ export default function ChangeRequestPage() {
                         {[1, 2, 3].map(i => (
                             <div
                                 key={i}
-                                className="h-11 w-32 rounded-t-[10px] bg-[#F2BA1A]/50"
+                                className="h-11 w-32 rounded-t-[10px] bg-primary-first/50"
                             />
                         ))}
                     </div>)}
@@ -127,7 +127,7 @@ export default function ChangeRequestPage() {
                 </>
             ) : changeRequests.length === 0 ? (
                 <div className="px-6 py-5 flex items-center justify-center text-center">
-                    <div className="text-[16px] text-black/50 font-medium">
+                    <div className="text-[16px] text-neutral-first/50 font-medium">
                         {t("no_change_request")}
                     </div>
                 </div>

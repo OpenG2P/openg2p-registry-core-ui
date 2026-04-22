@@ -62,21 +62,21 @@ export default function SelectedFilters({
     };
 
     return (
-        <div className="bg-white px-4 py-4 mb-2 flex items-center rounded-[10px] gap-4">
+        <div className="bg-neutral-second px-4 py-4 mb-2 flex items-center rounded-[10px] gap-4">
             <div className="flex flex-wrap items-center gap-4 flex-1">
-                <span className="w-27.5 font-normal text-[16px] text-black pl-1 truncate" title={t('selected_filters')}>
+                <span className="w-27.5 font-normal text-[16px] text-neutral-first pl-1 truncate" title={t('selected_filters')}>
                     {t('selected_filters')}
                 </span>
 
                 {appliedFilters.length === 0 ? (
-                    <div className="h-8.5 flex items-center bg-[#F2BA1A40] rounded-[10px] px-3 text-[#00000080] font-['Roboto'] text-[14px] not-italic font-normal leading-normal">
+                    <div className="h-8.5 flex items-center bg-primary-first/25 rounded-[10px] px-3 text-neutral-first/50 font-['Roboto'] text-[14px] not-italic font-normal leading-normal">
                         {t('none')}
                     </div>
                 ) : (
                     appliedFilters.map((filter, index) => (
                         <div
                             key={index}
-                            className="h-8.5 flex items-center bg-[#F2BA1A40] rounded-[10px] px-3 gap-2 text-[#00000080] text-[14px] font-normal leading-normal"
+                            className="h-8.5 flex items-center bg-primary-first/25 rounded-[10px] px-3 gap-2 text-neutral-first/50 text-[14px] font-normal leading-normal"
                         >
                             <span>{getFilterLabel(filter)}</span>
                             <button
@@ -92,7 +92,7 @@ export default function SelectedFilters({
                 {appliedFilters.length > 0 && (
                     <button
                         onClick={clearAllFilters}
-                        className="text-[#ED7C22] text-sm"
+                        className="text-primary-second text-sm"
                     >
                         {t('clear_all')}
                     </button>
@@ -100,7 +100,7 @@ export default function SelectedFilters({
             </div>
 
             {onSearch && (
-                <div className="ml-auto shrink-0 border border-[#ED7C22] rounded-[10px] h-8.5 flex items-center bg-white">
+                <div className="ml-auto shrink-0 border border-primary-second rounded-[10px] h-8.5 flex items-center bg-neutral-second">
                     <SearchBar
                         placeholder={resolvedSearchPlaceholder}
                         category=""

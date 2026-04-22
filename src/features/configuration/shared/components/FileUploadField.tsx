@@ -25,16 +25,16 @@ export default function FileUploadField({
 }: Props) {
     return (
         <div>
-            <label className="text-[16px] font-medium text-black">
+            <label className="text-[16px] font-medium text-neutral-first">
                 {label}
             </label>
 
             <div className="mt-2 flex items-center gap-4">
                 <div
                     onClick={() => !disabled && fileInputRef.current?.click()}
-                    className={`w-10 h-10 border-2 border-dashed border-[#F77F57] rounded-[10px] flex items-center justify-center shrink-0 ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:bg-orange-50'}`}
+                    className={`w-10 h-10 border-2 border-dashed border-primary-second rounded-[10px] flex items-center justify-center shrink-0 ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:bg-secondary-first'}`}
                 >
-                    <Upload className="text-[#F77F57]" size={20} />
+                    <Upload className="text-primary-second" size={20} />
                 </div>
 
                 <input
@@ -50,7 +50,7 @@ export default function FileUploadField({
                         type="button"
                         disabled={disabled}
                         onClick={() => fileInputRef.current?.click()}
-                        className="text-[#F77F57] font-medium disabled:opacity-50"
+                        className="text-primary-second font-medium disabled:opacity-50"
                     >
                         {uploading
                             ? 'Uploading...'
@@ -61,14 +61,14 @@ export default function FileUploadField({
 
                     {fileName && (
                         <div className="flex items-center gap-2 mt-1">
-                            <p className="text-black text-[14px] font-medium truncate max-w-25">
+                            <p className="text-neutral-first text-[14px] font-medium truncate max-w-25">
                                 {fileName}
                             </p>
 
                             <button
                                 type="button"
                                 onClick={onRemove}
-                                className="text-[#EB656A] hover:text-red-500"
+                                className="text-toast-failed hover:text-toast-failed"
                             >
                                 <X size={16} />
                             </button>

@@ -25,7 +25,7 @@ export default function Header() {
     }, []);
 
     return (
-        <header className={`w-full bg-white fixed top-0 left-0 right-0 z-20 flex justify-center ${isScrolled ? "shadow-[0px_4px_10px_0px_#00000026]" : ""}`}>
+        <header className={`w-full bg-neutral-second fixed top-0 left-0 right-0 z-20 flex justify-center ${isScrolled ? "shadow-[0px_4px_10px_0px_rgba(0,0,0,0.15)]" : ""}`}>
             <div className="w-full h-17.5 flex items-center justify-between px-3">
             <Link href={`/${locale}`} className="flex items-center gap-2">
                 <Image
@@ -38,19 +38,19 @@ export default function Header() {
                 />
                 <div className="flex items-center gap-3">
                     <span
-                        className="text-black text-[20px] font-medium not-italic leading-normal"
+                        className="text-neutral-first text-[20px] font-medium not-italic leading-normal"
                         style={{ fontFamily: 'Roboto' }}
                     >
                         {config?.registryName || t('registryGen2')}
                     </span>
 
-                        {/* <span className="h-8 w-0.5 bg-[#D9D9D9]" />
+                        {/* <span className="h-8 w-0.5 bg-secondary-second" />
 
                     <div className="flex flex-col leading-tight">
-                        <span className="text-[14px] text-black/50">
+                        <span className="text-[14px] text-neutral-first/50">
                             powered by
                         </span>
-                        <span className="text-[16px] font-medium text-black">
+                        <span className="text-[16px] font-medium text-neutral-first">
                             OpenG2P
                         </span>
                     </div> */}

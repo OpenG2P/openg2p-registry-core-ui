@@ -11,23 +11,30 @@ const config: Config = {
     ],
     theme: {
         extend: {
-            // Design System Colors
             colors: {
-                // Add your design system colors here
-                // primary: { ... },
-                // secondary: { ... },
-                // success: { ... },
-                // warning: { ... },
-                // error: { ... },
-                // neutral: { ... },
+                primary: {
+                    first: "var(--color-primary-first)",
+                    second: "var(--color-primary-second)",
+                },
+                secondary: {
+                    first: "var(--color-secondary-first)",
+                    second: "var(--color-secondary-second)",
+                    third: "var(--color-secondary-third)",
+                },
+                neutral: {
+                    first: "var(--color-neutral-first)",
+                    second: "var(--color-neutral-second)",
+                },
+                toast: {
+                    info: "var(--toast-info-color)",
+                    success: "var(--toast-success-color)",
+                    warning: "var(--toast-warning-color)",
+                    failed: "var(--toast-failed-color)",
+                },
             },
         },
     },
-    plugins: [
-        // Add Tailwind plugins here as needed
-        // require('@tailwindcss/forms'),
-        // require('@tailwindcss/typography'),
-    ],
+    plugins: [],
 };
 
 export default config;

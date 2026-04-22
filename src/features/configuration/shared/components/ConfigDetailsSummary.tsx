@@ -25,26 +25,26 @@ export default function ConfigDetailsSummary({
     return (
         <div className="mx-8 mb-0">
             <div
-                className="bg-[#F3E6BC] border-[#ED7C22] border-dashed border rounded-[10px] px-12 h-15 flex items-center justify-between shadow-sm"
+                className="bg-primary-first/20 border-primary-second border-dashed border rounded-[10px] px-12 h-15 flex items-center justify-between shadow-sm"
                 style={{ borderStyle: 'dashed', borderWidth: '1px' }}
             >
                 <div className="flex flex-1 items-center gap-10">
                     <div className="min-w-30">
-                        <span className="text-gray-600 font-medium text-base">{title}</span>
+                        <span className="text-neutral-first/70 font-medium text-base">{title}</span>
                     </div>
 
                     <div className="flex-1 max-w-75 truncate">
-                        <span className="text-gray-600 text-sm">{description}</span>
+                        <span className="text-neutral-first/70 text-sm">{description}</span>
                     </div>
 
                     {extraInfo1 && (
                         <div className="flex-1 truncate">
-                            <span className="text-gray-600 text-sm">{extraInfo1}</span>
+                            <span className="text-neutral-first/70 text-sm">{extraInfo1}</span>
                         </div>
                     )}
                     {extraInfo2 && (
                         <div className="flex-1 truncate">
-                            <span className="text-gray-600 text-sm">{extraInfo2}</span>
+                            <span className="text-neutral-first/70 text-sm">{extraInfo2}</span>
                         </div>
                     )}
                 </div>
@@ -53,19 +53,19 @@ export default function ConfigDetailsSummary({
                     {onView && (
                         <button
                             onClick={onView}
-                            className="bg-white p-2 rounded-[10px] hover:bg-gray-50 transition-colors shadow-sm flex items-center justify-center shrink-0"
+                            className="bg-neutral-second p-2 rounded-[10px] hover:bg-secondary-first transition-colors shadow-sm flex items-center justify-center shrink-0"
                             title={t('view_details') || "View Details"}
                         >
-                            <Eye size={16} className="text-gray-700" />
+                            <Eye size={16} className="text-neutral-first" />
                         </button>
                     )}
                     {onEdit && (
                         <button
                             onClick={onEdit}
-                            className="bg-white p-2 rounded-[10px] hover:bg-gray-50 transition-colors shadow-sm flex items-center justify-center shrink-0"
+                            className="bg-neutral-second p-2 rounded-[10px] hover:bg-secondary-first transition-colors shadow-sm flex items-center justify-center shrink-0"
                             title={t('common.edit') || "Edit"}
                         >
-                            <Pencil size={16} className="text-gray-700" />
+                            <Pencil size={16} className="text-neutral-first" />
                         </button>
                     )}
                 </div>

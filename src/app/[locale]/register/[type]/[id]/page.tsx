@@ -52,7 +52,7 @@ export default function RegisterDetailPage() {
             {isLoading ? (
                 <RegisterDetailsPageSkeleton tabs={tabs} />
             ) : isNotFound ? (
-                <div className="p-8 text-center text-red-500 bg-white rounded-lg border border-red-100 shadow-sm">
+                <div className="p-8 text-center text-toast-failed bg-neutral-second rounded-lg border border-red-100 shadow-sm">
                     {t('record_not_found')}
                 </div>
             ) : (
@@ -86,7 +86,7 @@ export default function RegisterDetailPage() {
                                 </WidgetProvider>
                             ) : !isLoading && (
                                 <div className=" px-6 py-5 flex items-center justify-center text-center">
-                                    <div className="text-[16px] text-black/50 font-medium">
+                                    <div className="text-[16px] text-neutral-first/50 font-medium">
                                         {t("no_tab_section")}
                                     </div>
                                 </div>

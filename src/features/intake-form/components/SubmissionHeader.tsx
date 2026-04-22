@@ -13,12 +13,12 @@ import Can from "@/components/shared/Can";
 import { INTAKE_FORM_ACTIONS } from "../utils/intakeForm.actions";
 
 const statusClassMap: Record<string, string> = {
-    REJECTED: "text-red-500",
+    REJECTED: "text-toast-failed",
     PENDING: "text-amber-500",
-    APPROVED: "text-green-600",
-    DRAFT: "text-blue-500",
+    APPROVED: "text-toast-success",
+    DRAFT: "text-toast-info",
     SUBMITTED: "text-indigo-500",
-    FINALIZED: "text-green-600",
+    FINALIZED: "text-toast-success",
 };
 
 interface Props {
@@ -67,7 +67,7 @@ export default function SubmissionHeader({ submission, onActionComplete }: Props
     };
 
     return (
-        <div className="rounded-[10px] bg-[#F2BA1A33]/80 px-10 py-5 flex flex-col border border-dashed border-[#ED7C22]">
+        <div className="rounded-[10px] bg-primary-first/20 px-10 py-5 flex flex-col border border-dashed border-primary-second">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <InfoSection submission={submission} />
                 <VerificationStats submission={submission} documentsCount={documents.length} />
@@ -76,12 +76,12 @@ export default function SubmissionHeader({ submission, onActionComplete }: Props
 
             {submission?.approval_status === "PENDING" && (
                 <Can action={INTAKE_FORM_ACTIONS.approve}>
-                    <div className="my-4 border-t-2 border-[#F2BA1A]" />
+                    <div className="my-4 border-t-2 border-primary-first" />
                     <div className="flex items-center gap-4">
                         <button
                             type="button"
                             onClick={() => handleAction('reject')}
-                            className="px-4 py-2 text-[14px] font-medium rounded-[10px] bg-white text-black/50"
+                            className="px-4 py-2 text-[14px] font-medium rounded-[10px] bg-neutral-second text-neutral-first/50"
                         >
                             {t('reject_submission')}
                         </button>
@@ -89,7 +89,7 @@ export default function SubmissionHeader({ submission, onActionComplete }: Props
                         <button
                             type="button"
                             onClick={() => handleAction('approve')}
-                            className="px-4 py-2 text-[14px] font-medium rounded-[10px] bg-black text-white"
+                            className="px-4 py-2 text-[14px] font-medium rounded-[10px] bg-neutral-first text-neutral-second"
                         >
                             {t('approve_submission')}
                         </button>
@@ -103,37 +103,37 @@ export default function SubmissionHeader({ submission, onActionComplete }: Props
 const InfoSection = ({ submission }: { submission?: IntakeSubmissionPayload | null }) => {
     const t = useTranslations();
     return (
-        <div className="space-y-2 text-[16px] text-[#00000080]">
-            <h3 className="text-[24px] font-medium text-black truncate" title={t('intake_submission') || 'Intake Submission'}>
+        <div className="space-y-2 text-[16px] text-neutral-first/50">
+            <h3 className="text-[24px] font-medium text-neutral-first truncate" title={t('intake_submission') || 'Intake Submission'}>
                 {t('intake_submission')}
             </h3>
             <div className="flex w-full overflow-hidden">
                 <span className="w-1/2 truncate" title={t('reference_no')}>{t('reference_no')}:</span>
-                <span className="w-1/2 pl-4 text-black font-medium truncate" title={submission?.submission_reference ? String(submission.submission_reference) : ''}>
+                <span className="w-1/2 pl-4 text-neutral-first font-medium truncate" title={submission?.submission_reference ? String(submission.submission_reference) : ''}>
                     {submission?.submission_reference}
                 </span>
             </div>
             <div className="flex w-full overflow-hidden">
                 <span className="w-1/2 truncate" title={t('form_status')}>{t('form_status')}:</span>
-                <span className={`w-1/2 pl-4 font-medium truncate ${statusClassMap[submission?.intake_form_status || ''] ?? "text-gray-500"}`} title={submission?.intake_form_status}>
+                <span className={`w-1/2 pl-4 font-medium truncate ${statusClassMap[submission?.intake_form_status || ''] ?? "text-neutral-first/50"}`} title={submission?.intake_form_status}>
                     {submission?.intake_form_status}
                 </span>
             </div>
             <div className="flex w-full overflow-hidden">
                 <span className="w-1/2 truncate" title={t('cr_status')}>{t('cr_status')}:</span>
-                <span className="w-1/2 pl-4 text-black font-medium truncate" title={submission?.change_request_submission_status ?? t('n_a')}>
+                <span className="w-1/2 pl-4 text-neutral-first font-medium truncate" title={submission?.change_request_submission_status ?? t('n_a')}>
                     {submission?.change_request_submission_status ?? t('n_a')}
                 </span>
             </div>
             <div className="flex w-full overflow-hidden">
                 <span className="w-1/2 truncate" title={t('approval_status')}>{t('approval_status')}:</span>
-                <span className={`w-1/2 pl-4 font-medium truncate ${statusClassMap[submission?.approval_status || ''] ?? "text-gray-500"}`} title={submission?.approval_status}>
+                <span className={`w-1/2 pl-4 font-medium truncate ${statusClassMap[submission?.approval_status || ''] ?? "text-neutral-first/50"}`} title={submission?.approval_status}>
                     {submission?.approval_status}
                 </span>
             </div>
             <div className="flex w-full overflow-hidden">
                 <span className="w-1/2 truncate" title={t('created_date')}>{t('created_date')}:</span>
-                <span className="w-1/2 pl-4 text-black font-medium truncate" title={submission?.created_at ? formatDate(submission.created_at) : '--'}>
+                <span className="w-1/2 pl-4 text-neutral-first font-medium truncate" title={submission?.created_at ? formatDate(submission.created_at) : '--'}>
                     {submission?.created_at ? formatDate(submission.created_at) : '--'}
                 </span>
             </div>
@@ -150,29 +150,29 @@ const VerificationStats = ({
 }) => {
     const t = useTranslations();
     return (
-        <div className="space-y-2 text-[16px] text-[#00000080]">
-            <h3 className="text-lg font-semibold text-black invisible">
+        <div className="space-y-2 text-[16px] text-neutral-first/50">
+            <h3 className="text-lg font-semibold text-neutral-first invisible">
                 Verification
             </h3>
 
-            <div className="border-l border-[#F2BA1A] pl-6 space-y-2">
+            <div className="border-l border-primary-first pl-6 space-y-2">
                 <div className="flex w-full overflow-hidden">
                     <span className="w-1/2 truncate" title={t('verifications_required')}>{t('verifications_required')}:</span>
-                    <span className="w-1/2 pl-4 text-black font-medium truncate" title={submission?.no_of_verifications_required !== undefined ? String(submission.no_of_verifications_required) : ''}>
+                    <span className="w-1/2 pl-4 text-neutral-first font-medium truncate" title={submission?.no_of_verifications_required !== undefined ? String(submission.no_of_verifications_required) : ''}>
                         {submission?.no_of_verifications_required}
                     </span>
                 </div>
 
                 <div className="flex w-full overflow-hidden">
                     <span className="w-1/2 truncate" title={t('verifications_done')}>{t('verifications_done')}:</span>
-                    <span className="w-1/2 pl-4 text-black font-medium truncate" title={submission?.no_of_verifications_done !== undefined ? String(submission.no_of_verifications_done) : ''}>
+                    <span className="w-1/2 pl-4 text-neutral-first font-medium truncate" title={submission?.no_of_verifications_done !== undefined ? String(submission.no_of_verifications_done) : ''}>
                         {submission?.no_of_verifications_done}
                     </span>
                 </div>
 
                 <div className="flex w-full overflow-hidden">
                     <span className="w-1/2 truncate" title={t('documents_attached')}>{t('documents_attached')}:</span>
-                    <span className="w-1/2 pl-4 text-black font-medium truncate" title={documentsCount.toString()}>
+                    <span className="w-1/2 pl-4 text-neutral-first font-medium truncate" title={documentsCount.toString()}>
                         {documentsCount}
                     </span>
                 </div>
@@ -188,9 +188,9 @@ const AttachedDocuments = ({ documents = [] }: { documents?: any[] }) => {
     const placeholdersCount = Math.max(0, 3 - visibleDocs.length);
 
     return (
-        <div className="space-y-2 text-[16px] text-[#00000080]">
+        <div className="space-y-2 text-[16px] text-neutral-first/50">
             <div className="pl-6 flex items-center leading-none mt-2">
-                <span className="text-[16px] font-medium text-black">
+                <span className="text-[16px] font-medium text-neutral-first">
                     {t('attached_documents')}
                 </span>
                 <Image
@@ -202,7 +202,7 @@ const AttachedDocuments = ({ documents = [] }: { documents?: any[] }) => {
                 />
             </div>
 
-            <div className="border-l border-[#F2BA1A] pl-6 flex flex-col gap-2 font-semibold min-h-15">
+            <div className="border-l border-primary-first pl-6 flex flex-col gap-2 font-semibold min-h-15">
 
 
                 {visibleDocs.map((doc, index) => (
@@ -213,7 +213,7 @@ const AttachedDocuments = ({ documents = [] }: { documents?: any[] }) => {
                         target="_blank"
                         rel="noopener noreferrer"
                         className={`flex items-center gap-2 ${doc.document_url
-                            ? 'cursor-pointer hover:underline text-black'
+                            ? 'cursor-pointer hover:underline text-neutral-first'
                             : 'opacity-50 pointer-events-none'
                             }`}
                     >

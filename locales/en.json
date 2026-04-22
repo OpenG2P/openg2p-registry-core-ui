@@ -808,5 +808,8 @@
   "ingest_template_updated": "Template updated successfully",
   "ingest_template_update_failed": "Template update failed",
   "ingest_template_deleted_success": "Template deleted successfully",
-  "ingest_template_deletion_failed": "Template deletion failed"
+  "ingest_template_deletion_failed": "Template deletion failed",
+  "farmer_header": "Farmer Header",
+  "num_male_members": "No of Male Members",
+  "num_female_members": "No of Female Members"
 }

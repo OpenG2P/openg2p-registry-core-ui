@@ -56,10 +56,34 @@ export default async function RootLayout({
     const messages = await getMessages();
     await clientSafeConfig.fetchRegistryConfig(origin);
     const config = clientSafeConfig.getAll();
-
+    const cssVariables = `
+        :root {
+            --color-primary-first: ${config.branding?.color1 ?? "#EABB13"};
+            --color-primary-second: ${config.branding?.color2 ?? "#ED7C22"};
+            --color-secondary-first: ${config.branding?.color3 ?? "#F3F1F4"};
+            --color-secondary-second: ${config.branding?.color4 ?? "#E1E1E1"};
+            --color-secondary-third: ${config.branding?.color5 ?? "#A1A1A1"};
+            --color-neutral-first: ${config.branding?.color6 ?? "#000000"};
+            --color-neutral-second: ${config.branding?.color7 ?? "#FFFFFF"};
+            --toast-info-color: ${config.branding?.toast_color?.toast_info_color ?? "#007BFF"};
+            --toast-success-color: ${config.branding?.toast_color?.toast_success_color ?? "#28A745"};
+            --toast-warning-color: ${config.branding?.toast_color?.toast_warning_color ?? "#FFC107"};
+            --toast-failed-color: ${config.branding?.toast_color?.toast_failed_color ?? "#DC3545"};
+        }
+    `;
 
     return (
         <html lang={locale}>
+            <head>
+                {config.branding?.font_url && (
+                    <link rel="stylesheet" href={config.branding?.font_url} />
+                )}
+                <style
+                    id="branding-css-variables"
+                    suppressHydrationWarning
+                    dangerouslySetInnerHTML={{ __html: cssVariables }}
+                />
+            </head>
             <body className={`${roboto.className} antialiased`}>
                 <NextIntlClientProvider messages={messages}>
                     <GlobalContextProvider>
@@ -78,4 +102,3 @@ export default async function RootLayout({
         </html>
     );
 }
-

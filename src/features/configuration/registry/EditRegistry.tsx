@@ -54,12 +54,12 @@ export default function EditRegistry({
 
     return (
         <>
-            <div className="bg-[#F2BA1A]/20 rounded-[10px] p-10 border-2 border-dashed border-[#ED7C22] w-full min-h-75 flex flex-col justify-between font-roboto">
+            <div className="bg-primary-first/20 rounded-[10px] p-10 border-2 border-dashed border-primary-second w-full min-h-75 flex flex-col justify-between font-roboto">
                 <div className="flex flex-col gap-10">
                     {/* Top Section */}
                     <div className="flex items-center gap-10">
                         {/* Image Edit Area */}
-                        <div className="relative group w-30 h-30 bg-[#E5E7EB] rounded-[10px] flex items-center justify-center overflow-hidden shrink-0">
+                        <div className="relative group w-30 h-30 bg-secondary-second rounded-[10px] flex items-center justify-center overflow-hidden shrink-0">
                             <input
                                 type="file"
                                 id="registry-image-upload"
@@ -77,23 +77,23 @@ export default function EditRegistry({
                                     unoptimized
                                 />
                             ) : (
-                                <div className="flex flex-col items-center justify-center text-gray-400">
+                                <div className="flex flex-col items-center justify-center text-secondary-third">
                                     <ImageIcon size={50} strokeWidth={1} />
                                 </div>
                             )}
 
                             {/* Overlay Action Buttons */}
-                            <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                            <div className="absolute inset-0 bg-neutral-first/40 flex flex-col items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                                 <button
                                     onClick={triggerUpload}
-                                    className="flex items-center justify-center gap-2 w-23.75 py-1.5 bg-white rounded-[10px] text-[#ED7C22] shadow-md hover:bg-gray-50 transition-all active:scale-95"
+                                    className="flex items-center justify-center gap-2 w-23.75 py-1.5 bg-neutral-second rounded-[10px] text-primary-second shadow-md hover:bg-secondary-first transition-all active:scale-95"
                                 >
                                     <Upload size={15} strokeWidth={2.5} />
                                     <span className="text-[13px] leading-none">{t('upload')}</span>
                                 </button>
                                 <button
                                     onClick={() => setImage('/images/config/blank_image.png')}
-                                    className="flex items-center justify-center gap-2 w-23.75 py-1.5 bg-white rounded-[10px] text-[#ED7C22] shadow-md hover:bg-gray-50 transition-all active:scale-95"
+                                    className="flex items-center justify-center gap-2 w-23.75 py-1.5 bg-neutral-second rounded-[10px] text-primary-second shadow-md hover:bg-secondary-first transition-all active:scale-95"
                                 >
                                     <Trash2 size={15} strokeWidth={2.5} />
                                     <span className="text-[13px] leading-none">{t('remove')}</span>
@@ -105,13 +105,13 @@ export default function EditRegistry({
                         <div className="flex-1 flex items-center gap-4">
                             <div className="w-75">
                                 <div className='flex flex-col items-start gap-1'>
-                                    <span className='text-black text-[16px] font-normal leading-5.5 tracking-normal m-0'>{t('registry_name')}</span>
+                                    <span className='text-neutral-first text-[16px] font-normal leading-5.5 tracking-normal m-0'>{t('registry_name')}</span>
                                     <input
                                         type="text"
                                         value={name}
                                         onChange={(e) => setName(e.target.value)}
                                         placeholder={t('registry_name')}
-                                        className="w-full h-10 px-4 rounded-[10px] border-none text-[16px] font-medium text-black/50 bg-white outline-none placeholder:text-black/50"
+                                        className="w-full h-10 px-4 rounded-[10px] border-none text-[16px] font-medium text-neutral-first/50 bg-neutral-second outline-none placeholder:text-neutral-first/50"
                                     />
 
                                 </div>
@@ -122,19 +122,19 @@ export default function EditRegistry({
                     {/* Divider and Bottom Section */}
                     <div className="space-y-6">
                         {/* Divider */}
-                        <div className="w-full h-px bg-[#F2BA1A]" />
+                        <div className="w-full h-px bg-primary-first" />
 
                         {/* Buttons Row */}
                         <div className="flex gap-4">
                             <button
                                 onClick={onCancel}
-                                className="w-20 h-10 bg-[#DDDDDD] text-black/50 rounded-[10px] text-[16px] font-medium hover:bg-gray-300 transition-colors"
+                                className="w-20 h-10 bg-secondary-second text-neutral-first/50 rounded-[10px] text-[16px] font-medium hover:bg-secondary-third transition-colors"
                             >
                                 {t('cancel')}
                             </button>
                             <button
                                 onClick={() => onSave(name, image)}
-                                className="w-20 h-10 bg-black text-white rounded-[10px] text-[16px] font-medium hover:bg-black/90 transition-colors flex items-center justify-center"
+                                className="w-20 h-10 bg-neutral-first text-neutral-second rounded-[10px] text-[16px] font-medium hover:bg-neutral-first/90 transition-colors flex items-center justify-center"
                             >
                                 {t('save')}
                             </button>
