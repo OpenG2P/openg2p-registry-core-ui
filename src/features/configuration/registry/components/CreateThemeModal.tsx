@@ -20,7 +20,7 @@ export default function CreateThemeModal({
 }: CreateThemeModalProps) {
     const t = useTranslations();
     const { themes, themesLoading, loadAttributes } = useTheme();
-    
+
     const [name, setName] = useState('');
     const [draftColors, setDraftColors] = useState<Record<string, string>>({});
     const [initializing, setInitializing] = useState(true);
@@ -33,7 +33,7 @@ export default function CreateThemeModal({
         const initFactory = async () => {
             setInitializing(true);
             setName('');
-            
+
             const factoryTheme = themes.find(th => th.is_factory_shipped);
             if (factoryTheme) {
                 try {
@@ -69,7 +69,7 @@ export default function CreateThemeModal({
 
     const handleSave = async () => {
         if (!name.trim() || isSubmitting) return;
-        
+
         setIsSubmitting(true);
         try {
             const themeValues = THEME_ATTRIBUTES.map(attr => ({
@@ -88,7 +88,7 @@ export default function CreateThemeModal({
         <div className="fixed inset-0 bg-neutral-first/80 z-[100] flex items-center justify-center p-4 font-roboto">
             <div className="relative w-full max-w-[1000px] max-h-[95vh] bg-primary-first rounded-[10px] overflow-hidden flex p-1">
                 <div className="flex-1 w-full bg-neutral-second relative rounded-[10px] p-10 overflow-y-auto custom-scrollbar">
-                    
+
                     <button
                         onClick={onClose}
                         className="absolute top-6 right-6 text-secondary-third hover:text-neutral-first/70 transition-colors"
@@ -124,9 +124,8 @@ export default function CreateThemeModal({
                             onColorChange={handleColorChange}
                             onSave={handleSave}
                             onDiscard={onClose}
-                            onDelete={() => {}}
-                            onReset={() => {}}
-                            isDirty={true}
+                            onDelete={() => { }}
+                            onReset={() => { }}
                             isFactoryTheme={false}
                         />
 

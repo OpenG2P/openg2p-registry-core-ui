@@ -64,7 +64,7 @@ export default function EditRegistry({
     return (
         <>
             <div className="bg-primary-first/20 rounded-[10px] p-8 border-2 border-dashed border-primary-second w-full flex flex-col font-roboto">
-                <div className="flex flex-col gap-10 p-6">
+                <div className="flex flex-col gap-10">
                     {/* Logo Section */}
                     <div className='flex flex-col items-start gap-3'>
                         <span className='text-neutral-first text-[16px] font-normal tracking-normal m-0 opacity-60'>{t('registry_logo')}</span>
@@ -112,7 +112,7 @@ export default function EditRegistry({
                     </div>
 
                     {/* Input Area */}
-                    <div className="flex flex-col gap-6 w-full max-w-md">
+                    <div className="flex flex-col gap-6 w-full max-w-md pb-6">
                         <div className='flex flex-col items-start gap-2 w-full'>
                             <span className='text-neutral-first text-[16px] font-normal tracking-normal m-0 opacity-60'>{t('registry_name')}</span>
                             <input
@@ -120,7 +120,7 @@ export default function EditRegistry({
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
                                 placeholder={t('registry_name')}
-                                className="w-full h-10 px-4 rounded-[10px] border-none text-[16px] font-medium text-neutral-first bg-neutral-second outline-none placeholder:text-neutral-first/50 shadow-sm"
+                                className="w-full h-10 px-4 rounded-[10px] border border-primary-second text-[16px] font-medium text-neutral-first bg-neutral-second outline-none placeholder:text-neutral-first/50"
                             />
                         </div>
 
