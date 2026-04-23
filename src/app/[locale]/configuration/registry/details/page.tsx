@@ -24,7 +24,7 @@ const RegistryConfigurationPage = () => {
 	const [themeId, setThemeId] = useState<string | null>(null);
 	const [languageId, setLanguageId] = useState<string | null>(null);
 
-	const { data: registryData, execute: fetchRegistry } = useFetch({ url: '/api/configuration/registry/get' });
+	const { data: registryData } = useFetch({ url: '/api/configuration/registry/get' });
 	const { execute: saveRegistry } = useFetch();
 
 

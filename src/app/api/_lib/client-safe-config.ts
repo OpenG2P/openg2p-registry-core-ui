@@ -108,6 +108,42 @@ class ClientSafeConfig {
                     }
                 }
 
+                // If no specific language is configured or not found, fallback to the one marked as is_default
+                if (!language_config) {
+                    const allLanguagesUrl = `${backendConfig.backendApiUrl}/registry-language/get_all_languages`;
+                    const allLanguagesRequest = createBackendRequest({
+                        pagination_request: {
+                            current_page: 1,
+                            page_size: 100,
+                            sort_by: "",
+                            filter_by: undefined,
+                            search_text: ""
+                        },
+                        request_payload: {}
+                    }, origin);
+
+                    const allLanguagesResponse = await fetch(allLanguagesUrl, {
+                        method: "POST",
+                        headers: {
+                            ...auth.backendHeaders,
+                        },
+                        body: JSON.stringify(allLanguagesRequest),
+                        next: {
+                            revalidate: 0,
+                            tags: ['all-languages-config']
+                        }
+                    });
+
+                    if (allLanguagesResponse.ok) {
+                        const allLanguagesData = await allLanguagesResponse.json();
+                        const languages = allLanguagesData.response_body?.response_payload || [];
+                        const defaultLang = languages.find((l: any) => l.is_default);
+                        if (defaultLang) {
+                            language_config = defaultLang;
+                        }
+                    }
+                }
+
                 this.setMany({
                     registryName: payload?.registry_name ?? "",
                     registryLogo: payload?.registry_logo ?? "",

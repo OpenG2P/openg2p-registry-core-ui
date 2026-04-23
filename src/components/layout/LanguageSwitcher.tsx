@@ -4,7 +4,7 @@ import { useRouter, usePathname } from '@/i18n/navigation';
 import { routing } from '@/i18n/routing';
 import { useTranslations, useLocale } from 'next-intl';
 import Image from 'next/image';
-import React, { useRef, useState, useTransition, useMemo } from 'react';
+import { useRef, useState, useTransition, useMemo } from 'react';
 import { useClickOutside } from '@/shared/hooks/useClickOutside';
 import { useLang } from '@/features/configuration/registry/hooks/useLang';
 
