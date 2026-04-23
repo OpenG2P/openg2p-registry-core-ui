@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, ReactNode } from "react";
-import { Branding } from "@/app/api/_lib/client-safe-config.types";
+import { Branding, LanguageConfig } from "@/app/api/_lib/client-safe-config.types";
 
 export interface RuntimeConfig {
     partnerImportExportEnable: boolean;
@@ -11,7 +11,10 @@ export interface RuntimeConfig {
     partnerIngestUrl: string;
     registryName: string;
     registryLogo: string;
+    registry_theme_id: string;
+    registry_language_id: string;
     branding?: Branding;
+    language_config?: LanguageConfig;
 }
 
 

@@ -24,7 +24,8 @@ const sidebarOptions: SidebarOption[] = [
         path: '/configuration/registry/details',
         subOptions: [
             { id: 'registry-details', label: 'registry_details', path: '/configuration/registry/details' },
-            { id: 'registry-theme', label: 'registry_theme', path: '/configuration/registry/theme' },
+            { id: 'registry-themes', label: 'registry_theme', path: '/configuration/registry/themes' },
+            { id: 'registry-languages', label: 'registry_languages', path: '/configuration/registry/languages' },
         ]
     },
     {

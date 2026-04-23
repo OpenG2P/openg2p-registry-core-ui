@@ -6,7 +6,7 @@ import RequireAction from '@/components/shared/RequireAction';
 import { CONFIG_VIEW_ACTIONS } from '@/features/configuration/shared/utils/configurationView.actions';
 
 const SIDEBAR_OPTIONS: ConfigActiveOption[] = [
-    'registry', 'registry-details', 'registry-theme', 'registers', 'data-models', 'ingest-configurations', 'outgest-configurations',
+    'registry', 'registry-details', 'registry-themes', 'registry-languages', 'registers', 'data-models', 'ingest-configurations', 'outgest-configurations',
     'ingest-key-paths', 'ingest-semantic-patterns', 'ingest-manage-subscription',
     'outgest-topics', 'outgest-templates'
 ];
@@ -24,7 +24,8 @@ function getActiveOptionFromPathname(pathname: string | null): ConfigActiveOptio
     if (subSegment) {
         if (parentSegment === 'registry') {
             if (subSegment === 'details') return 'registry-details';
-            if (subSegment === 'theme') return 'registry-theme';
+            if (subSegment === 'themes') return 'registry-themes';
+            if (subSegment === 'languages') return 'registry-languages';
         }
         if (parentSegment === 'ingest-configurations') {
             if (subSegment === 'key-paths') return 'ingest-key-paths';

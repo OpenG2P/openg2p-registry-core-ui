@@ -44,7 +44,7 @@ const CreateThemePage = () => {
             } else {
                 const defaults: Record<string, string> = {};
                 COLOR_ATTRIBUTES.forEach(attr => {
-                    defaults[attr.key] = '#EABB13';
+                    defaults[attr.key] = '#ffffff';
                 });
                 setDraftColors(defaults);
             }
@@ -74,7 +74,7 @@ const CreateThemePage = () => {
         const result = await createTheme(name.trim(), themeValues);
         if (result !== null) {
             toast.success(t('theme_config_create_success'));
-            router.push('/configuration/registry/theme');
+            router.push('/configuration/registry/themes');
         } else {
             toast.error(t('theme_config_create_error'));
         }
