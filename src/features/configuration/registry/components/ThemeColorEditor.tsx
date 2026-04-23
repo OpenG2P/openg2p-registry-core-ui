@@ -53,7 +53,6 @@ export default function ThemeColorEditor({
         return (
             <div className="bg-neutral-second rounded-[10px] p-12 flex flex-col items-center justify-center gap-3">
                 <p className="text-base font-medium text-neutral-first">{t('theme_config_select_to_edit')}</p>
-                <p className="text-sm text-secondary-third">{t('theme_config_select_to_edit_desc')}</p>
             </div>
         );
     }

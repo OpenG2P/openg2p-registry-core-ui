@@ -16,7 +16,14 @@ export type Branding = {
         toast_failed_color?: string;
     }
 };
-
+export type LanguageConfig = {
+    language_id: string;
+    code: string;
+    label: string;
+    flag: string;
+    is_default: boolean;
+    translation: Record<string, any>;
+};
 export type ClientSafeConfigShape = {
     partnerImportExportEnable: boolean;
     verifyServiceUrl: string;
@@ -26,5 +33,7 @@ export type ClientSafeConfigShape = {
     registryName: string;
     registryLogo: string;
     registry_theme_id: string;
+    registry_language_id: string;
     branding?: Branding;
+    language_config?: LanguageConfig;
 };

@@ -121,7 +121,7 @@ const ThemePage = () => {
 
                         <button
                             id="create-theme-btn"
-                            onClick={() => router.push('/configuration/registry/theme/create')}
+                            onClick={() => router.push('/configuration/registry/themes/create')}
                             className="h-10 px-5 bg-neutral-first text-neutral-second rounded-[10px] flex items-center justify-center gap-2 hover:bg-neutral-first/90 transition-all active:scale-95 shadow-lg shadow-neutral-first/10"
                         >
                             <Plus size={16} strokeWidth={3} />

@@ -4,8 +4,9 @@ import { useRouter, usePathname } from '@/i18n/navigation';
 import { routing } from '@/i18n/routing';
 import { useTranslations, useLocale } from 'next-intl';
 import Image from 'next/image';
-import React, { useRef, useState, useTransition } from 'react';
+import React, { useRef, useState, useTransition, useMemo } from 'react';
 import { useClickOutside } from '@/shared/hooks/useClickOutside';
+import { useLang } from '@/features/configuration/registry/hooks/useLang';
 
 const LANGUAGE_CONFIG: Record<string, { label: string; flag: string }> = {
     en: { label: 'English', flag: '/images/common/flags/en_flag.png' },
@@ -19,6 +20,7 @@ export default function LanguageSwitcher() {
     const locale = useLocale();
     const t = useTranslations();
     const [isPending, startTransition] = useTransition();
+    const { languages } = useLang();
 
     const [open, setOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -32,7 +34,28 @@ export default function LanguageSwitcher() {
         });
     };
 
-    const currentLanguage = LANGUAGE_CONFIG[locale] || LANGUAGE_CONFIG.en;
+    const dynamicConfig = useMemo(() => {
+        if (languages && languages.length > 0) {
+            const config: Record<string, { label: string; flag: string }> = {};
+            languages.forEach(lang => {
+                config[lang.code] = {
+                    label: lang.label,
+                    flag: lang.flag
+                };
+            });
+            return config;
+        }
+        return LANGUAGE_CONFIG;
+    }, [languages]);
+
+    const availableLocales = useMemo(() => {
+        if (languages && languages.length > 0) {
+            return languages.map(lang => lang.code);
+        }
+        return routing.locales;
+    }, [languages]);
+
+    const currentLanguage = dynamicConfig[locale] || dynamicConfig[availableLocales[0]] || LANGUAGE_CONFIG.en;
 
     return (
         <div className="relative inline-block" ref={dropdownRef}>
@@ -70,8 +93,8 @@ export default function LanguageSwitcher() {
                 <div
                     className="absolute top-full left-0 mt-2 min-w-35 ring-1 ring-black/10 rounded-[10px] bg-neutral-second overflow-hidden z-50"
                 >
-                    {routing.locales.map((loc, index) => {
-                        const lang = LANGUAGE_CONFIG[loc] || { label: loc, flag: LANGUAGE_CONFIG.en.flag };
+                    {availableLocales.map((loc, index) => {
+                        const lang = dynamicConfig[loc] || { label: loc, flag: LANGUAGE_CONFIG.en.flag };
                         return (
                             <button
                                 key={loc}
@@ -99,4 +122,3 @@ export default function LanguageSwitcher() {
         </div>
     );
 }
-

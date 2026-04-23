@@ -39,3 +39,12 @@ export const THEME_ATTRIBUTES = [...COLOR_ATTRIBUTES, ...TYPOGRAPHY_ATTRIBUTES, 
 
 export type ColorAttributeKey = typeof COLOR_ATTRIBUTES[number]['key'];
 export type ThemeAttributeKey = typeof THEME_ATTRIBUTES[number]['key'];
+
+export interface Language {
+    language_id: string;
+    code: string;
+    label: string;
+    flag: string;
+    is_default: boolean;
+    translation: Record<string, any>;
+}

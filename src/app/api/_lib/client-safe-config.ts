@@ -3,7 +3,7 @@ import { getBackendConfig } from "./backend-config";
 import { createBackendRequest } from "./backend-request";
 import { requireAuthFromCookies } from "./requireAuth";
 
-import { Branding, ClientSafeConfigShape } from "./client-safe-config.types";
+import { Branding, ClientSafeConfigShape, LanguageConfig } from "./client-safe-config.types";
 
 class ClientSafeConfig {
     private config: ClientSafeConfigShape;
@@ -18,6 +18,7 @@ class ClientSafeConfig {
             registryName: "",
             registryLogo: "",
             registry_theme_id: "",
+            registry_language_id: "",
             branding: {},
         };
     }
@@ -80,11 +81,40 @@ class ClientSafeConfig {
                     }
                 }
 
+                const language_id = payload?.registry_language_id;
+                let language_config: LanguageConfig | undefined = undefined;
+
+                if (language_id) {
+                    const languageUrl = `${backendConfig.backendApiUrl}/registry-language/get_language`;
+                    const languageRequest = createBackendRequest({
+                        request_payload: { language_id: language_id }
+                    }, origin);
+
+                    const languageResponse = await fetch(languageUrl, {
+                        method: "POST",
+                        headers: {
+                            ...auth.backendHeaders,
+                        },
+                        body: JSON.stringify(languageRequest),
+                        next: {
+                            revalidate: 0,
+                            tags: ['language-config']
+                        }
+                    });
+
+                    if (languageResponse.ok) {
+                        const languageData = await languageResponse.json();
+                        language_config = languageData.response_body?.response_payload;
+                    }
+                }
+
                 this.setMany({
                     registryName: payload?.registry_name ?? "",
                     registryLogo: payload?.registry_logo ?? "",
-                    registry_theme_id: theme_id,
+                    registry_theme_id: theme_id ?? "",
+                    registry_language_id: language_id ?? "",
                     branding,
+                    language_config,
                 });
             }
         } catch (error) {

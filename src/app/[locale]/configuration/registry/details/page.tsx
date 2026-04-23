@@ -10,16 +10,19 @@ import Can from '@/components/shared/Can';
 import { CONFIGURATION_REGISTRY_ACTIONS } from '@/features/configuration/shared/utils/configurationRegistry.actions';
 import { useTranslations } from 'next-intl';
 import { useTheme } from '@/features/configuration/registry/hooks/useTheme';
+import { useLang } from '@/features/configuration/registry/hooks/useLang';
 import EditRegistry from '@/features/configuration/registry/components/EditRegistry';
 
 const RegistryConfigurationPage = () => {
 	const t = useTranslations();
 	const { themes, themesLoading } = useTheme();
+	const { languages, languagesLoading } = useLang();
 	const [isEditing, setIsEditing] = useState(false);
 	const [configurationId, setConfigurationId] = useState<string | null>(null);
 	const [registryName, setRegistryName] = useState(t('registry_name'));
 	const [image, setImage] = useState('/images/config/blank_image.png');
 	const [themeId, setThemeId] = useState<string | null>(null);
+	const [languageId, setLanguageId] = useState<string | null>(null);
 
 	const { data: registryData, execute: fetchRegistry } = useFetch({ url: '/api/configuration/registry/get' });
 	const { execute: saveRegistry } = useFetch();
@@ -32,11 +35,12 @@ const RegistryConfigurationPage = () => {
 			setRegistryName(registryData.registry_name || t('registry_name'));
 			setImage(registryData.registry_logo || '/images/config/blank_image.png');
 			setThemeId(registryData.registry_theme_id || null);
+			setLanguageId(registryData.registry_language_id || null);
 		}
 		setIsEditing(true);
 	};
 
-	const handleSave = async (newName: string, newImage: string, newThemeId: string | null) => {
+	const handleSave = async (newName: string, newImage: string, newThemeId: string | null, newLanguageId: string | null) => {
 		const base64Logo = await convertImageToBase64(newImage);
 
 		const endpoint = configurationId || registryData?.configuration_id
@@ -48,12 +52,14 @@ const RegistryConfigurationPage = () => {
 				configuration_id: configurationId || registryData?.configuration_id,
 				registry_name: newName,
 				registry_logo: base64Logo,
-				registry_theme_id: newThemeId
+				registry_theme_id: newThemeId,
+				registry_language_id: newLanguageId
 			}
 			: {
 				registry_name: newName,
 				registry_logo: base64Logo,
-				registry_theme_id: newThemeId
+				registry_theme_id: newThemeId,
+				registry_language_id: newLanguageId
 			};
 
 		const result = await saveRegistry(endpoint, {
@@ -66,6 +72,7 @@ const RegistryConfigurationPage = () => {
 			setRegistryName(newName);
 			setImage(newImage);
 			setThemeId(newThemeId);
+			setLanguageId(newLanguageId);
 			setIsEditing(false);
 			toast.success(t('toast_registry_config_saved'));
 			window.location.reload();//Window reload on save 
@@ -90,8 +97,11 @@ const RegistryConfigurationPage = () => {
 							initialName={registryName}
 							initialImage={image}
 							initialThemeId={registryData?.registry_theme_id || themeId}
+							initialLanguageId={registryData?.registry_language_id || languageId}
 							themes={themes}
 							themesLoading={themesLoading}
+							languages={languages}
+							languagesLoading={languagesLoading}
 							onSave={handleSave}
 							onCancel={() => setIsEditing(false)}
 						/>
@@ -123,6 +133,13 @@ const RegistryConfigurationPage = () => {
 									<span className='text-neutral-first text-[16px] font-normal tracking-normal m-0 opacity-60'>{t('registry_theme')}</span>
 									<span className="text-primary-second text-xl m-0 font-semibold capitalize">
 										{themes.find(th => th.theme_id === (registryData?.registry_theme_id || themeId))?.theme_mnemonic || ''}
+									</span>
+								</div>
+
+								<div className='flex flex-col items-start gap-2'>
+									<span className='text-neutral-first text-[16px] font-normal tracking-normal m-0 opacity-60'>{t('registry_language')}</span>
+									<span className="text-primary-second text-xl m-0 font-semibold capitalize">
+										{languages.find(l => l.language_id === (registryData?.registry_language_id || languageId))?.label || ''}
 									</span>
 								</div>
 

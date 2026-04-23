@@ -8,6 +8,7 @@ interface Props {
     cols?: number;
     className?: string;
     textareaClassName?: string;
+    placeholder?: string;
 }
 
 export default function TextAreaField({
@@ -17,7 +18,8 @@ export default function TextAreaField({
     rows = 3,
     cols,
     className = '',
-    textareaClassName = ''
+    textareaClassName = '',
+    placeholder
 }: Props) {
     return (
         <div className={`flex flex-col ${className}`}>
@@ -26,6 +28,7 @@ export default function TextAreaField({
             </label>
             <textarea
                 value={value}
+                placeholder={placeholder}
                 onChange={(e) => onChange(e.target.value)}
                 rows={rows}
                 cols={cols}

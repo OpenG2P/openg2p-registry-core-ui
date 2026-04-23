@@ -1,5 +1,7 @@
 'use client';
 
+import { Check } from 'lucide-react';
+
 interface Props {
     label: string;
     checked: boolean;
@@ -14,20 +16,25 @@ export default function CheckboxField({
     disabled = false,
 }: Props) {
     return (
-        <div>
-            <label className="text-[16px] font-medium text-neutral-first">
+        <div className="flex items-center gap-3 select-none">
+            <div
+                onClick={() => !disabled && onChange(!checked)}
+                className={`
+                    w-5 h-5 rounded border transition-all flex items-center justify-center cursor-pointer
+                    ${checked 
+                        ? 'bg-amber-600 border-amber-600 shadow-sm' 
+                        : 'bg-white border-secondary-second hover:border-amber-600/50'}
+                    ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
+                `}
+            >
+                {checked && <Check size={14} className="text-white" strokeWidth={3} />}
+            </div>
+            <label 
+                onClick={() => !disabled && onChange(!checked)}
+                className={`text-sm font-semibold cursor-pointer ${disabled ? 'text-neutral-first/30' : 'text-neutral-first/70'}`}
+            >
                 {label}
             </label>
-
-            <div className="mt-2 flex items-center gap-2">
-                <input
-                    type="checkbox"
-                    checked={checked}
-                    disabled={disabled}
-                    onChange={(e) => onChange(e.target.checked)}
-                    className="w-4 h-4 cursor-pointer"
-                />
-            </div>
         </div>
     );
 }
