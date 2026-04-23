@@ -68,7 +68,7 @@ const RegistryConfigurationPage = () => {
 			setThemeId(newThemeId);
 			setIsEditing(false);
 			toast.success(t('toast_registry_config_saved'));
-			fetchRegistry(); // Refresh view data
+			window.location.reload();//Window reload on save 
 		} else {
 			toast.error(t('toast_registry_config_save_failed'));
 		}
@@ -122,7 +122,7 @@ const RegistryConfigurationPage = () => {
 								<div className='flex flex-col items-start gap-2'>
 									<span className='text-neutral-first text-[16px] font-normal tracking-normal m-0 opacity-60'>{t('registry_theme')}</span>
 									<span className="text-primary-second text-xl m-0 font-semibold capitalize">
-										{themes.find(th => th.theme_id === (registryData?.registry_theme_id || themeId))?.theme_mnemonic || '-'}
+										{themes.find(th => th.theme_id === (registryData?.registry_theme_id || themeId))?.theme_mnemonic || ''}
 									</span>
 								</div>
 

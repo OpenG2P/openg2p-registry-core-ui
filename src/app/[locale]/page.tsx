@@ -219,12 +219,13 @@ export default function Home() {
                 </div>
                 <div className="bottom-0 w-full px-4">
                     <Image
-                        src="/images/common/people.svg"
+                        src={config?.branding?.dashboard_image || "/images/common/people.svg"}
                         alt={t('peoples_image_alt')}
                         width={1200}
                         height={600}
                         className="w-full h-auto select-none"
                         priority
+                        unoptimized={!!config?.branding?.dashboard_image}
                     />
                 </div>
             </div>

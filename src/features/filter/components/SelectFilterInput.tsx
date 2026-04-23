@@ -74,7 +74,7 @@ export default function SelectFilterInput({
                     alt=""
                     width={14}
                     height={14}
-                    className=""
+                    className="h-auto"
                 />
             </div>
         </div>

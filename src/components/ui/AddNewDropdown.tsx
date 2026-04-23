@@ -54,7 +54,7 @@ export default function AddNewDropdown({
                     alt="open"
                     width={14}
                     height={8}
-                    className={`transition-transform ${open ? 'rotate-180' : ''}`}
+                    className={`h-auto transition-transform ${open ? 'rotate-180' : ''}`}
                 />
             </button>
 

@@ -178,7 +178,7 @@ export default function FilterDropdown({
                                 alt=""
                                 width={14}
                                 height={8}
-                                className="aspect-[7/4]"
+                                className="h-auto"
                             />
                         </div>
                     </div>
@@ -258,6 +258,7 @@ export default function FilterDropdown({
                                         alt=""
                                         width={14}
                                         height={8}
+                                        className="h-auto"
                                     />
                                 </div>
                             </div>

@@ -62,7 +62,7 @@ export default function LanguageSwitcher() {
                     alt="toggle"
                     width={14}
                     height={14}
-                    className={`transition-transform ${open ? 'rotate-180' : ''}`}
+                    className={`h-auto transition-transform ${open ? 'rotate-180' : ''}`}
                 />
             </button>
 
@@ -85,7 +85,7 @@ export default function LanguageSwitcher() {
                                             alt={lang.label}
                                             width={27}
                                             height={18}
-                                            className="object-cover"
+                                            className="object-cover h-auto"
                                         />
                                     </div>
                                     <span className="text-neutral-first text-[14px] font-normal leading-normal">{lang.label}</span>

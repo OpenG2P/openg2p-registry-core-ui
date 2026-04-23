@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
-import { Palette, Plus } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { useRouter } from '@/i18n/navigation';
 import { TopBar } from '@/components/shared';
@@ -18,7 +18,6 @@ const ThemePage = () => {
         selectedThemeId,
         attributesLoading,
         selectTheme,
-        createTheme,
         updateThemeColors,
         removeTheme,
         getAttributeValue,
@@ -105,36 +104,28 @@ const ThemePage = () => {
             />
 
             <div className="mx-7.5 flex flex-col gap-5 pb-10">
-                {/* Header card */}
-                <div className="bg-neutral-second rounded-[10px] p-6 flex items-center justify-between gap-4">
-                    <div className="flex items-center gap-6">
-                        <div className="flex items-center gap-3">
-
-                            <div>
-                                <h1 className="text-lg font-semibold text-neutral-first m-0">{t('theme_config_title')}</h1>
-                            </div>
-                        </div>
-
-                        <div className="h-8 w-px bg-secondary-second hidden md:block" />
-
-                        <ThemeSelector
-                            themes={themes}
-                            themesLoading={themesLoading}
-                            selectedThemeId={selectedThemeId}
-                            onSelectTheme={handleSelectTheme}
-                        />
-
-
+                <div className="bg-neutral-second rounded-[10px] p-8 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center shadow-sm">
+                    <div className="flex flex-col gap-1.5">
+                        <h1 className="text-[22px] font-bold text-neutral-first m-0 tracking-tight">{t('theme_config_title')}</h1>
                     </div>
 
-                    <div className="flex items-center gap-3">
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 justify-end">
+                        <div className="w-full sm:w-80">
+                            <ThemeSelector
+                                themes={themes}
+                                themesLoading={themesLoading}
+                                selectedThemeId={selectedThemeId}
+                                onSelectTheme={handleSelectTheme}
+                            />
+                        </div>
+
                         <button
                             id="create-theme-btn"
                             onClick={() => router.push('/configuration/registry/theme/create')}
-                            className="h-8.5 px-5 bg-primary-first rounded-[10px] flex items-center gap-2 hover:bg-primary-first/90 transition-colors"
+                            className="h-10 px-5 bg-neutral-first text-neutral-second rounded-[10px] flex items-center justify-center gap-2 hover:bg-neutral-first/90 transition-all active:scale-95 shadow-lg shadow-neutral-first/10"
                         >
-                            <Plus size={15} strokeWidth={2.5} className="text-neutral-first" />
-                            <span className="text-sm font-medium text-neutral-first">{t('theme_config_new_theme')}</span>
+                            <Plus size={16} strokeWidth={3} />
+                            <span className="text-sm font-bold">{t('theme_config_new_theme')}</span>
                         </button>
                     </div>
                 </div>

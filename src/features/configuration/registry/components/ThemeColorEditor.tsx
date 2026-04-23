@@ -3,11 +3,10 @@
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
-import { Palette, Trash2, Upload, Image as ImageIcon, RotateCcw } from 'lucide-react';
+import { Palette, Trash2, Upload, Image as ImageIcon } from 'lucide-react';
 import ColorPicker from './ColorPicker';
-import ImageCropper from '@/components/shared/ImageCropper';
 import ConfirmRemovePopup from '@/features/configuration/shared/components/ConfirmRemovePopup';
-import { Theme, COLOR_ATTRIBUTES, TYPOGRAPHY_ATTRIBUTES, IMAGE_ATTRIBUTES } from '../types';
+import { Theme, COLOR_ATTRIBUTES, IMAGE_ATTRIBUTES } from '../types';
 
 interface ThemeColorEditorProps {
     selectedThemeId: string | null;
@@ -37,9 +36,6 @@ export default function ThemeColorEditor({
     isFactoryTheme,
 }: ThemeColorEditorProps) {
     const t = useTranslations();
-    const [croppingImage, setCroppingImage] = useState<string | null>(null);
-    const [isCropperOpen, setIsCropperOpen] = useState(false);
-    const [activeImageKey, setActiveImageKey] = useState<string | null>(null);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
     const handleFileChange = (key: string, e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,35 +43,15 @@ export default function ThemeColorEditor({
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
-                setCroppingImage(reader.result as string);
-                setIsCropperOpen(true);
-                setActiveImageKey(key);
+                onColorChange(key, reader.result as string);
             };
             reader.readAsDataURL(file);
         }
     };
 
-    const handleCropComplete = (croppedImage: string) => {
-        if (activeImageKey) {
-            onColorChange(activeImageKey, croppedImage);
-        }
-        setIsCropperOpen(false);
-        setCroppingImage(null);
-        setActiveImageKey(null);
-    };
-
-    const handleCropCancel = () => {
-        setIsCropperOpen(false);
-        setCroppingImage(null);
-        setActiveImageKey(null);
-    };
-
     if (!selectedThemeId) {
         return (
             <div className="bg-neutral-second rounded-[10px] p-12 flex flex-col items-center justify-center gap-3">
-                <div className="w-16 h-16 rounded-full bg-secondary-first flex items-center justify-center">
-                    <Palette size={28} className="text-secondary-third" strokeWidth={1.5} />
-                </div>
                 <p className="text-base font-medium text-neutral-first">{t('theme_config_select_to_edit')}</p>
                 <p className="text-sm text-secondary-third">{t('theme_config_select_to_edit_desc')}</p>
             </div>
@@ -84,11 +60,10 @@ export default function ThemeColorEditor({
 
     return (
         <div className="bg-neutral-second rounded-[10px] overflow-hidden">
-            {/* Theme header */}
-            <div className="px-6 py-5 border-b border-secondary-second flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="px-8 py-5 border-b border-secondary-second flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div className="flex items-center gap-4">
                     <div>
-                        <h2 className="text-base font-semibold text-neutral-first m-0">{selectedTheme?.theme_mnemonic}</h2>
+                        <h2 className="text-[18px] font-bold text-neutral-first m-0">{selectedTheme?.theme_mnemonic}</h2>
                     </div>
                 </div>
 
@@ -115,7 +90,6 @@ export default function ThemeColorEditor({
                 )}
             </div>
 
-            {/* Color pickers */}
             {attributesLoading ? (
                 <div className="p-6 flex flex-col gap-8">
                     <div>
@@ -138,9 +112,8 @@ export default function ThemeColorEditor({
                     </div>
                 </div>
             ) : (
-                <div className="p-6 flex flex-col gap-8">
+                <div className="p-8 flex flex-col gap-8">
 
-                    {/* Minimal Theme Preview */}
                     <div className="rounded-[10px] overflow-hidden border border-secondary-second shadow-sm bg-neutral-second">
                         <div className="h-1.5 flex">
                             {previewColors.map((c, i) => (
@@ -162,9 +135,8 @@ export default function ThemeColorEditor({
                         </div>
                     </div>
 
-                    {/* Primary Colors */}
                     <div>
-                        <h3 className="text-sm font-bold text-secondary-third uppercase tracking-wider mb-4 px-1">{t('theme_group_primary')}</h3>
+                        <h3 className="text-base font-semibold text-primary-second uppercase tracking-wider mb-4">{t('theme_group_primary')}</h3>
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                             {COLOR_ATTRIBUTES.filter(a => a.key.startsWith('primary')).map(attr => (
                                 <ColorPicker
@@ -179,9 +151,8 @@ export default function ThemeColorEditor({
                         </div>
                     </div>
 
-                    {/* Secondary Colors */}
                     <div>
-                        <h3 className="text-sm font-bold text-secondary-third uppercase tracking-wider mb-4 px-1">{t('theme_group_secondary')}</h3>
+                        <h3 className="text-base font-semibold text-primary-second uppercase tracking-wider mb-4">{t('theme_group_secondary')}</h3>
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                             {COLOR_ATTRIBUTES.filter(a => a.key.startsWith('secondary')).map(attr => (
                                 <ColorPicker
@@ -196,9 +167,8 @@ export default function ThemeColorEditor({
                         </div>
                     </div>
 
-                    {/* Neutral Colors */}
                     <div>
-                        <h3 className="text-sm font-bold text-secondary-third uppercase tracking-wider mb-4 px-1">{t('theme_group_neutral')}</h3>
+                        <h3 className="text-base font-semibold text-primary-second uppercase tracking-wider mb-4">{t('theme_group_neutral')}</h3>
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                             {COLOR_ATTRIBUTES.filter(a => a.key.startsWith('neutral')).map(attr => (
                                 <ColorPicker
@@ -213,35 +183,19 @@ export default function ThemeColorEditor({
                         </div>
                     </div>
 
-                    {/* Typography Section */}
-                    {/* <div>
-                        <h3 className="text-sm font-bold text-secondary-third uppercase tracking-wider mb-4 px-1">{t('theme_group_typography')}</h3>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                            {TYPOGRAPHY_ATTRIBUTES.map(attr => (
-                                <div key={attr.key} className="flex flex-col gap-2">
-                                    <span className="text-[13px] font-semibold text-neutral-first/80 px-1">{t(`theme_attr_${attr.key}_label`)}</span>
-                                        <input
-                                            type="text"
-                                            value={getColor(attr.key)}
-                                            onChange={e => onColorChange(attr.key, e.target.value)}
-                                            placeholder={t(`theme_attr_${attr.key}_desc`)}
-                                            disabled={isFactoryTheme}
-                                            className="w-full h-10 px-4 rounded-[10px] border border-secondary-second text-[14px] font-medium text-neutral-first bg-secondary-first/30 outline-none focus:border-primary-first transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                                        />
-                                </div>
-                            ))}
-                        </div>
-                    </div> */}
-
-                    {/* Images Section */}
                     <div>
-                        <h3 className="text-sm font-bold text-secondary-third uppercase tracking-wider mb-4 px-1">{t('theme_group_images')}</h3>
+                        <h3 className="text-base font-semibold text-primary-second uppercase tracking-wider mb-4">{t('theme_group_images')}</h3>
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                             {IMAGE_ATTRIBUTES.map(attr => {
                                 const val = getColor(attr.key);
                                 return (
                                     <div key={attr.key} className="flex flex-col gap-2">
-                                        <span className="text-[13px] font-semibold text-neutral-first/80 px-1">{t(`theme_attr_${attr.key}_label`)}</span>
+                                        <div className="flex flex-col px-1">
+                                            <span className="text-base font-medium text-neutral-first">
+                                                {t(`theme_attr_${attr.key}_label`)}
+                                                {attr.key === 'dashboard_image' && ' (1200 X 600 px)'}
+                                            </span>
+                                        </div>
                                         <div className="relative group w-full h-48 bg-secondary-second rounded-[10px] flex items-center justify-center overflow-hidden shrink-0">
                                             <input
                                                 type="file"
@@ -266,7 +220,6 @@ export default function ThemeColorEditor({
                                                 </div>
                                             )}
 
-                                            {/* Overlay Action Buttons */}
                                             {!isFactoryTheme && (
                                                 <div className="absolute inset-0 bg-neutral-first/40 flex flex-col items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                                                     <button
@@ -316,13 +269,6 @@ export default function ThemeColorEditor({
                 </div>
             )}
 
-            {isCropperOpen && croppingImage && (
-                <ImageCropper
-                    image={croppingImage}
-                    onCropComplete={handleCropComplete}
-                    onCancel={handleCropCancel}
-                />
-            )}
 
             {showDeleteConfirm && (
                 <ConfirmRemovePopup

@@ -77,7 +77,7 @@ export default function ColorPicker({ value, onChange, label, id, disabled = fal
                             alt="arrow"
                             width={14}
                             height={8}
-                            className={`transition-transform ${isOpen ? 'rotate-180' : ''}`}
+                            className={`h-auto transition-transform ${isOpen ? 'rotate-180' : ''}`}
                         />
                     )}
                 </div>
