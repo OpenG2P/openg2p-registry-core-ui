@@ -21,7 +21,7 @@ export default function TextAreaField({
 }: Props) {
     return (
         <div className={`flex flex-col ${className}`}>
-            <label className="text-[16px] font-medium text-black">
+            <label className="text-[16px] font-medium text-neutral-first">
                 {label}
             </label>
             <textarea
@@ -29,7 +29,7 @@ export default function TextAreaField({
                 onChange={(e) => onChange(e.target.value)}
                 rows={rows}
                 cols={cols}
-                className={`mt-2 w-full border border-[#F77F57] py-2 px-4 rounded-[10px] outline-none text-[16px] ${textareaClassName}`}
+                className={`mt-2 w-full border border-primary-second py-2 px-4 rounded-[10px] outline-none text-[16px] ${textareaClassName}`}
             />
         </div>
     );

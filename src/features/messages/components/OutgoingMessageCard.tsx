@@ -19,11 +19,11 @@ export default function OutgoingMessageCard({ message }: Props) {
     const topicsToShow = showAllTopics ? message.topic_names : message.topic_names.slice(0, 4);
 
     return (
-        <div className="rounded-[10px] bg-white px-10 py-8">
-            <div className="grid gap-6 grid-cols-1 md:grid-cols-3 text-[16px] text-[#00000080]">
+        <div className="rounded-[10px] bg-neutral-second px-10 py-8">
+            <div className="grid gap-6 grid-cols-1 md:grid-cols-3 text-[16px] text-neutral-first/50">
 
                 <div className="space-y-2">
-                    <h3 className="text-[16px] font-medium text-[#ED7C22] flex justify-between items-center">
+                    <h3 className="text-[16px] font-medium text-primary-second flex justify-between items-center">
                         <span>{t('source') || 'Source'}</span>
                         <Image
                             src="/images/messages/chat.png"
@@ -41,28 +41,28 @@ export default function OutgoingMessageCard({ message }: Props) {
                     <KeyValue label={t('source_change_request_id') || 'Source Change Request ID'} value={message.source_change_request_id} />
                 </div>
 
-                <div className="border-l-2 border-[#D9D9D9] pl-6 flex flex-col justify-between">
+                <div className="border-l-2 border-secondary-second pl-6 flex flex-col justify-between">
                     <div className='space-y-2'>
-                        <h3 className="text-[16px] font-medium text-[#ED7C22]">{t('topic_resolution_status') || 'Topic Resolution Status'}</h3>
+                        <h3 className="text-[16px] font-medium text-primary-second">{t('topic_resolution_status') || 'Topic Resolution Status'}</h3>
                         <KeyValue label={t('topic_resolution') || 'Topic Resolution'} value={message.topic_resolution} />
                         <KeyValue label={t('date_and_time') || 'Date & Time'} value={formatDateTime(message.topic_resolution_datetime)} />
                     </div>
                     <div className='space-y-2'>
-                        <h3 className="text-[16px] font-medium text-[#ED7C22]">{t('topics') || 'Topics'}</h3>
+                        <h3 className="text-[16px] font-medium text-primary-second">{t('topics') || 'Topics'}</h3>
                         <KeyValue label={t('number_of_topics_resolved') || 'Number of Topics Resolved'} value={message.number_of_topics_resolved.toString()} />
                     </div>
                 </div>
 
 
-                <div className="border-l-2 border-[#D9D9D9] pl-6 space-y-2">
-                    <h3 className="text-[16px] font-medium text-[#ED7C22]">{t('topic_names') || 'Topic Names'}</h3>
+                <div className="border-l-2 border-secondary-second pl-6 space-y-2">
+                    <h3 className="text-[16px] font-medium text-primary-second">{t('topic_names') || 'Topic Names'}</h3>
                     {topicsToShow.map((topic, idx) => (
                         <KeyValue key={idx} label={`${t('topic') || 'Topic'} ${idx + 1}`} value={topic} />
                     ))}
                     {message.topic_names.length > 4 && !showAllTopics && (
                         <Link
                             href={`/outgoing-messages}`}
-                            className="text-black/50 inline-flex items-center gap-1"
+                            className="text-neutral-first/50 inline-flex items-center gap-1"
                         >
                             {t('view_more') || "View More"}
                             <Image
@@ -82,9 +82,9 @@ export default function OutgoingMessageCard({ message }: Props) {
 
 function KeyValue({ label, value }: { label: string; value: string }) {
     return (
-        <div className="text-black text-[16px]">
-            <span className="text-black/50">{label}</span>
-            <span className="text-black/50 mx-1">:</span>
+        <div className="text-neutral-first text-[16px]">
+            <span className="text-neutral-first/50">{label}</span>
+            <span className="text-neutral-first/50 mx-1">:</span>
             <span className="font-semibold">{value}</span>
         </div>
     );

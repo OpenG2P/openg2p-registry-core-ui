@@ -16,10 +16,10 @@ export default function Field({
     if (layout === 'column') {
         return (
             <div className={`py-2 ${className}`}>
-                <span className="text-black/50 text-[16px] font-medium block mb-2">
+                <span className="text-neutral-first/50 text-[16px] font-medium block mb-2">
                     {label}
                 </span>
-                <div className="text-black text-[16px] font-normal bg-white px-4 py-2 rounded-[10px] border border-gray-100 break-all">
+                <div className="text-neutral-first text-[16px] font-normal bg-neutral-second px-4 py-2 rounded-[10px] border border-secondary-first break-all">
                     {value ?? '-'}
                 </div>
             </div>
@@ -28,10 +28,10 @@ export default function Field({
 
     return (
         <div className={`grid grid-cols-[1.2fr_2fr] gap-4 py-2 ${className}`}>
-            <span className="text-black/50 text-[16px] font-medium truncate" title={label}>
+            <span className="text-neutral-first/50 text-[16px] font-medium truncate" title={label}>
                 {label}
             </span>
-            <div className="text-black text-[16px] font-normal break-all">
+            <div className="text-neutral-first text-[16px] font-normal break-all">
                 {value ?? '-'}
             </div>
         </div>

@@ -87,14 +87,14 @@ export default function TopBar({
                     {showCapsule && capsule}
 
                     {showSubHeading && subHeading && (
-                        <div className="text-[20px] text-[#ED7C22] font-medium">
+                        <div className="text-[20px] text-primary-second font-medium">
                             {subHeading}
                         </div>
                     )}
                 </div>
                 <div className="flex items-center gap-2 sm:gap-4">
                     {showSearch && onSearch && (
-                        <div className="ml-auto shrink-0 border border-[#ED7C22] rounded-[10px] h-8.5 flex items-center bg-white">
+                        <div className="ml-auto shrink-0 border border-primary-second rounded-[10px] h-8.5 flex items-center bg-neutral-second">
                             <SearchBar
                                 placeholder={searchPlaceholder}
                                 category=""
@@ -119,12 +119,12 @@ export default function TopBar({
                     {showSecondaryButton && (
                         <button
                             onClick={onSecondaryButton}
-                            className="h-8.5 px-6 bg-[#F2BA1A] rounded-[10px] flex items-center gap-2 "
+                            className="h-8.5 px-6 bg-primary-first rounded-[10px] flex items-center gap-2 "
                         >
-                            <span className="text-[16px] font-medium text-black truncate overflow-hidden whitespace-nowrap">
+                            <span className="text-[16px] font-medium text-neutral-first truncate overflow-hidden whitespace-nowrap">
                                 {secondaryButtonText}
                             </span>
-                            <span className=" text-[20px] font-bold text-black leading-none">
+                            <span className=" text-[20px] font-bold text-neutral-first leading-none">
                                 +
                             </span>
                         </button>
@@ -133,12 +133,12 @@ export default function TopBar({
                     {showAddNewButton && (
                         <button
                             onClick={onAddNewButton}
-                            className="h-8.5 px-6 bg-[#F2BA1A] rounded-[10px] flex items-center gap-2 "
+                            className="h-8.5 px-6 bg-primary-first rounded-[10px] flex items-center gap-2 "
                         >
-                            <span className="text-[16px] font-medium text-black truncate overflow-hidden whitespace-nowrap">
+                            <span className="text-[16px] font-medium text-neutral-first truncate overflow-hidden whitespace-nowrap">
                                 {addNewButtonText}
                             </span>
-                            <span className=" text-[20px] font-bold text-black leading-none ">
+                            <span className=" text-[20px] font-bold text-neutral-first leading-none ">
                                 +
                             </span>
 

@@ -13,9 +13,9 @@ interface Props {
 
 function KeyValue({ label, value }: { label: string; value: string }) {
     return (
-        <div className="flex w-full overflow-hidden text-black font-normal leading-[26px]">
-            <span className="w-1/2 text-black/50 text-[16px] truncate" title={label}>{label} : </span>
-            <span className="w-1/2 pl-4 text-black font-normal text-[16px] truncate" title={value}>{value}</span>
+        <div className="flex w-full overflow-hidden text-neutral-first font-normal leading-[26px]">
+            <span className="w-1/2 text-neutral-first/50 text-[16px] truncate" title={label}>{label} : </span>
+            <span className="w-1/2 pl-4 text-neutral-first font-normal text-[16px] truncate" title={value}>{value}</span>
         </div>
     );
 }
@@ -25,16 +25,16 @@ export default function DeduplicationCard({ results, loading, type, t }: Props) 
 
     if (loading) {
         return (
-            <div className="rounded-[10px] bg-white border border-gray-200 px-10 py-8">
-                <p className="text-black/50 text-sm">{t("loading")}</p>
+            <div className="rounded-[10px] bg-neutral-second border border-gray-200 px-10 py-8">
+                <p className="text-neutral-first/50 text-sm">{t("loading")}</p>
             </div>
         );
     }
 
     if (!results.length) {
         return (
-            <div className="rounded-[10px] bg-white border border-gray-200 px-10 py-8">
-                <p className="text-black/50 text-sm">{t("no_duplicates_found")}</p>
+            <div className="rounded-[10px] bg-neutral-second border border-gray-200 px-10 py-8">
+                <p className="text-neutral-first/50 text-sm">{t("no_duplicates_found")}</p>
             </div>
         );
     }
@@ -71,11 +71,11 @@ export default function DeduplicationCard({ results, loading, type, t }: Props) 
                     <div
                         key={result.dedup_result_id}
                         className={`relative px-10 pt-8 pb-6 transition-all ease-in-out duration-200 ${expanded
-                            ? "bg-[#F3E6BC] border border-dashed border-[#ED7C22] z-10 rounded-t-[10px]"
-                            : "bg-white border border-gray-200 z-0 rounded-[10px]"
+                            ? "bg-secondary-first border border-dashed border-primary-second z-10 rounded-t-[10px]"
+                            : "bg-neutral-second border border-gray-200 z-0 rounded-[10px]"
                             }`}
                     >
-                        <h3 className="text-[20px] font-medium text-black mb-4 leading-none truncate" title={t("match") + "  #" + String(index + 1).padStart(2, "0")}>
+                        <h3 className="text-[20px] font-medium text-neutral-first mb-4 leading-none truncate" title={t("match") + "  #" + String(index + 1).padStart(2, "0")}>
                             {t("match") + "  #" + String(index + 1).padStart(2, "0")}
                         </h3>
 
@@ -94,19 +94,19 @@ export default function DeduplicationCard({ results, loading, type, t }: Props) 
                             )}
                         </div>
 
-                        <div className={`mt-4 mb-2 border-t ${expanded ? "border-[#F2BA1A]" : "border-[#D9D9D9]"}`} />
+                        <div className={`mt-4 mb-2 border-t ${expanded ? "border-primary-first" : "border-secondary-second"}`} />
 
                         {!expanded && fields.length > 0 && (
                             <button
                                 onClick={() => setExpandedIndex(index)}
-                                className="flex items-center gap-1 text-[14px] text-black/60 cursor-pointer"
+                                className="flex items-center gap-1 text-[14px] text-neutral-first/60 cursor-pointer"
                             >
                                 {t("view_more")} <Image src="/images/common/arrow_next_01.png" alt="more" width={14} height={14} className="rotate-90 opacity-[0.5]" />
                             </button>
                         )}
 
                         {expanded && fields.length > 0 && (
-                            <div className="absolute top-full left-[-1px] right-[-1px] z-20 bg-[#F3E6BC] border border-t-0 border-dashed border-[#ED7C22] rounded-b-[10px] px-10 pb-8">
+                            <div className="absolute top-full left-[-1px] right-[-1px] z-20 bg-secondary-first border border-t-0 border-dashed border-primary-second rounded-b-[10px] px-10 pb-8">
                                 <div className="grid grid-cols-1 md:grid-cols-3">
                                     {fields.map(([fieldKey, match], i) => (
                                         <div
@@ -114,11 +114,11 @@ export default function DeduplicationCard({ results, loading, type, t }: Props) 
                                             className={`space-y-0 py-2 ${i === 2 ? "" : "pr-10"} ${i > 0 ? "pl-10" : ""}`}
                                         >
                                             <div className={i > 0 ? "pl-6" : ""}>
-                                                <h4 className="text-[20px] font-medium text-black leading-none mb-1 truncate" title={t(fieldKey)}>
+                                                <h4 className="text-[20px] font-medium text-neutral-first leading-none mb-1 truncate" title={t(fieldKey)}>
                                                     {t(fieldKey)}
                                                 </h4>
                                             </div>
-                                            <div className={`space-y-0 ${i > 0 ? " border-l border-[#F2BA1A] pl-6" : ""}`}>
+                                            <div className={`space-y-0 ${i > 0 ? " border-l border-primary-first pl-6" : ""}`}>
                                                 <KeyValue label={t("incoming")} value={match.incoming} />
                                                 <KeyValue label={t("candidate")} value={match.candidate} />
                                                 <KeyValue
@@ -129,10 +129,10 @@ export default function DeduplicationCard({ results, loading, type, t }: Props) 
                                         </div>
                                     ))}
                                 </div>
-                                <hr className="border-t border-[#F2BA1A] mt-6 mb-4" />
+                                <hr className="border-t border-primary-first mt-6 mb-4" />
                                 <button
                                     onClick={() => setExpandedIndex(null)}
-                                    className="flex items-center gap-1 text-[14px] text-black/60 cursor-pointer"
+                                    className="flex items-center gap-1 text-[14px] text-neutral-first/60 cursor-pointer"
                                 >
                                     {t("view_less")} <Image src="/images/common/arrow_next_01.png" alt="less" width={14} height={14} className="-rotate-90 opacity-[0.5]" />
                                 </button>

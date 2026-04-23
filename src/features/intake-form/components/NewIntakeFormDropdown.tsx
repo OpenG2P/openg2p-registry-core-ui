@@ -25,10 +25,10 @@ export default function NewIntakeFormDropdown({
         <div ref={ref} className="relative mt-2 w-35 z-10">
             <button
                 onClick={() => setOpen(o => !o)}
-                className={`w-full flex items-center gap-2.5 px-4 py-1 bg-white border border-[#ED7C22] rounded-[10px] truncate ${open ? 'border-b-transparent rounded-b-none ' : ''}`}
+                className={`w-full flex items-center gap-2.5 px-4 py-1 bg-neutral-second border border-primary-second rounded-[10px] truncate ${open ? 'border-b-transparent rounded-b-none ' : ''}`}
                 title={t('new_intake')}
             >
-               <span className={`text-[16px] font-medium ${open ? 'text-[#1E1E1E]/50' : 'text-[#1E1E1E]'} truncate`}>
+               <span className={`text-[16px] font-medium ${open ? 'text-neutral-first/50' : 'text-neutral-first'} truncate`}>
                     {t('new_intake')}
                 </span>
 
@@ -42,10 +42,10 @@ export default function NewIntakeFormDropdown({
             </button>
 
             {open && (
-               <div className="absolute left-0 py-1 top-full w-full bg-white border border-[#ED7C22] border-t-0 rounded-b-[10px] overflow-hidden">
-                    <div className="h-px bg-[#ED7C22] my-1" />
+               <div className="absolute left-0 py-1 top-full w-full bg-neutral-second border border-primary-second border-t-0 rounded-b-[10px] overflow-hidden">
+                    <div className="h-px bg-primary-second my-1" />
                     {forms.length === 0 && (
-                        <div className="px-4 py-3 text-[16px] text-[#1E1E1E] truncate" title={t('no_options_available')}>
+                        <div className="px-4 py-3 text-[16px] text-neutral-first truncate" title={t('no_options_available')}>
                             {t('no_options_available')}
                         </div>
                     )}
@@ -76,7 +76,7 @@ function DropdownItem({
     return (
         <div
             onClick={onClick}
-            className="px-4 py-1 text-[16px] cursor-pointer hover:bg-[#F3F1E4] text-[#1E1E1E] font-medium truncate"
+            className="px-4 py-1 text-[16px] cursor-pointer hover:bg-secondary-first text-neutral-first font-medium truncate"
             title={label}
         >
             {label}

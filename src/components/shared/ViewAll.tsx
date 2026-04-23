@@ -16,10 +16,10 @@ interface ViewAllProps {
 export default function ViewAll({
     href,
     label = "View All",
-    bgColor = "#F5F5F5",
+    bgColor = "var(--color-secondary-first)",
     hoverBgColor,
     hoverTextColor,
-    textColor = "#000000"
+    textColor = "var(--color-neutral-first)"
 }: ViewAllProps) {
     const [isHovered, setIsHovered] = useState(false);
 

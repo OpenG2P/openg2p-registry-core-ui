@@ -49,7 +49,7 @@ export default function CustomDropdown({
     return (
         <div className="w-full">
             {label && (
-                <label className="text-[16px] font-medium text-black">
+                <label className="text-[16px] font-medium text-neutral-first">
                     {label}
                 </label>
             )}
@@ -57,7 +57,7 @@ export default function CustomDropdown({
             <div ref={ref} className="relative mt-2">
                 <div
                     onClick={() => !disabled && setOpen((prev) => !prev)}
-                    className={`flex items-center justify-between gap-2.5 px-4 py-2 bg-white border border-[#F77F57] rounded-[10px] truncate ${open ? 'border-b-transparent rounded-b-none' : ''}`}
+                    className={`flex items-center justify-between gap-2.5 px-4 py-2 bg-neutral-second border border-primary-second rounded-[10px] truncate ${open ? 'border-b-transparent rounded-b-none' : ''}`}
                 >
                     <span className="text-[16px] truncate">
                         {loading
@@ -70,12 +70,12 @@ export default function CustomDropdown({
                         alt="arrow"
                         width={14}
                         height={8}
-                        className={`transition-transform ${open ? 'rotate-180' : ''}`}
+                        className={`h-auto transition-transform ${open ? 'rotate-180' : ''}`}
                     />
                 </div>
 
                 {open && !disabled && (
-                    <div className="absolute top-full left-0 w-full bg-white border border-[#F77F57] border-t-0 rounded-b-[10px] z-20 max-h-60 overflow-auto">
+                    <div className="absolute top-full left-0 w-full bg-neutral-second border border-primary-second border-t-0 rounded-b-[10px] z-20 max-h-60 overflow-auto">
                         {loading ? (
                             <div className="px-4 py-1 text-[16px]">Loading...</div>
                         ) : options.length === 0 ? (
@@ -87,7 +87,7 @@ export default function CustomDropdown({
                                 <div
                                     key={opt.value}
                                     onClick={() => handleSelect(opt.value)}
-                                    className="px-4 py-1 text-[16px] cursor-pointer hover:bg-orange-50 truncate"
+                                    className="px-4 py-1 text-[16px] cursor-pointer hover:bg-secondary-first truncate"
                                 >
                                     {opt.label}
                                 </div>

@@ -124,7 +124,7 @@ export default function FilterDropdown({
     if (filterConfig.length === 0) {
         return (
             <div className="flex items-center justify-center p-10 min-w-110">
-                <p className="text-gray-500">{t("filter_loading")}</p>
+                <p className="text-neutral-first/50">{t("filter_loading")}</p>
             </div>
         );
     }
@@ -161,7 +161,7 @@ export default function FilterDropdown({
                 return (
                     <div className="relative w-full">
                         <select
-                            className="border border-[#D1D5DB] rounded-[10px] px-3 py-2 text-sm w-full appearance-none bg-white pr-10 focus:outline-none focus:border-gray-400 text-[#00000080] font-['Roboto'] font-normal h-10"
+                            className="border border-secondary-second rounded-[10px] px-3 py-2 text-sm w-full appearance-none bg-neutral-second pr-10 focus:outline-none focus:border-gray-400 text-neutral-first/50 font-['Roboto'] font-normal h-10"
                             value={value === true ? "true" : value === false ? "false" : ""}
                             onChange={e => {
                                 if (e.target.value === "") return setValue("");
@@ -178,7 +178,7 @@ export default function FilterDropdown({
                                 alt=""
                                 width={14}
                                 height={8}
-                                className="aspect-[7/4]"
+                                className="h-auto"
                             />
                         </div>
                     </div>
@@ -191,7 +191,7 @@ export default function FilterDropdown({
 
     return (
         <div
-            className="flex bg-white rounded-[10px] min-w-[500px] w-max min-h-[300px] font-['Roboto'] relative border border-[#F2BA1A]"
+            className="flex bg-neutral-second rounded-[10px] min-w-[500px] w-max min-h-[300px] font-['Roboto'] relative border border-primary-first"
             style={{ boxShadow: '0 0 8px 0 rgba(0, 0, 0, 0.25)' }}
         >
             {/* Close Button */}
@@ -208,7 +208,7 @@ export default function FilterDropdown({
             </button>
 
             {/* Left Sidebar */}
-            <div className="w-[148.9px] shrink-0 bg-[#D9D9D980] px-3 pt-[63.3px] pb-4 flex flex-col gap-2 rounded-l-[10px]">
+            <div className="w-[148.9px] shrink-0 bg-secondary-second/50 px-3 pt-[63.3px] pb-4 flex flex-col gap-2 rounded-l-[10px]">
                 {sortedConfig.map(filter => {
                     const isActive = filter.field_name === selectedFieldName;
                     return (
@@ -217,8 +217,8 @@ export default function FilterDropdown({
                             onClick={() => setSelectedFieldName(filter.field_name)}
                             className={`w-full text-left py-2 px-4 min-h-[40px] flex items-center text-[14px] font-medium leading-tight capitalize transition-colors truncate
     ${isActive
-                                    ? "bg-[#F2BA1A] text-black rounded-[20px]"
-                                    : "text-[#00000080] rounded-[20px]"}`}
+                                    ? "bg-primary-first text-neutral-first rounded-[20px]"
+                                    : "text-neutral-first/50 rounded-[20px]"}`}
                         >
                             {t(filter.display_label)}
                         </button>
@@ -228,7 +228,7 @@ export default function FilterDropdown({
 
             {/* Right Side Content */}
             <div className="flex-1 p-6 flex flex-col">
-                <div className="text-[18px] font-medium text-[#ED7C22] leading-[20px] mb-6">
+                <div className="text-[18px] font-medium text-primary-second leading-[20px] mb-6">
                     {selectedFilter && t("filter_search_by", { field: t(selectedFilter.display_label) })}
                 </div>
 
@@ -236,12 +236,12 @@ export default function FilterDropdown({
                     <div className="flex-1 space-y-4">
                         {/* Operator Label/Input */}
                         <div className="flex flex-col gap-1.5">
-                            <label className="text-[16px] font-normal text-black leading-none">
+                            <label className="text-[16px] font-normal text-neutral-first leading-none">
                                 {t("select_operator")}
                             </label>
                             <div className="relative w-full">
                                 <select
-                                    className="border border-[#D1D5DB] rounded-[10px] px-3 text-[16px] font-normal w-full appearance-none bg-white pr-10 outline-0 h-[36px] text-[#00000080]"
+                                    className="border border-secondary-second rounded-[10px] px-3 text-[16px] font-normal w-full appearance-none bg-neutral-second pr-10 outline-0 h-[36px] text-neutral-first/50"
                                     value={operator}
                                     onChange={e => setOperator(e.target.value)}
                                 >
@@ -258,6 +258,7 @@ export default function FilterDropdown({
                                         alt=""
                                         width={14}
                                         height={8}
+                                        className="h-auto"
                                     />
                                 </div>
                             </div>
@@ -265,14 +266,14 @@ export default function FilterDropdown({
 
                         {/* Name Label/Input */}
                         <div className="flex flex-col gap-1.5">
-                            <label className="text-[16px] font-normal text-black leading-none">
+                            <label className="text-[16px] font-normal text-neutral-first leading-none">
                                 {t(selectedFilter.display_label)}
                             </label>
                             {renderValueInput()}
                         </div>
 
                         {error && (
-                            <p className="text-xs text-red-500">
+                            <p className="text-xs text-toast-failed">
                                 {error}
                             </p>
                         )}
@@ -282,7 +283,7 @@ export default function FilterDropdown({
                 <div className="mt-4">
                     <button
                         onClick={applyFilter}
-                        className="bg-black text-white px-8 py-2 rounded-full text-[16px] font-medium h-10 flex items-center justify-center transition-opacity hover:opacity-90"
+                        className="bg-neutral-first text-neutral-second px-8 py-2 rounded-full text-[16px] font-medium h-10 flex items-center justify-center transition-opacity hover:opacity-90"
                     >
                         {t("apply")}
                     </button>

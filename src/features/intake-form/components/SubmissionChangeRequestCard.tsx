@@ -49,33 +49,33 @@ export default function SubmissionChangeRequestCard({
 
     if (loading) {
         return (
-            <div className="relative rounded-[10px] bg-[#EDC227] px-8 pt-4 pb-7 overflow-hidden animate-pulse">
+            <div className="relative rounded-[10px] bg-primary-first px-8 pt-4 pb-7 overflow-hidden animate-pulse">
                 <div className="flex items-center justify-between">
-                    <div className="h-6 w-40 rounded bg-black/20" />
-                    <div className="h-15 w-20 rounded-[20px] bg-black/20" />
+                    <div className="h-6 w-40 rounded bg-neutral-first/20" />
+                    <div className="h-15 w-20 rounded-[20px] bg-neutral-first/20" />
                 </div>
 
-                <div className="mt-3 h-3 w-56 rounded bg-black/20" />
+                <div className="mt-3 h-3 w-56 rounded bg-neutral-first/20" />
 
-                <div className="mt-25 h-10 w-32 rounded-full bg-black/20" />
+                <div className="mt-25 h-10 w-32 rounded-full bg-neutral-first/20" />
 
-                <div className="absolute bottom-4 right-4 h-30 w-30 rounded-full bg-black/20" />
+                <div className="absolute bottom-4 right-4 h-30 w-30 rounded-full bg-neutral-first/20" />
             </div>
         );
     }
 
     return (
-        <div className="relative rounded-[10px] bg-[#EDC227] px-8 pt-5 pb-8 overflow-hidden">
+        <div className="relative rounded-[10px] bg-primary-first px-8 pt-5 pb-8 overflow-hidden">
             <div className="flex items-center justify-between">
-                <h3 className="text-[24px] font-semibold text-black leading-none">
+                <h3 className="text-[24px] font-semibold text-neutral-first leading-none">
                     {t("change_request")}
                 </h3>
-                <div className="flex h-15 w-20 items-center justify-center rounded-[10px] border-3 border-white bg-[#EDC227] text-[34px] font-bold text-black">
+                <div className="flex h-15 w-20 items-center justify-center rounded-[10px] border-3 border-white bg-primary-first text-[34px] font-bold text-neutral-first">
                     {count}
                 </div>
             </div>
 
-            <p className="mt-3 text-[16px] text-black font-normal">
+            <p className="mt-3 text-[16px] text-neutral-first font-normal">
                 {count > 0
                     ? t("pending_changes")
                     : t("no_pending_changes")}
@@ -87,7 +87,7 @@ export default function SubmissionChangeRequestCard({
                 >
                     <ViewAll
                         href={href}
-                        bgColor="#D9D9D9"
+                        bgColor="var(--color-secondary-second)"
                         label={t("know_more")}
                     />
                 </div>

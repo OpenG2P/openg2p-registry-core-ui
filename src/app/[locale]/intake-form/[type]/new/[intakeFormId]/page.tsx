@@ -28,7 +28,7 @@ export default function NewIntakeFormSubmissionPage() {
     });
 
     return (
-        <div className="min-h-screen mx-auto bg-[#F3F1E4]">
+        <div className="min-h-screen mx-auto bg-secondary-first">
             <TopBar
                 breadcrumb={[
                     { 
@@ -46,7 +46,7 @@ export default function NewIntakeFormSubmissionPage() {
             <div className="mx-7.5">
                 {loading ? (
                     <div className="flex items-center justify-center py-20">
-                        <span className="text-gray-500">{t('loading')}</span>
+                        <span className="text-neutral-first/50">{t('loading')}</span>
                     </div>
                 ) : (
                     <MultiSectionAccordionForms

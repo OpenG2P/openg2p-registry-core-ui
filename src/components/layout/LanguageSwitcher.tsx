@@ -52,7 +52,7 @@ export default function LanguageSwitcher() {
                         />
                     </div>
 
-                    <span className="text-black text-[14px] font-normal leading-normal">
+                    <span className="text-neutral-first text-[14px] font-normal leading-normal">
                         {currentLanguage.label}
                     </span>
                 </div>
@@ -62,13 +62,13 @@ export default function LanguageSwitcher() {
                     alt="toggle"
                     width={14}
                     height={14}
-                    className={`transition-transform ${open ? 'rotate-180' : ''}`}
+                    className={`h-auto transition-transform ${open ? 'rotate-180' : ''}`}
                 />
             </button>
 
             {open && (
                 <div
-                    className="absolute top-full left-0 mt-2 min-w-35 ring-1 ring-black/10 rounded-[10px] bg-white overflow-hidden z-50"
+                    className="absolute top-full left-0 mt-2 min-w-35 ring-1 ring-black/10 rounded-[10px] bg-neutral-second overflow-hidden z-50"
                 >
                     {routing.locales.map((loc, index) => {
                         const lang = LANGUAGE_CONFIG[loc] || { label: loc, flag: LANGUAGE_CONFIG.en.flag };
@@ -85,10 +85,10 @@ export default function LanguageSwitcher() {
                                             alt={lang.label}
                                             width={27}
                                             height={18}
-                                            className="object-cover"
+                                            className="object-cover h-auto"
                                         />
                                     </div>
-                                    <span className="text-black text-[14px] font-normal leading-normal">{lang.label}</span>
+                                    <span className="text-neutral-first text-[14px] font-normal leading-normal">{lang.label}</span>
                                 </div>
 
                             </button>

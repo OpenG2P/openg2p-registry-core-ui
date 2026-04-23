@@ -18,7 +18,7 @@ export default function ViewButton({ label, onClick }: Props) {
             className="flex items-center hover:opacity-80 transition-opacity"
             title={label}
         >
-            <span className="font-medium text-[#1cc9b7]">{label}</span>
+            <span className="font-medium text-toast-success">{label}</span>
             <Image
                 src="/images/common/view.png"
                 alt={label}
