@@ -75,9 +75,6 @@ export default async function RootLayout({
     return (
         <html lang={locale}>
             <head>
-                {config.branding?.font_url && (
-                    <link rel="stylesheet" href={config.branding?.font_url} />
-                )}
                 <style
                     id="branding-css-variables"
                     suppressHydrationWarning

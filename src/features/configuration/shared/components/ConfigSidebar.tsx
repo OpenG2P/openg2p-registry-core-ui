@@ -76,8 +76,11 @@ export default function ConfigSidebar({ activeOption }: { activeOption: string }
                     return (
                         <div key={option.id} className="relative">
                             {isActive && (
-                                <div className="absolute inset-0 bg-primary-first rounded-[10px]" />
+                                <div
+                                    className="absolute inset-0 rounded-[10px] bg-neutral-second/30"
+                                />
                             )}
+
                             <div className="relative z-10">
                                 <Link
                                     href={option.path}
