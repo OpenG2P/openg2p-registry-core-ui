@@ -58,13 +58,13 @@ export default async function RootLayout({
     const config = clientSafeConfig.getAll();
     const cssVariables = `
         :root {
-            --color-primary-first: ${config.branding?.color1 ?? "#EABB13"};
-            --color-primary-second: ${config.branding?.color2 ?? "#ED7C22"};
-            --color-secondary-first: ${config.branding?.color3 ?? "#F3F1F4"};
-            --color-secondary-second: ${config.branding?.color4 ?? "#E1E1E1"};
-            --color-secondary-third: ${config.branding?.color5 ?? "#A1A1A1"};
-            --color-neutral-first: ${config.branding?.color6 ?? "#000000"};
-            --color-neutral-second: ${config.branding?.color7 ?? "#FFFFFF"};
+            --color-primary-first: ${config.branding?.primary_color_1 ?? "#EABB13"};
+            --color-primary-second: ${config.branding?.primary_color_2 ?? "#ED7C22"};
+            --color-secondary-first: ${config.branding?.secondary_color_1 ?? "#F3F1F4"};
+            --color-secondary-second: ${config.branding?.secondary_color_2 ?? "#E1E1E1"};
+            --color-secondary-third: ${config.branding?.secondary_color_3 ?? "#A1A1A1"};
+            --color-neutral-first: ${config.branding?.neutral_color_1 ?? "#000000"};
+            --color-neutral-second: ${config.branding?.neutral_color_2 ?? "#FFFFFF"};
             --toast-info-color: ${config.branding?.toast_color?.toast_info_color ?? "#007BFF"};
             --toast-success-color: ${config.branding?.toast_color?.toast_success_color ?? "#28A745"};
             --toast-warning-color: ${config.branding?.toast_color?.toast_warning_color ?? "#FFC107"};

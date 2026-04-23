@@ -21,7 +21,11 @@ const sidebarOptions: SidebarOption[] = [
         id: 'registry',
         label: 'registry',
         iconUrl: "/images/config/menu_registry_01.png",
-        path: '/configuration/registry'
+        path: '/configuration/registry/details',
+        subOptions: [
+            { id: 'registry-details', label: 'registry_details', path: '/configuration/registry/details' },
+            { id: 'registry-theme', label: 'registry_theme', path: '/configuration/registry/theme' },
+        ]
     },
     {
         id: 'registers',

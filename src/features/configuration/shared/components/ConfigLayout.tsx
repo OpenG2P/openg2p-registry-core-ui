@@ -5,6 +5,8 @@ import { ReactNode } from 'react';
 
 export type ConfigActiveOption =
     | "registry"
+    | "registry-details"
+    | "registry-theme"
     | "registers"
     | "data-models"
     | "ingest-configurations"
