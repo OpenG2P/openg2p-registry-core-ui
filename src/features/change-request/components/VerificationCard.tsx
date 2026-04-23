@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Verification } from "@/features/change-request/types/change-request";
 import { useTranslations } from "next-intl";
+import { formatDateTime } from "@/shared/utils/dateUtils";
 
 interface VerificationCardProps {
     verification: Verification;
@@ -29,7 +30,7 @@ export default function VerificationCard(props: VerificationCardProps) {
                         {verification.verified_by}
                     </span>
                     <span className="text-[14px] text-black/50 font-normal">
-                        {new Date(verification.verified_at).toLocaleString()}
+                        {formatDateTime(verification.verified_at)}
                     </span>
                 </div>
             </div>

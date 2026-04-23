@@ -15,7 +15,10 @@ export const extractFilesFromSection = (files?: unknown[]) => {
                 try {
                     const realFile = deserializeFile(value);
                     filesToUpload.push(realFile);
-                    fileLabels.push(`file_${index}`);
+
+                    // Use embedded label if present, otherwise fallback to index-based label
+                    const label = (value as any).label ||(value as any).name || `file_${index}`;
+                    fileLabels.push(label);
                 } catch (error) {
                     console.error('Failed to deserialize file:', error);
                 }
@@ -39,7 +42,8 @@ export const extractFilesFromSection = (files?: unknown[]) => {
  */
 export function normalizeEditActions(
     records: any[],
-    linkInternalRecordId = ""
+    linkInternalRecordId = "",
+    document_store_id?: string,
 ) {
     if (!Array.isArray(records)) return [];
 
@@ -54,6 +58,10 @@ export function normalizeEditActions(
         if (result.edit_action === "ADD") {
             result.link_internal_record_id = linkInternalRecordId;
             result.internal_record_id = "";
+        }
+
+        if (document_store_id && result.record_image_storage_id !== undefined) {
+            result.record_image_storage_id = document_store_id;
         }
 
         return result;

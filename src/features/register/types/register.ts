@@ -15,10 +15,10 @@ export interface RegisterRecord {
 }
 
 export interface PaginationResponse {
-  current_page?: number;
-  page_size?: number;
-  number_of_items?: number;
-  number_of_pages?: number;
+    current_page?: number;
+    page_size?: number;
+    number_of_items?: number;
+    number_of_pages?: number;
 }
 
 export interface RegisterRecordsApiResponse {
@@ -44,13 +44,15 @@ export interface TabSection {
     register_id: string;
     section_id: string;
     tab_id: string;
-    register_purpose:string,
-    register_relation:string,
+    register_purpose: string,
+    register_relation: string,
     section_mnemonic: string;
     section_description: string;
     documents_required: boolean;
     section_order: number;
     section_ui_schema: any; // UISchema
+    is_core_section?: boolean;
+    is_primary_section?: boolean;
 }
 
 export interface SectionData {

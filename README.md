@@ -1,2 +1,3 @@
-# openg2p-registry-gen2-ui
-UI Project for OpenG2P Registry Gen 2
+# OpenG2P Registry Staff Portal UI
+
+Staff-facing portal for managing OpenG2P social registry operations, built with Next.js and React.

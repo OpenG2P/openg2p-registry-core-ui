@@ -50,25 +50,28 @@ export default function ChangeRequestCard({
                 className="grid gap-6 grid-cols-4"
             >
                 <div className="space-y-2 text-[16px] text-[#00000080]">
-                    <h3 className="text-[24px] font-medium text-black">
+                    <h3
+                        className="text-[24px] font-medium text-black truncate"
+                        title={title}
+                    >
                         {title}
                     </h3>
 
-                    <div>
-                        {t('change_id')}:{' '}
-                        <span className="text-black font-medium">{changeRequest.change_request_id}</span>
+                    <div className="flex w-full overflow-hidden">
+                        <span className="w-1/2 truncate" title={t('change_id')}>{t('change_id')}:</span>
+                        <span className="w-1/2 pl-4 text-black font-medium truncate" title={changeRequest.change_request_id}>{changeRequest.change_request_id}</span>
                     </div>
 
-                    <div>
-                        {t('status')}:{' '}
-                        <span className={`font-medium ${statusClass}`}>
+                    <div className="flex w-full overflow-hidden">
+                        <span className="w-1/2 truncate" title={t('status')}>{t('status')}:</span>
+                        <span className={`w-1/2 pl-4 font-medium truncate ${statusClass}`} title={changeRequest.approval_status}>
                             {changeRequest.approval_status}
                         </span>
                     </div>
 
-                    <div>
-                        {t('change_date')}:{' '}
-                        <span className="text-black font-medium">
+                    <div className="flex w-full overflow-hidden">
+                        <span className="w-1/2 truncate" title={t('change_date')}>{t('change_date')}:</span>
+                        <span className="w-1/2 pl-4 text-black font-medium truncate" title={new Date(changeRequest.created_at).toLocaleDateString()}>
                             {new Date(changeRequest.created_at).toLocaleDateString()}
                         </span>
                     </div>
@@ -79,21 +82,21 @@ export default function ChangeRequestCard({
                         Verification
                     </h3>
                     <div className="border-l space-y-2 border-[#D9D9D9] pl-6">
-                        <div>
-                            {t('verifications_required')}:{' '}
-                            <span className="text-black font-medium">
+                        <div className="flex w-full overflow-hidden">
+                            <span className="w-1/2 truncate" title={t('verifications_required')}>{t('verifications_required')}:</span>
+                            <span className="w-1/2 pl-4 text-black font-medium truncate" title={changeRequest.no_of_verifications_required?.toString()}>
                                 {changeRequest.no_of_verifications_required}
                             </span>
                         </div>
-                        <div>
-                            {t('verifications_done')}:{' '}
-                            <span className="text-black font-medium">
+                        <div className="flex w-full overflow-hidden">
+                            <span className="w-1/2 truncate" title={t('verifications_done')}>{t('verifications_done')}:</span>
+                            <span className="w-1/2 pl-4 text-black font-medium truncate" title={changeRequest.no_of_verifications_done?.toString()}>
                                 {changeRequest.no_of_verifications_done}
                             </span>
                         </div>
-                        <div>
-                            {t('documents_attached')}:{' '}
-                            <span className="text-black font-medium">{documents.length}</span>
+                        <div className="flex w-full overflow-hidden">
+                            <span className="w-1/2 truncate" title={t('documents_attached')}>{t('documents_attached')}:</span>
+                            <span className="w-1/2 pl-4 text-black font-medium truncate" title={documents.length.toString()}>{documents.length}</span>
                         </div>
                     </div>
                 </div>

@@ -8,9 +8,13 @@ import { SectionChanges } from "@openg2p/registry-widgets";
 import { extractFilesFromSection, normalizeEditActions } from "../utils";
 import { toast } from "react-toastify";
 import { useTranslations } from "next-intl";
+import { useDocumentUpload } from "./useDocumentUpload";
+
+import { TabSection } from "@/features/register/types";
 
 export const useSectionSave = (
-    onChangeRequestCreated: () => void
+    onChangeRequestCreated: () => void,
+    tabSections?: TabSection[]
 ) => {
     const t = useTranslations();
     const { internalRecordId } = useRegisterRecord();
@@ -19,6 +23,7 @@ export const useSectionSave = (
 
     const { execute: submitChangeRequest } = useFetch();
     const { execute: uploadDocumentRequest } = useFetch();
+    const { uploadDocument } = useDocumentUpload(uploadDocumentRequest);
 
     const isSubmitting = useRef(false);
 
@@ -50,48 +55,52 @@ export const useSectionSave = (
                 const { filesToUpload, fileLabels } = extractFilesFromSection(files);
 
                 let documentsResponse: UploadedDocument[] = [];
+                let document_store_id: string | undefined;
+
+                // Profile pictures of register records
+                if (sectionChanges.image) {
+                    const uploadResult = await uploadDocument({
+                        file: sectionChanges.image,
+                        label: "profile_image_file",
+                    });
+
+                    if (uploadResult) {
+                        documentsResponse.push(uploadResult);
+                        document_store_id = uploadResult.document_store_id;
+
+                        toast.success(t("toast_profile_image_upload_success"), {
+                            position: "top-right",
+                            autoClose: 4000,
+                        });
+                    }
+                }
+
                 if (filesToUpload.length > 0) {
                     try {
-                        // Upload files one by one with their corresponding labels
-                        for (let i = 0; i < filesToUpload.length; i++) {
-                            const formData = new FormData();
-                            formData.append("document_label", fileLabels[i]);
-                            formData.append("documents", filesToUpload[i]);
-
-                            const uploadResult = await uploadDocumentRequest(
-                                "/api/change-request/upload-document",
-                                {
-                                    method: "POST",
-                                    body: formData,
-                                }
-                            );
-
-                            if (!uploadResult || uploadResult.length === 0) {
-                                toast.error(
-                                    t("toast_upload_failed_cr_not_created"),
-                                    {
-                                        position: "top-right",
-                                        autoClose: 6000,
-                                    }
-                                );
-                                return;
-                            }
-
-                            if (Array.isArray(uploadResult)) {
-                                documentsResponse.push(...uploadResult);
-                            } else if (uploadResult) {
-                                documentsResponse.push(uploadResult);
-                            }
-                        }
-
-                        toast.success(
-                            t("toast_upload_success", { count: documentsResponse.length }),
-                            {
-                                position: "top-right",
-                                autoClose: 4000,
-                            }
+                        const uploadPromises = filesToUpload.map((file, index) =>
+                            uploadDocument({
+                                file,
+                                label: fileLabels[index],
+                            })
                         );
 
+                        const results = await Promise.all(uploadPromises);
+                        const successfulUploads = results.filter((r): r is UploadedDocument => r !== null);
+
+                        if (successfulUploads.length === 0) {
+                            toast.error(t("toast_upload_failed_cr_not_created"), {
+                                position: "top-right",
+                                autoClose: 6000,
+                            });
+                            return;
+                        }
+
+                        documentsResponse.push(...successfulUploads);
+
+                        toast.success(t("toast_upload_success", { count: documentsResponse.length }), {
+                            position: "top-right",
+                            autoClose: 4000,
+                        });
                     } catch (error) {
                         toast.error(t("toast_upload_failed"), {
                             position: "top-right",
@@ -104,9 +113,17 @@ export const useSectionSave = (
 
                 const records = normalizeEditActions(
                     sectionChangeRecords,
-                    internalRecordId
+                    internalRecordId,
+                    document_store_id
                 )
-                const change_request_response = await submitChangeRequest(`/api/change-request/create`, {
+
+                const section = tabSections?.find(
+                    (section) => section.section_id === section_id
+                );
+
+                const endpoint = section?.is_core_section ? `/api/change-request/core-section/create` : `/api/change-request/create`;
+
+                const change_request_response = await submitChangeRequest(endpoint, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
@@ -141,15 +158,16 @@ export const useSectionSave = (
             } finally {
                 isSubmitting.current = false;
             }
-        },
-        [
+        },[
             currentRegister,
             internalRecordId,
             submitChangeRequest,
             activeTabId,
             uploadDocumentRequest,
+            uploadDocument,
             onChangeRequestCreated,
             t,
+            tabSections,
         ]
     );
 

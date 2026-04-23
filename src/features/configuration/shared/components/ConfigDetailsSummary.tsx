@@ -1,8 +1,6 @@
 import React from 'react';
-import { Pencil, Eye, Check, X, ChevronDown } from 'lucide-react';
+import { Pencil, Eye } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { CONFIGURATION_REGISTERS_ACTIONS } from '../utils/configurationRegisters.actions';
-import Can from '@/components/shared/Can';
 
 interface ConfigDetailsSummaryProps {
     title: string;

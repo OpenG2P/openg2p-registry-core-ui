@@ -107,15 +107,6 @@ export default function RegistersConfigView({
         setIsViewModalOpen(true);
     };
 
-
-    if (loading) {
-        return (
-            <div className="flex items-center justify-center p-8">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#ED7C22]"></div>
-            </div>
-        );
-    }
-
     return (
         <>
             <div className="mx-7.5 bg-white rounded-[10px] p-4 pt-8 overflow-hidden">
@@ -143,78 +134,90 @@ export default function RegistersConfigView({
                     </div>
 
                     {/* Data Rows */}
-                    {registers.map((register, index) => (
-                        <Link
-                            key={register.register_id}
-                            href={`/configuration/registers/${register.register_id}`}
-                            className="block -mx-8"
-                        >
-                            <div
-                                className={`grid grid-cols-6 gap-4 items-center px-16 h-15 transition-colors ${index % 2 === 0 ? 'bg-[#D9D9D940]' : 'bg-white'
-                                    } cursor-pointer`}
+                    {loading ? (
+                        <div className="flex justify-center items-center py-60">
+                            <div className="flex flex-col items-center gap-4">
+                                <img
+                                    src="/images/common/loading.gif"
+                                    alt="Loading"
+                                    className="w-12 h-12"
+                                />
+                            </div>
+                        </div>
+                    ) : (
+                        registers.map((register, index) => (
+                            <Link
+                                key={register.register_id}
+                                href={`/configuration/registers/${register.register_id}`}
+                                className="block -mx-8"
                             >
-                                <div className="text-base font-medium flex items-center">
-                                    {register.register_icon ? (
-                                        <Image
-                                            src={register.register_icon.startsWith('data:') ? register.register_icon : `data:image/png;base64,${register.register_icon}`}
-                                            alt={register.register_mnemonic}
-                                            width={40}
-                                            height={40}
-                                            className="rounded-md object-contain"
-                                        />
-                                    ) : (
-                                        <div className="w-8 h-8 bg-gray-300 border border-gray-200 rounded-md" />
-                                    )}
-                                </div>
-
-                                <div className="text-base font-medium truncate">
-                                    {register.register_mnemonic}
-                                </div>
-                                <div className="text-base font-medium truncate">
-                                    {register.master_register_mnemonic}
-                                </div>
-                                <div className="text-base font-medium">
-                                    {register.register_rank}
-                                </div>
-                                <div className="text-base font-medium truncate">
-                                    {register.register_purpose}
-                                </div>
-                                <div className="flex items-center gap-6">
-                                    <button
-                                        onClick={(e) => handleView(e, register)}
-                                        className="flex items-center text-[#1cc9b7] cursor-pointer hover:opacity-80 transition-opacity"
-                                        title={t('view')}
-                                    >
-                                        <span className="text-sm font-medium">{t('view')}</span>
-                                        <Image
-                                            src="/images/common/view.png"
-                                            alt={t('view')}
-                                            width={18}
-                                            height={18}
-                                            className="ml-2"
-                                        />
-                                    </button>
-                                    <Can action={CONFIGURATION_REGISTERS_ACTIONS.delete}>
-                                        <button
-                                            onClick={(e) => handleDelete(e, register)}
-                                            className="flex items-center text-[#1cc9b7] cursor-pointer hover:opacity-80 transition-opacity"
-                                            title={t('remove')}
-                                        >
-                                            <span className="tsmext- font-medium text-[#00000080]">{t('remove')}</span>
+                                <div
+                                    className={`grid grid-cols-6 gap-4 items-center px-16 h-15 transition-colors ${index % 2 === 0 ? 'bg-[#D9D9D940]' : 'bg-white'
+                                        } cursor-pointer`}
+                                >
+                                    <div className="text-base font-medium flex items-center">
+                                        {register.register_icon ? (
                                             <Image
-                                                src="/images/common/false_sign.png"
-                                                alt={t('remove')}
+                                                src={register.register_icon.startsWith('data:') ? register.register_icon : `data:image/png;base64,${register.register_icon}`}
+                                                alt={register.register_mnemonic}
+                                                width={40}
+                                                height={40}
+                                                className="rounded-md object-contain"
+                                            />
+                                        ) : (
+                                            <div className="w-8 h-8 bg-gray-300 border border-gray-200 rounded-md" />
+                                        )}
+                                    </div>
+
+                                    <div className="text-base font-medium truncate">
+                                        {register.register_mnemonic}
+                                    </div>
+                                    <div className="text-base font-medium truncate">
+                                        {register.master_register_mnemonic}
+                                    </div>
+                                    <div className="text-base font-medium">
+                                        {register.register_rank}
+                                    </div>
+                                    <div className="text-base font-medium truncate">
+                                        {register.register_purpose}
+                                    </div>
+                                    <div className="flex items-center gap-6">
+                                        <button
+                                            onClick={(e) => handleView(e, register)}
+                                            className="flex items-center text-[#1cc9b7] cursor-pointer hover:opacity-80 transition-opacity"
+                                            title={t('view')}
+                                        >
+                                            <span className="text-sm font-medium">{t('view')}</span>
+                                            <Image
+                                                src="/images/common/view.png"
+                                                alt={t('view')}
                                                 width={18}
                                                 height={18}
                                                 className="ml-2"
                                             />
                                         </button>
-                                    </Can>
-                                </div>
+                                        <Can action={CONFIGURATION_REGISTERS_ACTIONS.delete}>
+                                            <button
+                                                onClick={(e) => handleDelete(e, register)}
+                                                className="flex items-center text-[#1cc9b7] cursor-pointer hover:opacity-80 transition-opacity"
+                                                title={t('remove')}
+                                            >
+                                                <span className="tsmext- font-medium text-[#00000080]">{t('remove')}</span>
+                                                <Image
+                                                    src="/images/common/false_sign.png"
+                                                    alt={t('remove')}
+                                                    width={18}
+                                                    height={18}
+                                                    className="ml-2"
+                                                />
+                                            </button>
+                                        </Can>
+                                    </div>
 
-                            </div>
-                        </Link>
-                    ))}
+                                </div>
+                            </Link>
+                        ))
+                    )}
                 </div>
             </div>
 

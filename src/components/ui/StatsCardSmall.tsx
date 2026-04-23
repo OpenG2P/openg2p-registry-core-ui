@@ -115,7 +115,7 @@ const StatsCardSmall = ({
 
     return (
         <div className={`flex flex-col justify-between  transition-all duration-200 w-full rounded-[10px] px-7 py-6 ${active ? "border-black bg-black text-white" : "bg-[#E1E1E1] text-[#A1A1A1]"}`}>
-            <div className="pointer-events-none min-h-40">
+            <div className="min-h-40">
                 {/* count and title */}
                 <div className="mb-4 mt-4">
                     {loading ? (
@@ -125,10 +125,10 @@ const StatsCardSmall = ({
                         </div>
                     ) : (
                         <>
-                            <h2 className="font-roboto text-[45px] font-bold leading-none truncate overflow-hidden whitespace-nowrap">
+                            <h2 className="font-roboto text-[45px] font-bold leading-none truncate overflow-hidden whitespace-nowrap" title={totalCount}>
                                 {totalCount}
                             </h2>
-                            <h3 className="font-roboto text-[22px] font-bold leading-7 truncate overflow-hidden whitespace-nowrap">
+                            <h3 className="font-roboto text-[22px] font-bold leading-7 truncate overflow-hidden whitespace-nowrap" title={title}>
                                 {title}
                             </h3>
                         </>
@@ -159,12 +159,12 @@ const StatsCardSmall = ({
                                 )}
 
                                 {/* value */}
-                                <span className="font-roboto text-[16px] font-bold leading-7 truncate overflow-hidden whitespace-nowrap">
+                                <span className="font-roboto text-[16px] font-bold leading-7 truncate overflow-hidden whitespace-nowrap" title={row.value}>
                                     {row.value}
                                 </span>
 
                                 {/* label */}
-                                <span className="font-roboto text-[16px] font-medium leading-7 opacity-80 truncate overflow-hidden whitespace-nowrap">
+                                <span className="font-roboto text-[16px] font-medium leading-7 opacity-80 truncate overflow-hidden whitespace-nowrap" title={row.label}>
                                     {row.label}
                                 </span>
                             </li>

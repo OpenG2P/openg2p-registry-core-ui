@@ -40,7 +40,7 @@ export default function Error({
 
             {/* Main Content Card */}
             <div className="flex flex-1 items-center justify-start px-8">
-                <div className="w-full bg-white rounded-[28px] py-16 flex flex-col items-center text-center shadow-sm">
+                <div className="w-full bg-white rounded-[10px] py-36 flex flex-col items-center text-center">
                     <Image
                         src="/images/common/error.png"
                         width={200}

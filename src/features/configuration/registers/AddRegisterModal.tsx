@@ -34,6 +34,7 @@ export default function AddRegisterModal({ isOpen, onClose, onSuccess }: AddRegi
         register_icon: '',
         register_rank: '',
         register_purpose: 'REGISTER',
+        functional_id_generation_required: false,
     });
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -72,6 +73,7 @@ export default function AddRegisterModal({ isOpen, onClose, onSuccess }: AddRegi
                 register_icon: formData.register_icon,
                 register_rank: Number(formData.register_rank) || 0,
                 register_purpose: formData.register_purpose,
+                functional_id_generation_required: formData.functional_id_generation_required,
             })
         });
 
@@ -88,6 +90,7 @@ export default function AddRegisterModal({ isOpen, onClose, onSuccess }: AddRegi
                 register_icon: '',
                 register_rank: '',
                 register_purpose: 'REGISTER',
+                functional_id_generation_required: false,
             });
 
             if (onSuccess) onSuccess();
@@ -107,6 +110,7 @@ export default function AddRegisterModal({ isOpen, onClose, onSuccess }: AddRegi
             register_icon: '',
             register_rank: '',
             register_purpose: 'REGISTER',
+            functional_id_generation_required: false,
         });
         onClose();
     };
@@ -131,7 +135,7 @@ export default function AddRegisterModal({ isOpen, onClose, onSuccess }: AddRegi
                     <div className="space-y-4">
                         <div>
                             <label className="block text-sm font-semibold text-black mb-2">
-                                {t('registry_name')}
+                                {t('register_mnemonic')}
                             </label>
                             <input
                                 type="text"
@@ -144,7 +148,7 @@ export default function AddRegisterModal({ isOpen, onClose, onSuccess }: AddRegi
 
                         <div>
                             <label className="block text-sm font-semibold text-black mb-2">
-                                {t('description')}
+                                {t('register_description')}
                             </label>
                             <textarea
                                 placeholder={t('type_your_message')}
@@ -198,7 +202,7 @@ export default function AddRegisterModal({ isOpen, onClose, onSuccess }: AddRegi
 
 
 
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-3 gap-4">
                             <div>
                                 <label className="block text-sm font-semibold text-black mb-2">
                                     {t('deduplication_enabled')}
@@ -230,6 +234,23 @@ export default function AddRegisterModal({ isOpen, onClose, onSuccess }: AddRegi
                                     disabled={!formData.dedup_is_enabled}
                                     className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all text-gray-600 disabled:opacity-50 placeholder:text-gray-400"
                                 />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-semibold text-black mb-2">
+                                    {t('functional_id_generation_required')}
+                                </label>
+                                <div className="relative">
+                                    <select
+                                        value={formData.functional_id_generation_required ? "true" : "false"}
+                                        onChange={(e) => setFormData({ ...formData, functional_id_generation_required: e.target.value === "true" })}
+                                        className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all bg-white appearance-none cursor-pointer text-gray-600 pr-10"
+                                    >
+                                        <option value="true">{t('true')}</option>
+                                        <option value="false">{t('false')}</option>
+                                    </select>
+                                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
+                                </div>
                             </div>
                         </div>
 

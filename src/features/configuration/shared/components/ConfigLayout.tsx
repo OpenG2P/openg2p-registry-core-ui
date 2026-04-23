@@ -9,6 +9,12 @@ export type ConfigActiveOption =
     | "data-models"
     | "ingest-configurations"
     | "outgest-configurations"
+    | "ingest-key-paths"
+    | "ingest-semantic-patterns"
+    | "ingest-manage-subscription"
+    | "ingest-templates"
+    | "outgest-topics"
+    | "outgest-templates"
 
 interface ConfigLayoutProps {
     children: ReactNode;

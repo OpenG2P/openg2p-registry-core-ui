@@ -18,11 +18,13 @@ export async function POST(request: NextRequest) {
                 register_mnemonic: body.register_mnemonic,
                 register_description: body.register_description,
                 master_register_id: body.master_register_id,
-                dedup_is_enabled: body.dedup_is_enabled ?? false,
-                dedup_threshold_score: body.dedup_threshold_score ?? 0,
                 register_purpose: body.register_purpose,
-                register_rank: body.register_rank ?? 0,
+                register_rank: body.register_rank,
                 register_icon: body.register_icon,
+                dedup_is_enabled: body.dedup_is_enabled,
+                dedup_threshold_score: body.dedup_threshold_score,
+                functional_id_generation_required: body.functional_id_generation_required,
+
             },
         }),
     });

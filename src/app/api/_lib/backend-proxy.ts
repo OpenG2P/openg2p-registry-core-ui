@@ -18,6 +18,13 @@ interface BackendProxyOptions {
 	backend?: "default" | "masterdata";
 }
 
+const errorCodeMap: Record<string, number> = {
+	"G2P-AUT-401": 401,
+	"G2P-AUT-403": 403,
+	"G2P-AUT-404": 404,
+};
+
+
 export async function proxyToBackend({
 	req,
 	backend,
@@ -62,19 +69,30 @@ export async function proxyToBackend({
 		};
 
 		if (isFormData) {
+			const { 'content-type': _, 'Content-Type': __, ...cleanHeaders } =
+				auth.backendHeaders as Record<string, string>;
+
+			fetchOptions.headers = {
+				...cleanHeaders,
+			};
 			fetchOptions.body = body;
 			// When sending FormData, the browser/runtime will automatically set
 			// the Content-Type header with the correct boundary.
-		} else {
+		}
+		else {
 			const defaultPayloadBuilder: PayloadBuilder = (b) => ({
 				pagination_request: undefined,
 				request_payload: b
 			});
 
 			const payload = (buildPayload || defaultPayloadBuilder)(body);
-			// console.log(payload,"payload",targetEndpoint)
 
-			const backendRequest = createBackendRequest(payload);
+			const h = req.headers;
+			const host = h.get("x-forwarded-host") || h.get("host");
+			const proto = h.get("x-forwarded-proto") || "https";
+			const origin = h.get("origin") || `${proto}://${host}`;
+
+			const backendRequest = createBackendRequest(payload, origin);
 
 			fetchOptions.headers = {
 				...auth.backendHeaders,
@@ -84,16 +102,23 @@ export async function proxyToBackend({
 		}
 
 		const response = await fetch(backendUrl, fetchOptions);
-		// console.log(response,"**************************",backendUrl)
 
 		const backendResponse: BackendResponse = await response.json();
-		// console.log(backendResponse,"backendResponse",targetEndpoint)
-
 
 		if (backendResponse.response_header?.response_status === 'ERROR') {
+			const errorCode = backendResponse.response_header.response_error_code;
+
+			const status = errorCodeMap[errorCode] || 400;
+
 			return NextResponse.json(
-				{ error: backendResponse.response_header.response_error_message },
-				{ status: 400, headers: responseHeaders }
+				{
+					error: backendResponse.response_header.response_error_message,
+					code: errorCode,
+				},
+				{
+					status,
+					headers: responseHeaders,
+				}
 			);
 		}
 

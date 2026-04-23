@@ -10,6 +10,7 @@ import { RegisterProvider } from "@/context/RegisterContext";
 import { ToastContainer } from "react-toastify";
 import { Roboto } from 'next/font/google'
 import { clientSafeConfig } from '@/app/api/_lib/client-safe-config';
+import { getOrigin } from "@/app/api/_lib/get-origin";
 
 
 const roboto = Roboto({
@@ -24,9 +25,12 @@ export async function generateMetadata({
 }: {
     params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
+
+    const origin = await getOrigin();
+
     const { locale } = await params;
     const t = await getTranslations({ locale });
-    await clientSafeConfig.fetchRegistryConfig();
+    await clientSafeConfig.fetchRegistryConfig(origin);
     const config = clientSafeConfig.getAll();
 
     return {
@@ -45,9 +49,12 @@ export default async function RootLayout({
     children: React.ReactNode;
     params: Promise<{ locale: string }>;
 }) {
+
+    const origin = await getOrigin();
+
     const { locale } = await params;
     const messages = await getMessages();
-    await clientSafeConfig.fetchRegistryConfig();
+    await clientSafeConfig.fetchRegistryConfig(origin);
     const config = clientSafeConfig.getAll();
 
 

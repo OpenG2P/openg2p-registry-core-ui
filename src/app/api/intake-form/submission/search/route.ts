@@ -18,5 +18,9 @@ export async function POST(request: NextRequest) {
                 tab_id: body.tab_id ?? "",
             },
         }),
+        transformResponse: (responseBody) => ({
+            records: responseBody.response_payload,
+            pagination: responseBody.pagination_response,
+        }),
     });
 }

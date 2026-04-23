@@ -9,6 +9,8 @@ import { useMemo } from "react";
 import { useIntakeFormDocuments } from "../hooks/useIntakeFormDocuments";
 import { UploadedDocument } from "@/shared/types";
 import { formatDate } from "@/shared/utils/dateUtils";
+import Can from "@/components/shared/Can";
+import { INTAKE_FORM_ACTIONS } from "../utils/intakeForm.actions";
 
 const statusClassMap: Record<string, string> = {
     REJECTED: "text-red-500",
@@ -73,7 +75,7 @@ export default function SubmissionHeader({ submission, onActionComplete }: Props
             </div>
 
             {submission?.approval_status === "PENDING" && (
-                <>
+                <Can action={INTAKE_FORM_ACTIONS.approve}>
                     <div className="my-4 border-t-2 border-[#F2BA1A]" />
                     <div className="flex items-center gap-4">
                         <button
@@ -92,7 +94,7 @@ export default function SubmissionHeader({ submission, onActionComplete }: Props
                             {t('approve_submission')}
                         </button>
                     </div>
-                </>
+                </Can>
             )}
         </div>
     );
@@ -102,36 +104,36 @@ const InfoSection = ({ submission }: { submission?: IntakeSubmissionPayload | nu
     const t = useTranslations();
     return (
         <div className="space-y-2 text-[16px] text-[#00000080]">
-            <h3 className="text-[24px] font-medium text-black">
+            <h3 className="text-[24px] font-medium text-black truncate" title={t('intake_submission') || 'Intake Submission'}>
                 {t('intake_submission')}
             </h3>
-            <div>
-                {t('reference_no')}:{" "}
-                <span className="text-black font-medium">
+            <div className="flex w-full overflow-hidden">
+                <span className="w-1/2 truncate" title={t('reference_no')}>{t('reference_no')}:</span>
+                <span className="w-1/2 pl-4 text-black font-medium truncate" title={submission?.submission_reference ? String(submission.submission_reference) : ''}>
                     {submission?.submission_reference}
                 </span>
             </div>
-            <div>
-                {t('form_status')}:{" "}
-                <span className={`font-medium ${statusClassMap[submission?.intake_form_status || ''] ?? "text-gray-500"}`}>
+            <div className="flex w-full overflow-hidden">
+                <span className="w-1/2 truncate" title={t('form_status')}>{t('form_status')}:</span>
+                <span className={`w-1/2 pl-4 font-medium truncate ${statusClassMap[submission?.intake_form_status || ''] ?? "text-gray-500"}`} title={submission?.intake_form_status}>
                     {submission?.intake_form_status}
                 </span>
             </div>
-            <div>
-                {t('cr_status')}:{" "}
-                <span className="text-black font-medium">
+            <div className="flex w-full overflow-hidden">
+                <span className="w-1/2 truncate" title={t('cr_status')}>{t('cr_status')}:</span>
+                <span className="w-1/2 pl-4 text-black font-medium truncate" title={submission?.change_request_submission_status ?? t('n_a')}>
                     {submission?.change_request_submission_status ?? t('n_a')}
                 </span>
             </div>
-            <div>
-                {t('approval_status')}:{" "}
-                <span className={`font-medium ${statusClassMap[submission?.approval_status || ''] ?? "text-gray-500"}`}>
+            <div className="flex w-full overflow-hidden">
+                <span className="w-1/2 truncate" title={t('approval_status')}>{t('approval_status')}:</span>
+                <span className={`w-1/2 pl-4 font-medium truncate ${statusClassMap[submission?.approval_status || ''] ?? "text-gray-500"}`} title={submission?.approval_status}>
                     {submission?.approval_status}
                 </span>
             </div>
-            <div>
-                {t('created_date')}:{" "}
-                <span className="text-black font-medium">
+            <div className="flex w-full overflow-hidden">
+                <span className="w-1/2 truncate" title={t('created_date')}>{t('created_date')}:</span>
+                <span className="w-1/2 pl-4 text-black font-medium truncate" title={submission?.created_at ? formatDate(submission.created_at) : '--'}>
                     {submission?.created_at ? formatDate(submission.created_at) : '--'}
                 </span>
             </div>
@@ -154,23 +156,23 @@ const VerificationStats = ({
             </h3>
 
             <div className="border-l border-[#F2BA1A] pl-6 space-y-2">
-                <div>
-                    {t('verifications_required')}:{" "}
-                    <span className="text-black font-medium">
+                <div className="flex w-full overflow-hidden">
+                    <span className="w-1/2 truncate" title={t('verifications_required')}>{t('verifications_required')}:</span>
+                    <span className="w-1/2 pl-4 text-black font-medium truncate" title={submission?.no_of_verifications_required !== undefined ? String(submission.no_of_verifications_required) : ''}>
                         {submission?.no_of_verifications_required}
                     </span>
                 </div>
 
-                <div>
-                    {t('verifications_done')}:{" "}
-                    <span className="text-black font-medium">
+                <div className="flex w-full overflow-hidden">
+                    <span className="w-1/2 truncate" title={t('verifications_done')}>{t('verifications_done')}:</span>
+                    <span className="w-1/2 pl-4 text-black font-medium truncate" title={submission?.no_of_verifications_done !== undefined ? String(submission.no_of_verifications_done) : ''}>
                         {submission?.no_of_verifications_done}
                     </span>
                 </div>
 
-                <div>
-                    {t('documents_attached')}:{" "}
-                    <span className="text-black font-medium">
+                <div className="flex w-full overflow-hidden">
+                    <span className="w-1/2 truncate" title={t('documents_attached')}>{t('documents_attached')}:</span>
+                    <span className="w-1/2 pl-4 text-black font-medium truncate" title={documentsCount.toString()}>
                         {documentsCount}
                     </span>
                 </div>

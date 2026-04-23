@@ -39,20 +39,19 @@ const sidebarOptions: SidebarOption[] = [
         id: 'ingest-configurations',
         label: 'ingest_configurations',
         iconUrl: "/images/config/menu_ingest_config_04.png",
-        path: '/configuration/ingest-configurations',
+        path: '/configuration/ingest-configurations/key-paths',
         subOptions: [
-            { id: 'ingest-partners', label: 'ingest_partners', path: '/configuration/ingest-configurations/partners' },
-            { id: 'ingest-signature-paths', label: 'ingest_signature_paths', path: '/configuration/ingest-configurations/signature-paths' },
-            { id: 'ingest-symmetric-expressions', label: 'ingest_symmetric_expressions', path: '/configuration/ingest-configurations/symmetric-expressions' },
+            { id: 'ingest-key-paths', label: 'ingest_key_paths', path: '/configuration/ingest-configurations/key-paths' },
+            { id: 'ingest-semantic-patterns', label: 'ingest_semantic_patterns', path: '/configuration/ingest-configurations/semantic-patterns' },
+            { id: 'ingest-manage-subscription', label: 'ingest_manage_subscription', path: '/configuration/ingest-configurations/manage-subscription' },
             { id: 'ingest-templates', label: 'ingest_templates', path: '/configuration/ingest-configurations/templates' },
-            { id: 'ingest-payload-enrichers', label: 'ingest_payload_enrichers', path: '/configuration/ingest-configurations/payload-enrichers' },
         ]
     },
     {
         id: 'outgest-configurations',
         label: 'outgest_configurations',
         iconUrl: "/images/config/menu_outgest_config_05.png",
-        path: '/configuration/outgest-configurations',
+        path: '/configuration/outgest-configurations/topics',
         subOptions: [
             { id: 'outgest-topics', label: 'outgest_topics', path: '/configuration/outgest-configurations/topics' },
             { id: 'outgest-templates', label: 'outgest_templates', path: '/configuration/outgest-configurations/templates' },
@@ -80,10 +79,7 @@ export default function ConfigSidebar({ activeOption }: { activeOption: string }
                                     href={option.path}
                                     className="flex items-center px-4 py-3 cursor-pointer"
                                 >
-                                    <div className={`
-                    w-10 h-10 rounded-full flex items-center justify-center shrink-0
-                    ${isActive ? 'bg-black' : 'bg-white'}
-                  `}>
+                                    <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${isActive ? 'bg-black' : 'bg-white'} `}>
                                         <div className="flex items-center justify-center">
                                             <Image
                                                 src={option.iconUrl}
@@ -100,14 +96,14 @@ export default function ConfigSidebar({ activeOption }: { activeOption: string }
                                 </Link>
 
                                 {isActive && option.subOptions && (
-                                    <div className="ml-14 pb-4 pr-4 space-y-2">
+                                    <div className="ml-17 pr-4 pb-4 space-y-2">
                                         {option.subOptions.map((sub, index) => (
                                             <Link
                                                 key={sub.id}
                                                 href={sub.path}
-                                                className={`block text-sm transition-colors ${(activeOption === sub.id || (isParentActive && index === 0))
+                                                className={`block text-sm transition-colors ${activeOption === sub.id
                                                     ? 'text-white font-bold'
-                                                    : 'text-black font-medium hover:text-white'
+                                                    : 'text-black font-medium'
                                                     }`}
                                             >
                                                 {t(sub.label)}

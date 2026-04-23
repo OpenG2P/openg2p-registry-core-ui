@@ -69,7 +69,7 @@ const RegistryConfigurationPage = () => {
 				showAddNewButton={false}
 			/>
 
-			<div className="mx-8 mt-4 ">
+			<div className="mx-7.5">
 				{isEditing ? (
 					<EditRegistry
 						initialName={registryName}

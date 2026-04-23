@@ -3,8 +3,8 @@
 import { TopBar } from '@/components/shared';
 import { useRouter } from '@/i18n/navigation';
 import { useTranslations } from 'next-intl';
-import { SelectedFilters } from '@/features/filter/components';
-import { useFilters } from '@/features/filter/hooks/useFilters';
+// import { SelectedFilters } from '@/features/filter/components';
+// import { useFilters } from '@/features/filter/hooks/useFilters';
 import { useRegister } from '@/context/RegisterContext';
 import { useParams, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
@@ -34,22 +34,22 @@ export default function IntakeFormPage() {
 
     const { forms, loading: formsLoading } = useIntakeForms(registerId);
 
-    const {
-        appliedFilters,
-        filterConfig,
-        applyFilters,
-        removeFilter,
-        clearAllFilters,
-    } = useFilters("/api/register/filters");
+    // const {
+    //     appliedFilters,
+    //     filterConfig,
+    //     applyFilters,
+    //     removeFilter,
+    //     clearAllFilters,
+    // } = useFilters("/api/register/filters");
 
-    const { submissions, loading: submissionsLoading } = useIntakeSubmissions(registerId, {
+    const { submissions, paginationInfo, loading: submissionsLoading } = useIntakeSubmissions(registerId, {
         searchText: searchQuery,
         currentPage,
         pageSize,
     });
 
     const pagination = usePagination({
-        totalItems: submissions?.length || 0,
+        totalItems: paginationInfo?.number_of_items ?? 0,
         currentPage,
         pageSize,
         currentCount: submissions?.length || 0,
@@ -94,9 +94,9 @@ export default function IntakeFormPage() {
                 total={pagination.total}
                 onPrev={handlePreviousPage}
                 onNext={handleNextPage}
-                onApplyFilters={applyFilters}
-                appliedFilters={appliedFilters}
-                filterConfig={filterConfig}
+                // onApplyFilters={applyFilters}
+                // appliedFilters={appliedFilters}
+                // filterConfig={filterConfig}
                 showSearch
                 searchValue={searchQuery || ''}
                 searchPlaceholder={t('search')}

@@ -8,9 +8,9 @@ export function formatDateTime(value?: string | null) {
         safeValue = safeValue.replace(' ', 'T');
     }
 
-    // Some backends might not `include` Z for UTC
+    // Force UTC if no timezone info
     if (!safeValue.includes('Z') && !safeValue.includes('+')) {
-        // safeValue = `${safeValue}Z`;
+        safeValue = `${safeValue}Z`;
     }
 
     const date = new Date(safeValue);

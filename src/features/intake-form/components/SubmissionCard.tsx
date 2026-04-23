@@ -12,9 +12,9 @@ interface IntakeFormSubmissionCardProps {
 
 function KeyValue({ label, value }: { label: string; value: string }) {
     return (
-        <div className="text-black">
-            <span className=" font-normal text-black/50 text-[16px]">{label}: </span>
-            <span className="font-medium text-[16px]">{value}</span>
+        <div className="flex w-full overflow-hidden text-black leading-[26px]">
+            <span className="w-1/2 font-normal text-black/50 text-[16px] truncate" title={label}>{label}: </span>
+            <span className="w-1/2 pl-4 font-medium text-[16px] truncate" title={value}>{value}</span>
         </div>
     );
 }
@@ -30,10 +30,11 @@ export function IntakeFormSubmissionCard({ submission, registerType }: IntakeFor
                 <div className="grid gap-6 grid-cols-4 text-[16px] text-[#00000080]">
                     {/* Column 1: Reference */}
                     <div className="space-y-4">
-                        <h3 className="text-[16px] font-medium text-[#ED7C22]">
+                        <h3 className="text-[16px] font-medium text-[#ED7C22] truncate" title={submission.record_name}>
                             {submission.record_name}
                         </h3>
                         <div className="space-y-2">
+                            {/* here */}
                             <KeyValue label={t('submission_reference') || "Submission Reference"} value={String(submission.submission_reference)} />
                             <KeyValue label={t('tab_id') || "Tab ID"} value={submission.tab_id} />
                         </div>
@@ -56,7 +57,6 @@ export function IntakeFormSubmissionCard({ submission, registerType }: IntakeFor
                             <KeyValue label={t('submission_no_of_attempts') || "Submission No of Attempts"} value={String(submission.submission_no_of_attempts ?? 0)} />
                             <KeyValue label={t('no_of_verifications_required') || "No of Verifications Required"} value={String(submission.no_of_verifications_required)} />
                             <KeyValue label={t('no_of_verifications_done') || "No of Verifications Done"} value={String(submission.no_of_verifications_done)} />
-                            <div className="invisible" aria-hidden="true"><KeyValue label="Fake label" value="Fake value" /></div>
                         </div>
                     </div>
 
