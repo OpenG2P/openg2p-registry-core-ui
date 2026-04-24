@@ -23,7 +23,43 @@ class ClientSafeConfig {
         };
     }
 
+    async fetchLanguageConfigByCode(code: string, origin: string): Promise<LanguageConfig | undefined> {
+        const backendConfig = getBackendConfig();
+        const auth = await requireAuthFromCookies();
+        if (!auth) return undefined;
+
+        const languagesUrl = `${backendConfig.backendApiUrl}/registry-language/get_all_languages`;
+        const languagesRequest = createBackendRequest({
+            request_payload: {},
+            pagination_request: { current_page: 1, page_size: 100 }
+        }, origin);
+
+        try {
+            const response = await fetch(languagesUrl, {
+                method: "POST",
+                headers: {
+                    ...auth.backendHeaders,
+                },
+                body: JSON.stringify(languagesRequest),
+                next: {
+                    revalidate: 0,
+                    tags: ['languages-config']
+                }
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                const languages: LanguageConfig[] = data.response_body?.response_payload || [];
+                return languages.find(l => l.code === code);
+            }
+        } catch (error) {
+            console.error(`Failed to fetch language config for ${code}:`, error);
+        }
+        return undefined;
+    }
+
     async fetchRegistryConfig(origin: string): Promise<ClientSafeConfigShape> {
+
         const backendConfig = getBackendConfig();
         const backendUrl = `${backendConfig.backendApiUrl}/registry-config/get_registry_configuration`;
 

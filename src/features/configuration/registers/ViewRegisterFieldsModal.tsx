@@ -93,6 +93,14 @@ export default function ViewRegisterFieldsModal({
                         </div>
 
                         <div className="flex items-start">
+                            <div className="w-55 text-[16px] text-secondary-third font-medium shrink-0">{t('completion_score_required')}</div>
+                            <div className="flex-1 text-[16px] text-neutral-first font-bold">
+                                {data.completion_score_required ? t('true') : t('false')}
+                            </div>
+                        </div>
+
+
+                        <div className="flex items-start">
                             <div className="w-55 text-[16px] text-secondary-third font-medium shrink-0">{t('register_rank')}</div>
                             <div className="flex-1 text-[16px] text-neutral-first font-bold">
                                 {data.register_rank ?? 0}
