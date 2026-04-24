@@ -21,7 +21,12 @@ const sidebarOptions: SidebarOption[] = [
         id: 'registry',
         label: 'registry',
         iconUrl: "/images/config/menu_registry_01.png",
-        path: '/configuration/registry'
+        path: '/configuration/registry/details',
+        subOptions: [
+            { id: 'registry-details', label: 'registry_details', path: '/configuration/registry/details' },
+            { id: 'registry-themes', label: 'registry_theme', path: '/configuration/registry/themes' },
+            { id: 'registry-languages', label: 'registry_languages', path: '/configuration/registry/languages' },
+        ]
     },
     {
         id: 'registers',
@@ -62,7 +67,7 @@ const sidebarOptions: SidebarOption[] = [
 export default function ConfigSidebar({ activeOption }: { activeOption: string }) {
     const t = useTranslations();
     return (
-        <div className="w-full h-full bg-[#F2BA1A] rounded-r-[10px] p-4 pt-8">
+        <div className="w-full h-full bg-primary-first rounded-r-[10px] p-4 pt-8">
             <div className="space-y-2">
                 {sidebarOptions.map((option) => {
                     const isParentActive = activeOption === option.id;
@@ -72,14 +77,17 @@ export default function ConfigSidebar({ activeOption }: { activeOption: string }
                     return (
                         <div key={option.id} className="relative">
                             {isActive && (
-                                <div className="absolute inset-0 bg-[#ffd54c] rounded-[10px]" />
+                                <div
+                                    className="absolute inset-0 rounded-[10px] bg-neutral-second/30"
+                                />
                             )}
+
                             <div className="relative z-10">
                                 <Link
                                     href={option.path}
                                     className="flex items-center px-4 py-3 cursor-pointer"
                                 >
-                                    <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${isActive ? 'bg-black' : 'bg-white'} `}>
+                                    <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${isActive ? 'bg-neutral-first' : 'bg-neutral-second'} `}>
                                         <div className="flex items-center justify-center">
                                             <Image
                                                 src={option.iconUrl}
@@ -102,8 +110,8 @@ export default function ConfigSidebar({ activeOption }: { activeOption: string }
                                                 key={sub.id}
                                                 href={sub.path}
                                                 className={`block text-sm transition-colors ${activeOption === sub.id
-                                                    ? 'text-white font-bold'
-                                                    : 'text-black font-medium'
+                                                    ? 'text-neutral-second font-bold'
+                                                    : 'text-neutral-first font-medium'
                                                     }`}
                                             >
                                                 {t(sub.label)}

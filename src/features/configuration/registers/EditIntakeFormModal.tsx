@@ -85,17 +85,17 @@ export default function EditIntakeFormModal({
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
-            <div className="relative w-full max-w-200 max-h-150 bg-[#F2BA1A] rounded-[10px] overflow-hidden flex p-1">
-                <div className="flex-1 w-full bg-white p-10 relative rounded-[10px] overflow-y-auto">
+        <div className="fixed inset-0 bg-neutral-first/80 z-50 flex items-center justify-center p-4">
+            <div className="relative w-full max-w-200 max-h-150 bg-primary-first rounded-[10px] overflow-hidden flex p-1">
+                <div className="flex-1 w-full bg-neutral-second p-10 relative rounded-[10px] overflow-y-auto">
                     <button
                         onClick={handleCancel}
-                        className="absolute top-6 right-6 text-gray-400 hover:text-gray-600"
+                        className="absolute top-6 right-6 text-secondary-third hover:text-neutral-first/70"
                     >
                         <X size={40} strokeWidth={2} />
                     </button>
 
-                    <h2 className="text-2xl font-bold text-orange-500 mb-4">
+                    <h2 className="text-2xl font-bold text-primary-second mb-4">
                         {t('edit_intake_form')}
                     </h2>
 
@@ -114,7 +114,7 @@ export default function EditIntakeFormModal({
                                         intake_form_name: e.target.value
                                     })
                                 }
-                                className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57]"
+                                className="w-full px-4 py-2 border border-primary-second rounded-lg outline-none outline-1 outline-primary-second"
                             />
                         </div>
 
@@ -131,7 +131,7 @@ export default function EditIntakeFormModal({
                                         intake_form_description: e.target.value
                                     })
                                 }
-                                className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57]"
+                                className="w-full px-4 py-2 border border-primary-second rounded-lg outline-none outline-1 outline-primary-second"
                             />
                         </div>
 
@@ -149,7 +149,7 @@ export default function EditIntakeFormModal({
                                         no_of_verifications_required: Number(e.target.value)
                                     })
                                 }
-                                className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57]"
+                                className="w-full px-4 py-2 border border-primary-second rounded-lg outline-none outline-1 outline-primary-second"
                             />
                         </div>
 
@@ -186,14 +186,14 @@ export default function EditIntakeFormModal({
                         <div className="flex gap-4 pt-6">
                             <button
                                 onClick={handleCancel}
-                                className="px-12 py-2.5 bg-gray-300 rounded-[10px]"
+                                className="px-12 py-2.5 bg-secondary-third rounded-[10px]"
                             >
                                 {t('cancel')}
                             </button>
 
                             <button
                                 onClick={handleSubmit}
-                                className="px-12 py-2.5 bg-black text-white rounded-[10px]"
+                                className="px-12 py-2.5 bg-neutral-first text-neutral-second rounded-[10px]"
                             >
                                 {t('update')}
                             </button>

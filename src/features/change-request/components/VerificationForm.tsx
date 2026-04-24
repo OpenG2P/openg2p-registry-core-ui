@@ -25,7 +25,7 @@ export default function VerificationForm({ onSubmit, onClose }: Props) {
     };
 
     return (
-        <div className="relative border border-[#F2BA1A] rounded-[10px] p-6 text-sm space-y-3 bg-white">
+        <div className="relative border border-primary-first rounded-[10px] p-6 text-sm space-y-3 bg-neutral-second">
             <button
                 onClick={onClose}
                 className="absolute top-4 right-4"
@@ -39,7 +39,7 @@ export default function VerificationForm({ onSubmit, onClose }: Props) {
                 />
             </button>
 
-            <div className="font-semibold text-black/50">
+            <div className="font-semibold text-neutral-first/50">
                 {t("new_verification")}
             </div>
 
@@ -53,18 +53,18 @@ export default function VerificationForm({ onSubmit, onClose }: Props) {
                     />
                 </div>
                 <div className="flex flex-col">
-                    <span className="text-[20px] font-medium text-black">
+                    <span className="text-[20px] font-medium text-neutral-first">
                         {user.name}
-                        <span className="ml-2 text-[14px] text-black/50">{t("you")}</span>
+                        <span className="ml-2 text-[14px] text-neutral-first/50">{t("you")}</span>
                     </span>
-                    <span className="text-[14px] text-black/50">
+                    <span className="text-[14px] text-neutral-first/50">
                         {new Date().toLocaleString()}
                     </span>
                 </div>
             </div>
 
             <div>
-                <div className="text-[14px] font-medium text-black/50 mb-1">
+                <div className="text-[14px] font-medium text-neutral-first/50 mb-1">
                     {t("message")}
                 </div>
                 <textarea
@@ -92,7 +92,7 @@ export default function VerificationForm({ onSubmit, onClose }: Props) {
 
                 <button
                     onClick={handleSubmit}
-                    className="px-4 py-1.5 text-sm rounded-xl bg-black text-white"
+                    className="px-4 py-1.5 text-sm rounded-xl bg-neutral-first text-neutral-second"
                 >
                     {t("submit")}
                 </button>
@@ -116,13 +116,13 @@ const CheckboxOption = ({
     >
         <input type="checkbox" checked={checked} readOnly className="hidden" />
         <div
-            className={`w-6 h-6 border rounded flex items-center justify-center ${checked ? "border-[#ED7C22]" : "border-gray-300"
+            className={`w-6 h-6 border rounded flex items-center justify-center ${checked ? "border-primary-second" : "border-secondary-third"
                 }`}
         >
             {checked && (
                 <Image src="/images/common/tick.png" alt="tick" width={16} height={16} />
             )}
         </div>
-        <span className="text-gray-700">{label}</span>
+        <span className="text-neutral-first">{label}</span>
     </label>
 );

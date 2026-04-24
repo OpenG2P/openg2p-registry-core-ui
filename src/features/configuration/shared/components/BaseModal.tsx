@@ -24,10 +24,10 @@ export default function BaseModal({
     secondaryActionLabel,
 }: BaseModalProps) {
     return (
-        <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center">
-            <div className={`relative w-full ${maxWidth} bg-white rounded-[10px] border-5 border-[#F2BA1A] px-8 py-6`}>
+        <div className="fixed inset-0 bg-neutral-first/80 z-50 flex items-center justify-center">
+            <div className={`relative w-full ${maxWidth} bg-neutral-second rounded-[10px] border-5 border-primary-first px-8 py-6`}>
                 <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-[24px] text-[#ED7C22] font-medium">
+                    <h2 className="text-[24px] text-primary-second font-medium">
                         {title}
                     </h2>
 
@@ -45,7 +45,7 @@ export default function BaseModal({
                         {!hideCancel && (
                             <button
                                 onClick={onClose}
-                                className="px-6 py-2 bg-[#DDDDDD] text-[#00000080] text-[16px] font-bold rounded-[10px]"
+                                className="px-6 py-2 bg-secondary-second text-neutral-first/50 text-[16px] font-bold rounded-[10px]"
                             >
                                 {secondaryActionLabel || 'Cancel'}
                             </button>
@@ -54,7 +54,7 @@ export default function BaseModal({
                         {primaryActionLabel && onPrimaryAction && (
                             <button
                                 onClick={onPrimaryAction}
-                                className="px-6 py-2 bg-black text-white text-[16px] font-bold rounded-[10px]"
+                                className="px-6 py-2 bg-neutral-first text-neutral-second text-[16px] font-bold rounded-[10px]"
                             >
                                 {primaryActionLabel}
                             </button>

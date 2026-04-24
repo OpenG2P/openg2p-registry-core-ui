@@ -11,8 +11,8 @@ export default function VerificationCard(props: VerificationCardProps) {
     const { verification } = props;
     const t = useTranslations();
     return (
-        <div className="bg-[#E0E0E0] rounded-[10px] p-6 space-y-3">
-            <div className="font-normal text-[14px] text-black/50">
+        <div className="bg-secondary-second rounded-[10px] p-6 space-y-3">
+            <div className="font-normal text-[14px] text-neutral-first/50">
                 {t("verified_by")}
             </div>
 
@@ -26,20 +26,20 @@ export default function VerificationCard(props: VerificationCardProps) {
                     />
                 </div>
                 <div className="flex flex-col">
-                    <span className="text-[20px] font-medium text-black">
+                    <span className="text-[20px] font-medium text-neutral-first">
                         {verification.verified_by}
                     </span>
-                    <span className="text-[14px] text-black/50 font-normal">
+                    <span className="text-[14px] text-neutral-first/50 font-normal">
                         {formatDateTime(verification.verified_at)}
                     </span>
                 </div>
             </div>
 
             <div>
-                <div className="text-[14px] font-normal text-black/50 mb-1">
+                <div className="text-[14px] font-normal text-neutral-first/50 mb-1">
                     {t("message")}
                 </div>
-                <div className="text-[16px] text-black font-normal">
+                <div className="text-[16px] text-neutral-first font-normal">
                     {verification.verification_observations}
                 </div>
             </div>
@@ -65,15 +65,15 @@ const StatusIndicator = ({
     label: string;
     isActive: boolean;
 }) => (
-    <div className="flex items-center gap-2 text-gray-700">
+    <div className="flex items-center gap-2 text-neutral-first">
         <div
-            className={`w-6 h-6 border rounded flex items-center justify-center ${isActive ? "border-[#ED7C22] bg-white" : "border-gray-300 bg-white"
+            className={`w-6 h-6 border rounded flex items-center justify-center ${isActive ? "border-primary-second bg-neutral-second" : "border-secondary-third bg-neutral-second"
                 }`}
         >
             {isActive && (
                 <Image src="/images/common/tick.png" alt="tick" width={16} height={16} />
             )}
         </div>
-        <span className="text-[14px] font-medium text-black">{label}</span>
+        <span className="text-[14px] font-medium text-neutral-first">{label}</span>
     </div>
 );

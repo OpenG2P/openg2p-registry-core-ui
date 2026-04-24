@@ -109,22 +109,22 @@ export default function AddSectionModal({ isOpen, onClose, onSuccess }: AddSecti
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 bg-black/80  z-50 flex items-center justify-center p-4">
-            <div className="relative w-full max-w-200 max-h-[95vh] bg-[#F2BA1A] rounded-[10px] overflow-hidden flex p-1">
+        <div className="fixed inset-0 bg-neutral-first/80  z-50 flex items-center justify-center p-4">
+            <div className="relative w-full max-w-200 max-h-[95vh] bg-primary-first rounded-[10px] overflow-hidden flex p-1">
 
-                <div className="flex-1 w-full bg-white p-10 relative rounded-[10px] overflow-y-auto">
+                <div className="flex-1 w-full bg-neutral-second p-10 relative rounded-[10px] overflow-y-auto">
                     <button
                         onClick={handleCancel}
-                        className="absolute top-6 right-6 text-gray-400 hover:text-gray-600 transition-colors"
+                        className="absolute top-6 right-6 text-secondary-third hover:text-neutral-first/70 transition-colors"
                     >
                         <X size={40} strokeWidth={2} />
                     </button>
 
-                    <h2 className="text-2xl font-bold text-orange-500 mb-4">{t('add_new_section')}</h2>
+                    <h2 className="text-2xl font-bold text-primary-second mb-4">{t('add_new_section')}</h2>
 
                     <div className="space-y-4">
                         <div>
-                            <label className="block text-sm font-semibold text-black mb-1">
+                            <label className="block text-sm font-semibold text-neutral-first mb-1">
                                 {t('section_name')}
                             </label>
                             <div className="relative">
@@ -133,7 +133,7 @@ export default function AddSectionModal({ isOpen, onClose, onSuccess }: AddSecti
                                     placeholder={t('enter_section_name')}
                                     value={formData.section_mnemonic}
                                     onChange={(e) => setFormData({ ...formData, section_mnemonic: e.target.value })}
-                                    className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all text-gray-600 placeholder:text-gray-400"
+                                    className="w-full px-4 py-2 border border-primary-second rounded-lg outline-none outline-1 outline-primary-second transition-all text-neutral-first/70 placeholder:text-secondary-third"
                                 />
                             </div>
                         </div>
@@ -141,7 +141,7 @@ export default function AddSectionModal({ isOpen, onClose, onSuccess }: AddSecti
 
 
                         <div>
-                            <label className="block text-sm font-semibold text-black mb-2">
+                            <label className="block text-sm font-semibold text-neutral-first mb-2">
                                 {t('description')}
                             </label>
                             <textarea
@@ -149,13 +149,13 @@ export default function AddSectionModal({ isOpen, onClose, onSuccess }: AddSecti
                                 value={formData.section_description}
                                 onChange={(e) => setFormData({ ...formData, section_description: e.target.value })}
                                 rows={2}
-                                className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all resize-none text-gray-600 placeholder:text-gray-400"
+                                className="w-full px-4 py-2 border border-primary-second rounded-lg outline-none outline-1 outline-primary-second transition-all resize-none text-neutral-first/70 placeholder:text-secondary-third"
                             />
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <label className="block text-sm font-semibold text-black mb-2">
+                                <label className="block text-sm font-semibold text-neutral-first mb-2">
                                     {t('no_of_verifications_required')}
                                 </label>
                                 <input
@@ -163,74 +163,74 @@ export default function AddSectionModal({ isOpen, onClose, onSuccess }: AddSecti
                                     placeholder="e.g. 0"
                                     value={formData.no_of_verifications_required}
                                     onChange={(e) => setFormData({ ...formData, no_of_verifications_required: e.target.value })}
-                                    className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all text-gray-600 placeholder:text-gray-400"
+                                    className="w-full px-4 py-2 border border-primary-second rounded-lg outline-none outline-1 outline-primary-second transition-all text-neutral-first/70 placeholder:text-secondary-third"
                                 />
                             </div>
 
                             <div>
-                                <label className="block text-sm font-semibold text-black mb-2">
+                                <label className="block text-sm font-semibold text-neutral-first mb-2">
                                     {t('documents_required')}
                                 </label>
                                 <div className="relative">
                                     <select
                                         value={formData.documents_required ? "true" : "false"}
                                         onChange={(e) => setFormData({ ...formData, documents_required: e.target.value === "true" })}
-                                        className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all bg-white appearance-none cursor-pointer text-gray-600 pr-10"
+                                        className="w-full px-4 py-2 border border-primary-second rounded-lg outline-none outline-1 outline-primary-second transition-all bg-neutral-second appearance-none cursor-pointer text-neutral-first/70 pr-10"
                                     >
                                         <option value="true">{t('true')}</option>
                                         <option value="false">{t('false')}</option>
                                     </select>
-                                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
+                                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-secondary-third pointer-events-none" size={20} />
                                 </div>
                             </div>
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <label className="block text-sm font-semibold text-black mb-2">
+                                <label className="block text-sm font-semibold text-neutral-first mb-2">
                                     {t('auto_approval')}
                                 </label>
                                 <div className="relative">
                                     <select
                                         value={formData.auto_approval ? "true" : "false"}
                                         onChange={(e) => setFormData({ ...formData, auto_approval: e.target.value === "true" })}
-                                        className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all bg-white appearance-none cursor-pointer text-gray-600 pr-10"
+                                        className="w-full px-4 py-2 border border-primary-second rounded-lg outline-none outline-1 outline-primary-second transition-all bg-neutral-second appearance-none cursor-pointer text-neutral-first/70 pr-10"
                                     >
                                         <option value="true">{t('true')}</option>
                                         <option value="false">{t('false')}</option>
                                     </select>
-                                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
+                                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-secondary-third pointer-events-none" size={20} />
                                 </div>
                             </div>
 
                             <div>
-                                <label className="block text-sm font-semibold text-black mb-2">
+                                <label className="block text-sm font-semibold text-neutral-first mb-2">
                                     {t('is_list')}
                                 </label>
                                 <div className="relative">
                                     <select
                                         value={formData.is_list ? "true" : "false"}
                                         onChange={(e) => setFormData({ ...formData, is_list: e.target.value === "true" })}
-                                        className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all bg-white appearance-none cursor-pointer text-gray-600 pr-10"
+                                        className="w-full px-4 py-2 border border-primary-second rounded-lg outline-none outline-1 outline-primary-second transition-all bg-neutral-second appearance-none cursor-pointer text-neutral-first/70 pr-10"
                                     >
                                         <option value="true">{t('true')}</option>
                                         <option value="false">{t('false')}</option>
                                     </select>
-                                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
+                                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-secondary-third pointer-events-none" size={20} />
                                 </div>
                             </div>
                         </div>
 
                         <div className="grid grid-cols-2 gap-4" >
                             <div>
-                                <label className="block text-sm font-semibold text-black mb-1">
+                                <label className="block text-sm font-semibold text-neutral-first mb-1">
                                     {t('section_register')}
                                 </label>
                                 <div className="relative">
                                     <select
                                         value={formData.section_register_id}
                                         onChange={(e) => setFormData({ ...formData, section_register_id: e.target.value })}
-                                        className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all bg-white appearance-none cursor-pointer text-gray-600 pr-10"
+                                        className="w-full px-4 py-2 border border-primary-second rounded-lg outline-none outline-1 outline-primary-second transition-all bg-neutral-second appearance-none cursor-pointer text-neutral-first/70 pr-10"
                                         disabled={registersLoading}
                                     >
                                         <option value="">{t('select_register')}</option>
@@ -241,31 +241,31 @@ export default function AddSectionModal({ isOpen, onClose, onSuccess }: AddSecti
                                         ))}
 
                                     </select>
-                                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
+                                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-secondary-third pointer-events-none" size={20} />
                                 </div>
                             </div>
 
                             <div>
-                                <label className="block text-sm font-semibold text-black mb-2">
+                                <label className="block text-sm font-semibold text-neutral-first mb-2">
                                     {t('is_primary_section')}
                                 </label>
                                 <div className="relative">
                                     <select
                                         value={formData.is_primary_section ? "true" : "false"}
                                         onChange={(e) => setFormData({ ...formData, is_primary_section: e.target.value === "true" })}
-                                        className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all bg-white appearance-none cursor-pointer text-gray-600 pr-10"
+                                        className="w-full px-4 py-2 border border-primary-second rounded-lg outline-none outline-1 outline-primary-second transition-all bg-neutral-second appearance-none cursor-pointer text-neutral-first/70 pr-10"
                                     >
                                         <option value="true">{t('true')}</option>
                                         <option value="false">{t('false')}</option>
                                     </select>
-                                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
+                                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-secondary-third pointer-events-none" size={20} />
                                 </div>
                             </div>
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <label className="block text-sm font-semibold text-black mb-2">
+                                <label className="block text-sm font-semibold text-neutral-first mb-2">
                                     {t('section_order')}
                                 </label>
                                 <input
@@ -273,24 +273,24 @@ export default function AddSectionModal({ isOpen, onClose, onSuccess }: AddSecti
                                     placeholder="e.g. 0"
                                     value={formData.section_order}
                                     onChange={(e) => setFormData({ ...formData, section_order: e.target.value })}
-                                    className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all text-gray-600 placeholder:text-gray-400"
+                                    className="w-full px-4 py-2 border border-primary-second rounded-lg outline-none outline-1 outline-primary-second transition-all text-neutral-first/70 placeholder:text-secondary-third"
                                 />
                             </div>
 
                             <div>
-                                <label className="block text-sm font-semibold text-black mb-2">
+                                <label className="block text-sm font-semibold text-neutral-first mb-2">
                                     {t('is_core_section')}
                                 </label>
                                 <div className="relative">
                                     <select
                                         value={formData.is_core_section ? "true" : "false"}
                                         onChange={(e) => setFormData({ ...formData, is_core_section: e.target.value === "true" })}
-                                        className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all bg-white appearance-none cursor-pointer text-gray-600 pr-10"
+                                        className="w-full px-4 py-2 border border-primary-second rounded-lg outline-none outline-1 outline-primary-second transition-all bg-neutral-second appearance-none cursor-pointer text-neutral-first/70 pr-10"
                                     >
                                         <option value="true">{t('true')}</option>
                                         <option value="false">{t('false')}</option>
                                     </select>
-                                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
+                                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-secondary-third pointer-events-none" size={20} />
                                 </div>
                             </div>
                         </div>
@@ -298,13 +298,13 @@ export default function AddSectionModal({ isOpen, onClose, onSuccess }: AddSecti
                         <div className="flex gap-4 pt-6">
                             <button
                                 onClick={handleCancel}
-                                className="px-12 py-2.5 bg-gray-300 text-gray-700 rounded-[10px]"
+                                className="px-12 py-2.5 bg-secondary-third text-neutral-first rounded-[10px]"
                             >
                                 {t('cancel')}
                             </button>
                             <button
                                 onClick={handleSubmit}
-                                className="px-12 py-2.5 bg-black text-white rounded-[10px]"
+                                className="px-12 py-2.5 bg-neutral-first text-neutral-second rounded-[10px]"
                             >
                                 {t('save')}
                             </button>

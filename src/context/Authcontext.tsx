@@ -92,14 +92,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     if (isLoading) {
         return (
-            <div className="w-full min-h-screen flex items-center justify-center bg-white">
+            <div className="w-full min-h-screen flex items-center justify-center bg-neutral-second">
                 <div className="flex flex-col items-center gap-4">
                     <img
                         src="/images/common/loading.gif"
                         alt="Loading"
                         className="w-12 h-12"
                     />
-                    <p className="text-black/50 text-[20px]">{t('loading_admin')}</p>
+                    <p className="text-neutral-first/50 text-[20px]">{t('loading_admin')}</p>
                 </div>
             </div>
         );
@@ -107,16 +107,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     if (errorCode === 'AUTH_GENERIC_ERROR') {
         return (
-            <div className="w-full min-h-screen flex items-center justify-center bg-gray-50 px-4">
-                <div className="bg-white drop-shadow-lg rounded-lg p-10 max-w-150 w-full text-center">
+            <div className="w-full min-h-screen flex items-center justify-center bg-secondary-first px-4">
+                <div className="bg-neutral-second drop-shadow-lg rounded-lg p-10 max-w-150 w-full text-center">
                     <div className="w-16 h-16 rounded-full bg-red-50 flex items-center justify-center mx-auto mb-6">
-                        <svg className="w-7 h-7 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <svg className="w-7 h-7 text-toast-failed" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
                         </svg>
                     </div>
 
-                    <h1 className="text-2xl font-semibold text-black">{t('generic_error_title')}</h1>
-                    <p className="text-black mt-4 text-lg leading-relaxed">
+                    <h1 className="text-2xl font-semibold text-neutral-first">{t('generic_error_title')}</h1>
+                    <p className="text-neutral-first mt-4 text-lg leading-relaxed">
                         {t('generic_error_description')}
                     </p>
                 </div>
@@ -126,29 +126,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     if (errorCode === 'G2P-AUT-413') {
         return (
-            <div className="w-full min-h-screen flex items-center justify-center bg-gray-50 px-4">
-                <div className="bg-[#ffffff] drop-shadow-[0_4px_20px_rgba(0,0,0,0.25)] rounded-[10px] p-10 max-w-180 w-full text-center">
+            <div className="w-full min-h-screen flex items-center justify-center bg-secondary-first px-4">
+                <div className="bg-neutral-second drop-shadow-[0_4px_20px_rgba(0,0,0,0.25)] rounded-[10px] p-10 max-w-180 w-full text-center">
 
                     <div className="w-16 h-16 rounded-full bg-red-50 flex items-center justify-center mx-auto mb-6">
-                        <svg className="w-7 h-7 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <svg className="w-7 h-7 text-toast-failed" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
                         </svg>
                     </div>
 
-                    <h1 className="text-2xl font-semibold text-black">
+                    <h1 className="text-2xl font-semibold text-neutral-first">
                         {t('token_size_title')}
                     </h1>
 
-                    <p className="text-black mt-4 text-lg leading-relaxed">
+                    <p className="text-neutral-first mt-4 text-lg leading-relaxed">
                         {t('token_size_description')}
                     </p>
 
-                    <p className="text-black mt-2 text-base leading-relaxed">
+                    <p className="text-neutral-first mt-2 text-base leading-relaxed">
                         {t('token_size_cause')}
                     </p>
 
-                    <div className="mt-6 text-left bg-white border border-black/20 rounded-[10px] p-5">
-                        <p className="text-base font-semibold text-black mb-3">
+                    <div className="mt-6 text-left bg-neutral-second border border-black/20 rounded-[10px] p-5">
+                        <p className="text-base font-semibold text-neutral-first mb-3">
                             {t('required_action')}
                         </p>
 
@@ -159,16 +159,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                                 t('step_reissue_token'),
                             ].map((step, i) => (
                                 <li key={i} className="flex items-start gap-3">
-                                    <span className="w-6 h-6 rounded-full bg-black text-white text-xs font-semibold flex items-center justify-center shrink-0 mt-0.5">
+                                    <span className="w-6 h-6 rounded-full bg-neutral-first text-neutral-second text-xs font-semibold flex items-center justify-center shrink-0 mt-0.5">
                                         {i + 1}
                                     </span>
-                                    <span className="text-base text-black">{step}</span>
+                                    <span className="text-base text-neutral-first">{step}</span>
                                 </li>
                             ))}
                         </ol>
                     </div>
 
-                    <p className="text-[16px] font-bold text-black mt-4">
+                    <p className="text-[16px] font-bold text-neutral-first mt-4">
                         Error Code: <span className="font-mono">G2P-AUT-413</span>
                     </p>
                 </div>
@@ -178,9 +178,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     if (errorCode === 'G2P-AUT-403') {
         return (
-            <div className="w-full min-h-screen flex items-center justify-center bg-white px-4">
+            <div className="w-full min-h-screen flex items-center justify-center bg-neutral-second px-4">
                 <div className="flex flex-1 items-center justify-start">
-                    <div className="w-full bg-white rounded-[10px] flex flex-col items-center text-center">
+                    <div className="w-full bg-neutral-second rounded-[10px] flex flex-col items-center text-center">
                         <Image
                             src="/images/common/forbidden.png"
                             width={140}
@@ -190,11 +190,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                             priority
                         />
 
-                        <h1 className="mb-4 text-[40px] font-semibold leading-11.75 text-[#ED7C22]">
+                        <h1 className="mb-4 text-[40px] font-semibold leading-11.75 text-primary-second">
                             {t('access_denied')}
                         </h1>
 
-                        <p className="mb-6 text-[20px] font-light leading-6 text-black/50 max-w-xl">
+                        <p className="mb-6 text-[20px] font-light leading-6 text-neutral-first/50 max-w-xl">
                             {t('no_permission')}
                         </p>
                     </div>

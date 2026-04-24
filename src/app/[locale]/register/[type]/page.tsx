@@ -50,7 +50,7 @@ export default function RegisterTypePage() {
     const [openVC, setOpenVC] = useState(false);
 
     return (
-        <div className="min-h-screen mx-auto bg-[#F3F1E4]">
+        <div className="min-h-screen mx-auto bg-secondary-first">
             <TopBar
                 breadcrumb={[{ label: registerTypeLabel }]}
                 showFilters
@@ -78,7 +78,7 @@ export default function RegisterTypePage() {
                 filterConfig={filterConfig}
             />
 
-            <div className="mx-7.5 bg-white rounded-[10px]">
+            <div className="mx-7.5 bg-neutral-second rounded-[10px]">
                 <div className="px-2 pt-1">
                     <SelectedFilters
                         appliedFilters={appliedFilters}
@@ -98,26 +98,26 @@ export default function RegisterTypePage() {
                             {[...Array(5)].map((_, i) => (
                                 <div
                                     key={i}
-                                    className="flex items-center gap-4 sm:gap-6 px-4 sm:px-6 lg:px-8 p-4 w-full overflow-hidden bg-gray-200 animate-pulse"
+                                    className="flex items-center gap-4 sm:gap-6 px-4 sm:px-6 lg:px-8 p-4 w-full overflow-hidden bg-secondary-second animate-pulse"
                                 >
-                                    <div className="w-16 h-16 rounded-md bg-gray-300 shrink-0" />
+                                    <div className="w-16 h-16 rounded-md bg-secondary-third shrink-0" />
                                     <div className="flex-1 space-y-2 min-w-0">
-                                        <div className="h-4 bg-gray-300 rounded w-1/3" />
-                                        <div className="h-3 bg-gray-300 rounded w-1/2" />
+                                        <div className="h-4 bg-secondary-third rounded w-1/3" />
+                                        <div className="h-3 bg-secondary-third rounded w-1/2" />
                                     </div>
                                     <div className="flex-1 space-y-2 min-w-0">
-                                        <div className="h-3 bg-gray-300 rounded w-2/3" />
-                                        <div className="h-3 bg-gray-300 rounded w-1/2" />
+                                        <div className="h-3 bg-secondary-third rounded w-2/3" />
+                                        <div className="h-3 bg-secondary-third rounded w-1/2" />
                                     </div>
                                     <div className="flex-1 space-y-2 min-w-0">
-                                        <div className="h-3 bg-gray-300 rounded w-1/3" />
-                                        <div className="h-3 bg-gray-300 rounded w-2/3" />
+                                        <div className="h-3 bg-secondary-third rounded w-1/3" />
+                                        <div className="h-3 bg-secondary-third rounded w-2/3" />
                                     </div>
                                 </div>
                             ))}
                         </div>
                     ) : records.length === 0 ? (
-                        <div className="text-center py-10 text-gray-500">{t('no_items_found')}</div>
+                        <div className="text-center py-10 text-neutral-first/50">{t('no_items_found')}</div>
                     ) : (
                         records.map((record: RegisterRecord, index: number) => (
                             <RegisterRecordCard
@@ -128,7 +128,7 @@ export default function RegisterTypePage() {
                             />
                         ))
                     )}
-                    <div className={`h-6.25 rounded-b-[10px] ${records.length % 2 !== 0 ? 'bg-white' : 'bg-[#D9D9D940]'}`}>
+                    <div className={`h-6.25 rounded-b-[10px] ${records.length % 2 !== 0 ? 'bg-neutral-second' : 'bg-secondary-second/25'}`}>
                         &nbsp;
                     </div>
                 </div>

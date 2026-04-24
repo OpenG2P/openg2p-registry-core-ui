@@ -28,11 +28,11 @@ export default function IncomingMessageCard({ message }: Props) {
 
 
     return (
-        <div className="rounded-[10px] bg-white px-10 py-8">
-            <div className="grid gap-6 grid-cols-1 md:grid-cols-4 text-[16px] text-[#00000080]">
+        <div className="rounded-[10px] bg-neutral-second px-10 py-8">
+            <div className="grid gap-6 grid-cols-1 md:grid-cols-4 text-[16px] text-neutral-first/50">
                 {/* Column 1: Raw */}
                 <div className="space-y-4">
-                    <h3 className="text-[18px] font-semibold text-[#ED7C22] flex justify-between items-center">
+                    <h3 className="text-[18px] font-semibold text-primary-second flex justify-between items-center">
                         <span>{t('raw') || 'Raw'}</span>
                         <Image
                             src="/images/messages/chat.png"
@@ -56,8 +56,8 @@ export default function IncomingMessageCard({ message }: Props) {
                 </div>
 
                 {/* Column 2: Classification */}
-                <div className="border-l-2 space-y-4 border-[#D9D9D9] pl-6">
-                    <h3 className="text-[18px] font-semibold text-[#ED7C22]">{t('classification') || 'Classification'}</h3>
+                <div className="border-l-2 space-y-4 border-secondary-second pl-6">
+                    <h3 className="text-[18px] font-semibold text-primary-second">{t('classification') || 'Classification'}</h3>
                     <div className="space-y-2">
                         <KeyValue label={t('status') || 'Status'} value={message.classification_status} />
                         <KeyValue label={t('date_and_time') || 'Date & Time'} value={formatDateTime(message.classification_date_time)} />
@@ -69,8 +69,8 @@ export default function IncomingMessageCard({ message }: Props) {
                 </div>
 
                 {/* Column 3: Transformation */}
-                <div className="border-l-2 space-y-4 border-[#D9D9D9] pl-6">
-                    <h3 className="text-[18px] font-semibold text-[#ED7C22] flex justify-between items-center">
+                <div className="border-l-2 space-y-4 border-secondary-second pl-6">
+                    <h3 className="text-[18px] font-semibold text-primary-second flex justify-between items-center">
                         <span>{t('transformation') || 'Transformation'}</span>
                         <Image
                             src="/images/messages/chat.png"
@@ -95,20 +95,20 @@ export default function IncomingMessageCard({ message }: Props) {
                 </div>
 
                 {/* Column 4: Ingestion */}
-                <div className="border-l-2 space-y-4 border-[#D9D9D9] pl-6">
-                    <h3 className="text-[18px] font-semibold text-[#ED7C22]">{t('ingestion') || 'Ingestion'}</h3>
+                <div className="border-l-2 space-y-4 border-secondary-second pl-6">
+                    <h3 className="text-[18px] font-semibold text-primary-second">{t('ingestion') || 'Ingestion'}</h3>
                     <div className="space-y-2">
                         <KeyValue label={t('status') || 'Status'} value={message.ingestion_status ?? t('n_a') ?? 'N/A'} />
                         <KeyValue label={t('date_and_time') || 'Date & Time'} value={formatDateTime(message.ingestion_date_time)} />
                     </div>
 
                     <div className="space-y-2">
-                        <div className="text-black">
-                            <span className="text-black/50 text-[16px]">{t('cr') || 'CR'}: </span>
+                        <div className="text-neutral-first">
+                            <span className="text-neutral-first/50 text-[16px]">{t('cr') || 'CR'}: </span>
                             {message.change_request_id ? (
                                 <Link
                                     href={`/${locale}/incoming-messages/change-request/${message.change_request_id}`}
-                                    className="font-medium text-[14px] text-black break-all"
+                                    className="font-medium text-[14px] text-neutral-first break-all"
                                 >
                                     {message.change_request_id}
                                     <Image
@@ -141,9 +141,9 @@ export default function IncomingMessageCard({ message }: Props) {
 
 function KeyValue({ label, value }: { label: string; value: string }) {
     return (
-        <div className="text-black">
-            <span className="text-black/50 text-[16px]">{label}: </span>
-            {/* <span className="text-black/50 mx-1">:</span> */}
+        <div className="text-neutral-first">
+            <span className="text-neutral-first/50 text-[16px]">{label}: </span>
+            {/* <span className="text-neutral-first/50 mx-1">:</span> */}
             <span className="font-medium text-[14px]">{value}</span>
         </div>
     );

@@ -155,7 +155,7 @@ export default function Home() {
     const viewAction = getViewAction(activeStatsCard, selectedMessageType);
 
     return (
-        <div className="min-h-screen bg-[#EABB13] pt-8 sm:pt-10 md:pt-12 overflow-hidden text-gray-900 bg-[url('/images/common/bg_pattern.png')]">
+        <div className="min-h-screen bg-primary-first pt-8 sm:pt-10 md:pt-12 overflow-hidden text-secondary-second-900 bg-[url('/images/common/bg_pattern.png')]">
             <div className="relative">
                 <div className="mx-auto flex max-w-6xl flex-col items-center px-4 sm:px-6 py-8 sm:py-10 lg:py-12 space-y-10 sm:space-y-12 lg:space-y-14">
 
@@ -178,7 +178,7 @@ export default function Home() {
                     <Can
                         action={viewAction}
                         fallback={
-                            <div className="relative border border-[#ED7C22] flex h-14 w-4/5 items-center rounded-[10px] bg-white overflow-visible">
+                            <div className="relative border border-primary-second flex h-14 w-4/5 items-center rounded-[10px] bg-neutral-second overflow-visible">
                                 <div className="relative flex items-center w-full h-full">
                                     <SearchBar
                                         placeholder={searchPlaceholders[activeStatsCard]}
@@ -190,7 +190,7 @@ export default function Home() {
                             </div>
                         }
                     >
-                        <div className="relative border border-[#ED7C22] flex h-14 w-4/5 items-center rounded-[10px] bg-white overflow-visible">
+                        <div className="relative border border-primary-second flex h-14 w-4/5 items-center rounded-[10px] bg-neutral-second overflow-visible">
 
                             {(activeStatsCard === 'registers' || activeStatsCard === 'intake-form') &&
                                 registerList?.length > 0 && (
@@ -219,12 +219,13 @@ export default function Home() {
                 </div>
                 <div className="bottom-0 w-full px-4">
                     <Image
-                        src="/images/common/people.svg"
+                        src={config?.branding?.dashboard_image || "/images/common/people.svg"}
                         alt={t('peoples_image_alt')}
                         width={1200}
                         height={600}
                         className="w-full h-auto select-none"
                         priority
+                        unoptimized={!!config?.branding?.dashboard_image}
                     />
                 </div>
             </div>

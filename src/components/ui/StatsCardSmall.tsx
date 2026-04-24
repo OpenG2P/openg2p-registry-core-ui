@@ -114,14 +114,14 @@ const StatsCardSmall = ({
     }, [data, stats_endpoint]);
 
     return (
-        <div className={`flex flex-col justify-between  transition-all duration-200 w-full rounded-[10px] px-7 py-6 ${active ? "border-black bg-black text-white" : "bg-[#E1E1E1] text-[#A1A1A1]"}`}>
+        <div className={`flex flex-col justify-between  transition-all duration-200 w-full rounded-[10px] px-7 py-6 ${active ? "border-black bg-neutral-first text-neutral-second" : "bg-secondary-second text-secondary-third"}`}>
             <div className="min-h-40">
                 {/* count and title */}
                 <div className="mb-4 mt-4">
                     {loading ? (
                         <div className="animate-pulse space-y-2">
-                            <div className="h-12.5 w-32 rounded bg-gray-300 dark:bg-gray-700"></div>
-                            <div className="h-7 w-24 rounded bg-gray-300 dark:bg-gray-700"></div>
+                            <div className="h-12.5 w-32 rounded bg-secondary-third dark:bg-secondary-second-700"></div>
+                            <div className="h-7 w-24 rounded bg-secondary-third dark:bg-secondary-second-700"></div>
                         </div>
                     ) : (
                         <>
@@ -138,11 +138,11 @@ const StatsCardSmall = ({
 
                 {loading ? (
                     <div className="animate-pulse">
-                        <div className="h-4 w-24 rounded bg-gray-300 dark:bg-gray-700 mb-1.75"></div>
-                        <div className="h-5 w-32 rounded bg-gray-300 dark:bg-gray-700"></div>
+                        <div className="h-4 w-24 rounded bg-secondary-third dark:bg-secondary-second-700 mb-1.75"></div>
+                        <div className="h-5 w-32 rounded bg-secondary-third dark:bg-secondary-second-700"></div>
                     </div>
                 ) : error ? (
-                    <p className="text-sm text-red-500">{t('failed_to_load')}</p>
+                    <p className="text-sm text-toast-failed">{t('failed_to_load')}</p>
                 ) : (
                     // items
                     <ul>

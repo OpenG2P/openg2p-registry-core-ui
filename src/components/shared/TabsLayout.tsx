@@ -69,7 +69,7 @@ export default function TabsLayout({
             : undefined;
 
     return (
-        <div className="min-h-screen bg-[#F3F1E4]">
+        <div className="min-h-screen bg-secondary-first">
             <div className="px-7.5 pt-5">
                 <BreadcrumbBar breadcrumb={breadcrumb} />
             </div>
@@ -86,10 +86,10 @@ export default function TabsLayout({
                                     <button
                                         key={tab.tab_id}
                                         onClick={() => onTabChange(tabIndex)}
-                                        className={`min-w-30 max-w-45 px-4 py-2 text-black text-[18px] font-medium rounded-t-[10px] transition-all ${
+                                        className={`min-w-30 max-w-45 px-4 py-2 text-neutral-first text-[18px] font-medium rounded-t-[10px] transition-all ${
                                             isActive
-                                                ? "bg-[#F2BA1A]"
-                                                : "bg-[#DDDDDD]"
+                                                ? "bg-primary-first"
+                                                : "bg-secondary-second"
                                         }`}
                                     >
                                         <span className="block w-full truncate text-center">
@@ -106,10 +106,10 @@ export default function TabsLayout({
                                         onClick={() =>
                                             setIsMoreOpen((prev) => !prev)
                                         }
-                                        className={`inline-flex items-center justify-center gap-2 min-w-30 px-4 py-2 rounded-t-[10px] font-medium text-[18px] text-black transition-all whitespace-nowrap ${
+                                        className={`inline-flex items-center justify-center gap-2 min-w-30 px-4 py-2 rounded-t-[10px] font-medium text-[18px] text-neutral-first transition-all whitespace-nowrap ${
                                             isMoreActive
-                                                ? "bg-[#F2BA1A]"
-                                                : "bg-[#D1D1D1]"
+                                                ? "bg-primary-first"
+                                                : "bg-secondary-second"
                                         }`}
                                     >
                                         <span className="truncate">
@@ -126,7 +126,7 @@ export default function TabsLayout({
                                     </button>
 
                                     {isMoreOpen && (
-                                        <div className="origin-top-left outline-none absolute left-0 mt-0 min-w-30 rounded-b-[10px] rounded-r-[10px] bg-white border border-[#F2BA1A] drop-shadow-[0_2px_6px_rgba(0,0,0,0.25)] z-50">
+                                        <div className="origin-top-left outline-none absolute left-0 mt-0 min-w-30 rounded-b-[10px] rounded-r-[10px] bg-neutral-second border border-primary-first drop-shadow-[0_2px_6px_rgba(0,0,0,0.25)] z-50">
                                             <div className="py-1">
                                                 {moreTabs.map((tab, index) => {
                                                     const tabIndex =
@@ -149,8 +149,8 @@ export default function TabsLayout({
                                                             }}
                                                             className={`block w-full max-w-62.5 text-left px-4 py-2 font-medium text-[18px] transition-colors ${
                                                                 isActive
-                                                                    ? "bg-[#F2BA1A40] text-black font-semibold"
-                                                                    : "text-black"
+                                                                    ? "bg-primary-first/25 text-neutral-first font-semibold"
+                                                                    : "text-neutral-first"
                                                             }`}
                                                         >
                                                             {t(

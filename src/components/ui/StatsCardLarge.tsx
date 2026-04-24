@@ -67,13 +67,13 @@ const StatsCardLarge = ({
         }
     }, [data, stats_endpoint]);
 
-    const pulseBg = active ? "bg-white/20" : "bg-black/20";
+    const pulseBg = active ? "bg-neutral-second/20" : "bg-neutral-first/20";
 
     return (
         <div className={`flex justify-between transition-all duration-200 w-full h-52 rounded-[10px] px-10 py-8 gap-2
             ${active
-                ? "border-black bg-black text-white"
-                : "bg-[#E1E1E1] text-[#A1A1A1]"
+                ? "border-black bg-neutral-first text-neutral-second"
+                : "bg-secondary-second text-secondary-third"
             }`}
         >
             {/* LEFT */}
@@ -103,7 +103,7 @@ const StatsCardLarge = ({
                         <div className={`h-4 w-24 rounded ${pulseBg}`} />
                     </div>
                 ) : error ? (
-                    <p className="text-[16px] text-red-500">{t('failed_to_load')}</p>
+                    <p className="text-[16px] text-toast-failed">{t('failed_to_load')}</p>
                 ) : (
                     rows.map((row) => (
                         <div key={row.id} className="flex items-center gap-3">

@@ -60,39 +60,39 @@ export default function EditFormModal({ isOpen, onClose, onSuccess, initialData,
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
-            <div className="relative w-full max-w-200 bg-[#F2BA1A] rounded-[10px] p-1">
-                <div className="bg-white rounded-[10px] p-10 relative">
-                    <button onClick={onClose} className="absolute top-6 right-6 text-gray-400 hover:text-gray-600">
+        <div className="fixed inset-0 bg-neutral-first/80 z-50 flex items-center justify-center p-4">
+            <div className="relative w-full max-w-200 bg-primary-first rounded-[10px] p-1">
+                <div className="bg-neutral-second rounded-[10px] p-10 relative">
+                    <button onClick={onClose} className="absolute top-6 right-6 text-secondary-third hover:text-neutral-first/70">
                         <X size={40} />
                     </button>
 
-                    <h2 className="text-2xl font-bold text-orange-500 mb-6">{t('edit_form')}</h2>
+                    <h2 className="text-2xl font-bold text-primary-second mb-6">{t('edit_form')}</h2>
 
                     <div className="space-y-4">
                         <div>
-                            <label className="block text-sm font-semibold text-black mb-1">{t('form_label')}</label>
+                            <label className="block text-sm font-semibold text-neutral-first mb-1">{t('form_label')}</label>
                             <input
                                 type="text"
                                 value={formData.tab_label}
                                 onChange={(e) => setFormData({ ...formData, tab_label: e.target.value })}
-                                className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none"
+                                className="w-full px-4 py-2 border border-primary-second rounded-lg outline-none"
                             />
                         </div>
 
                         <div>
-                            <label className="block text-sm font-semibold text-black mb-1">{t('form_order')}</label>
+                            <label className="block text-sm font-semibold text-neutral-first mb-1">{t('form_order')}</label>
                             <input
                                 type="number"
                                 value={formData.tab_order}
                                 onChange={(e) => setFormData({ ...formData, tab_order: Number(e.target.value) })}
-                                className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none"
+                                className="w-full px-4 py-2 border border-primary-second rounded-lg outline-none"
                             />
                         </div>
 
                         <div className="flex gap-4 pt-6">
-                            <button onClick={onClose} className="px-12 py-2.5 bg-gray-300 text-gray-700 rounded-[10px]">{t('cancel')}</button>
-                            <button onClick={handleSubmit} disabled={loading} className="px-12 py-2.5 bg-black text-white rounded-[10px]">{t('save_changes')}</button>
+                            <button onClick={onClose} className="px-12 py-2.5 bg-secondary-third text-neutral-first rounded-[10px]">{t('cancel')}</button>
+                            <button onClick={handleSubmit} disabled={loading} className="px-12 py-2.5 bg-neutral-first text-neutral-second rounded-[10px]">{t('save_changes')}</button>
                         </div>
                     </div>
                 </div>
