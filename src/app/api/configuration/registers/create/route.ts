@@ -23,6 +23,7 @@ export async function POST(request: NextRequest) {
                 dedup_is_enabled: body.dedup_is_enabled,
                 dedup_threshold_score: body.dedup_threshold_score,
                 functional_id_generation_required: body.functional_id_generation_required,
+                completion_score_required: body.completion_score_required,
             },
 
         }),
