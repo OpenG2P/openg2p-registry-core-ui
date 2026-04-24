@@ -58,11 +58,6 @@ export default async function RootLayout({
     await clientSafeConfig.fetchRegistryConfig(origin);
     const config = clientSafeConfig.getAll();
 
-    const dynamicMessages = config.language_config?.translation;
-    const finalMessages = (dynamicMessages && Object.keys(dynamicMessages).length > 0)
-        ? dynamicMessages
-        : messages;
-
     const cssVariables = `
         :root {
             --color-primary-first: ${config.branding?.primary_color_1 ?? "#EABB13"};
@@ -89,7 +84,7 @@ export default async function RootLayout({
                 />
             </head>
             <body className={`${roboto.className} antialiased`}>
-                <NextIntlClientProvider messages={finalMessages}>
+                <NextIntlClientProvider messages={messages}>
                     <GlobalContextProvider>
                         <RuntimeConfigProvider initialConfig={config}>
                             <Header />

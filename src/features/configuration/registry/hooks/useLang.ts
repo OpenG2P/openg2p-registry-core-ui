@@ -6,8 +6,8 @@ import { Language } from '../types';
 
 export function useLang() {
     const [languages, setLanguages] = useState<Language[]>([]);
-    
-    const { data: languagesData, loading: languagesLoading, execute: fetchLanguages } = useFetch<any>({
+
+    const { data: languagesData, loading: languagesLoading, execute: fetchLanguages } = useFetch<Language[]>({
         url: '/api/configuration/registry/language/get-all-languages',
         options: { method: 'POST', body: JSON.stringify({}) },
     });

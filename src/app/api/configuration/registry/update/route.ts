@@ -18,6 +18,7 @@ export async function POST(request: NextRequest) {
                 registry_name: body.registry_name,
                 registry_logo: body.registry_logo,
                 registry_theme_id: body.registry_theme_id,
+                registry_language_id: body.registry_language_id,
             },
         }),
     });

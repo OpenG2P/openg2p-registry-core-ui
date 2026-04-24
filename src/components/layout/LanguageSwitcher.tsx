@@ -1,10 +1,9 @@
 'use client';
 
 import { useRouter, usePathname } from '@/i18n/navigation';
-import { routing } from '@/i18n/routing';
 import { useTranslations, useLocale } from 'next-intl';
 import Image from 'next/image';
-import React, { useRef, useState, useTransition, useMemo } from 'react';
+import { useRef, useState, useTransition, useMemo } from 'react';
 import { useClickOutside } from '@/shared/hooks/useClickOutside';
 import { useLang } from '@/features/configuration/registry/hooks/useLang';
 
@@ -34,6 +33,15 @@ export default function LanguageSwitcher() {
         });
     };
 
+    // Priotise db available locales over static locales
+    const availableLocales = useMemo(() => {
+        if (languages && languages.length > 0) {
+            return languages.map(lang => lang.code);
+        }
+        return Object.keys(LANGUAGE_CONFIG);
+    }, [languages]);
+
+    // Create a dynamic config object from db locales
     const dynamicConfig = useMemo(() => {
         if (languages && languages.length > 0) {
             const config: Record<string, { label: string; flag: string }> = {};
@@ -48,14 +56,17 @@ export default function LanguageSwitcher() {
         return LANGUAGE_CONFIG;
     }, [languages]);
 
-    const availableLocales = useMemo(() => {
-        if (languages && languages.length > 0) {
-            return languages.map(lang => lang.code);
-        }
-        return routing.locales;
-    }, [languages]);
+    // Get current language from locale or default language
+    const currentLanguage = useMemo(() => {
+        if (dynamicConfig[locale]) return dynamicConfig[locale];
 
-    const currentLanguage = dynamicConfig[locale] || dynamicConfig[availableLocales[0]] || LANGUAGE_CONFIG.en;
+        const defaultLang = languages?.find(l => l.is_default);
+        if (defaultLang && dynamicConfig[defaultLang.code]) {
+            return dynamicConfig[defaultLang.code];
+        }
+
+        return dynamicConfig[availableLocales[0]] || LANGUAGE_CONFIG.en;
+    }, [dynamicConfig, locale, languages, availableLocales]);
 
     return (
         <div className="relative inline-block" ref={dropdownRef}>

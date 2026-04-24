@@ -107,7 +107,6 @@ class ClientSafeConfig {
                         language_config = languageData.response_body?.response_payload;
                     }
                 }
-
                 this.setMany({
                     registryName: payload?.registry_name ?? "",
                     registryLogo: payload?.registry_logo ?? "",
