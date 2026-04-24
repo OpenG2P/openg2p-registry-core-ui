@@ -14,7 +14,24 @@ export default getRequestConfig(async ({ requestLocale }) => {
     const origin = await getOrigin();
     await clientSafeConfig.fetchRegistryConfig(origin);
     const config = clientSafeConfig.getAll();
-    let messages = config.language_config?.code === locale ? (config.language_config?.translation || {}) : {};
+    
+    let messages = {};
+    if (config.language_config?.code === locale) {
+        messages = config.language_config?.translation || {};
+    } else {
+        const dynamicLang = await clientSafeConfig.fetchLanguageConfigByCode(locale as string, origin);
+        if (dynamicLang) {
+            messages = dynamicLang.translation || {};
+        }
+    }
+
+
+    if (Object.keys(messages).length > 0) {
+        return {
+            locale,
+            messages
+        };
+    }
 
     try {
         const staticMessages = (await import(`../../locales/${locale}.json`)).default;
@@ -22,6 +39,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
     } catch (error) {
         // If static file is missing, we just stick with the DB translations
     }
+
 
     return {
         locale,
