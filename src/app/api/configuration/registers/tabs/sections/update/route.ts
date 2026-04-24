@@ -26,6 +26,7 @@ export async function POST(request: NextRequest) {
                 is_core_section: body.is_core_section,
                 is_primary_section: body.is_primary_section,
                 section_order: body.section_order,
+                section_weightage: body.section_weightage,
             },
         }),
     });
