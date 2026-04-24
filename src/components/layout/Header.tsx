@@ -27,22 +27,22 @@ export default function Header() {
     return (
         <header className={`w-full bg-neutral-second fixed top-0 left-0 right-0 z-20 flex justify-center ${isScrolled ? "shadow-[0px_4px_10px_0px_rgba(0,0,0,0.15)]" : ""}`}>
             <div className="w-full h-17.5 flex items-center justify-between px-3">
-            <Link href={`/${locale}`} className="flex items-center gap-2">
-                <Image
-                    src={config?.registryLogo || "/images/common/openg2p_logo.png"}
-                    alt="Registry Logo"
-                    width={40}
-                    height={40}
-                    className="w-10 h-10 shrink-0 object-contain"
-                    unoptimized
-                />
-                <div className="flex items-center gap-3">
-                    <span
-                        className="text-neutral-first text-[20px] font-medium not-italic leading-normal"
-                        style={{ fontFamily: 'Roboto' }}
-                    >
-                        {config?.registryName || t('registryGen2')}
-                    </span>
+                <Link href={`/${locale}`} className="flex items-center gap-2">
+                    <Image
+                        src={config?.registryLogo || "/images/common/openg2p_logo.png"}
+                        alt="Registry Logo"
+                        width={40}
+                        height={40}
+                        className="w-10 h-10 shrink-0 object-contain"
+                        unoptimized
+                    />
+                    <div className="flex items-center gap-3">
+                        <span
+                            className="text-neutral-first text-[20px] font-medium not-italic leading-normal"
+                            style={{ fontFamily: 'Roboto' }}
+                        >
+                            {config?.registryName ? t(config?.registryName) : t('registryGen2')}
+                        </span>
 
                         {/* <span className="h-8 w-0.5 bg-secondary-second" />
 
@@ -57,15 +57,15 @@ export default function Header() {
                     </div>
                 </Link>
 
-            {/* Desktop Navigation */}
-            <div className="flex items-center gap-8">
-                <Can anyOf={CONFIG_VIEW_ACTIONS}>
-                    <ConfigurationButton />
-                </Can>
-                <LanguageSwitcher/>
-                <NotificationDropdown />
-                <ProfileDropdown />
-            </div>
+                {/* Desktop Navigation */}
+                <div className="flex items-center gap-8">
+                    <Can anyOf={CONFIG_VIEW_ACTIONS}>
+                        <ConfigurationButton />
+                    </Can>
+                    <LanguageSwitcher />
+                    <NotificationDropdown />
+                    <ProfileDropdown />
+                </div>
             </div>
         </header>
     );

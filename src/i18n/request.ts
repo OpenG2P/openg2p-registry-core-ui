@@ -14,7 +14,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
     const origin = await getOrigin();
     await clientSafeConfig.fetchRegistryConfig(origin);
     const config = clientSafeConfig.getAll();
-    let messages = config.language_config?.translation || {};
+    let messages = config.language_config?.code === locale ? (config.language_config?.translation || {}) : {};
 
     try {
         const staticMessages = (await import(`../../locales/${locale}.json`)).default;
