@@ -43,7 +43,7 @@ export default function LanguagesConfigView({
         toast.info(
             ({ closeToast }) => (
                 <div className="p-1">
-                    <p className="font-bold text-neutral-first mb-3">{t('confirm_delete_language', { label: lang.label })}</p>
+                    <p className="font-bold text-neutral-first mb-3">{t('confirm_delete_language', { label: lang.language_label })}</p>
                     <div className="flex gap-3">
                         <button
                             onClick={async () => {
@@ -114,15 +114,15 @@ export default function LanguagesConfigView({
                                 >
                                     <div className="flex items-center">
                                         <div className="w-10 h-6 relative rounded border overflow-hidden bg-secondary-first shadow-sm">
-                                            {lang.flag ? (
-                                                <Image src={lang.flag} alt={lang.label} fill className="object-cover" />
+                                            {lang.language_flag_base64 ? (
+                                                <Image src={lang.language_flag_base64} alt={lang.language_label} fill className="object-cover" />
                                             ) : (
                                                 <div className="w-full h-full flex items-center justify-center text-[8px] opacity-30">No Flag</div>
                                             )}
                                         </div>
                                     </div>
-                                    <div className="text-base font-medium truncate">{lang.code}</div>
-                                    <div className="text-base font-medium truncate">{lang.label}</div>
+                                    <div className="text-base font-medium truncate">{lang.language_code}</div>
+                                    <div className="text-base font-medium truncate">{lang.language_label}</div>
                                     <div className="text-base font-medium">
                                         {lang.is_default == true ? 'True' : 'False'}
                                     </div>

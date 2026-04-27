@@ -12,9 +12,12 @@ import { useTranslations } from 'next-intl';
 import { useTheme } from '@/features/configuration/registry/hooks/useTheme';
 import { useLang } from '@/features/configuration/registry/hooks/useLang';
 import EditRegistry from '@/features/configuration/registry/components/EditRegistry';
+import { useRouter, usePathname } from '@/i18n/navigation';
 
 const RegistryConfigurationPage = () => {
 	const t = useTranslations();
+	const router = useRouter();
+	const pathname = usePathname();
 	const { themes, themesLoading } = useTheme();
 	const { languages, languagesLoading } = useLang();
 	const [isEditing, setIsEditing] = useState(false);
@@ -75,7 +78,14 @@ const RegistryConfigurationPage = () => {
 			setLanguageId(newLanguageId);
 			setIsEditing(false);
 			toast.success(t('toast_registry_config_saved'));
-			window.location.reload();//Window reload on save 
+			
+			const newLangObj = languages.find(l => l.language_id === newLanguageId);
+			if (newLangObj && newLangObj.language_code) {
+				router.replace(pathname, { locale: newLangObj.language_code });
+				router.refresh();
+			} else {
+				window.location.reload();
+			}
 		} else {
 			toast.error(t('toast_registry_config_save_failed'));
 		}
@@ -139,7 +149,7 @@ const RegistryConfigurationPage = () => {
 								<div className='flex flex-col items-start gap-2'>
 									<span className='text-neutral-first text-[16px] font-normal tracking-normal m-0 opacity-60'>{t('registry_language')}</span>
 									<span className="text-primary-second text-xl m-0 font-semibold capitalize">
-										{languages.find(l => l.language_id === (registryData?.registry_language_id || languageId))?.label || ''}
+										{languages.find(l => l.language_id === (registryData?.registry_language_id || languageId))?.language_label || ''}
 									</span>
 								</div>
 

@@ -15,11 +15,11 @@ export async function POST(request: NextRequest) {
 			},
 			request_payload: {
 				language_id: body.language_id,
-				code: body.code,
-				label: body.label,
-				flag: body.flag,
+				language_code: body.language_code,
+				language_label: body.language_label,
+				language_flag_base64: body.language_flag_base64,
 				is_default: body.is_default ?? false,
-				translation: body.translation,
+				language_translation: body.language_translation,
 			},
 		}),
 	});
