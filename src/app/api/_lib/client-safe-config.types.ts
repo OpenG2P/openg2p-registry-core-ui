@@ -18,11 +18,11 @@ export type Branding = {
 };
 export type LanguageConfig = {
     language_id: string;
-    code: string;
-    label: string;
-    flag: string;
+    language_code: string;
+    language_label: string;
+    language_flag_base64: string;
     is_default: boolean;
-    translation: Record<string, any>;
+    language_translation: Record<string, any>;
 };
 export type ClientSafeConfigShape = {
     partnerImportExportEnable: boolean;

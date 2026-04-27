@@ -36,7 +36,7 @@ export default function LanguageSwitcher() {
     // Priotise db available locales over static locales
     const availableLocales = useMemo(() => {
         if (languages && languages.length > 0) {
-            return languages.map(lang => lang.code);
+            return languages.map(lang => lang.language_code);
         }
         return Object.keys(LANGUAGE_CONFIG);
     }, [languages]);
@@ -46,9 +46,9 @@ export default function LanguageSwitcher() {
         if (languages && languages.length > 0) {
             const config: Record<string, { label: string; flag: string }> = {};
             languages.forEach(lang => {
-                config[lang.code] = {
-                    label: lang.label,
-                    flag: lang.flag
+                config[lang.language_code] = {
+                    label: lang.language_label,
+                    flag: lang.language_flag_base64
                 };
             });
             return config;
@@ -61,8 +61,8 @@ export default function LanguageSwitcher() {
         if (dynamicConfig[locale]) return dynamicConfig[locale];
 
         const defaultLang = languages?.find(l => l.is_default);
-        if (defaultLang && dynamicConfig[defaultLang.code]) {
-            return dynamicConfig[defaultLang.code];
+        if (defaultLang && dynamicConfig[defaultLang.language_code]) {
+            return dynamicConfig[defaultLang.language_code];
         }
 
         return dynamicConfig[availableLocales[0]] || LANGUAGE_CONFIG.en;
