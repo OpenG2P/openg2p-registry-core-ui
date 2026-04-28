@@ -42,9 +42,9 @@ export type ThemeAttributeKey = typeof THEME_ATTRIBUTES[number]['key'];
 
 export interface Language {
     language_id: string;
-    code: string;
-    label: string;
-    flag: string;
+    language_code: string;
+    language_label: string;
+    language_flag_base64: string;
     is_default: boolean;
-    translation: Record<string, any>;
+    language_translation: Record<string, any>;
 }

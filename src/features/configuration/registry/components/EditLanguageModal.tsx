@@ -26,13 +26,13 @@ export default function EditLanguageModal({
     const t = useTranslations();
     const { execute: saveLanguage } = useFetch();
 
-    const [code, setCode] = useState(language.code || '');
-    const [label, setLabel] = useState(language.label || '');
+    const [language_code, setLanguageCode] = useState(language.language_code || '');
+    const [language_label, setLanguageLabel] = useState(language.language_label || '');
     const [isDefault, setIsDefault] = useState(language.is_default || false);
-    const [flag, setFlag] = useState(language.flag || '');
+    const [language_flag_base64, setLanguageFlagBase64] = useState(language.language_flag_base64 || '');
     const [flagFileName, setFlagFileName] = useState('');
-    const [translation, setTranslation] = useState<any>(language.translation || null);
-    const [fileName, setFileName] = useState(language.code ? `${language.code}.json` : '');
+    const [language_translation, setLanguageTranslation] = useState<any>(language.language_translation || null);
+    const [fileName, setFileName] = useState(language.language_code ? `${language.language_code}.json` : '');
     const [loading, setLoading] = useState(false);
 
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -40,12 +40,12 @@ export default function EditLanguageModal({
 
     useEffect(() => {
         if (isOpen && language) {
-            setCode(language.code || '');
-            setLabel(language.label || '');
+            setLanguageCode(language.language_code || '');
+            setLanguageLabel(language.language_label || '');
             setIsDefault(language.is_default || false);
-            setFlag(language.flag || '');
-            setTranslation(language.translation || null);
-            setFileName(language.code ? `${language.code}.json` : '');
+            setLanguageFlagBase64(language.language_flag_base64 || '');
+            setLanguageTranslation(language.language_translation || null);
+            setFileName(language.language_code ? `${language.language_code}.json` : '');
         }
     }, [isOpen, language]);
 
@@ -57,7 +57,7 @@ export default function EditLanguageModal({
 
         try {
             const json = await readAndValidateJson(file);
-            setTranslation(json);
+            setLanguageTranslation(json);
             setFileName(file.name);
         } catch (error: any) {
             toast.error(error.message);
@@ -72,18 +72,18 @@ export default function EditLanguageModal({
         setFlagFileName(file.name);
         const reader = new FileReader();
         reader.onload = (event) => {
-            setFlag(event.target?.result as string);
+            setLanguageFlagBase64(event.target?.result as string);
         };
         reader.readAsDataURL(file);
     };
 
     const handleDownloadJson = () => {
-        if (!translation) return;
-        const blob = new Blob([JSON.stringify(translation, null, 2)], { type: 'application/json' });
+        if (!language_translation) return;
+        const blob = new Blob([JSON.stringify(language_translation, null, 2)], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `${code || 'locale'}.json`;
+        a.download = `${language_code || 'locale'}.json`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -91,7 +91,7 @@ export default function EditLanguageModal({
     };
 
     const handleSave = async () => {
-        if (!code || !label || !translation) {
+        if (!language_code || !language_label || !language_translation) {
             toast.warn(t('fill_required_fields'));
             return;
         }
@@ -99,11 +99,11 @@ export default function EditLanguageModal({
         setLoading(true);
         const payload = {
             language_id: language.language_id,
-            code,
-            label,
-            flag,
+            language_code,
+            language_label,
+            language_flag_base64,
             is_default: isDefault,
-            translation
+            language_translation
         };
 
         try {
@@ -138,14 +138,14 @@ export default function EditLanguageModal({
                 <div className="grid grid-cols-2 gap-4">
                     <InputField
                         label={t('language_code')}
-                        value={code}
-                        onChange={setCode}
+                        value={language_code}
+                        onChange={setLanguageCode}
                         placeholder={t('language_code_placeholder')}
                     />
                     <InputField
                         label={t('language_label')}
-                        value={label}
-                        onChange={setLabel}
+                        value={language_label}
+                        onChange={setLanguageLabel}
                         placeholder={t('language_label_placeholder')}
                     />
                 </div>
@@ -154,10 +154,10 @@ export default function EditLanguageModal({
                     <label className="text-sm font-semibold text-neutral-first/60">{t('language_flag')}</label>
                     <div className="flex items-center gap-4">
                         <div className="w-1/2 h-10 px-4 rounded-[10px] border border-neutral-first/10 bg-neutral-first/5 flex items-center overflow-hidden">
-                            {flag ? (
+                            {language_flag_base64 ? (
                                 <div className="flex items-center gap-2 overflow-hidden">
                                     <div className="w-8 h-5 relative rounded border overflow-hidden shrink-0">
-                                        <Image src={flag} alt="flag" fill className="object-cover" />
+                                        <Image src={language_flag_base64} alt="flag" fill className="object-cover" />
                                     </div>
                                     <span className="text-sm text-neutral-first/60 truncate">
                                         {flagFileName || t('flag_image')}
@@ -196,7 +196,7 @@ export default function EditLanguageModal({
                         <button
                             type="button"
                             onClick={handleDownloadJson}
-                            disabled={!translation}
+                            disabled={!language_translation}
                             className="h-10 px-4 rounded-[10px] border border-primary-second text-primary-second text-sm font-bold hover:bg-primary-second/5 transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             <Download size={18} />

@@ -14,14 +14,14 @@ export default getRequestConfig(async ({ requestLocale }) => {
     const origin = await getOrigin();
     await clientSafeConfig.fetchRegistryConfig(origin);
     const config = clientSafeConfig.getAll();
-    
+
     let messages = {};
-    if (config.language_config?.code === locale) {
-        messages = config.language_config?.translation || {};
+    if (config.language_config?.language_code === locale) {
+        messages = config.language_config?.language_translation || {};
     } else {
         const dynamicLang = await clientSafeConfig.fetchLanguageConfigByCode(locale as string, origin);
         if (dynamicLang) {
-            messages = dynamicLang.translation || {};
+            messages = dynamicLang.language_translation || {};
         }
     }
 
@@ -33,11 +33,19 @@ export default getRequestConfig(async ({ requestLocale }) => {
         };
     }
 
-    try {
-        const staticMessages = (await import(`../../locales/${locale}.json`)).default;
-        messages = { ...staticMessages, ...messages };
-    } catch (error) {
-        // If static file is missing, we just stick with the DB translations
+    const staticMessagesMap: Record<string, () => Promise<any>> = {
+        'en': () => import('../../locales/en.json'),
+        'es': () => import('../../locales/es.json'),
+        'fr': () => import('../../locales/fr.json'),
+    };
+
+    if (staticMessagesMap[locale as string]) {
+        try {
+            const staticMessages = (await staticMessagesMap[locale as string]()).default;
+            messages = { ...staticMessages};
+        } catch (error) {
+            // If static file is missing, we just stick with the DB translations
+        }
     }
 
 

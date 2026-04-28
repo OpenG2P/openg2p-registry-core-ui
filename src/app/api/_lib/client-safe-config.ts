@@ -23,7 +23,7 @@ class ClientSafeConfig {
         };
     }
 
-    async fetchLanguageConfigByCode(code: string, origin: string): Promise<LanguageConfig | undefined> {
+    async fetchLanguageConfigByCode(language_code: string, origin: string): Promise<LanguageConfig | undefined> {
         const backendConfig = getBackendConfig();
         const auth = await requireAuthFromCookies();
         if (!auth) return undefined;
@@ -50,10 +50,10 @@ class ClientSafeConfig {
             if (response.ok) {
                 const data = await response.json();
                 const languages: LanguageConfig[] = data.response_body?.response_payload || [];
-                return languages.find(l => l.code === code);
+                return languages.find(l => l.language_code === language_code);
             }
         } catch (error) {
-            console.error(`Failed to fetch language config for ${code}:`, error);
+            console.error(`Failed to fetch language config for ${language_code}:`, error);
         }
         return undefined;
     }

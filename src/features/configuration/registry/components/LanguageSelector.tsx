@@ -39,18 +39,18 @@ export default function LanguageSelector({
                 className={`flex items-center justify-between gap-2.5 px-4 py-2 bg-neutral-second border border-primary-second rounded-[10px] cursor-pointer truncate ${isOpen ? 'border-b-transparent rounded-b-none' : ''}`}
             >
                 <div className="flex items-center gap-2 truncate">
-                    {selectedLanguage?.flag && (
+                    {selectedLanguage?.language_flag_base64 && (
                         <div className="w-6 h-4 relative rounded-sm overflow-hidden shrink-0 border">
                             <Image
-                                src={selectedLanguage.flag}
-                                alt={selectedLanguage.label}
+                                src={selectedLanguage.language_flag_base64}
+                                alt={selectedLanguage.language_label}
                                 fill
                                 className="object-cover"
                             />
                         </div>
                     )}
                     <span className="text-[16px] font-medium text-neutral-first truncate">
-                        {languagesLoading ? 'Loading...' : selectedLanguage?.label || t('select_language')}
+                        {languagesLoading ? 'Loading...' : selectedLanguage?.language_label || t('select_language')}
                     </span>
                 </div>
 
@@ -76,17 +76,17 @@ export default function LanguageSelector({
                                 onClick={() => handleSelect(lang.language_id)}
                                 className={`flex items-center gap-2 px-4 py-2 text-[16px] cursor-pointer hover:bg-secondary-first truncate transition-colors ${selectedLanguageId === lang.language_id ? 'bg-primary-first/10 font-semibold text-primary-second' : 'text-neutral-first'}`}
                             >
-                                {lang.flag && (
+                                {lang.language_flag_base64 && (
                                     <div className="w-6 h-4 relative rounded-sm overflow-hidden shrink-0 border">
                                         <Image
-                                            src={lang.flag}
-                                            alt={lang.label}
+                                            src={lang.language_flag_base64}
+                                            alt={lang.language_label}
                                             fill
                                             className="object-cover"
                                         />
                                     </div>
                                 )}
-                                <span className="truncate">{lang.label}</span>
+                                <span className="truncate">{lang.language_label}</span>
                             </div>
                         ))
                     )}
