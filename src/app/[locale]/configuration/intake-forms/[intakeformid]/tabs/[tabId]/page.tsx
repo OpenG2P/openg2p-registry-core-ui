@@ -1,0 +1,317 @@
+'use client';
+
+import { useState } from 'react';
+import { BreadcrumbBar, TopBar } from '@/components/shared';
+import { useParams } from 'next/navigation';
+import { useBreadcrumb } from '@/shared/hooks/useBreadcrumb';
+import {
+    ConfigDetailsSummary,
+    DeleteButton,
+    EditButton,
+    ViewButton,
+} from '@/features/configuration/shared';
+
+import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
+import { useFetch, usePagination } from '@/shared/hooks';
+import { useRbac } from '@/context/RbacContext';
+import { CONFIGURATION_TABS_ACTIONS } from '@/features/configuration/shared/utils/configurationTabs.actions';
+import { CONFIGURATION_REGISTERS_ACTIONS } from '@/features/configuration/shared/utils/configurationRegisters.actions';
+import { useTranslations } from 'next-intl';
+import { Link } from '@/i18n/navigation';
+import { toast } from 'react-toastify';
+import { useIntakeFormTabById } from '@/features/configuration/shared/hooks/useIntakeFormTabById';
+import { useAllIntakeFormTabSections } from '@/features/configuration/shared/hooks/useAllIntakeFormTabSections';
+import { useIntakeFormById } from '@/features/configuration/shared/hooks/useIntakeFormById';
+import ViewIntakeFormTabModal from '@/features/configuration/intake-forms/ViewIntakeFormTabModal';
+import EditIntakeFormTabModal from '@/features/configuration/intake-forms/EditIntakeFormTabModal';
+import AddIntakeFormTabSectionModal from '@/features/configuration/intake-forms/AddIntakeFormTabSectionModal';
+import ViewIntakeFormTabSectionModal from '@/features/configuration/intake-forms/ViewIntakeFormTabSectionModal';
+import EditIntakeFormTabSectionModal from '@/features/configuration/intake-forms/EditIntakeFormTabSectionModal';
+import ConfirmRemovePopup from '@/features/configuration/shared/components/ConfirmRemovePopup';
+
+
+const IntakeFormTabIdPage = () => {
+    const t = useTranslations();
+    const { intakeformid } = useParams<{ intakeformid: string }>();
+    const { tabId } = useParams<{ tabId: string }>();
+    const {
+        tab,
+        loading: tabLoading,
+        refresh: tabrefresh
+    } = useIntakeFormTabById(tabId);
+
+    const {
+        intake_form,
+        loading: intakeformLoading,
+    } = useIntakeFormById(intakeformid);
+
+    const [modalType, setModalType] = useState<'add' | 'edit' | 'view' | null>(null);
+    const [sectionModal, setSectionModal] = useState<'add' | 'edit' | 'view' | null>(null);
+    const [selectedSection, setSelectedSection] = useState<any>(null);
+
+    const [showPopup, setShowPopup] = useState(false);
+    const [selectedItem, setSelectedItem] = useState<any>(null);
+    const { execute: deleteIntakeFormTabSection } = useFetch();
+
+
+    const { can } = useRbac();
+    const canEdit = can(CONFIGURATION_REGISTERS_ACTIONS.edit);
+    const canCreate = can(CONFIGURATION_TABS_ACTIONS.create);
+
+
+    const breadcrumb = useBreadcrumb({
+        rootItem: { label: t('intake_form'), href: '/configuration/intake-forms' },
+        customItems: [
+            { label: `${intake_form?.form_mnemonic || ''}`, href: `/configuration/intake-forms/${intakeformid}` },
+            { label: `${tab?.tab_label || ''}`, href: `/configuration/intake-forms/${intakeformid}/tab/${tabId}` }
+        ]
+    });
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const { config } = useRuntimeConfig();
+
+    const { sections, refresh, pagination } = useAllIntakeFormTabSections(currentPage, config.pageSize, tabId);
+
+    const { pageStart, pageEnd, total } = usePagination({
+        totalItems: pagination?.number_of_items || 0,
+        currentPage: currentPage,
+        pageSize: config.pageSize || 10,
+        currentCount: sections?.length || 0,
+    });
+
+    const handlePrev = () => {
+        setCurrentPage(prev => Math.max(1, prev - 1));
+    };
+
+    const handleNext = () => {
+        setCurrentPage(prev => prev + 1);
+    };
+
+    const proceedDelete = async (id: string) => {
+        try {
+            const result = await deleteIntakeFormTabSection('/api/intake-form/delete-section', {
+                method: 'POST',
+                body: JSON.stringify({ tab_section_id: id })
+            });
+
+            if (result?.tab_section_id) {
+                toast.success(t('intake_form_tab_section_deleted'));
+                refresh();
+            } else {
+                toast.error(t('toast_intake_form_tab_section_deletion_failed'));
+            }
+        } catch (error) {
+            toast.error(t('toast_operation_failed'));
+        }
+    };
+
+    const handleConfirmDelete = async () => {
+        if (!selectedItem) return;
+
+        await proceedDelete(selectedItem.tab_section_id);
+
+        setShowPopup(false);
+        setSelectedItem(null);
+    };
+
+    const handleDelete = (intakeForm: any) => {
+        setSelectedItem(intakeForm);
+        setShowPopup(true);
+    };
+
+    if (tabLoading || !tab.tab_id) {
+        return (
+            <div className="min-h-screen bg-secondary-first flex items-center justify-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-second"></div>
+            </div>
+        );
+    }
+
+
+
+    return (
+        <>
+            <div className="pt-10 px-7.5 mb-6">
+                <BreadcrumbBar breadcrumb={breadcrumb} />
+            </div>
+
+            <ConfigDetailsSummary
+                title={tab?.tab_label || t('none')}
+                description={tab?.tab_order}
+                onEdit={
+                    canEdit
+                        ? () => setModalType('edit')
+                        : undefined
+                }
+                onView={() => setModalType('view')}
+            />
+
+            <div className=" ml-4 mt-4 px-7.5">
+                <div className="flex justify-between items-center h-14">
+
+
+                    {/* TopBar */}
+                    <div className="font-medium text-[20px]">{t('intake_form_tab_sections')}</div>
+                    <div className="flex items-center h-full">
+                        <TopBar
+                            breadcrumb={[]}
+                            showFilters={false}
+                            showPagination={true}
+                            showAddNewButton={canCreate}
+                            addNewButtonText={t('add_new_section')}
+                            onAddNewButton={() => setSectionModal('add')}
+                            showSecondaryButton={false}
+                            pageStart={pageStart}
+                            pageEnd={pageEnd}
+                            total={total}
+                            onPrev={handlePrev}
+                            onNext={handleNext}
+                            showCapsule={false}
+                        />
+                    </div>
+                </div>
+            </div>
+            <div className="mx-7.5 bg-neutral-second rounded-[10px] p-4 pt-8 overflow-hidden">
+                <div>
+                    <div className="grid grid-cols-5 gap-4 pb-2 px-8">
+                        <div className="py-3 text-base font-semibold text-primary-second">
+                            {t('section_mnemonic')}
+                        </div>
+                        <div className="py-3 text-base font-semibold text-primary-second">
+                            {t('section_order')}
+                        </div>
+                        <div className="py-3 text-base font-semibold text-primary-second">
+                            {t('section_id')}
+                        </div>
+                        <div className="py-3 text-base font-semibold text-primary-second">
+                            {t('actions')}
+                        </div>
+                    </div>
+
+                    {tabLoading ? (
+                        <div className="flex justify-center items-center py-40">
+                            <img
+                                src="/images/common/loading.gif"
+                                alt="Loading"
+                                className="w-10 h-10"
+                            />
+                        </div>
+                    ) : (
+                        sections?.map((section: any, index: number) => (
+                            <div
+                                key={section.tab_section_id}
+                                className={`grid grid-cols-5 gap-4 items-center px-16 -mx-8 h-16 ${index % 2 === 0
+                                    ? 'bg-secondary-second/25'
+                                    : 'bg-neutral-second'
+                                    }`}
+                            >
+                                <div className="text-base font-medium truncate">
+                                    {section.section_mnemonic}
+                                </div>
+
+                                <div className="text-base font-medium truncate">
+                                    {section.section_order}
+                                </div>
+
+                                <div className="text-base truncate">
+                                    {section.section_id}
+                                </div>
+
+                                <div className="flex gap-4">
+                                    <ViewButton
+                                        label={t('view')}
+                                        onClick={() => {
+                                            setSelectedSection(section);
+                                            setSectionModal('view');
+                                        }}
+                                    />
+                                    <EditButton
+                                        label={t('common.edit')}
+                                        onClick={() => {
+                                            setSelectedSection(section);
+                                            setSectionModal('edit');
+                                        }}
+                                    />
+                                    <DeleteButton
+                                        label={t('remove')}
+                                        onClick={() => handleDelete(section)}
+                                    />
+                                </div>
+                            </div>
+                        ))
+                    )}
+                </div>
+            </div>
+
+            {showPopup && (
+                <ConfirmRemovePopup
+                    onClose={() => {
+                        setShowPopup(false);
+                        setSelectedItem(null);
+                        refresh();
+                    }}
+                    onConfirm={handleConfirmDelete}
+                    messageKey='confirm_remove_intake_form_tab_section'
+                />
+            )}
+
+            {modalType === 'view' && (
+                <ViewIntakeFormTabModal
+                    data={tab}
+                    onClose={() => {
+                        setModalType(null);
+                        setSelectedItem(null);
+                    }}
+                />
+            )}
+
+            {modalType === 'edit' && (
+                <EditIntakeFormTabModal
+                    initialData={tab}
+                    onClose={() => {
+                        setModalType(null);
+                        setSelectedItem(null);
+                    }}
+                    onSuccess={() => {
+                        tabrefresh();
+                    }}
+                />
+            )}
+
+            {sectionModal === 'add' && (
+                <AddIntakeFormTabSectionModal
+                    tabId={tabId}
+                    onClose={() => setSectionModal(null)}
+                    onSuccess={() => {
+                        refresh();
+                    }}
+                />
+            )}
+
+            {sectionModal === 'view' && (
+                <ViewIntakeFormTabSectionModal
+                    data={selectedSection}
+                    onClose={() => {
+                        setSectionModal(null);
+                        setSelectedSection(null);
+                    }}
+                />
+            )}
+
+            {sectionModal === 'edit' && (
+                <EditIntakeFormTabSectionModal
+                    initialData={selectedSection}
+                    onClose={() => {
+                        setSectionModal(null);
+                        setSelectedSection(null);
+                    }}
+                    onSuccess={() => {
+                        refresh();
+                    }}
+                />
+            )}
+        </>
+    );
+};
+
+export default IntakeFormTabIdPage;
