@@ -14,6 +14,7 @@ export interface Section {
     is_list: boolean;
     is_primary_section: boolean;
     is_core_section?: boolean;
+    section_weightage?: number;
     section_register_id: string;
     section_ui_schema: any;
     register_id: string;

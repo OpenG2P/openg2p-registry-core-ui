@@ -15,21 +15,21 @@ export default function StatusView({ vp }: StatusViewProps) {
     return (
         <div className="flex-1">
             <div className="grid grid-cols-3 gap-6 min-h-60">
-                <div className="bg-gray-100 p-10 flex flex-col justify-center items-center text-center">
-                    <p className="text-[16px] text-gray-500 mb-2">{t('credential_type')}</p>
+                <div className="bg-secondary-first p-10 flex flex-col justify-center items-center text-center">
+                    <p className="text-[16px] text-neutral-first/50 mb-2">{t('credential_type')}</p>
                     <p className="text-[16px] font-semibold">
                         {payload?.vct ?? '—'}
                     </p>
                 </div>
 
-                <div className="bg-gray-100 p-10 flex flex-col justify-center items-center text-center">
-                    <p className="text-[16px] text-gray-500 mb-2">{t('credential_id')}</p>
+                <div className="bg-secondary-first p-10 flex flex-col justify-center items-center text-center">
+                    <p className="text-[16px] text-neutral-first/50 mb-2">{t('credential_id')}</p>
                     <p className="text-[16px] font-semibold">
                         {payload?.id ?? '—'}
                     </p>
                 </div>
 
-                <div className="bg-gray-100 p-10 flex flex-col justify-center items-center text-center">
+                <div className="bg-secondary-first p-10 flex flex-col justify-center items-center text-center">
                     <Image
                         src={isSuccess ? '/images/common/verified.png' : '/images/common/invalid.png'}
                         alt={status}
@@ -38,9 +38,9 @@ export default function StatusView({ vp }: StatusViewProps) {
                         className={`mb-2 p-1 rounded-full ${isSuccess ? '' : 'bg-red-500'}`}
                     />
 
-                    <p className="text-[16px] text-gray-500 mb-2">{t('verification_result')}</p>
+                    <p className="text-[16px] text-neutral-first/50 mb-2">{t('verification_result')}</p>
                     <p
-                        className={`text-[16px] font-semibold ${isSuccess ? 'text-green-600' : 'text-red-600'}`}
+                        className={`text-[16px] font-semibold ${isSuccess ? 'text-toast-success' : 'text-red-600'}`}
                     >
                         {status}
                     </p>

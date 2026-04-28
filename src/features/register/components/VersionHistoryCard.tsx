@@ -47,23 +47,23 @@ export default function VersionHistoryCard({
 
     if (loading) {
         return (
-            <div className="relative rounded-[10px] bg-[#E0E0E0] px-7.25 pt-5 pb-7.25 overflow-hidden animate-pulse">
+            <div className="relative rounded-[10px] bg-secondary-second px-7.25 pt-5 pb-7.25 overflow-hidden animate-pulse">
                 <div className="flex items-center justify-between mb-5">
-                    <div className="h-6 w-40 rounded bg-black/20" />
-                    <div className="h-15 w-20 rounded-[20px] bg-black/20" />
+                    <div className="h-6 w-40 rounded bg-neutral-first/20" />
+                    <div className="h-15 w-20 rounded-[20px] bg-neutral-first/20" />
                 </div>
 
                 <div className="space-y-3">
-                    <div className="h-4 w-32 rounded bg-black/20" />
-                    <div className="h-4 w-64 rounded bg-black/20" />
+                    <div className="h-4 w-32 rounded bg-neutral-first/20" />
+                    <div className="h-4 w-64 rounded bg-neutral-first/20" />
                 </div>
 
                 <div className="mt-4 space-y-3">
-                    <div className="h-4 w-32 rounded bg-black/20" />
-                    <div className="h-4 w-64 rounded bg-black/20" />
+                    <div className="h-4 w-32 rounded bg-neutral-first/20" />
+                    <div className="h-4 w-64 rounded bg-neutral-first/20" />
                 </div>
 
-                <div className="mt-6 h-10 w-32 rounded-full bg-black/20" />
+                <div className="mt-6 h-10 w-32 rounded-full bg-neutral-first/20" />
             </div>
         );
     }
@@ -81,17 +81,17 @@ export default function VersionHistoryCard({
     const isDisabled = count === 0;
 
     return (
-        <div className="relative rounded-[10px] bg-[#E0E0E0] px-7.25 pt-5 pb-7.25 overflow-hidden">
+        <div className="relative rounded-[10px] bg-secondary-second px-7.25 pt-5 pb-7.25 overflow-hidden">
             <div className="flex items-center justify-between mb-5">
-                <h3 className="text-[24px] font-semibold text-black leading-none">
+                <h3 className="text-[24px] font-semibold text-neutral-first leading-none">
                     {t("version_history")}
                 </h3>
-                <div className="flex h-15 w-20 items-center justify-center rounded-[10px] border-3 border-white bg-[#D9D9D9] text-[34px] font-bold text-black">
+                <div className="flex h-15 w-20 items-center justify-center rounded-[10px] border-3 border-white bg-secondary-second text-[34px] font-bold text-neutral-first">
                     {count.toString().padStart(2, '0')}
                 </div>
             </div>
 
-            <div className="space-y-1 text-[16px] text-black font-normal">
+            <div className="space-y-1 text-[16px] text-neutral-first font-normal">
                 <p className="font-medium">{t("last_updated_by")}</p>
                 <div className="flex items-center gap-2">
                     <Image
@@ -116,7 +116,7 @@ export default function VersionHistoryCard({
             </div>
 
             {payload.last_approved_by && payload.last_approved_at && (
-                <div className="mt-4 space-y-1 text-[16px] text-black">
+                <div className="mt-4 space-y-1 text-[16px] text-neutral-first">
                     <p className="font-medium">{t("last_approved_by")}</p>
                     <div className="flex items-center gap-2">
                         <Image
@@ -145,7 +145,7 @@ export default function VersionHistoryCard({
             >
                 <ViewAll
                     href={href}
-                    bgColor="#B0B0AD"
+                    bgColor="var(--color-secondary-third)"
                     label={t("know_more")}
                 />
             </div>

@@ -76,8 +76,8 @@ const RegisterConfigurationPage = () => {
 
     if (loading || !registerDetails.register_id) {
         return (
-            <div className="min-h-screen bg-[#F3F1E4] flex items-center justify-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#ED7C22]"></div>
+            <div className="min-h-screen bg-secondary-first flex items-center justify-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-second"></div>
             </div>
         );
     }

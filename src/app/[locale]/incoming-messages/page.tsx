@@ -50,7 +50,7 @@ export default function IncomingMessagesPage() {
     }, [searchParams]);
 
     return (
-        <div className="min-h-screen mx-auto bg-[#F3F1E4]">
+        <div className="min-h-screen mx-auto bg-secondary-first">
             <TopBar
                 breadcrumb={[{ label: t('incoming_messages') }]}
                 showSearch
@@ -75,7 +75,7 @@ export default function IncomingMessagesPage() {
                         ))}
                     </div>
                 ) : messages.length === 0 ? (
-                    <div className="text-sm text-gray-400 text-center py-6">
+                    <div className="text-sm text-secondary-third text-center py-6">
                         {t('no_incoming_messages')}
                     </div>
                 ) : (

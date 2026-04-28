@@ -50,17 +50,17 @@ export default function CapsuleDropdown(props: CapsuleDropdownProps) {
 
     return (
         <div className="flex items-center gap-3">
-            <span className="text-[16px] w-25 text-black font-medium whitespace-nowrap truncate" title={label}>
+            <span className="text-[16px] w-25 text-neutral-first font-medium whitespace-nowrap truncate" title={label}>
                 {label}
             </span>
 
             <div ref={dropdownRef} className={`relative z-10 ${maxWidth || 'w-35'}`}>
                 <div
                     onClick={handleToggle}
-                    className={`w-full flex items-center justify-between gap-2.5 px-4 py-1 bg-white border border-[#ED7C22] rounded-[10px] truncate ${open ? 'border-b-transparent rounded-b-none ' : ''}`}
+                    className={`w-full flex items-center justify-between gap-2.5 px-4 py-1 bg-neutral-second border border-primary-second rounded-[10px] truncate ${open ? 'border-b-transparent rounded-b-none ' : ''}`}
                     title={selected}
                 >
-                    <span className={`text-[16px] font-medium ${open ? 'text-[#1E1E1E]/50' : 'text-[#1E1E1E]'} truncate`}>
+                    <span className={`text-[16px] font-medium ${open ? 'text-neutral-first/50' : 'text-neutral-first'} truncate`}>
                         {selected ?? t('select')}
                     </span>
 
@@ -69,16 +69,16 @@ export default function CapsuleDropdown(props: CapsuleDropdownProps) {
                         alt="open"
                         width={14}
                         height={8}
-                        className={`transition-transform ${open ? 'rotate-180' : ''}`}
+                        className={`h-auto transition-transform ${open ? 'rotate-180' : ''}`}
                     />
                 </div>
 
                 {open && (
-                    <div className="absolute left-0 py-1 top-full w-full bg-white border border-[#ED7C22] border-t-0 rounded-b-[10px] overflow-hidden">
+                    <div className="absolute left-0 py-1 top-full w-full bg-neutral-second border border-primary-second border-t-0 rounded-b-[10px] overflow-hidden">
                         {(
                             items.length === 0 ?
                                 (
-                                    <div className="px-4 py-3 text-[16px] text-[#1E1E1E] truncate" title={fallbackEmptyMessage}>
+                                    <div className="px-4 py-3 text-[16px] text-neutral-first truncate" title={fallbackEmptyMessage}>
                                         {fallbackEmptyMessage}
                                     </div>
                                 )
@@ -87,7 +87,7 @@ export default function CapsuleDropdown(props: CapsuleDropdownProps) {
                                         <div
                                             key={item}
                                             onClick={() => handleSelect(item)}
-                                            className="px-4 py-1 text-[16px] cursor-pointer hover:bg-[#F3F1E4] text-[#1E1E1E] font-medium truncate"
+                                            className="px-4 py-1 text-[16px] cursor-pointer hover:bg-secondary-first text-neutral-first font-medium truncate"
                                             title={item}
                                         >
                                             {item}

@@ -20,9 +20,9 @@ interface Props {
 }
 
 const statusClassMap: Record<string, string> = {
-    REJECTED: "text-red-500",
+    REJECTED: "text-toast-failed",
     PENDING: "text-amber-500",
-    APPROVED: "text-green-600",
+    APPROVED: "text-toast-success",
 };
 
 export default function ChangeRequestHeader({
@@ -40,7 +40,7 @@ export default function ChangeRequestHeader({
         ? t(rawTitle, { default: rawTitle })
         : t('change_request');
     return (
-        <div className="rounded-[10px] bg-[#F2BA1A33]/80 px-10 pt-5 pb-4 flex flex-col border border-dashed border-[#ED7C22]">
+        <div className="rounded-[10px] bg-primary-first/20 px-10 pt-5 pb-4 flex flex-col border border-dashed border-primary-second">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <InfoSection
                     title={title}
@@ -56,13 +56,13 @@ export default function ChangeRequestHeader({
 
             {details.approval_status === "PENDING" && (
                 <Can action={CHANGE_REQUEST_ACTIONS.approve}>
-                    <div className="my-3 border-t border-[#F2BA1A]" />
+                    <div className="my-3 border-t border-primary-first" />
                     <div className="flex items-center gap-4">
                         <button
                             type="button"
                             disabled={loadingAction}
                             onClick={onReject}
-                            className="px-4 py-1.5 text-[14px] font-medium rounded-[10px] bg-white text-black/50"
+                            className="px-4 py-1.5 text-[14px] font-medium rounded-[10px] bg-neutral-second text-neutral-first/50"
                         >
                             {t('reject_change')}
                         </button>
@@ -71,7 +71,7 @@ export default function ChangeRequestHeader({
                             type="button"
                             disabled={loadingAction}
                             onClick={onApprove}
-                            className="px-4 py-1.5 text-[14px] font-medium rounded-[10px] bg-black text-white"
+                            className="px-4 py-1.5 text-[14px] font-medium rounded-[10px] bg-neutral-first text-neutral-second"
                         >
                             {t('approve_change')}
                         </button>
@@ -90,25 +90,23 @@ const InfoSection = ({
 }) => {
     const t = useTranslations();
     return (
-        <div className="space-y-2 text-[16px] text-[#00000080]">
-            <h3 className="text-[24px] font-medium text-black truncate" title={title}>{title}</h3>
+        <div className="space-y-2 text-[16px] text-neutral-first/50">
+            <h3 className="text-[24px] font-medium text-neutral-first truncate" title={title}>{title}</h3>
             <div className="flex w-full overflow-hidden">
                 <span className="w-1/2 truncate" title={t('change_id')}>{t('change_id')}:</span>
-                <span className="w-1/2 pl-4 text-black font-medium truncate" title={details.change_request_id}>
+                <span className="w-1/2 pl-4 text-neutral-first font-medium truncate" title={details.change_request_id}>
                     {details.change_request_id}
                 </span>
             </div>
             <div className="flex w-full overflow-hidden">
                 <span className="w-1/2 truncate" title={t("status")}>{t("status")}:</span>
-                <span className={`w-1/2 pl-4 font-medium truncate ${statusClassMap[details.approval_status] ?? "text-gray-500"}`} title={details.approval_status}>
-                    {t(details.approval_status, {
-                        default: details.approval_status,
-                    })}
+                <span className={`w-1/2 pl-4 font-medium truncate ${statusClassMap[details.approval_status] ?? "text-neutral-first/50"}`} title={details.approval_status}>
+                    {details.approval_status}
                 </span>
             </div>
             <div className="flex w-full overflow-hidden">
                 <span className="w-1/2 truncate" title={t("change_date")}>{t("change_date")}:</span>
-                <span className="w-1/2 pl-4 text-black font-medium truncate" title={new Date(details.created_at).toLocaleDateString()}>
+                <span className="w-1/2 pl-4 text-neutral-first font-medium truncate" title={new Date(details.created_at).toLocaleDateString()}>
                     {new Date(details.created_at).toLocaleDateString()}
                 </span>
             </div>
@@ -128,29 +126,29 @@ const VerificationStats = ({
     const t = useTranslations();
 
     return (
-        <div className="space-y-2 text-[16px] text-[#00000080]">
-            <h3 className="text-lg font-semibold text-black invisible">
+        <div className="space-y-2 text-[16px] text-neutral-first/50">
+            <h3 className="text-lg font-semibold text-neutral-first invisible">
                 Verification
             </h3>
 
-            <div className="border-l border-[#F2BA1A] pl-6 space-y-2">
+            <div className="border-l border-primary-first pl-6 space-y-2">
                 <div className="flex w-full overflow-hidden">
                     <span className="w-1/2 truncate" title={t('verifications_required')}>{t('verifications_required')}:</span>
-                    <span className="w-1/2 pl-4 text-black font-medium truncate" title={details.no_of_verifications_required?.toString()}>
+                    <span className="w-1/2 pl-4 text-neutral-first font-medium truncate" title={details.no_of_verifications_required?.toString()}>
                         {details.no_of_verifications_required}
                     </span>
                 </div>
 
                 <div className="flex w-full overflow-hidden">
                     <span className="w-1/2 truncate" title={t('verifications_done')}>{t('verifications_done')}:</span>
-                    <span className="w-1/2 pl-4 text-black font-medium truncate" title={verificationCount.toString()}>
+                    <span className="w-1/2 pl-4 text-neutral-first font-medium truncate" title={verificationCount.toString()}>
                         {verificationCount}
                     </span>
                 </div>
 
                 <div className="flex w-full overflow-hidden">
                     <span className="w-1/2 truncate" title={t('documents_attached')}>{t('documents_attached')}:</span>
-                    <span className="w-1/2 pl-4 text-black font-medium truncate" title={documentsCount.toString()}>
+                    <span className="w-1/2 pl-4 text-neutral-first font-medium truncate" title={documentsCount.toString()}>
                         {documentsCount}
                     </span>
                 </div>
@@ -166,9 +164,9 @@ const AttachedDocuments = ({ documents = [] }: { documents?: ChangeRequestDocume
     const placeholdersCount = Math.max(0, 3 - visibleDocs.length);
 
     return (
-        <div className="space-y-2 text-[16px] text-[#00000080]">
+        <div className="space-y-2 text-[16px] text-neutral-first/50">
             <div className="pl-6 flex items-center leading-none mt-2">
-                <span className="text-[16px] font-medium text-black">
+                <span className="text-[16px] font-medium text-neutral-first">
                     {t('attached_documents')}
                 </span>
                 <Image
@@ -180,7 +178,7 @@ const AttachedDocuments = ({ documents = [] }: { documents?: ChangeRequestDocume
                 />
             </div>
 
-            <div className="border-l border-[#F2BA1A] pl-6 flex flex-col gap-2 font-semibold">
+            <div className="border-l border-primary-first pl-6 flex flex-col gap-2 font-semibold">
                 {visibleDocs.map((doc, index) => (
                     <span
                         key={index}

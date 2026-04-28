@@ -9,7 +9,7 @@ export default function NotFound() {
     const t = useTranslations('common');
 
     return (
-        <div className="min-h-screen bg-[#F3F1E4]">
+        <div className="min-h-screen bg-secondary-first">
             <div className="w-full h-17.5 flex justify-center items-center">
                 <div className="w-full px-7.5 flex justify-between items-center">
                     <div className="flex items-end gap-2">
@@ -27,7 +27,7 @@ export default function NotFound() {
             </div>
 
             <div className="flex flex-1 items-center justify-start px-8">
-                <div className="w-full bg-white rounded-[10px] py-36 flex flex-col items-center text-center">
+                <div className="w-full bg-neutral-second rounded-[10px] py-36 flex flex-col items-center text-center">
                     <Image
                         src="/images/common/404.png"
                         width={200}
@@ -37,17 +37,17 @@ export default function NotFound() {
                         priority
                     />
 
-                    <h1 className="mb-2 text-4xl font-bold text-[#ED7C22]">
+                    <h1 className="mb-2 text-4xl font-bold text-primary-second">
                         {t('error_404_title')}
                     </h1>
 
-                    <p className="mb-8 text-lg text-gray-400">
+                    <p className="mb-8 text-lg text-secondary-third">
                         {t('error_404_subtitle')}
                     </p>
 
                     <button
                         onClick={() => router.back()}
-                        className="flex items-center gap-3 rounded-full bg-black px-6 py-2.5 text-[16px] font-semibold text-white"
+                        className="flex items-center gap-3 rounded-full bg-neutral-first px-6 py-2.5 text-[16px] font-semibold text-neutral-second"
                     >
                         <Image
                             src="/images/common/left_white_arrow.png"

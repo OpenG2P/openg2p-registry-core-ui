@@ -24,10 +24,10 @@ export default function ToggleStatusSwitch({
             }}
             disabled={disabled}
             title={t('toggle_status')}
-            className={`relative w-12 h-6 rounded-full transition-colors duration-300 items-center ${isActive ? 'bg-green-500' : 'bg-gray-300'} ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+            className={`relative w-12 h-6 rounded-full transition-colors duration-300 items-center ${isActive ? 'bg-toast-success' : 'bg-secondary-third'} ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
         >
             <span
-                className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow-md transform transition-transform duration-300 ${isActive ? 'translate-x-6' : 'translate-x-0'}`}
+                className={`absolute top-0.5 left-0.5 w-5 h-5 bg-neutral-second rounded-full shadow-md transform transition-transform duration-300 ${isActive ? 'translate-x-6' : 'translate-x-0'}`}
             />
         </button>
     );

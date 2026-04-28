@@ -38,9 +38,9 @@ export default function FilterBar({
         <div className="relative inline-block items-center" ref={dropdownRef}>
             <button
                 onClick={() => setOpen((prev) => !prev)}
-                className="w-[130px] h-[34px] flex items-center justify-between px-4 rounded-[10px] bg-[#F2BA1A]"
+                className="w-[130px] h-[34px] flex items-center justify-between px-4 rounded-[10px] bg-primary-first"
                 disabled={filterLoading}
-            >   <span className=" text-[16px] font-medium leading-normal text-[#1E1E1E]">
+            >   <span className=" text-[16px] font-medium leading-normal text-neutral-first">
                     {filterLoading ? t('filter_loading') : t('filters')}
                 </span>
 
@@ -50,7 +50,7 @@ export default function FilterBar({
             {open && !filterLoading && (
                 <div className="absolute -right-8 top-12 z-50">
                     <div
-                        className="absolute -top-[9px] right-[45px] z-20 bg-[#FFFFFF] border-t border-r border-[#F2BA1A] w-[20px] h-[20px] -rotate-45 rounded-[2px] shadow-[0_0_4px_0_rgba(0,0,0,0.25)] [clip-path:polygon(-20px_-20px,_40px_-20px,_40px_40px)]"
+                        className="absolute -top-[9px] right-[45px] z-20 bg-neutral-second border-t border-r border-primary-first w-[20px] h-[20px] -rotate-45 rounded-[2px] shadow-[0_0_4px_0_rgba(0,0,0,0.25)] [clip-path:polygon(-20px_-20px,_40px_-20px,_40px_40px)]"
                     />
                     <div className="relative z-10">
                         <FilterDropdown

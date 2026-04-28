@@ -117,9 +117,9 @@ const DataModelsConfigurationPage = () => {
             label: t('status'),
             render: (item: DataModel) =>
                 item.is_active ? (
-                    <span className="text-[#77D79B]">{t('active')}</span>
+                    <span className="text-toast-success">{t('active')}</span>
                 ) : (
-                    <span className="text-[#EB656A]">{t('inactive')}</span>
+                    <span className="text-toast-failed">{t('inactive')}</span>
                 ),
         },
     ];

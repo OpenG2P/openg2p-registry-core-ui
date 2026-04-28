@@ -34,7 +34,7 @@ export default function FileLink({
         <button
             onClick={handleClick}
             disabled={!documentId}
-            className={`text-black hover:text-[#33A5E8] hover:underline transition-colors truncate disabled:opacity-50 ${className}`}
+            className={`text-neutral-first hover:text-toast-info hover:underline transition-colors truncate disabled:opacity-50 ${className}`}
         >
             {documentId}
         </button>

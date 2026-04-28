@@ -20,7 +20,7 @@ export default function Error({
     }, [error]);
 
     return (
-        <div className="min-h-screen bg-[#F3F1E4]">
+        <div className="min-h-screen bg-secondary-first">
             {/* Header / Breadcrumb */}
             <div className="w-full h-17.5 flex justify-center items-center">
                 <div className="w-full px-7.5 flex justify-between items-center">
@@ -40,7 +40,7 @@ export default function Error({
 
             {/* Main Content Card */}
             <div className="flex flex-1 items-center justify-start px-8">
-                <div className="w-full bg-white rounded-[10px] py-36 flex flex-col items-center text-center">
+                <div className="w-full bg-neutral-second rounded-[10px] py-36 flex flex-col items-center text-center">
                     <Image
                         src="/images/common/error.png"
                         width={200}
@@ -50,17 +50,17 @@ export default function Error({
                         priority
                     />
 
-                    <h1 className="mb-1 text-[40px] font-semibold leading-11.75 text-[#ED7C22]">
+                    <h1 className="mb-1 text-[40px] font-semibold leading-11.75 text-primary-second">
                         {t('something_went_wrong')}
                     </h1>
 
-                    <p className="mb-6 text-[20px] font-light leading-6 text-black/50">
+                    <p className="mb-6 text-[20px] font-light leading-6 text-neutral-first/50">
                         {t('something_went_wrong_subtitle')}
                     </p>
 
                     <button
                         onClick={() => reset()}
-                        className="flex items-center justify-center rounded-full bg-black px-8 py-1.5 text-lg font-medium text-white transition-all hover:bg-gray-800"
+                        className="flex items-center justify-center rounded-full bg-neutral-first px-8 py-1.5 text-lg font-medium text-neutral-second transition-all hover:bg-secondary-second-800"
                     >
                         {t('retry')}
                     </button>

@@ -34,12 +34,12 @@ const SearchBar = ({
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && onSearch(value, category)}
-                className={`border-none outline-none flex-1 bg-transparent px-2 pl-3 py-0 font-normal text-[#1E1E1E] placeholder-[#00000080] ${textClass}`}
+                className={`border-none outline-none flex-1 bg-transparent px-2 pl-3 py-0 font-normal text-neutral-first placeholder-neutral-first/50 ${textClass}`}
             />
 
             <button
                 onClick={() => onSearch(value, category)}
-                className="pl-1 pr-3 text-[#1E1E1E]"
+                className="pl-1 pr-3 text-neutral-first"
             >
                 <Image
                     src="/images/common/search_icon.png"

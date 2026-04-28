@@ -18,7 +18,7 @@ export default function DeleteButton({ label, onClick }: Props) {
             className="flex items-center hover:opacity-80 transition-opacity"
             title={label}
         >
-            <span className="font-medium text-[#00000080]">{label}</span>
+            <span className="font-medium text-neutral-first/50">{label}</span>
             <Image
                 src="/images/common/false_sign.png"
                 alt={label}

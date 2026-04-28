@@ -31,9 +31,9 @@ export default function ProfileDropdown() {
         <div ref={dropdownRef} className="relative">
             <button
                 onClick={toggleDropdown}
-                className="flex items-center gap-3 px-1 py-1 bg-white text-sm font-medium text-gray-800 rounded-md transition cursor-pointer"
+                className="flex items-center gap-3 px-1 py-1 bg-neutral-second text-sm font-medium text-neutral-first rounded-md transition cursor-pointer"
             >
-                <span className="text-[16px] text-black font-normal">
+                <span className="text-[16px] text-neutral-first font-normal">
                     {/* in place of use set the actual use name  */}
                     <span className="font-medium">{displayName}</span>
                 </span>
@@ -50,14 +50,14 @@ export default function ProfileDropdown() {
             </button>
 
             {open && (
-                <div className="absolute right-0 top-10 mt-3 w-35 bg-[#E0E0E0] border border-gray-200 rounded-lg shadow-xl z-50 flex flex-col">
-                    <div className="absolute -top-2.5 right-9 w-5 h-5 bg-[#E0E0E0] border-l border-t border-gray-200 rotate-45"></div>
+                <div className="absolute right-0 top-10 mt-3 w-35 bg-secondary-second border border-gray-200 rounded-lg shadow-xl z-50 flex flex-col">
+                    <div className="absolute -top-2.5 right-9 w-5 h-5 bg-secondary-second border-l border-t border-gray-200 rotate-45"></div>
 
                     <div className="flex flex-col">
                         {/* <Link
                             href={`/myprofile`}
                             onClick={() => setOpen(false)}
-                            className="flex items-center gap-x-2 px-4 py-4 text-sm text-black font-bold"
+                            className="flex items-center gap-x-2 px-4 py-4 text-sm text-neutral-first font-bold"
                         >
                             <Image
                                 src="/images/common/user_dropdown.png"
@@ -70,7 +70,7 @@ export default function ProfileDropdown() {
 
                         <button
                             onClick={logoutHandler}
-                            className="flex items-center gap-x-2 mt-4 px-4 pb-4 text-sm text-black font-bold"
+                            className="flex items-center gap-x-2 mt-4 px-4 pb-4 text-sm text-neutral-first font-bold"
                         >
                             <Image
                                 src="/images/common/logout.png"

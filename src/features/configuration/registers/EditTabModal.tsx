@@ -63,21 +63,21 @@ export default function EditTabModal({ isOpen, onClose, onSuccess, initialData, 
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
-            <div className="relative w-full max-w-200 max-h-150 bg-[#F2BA1A] rounded-[10px] overflow-hidden flex p-1">
-                <div className="flex-1 w-full bg-white p-10 relative rounded-[10px] overflow-y-auto">
+        <div className="fixed inset-0 bg-neutral-first/80 z-50 flex items-center justify-center p-4">
+            <div className="relative w-full max-w-200 max-h-150 bg-primary-first rounded-[10px] overflow-hidden flex p-1">
+                <div className="flex-1 w-full bg-neutral-second p-10 relative rounded-[10px] overflow-y-auto">
                     <button
                         onClick={handleCancel}
-                        className="absolute top-6 right-6 text-gray-400 hover:text-gray-600 transition-colors"
+                        className="absolute top-6 right-6 text-secondary-third hover:text-neutral-first/70 transition-colors"
                     >
                         <X size={40} strokeWidth={2} />
                     </button>
 
-                    <h2 className="text-2xl font-bold text-orange-500 mb-4">{t('edit_tab')}</h2>
+                    <h2 className="text-2xl font-bold text-primary-second mb-4">{t('edit_tab')}</h2>
 
                     <div className="space-y-4">
                         <div>
-                            <label className="block text-sm font-semibold text-black mb-2">
+                            <label className="block text-sm font-semibold text-neutral-first mb-2">
                                 {t('tab_label')}
                             </label>
                             <div className="relative">
@@ -86,13 +86,13 @@ export default function EditTabModal({ isOpen, onClose, onSuccess, initialData, 
                                     placeholder={t('enter_tab_label')}
                                     value={formData.tab_label}
                                     onChange={(e) => setFormData({ ...formData, tab_label: e.target.value })}
-                                    className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all text-gray-600 placeholder:text-gray-400"
+                                    className="w-full px-4 py-2 border border-primary-second rounded-lg outline-none outline-1 outline-primary-second transition-all text-neutral-first/70 placeholder:text-secondary-third"
                                 />
                             </div>
                         </div>
 
                         <div>
-                            <label className="block text-sm font-semibold text-black mb-2">
+                            <label className="block text-sm font-semibold text-neutral-first mb-2">
                                 {t('tab_order')}
                             </label>
                             <input
@@ -100,20 +100,20 @@ export default function EditTabModal({ isOpen, onClose, onSuccess, initialData, 
                                 placeholder="e.g. 0"
                                 value={formData.tab_order}
                                 onChange={(e) => setFormData({ ...formData, tab_order: e.target.value })}
-                                className="w-full px-4 py-2 border border-[#F77F57] rounded-lg outline-none outline-1 outline-[#F77F57] transition-all text-gray-600 placeholder:text-gray-400"
+                                className="w-full px-4 py-2 border border-primary-second rounded-lg outline-none outline-1 outline-primary-second transition-all text-neutral-first/70 placeholder:text-secondary-third"
                             />
                         </div>
 
                         <div className="flex gap-4 pt-6">
                             <button
                                 onClick={handleCancel}
-                                className="px-12 py-2.5 bg-gray-300 text-gray-700 rounded-[10px] hover:bg-gray-400 transition-colors"
+                                className="px-12 py-2.5 bg-secondary-third text-neutral-first rounded-[10px] hover:bg-secondary-third transition-colors"
                             >
                                 {t('cancel')}
                             </button>
                             <button
                                 onClick={handleSubmit}
-                                className="px-12 py-2.5 bg-black text-white rounded-[10px] hover:bg-gray-800 transition-colors disabled:opacity-50"
+                                className="px-12 py-2.5 bg-neutral-first text-neutral-second rounded-[10px] hover:bg-secondary-second-800 transition-colors disabled:opacity-50"
                             >
                                 {t('update')}
                             </button>

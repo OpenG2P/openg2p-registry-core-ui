@@ -31,15 +31,15 @@ export default function IntakeVerificationCard({ submission, isPending }: Props)
     return (
         <Can action={VERIFICATION_INTAKE_FORM_ACTIONS.view}>
             <div className="rounded-lg space-y-4">
-                <div className="bg-[#F2BA1A] px-6 py-4 rounded-[10px] flex justify-between items-center shadow-sm">
-                    <h4 className="text-[24px] font-semibold text-black">
+                <div className="bg-primary-first px-6 py-4 rounded-[10px] flex justify-between items-center shadow-sm">
+                    <h4 className="text-[24px] font-semibold text-neutral-first">
                         {t("verifications")}
                     </h4>
                     {isPending && (
                         <Can action={VERIFICATION_INTAKE_FORM_ACTIONS.create}>
                             <button
                                 onClick={() => setShowForm(!showForm)}
-                                className="flex items-center gap-2 text-[14px] px-4 py-1 rounded-[10px] bg-black text-white hover:bg-gray-800 transition-colors"
+                                className="flex items-center gap-2 text-[14px] px-4 py-1 rounded-[10px] bg-neutral-first text-neutral-second hover:bg-secondary-second-800 transition-colors"
                             >
                                 <span>{t("add")}</span>
                                 <Image
@@ -66,7 +66,7 @@ export default function IntakeVerificationCard({ submission, isPending }: Props)
 
                 <div className="space-y-3">
                     {loadingVerifications ? (
-                        <div className="py-4 text-center text-gray-500">Loading verifications...</div>
+                        <div className="py-4 text-center text-neutral-first/50">Loading verifications...</div>
                     ) : (
                         verifications.map((v) => (
                             <VerificationCard key={v.verification_id} verification={v} />

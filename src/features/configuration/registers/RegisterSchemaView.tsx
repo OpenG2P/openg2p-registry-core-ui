@@ -62,35 +62,35 @@ export default function RegisterSchemaView({
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center p-8 bg-white rounded-[10px] mx-7.5">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#ED7C22]"></div>
+            <div className="flex items-center justify-center p-8 bg-neutral-second rounded-[10px] mx-7.5">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-second"></div>
             </div>
         );
     }
 
 
     if (!schema) {
-        return <div className="p-6 text-gray-500">{t('no_schema_found') || "No schema found"}</div>;
+        return <div className="p-6 text-neutral-first/50">{t('no_schema_found') || "No schema found"}</div>;
     }
 
     return (
-        <div className="mx-7.5 bg-white rounded-[10px] p-6 relative">
+        <div className="mx-7.5 bg-neutral-second rounded-[10px] p-6 relative">
             <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-semibold text-gray-700 capitalize">
+                <h3 className="text-lg font-semibold text-neutral-first capitalize">
                     {activeTab} {t('schema') || "Schema"}
                 </h3>
                 <button
                     onClick={handleSave}
-                    className="bg-black text-white px-4 py-2 rounded-[10px] font-semibold"
+                    className="bg-neutral-first text-neutral-second px-4 py-2 rounded-[10px] font-semibold"
                 >
                     {t('save_schema') || "Save Schema"}
                 </button>
             </div>
-            <div className="border border-gray-200 rounded-[10px] bg-[#D9D9D933] overflow-hidden">
+            <div className="border border-secondary-second rounded-[10px] bg-secondary-second/20 overflow-hidden">
                 <textarea
                     value={editableSchema}
                     onChange={(e) => setEditableSchema(e.target.value)}
-                    className="w-full min-h-125 p-4 font-mono text-sm text-gray-800 focus:outline-none resize-y"
+                    className="w-full min-h-125 p-4 font-mono text-sm text-neutral-first focus:outline-none resize-y"
                     spellCheck={false}
                 />
             </div>

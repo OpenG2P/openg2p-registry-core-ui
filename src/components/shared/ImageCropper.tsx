@@ -57,21 +57,21 @@ export default function ImageCropper({ image, onCropComplete, onCancel }: ImageC
     };
 
     return (
-        <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/80 p-4">
-            <div className="relative w-full max-w-175 bg-white rounded-[10px] overflow-hidden border-4 border-[#F2BA1A]">
+        <div className="fixed inset-0 z-100 flex items-center justify-center bg-neutral-first/80 p-4">
+            <div className="relative w-full max-w-175 bg-neutral-second rounded-[10px] overflow-hidden border-4 border-primary-first">
                 {/* Header */}
                 <div className="flex items-center justify-between px-8 py-6">
-                    <h2 className="text-[#ED7C22] text-2xl font-bold font-roboto">{t('edit_image')}</h2>
+                    <h2 className="text-primary-second text-2xl font-bold font-roboto">{t('edit_image')}</h2>
                     <button
                         onClick={onCancel}
-                        className="text-gray-400 hover:text-gray-600 transition-colors"
+                        className="text-secondary-third hover:text-neutral-first/70 transition-colors"
                     >
                         <X size={32} />
                     </button>
                 </div>
 
                 {/* Cropper Area */}
-                <div className="relative mx-8 h-87.5 bg-[#3D3D00] rounded-[10px] overflow-hidden">
+                <div className="relative mx-8 h-87.5 bg-neutral-first rounded-[10px] overflow-hidden">
                     <Cropper
                         image={image}
                         crop={crop}
@@ -86,18 +86,18 @@ export default function ImageCropper({ image, onCropComplete, onCancel }: ImageC
                 </div>
 
                 {/* Controls */}
-                <div className="px-8 py-8 flex items-center gap-6 bg-gray-50/50 w-full">
+                <div className="px-8 py-8 flex items-center gap-6 bg-secondary-first/50 w-full">
 
                     {/* Zoom  */}
                     <div className="flex items-center gap-3 flex-1">
                         <button
                             onClick={() => setZoom(Math.max(1, zoom - 0.1))}
-                            className="text-gray-400 hover:text-gray-600 transition-colors"
+                            className="text-secondary-third hover:text-neutral-first/70 transition-colors"
                         >
-                            <Minus size={20} strokeWidth={3} className="border-2 border-gray-300 rounded-full p-0.5" />
+                            <Minus size={20} strokeWidth={3} className="border-2 border-secondary-third rounded-full p-0.5" />
                         </button>
 
-                        <div className="relative flex-1 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                        <div className="relative flex-1 h-1.5 bg-secondary-second rounded-full overflow-hidden">
                             <input
                                 type="range"
                                 value={zoom}
@@ -108,44 +108,44 @@ export default function ImageCropper({ image, onCropComplete, onCancel }: ImageC
                                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                             />
                             <div
-                                className="absolute top-0 left-0 h-full bg-[#F2BA1A]"
+                                className="absolute top-0 left-0 h-full bg-primary-first"
                                 style={{ width: `${((zoom - 1) / 2) * 100}%` }}
                             />
                         </div>
 
                         <button
                             onClick={() => setZoom(Math.min(3, zoom + 0.1))}
-                            className="text-gray-400 hover:text-gray-600 transition-colors"
+                            className="text-secondary-third hover:text-neutral-first/70 transition-colors"
                         >
-                            <Plus size={20} strokeWidth={3} className="border-2 border-gray-300 rounded-full p-0.5" />
+                            <Plus size={20} strokeWidth={3} className="border-2 border-secondary-third rounded-full p-0.5" />
                         </button>
                     </div>
 
                     {/* Aspect Ratio*/}
                     <div className="flex items-center gap-2 shrink-0">
-                        <span className="text-xs text-gray-500 font-semibold">{t('width')}</span>
+                        <span className="text-xs text-neutral-first/50 font-semibold">{t('width')}</span>
                         <input
                             type="number"
                             value={inputWidth}
                             onChange={(e) => setInputWidth(e.target.value)}
-                            className="w-20 px-2 py-1 text-sm border border-gray-300 rounded outline-none focus:border-gray-500"
+                            className="w-20 px-2 py-1 text-sm border border-secondary-third rounded outline-none focus:border-gray-500"
                         />
 
-                        <span className="text-gray-400 font-bold">:</span>
+                        <span className="text-secondary-third font-bold">:</span>
 
-                        <span className="text-xs text-gray-500 font-semibold">{t('height')}</span>
+                        <span className="text-xs text-neutral-first/50 font-semibold">{t('height')}</span>
                         <input
                             type="number"
                             value={inputHeight}
                             onChange={(e) => setInputHeight(e.target.value)}
-                            className="w-20 px-2 py-1 text-sm border border-gray-300 rounded outline-none focus:border-gray-500"
+                            className="w-20 px-2 py-1 text-sm border border-secondary-third rounded outline-none focus:border-gray-500"
                         />
                     </div>
 
                     {/* Rotate */}
                     <button
                         onClick={() => setRotation((prev) => (prev + 90) % 360)}
-                        className="text-gray-400 hover:text-[#ED7C22] transition-colors shrink-0"
+                        className="text-secondary-third hover:text-primary-second transition-colors shrink-0"
                         title="Rotate 90°"
                     >
                         <RotateCw size={22} />
@@ -154,7 +154,7 @@ export default function ImageCropper({ image, onCropComplete, onCancel }: ImageC
                     {/* Apply */}
                     <button
                         onClick={handleApply}
-                        className="bg-black text-white px-8 py-2 rounded-[10px] font-bold text-sm hover:bg-gray-800 transition-colors shadow-lg shrink-0"
+                        className="bg-neutral-first text-neutral-second px-8 py-2 rounded-[10px] font-bold text-sm hover:bg-secondary-second-800 transition-colors shadow-lg shrink-0"
                     >
                         {t('apply')}
                     </button>

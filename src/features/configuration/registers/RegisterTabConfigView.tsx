@@ -70,20 +70,20 @@ export default function RegisterTabConfigView({
 		toast.info(
 			({ closeToast }) => (
 				<div className="p-1">
-					<p className="font-bold text-gray-800 mb-3">{t('confirm_remove_tab')}</p>
+					<p className="font-bold text-neutral-first mb-3">{t('confirm_remove_tab')}</p>
 					<div className="flex gap-3">
 						<button
 							onClick={async () => {
 								closeToast();
 								await proceedDelete(tabId);
 							}}
-							className="bg-[#ED7C22] text-white px-4 py-1.5 rounded-full text-sm font-semibold hover:bg-[#d66a1a] transition-colors shadow-sm"
+							className="bg-primary-second text-neutral-second px-4 py-1.5 rounded-full text-sm font-semibold hover:bg-primary-second transition-colors shadow-sm"
 						>
 							{t('remove')}
 						</button>
 						<button
 							onClick={closeToast}
-							className="bg-gray-100 text-gray-600 px-4 py-1.5 rounded-full text-sm font-semibold hover:bg-gray-200 transition-colors"
+							className="bg-secondary-first text-neutral-first/70 px-4 py-1.5 rounded-full text-sm font-semibold hover:bg-secondary-second transition-colors"
 						>
 							{t('cancel')}
 						</button>
@@ -96,39 +96,39 @@ export default function RegisterTabConfigView({
 				closeOnClick: false,
 				draggable: false,
 				closeButton: false,
-				className: 'rounded-[15px] shadow-xl border border-gray-100',
+				className: 'rounded-[15px] shadow-xl border border-secondary-first',
 			}
 		);
 	};
 
 	if (loading) {
 		return (
-			<div className="flex items-center justify-center p-8 bg-white rounded-[10px] mx-7.5">
-				<div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#ED7C22]"></div>
+			<div className="flex items-center justify-center p-8 bg-neutral-second rounded-[10px] mx-7.5">
+				<div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-second"></div>
 			</div>
 		);
 	}
 
 	return (
 		<>
-			<div className="mx-7.5 bg-white rounded-[10px] p-8 overflow-x-visible">
+			<div className="mx-7.5 bg-neutral-second rounded-[10px] p-8 overflow-x-visible">
 				<div>
 					{/* Header */}
 					<div className="grid grid-cols-5 gap-4 pb-2 px-4">
-						<div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
+						<div className="py-3 text-left text-base font-semibold text-primary-second tracking-wider">
 							{t('tab_label')}
 						</div>
-						<div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
+						<div className="py-3 text-left text-base font-semibold text-primary-second tracking-wider">
 							{t('tab_order')}
 						</div>
-						<div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
+						<div className="py-3 text-left text-base font-semibold text-primary-second tracking-wider">
 							{t('used_for_intake')}
 						</div>
-						<div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
+						<div className="py-3 text-left text-base font-semibold text-primary-second tracking-wider">
 							Status
 						</div>
 
-						<div className="py-3 text-left text-base font-semibold text-[#ED7C22] tracking-wider">
+						<div className="py-3 text-left text-base font-semibold text-primary-second tracking-wider">
 							{t('actions')}
 						</div>
 
@@ -142,20 +142,20 @@ export default function RegisterTabConfigView({
 							className="block -mx-8"
 						>
 							<div
-								className={`grid grid-cols-5 h-15 gap-4 items-center px-12 py-4 transition-colors ${index % 2 === 0 ? 'bg-[#D9D9D940]' : 'bg-white'
+								className={`grid grid-cols-5 h-15 gap-4 items-center px-12 py-4 transition-colors ${index % 2 === 0 ? 'bg-secondary-second/25' : 'bg-neutral-second'
 									} cursor-pointer`}
 							>
 
 								<div className="text-base font-medium">
 									{tab.tab_label || tab.intake_form_name}
 								</div>
-								<div className="text-base font-medium text-gray-500">
+								<div className="text-base font-medium text-neutral-first/50">
 									{tab.tab_order}
 								</div>
-								<div className="text-base font-medium text-gray-500">
+								<div className="text-base font-medium text-neutral-first/50">
 									{tab.used_for_new_intake_form ? t('true') : t('false')}
 								</div>
-								<div className="text-base font-medium text-gray-500">
+								<div className="text-base font-medium text-neutral-first/50">
 									{tab.is_active ? t('active') : t('inactive')}
 								</div>
 
@@ -163,7 +163,7 @@ export default function RegisterTabConfigView({
 									<Can action={CONFIGURATION_TABS_ACTIONS.delete}>
 										<span
 											onClick={(e) => handleDelete(e, tab.tab_id)}
-											className="flex items-center text-[#00000080]"
+											className="flex items-center text-neutral-first/50"
 										>
 											{t('remove')}
 											<Image

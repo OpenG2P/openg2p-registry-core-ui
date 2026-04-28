@@ -5,6 +5,9 @@ import { ReactNode } from 'react';
 
 export type ConfigActiveOption =
     | "registry"
+    | "registry-details"
+    | "registry-themes"
+    | "registry-languages"
     | "registers"
     | "data-models"
     | "ingest-configurations"
@@ -23,7 +26,7 @@ interface ConfigLayoutProps {
 
 export const ConfigLayout = ({ children, activeOption }: ConfigLayoutProps) => {
     return (
-        <div className="min-h-screen mx-auto bg-[#F3F1E4] flex">
+        <div className="min-h-screen mx-auto bg-secondary-first flex">
             <div className="mt-4">
                 <ConfigSidebar activeOption={activeOption} />
             </div>
