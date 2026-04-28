@@ -32,7 +32,9 @@ export default function EditRegisterModal({ isOpen, onClose, onSuccess, initialD
         register_rank: '',
         register_purpose: 'REGISTER',
         functional_id_generation_required: false,
+        completion_score_required: false,
     });
+
 
     useEffect(() => {
         if (initialData && isOpen) {
@@ -46,7 +48,9 @@ export default function EditRegisterModal({ isOpen, onClose, onSuccess, initialD
                 register_rank: initialData.register_rank?.toString() || '0',
                 register_purpose: initialData.register_purpose || 'REGISTER',
                 functional_id_generation_required: initialData.functional_id_generation_required || false,
+                completion_score_required: initialData.completion_score_required || false,
             });
+
         }
     }, [initialData, isOpen]);
 
@@ -86,8 +90,10 @@ export default function EditRegisterModal({ isOpen, onClose, onSuccess, initialD
                 register_rank: Number(formData.register_rank) || 0,
                 register_purpose: formData.register_purpose,
                 functional_id_generation_required: formData.functional_id_generation_required,
+                completion_score_required: formData.completion_score_required,
             })
         });
+
 
 
         if (result) {
@@ -238,6 +244,26 @@ export default function EditRegisterModal({ isOpen, onClose, onSuccess, initialD
                         </div>
 
                         <div className="grid grid-cols-3 gap-4">
+                            <div>
+                                <label className="block text-sm font-semibold text-neutral-first mb-2">
+                                    {t('completion_score_required')}
+                                </label>
+                                <div className="relative">
+                                    <select
+                                        value={formData.completion_score_required ? "true" : "false"}
+                                        onChange={(e) => setFormData({ ...formData, completion_score_required: e.target.value === "true" })}
+                                        className="w-full px-4 py-2 border border-primary-second rounded-lg outline-none outline-1 outline-primary-second transition-all bg-neutral-second appearance-none cursor-pointer text-neutral-first/70 pr-10"
+                                    >
+                                        <option value="true">{t('true')}</option>
+                                        <option value="false">{t('false')}</option>
+                                    </select>
+                                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-secondary-third pointer-events-none" size={20} />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-3 gap-4">
+
                             <div>
                                 <label className="block text-sm font-semibold text-neutral-first mb-2">
                                     {t('available_register_rank')}

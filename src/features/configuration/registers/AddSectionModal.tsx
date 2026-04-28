@@ -36,7 +36,9 @@ export default function AddSectionModal({ isOpen, onClose, onSuccess }: AddSecti
         is_primary_section: false,
         is_core_section: false,
         section_order: '',
+        section_weightage: '',
     });
+
 
     const handleSubmit = async () => {
         if (!formData.section_mnemonic) {
@@ -64,9 +66,11 @@ export default function AddSectionModal({ isOpen, onClose, onSuccess }: AddSecti
                 is_primary_section: formData.is_primary_section,
                 is_core_section: formData.is_core_section,
                 section_order: Number(formData.section_order) || 0,
+                section_weightage: Number(formData.section_weightage) || 0,
                 section_ui_schema: {}
             })
         });
+
 
         if (result?.section_id) {
             toast.success('Section created successfully');
@@ -81,7 +85,9 @@ export default function AddSectionModal({ isOpen, onClose, onSuccess }: AddSecti
                 is_primary_section: false,
                 is_core_section: false,
                 section_order: '',
+                section_weightage: '',
             });
+
             if (onSuccess) onSuccess();
             onClose();
         } else {
@@ -101,7 +107,9 @@ export default function AddSectionModal({ isOpen, onClose, onSuccess }: AddSecti
             is_primary_section: false,
             is_core_section: false,
             section_order: '',
+            section_weightage: '',
         });
+
         onClose();
     };
 
@@ -160,11 +168,13 @@ export default function AddSectionModal({ isOpen, onClose, onSuccess }: AddSecti
                                 </label>
                                 <input
                                     type="number"
+                                    min="0"
                                     placeholder="e.g. 0"
                                     value={formData.no_of_verifications_required}
                                     onChange={(e) => setFormData({ ...formData, no_of_verifications_required: e.target.value })}
                                     className="w-full px-4 py-2 border border-primary-second rounded-lg outline-none outline-1 outline-primary-second transition-all text-neutral-first/70 placeholder:text-secondary-third"
                                 />
+
                             </div>
 
                             <div>
@@ -294,6 +304,24 @@ export default function AddSectionModal({ isOpen, onClose, onSuccess }: AddSecti
                                 </div>
                             </div>
                         </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-sm font-semibold text-neutral-first mb-2">
+                                    {t('section_weightage')}
+                                </label>
+                                <input
+                                    type="number"
+                                    min="0"
+                                    placeholder="e.g. 0"
+                                    value={formData.section_weightage}
+                                    onChange={(e) => setFormData({ ...formData, section_weightage: e.target.value })}
+                                    className="w-full px-4 py-2 border border-primary-second rounded-lg outline-none outline-1 outline-primary-second transition-all text-neutral-first/70 placeholder:text-secondary-third"
+                                />
+
+                            </div>
+                        </div>
+
 
                         <div className="flex gap-4 pt-6">
                             <button

@@ -59,6 +59,7 @@ class ClientSafeConfig {
     }
 
     async fetchRegistryConfig(origin: string): Promise<ClientSafeConfigShape> {
+
         const backendConfig = getBackendConfig();
         const backendUrl = `${backendConfig.backendApiUrl}/registry-config/get_registry_configuration`;
 
