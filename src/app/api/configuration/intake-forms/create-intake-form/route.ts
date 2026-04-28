@@ -4,11 +4,14 @@ import { proxyToBackend } from "@/app/api/_lib/backend-proxy";
 export async function POST(request: NextRequest) {
     return proxyToBackend({
         req: request,
-        targetEndpoint: "/intake-form-data/get_number_of_pending_change_requests_for_submission",
+        targetEndpoint: "/intake-form-metadata/create_intake_form",
         buildPayload: (body) => ({
             pagination_request: undefined,
             request_payload: {
-                submission_id: body.submission_id,
+                register_id: body.register_id,
+                form_mnemonic: body.form_mnemonic,
+                form_description: body.form_description,
+                number_of_verifications: body.number_of_verifications,
             },
         }),
     });

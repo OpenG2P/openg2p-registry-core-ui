@@ -4,7 +4,7 @@ import { proxyToBackend } from "@/app/api/_lib/backend-proxy";
 export async function POST(request: NextRequest) {
     return proxyToBackend({
         req: request,
-        targetEndpoint: "/intake-form-metadata/get_intake_form",
+        targetEndpoint: "/intake-form-metadata/get_all_intake_forms",
         buildPayload: (body) => ({
             pagination_request: {
                 current_page: body.current_page ?? 1,
@@ -15,8 +15,11 @@ export async function POST(request: NextRequest) {
             },
             request_payload: {
                 register_id: body.register_id,
-                intake_form_id: body.intake_form_id,
             },
+        }),
+        transformResponse: (responseBody) => ({
+            intake_forms: responseBody?.response_payload || [],
+            pagination: responseBody?.pagination_response,
         }),
     });
 }
