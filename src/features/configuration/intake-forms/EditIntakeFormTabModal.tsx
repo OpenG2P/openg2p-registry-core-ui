@@ -61,7 +61,7 @@ export default function EditIntakeFormTabModal({
 
     return (
         <BaseModal
-            title={t('edit_intake_form')}
+            title={t('edit_intake_form_tab')}
             onClose={onClose}
             primaryActionLabel={t('update')}
             onPrimaryAction={handleSubmit}

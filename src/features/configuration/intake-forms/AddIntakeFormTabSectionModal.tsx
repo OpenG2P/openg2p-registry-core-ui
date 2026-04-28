@@ -73,7 +73,7 @@ export default function AddIntakeFormTabSectionModal({
 
     return (
         <BaseModal
-            title={t('add_intake_form_tab')}
+            title={t('add_intake_form_tab_section')}
             onClose={onClose}
             primaryActionLabel={t('save')}
             onPrimaryAction={handleSubmit}

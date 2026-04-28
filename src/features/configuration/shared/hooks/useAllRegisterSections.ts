@@ -8,7 +8,7 @@ export function useAllRegisterSections(register_id?: string, page?: number, page
             number_of_pages: number;
         };
     }>({
-        url: '/api/configuration/registers/sections-brief',
+        url: '/api/configuration/registers/section-metadata/get-all-sections-brief',
         options: {
             method: 'POST',
             body: JSON.stringify({

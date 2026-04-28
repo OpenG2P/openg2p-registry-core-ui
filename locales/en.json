@@ -927,5 +927,8 @@
   "toast_intake_form_tab_updated": "Intake form tab updated successfully",
   "toast_intake_form_tab_update_failed": "Failed to update intake form tab",
   "toast_intake_form_tab_section_updated": "Intake form tab section updated successfully",
-  "toast_intake_form_tab_section_update_failed": "Failed to update intake form tab section"
+  "toast_intake_form_tab_section_update_failed": "Failed to update intake form tab section",
+  "add_intake_form_tab_section": "Add Intake Form Tab Section",
+  "edit_intake_form_tab": "Edit Intake Form Tab",
+  "edit_intake_form_tab_section": "Edit Intake Form Tab Section"
 }
