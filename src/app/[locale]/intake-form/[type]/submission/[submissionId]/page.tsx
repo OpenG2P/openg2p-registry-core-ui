@@ -128,7 +128,7 @@ export default function IntakeFormSubmissionPage() {
                         <div className="w-full lg:w-[25%] space-y-6">
                             <div className={isDraft ? 'opacity-50 pointer-events-none' : ''}>
                                 <IntakeVerificationCard
-                                    submission={submission}
+                                    submission_id={submissionId}
                                     isPending={!isDraft && submission?.approval_status === "PENDING"}
                                 />
                             </div>

@@ -11,7 +11,7 @@ export const useVerifications = (changeId?: string, intakeFormSubmissionId?: str
 
     const { data: verificationResp, loading: verificationsLoading } = useFetch<any>({
         url: `/api/verification/list`,
-        enabled: !!changeId,
+        enabled: !!changeId || !!intakeFormSubmissionId,
         options: {
             method: "POST",
             body: JSON.stringify({
@@ -28,14 +28,14 @@ export const useVerifications = (changeId?: string, intakeFormSubmissionId?: str
 
     useEffect(() => {
         setVerifications([]);
-    }, [changeId]);
+    }, [changeId, intakeFormSubmissionId]);
 
     useEffect(() => {
         if (verificationResp?.verifications) {
             setVerifications(verificationResp.verifications);
         }
-        setLoadingVerifications(verificationsLoading)
-    }, [verificationResp]);
+        setLoadingVerifications(verificationsLoading);
+    }, [verificationResp, verificationsLoading]);
 
     const addVerification = useCallback(
         async (observation: string, isApproved: boolean) => {
