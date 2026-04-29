@@ -94,7 +94,7 @@ export default function IntakeFormSubmissionPage() {
                         label: t("register_intake_form", { subject: currentRegister?.register_subject || t("register") }),
                         href: `/intake-form/${registerType}`
                     },
-                    { label: submission?.submission_id ? t("id") + String(submission.submission_id) : "" }
+                    { label: submission?.submission_id ? t("id") +"-"+ String(submission.submission_id) : "" }
                 ]}
                 showFilters={false}
                 showPagination={false}
@@ -110,7 +110,7 @@ export default function IntakeFormSubmissionPage() {
                     <div className="flex flex-col lg:flex-row gap-7.5">
                         <div className="w-full lg:w-[75%] space-y-6">
                             {!isDraft && (
-                                <SubmissionHeader submission={submission} onActionComplete={() => { }} />
+                                <SubmissionHeader submission={submission} section_payloads={section_payloads} onActionComplete={() => window.location.reload()} />
                             )}
 
                             <div className=" rounded-[10px] p-6 border border-secondary-first/30 space-y-2">

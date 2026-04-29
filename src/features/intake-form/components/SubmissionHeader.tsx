@@ -23,10 +23,11 @@ const statusClassMap: Record<string, string> = {
 
 interface Props {
     submission?: IntakeFormSubmission | null;
+    section_payloads?: any[] | null;
     onActionComplete?: () => void;
 }
 
-export default function SubmissionHeader({ submission, onActionComplete }: Props) {
+export default function SubmissionHeader({ submission, section_payloads, onActionComplete }: Props) {
     const t = useTranslations();
     const { execute, loading: loadingAction } = useFetch({ enabled: false });
 
@@ -38,7 +39,7 @@ export default function SubmissionHeader({ submission, onActionComplete }: Props
         //     }
         // });
         return allDocs;
-    }, [submission]);
+    }, [submission, section_payloads]);
 
     const { documents: docsWithUrls } = useIntakeFormDocuments(documents);
 
