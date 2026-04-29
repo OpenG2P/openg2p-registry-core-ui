@@ -29,7 +29,7 @@ const RegisterConfigurationPage = () => {
     const { registerId } = useParams<{ registerId: string }>();
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isViewModalOpen, setIsViewModalOpen] = useState(false);
-    const [activeTab, setActiveTab] = useState<'tabs' | 'filter' | 'search' | 'deduplication'>('tabs');
+    const [activeTab, setActiveTab] = useState<'tabs' | 'sections' | 'filter' | 'search' | 'deduplication'>('tabs');
     const [isIntakeModalOpen, setIsIntakeModalOpen] = useState(false);
 
     const { can } = useRbac();
@@ -41,6 +41,7 @@ const RegisterConfigurationPage = () => {
 
     const tabLabels: Record<string, string> = {
         tabs: t('tabs'),
+        sections: t('sections'),
         filter: t('filter_schema'),
         search: t('search_schema'),
         deduplication: t('deduplication_schema'),
@@ -116,13 +117,26 @@ const RegisterConfigurationPage = () => {
                         <TopBar
                             breadcrumb={[]}
                             showFilters={false}
-                            showPagination={activeTab === 'tabs'}
-                            showAddNewButton={canCreate && activeTab === 'tabs'}
-                            addNewButtonText={t('add_new_tab')}
-                            onAddNewButton={() => setIsModalOpen(true)}
-                            showSecondaryButton={canCreate && activeTab === 'tabs'}
-                            secondaryButtonText={t('add_intake_form')}
-                            onSecondaryButton={() => setIsIntakeModalOpen(true)}
+                            showPagination={activeTab === 'tabs' || activeTab === 'sections'}
+
+                            showAddNewButton={
+                                canCreate && (activeTab === 'tabs' || activeTab === 'sections')
+                            }
+
+                            addNewButtonText={
+                                activeTab === 'tabs'
+                                    ? t('add_new_tab')
+                                    : t('add_section')
+                            }
+
+                            onAddNewButton={() => {
+                                if (activeTab === 'tabs') {
+                                    setIsModalOpen(true);
+                                } else if (activeTab === 'sections') {
+                                    setIsIntakeModalOpen(true);
+                                }
+                            }}
+                            showSecondaryButton={false}
                             pageStart={pagination.pageStart}
                             pageEnd={pagination.pageEnd}
                             total={pagination.total}
@@ -137,7 +151,7 @@ const RegisterConfigurationPage = () => {
 
             {/* Tab Content */}
             <div className="mt-0">
-                {activeTab === 'tabs' ? (
+                {/* {activeTab === 'tabs' ? (
                     (
                         <RegisterTabConfigView
                             onAddNewRegister={() => setIsModalOpen(true)}
@@ -151,6 +165,41 @@ const RegisterConfigurationPage = () => {
                         />
                     )
                 ) : (
+                    <RegisterSchemaView
+                        registerId={registerId}
+                        activeTab={activeTab as 'filter' | 'search' | 'deduplication'}
+                    />
+                )} */}
+                {activeTab === 'tabs' && (
+                    <RegisterTabConfigView
+                        onAddNewRegister={() => setIsModalOpen(true)}
+                        isModalOpen={isModalOpen}
+                        onCloseModal={() => setIsModalOpen(false)}
+                        isIntakeModalOpen={isIntakeModalOpen}
+                        onCloseIntakeModal={() => setIsIntakeModalOpen(false)}
+                        page={currentPage}
+                        pageSize={PAGE_SIZE}
+                        onDataLoaded={(totalItems, currentCount) =>
+                            setPaginationInfo({ totalItems, currentCount })
+                        }
+                    />
+                )}
+
+                {activeTab === 'sections' && (
+                    // <RegisterSectionConfigView   // 🚀 create this (same pattern as tabs)
+                    //     registerId={registerId}
+                    //     page={currentPage}
+                    //     pageSize={PAGE_SIZE}
+                    //     isModalOpen={isIntakeModalOpen}
+                    //     onCloseModal={() => setIsIntakeModalOpen(false)}
+                    //     onDataLoaded={(totalItems, currentCount) =>
+                    //         setPaginationInfo({ totalItems, currentCount })
+                    //     }
+                    // />
+                    <>"Hello"</>
+                )}
+
+                {['filter', 'search', 'deduplication'].includes(activeTab) && (
                     <RegisterSchemaView
                         registerId={registerId}
                         activeTab={activeTab as 'filter' | 'search' | 'deduplication'}

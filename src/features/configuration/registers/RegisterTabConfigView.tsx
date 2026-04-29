@@ -50,7 +50,7 @@ export default function RegisterTabConfigView({
 	const { execute: deleteTab } = useFetch();
 
 	const proceedDelete = async (tabId: string) => {
-		const result = await deleteTab('/api/configuration/registers/tabs/delete', {
+		const result = await deleteTab('/api/configuration/registers/tab-metadata/delete-tab', {
 			method: 'POST',
 			body: JSON.stringify({ tab_id: tabId })
 		});
@@ -122,9 +122,6 @@ export default function RegisterTabConfigView({
 							{t('tab_order')}
 						</div>
 						<div className="py-3 text-left text-base font-semibold text-primary-second tracking-wider">
-							{t('used_for_intake')}
-						</div>
-						<div className="py-3 text-left text-base font-semibold text-primary-second tracking-wider">
 							Status
 						</div>
 
@@ -142,18 +139,14 @@ export default function RegisterTabConfigView({
 							className="block -mx-8"
 						>
 							<div
-								className={`grid grid-cols-5 h-15 gap-4 items-center px-12 py-4 transition-colors ${index % 2 === 0 ? 'bg-secondary-second/25' : 'bg-neutral-second'
-									} cursor-pointer`}
+								className={`grid grid-cols-5 h-15 gap-4 items-center px-12 py-4 transition-colors ${index % 2 === 0 ? 'bg-secondary-second/25' : 'bg-neutral-second'} cursor-pointer`}
 							>
 
 								<div className="text-base font-medium">
-									{tab.tab_label || tab.intake_form_name}
+									{tab.tab_label}
 								</div>
 								<div className="text-base font-medium text-neutral-first/50">
 									{tab.tab_order}
-								</div>
-								<div className="text-base font-medium text-neutral-first/50">
-									{tab.used_for_new_intake_form ? t('true') : t('false')}
 								</div>
 								<div className="text-base font-medium text-neutral-first/50">
 									{tab.is_active ? t('active') : t('inactive')}
