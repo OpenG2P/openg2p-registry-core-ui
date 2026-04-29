@@ -16,7 +16,7 @@ export const useVerifications = (changeId?: string, intakeFormSubmissionId?: str
             method: "POST",
             body: JSON.stringify({
                 change_request_id: changeId ?? "",
-                // submission_id: intakeFormSubmissionId ?? "",
+                submission_id: intakeFormSubmissionId ?? "",
             }),
         },
     });
@@ -46,7 +46,7 @@ export const useVerifications = (changeId?: string, intakeFormSubmissionId?: str
                         method: "POST",
                         body: JSON.stringify({
                             change_request_id: changeId ?? "",
-                            // submission_id: intakeFormSubmissionId ?? "",
+                            submission_id: intakeFormSubmissionId ?? "",
                             verification_observations: observation,
                             is_approved: isApproved,
                         }),

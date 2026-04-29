@@ -94,8 +94,6 @@ export async function proxyToBackend({
 
 			const backendRequest = createBackendRequest(payload, origin);
 
-			console.log(backendRequest, "backendRequest*********************", backendUrl, "backendUrl*********************")
-
 			fetchOptions.headers = {
 				...auth.backendHeaders,
 				"Content-Type": "application/json",
