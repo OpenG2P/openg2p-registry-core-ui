@@ -44,7 +44,7 @@ export default function AddIntakeFormModal({
             return;
         }
 
-        const result = await createForm('/api/intake-form/create-intake-form', {
+        const result = await createForm('/api/configuration/intake-forms/create-intake-form', {
             method: 'POST',
             body: JSON.stringify({
                 form_mnemonic: formData.form_mnemonic,

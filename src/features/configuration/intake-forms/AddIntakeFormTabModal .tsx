@@ -34,7 +34,7 @@ export default function AddIntakeFormTabModal({
             return;
         }
 
-        const result = await createForm('/api/intake-form/create-tab', {
+        const result = await createForm('/api/configuration/intake-forms/create-tab', {
             method: 'POST',
             body: JSON.stringify({
                 form_id: intakeFormId,

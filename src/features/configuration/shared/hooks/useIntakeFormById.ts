@@ -4,7 +4,7 @@ export function useIntakeFormById(intakeFormId: string) {
     const { data, loading, error, execute } = useFetch<{
         intake_form: any;
     }>({
-        url: '/api/intake-form/get-intake-form-by-id',
+        url: '/api/configuration/intake-forms/get-intake-form-by-id',
         options: {
             method: 'POST',
             body: JSON.stringify({

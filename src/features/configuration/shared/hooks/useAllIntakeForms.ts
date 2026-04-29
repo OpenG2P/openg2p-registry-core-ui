@@ -8,7 +8,7 @@ export function useAllIntakeForms(page?: number, pageSize?: number) {
             number_of_pages: number;
         };
     }>({
-        url: '/api/intake-form/get-all-intake-forms',
+        url: '/api/configuration/intake-forms/get-all-intake-forms',
         options: {
             method: 'POST',
             body: JSON.stringify({

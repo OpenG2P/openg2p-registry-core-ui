@@ -89,7 +89,7 @@ const IntakeFormTabIdPage = () => {
 
     const proceedDelete = async (id: string) => {
         try {
-            const result = await deleteIntakeFormTabSection('/api/intake-form/delete-section', {
+            const result = await deleteIntakeFormTabSection('/api/configuration/intake-forms/delete-section', {
                 method: 'POST',
                 body: JSON.stringify({ tab_section_id: id })
             });

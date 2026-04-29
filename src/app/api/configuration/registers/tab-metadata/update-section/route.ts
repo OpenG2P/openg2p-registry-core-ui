@@ -4,14 +4,13 @@ import { proxyToBackend } from "@/app/api/_lib/backend-proxy";
 export async function POST(request: NextRequest) {
     return proxyToBackend({
         req: request,
-        targetEndpoint: "/intake-form-metadata/create_intake_form",
+        targetEndpoint: "/register-tab-metadata/update_section",
         buildPayload: (body) => ({
             pagination_request: undefined,
             request_payload: {
-                register_id: body.register_id,
-                form_mnemonic: body.form_mnemonic,
-                form_description: body.form_description,
-                number_of_verifications: body.number_of_verifications || 0
+                tab_section_id: body.tab_section_id,
+                section_id: body.section_id,
+                section_order: body.section_order,
             },
         }),
     });

@@ -43,7 +43,7 @@ export default function EditIntakeFormModal({
     const handleSubmit = async () => {
         if (!initialData?.form_id) return;
 
-        const result = await updateForm('/api/intake-form/update-intake-form', {
+        const result = await updateForm('/api/configuration/intake-forms/update-intake-form', {
             method: 'POST',
             body: JSON.stringify({
                 form_id: initialData.form_id,
