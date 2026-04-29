@@ -1,27 +1,26 @@
 import { useFetch } from '@/shared/hooks';
 
-export function useAllRegisterSections(register_id?: string, page?: number, pageSize?: number) {
+export function useRegisterSection(register_id: string, section_id: string) {
     const { data, loading, error, execute } = useFetch<{
-        sections: any[];
+        section: any;
         pagination?: {
             number_of_items: number;
             number_of_pages: number;
         };
     }>({
-        url: '/api/configuration/registers/section-metadata/get-all-sections',
+        url: '/api/configuration/registers/section-metadata/get-section',
         options: {
             method: 'POST',
             body: JSON.stringify({
                 register_id: register_id,
-                current_page: page,
-                page_size: pageSize
+                section_id: section_id
             })
         },
-        enabled: !!register_id
+        enabled: !!register_id && !!section_id
     });
 
     return {
-        sections: data?.sections,
+        section: data?.section,
         pagination: data?.pagination,
         loading,
         error,

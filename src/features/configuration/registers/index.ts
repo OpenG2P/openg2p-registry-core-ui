@@ -2,7 +2,7 @@ export { default as AddRegisterModal } from './AddRegisterModal';
 export { default as AddTabSectionModal } from './AddTabSectionModal';
 export { default as AddTabModal } from './AddTabModal';
 export { default as EditRegisterModal } from './EditRegisterModal';
-export { default as EditSectionModal } from './EditSectionModal';
+export { default as EditRegisterSectionModal } from './EditRegisterSectionModal';
 export { default as EditTabModal } from './EditTabModal';
 export { default as RegisterSchemaView } from './RegisterSchemaView';
 export { default as RegisterTabSectionConfigView } from './RegisterTabSectionConfigView';

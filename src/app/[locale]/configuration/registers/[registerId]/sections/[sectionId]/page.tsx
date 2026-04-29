@@ -4,28 +4,24 @@ import { useState } from 'react';
 import { BreadcrumbBar } from '@/components/shared';
 import { useParams } from 'next/navigation';
 import {
-    EditSectionModal,
+    EditRegisterSectionModal,
     SectionDetailsConfigView
 } from '@/features/configuration/registers';
 import {
     ConfigDetailsSummary,
     useAllRegister,
-    useConfigTabs,
-    useConfigSections,
     getRegisterDetails,
-    getTabDetails,
-    getSectionDetails
 } from '@/features/configuration/shared';
 import { useBreadcrumb } from '@/shared/hooks/useBreadcrumb';
 import { useRbac } from '@/context/RbacContext';
 import { CONFIGURATION_SECTIONS_ACTIONS } from '@/features/configuration/shared/utils/configurationSections.actions';
 import { useTranslations } from 'next-intl';
+import { useRegisterSection } from '@/features/configuration/shared/hooks/useRegisterSection';
 
 const SectionConfigurationPage = () => {
     const t = useTranslations();
-    const { registerId, tabId, sectionId } = useParams<{
+    const { registerId, sectionId } = useParams<{
         registerId: string;
-        tabId: string;
         sectionId: string;
     }>();
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -35,23 +31,19 @@ const SectionConfigurationPage = () => {
 
 
     const { registers, loading: registersLoading } = useAllRegister(1, 100);
-    const { tabs, loading: tabsLoading } = useConfigTabs(registerId, 1, 100);
-    const { sections, loading: sectionsLoading, refresh } = useConfigSections(registerId, tabId, 1, 100);
+    const { section, loading: sectionLoading, refresh } = useRegisterSection(registerId, sectionId)
 
     const registerDetails = getRegisterDetails(registerId, registers);
-    const tabDetails = getTabDetails(tabId, tabs);
-    const sectionDetails = getSectionDetails(sectionId, sections);
 
     const breadcrumb = useBreadcrumb({
         rootItem: { label: t('registers'), href: '/configuration/registers' },
         customItems: [
             { label: registerDetails.register_mnemonic || '', href: `/configuration/registers/${registerId}` },
-            { label: tabDetails.tab_label || tabDetails.intake_form_name || '', href: `/configuration/registers/${registerId}/tabs/${tabId}` },
-            { label: sectionDetails.section_mnemonic || '', href: `/configuration/registers/${registerId}/tabs/${tabId}/sections/${sectionId}` }
+            { label: section?.section_mnemonic || '', href: `/configuration/registers/${registerId}/sections/${sectionId}` }
         ]
     });
 
-    const isLoading = registersLoading || tabsLoading || sectionsLoading;
+    const isLoading = registersLoading || sectionLoading;
 
     if (isLoading) {
         return (
@@ -68,10 +60,8 @@ const SectionConfigurationPage = () => {
             </div>
 
             <ConfigDetailsSummary
-                title={sectionDetails.section_mnemonic || 'None'}
-                description={sectionDetails.section_description || 'None'}
-                extraInfo1={String(sectionDetails.section_order || 0)}
-                extraInfo2={String(tabDetails.tab_label || tabDetails.intake_form_name || 'None')}
+                title={section.section_mnemonic || 'None'}
+                description={section.section_description || 'None'}
                 onEdit={
                     canEdit
                         ? () => setIsEditModalOpen(true)
@@ -79,17 +69,16 @@ const SectionConfigurationPage = () => {
                 }
             />
 
-
             <SectionDetailsConfigView
-                sectionUISchema={sectionDetails?.section_ui_schema}
-                registerId={sectionDetails?.section_register_id || ''}
-                sectionId={sectionDetails?.section_id || ''}
-                isCoreSection={sectionDetails?.is_core_section}
+                sectionUISchema={section?.section_ui_schema}
+                registerId={section?.section_register_id || ''}
+                sectionId={section?.section_id || ''}
+                isCoreSection={section?.is_core_section}
             />
 
-            <EditSectionModal
+            <EditRegisterSectionModal
                 isOpen={isEditModalOpen}
-                initialData={sectionDetails as any}
+                initialData={section as any}
                 onClose={() => setIsEditModalOpen(false)}
                 onSuccess={refresh}
             />

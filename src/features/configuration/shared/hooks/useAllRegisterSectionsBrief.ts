@@ -1,6 +1,6 @@
 import { useFetch } from '@/shared/hooks';
 
-export function useAllRegisterSections(register_id?: string, page?: number, pageSize?: number) {
+export function useAllRegisterSectionsBrief(register_id?: string, page?: number, pageSize?: number) {
     const { data, loading, error, execute } = useFetch<{
         sections: any[];
         pagination?: {
@@ -8,7 +8,7 @@ export function useAllRegisterSections(register_id?: string, page?: number, page
             number_of_pages: number;
         };
     }>({
-        url: '/api/configuration/registers/section-metadata/get-all-sections',
+        url: '/api/configuration/registers/section-metadata/get-all-sections-brief',
         options: {
             method: 'POST',
             body: JSON.stringify({

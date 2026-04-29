@@ -10,7 +10,7 @@ import {
     InputField,
 } from '../shared/components';
 import { useAllRegister } from '../shared/hooks/useAllRegister';
-import { useAllRegisterSections } from '../shared/hooks/useAllRegisterSections';
+import { useAllRegisterSectionsBrief } from '../shared/hooks/useAllRegisterSectionsBrief';
 
 interface AddIntakeFormTabSectionModalProps {
     onClose: () => void;
@@ -33,7 +33,7 @@ export default function AddIntakeFormTabSectionModal({
     });
 
     const { registers, loading: registerLoading } = useAllRegister(1, 100);
-    const { sections, loading: sectionLoading } = useAllRegisterSections(formData.register_id, 1, 100);
+    const { sections, loading: sectionLoading } = useAllRegisterSectionsBrief(formData.register_id, 1, 100);
 
     const registerOptions =
         registers?.map((reg: any) => ({

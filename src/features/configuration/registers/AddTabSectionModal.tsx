@@ -5,7 +5,7 @@ import { useFetch } from '@/shared/hooks';
 import { useParams } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
-import { useAllRegisterSections } from '../shared/hooks/useAllRegisterSections';
+import { useAllRegisterSectionsBrief } from '../shared/hooks/useAllRegisterSectionsBrief';
 
 
 
@@ -21,7 +21,7 @@ export default function AddTabSectionModal({ isOpen, onClose, onSuccess }: AddTa
     const { registerId, tabId } = useParams<{ registerId: string; tabId: string }>();
     const { config } = useRuntimeConfig();
     const { execute: createSection, loading } = useFetch();
-    const { sections, loading: sectionLoading } = useAllRegisterSections(registerId, 1, 100);
+    const { sections, loading: sectionLoading } = useAllRegisterSectionsBrief(registerId, 1, 100);
 
     const sectionOptions =
         sections?.map((sec: any) => ({

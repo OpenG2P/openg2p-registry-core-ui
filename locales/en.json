@@ -930,5 +930,7 @@
   "toast_intake_form_tab_section_update_failed": "Failed to update intake form tab section",
   "add_intake_form_tab_section": "Add Intake Form Tab Section",
   "edit_intake_form_tab": "Edit Intake Form Tab",
-  "edit_intake_form_tab_section": "Edit Intake Form Tab Section"
+  "edit_intake_form_tab_section": "Edit Intake Form Tab Section",
+  "section_weightage": "Section Weightage",
+  "completion_score_required": "Completion Score Required"
 }
