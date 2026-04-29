@@ -14,11 +14,11 @@ export async function POST(request: NextRequest) {
                 search_text: body.search_text ?? "",
             },
             request_payload: {
-                form_id: body.form_id,
+                form_id: body.form_id
             },
         }),
         transformResponse: (responseBody) => ({
-            tabs: responseBody?.response_payload || [],
+            intake_form_tabs: responseBody?.response_payload || [],
             pagination: responseBody?.pagination_response,
         }),
     });

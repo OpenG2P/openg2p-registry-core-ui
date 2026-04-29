@@ -8,7 +8,7 @@ export function useAllIntakeFormTabSections(page?: number, pageSize?: number, ta
             number_of_pages: number;
         };
     }>({
-        url: '/api/intake-form/get-all-tab-sections',
+        url: '/api/configuration/intake-forms/get-all-tab-sections',
         options: {
             method: 'POST',
             body: JSON.stringify({

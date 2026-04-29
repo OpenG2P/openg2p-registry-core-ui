@@ -53,7 +53,7 @@ export default function AddIntakeFormTabSectionModal({
             return;
         }
 
-        const result = await createForm('/api/intake-form/create-section', {
+        const result = await createForm('/api/configuration/intake-forms/create-section', {
             method: 'POST',
             body: JSON.stringify({
                 tab_id: tabId,

@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
                 form_id: body.form_id,
                 form_mnemonic: body.form_mnemonic,
                 form_description: body.form_description,
-                number_of_verifications: body.number_of_verifications,
+                number_of_verifications: body.number_of_verifications || 0
             },
         }),
     });

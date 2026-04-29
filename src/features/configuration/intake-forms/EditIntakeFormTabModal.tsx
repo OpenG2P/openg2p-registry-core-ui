@@ -41,7 +41,7 @@ export default function EditIntakeFormTabModal({
     const handleSubmit = async () => {
         if (!initialData?.tab_id) return;
 
-        const result = await updateForm('/api/intake-form/update-tab', {
+        const result = await updateForm('/api/configuration/intake-forms/update-tab', {
             method: 'POST',
             body: JSON.stringify({
                 tab_id: initialData.tab_id,
