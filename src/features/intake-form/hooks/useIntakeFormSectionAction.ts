@@ -166,6 +166,12 @@ export const useIntakeFormSectionAction = ({
                 setActiveSubmissionId(saveResult.submission_id);
             }
 
+            if (action === 'draft') {
+                toast.success(t('draft_saved_successfully'));
+                if (onSuccess) onSuccess();
+                return;
+            }
+
             const handleSuccessClose = () => {
                 closeModal();
                 if (action === 'submit') {
@@ -177,8 +183,8 @@ export const useIntakeFormSectionAction = ({
             setModalConfig({
                 isOpen: true,
                 type: 'success',
-                title: action === 'submit' ? t('submitted_successfully') : t('draft_saved_successfully'),
-                subtitle: action === 'submit' ? t('submitted_successfully_subtitle') : t('draft_saved_successfully_subtitle'),
+                title: t('submitted_successfully'),
+                subtitle: t('submitted_successfully_subtitle'),
                 confirmText: t('close'),
                 hideCancel: true,
                 onClose: handleSuccessClose,
