@@ -20,12 +20,11 @@ export const useRegisterSections = (onChangeRequestCreated: () => void) => {
 
     // list of tab sections
     const { data: tabSections, loading: loadingSections } = useFetch<TabSection[]>({
-        url: `/api/register/tab-sections`,
+        url: `/api/register/get-sections`,
         enabled: !!activeTabId,
         options: {
             method: "POST",
             body: JSON.stringify({
-                register_id: currentRegister?.register_id,
                 tab_id: activeTabId,
             }),
         },
@@ -71,22 +70,26 @@ export const useRegisterSections = (onChangeRequestCreated: () => void) => {
 
         return [...tabSections]
             .sort((a, b) => (b.section_order ?? 0) - (a.section_order ?? 0))
-            .filter((section) =>
-                section.section_ui_schema &&
-                Object.keys(section.section_ui_schema).length > 0 &&
-                Array.isArray(section.section_ui_schema.panels) &&
-                section.section_ui_schema.panels.length > 0
-            )
+            .filter((section) => {
+                // API may wrap section fields inside section_data
+                const schema = section.section_ui_schema ?? section.section_data?.section_ui_schema;
+                return (
+                    schema &&
+                    Object.keys(schema).length > 0 &&
+                    Array.isArray(schema.panels) &&
+                    schema.panels.length > 0
+                );
+            })
             .map((section) => {
-                const {
-                    section_id,
-                    register_purpose,
-                    register_relation,
-                    section_ui_schema,
-                    section_register_id,
-                } = section;
+                // Flatten section_data into the section (API response wraps fields inside section_data)
+                const sectionData = section.section_data;
 
-                // evalute change request creation allowed or not
+                const section_id = section.section_id;
+                const section_register_id = section.section_register_id ?? sectionData?.section_register_id ?? section.register_id;
+                const section_ui_schema = section.section_ui_schema ?? sectionData?.section_ui_schema;
+                const register_purpose = section.register_purpose ?? sectionData?.register_purpose;
+                const register_relation = section.register_relation ?? sectionData?.register_relation;
+
                 let hideEditButton = false;
                 if (
                     (register_purpose === "REGISTER" ||
