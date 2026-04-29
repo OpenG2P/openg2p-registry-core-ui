@@ -8,12 +8,12 @@ import {
     VerificationForm
 } from "@/features/change-request/components";
 import { useVerifications } from "@/features/change-request/hooks";
-import { IntakeSubmissionPayload } from "@/features/intake-form/types";
+import { IntakeFormSubmission } from "../types/intake-form";
 import { VERIFICATION_INTAKE_FORM_ACTIONS } from "../utils/verificationIntakeForm.actions";
 import Can from "@/components/shared/Can";
 
 interface Props {
-    submission?: IntakeSubmissionPayload | null;
+    submission?: IntakeFormSubmission | null;
     isPending: boolean;
 }
 

@@ -24,7 +24,6 @@ export const useIntakeSubmissions = (
     const submissions = data?.submissions
     const paginationInfo = data?.pagination;
 
-    console.log(paginationInfo, "***************************")
     return {
         submissions,
         paginationInfo,
