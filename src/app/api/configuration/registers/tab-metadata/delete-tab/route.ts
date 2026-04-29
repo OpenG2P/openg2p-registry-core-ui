@@ -4,11 +4,11 @@ import { proxyToBackend } from "@/app/api/_lib/backend-proxy";
 export async function POST(request: NextRequest) {
     return proxyToBackend({
         req: request,
-        targetEndpoint: "/intake-form-metadata/delete_intake_form",
+        targetEndpoint: "/register-tab-metadata/delete_tab",
         buildPayload: (body) => ({
             pagination_request: undefined,
             request_payload: {
-                form_id: body.form_id
+                tab_id: body.tab_id
             },
         }),
     });

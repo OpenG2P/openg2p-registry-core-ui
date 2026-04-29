@@ -8,8 +8,8 @@ import { useRbac } from '@/context/RbacContext';
 import { CONFIGURATION_REGISTERS_ACTIONS } from '@/features/configuration/shared/utils/configurationRegisters.actions';
 import { useTranslations } from 'next-intl';
 import { useAllIntakeForms } from '@/features/configuration/shared/hooks/useAllIntakeForms';
-import { AddIntakeFormModal, EditIntakeFormModal, ViewIntakeFormModal } from '@/features/configuration/intake-forms';
-import { DeleteButton, EditButton, ViewButton } from '@/features/configuration/shared/components';
+import { AddIntakeFormModal } from '@/features/configuration/intake-forms';
+import { DeleteButton } from '@/features/configuration/shared/components';
 import { toast } from 'react-toastify';
 import ConfirmRemovePopup from '@/features/configuration/shared/components/ConfirmRemovePopup';
 import { Link } from '@/i18n/navigation';
@@ -46,7 +46,7 @@ const IntakeFormPage = () => {
 
     const proceedDelete = async (id: string) => {
         try {
-            const result = await deleteIntakeForm('/api/intake-form/delete-intake-form', {
+            const result = await deleteIntakeForm('/api/configuration/intake-forms/delete-intake-form', {
                 method: 'POST',
                 body: JSON.stringify({ form_id: id })
             });

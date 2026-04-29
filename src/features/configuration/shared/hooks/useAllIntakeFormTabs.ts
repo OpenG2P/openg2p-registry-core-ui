@@ -8,7 +8,7 @@ export function useAllIntakeFormTabs(page?: number, pageSize?: number, intakeFor
             number_of_pages: number;
         };
     }>({
-        url: '/api/intake-form/get-all-intake-form-tabs',
+        url: '/api/configuration/intake-forms/get-all-intake-form-tabs',
         options: {
             method: 'POST',
             body: JSON.stringify({

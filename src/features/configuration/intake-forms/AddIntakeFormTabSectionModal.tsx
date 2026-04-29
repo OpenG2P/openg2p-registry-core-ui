@@ -10,7 +10,7 @@ import {
     InputField,
 } from '../shared/components';
 import { useAllRegister } from '../shared/hooks/useAllRegister';
-import { useAllRegisterSections } from '../shared/hooks/useAllRegisterSections';
+import { useAllRegisterSectionsBrief } from '../shared/hooks/useAllRegisterSectionsBrief';
 
 interface AddIntakeFormTabSectionModalProps {
     onClose: () => void;
@@ -33,7 +33,7 @@ export default function AddIntakeFormTabSectionModal({
     });
 
     const { registers, loading: registerLoading } = useAllRegister(1, 100);
-    const { sections, loading: sectionLoading } = useAllRegisterSections(formData.register_id, 1, 100);
+    const { sections, loading: sectionLoading } = useAllRegisterSectionsBrief(formData.register_id, 1, 100);
 
     const registerOptions =
         registers?.map((reg: any) => ({
@@ -53,7 +53,7 @@ export default function AddIntakeFormTabSectionModal({
             return;
         }
 
-        const result = await createForm('/api/intake-form/create-section', {
+        const result = await createForm('/api/configuration/intake-forms/create-section', {
             method: 'POST',
             body: JSON.stringify({
                 tab_id: tabId,
@@ -73,7 +73,7 @@ export default function AddIntakeFormTabSectionModal({
 
     return (
         <BaseModal
-            title={t('add_intake_form_tab')}
+            title={t('add_intake_form_tab_section')}
             onClose={onClose}
             primaryActionLabel={t('save')}
             onPrimaryAction={handleSubmit}

@@ -4,7 +4,7 @@ export function useIntakeFormTabById(tabId: string) {
     const { data, loading, error, execute } = useFetch<{
         tab: any;
     }>({
-        url: '/api/intake-form/get-tab-by-id',
+        url: '/api/configuration/intake-forms/get-tab-by-id',
         options: {
             method: 'POST',
             body: JSON.stringify({

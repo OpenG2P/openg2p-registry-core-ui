@@ -1,19 +1,17 @@
 import { useFetch } from '@/shared/hooks';
-import { Section } from '../types';
 
-export function useConfigSections(registerId: string, tabId: string, page: number = 1, pageSize: number = 10) {
+export function useConfigSections(tabId: string, page: number = 1, pageSize: number = 10) {
     const { data, loading, error, execute } = useFetch<{
-        sections: Section[];
+        sections: any[];
         pagination?: {
             number_of_items: number;
             number_of_pages: number;
         };
     }>({
-        url: '/api/configuration/registers/tabs/sections/get',
+        url: '/api/configuration/registers/tab-metadata/get-sections',
         options: {
             method: 'POST',
             body: JSON.stringify({
-                register_id: registerId,
                 tab_id: tabId,
                 page,
                 pageSize
