@@ -28,7 +28,7 @@ export default function NewIntakeFormDropdown({
                 className={`w-full flex items-center gap-2.5 px-4 py-1 bg-neutral-second border border-primary-second rounded-[10px] truncate ${open ? 'border-b-transparent rounded-b-none ' : ''}`}
                 title={t('new_intake')}
             >
-               <span className={`text-[16px] font-medium ${open ? 'text-neutral-first/50' : 'text-neutral-first'} truncate`}>
+                <span className={`text-[16px] font-medium ${open ? 'text-neutral-first/50' : 'text-neutral-first'} truncate`}>
                     {t('new_intake')}
                 </span>
 
@@ -42,7 +42,7 @@ export default function NewIntakeFormDropdown({
             </button>
 
             {open && (
-               <div className="absolute left-0 py-1 top-full w-full bg-neutral-second border border-primary-second border-t-0 rounded-b-[10px] overflow-hidden">
+                <div className="absolute left-0 py-1 top-full w-full bg-neutral-second border border-primary-second border-t-0 rounded-b-[10px] overflow-hidden">
                     <div className="h-px bg-primary-second my-1" />
                     {forms.length === 0 && (
                         <div className="px-4 py-3 text-[16px] text-neutral-first truncate" title={t('no_options_available')}>
@@ -52,8 +52,8 @@ export default function NewIntakeFormDropdown({
 
                     {forms.map(form => (
                         <DropdownItem
-                            key={form.tab_id}
-                            label={form.intake_form_name}
+                            key={form.form_id}
+                            label={form.form_mnemonic}
                             onClick={() => {
                                 onSelectForm?.(form);
                                 setOpen(false);

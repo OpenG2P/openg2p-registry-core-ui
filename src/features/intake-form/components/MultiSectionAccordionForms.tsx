@@ -1,11 +1,11 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import {
   SectionsContainer,
   WidgetProvider,
   createWidgetStore,
 } from '@openg2p/registry-widgets';
-import type { SectionsFormHandle, SectionChanges } from '@openg2p/registry-widgets';
+import type { SectionChanges } from '@openg2p/registry-widgets';
 import { dataSourceRequestHandler } from '@/features/register/utils/dataSourceRequestHandler';
 import { IntakeFormSection } from '../types/intake-form';
 import FormDetailsCard from './FormDetailsCard';
@@ -15,8 +15,10 @@ export type SectionStatus = 'Saved' | 'Draft' | null;
 export interface AccordionFormsProps {
   formDetailsCard?: boolean;
   sections: IntakeFormSection[];
+  form_name?: string;
+  form_description?: string;
   schemaData?: any;
-  onAction?: (sectionChanges: SectionChanges[], type: 'submit' | 'draft') => void;
+  onAction?: (sectionChanges?: SectionChanges, type?: 'submit' | 'draft', section?: IntakeFormSection) => void;
   onCancel?: () => void;
   showActions?: boolean;
 }
@@ -25,14 +27,36 @@ export default function MultiSectionAccordionForms({
 
   formDetailsCard = false,
   sections,
+  form_name,
+  form_description,
   schemaData = {},
   onAction,
   onCancel,
   showActions = true,
 }: AccordionFormsProps) {
+
   const t = useTranslations();
   const widgetStore = useMemo(() => createWidgetStore(), []);
-  const [formHandle, setFormHandle] = useState<SectionsFormHandle | null>(null);
+
+  const [formSubmit, setFormSubmit] = useState<(() => void) | null>(null);
+  const [savedSections, setSavedSections] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (schemaData) {
+      const alreadySaved = sections
+        .filter((s) => schemaData[s.section_register_id])
+        .map((s) => s.section_id);
+      setSavedSections((prev) => Array.from(new Set([...prev, ...alreadySaved])));
+    }
+  }, [schemaData, sections]);
+
+  const allSectionsSaved = useMemo(() => {
+    return sections.every(
+      (section) =>
+        savedSections.includes(section.section_id) ||
+        !!schemaData[section.section_register_id]
+    );
+  }, [sections, savedSections, schemaData]);
 
   const sectionsConfig = useMemo(
     () =>
@@ -42,29 +66,26 @@ export default function MultiSectionAccordionForms({
     [sections]
   );
 
-  // NOTE: Intake form name and description contains
-  // all the sections not global level
-  // so here getting from first section
-  const intakeFormHeading = useMemo(() => sections?.[0]?.intake_form_name, [sections]);
-  const intakeFormDescription = useMemo(() => sections?.[0]?.intake_form_description, [sections]);
+  const intakeFormHeading = useMemo(() => form_name, [form_name]);
+  const intakeFormDescription = useMemo(() => form_description, [form_description]);
 
 
-
-  const handleDraft = () => {
-    if (!formHandle) return;
-    // Get structured section data (records + files) without validation
-    const sectionChanges = formHandle.getStructuredData();
-    onAction?.(sectionChanges, 'draft');
-  };
+  const handleDraft = useCallback(
+    async (sectionChanges: SectionChanges) => {
+      const section = sections.find((section) => section?.section_ui_schema?.['section-id'] === sectionChanges.section_id);
+      if (section && !savedSections.includes(section.section_id)) {
+        setSavedSections((prev) => [...prev, section.section_id]);
+      }
+      onAction?.(sectionChanges, 'draft', section);
+    },
+    [sections, onAction, savedSections]
+  )
 
   const handleSubmit = async () => {
-    if (!formHandle) return;
-    try {
-      // Validate all sections and get structured data (records + files)
-      const sectionChanges = await formHandle.validateAndGetData();
-      onAction?.(sectionChanges, 'submit');
-    } catch (e) {
-      console.error('Submission validation failed', e);
+    if (formSubmit) {
+      formSubmit();
+    } else {
+      onAction?.(undefined, 'submit');
     }
   };
 
@@ -107,7 +128,8 @@ export default function MultiSectionAccordionForms({
                 sections={sectionsConfig}
                 mode="IntakeForm"
                 isDraft={showActions}
-                onFormReady={setFormHandle}
+                onSectionSave={handleDraft}
+                onFormReady={(handle: any) => setFormSubmit(() => handle.submit)}
               />
 
               {/* Action Buttons */}
@@ -122,17 +144,10 @@ export default function MultiSectionAccordionForms({
                   </button>
 
                   <button
-                    onClick={handleDraft}
-                    className="px-8 py-2.5 rounded-full bg-neutral-first text-neutral-second font-bold text-[14px] hover:bg-secondary-second-800 transition-colors"
-                  >
-                    {t('save_draft')}
-                  </button>
-
-                  <button
                     onClick={handleSubmit}
                     className="px-8 py-2.5 rounded-full bg-neutral-first text-neutral-second font-bold text-[14px]
                    disabled:bg-secondary-second disabled:text-secondary-third disabled:cursor-not-allowed"
-                    disabled={formDetailsCard}
+                    disabled={formSubmit === null || !allSectionsSaved}
                   >
                     {t('submit')}
                   </button>

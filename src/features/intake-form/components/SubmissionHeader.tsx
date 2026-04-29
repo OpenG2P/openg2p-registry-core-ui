@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useTranslations } from "next-intl";
-import { IntakeSubmissionPayload } from "../types/intake-form";
+import { IntakeFormSubmission } from "../types/intake-form";
 import { toast } from "react-toastify";
 import { useFetch } from "@/shared/hooks/useFetch";
 import { useMemo } from "react";
@@ -22,7 +22,7 @@ const statusClassMap: Record<string, string> = {
 };
 
 interface Props {
-    submission?: IntakeSubmissionPayload | null;
+    submission?: IntakeFormSubmission | null;
     onActionComplete?: () => void;
 }
 
@@ -32,11 +32,11 @@ export default function SubmissionHeader({ submission, onActionComplete }: Props
 
     const documents = useMemo(() => {
         const allDocs: UploadedDocument[] = [];
-        submission?.section_payloads?.forEach(section => {
-            if (section.documents) {
-                allDocs.push(...section.documents);
-            }
-        });
+        // submission?.section_payloads?.forEach(section => {
+        //     if (section.documents) {
+        //         allDocs.push(...section.documents);
+        //     }
+        // });
         return allDocs;
     }, [submission]);
 
@@ -47,8 +47,8 @@ export default function SubmissionHeader({ submission, onActionComplete }: Props
 
         try {
             const url = type === 'approve'
-                ? '/api/intake-form/submission/approve'
-                : '/api/intake-form/submission/reject';
+                ? '/api/intake-form/approve-intake-form-submission'
+                : '/api/intake-form/reject-intake-form-submission';
 
             const result = await execute(url, {
                 method: 'POST',
@@ -100,7 +100,7 @@ export default function SubmissionHeader({ submission, onActionComplete }: Props
     );
 }
 
-const InfoSection = ({ submission }: { submission?: IntakeSubmissionPayload | null }) => {
+const InfoSection = ({ submission }: { submission?: IntakeFormSubmission | null }) => {
     const t = useTranslations();
     return (
         <div className="space-y-2 text-[16px] text-neutral-first/50">
@@ -108,21 +108,15 @@ const InfoSection = ({ submission }: { submission?: IntakeSubmissionPayload | nu
                 {t('intake_submission')}
             </h3>
             <div className="flex w-full overflow-hidden">
-                <span className="w-1/2 truncate" title={t('reference_no')}>{t('reference_no')}:</span>
-                <span className="w-1/2 pl-4 text-neutral-first font-medium truncate" title={submission?.submission_reference ? String(submission.submission_reference) : ''}>
-                    {submission?.submission_reference}
+                <span className="w-1/2 truncate" title={t('submission_id')}>{t('submission')}:</span>
+                <span className="w-1/2 pl-4 text-neutral-first font-medium truncate" title={submission?.submission_id ? String(submission.submission_id) : ''}>
+                    {submission?.submission_id}
                 </span>
             </div>
             <div className="flex w-full overflow-hidden">
-                <span className="w-1/2 truncate" title={t('form_status')}>{t('form_status')}:</span>
-                <span className={`w-1/2 pl-4 font-medium truncate ${statusClassMap[submission?.intake_form_status || ''] ?? "text-neutral-first/50"}`} title={submission?.intake_form_status}>
-                    {submission?.intake_form_status}
-                </span>
-            </div>
-            <div className="flex w-full overflow-hidden">
-                <span className="w-1/2 truncate" title={t('cr_status')}>{t('cr_status')}:</span>
-                <span className="w-1/2 pl-4 text-neutral-first font-medium truncate" title={submission?.change_request_submission_status ?? t('n_a')}>
-                    {submission?.change_request_submission_status ?? t('n_a')}
+                <span className="w-1/2 truncate" title={t('draft_status')}>{t('draft_status')}:</span>
+                <span className={`w-1/2 pl-4 font-medium truncate ${statusClassMap[submission?.draft_status || ''] ?? "text-neutral-first/50"}`} title={submission?.draft_status}>
+                    {submission?.draft_status}
                 </span>
             </div>
             <div className="flex w-full overflow-hidden">
@@ -132,9 +126,9 @@ const InfoSection = ({ submission }: { submission?: IntakeSubmissionPayload | nu
                 </span>
             </div>
             <div className="flex w-full overflow-hidden">
-                <span className="w-1/2 truncate" title={t('created_date')}>{t('created_date')}:</span>
-                <span className="w-1/2 pl-4 text-neutral-first font-medium truncate" title={submission?.created_at ? formatDate(submission.created_at) : '--'}>
-                    {submission?.created_at ? formatDate(submission.created_at) : '--'}
+                <span className="w-1/2 truncate" title={t('created_by')}>{t('created_by')}:</span>
+                <span className="w-1/2 pl-4 text-neutral-first font-medium truncate" title={submission?.created_by || '--'}>
+                    {submission?.created_by || '--'}
                 </span>
             </div>
         </div>
@@ -145,7 +139,7 @@ const VerificationStats = ({
     submission,
     documentsCount
 }: {
-    submission?: IntakeSubmissionPayload | null;
+    submission?: IntakeFormSubmission | null;
     documentsCount: number;
 }) => {
     const t = useTranslations();
@@ -158,15 +152,15 @@ const VerificationStats = ({
             <div className="border-l border-primary-first pl-6 space-y-2">
                 <div className="flex w-full overflow-hidden">
                     <span className="w-1/2 truncate" title={t('verifications_required')}>{t('verifications_required')}:</span>
-                    <span className="w-1/2 pl-4 text-neutral-first font-medium truncate" title={submission?.no_of_verifications_required !== undefined ? String(submission.no_of_verifications_required) : ''}>
-                        {submission?.no_of_verifications_required}
+                    <span className="w-1/2 pl-4 text-neutral-first font-medium truncate" title={submission?.number_of_verifications_required !== undefined ? String(submission.number_of_verifications_required) : ''}>
+                        {submission?.number_of_verifications_required}
                     </span>
                 </div>
 
                 <div className="flex w-full overflow-hidden">
                     <span className="w-1/2 truncate" title={t('verifications_done')}>{t('verifications_done')}:</span>
-                    <span className="w-1/2 pl-4 text-neutral-first font-medium truncate" title={submission?.no_of_verifications_done !== undefined ? String(submission.no_of_verifications_done) : ''}>
-                        {submission?.no_of_verifications_done}
+                    <span className="w-1/2 pl-4 text-neutral-first font-medium truncate" title={submission?.number_of_verifications_done !== undefined ? String(submission.number_of_verifications_done) : ''}>
+                        {submission?.number_of_verifications_done}
                     </span>
                 </div>
 
