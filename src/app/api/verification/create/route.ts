@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
             },
             request_payload: {
                 change_request_id: body.change_request_id ?? "",
-                // submission_id: body.submission_id ?? "",
+                submission_id: body.submission_id ?? "",
                 verification_observations: body.verification_observations ?? "",
                 is_approved: body.is_approved ?? false,
             },
