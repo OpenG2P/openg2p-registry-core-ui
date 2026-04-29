@@ -39,20 +39,40 @@ export interface TabSectionData {
 
 }
 
-export interface TabSection {
-    section_register_id: string;
+export interface TabSectionNestedData {
     register_id: string;
     section_id: string;
-    tab_id: string;
-    register_purpose: string,
-    register_relation: string,
+    section_register_id: string;
+    is_core_section?: boolean;
     section_mnemonic: string;
     section_description: string;
     documents_required: boolean;
-    section_order: number;
+    no_of_verifications_required?: number;
+    is_list?: boolean;
+    section_weightage?: number;
     section_ui_schema: any; // UISchema
+    register_purpose: string;
+    register_relation: string;
+    [key: string]: unknown;
+}
+
+export interface TabSection {
+    tab_section_id?: string;
+    section_register_id?: string;
+    register_id: string;
+    section_id: string;
+    tab_id: string;
+    register_purpose?: string;
+    register_relation?: string;
+    section_mnemonic?: string;
+    section_description?: string;
+    documents_required?: boolean;
+    section_order: number;
+    section_ui_schema?: any; // UISchema
     is_core_section?: boolean;
     is_primary_section?: boolean;
+    /** Actual API response wraps section fields inside section_data */
+    section_data?: TabSectionNestedData;
 }
 
 export interface SectionData {

@@ -9,7 +9,7 @@ export const useRegisterSectionsFromCR = ({
 }: Params) => {
   // Fetch section (UI schema)
   const { data, loading: loadingSchema } = useFetch<any>({
-    url: `/api/register/section-uischema`,
+    url: `/api/register/get-section-ui-schema`,
     enabled: !!sectionId,
     options: {
       method: "POST",
@@ -19,7 +19,7 @@ export const useRegisterSectionsFromCR = ({
     },
   });
   return {
-    sectionUISchema: data?.section_ui_schema,
+    sectionUISchema: data?.sectionUiSchema.section_ui_schema,
     loadingSchema: !!sectionId ? loadingSchema : false
   };
 };
