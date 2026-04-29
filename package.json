@@ -2,7 +2,6 @@
   "name": "openg2p-registry-staff-portal-ui",
   "version": "1.1-dev.0",
   "private": true,
-  "type": "module",
   "scripts": {
     "dev": "next dev --webpack",
     "build": "next build --webpack",
@@ -11,7 +10,7 @@
   },
   "dependencies": {
     "@novu/js": "^3.11.0",
-    "@openg2p/registry-widgets": "^1.1.0-dev.2",
+    "@openg2p/registry-widgets": "^1.1.0-dev.4",
     "@reduxjs/toolkit": "^2.11.2",
     "@sd-jwt/crypto-browser": "^0.15.0",
     "@sd-jwt/decode": "^0.15.0",

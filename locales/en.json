@@ -927,5 +927,7 @@
   "toast_intake_form_tab_updated": "Intake form tab updated successfully",
   "toast_intake_form_tab_update_failed": "Failed to update intake form tab",
   "toast_intake_form_tab_section_updated": "Intake form tab section updated successfully",
-  "toast_intake_form_tab_section_update_failed": "Failed to update intake form tab section"
+  "toast_intake_form_tab_section_update_failed": "Failed to update intake form tab section",
+  "form_id": "Form ID",
+  "draft_status": "Draft Status"
 }

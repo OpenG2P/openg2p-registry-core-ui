@@ -9,9 +9,7 @@ export async function POST(request: NextRequest) {
             pagination_request: undefined,
             request_payload: {
                 submission_id: body.submission_id,
-                section_register_id: body.section_register_id,
                 register_id: body.register_id,
-                section_id: body.section_id,
             },
         }),
     });
