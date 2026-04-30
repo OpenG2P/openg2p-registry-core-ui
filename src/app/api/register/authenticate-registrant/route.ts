@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
                 register_id: body.register_id,
                 internal_record_id: body.internal_record_id,
                 provider_id: body.provider_id,
-                initiated_by_staff_id: body.initiated_by_staff_id,
+                initiated_by_staff_id: body.initiated_by_staff_id ?? "staff-portal-ui",
             },
         })
     });
