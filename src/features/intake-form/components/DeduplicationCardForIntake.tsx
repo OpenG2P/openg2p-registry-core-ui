@@ -21,7 +21,6 @@ function KeyValue({ label, value }: { label: string; value: string }) {
 
 export default function DeduplicationCardForIntake({ results, loading, type, t }: Props) {
     const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
-    console.log(results,"*****************")
 
     if (loading) {
         return (
