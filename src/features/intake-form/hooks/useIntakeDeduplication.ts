@@ -17,7 +17,7 @@ export function useIntakeDeduplication(submissionId: string, type: "intake-form"
     });
 
     return {
-        results: data?.results || [],
+        results: data || [],
         loading
     };
 }
