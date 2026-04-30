@@ -32,6 +32,7 @@ export const useIntakeFormSectionAction = ({
     const { execute: uploadDocumentRequest } = useFetch();
 
     const [activeSubmissionId, setActiveSubmissionId] = useState<string | null>(submissionId);
+    const [sectionInternalIds, setSectionInternalIds] = useState<Record<string, string>>({});
 
     useEffect(() => {
         setActiveSubmissionId(submissionId);
@@ -143,7 +144,7 @@ export const useIntakeFormSectionAction = ({
         const savePayload = {
             submission_id: activeSubmissionId || submissionId,
             section_id: activeSection.section_id,
-            section_payload: intakeNormalisedRecords(change?.records || []),
+            section_payload: intakeNormalisedRecords(change?.records, sectionInternalIds[activeSection.section_register_id]),
             section_register_id: activeSection.section_register_id,
             form_id: formId,
             register_id: registerId,
@@ -166,8 +167,24 @@ export const useIntakeFormSectionAction = ({
                 setActiveSubmissionId(saveResult.submission_id);
             }
 
+            // Extract and cache the internal_record_id for non-list sections from the response.
+            // This ensures that subsequent draft saves, or other sections belonging to the same register,
+            // will reuse the existing internal_record_id rather than creating duplicate records for the same section_register_id.
+            if (saveResult && saveResult.section_payloads) {
+                const currentSectionPayload = saveResult.section_payloads.find(
+                    (payload: any) => payload.section_register_id === activeSection.section_register_id
+                );
+
+                if (currentSectionPayload && !currentSectionPayload.is_list && currentSectionPayload.records?.length > 0) {
+                    setSectionInternalIds(prev => ({
+                        ...prev,
+                        [activeSection.section_register_id]: currentSectionPayload.records[0].internal_record_id
+                    }));
+                }
+            }
+
             if (action === 'draft') {
-                toast.success(t('draft_saved_successfully'));
+                toast.success(t('draft_updated_successfully'));
                 if (onSuccess) onSuccess();
                 return;
             }

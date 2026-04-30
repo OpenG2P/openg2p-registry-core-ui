@@ -17,7 +17,7 @@ export const extractFilesFromSection = (files?: unknown[]) => {
                     filesToUpload.push(realFile);
 
                     // Use embedded label if present, otherwise fallback to index-based label
-                    const label = (value as any).label ||(value as any).name || `file_${index}`;
+                    const label = (value as any).label || (value as any).name || `file_${index}`;
                     fileLabels.push(label);
                 } catch (error) {
                     console.error('Failed to deserialize file:', error);
@@ -69,7 +69,7 @@ export function normalizeEditActions(
 }
 
 
-export function intakeNormalisedRecords(records: any[]) {
+export function intakeNormalisedRecords(records: any[], InternalRecordId?: string) {
     if (!Array.isArray(records)) return [];
 
     return records.map((record) => {
@@ -80,6 +80,11 @@ export function intakeNormalisedRecords(records: any[]) {
             result.link_internal_record_id = "";
             result.internal_record_id = "";
         }
+
+        if (InternalRecordId && !result.internal_record_id) {
+            result.internal_record_id = InternalRecordId;
+        }
+
         return result;
     });
 }
