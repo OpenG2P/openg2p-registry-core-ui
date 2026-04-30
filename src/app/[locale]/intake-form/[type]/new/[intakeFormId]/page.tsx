@@ -56,6 +56,7 @@ export default function NewIntakeFormSubmissionPage() {
                         form_description={form_description}
                         onAction={handleAction}
                         onCancel={() => router.push(`/intake-form/${registerType}`)}
+                        registerType={registerType}
                     />
 
                 )}

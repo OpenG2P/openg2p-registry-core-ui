@@ -44,6 +44,28 @@ export function IntakeFormSubmissionCard({ submission, registerType }: IntakeFor
                         </div>
                     </div>
 
+
+                    <div className="space-y-4">
+                        <div className="space-y-1 border-l-2 border-secondary-second pl-6">
+                            <KeyValue
+                                label={t('no_of_verifications_required') || "No of Verifications Required"}
+                                value={String(submission.number_of_verifications_required)}
+                            />
+                            <KeyValue
+                                label={t('no_of_verifications_done') || "No of Verifications Done"}
+                                value={String(submission.number_of_verifications_done)}
+                            />
+                            <KeyValue
+                                label={t('created_by') || "Created By"}
+                                value={submission.created_by}
+                            />
+                            <KeyValue
+                                label={t('register_ingest_process_status')}
+                                value={submission.register_ingest_process_status || '--'}
+                            />
+                        </div>
+                    </div>
+
                     <div className="space-y-4">
                         <div className="space-y-1 border-l-2 border-secondary-second pl-6">
                             {submission.display_fields?.slice(0, Math.ceil((submission.display_fields?.length || 0) / 2)).map((field) => (
@@ -68,22 +90,6 @@ export function IntakeFormSubmissionCard({ submission, registerType }: IntakeFor
                         </div>
                     </div>
 
-                    <div className="space-y-4">
-                        <div className="space-y-1 border-l-2 border-secondary-second pl-6">
-                            <KeyValue
-                                label={t('no_of_verifications_required') || "No of Verifications Required"}
-                                value={String(submission.number_of_verifications_required)}
-                            />
-                            <KeyValue
-                                label={t('no_of_verifications_done') || "No of Verifications Done"}
-                                value={String(submission.number_of_verifications_done)}
-                            />
-                            <KeyValue
-                                label={t('created_by') || "Created By"}
-                                value={submission.created_by}
-                            />
-                        </div>
-                    </div>
                 </div>
             </div>
         </Link>
