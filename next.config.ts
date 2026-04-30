@@ -15,6 +15,9 @@ const cspHeader = `
     object-src 'none';
     base-uri 'self';
     form-action 'self';
+
+    frame-src 'self' https://nsr.openg2p.org https://*.nsr.openg2p.org;
+
     frame-ancestors 'none';
     ${isDev ? '' : 'upgrade-insecure-requests;'}
 `;
