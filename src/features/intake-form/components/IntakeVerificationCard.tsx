@@ -13,11 +13,11 @@ import { VERIFICATION_INTAKE_FORM_ACTIONS } from "../utils/verificationIntakeFor
 import Can from "@/components/shared/Can";
 
 interface Props {
-    submission?: IntakeFormSubmission | null;
+    submission_id: string;
     isPending: boolean;
 }
 
-export default function IntakeVerificationCard({ submission, isPending }: Props) {
+export default function IntakeVerificationCard({ submission_id, isPending }: Props) {
     const t = useTranslations();
     const [showForm, setShowForm] = useState(false);
 
@@ -26,7 +26,7 @@ export default function IntakeVerificationCard({ submission, isPending }: Props)
         verifications,
         loadingVerifications,
         addVerification
-    } = useVerifications(undefined, submission?.submission_id);
+    } = useVerifications(undefined, submission_id);
 
     return (
         <Can action={VERIFICATION_INTAKE_FORM_ACTIONS.view}>
