@@ -33,11 +33,11 @@ export default function SubmissionHeader({ submission, section_payloads, onActio
 
     const documents = useMemo(() => {
         const allDocs: UploadedDocument[] = [];
-        // submission?.section_payloads?.forEach(section => {
-        //     if (section.documents) {
-        //         allDocs.push(...section.documents);
-        //     }
-        // });
+        section_payloads?.forEach(section => {
+            if (section.documents) {
+                allDocs.push(...section.documents);
+            }
+        });
         return allDocs;
     }, [submission, section_payloads]);
 
@@ -130,6 +130,12 @@ const InfoSection = ({ submission }: { submission?: IntakeFormSubmission | null 
                 <span className="w-1/2 truncate" title={t('created_by')}>{t('created_by')}:</span>
                 <span className="w-1/2 pl-4 text-neutral-first font-medium truncate" title={submission?.created_by || '--'}>
                     {submission?.created_by || '--'}
+                </span>
+            </div>
+            <div className="flex w-full overflow-hidden">
+                <span className="w-1/2 truncate" title={t('register_ingest_process_status')}>{t('register_ingest_process_status')}:</span>
+                <span className={`w-1/2 pl-4 font-medium truncate ${statusClassMap[submission?.register_ingest_process_status || ''] ?? "text-neutral-first/50"}`} title={submission?.register_ingest_process_status || '--'}>
+                    {submission?.register_ingest_process_status || '--'}
                 </span>
             </div>
         </div>

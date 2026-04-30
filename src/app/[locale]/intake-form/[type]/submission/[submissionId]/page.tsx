@@ -12,6 +12,7 @@ import IntakeVerificationCard from '@/features/intake-form/components/IntakeVeri
 import { useTranslations } from 'next-intl';
 import { useMemo } from 'react';
 import { useIntakeFormSectionAction } from '@/features/intake-form/hooks/useIntakeFormSectionAction';
+
 import { RegisterFlattenedRecord } from '@/features/register/types';
 import { useRegister } from '@/context/RegisterContext';
 import { useRbac } from '@/context/RbacContext';
@@ -94,45 +95,45 @@ export default function IntakeFormSubmissionPage() {
                         label: t("register_intake_form", { subject: currentRegister?.register_subject || t("register") }),
                         href: `/intake-form/${registerType}`
                     },
-                    { label: submission?.submission_id ? t("id") +"-"+ String(submission.submission_id) : "" }
+                    { label: isDraft ? (form_name || "") : (submission?.submission_id ? t("id") + "-" + String(submission.submission_id) : "") }
                 ]}
                 showFilters={false}
                 showPagination={false}
                 showCapsule={false}
             />
 
-            <div className="mx-7.5 py-6 space-y-6">
+            <div className={`mx-7.5 ${isDraft ? '' : 'py-6 space-y-6'}`}>
                 {loading ? (
                     <div className="flex items-center justify-center py-20">
                         <span className="text-neutral-first/50">{t('loading')}</span>
                     </div>
                 ) : (
-                    <div className="flex flex-col lg:flex-row gap-7.5">
-                        <div className="w-full lg:w-[75%] space-y-6">
+                    <div className="flex flex-col lg:flex-row gap-6">
+                        <div className={`w-full ${isDraft ? '' : 'lg:w-[75%]'} space-y-6`}>
                             {!isDraft && (
                                 <SubmissionHeader submission={submission} section_payloads={section_payloads} onActionComplete={() => window.location.reload()} />
                             )}
 
-                            <div className=" rounded-[10px] p-6 border border-secondary-first/30 space-y-2">
-                                <MultiSectionAccordionForms
-                                    form_name={form_name}
-                                    form_description={form_description}
-                                    sections={sections || []}
-                                    schemaData={sectionDataMap}
-                                    showActions={isDraft && canCreate}
-                                    onAction={handleAction}
-                                />
-                            </div>
+                            <MultiSectionAccordionForms
+                                form_name={form_name}
+                                form_description={form_description}
+                                sections={sections || []}
+                                schemaData={sectionDataMap}
+                                showActions={isDraft && canCreate}
+                                onAction={handleAction}
+                                submissionId={submissionId}
+                                registerType={registerType}
+                            />
                         </div>
 
-                        <div className="w-full lg:w-[25%] space-y-6">
-                            <div className={isDraft ? 'opacity-50 pointer-events-none' : ''}>
+                        {!isDraft && (
+                            <div className="w-full lg:w-[25%] space-y-6">
                                 <IntakeVerificationCard
                                     submission_id={submissionId}
                                     isPending={!isDraft && submission?.approval_status === "PENDING"}
                                 />
                             </div>
-                        </div>
+                        )}
                     </div>
                 )}
             </div>
