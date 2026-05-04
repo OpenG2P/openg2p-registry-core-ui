@@ -259,7 +259,7 @@ export default function ThemeColorEditor({
                                 id="save-theme-btn"
                                 onClick={onSave}
                                 disabled={isFactoryTheme}
-                                className="px-6 h-10 rounded-[10px] bg-neutral-first text-neutral-second text-sm font-semibold hover:bg-neutral-first/90 transition-colors shadow-lg active:scale-95 transform transition-transform disabled:opacity-40 disabled:cursor-not-allowed"
+                                className="px-6 h-10 rounded-[10px] bg-neutral-first text-neutral-second text-sm font-semibold hover:bg-neutral-first/90 transition-colors shadow-lg active:scale-95 transform disabled:opacity-40 disabled:cursor-not-allowed"
                             >
                                 {t('theme_config_save_changes')}
                             </button>
