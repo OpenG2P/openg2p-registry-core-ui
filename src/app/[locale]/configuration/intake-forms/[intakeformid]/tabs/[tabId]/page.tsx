@@ -6,6 +6,7 @@ import { useParams } from 'next/navigation';
 import { useBreadcrumb } from '@/shared/hooks/useBreadcrumb';
 import {
     ConfigDetailsSummary,
+    DataTable,
     DeleteButton,
     EditButton,
     ViewButton,
@@ -17,7 +18,6 @@ import { useRbac } from '@/context/RbacContext';
 import { CONFIGURATION_TABS_ACTIONS } from '@/features/configuration/shared/utils/configurationTabs.actions';
 import { CONFIGURATION_REGISTERS_ACTIONS } from '@/features/configuration/shared/utils/configurationRegisters.actions';
 import { useTranslations } from 'next-intl';
-import { Link } from '@/i18n/navigation';
 import { toast } from 'react-toastify';
 import { useIntakeFormTabById } from '@/features/configuration/shared/hooks/useIntakeFormTabById';
 import { useAllIntakeFormTabSections } from '@/features/configuration/shared/hooks/useAllIntakeFormTabSections';
@@ -119,15 +119,20 @@ const IntakeFormTabIdPage = () => {
         setShowPopup(true);
     };
 
-    if (tabLoading || !tab.tab_id) {
-        return (
-            <div className="min-h-screen bg-secondary-first flex items-center justify-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-second"></div>
-            </div>
-        );
-    }
-
-
+    const columns = [
+        {
+            key: 'section_mnemonic',
+            label: t('section_mnemonic'),
+        },
+        {
+            key: 'section_order',
+            label: t('section_order'),
+        },
+        {
+            key: 'section_id',
+            label: t('section_id'),
+        },
+    ];
 
     return (
         <>
@@ -171,77 +176,35 @@ const IntakeFormTabIdPage = () => {
                     </div>
                 </div>
             </div>
-            <div className="mx-7.5 bg-neutral-second rounded-[10px] p-4 pt-8 overflow-hidden">
-                <div>
-                    <div className="grid grid-cols-5 gap-4 pb-2 px-8">
-                        <div className="py-3 text-base font-semibold text-primary-second">
-                            {t('section_mnemonic')}
-                        </div>
-                        <div className="py-3 text-base font-semibold text-primary-second">
-                            {t('section_order')}
-                        </div>
-                        <div className="py-3 text-base font-semibold text-primary-second">
-                            {t('section_id')}
-                        </div>
-                        <div className="py-3 text-base font-semibold text-primary-second">
-                            {t('actions')}
-                        </div>
-                    </div>
 
-                    {tabLoading ? (
-                        <div className="flex justify-center items-center py-40">
-                            <img
-                                src="/images/common/loading.gif"
-                                alt="Loading"
-                                className="w-10 h-10"
-                            />
-                        </div>
-                    ) : (
-                        sections?.map((section: any, index: number) => (
-                            <div
-                                key={section.tab_section_id}
-                                className={`grid grid-cols-5 gap-4 items-center px-16 -mx-8 h-16 ${index % 2 === 0
-                                    ? 'bg-secondary-second/25'
-                                    : 'bg-neutral-second'
-                                    }`}
-                            >
-                                <div className="text-base font-medium truncate">
-                                    {section.section_mnemonic}
-                                </div>
-
-                                <div className="text-base font-medium truncate">
-                                    {section.section_order}
-                                </div>
-
-                                <div className="text-base truncate">
-                                    {section.section_id}
-                                </div>
-
-                                <div className="flex gap-4">
-                                    <ViewButton
-                                        label={t('view')}
-                                        onClick={() => {
-                                            setSelectedSection(section);
-                                            setSectionModal('view');
-                                        }}
-                                    />
-                                    <EditButton
-                                        label={t('common.edit')}
-                                        onClick={() => {
-                                            setSelectedSection(section);
-                                            setSectionModal('edit');
-                                        }}
-                                    />
-                                    <DeleteButton
-                                        label={t('remove')}
-                                        onClick={() => handleDelete(section)}
-                                    />
-                                </div>
-                            </div>
-                        ))
-                    )}
-                </div>
-            </div>
+            <DataTable
+                columns={columns}
+                data={sections || []}
+                loading={tabLoading}
+                rowKey={(item) => item.tab_section_id}
+                actions={(item) => (
+                    <>
+                        <ViewButton
+                            label={t('view')}
+                            onClick={() => {
+                                setSelectedSection(item);
+                                setSectionModal('view');
+                            }}
+                        />
+                        <EditButton
+                            label={t('common.edit')}
+                            onClick={() => {
+                                setSelectedSection(item);
+                                setSectionModal('edit');
+                            }}
+                        />
+                        <DeleteButton
+                            label={t('remove')}
+                            onClick={() => handleDelete(item)}
+                        />
+                    </>
+                )}
+            />
 
             {showPopup && (
                 <ConfirmRemovePopup

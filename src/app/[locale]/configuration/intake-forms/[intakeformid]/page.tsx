@@ -6,6 +6,7 @@ import { useParams } from 'next/navigation';
 import { useBreadcrumb } from '@/shared/hooks/useBreadcrumb';
 import {
     ConfigDetailsSummary,
+    DataTable,
     DeleteButton,
 } from '@/features/configuration/shared';
 
@@ -17,7 +18,7 @@ import { CONFIGURATION_REGISTERS_ACTIONS } from '@/features/configuration/shared
 import { useTranslations } from 'next-intl';
 import { useIntakeFormById } from '@/features/configuration/shared/hooks/useIntakeFormById';
 import { useAllIntakeFormTabs } from '@/features/configuration/shared/hooks/useAllIntakeFormTabs';
-import { Link } from '@/i18n/navigation';
+import { useRouter } from '@/i18n/navigation';
 import { toast } from 'react-toastify';
 import { EditIntakeFormModal, ViewIntakeFormModal } from '@/features/configuration/intake-forms';
 import AddIntakeFormTabModal from '@/features/configuration/intake-forms/AddIntakeFormTabModal ';
@@ -26,6 +27,7 @@ import ConfirmRemovePopup from '@/features/configuration/shared/components/Confi
 
 const IntakeFormIdPage = () => {
     const t = useTranslations();
+    const router = useRouter();
     const { intakeformid } = useParams<{ intakeformid: string }>();
     const {
         intake_form,
@@ -103,15 +105,20 @@ const IntakeFormIdPage = () => {
         setShowPopup(true);
     };
 
-    if (loading || !intake_form.form_id) {
-        return (
-            <div className="min-h-screen bg-secondary-first flex items-center justify-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-second"></div>
-            </div>
-        );
-    }
-
-
+    const columns = [
+        {
+            key: 'tab_id',
+            label: t('tab_id'),
+        },
+        {
+            key: 'tab_label',
+            label: t('tab_label'),
+        },
+        {
+            key: 'tab_order',
+            label: t('tab_order'),
+        },
+    ];
 
     return (
         <>
@@ -133,9 +140,6 @@ const IntakeFormIdPage = () => {
 
             <div className=" ml-4 mt-4 px-7.5">
                 <div className="flex justify-between items-center h-14">
-
-
-                    {/* TopBar */}
                     <div className="font-medium text-[20px]">{t('intake_form_tabs')}</div>
                     <div className="flex items-center h-full">
                         <TopBar
@@ -156,69 +160,22 @@ const IntakeFormIdPage = () => {
                     </div>
                 </div>
             </div>
-            <div className="mx-7.5 bg-neutral-second rounded-[10px] p-4 pt-8 overflow-hidden">
-                <div>
-                    <div className="grid grid-cols-5 gap-4 pb-2 px-8">
-                        <div className="py-3 text-base font-semibold text-primary-second">
-                            {t('tab_id')}
-                        </div>
-                        <div className="py-3 text-base font-semibold text-primary-second">
-                            {t('tab_label')}
-                        </div>
-                        <div className="py-3 text-base font-semibold text-primary-second">
-                            {t('tab_order')}
-                        </div>
-                        <div className="py-3 text-base font-semibold text-primary-second">
-                            {t('actions')}
-                        </div>
-                    </div>
 
-                    {loading ? (
-                        <div className="flex justify-center items-center py-40">
-                            <img
-                                src="/images/common/loading.gif"
-                                alt="Loading"
-                                className="w-10 h-10"
-                            />
-                        </div>
-                    ) : (
-                        intake_form_tabs?.map((tab: any, index: number) => (
-                            <Link
-                                key={tab.tab_id}
-                                href={`/configuration/intake-forms/${intakeformid}/tabs/${tab.tab_id}`}
-                                className="block -mx-8"
-                            >
-                                <div
-                                    key={tab.tab_id}
-                                    className={`grid grid-cols-5 gap-4 items-center px-16 h-16 ${index % 2 === 0
-                                        ? 'bg-secondary-second/25'
-                                        : 'bg-neutral-second'
-                                        }`}
-                                >
-                                    <div className="text-base font-medium truncate">
-                                        {tab.tab_id}
-                                    </div>
-
-                                    <div className="text-base font-medium truncate">
-                                        {tab.tab_label}
-                                    </div>
-
-                                    <div className="text-base truncate">
-                                        {tab.tab_order}
-                                    </div>
-
-                                    <div className="flex gap-4">
-                                        <DeleteButton
-                                            label={t('remove')}
-                                            onClick={() => handleDelete(tab)}
-                                        />
-                                    </div>
-                                </div>
-                            </Link>
-                        ))
-                    )}
-                </div>
-            </div>
+            <DataTable
+                columns={columns}
+                data={intake_form_tabs || []}
+                loading={loading}
+                rowKey={(item) => item.tab_id}
+                onRowClick={(item) =>
+                    router.push(`/configuration/intake-forms/${intakeformid}/tabs/${item.tab_id}`)
+                }
+                actions={(item) => (
+                    <DeleteButton
+                        label={t('remove')}
+                        onClick={() => handleDelete(item)}
+                    />
+                )}
+            />
 
             {showPopup && (
                 <ConfirmRemovePopup
