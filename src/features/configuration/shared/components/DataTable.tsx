@@ -14,6 +14,7 @@ interface Props<T> {
     loading?: boolean;
     rowKey: (item: T) => string;
     actions?: (item: T) => React.ReactNode;
+    onRowClick?: (item: T) => void;
 }
 
 export default function DataTable<T>({
@@ -22,6 +23,7 @@ export default function DataTable<T>({
     loading,
     rowKey,
     actions,
+    onRowClick
 }: Props<T>) {
     const gridCols = columns.length + (actions ? 1 : 0);
 
@@ -59,7 +61,8 @@ export default function DataTable<T>({
                 data.map((item, index) => (
                     <div
                         key={rowKey(item)}
-                        className={`grid gap-4 items-center -mx-8 px-16 h-15 transition-colors ${index % 2 === 0 ? 'bg-secondary-second/25' : 'bg-neutral-second'}`}
+                        onClick={() => onRowClick?.(item)}
+                        className={`grid gap-4 items-center -mx-8 px-16 h-15 transition-colors ${index % 2 === 0 ? 'bg-secondary-second/25' : 'bg-neutral-second'} ${onRowClick ? 'cursor-pointer hover:bg-secondary-second/40' : ''}`}
                         style={{ gridTemplateColumns: `repeat(${gridCols}, minmax(0, 1fr))` }}
                     >
                         {columns.map((col) => (
