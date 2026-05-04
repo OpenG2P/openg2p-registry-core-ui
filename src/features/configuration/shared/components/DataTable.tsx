@@ -65,16 +65,21 @@ export default function DataTable<T>({
                         className={`grid gap-4 items-center -mx-8 px-16 h-15 transition-colors ${index % 2 === 0 ? 'bg-secondary-second/25' : 'bg-neutral-second'} ${onRowClick ? 'cursor-pointer hover:bg-secondary-second/40' : ''}`}
                         style={{ gridTemplateColumns: `repeat(${gridCols}, minmax(0, 1fr))` }}
                     >
-                        {columns.map((col) => (
-                            <div
-                                key={String(col.key)}
-                                className="text-base font-medium truncate"
-                            >
-                                {col.render
-                                    ? col.render(item)
-                                    : (item as any)[col.key] ?? '-'}
-                            </div>
-                        ))}
+                        {columns.map((col) => {
+                            const value = col.render
+                                ? col.render(item)
+                                : (item as any)[col.key] ?? '-';
+
+                            return (
+                                <div
+                                    key={String(col.key)}
+                                    className="text-[16px] font-medium truncate"
+                                    title={typeof value === 'string' ? value : undefined}
+                                >
+                                    {value}
+                                </div>
+                            );
+                        })}
 
                         {actions && (
                             <div className="flex items-center gap-6">
