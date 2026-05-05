@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect } from 'react';
-import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
 import { toast } from 'react-toastify';
@@ -10,9 +9,10 @@ import { useFetch } from '@/shared/hooks';
 import Can from '@/components/shared/Can';
 
 import { CONFIGURATION_SECTIONS_ACTIONS } from '../shared/utils/configurationSections.actions';
-import { Link } from '@/i18n/navigation';
+import { Link, useRouter } from '@/i18n/navigation';
 import { useAllRegisterSections } from '../shared/hooks/useAllRegisterSections';
 import AddRegisterSectionModal from './AddRegisterSectionModal';
+import { DataTable, DeleteButton } from '../shared/components';
 
 interface RegisterSectionConfigViewProps {
 	page?: number;
@@ -29,8 +29,8 @@ export default function RegisterSectionConfigView({
 	isModalOpen,
 	onCloseModal,
 }: RegisterSectionConfigViewProps) {
-
 	const t = useTranslations();
+	const router = useRouter();
 	const { registerId } = useParams<{ registerId: string }>();
 
 	const { sections, loading, pagination, refresh } = useAllRegisterSections(registerId, page, pageSize);
@@ -60,10 +60,7 @@ export default function RegisterSectionConfigView({
 		}
 	};
 
-	const handleDelete = (e: React.MouseEvent, sectionId: string) => {
-		e.preventDefault();
-		e.stopPropagation();
-
+	const handleDelete = (sectionId: string) => {
 		toast.info(
 			({ closeToast }) => (
 				<div className="p-1">
@@ -98,72 +95,36 @@ export default function RegisterSectionConfigView({
 		);
 	};
 
-	if (loading) {
-		return (
-			<div className="flex items-center justify-center p-8 bg-neutral-second rounded-[10px] mx-7.5">
-				<div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-second"></div>
-			</div>
-		);
-	}
+	const columns = [
+		{
+			key: 'section_mnemonic',
+			label: t('section_mnemonic'),
+		},
+		{
+			key: 'section_description',
+			label: t('section_description'),
+		},
+	];
 
 	return (
 		<>
-			<div className="mx-7.5 bg-neutral-second rounded-[10px] p-8">
-				<div className="grid grid-cols-4 gap-4 px-4 pb-2">
-					<div className="py-3 text-left text-base font-semibold text-primary-second tracking-wider truncate">
-						{t('section_mnemonic')}
-					</div>
-					<div className="py-3 text-left text-base font-semibold text-primary-second tracking-wider">
-						{t('section_description')}
-					</div>
-					<div className="py-3 text-left text-base font-semibold text-primary-second tracking-wider">
-						{t('actions')}
-					</div>
-				</div>
-
-				{sections?.map((section: any, index: number) => (
-					<Link
-						key={section.section_id}
-						href={`/configuration/registers/${registerId}/sections/${section.section_id}`}
-						className="block -mx-8"
-					>
-						<div
-							className={`grid grid-cols-4 px-12 py-4 ${index % 2 === 0
-								? 'bg-secondary-second/25'
-								: 'bg-neutral-second'
-								}`}
-						>
-							<div className="text-base font-medium truncate">
-								{section.section_mnemonic}
-							</div>
-
-							<div className="text-base font-medium truncate">
-								{section.section_description}
-							</div>
-
-							<div>
-								<Can action={CONFIGURATION_SECTIONS_ACTIONS.delete}>
-									<span
-										onClick={(e) =>
-											handleDelete(e, section.section_id)
-										}
-										className="flex items-center text-neutral-first/50 cursor-pointer"
-									>
-										{t('remove')}
-										<Image
-											src="/images/common/false_sign.png"
-											alt={t('remove')}
-											width={18}
-											height={18}
-											className="ml-4"
-										/>
-									</span>
-								</Can>
-							</div>
-						</div>
-					</Link>
-				))}
-			</div>
+			<DataTable
+				columns={columns}
+				data={sections || []}
+				loading={loading}
+				rowKey={(item) => item.section_id}
+				onRowClick={(item) =>
+					router.push(`/configuration/registers/${registerId}/sections/${item.section_id}`)
+				}
+				actions={(item) => (
+					<Can action={CONFIGURATION_SECTIONS_ACTIONS.delete}>
+						<DeleteButton
+							label={t('remove')}
+							onClick={() => handleDelete(item.section_id)}
+						/>
+					</Can>
+				)}
+			/>
 			<AddRegisterSectionModal
 				isOpen={isModalOpen}
 				onClose={onCloseModal}

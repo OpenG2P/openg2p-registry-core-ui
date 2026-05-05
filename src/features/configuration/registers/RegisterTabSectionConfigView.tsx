@@ -1,7 +1,5 @@
 'use client';
 
-import Image from 'next/image';
-import { Link } from '@/i18n/navigation';
 import { useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
 import { useConfigSections } from '../shared/hooks/useConfigSections';
@@ -14,7 +12,7 @@ import { CONFIGURATION_SECTIONS_ACTIONS } from '../shared/utils/configurationSec
 import AddTabSectionModal from './AddTabSectionModal';
 import EditTabSectionModal from './EditTabSectionModal';
 import EditButton from '../shared/components/EditButton';
-import { Pencil } from 'lucide-react';
+import { DataTable, DeleteButton } from '../shared/components';
 
 interface RegisterTabSectionConfigViewProps {
     isModalOpen: boolean;
@@ -38,10 +36,7 @@ export default function RegisterTabSectionConfigView({
     const [editModalOpen, setEditModalOpen] = useState(false);
     const [selectedSection, setSelectedSection] = useState<any>(null);
 
-    const handleEdit = (e: React.MouseEvent, section: any) => {
-        e.preventDefault();
-        e.stopPropagation();
-
+    const handleEdit = (section: any) => {
         setSelectedSection(section);
         setEditModalOpen(true);
     };
@@ -69,10 +64,7 @@ export default function RegisterTabSectionConfigView({
         }
     };
 
-    const handleDelete = (e: React.MouseEvent, section: any) => {
-        e.preventDefault();
-        e.stopPropagation();
-
+    const handleDelete = (section: any) => {
         const tab_section_id = section.tab_section_id;
         toast.info(
             ({ closeToast }) => (
@@ -108,76 +100,42 @@ export default function RegisterTabSectionConfigView({
         );
     };
 
-    if (loading) {
-        return (
-            <div className="flex items-center justify-center p-8 bg-neutral-second rounded-[10px] mx-7.5">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-second"></div>
-            </div>
-        );
-    }
+    const columns = [
+        {
+            key: 'section_id',
+            label: t('section_id'),
+        },
+        {
+            key: 'section_order',
+            label: t('section_order'),
+        },
+    ];
 
     return (
         <>
-            <div className="mx-7.5 bg-neutral-second rounded-[10px] p-8 overflow-x-visible">
-                <div>
-                    {/* Header */}
-                    <div className="grid grid-cols-5 gap-4 pb-2 px-4">
-                        <div className="py-3 text-left text-base font-semibold text-primary-second tracking-wider truncate">
-                            {t('section_id')}
-                        </div>
-                        <div className="py-3 text-left text-base font-semibold text-primary-second tracking-wider">
-                            {t('section_order')}
-                        </div>
-                        <div className="py-3 text-left text-base font-semibold text-primary-second tracking-wider">
-                            {t('actions')}
-                        </div>
+            <DataTable
+                columns={columns}
+                data={sections}
+                loading={loading}
+                rowKey={(item) => item.tab_section_id}
+                actions={(item) => (
+                    <div className="flex gap-4">
+                        <Can action={CONFIGURATION_SECTIONS_ACTIONS.delete}>
+                            <EditButton
+                                label={t('edit')}
+                                onClick={() => handleEdit(item)}
+                            />
+                        </Can>
 
+                        <Can action={CONFIGURATION_SECTIONS_ACTIONS.delete}>
+                            <DeleteButton
+                                label={t('remove')}
+                                onClick={() => handleDelete(item)}
+                            />
+                        </Can>
                     </div>
-
-                    {/* Data Rows */}
-                    {sections.map((section, index) => (
-
-                        <div
-                            key={section.tab_section_id}
-                            className={`grid grid-cols-5 gap-4 items-center h-15 px-12 -mx-8 py-4 transition-colors ${index % 2 === 0 ? 'bg-secondary-second/25' : 'bg-neutral-second'} cursor-pointer`}
-                        >
-                            <div className="text-base font-medium truncate">
-                                {section.section_id}
-                            </div>
-                            <div className="text-base font-medium text-neutral-first/50">
-                                {section.section_order}
-                            </div>
-
-                            <div className="flex gap-4">
-                                <Can action={CONFIGURATION_SECTIONS_ACTIONS.delete}>
-                                    <span
-                                        onClick={(e) => handleEdit(e, section)}
-                                        className="flex gap-2 items-center text-neutral-first/50 cursor-pointer"
-                                    >
-                                        {t('edit')}
-                                        <Pencil size={16} className="opacity-60" />
-                                    </span>
-                                </Can>
-                                <Can action={CONFIGURATION_SECTIONS_ACTIONS.delete}>
-                                    <span
-                                        onClick={(e) => handleDelete(e, section)}
-                                        className="flex items-center text-neutral-first/50"
-                                    >
-                                        {t('remove')}
-                                        <Image
-                                            src="/images/common/false_sign.png"
-                                            alt={t('remove')}
-                                            width={18}
-                                            height={18}
-                                            className="ml-4"
-                                        />
-                                    </span>
-                                </Can>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
+                )}
+            />
 
             <AddTabSectionModal
                 isOpen={isModalOpen}

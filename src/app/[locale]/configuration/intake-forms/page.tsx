@@ -9,13 +9,14 @@ import { CONFIGURATION_REGISTERS_ACTIONS } from '@/features/configuration/shared
 import { useTranslations } from 'next-intl';
 import { useAllIntakeForms } from '@/features/configuration/shared/hooks/useAllIntakeForms';
 import { AddIntakeFormModal } from '@/features/configuration/intake-forms';
-import { DeleteButton } from '@/features/configuration/shared/components';
+import { DataTable, DeleteButton } from '@/features/configuration/shared/components';
 import { toast } from 'react-toastify';
 import ConfirmRemovePopup from '@/features/configuration/shared/components/ConfirmRemovePopup';
-import { Link } from '@/i18n/navigation';
+import { useRouter } from '@/i18n/navigation';
 
 const IntakeFormPage = () => {
     const t = useTranslations();
+    const router = useRouter();
     const [currentPage, setCurrentPage] = useState(1);
     const [modalType, setModalType] = useState<'add' | 'edit' | 'view' | null>(null);
     const [showPopup, setShowPopup] = useState(false);
@@ -76,6 +77,25 @@ const IntakeFormPage = () => {
         setShowPopup(true);
     };
 
+    const columns = [
+        {
+            key: 'form_mnemonic',
+            label: t('form_mnemonic'),
+        },
+        {
+            key: 'form_description',
+            label: t('description'),
+        },
+        {
+            key: 'register_mnemonic',
+            label: t('register'),
+        },
+        {
+            key: 'number_of_verifications',
+            label: t('verifications'),
+        },
+    ];
+
     return (
         <>
             <TopBar
@@ -92,76 +112,21 @@ const IntakeFormPage = () => {
                 onNext={handleNext}
             />
 
-            <div className="mx-7.5 bg-neutral-second rounded-[10px] p-4 pt-8 overflow-hidden">
-                <div>
-                    <div className="grid grid-cols-5 gap-4 pb-2 px-8">
-                        <div className="py-3 text-base font-semibold text-primary-second">
-                            {t('form_mnemonic')}
-                        </div>
-                        <div className="py-3 text-base font-semibold text-primary-second">
-                            {t('description')}
-                        </div>
-                        <div className="py-3 text-base font-semibold text-primary-second">
-                            {t('register')}
-                        </div>
-                        <div className="py-3 text-base font-semibold text-primary-second">
-                            {t('verifications')}
-                        </div>
-                        <div className="py-3 text-base font-semibold text-primary-second">
-                            {t('actions')}
-                        </div>
-                    </div>
-
-                    {loading ? (
-                        <div className="flex justify-center items-center py-40">
-                            <img
-                                src="/images/common/loading.gif"
-                                alt="Loading"
-                                className="w-10 h-10"
-                            />
-                        </div>
-                    ) : (
-                        intake_forms?.map((form: any, index: number) => (
-                            <Link
-                                key={form.form_id}
-                                href={`/configuration/intake-forms/${form.form_id}`}
-                                className="block -mx-8"
-                            >
-                                <div
-                                    key={form.form_id}
-                                    className={`grid grid-cols-5 gap-4 items-center px-16 h-16 ${index % 2 === 0
-                                        ? 'bg-secondary-second/25'
-                                        : 'bg-neutral-second'
-                                        }`}
-                                >
-                                    <div className="text-base font-medium truncate">
-                                        {form.form_mnemonic}
-                                    </div>
-
-                                    <div className="text-base truncate">
-                                        {form.form_description}
-                                    </div>
-
-                                    <div className="text-base truncate">
-                                        {form.register_mnemonic}
-                                    </div>
-
-                                    <div className="text-base">
-                                        {form.number_of_verifications}
-                                    </div>
-
-                                    <div className="flex gap-4">
-                                        <DeleteButton
-                                            label={t('remove')}
-                                            onClick={() => handleDelete(form)}
-                                        />
-                                    </div>
-                                </div>
-                            </Link>
-                        ))
-                    )}
-                </div>
-            </div>
+            <DataTable
+                columns={columns}
+                data={intake_forms || []}
+                loading={loading}
+                rowKey={(item) => item.form_id}
+                onRowClick={(item) =>
+                    router.push(`/configuration/intake-forms/${item.form_id}`)
+                }
+                actions={(item) => (
+                    <DeleteButton
+                        label={t('remove')}
+                        onClick={() => handleDelete(item)}
+                    />
+                )}
+            />
 
             {showPopup && (
                 <ConfirmRemovePopup
