@@ -1,21 +1,11 @@
 'use client';
 
-import dynamic from 'next/dynamic';
 import { useTranslations } from 'next-intl';
 import { TopBar } from '@/components/shared';
 import { SelectedFilters } from '@/features/filter/components';
 import { useRegisterRecords } from '@/features/register/hooks/useRegisterRecords';
 import { RegisterRecordCard } from '@/features/register/components';
 import { RegisterRecord } from '@/features/register/types';
-import { useState } from 'react';
-import AddNewDropdown from '@/components/ui/AddNewDropdown';
-import { useVCConfigs } from '@/features/register/hooks/useVCConfigs';
-import { useInputMechanisms } from '@/shared/hooks';
-
-const VpVerificationModal = dynamic(
-    () => import('@/features/verifiable-credentials/components/VpVerificationModal'),
-    { ssr: false }
-);
 
 export default function RegisterTypePage() {
     const t = useTranslations();
@@ -41,33 +31,14 @@ export default function RegisterTypePage() {
         }
     } = useRegisterRecords();
 
-
-    const { vcOptions, isLoadingVCs } = useVCConfigs();
-    const { mechanisms, isLoadingMechanisms } = useInputMechanisms();
-
-    const [selectedVC, setSelectedVC] = useState<any | null>(null);
-
-    const [openVC, setOpenVC] = useState(false);
-
     return (
         <div className="min-h-screen mx-auto bg-secondary-first">
             <TopBar
                 breadcrumb={[{ label: registerTypeLabel }]}
                 showFilters
                 showPagination
-                showCapsule={true}
-                capsule={
-                    <AddNewDropdown
-                        mechanisms={mechanisms}
-                        vcOptions={vcOptions}
-                        onSelectVC={(vc) => {
-                            setSelectedVC(vc);
-                            setOpenVC(true);
-                        }}
-                        onImportCSV={() => console.log('Import CSV')}
-                        onImportPDS={() => console.log('Import PDS')}
-                    />
-                }
+                showCapsule={false}
+                capsule={<></>}
                 pageStart={pagination.pageStart}
                 pageEnd={pagination.pageEnd}
                 total={pagination.total}
@@ -134,17 +105,6 @@ export default function RegisterTypePage() {
                 </div>
             </div>
             <div className='h-15'>&nbsp;</div>
-            <>
-                {openVC && selectedVC && (
-                    <VpVerificationModal
-                        descriptorSchema={selectedVC.descriptor_schema}
-                        onClose={() => {
-                            setOpenVC(false);
-                            setSelectedVC(null);
-                        }}
-                    />
-                )}
-            </>
         </div>
     );
 }

@@ -1,24 +1,21 @@
 'use client';
 
 import { TopBar } from '@/components/shared';
-import { useRouter } from '@/i18n/navigation';
 import { useTranslations } from 'next-intl';
 import { useRegister } from '@/context/RegisterContext';
 import { useParams, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 
-import NewIntakeFormDropdown from '@/features/intake-form/components/NewIntakeFormDropdown';
 import IntakeFormSubmissionList from '@/features/intake-form/components/SubmissionList';
-import { usePagination } from '@/shared/hooks';
-import { useIntakeForms } from '@/features/intake-form/hooks/useIntakeForms';
+import { useInputMechanisms, usePagination } from '@/shared/hooks';
 import { useIntakeSubmissions } from '@/features/intake-form/hooks/useIntakeSubmissions';
 import { INTAKE_FORM_ACTIONS } from '@/features/intake-form/utils/intakeForm.actions';
 import Can from '@/components/shared/Can';
 import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
+import AddNewDropdown from '@/components/ui/AddNewDropdown';
 
 export default function IntakeFormPage() {
     const t = useTranslations();
-    const router = useRouter();
     const { config } = useRuntimeConfig();
 
     const routeParams = useParams<{ type: string }>();
@@ -32,7 +29,8 @@ export default function IntakeFormPage() {
     const { currentRegister } = useRegister();
     const registerId = currentRegister?.register_id;
 
-    const { forms, loading: formsLoading } = useIntakeForms(registerId);
+    const { mechanisms, isLoadingMechanisms } = useInputMechanisms();
+
     const { submissions, paginationInfo, loading: submissionsLoading } = useIntakeSubmissions(registerId,
         {
             searchText: searchQuery,
@@ -64,20 +62,14 @@ export default function IntakeFormPage() {
         <div className="min-h-screen mx-auto bg-secondary-first">
             <TopBar
                 breadcrumb={[{ label: t("register_intake_form", { subject: currentRegister?.register_subject || t("register") }) }]}
-
-
                 showFilters={false}
                 showPagination
                 showCapsule={true}
                 capsule={
                     <Can action={INTAKE_FORM_ACTIONS.create}>
-                        <NewIntakeFormDropdown
-                            forms={forms || []}
-                            onSelectForm={(form) => {
-                                router.push(
-                                    `/intake-form/${registerType}/new/${form.form_id}`
-                                );
-                            }}
+                        <AddNewDropdown
+                            mechanisms={mechanisms || []}
+                            loading={isLoadingMechanisms}
                         />
                     </Can>
                 }
@@ -93,7 +85,7 @@ export default function IntakeFormPage() {
             />
 
             <div className="px-7.5">
-                {formsLoading || submissionsLoading ? (
+                {submissionsLoading ? (
                     <div className="space-y-4">
                         {[...Array(3)].map((_, i) => (
                             <div key={i} className="rounded-[10px] bg-neutral-second px-10 py-8 animate-pulse">
