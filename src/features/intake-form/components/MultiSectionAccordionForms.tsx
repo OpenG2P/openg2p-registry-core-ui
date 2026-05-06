@@ -55,11 +55,11 @@ export default function MultiSectionAccordionForms({
   useEffect(() => {
     if (schemaData) {
       const alreadySaved = sections
-        .filter((s) => schemaData[s.section_register_id])
+        .filter((s) => schemaData[s.section_register_id] || submissionId)
         .map((s) => s.section_id);
       setSavedSections((prev) => Array.from(new Set([...prev, ...alreadySaved])));
     }
-  }, [schemaData, sections]);
+  }, [schemaData, sections, submissionId]);
 
   const allSectionsSaved = useMemo(() => {
     return sections.every(
