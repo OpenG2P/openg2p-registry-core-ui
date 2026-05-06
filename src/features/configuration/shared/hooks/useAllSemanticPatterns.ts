@@ -6,10 +6,10 @@ export interface IncomingSemanticPattern {
     data_model_mnemonic?: string;
     register_id: string;
     register_mnemonic?: string;
-    section_id: string;
-    section_mnemonic?: string;
+    intake_form_id: string;
+    intake_form_mnemonic?: string;
     pattern_for_register: string;
-    pattern_for_section: string;
+    pattern_for_intake_form: string;
     key_path_for_business_payload: string;
     raw_payload_enricher_class: string;
 }

@@ -12,7 +12,7 @@ export const useIntakeForms = (registerId?: string) => {
     });
 
     return {
-        forms: data?.intake_forms as IntakeForm[],
+        forms: (data?.intake_forms ?? []) as IntakeForm[],
         loading,
         error,
     };

@@ -6,6 +6,7 @@ import { useFetch } from '@/shared/hooks';
 import { toast } from 'react-toastify';
 import { useAllRegister, useRegisterSections, useAllDataModels } from '@/features/configuration/shared';
 import { BaseModal, CustomDropdown, InputField, TextAreaField } from '../shared/components';
+import { useIntakeForms } from '@/features/intake-form/hooks/useIntakeForms';
 
 interface AddSemanticPatternModalProps {
     onClose: () => void;
@@ -23,15 +24,16 @@ export default function AddSemanticPatternModal({ onClose, onSuccess }: AddSeman
         data_model_mnemonic: '',
         register_id: '',
         register_mnemonic: '',
-        section_id: '',
+        intake_form_id: '',
         section_mnemonic: '',
         pattern_for_register: '',
-        pattern_for_section: '',
+        pattern_for_intake_form: '',
         key_path_for_business_payload: '',
         raw_payload_enricher_class: '',
     });
 
-    const { sections, loading: loadingSections } = useRegisterSections(formData.register_id);
+    // const { sections, loading: loadingSections } = useRegisterSections(formData.register_id);
+    const { forms, loading: formsLoading } = useIntakeForms(formData.register_id);
 
     useEffect(() => {
         setFormData(prev => ({ ...prev, section_id: '', section_mnemonic: '' }));
@@ -48,9 +50,9 @@ export default function AddSemanticPatternModal({ onClose, onSuccess }: AddSeman
             body: JSON.stringify({
                 data_model_id: formData.data_model_id,
                 register_id: formData.register_id,
-                section_id: formData.section_id || null,
+                intake_form_id: formData.intake_form_id || null,
                 pattern_for_register: formData.pattern_for_register,
-                pattern_for_section: formData.pattern_for_section,
+                pattern_for_intake_form: formData.pattern_for_intake_form,
                 key_path_for_business_payload: formData.key_path_for_business_payload,
                 raw_payload_enricher_class: formData.raw_payload_enricher_class,
             })
@@ -72,10 +74,10 @@ export default function AddSemanticPatternModal({ onClose, onSuccess }: AddSeman
             data_model_mnemonic: '',
             register_id: '',
             register_mnemonic: '',
-            section_id: '',
+            intake_form_id: '',
             section_mnemonic: '',
             pattern_for_register: '',
-            pattern_for_section: '',
+            pattern_for_intake_form: '',
             key_path_for_business_payload: '',
             raw_payload_enricher_class: '',
         });
@@ -123,17 +125,23 @@ export default function AddSemanticPatternModal({ onClose, onSuccess }: AddSeman
             />
 
             <CustomDropdown
-                label={t('section_mnemonic')}
-                options={sections.map(sec => ({
-                    label: sec.section_mnemonic,
-                    value: sec.section_id,
+                label={t('intake_form_mnemonic')}
+                options={forms.map((f) => ({
+                    label: f.form_mnemonic,
+                    value: f.form_id,
                 }))}
-                loading={loadingSections}
-                value={formData.section_id}
-                disabled={!formData.register_id || loadingSections}
+                value={formData.intake_form_id}
+                loading={formsLoading}
+                disabled={!formData.register_id}
                 onChange={(value) => {
-                    const mnemonic = sections.find(s => s.section_id === value)?.section_mnemonic || '';
-                    setFormData(prev => ({ ...prev, section_id: value, section_mnemonic: mnemonic }))
+                    const mnemonic =
+                        forms.find(f => f.form_id === value)?.form_mnemonic || '';
+
+                    setFormData(prev => ({
+                        ...prev,
+                        intake_form_id: value,
+                        intake_form_mnemonic: mnemonic
+                    }));
                 }}
             />
 
@@ -148,11 +156,11 @@ export default function AddSemanticPatternModal({ onClose, onSuccess }: AddSeman
             />
 
             <TextAreaField
-                label={t('pattern_for_section')}
-                value={formData.pattern_for_section}
+                label={t('pattern_for_intake_form')}
+                value={formData.pattern_for_intake_form}
                 textareaClassName="h-16"
                 onChange={(value) =>
-                    setFormData(prev => ({ ...prev, pattern_for_section: value }))
+                    setFormData(prev => ({ ...prev, pattern_for_intake_form: value }))
                 }
                 rows={2}
             />
