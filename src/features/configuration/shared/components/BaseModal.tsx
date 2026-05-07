@@ -1,6 +1,7 @@
 'use client';
 
 import { X } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 interface BaseModalProps {
     title: string;
@@ -23,6 +24,7 @@ export default function BaseModal({
     hideCancel = false,
     secondaryActionLabel,
 }: BaseModalProps) {
+    const t = useTranslations();
     return (
         <div className="fixed inset-0 bg-neutral-first/80 z-50 flex items-center justify-center">
             <div className={`relative w-full ${maxWidth} bg-neutral-second rounded-[10px] border-5 border-primary-first px-8 py-6`}>
@@ -47,7 +49,7 @@ export default function BaseModal({
                                 onClick={onClose}
                                 className="px-6 py-2 bg-secondary-second text-neutral-first/50 text-[16px] font-bold rounded-[10px]"
                             >
-                                {secondaryActionLabel || 'Cancel'}
+                                {secondaryActionLabel || t('cancel')}
                             </button>
                         )}
 
