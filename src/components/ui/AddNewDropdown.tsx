@@ -11,6 +11,7 @@ import { useClickOutside } from '@/shared/hooks';
 import { useTranslations } from 'next-intl';
 import dynamic from 'next/dynamic';
 import ImportModal from '@/features/intake-form/components/ImportModal';
+import { useImportFileConfigs } from '@/features/intake-form/hooks/useImportFileConfigs';
 
 const VpVerificationModal = dynamic(
     () => import('@/features/verifiable-credentials/components/VpVerificationModal'),
@@ -19,7 +20,7 @@ const VpVerificationModal = dynamic(
 
 type Mechanism = {
     mechanism_id: string;
-    mechanism_type: 'INTAKE_FORM' | 'IMPORT_FILE' | 'VERIFIABLE_CREDENTIALS';
+    mechanism_type: 'INTAKE_FORM' | 'IMPORT_FILE' | 'VERIFIABLE_CREDENTIAL';
     display_key: string;
 };
 
@@ -43,12 +44,14 @@ export default function AddNewDropdown({
 
     const { forms, loading: formsLoading } = useIntakeForms(registerId);
     const { vcOptions, isLoadingVCs } = useVCConfigs();
+    const { importFileOptions, isLoadingImportFiles } = useImportFileConfigs();
 
     const [open, setOpen] = useState(false);
     const [activeMenu, setActiveMenu] = useState<string | null>(null);
     const [showImportModal, setShowImportModal] = useState(false);
 
     const [selectedVC, setSelectedVC] = useState<any | null>(null);
+    const [selectedImportFile, setSelectedImportFile] = useState<any | null>(null);
     const [openVC, setOpenVC] = useState(false);
 
     const ref = useRef<HTMLDivElement>(null);
@@ -65,8 +68,10 @@ export default function AddNewDropdown({
         closeAll();
     };
 
-    const handleImport = () => {
+    const handleImport = (file: any) => {
+        setSelectedImportFile(file);
         setShowImportModal(true);
+        closeAll();
     };
 
     const handleVCSelect = (vc: any) => {
@@ -98,16 +103,34 @@ export default function AddNewDropdown({
                 ));
 
             case 'IMPORT_FILE':
-                return (
-                    <div
-                        onClick={() => handleImport()}
-                        className="px-4 py-1 hover:bg-secondary-second cursor-pointer text-[16px]"
-                    >
-                        CSV
-                    </div>
-                );
+                if (isLoadingImportFiles) {
+                    return (
+                        <div className="px-4 py-1 text-[16px] text-black/50">
+                            Loading...
+                        </div>
+                    );
+                }
 
-            case 'VERIFIABLE_CREDENTIALS':
+                if (!importFileOptions?.length) {
+                    return (
+                        <div className="px-4 py-1 text-[16px] text-black/50">
+                            No import file configs
+                        </div>
+                    );
+                }
+
+                return importFileOptions.map((file: any) => (
+                    <div
+                        key={file.import_file_configuration_id}
+                        onClick={() => handleImport(file)}
+                        className="px-4 py-1 hover:bg-secondary-second cursor-pointer text-[16px] truncate"
+                        title={file.import_file_template_mnemonic}
+                    >
+                        {file.import_file_template_mnemonic}
+                    </div>
+                ));
+
+            case 'VERIFIABLE_CREDENTIAL':
                 if (isLoadingVCs) {
                     return <div className="px-4 py-1 text-[16px] text-black/50">Loading...</div>;
                 }
@@ -120,7 +143,7 @@ export default function AddNewDropdown({
                     <div
                         key={vc.vc_config_id}
                         onClick={() => handleVCSelect(vc)}
-                        className="px-4 py-2 hover:bg-secondary-second cursor-pointer text-[16px]"
+                        className="px-4 py-1 hover:bg-secondary-second cursor-pointer text-[16px] truncate"
                         title={vc.vc_mnemonic}
                     >
                         {vc.vc_mnemonic}
@@ -205,7 +228,7 @@ export default function AddNewDropdown({
             {showImportModal && (
                 <ImportModal
                     onClose={() => setShowImportModal(false)}
-                    registerId={registerId}
+                    importFileConfig={selectedImportFile}
                 />
             )}
         </>

@@ -12,7 +12,7 @@ export const useInputMechanisms = () => {
     const registerId = currentRegister?.register_id;
 
     const { data, loading } = useFetch<InputMechanism[]>({
-        url: '/api/ui-helper/get-input-mechanisms',
+        url: '/api/input-mechanism/all-mechanisms',
         enabled: !!registerId,
         options: {
             method: 'POST',

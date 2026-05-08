@@ -8,12 +8,12 @@ import { useDocumentUpload } from '@/features/register/hooks/useDocumentUpload';
 
 interface ImportModalProps {
     onClose: () => void;
-    registerId?: string;
+    importFileConfig?: any;
 }
 
 export default function ImportModal({
     onClose,
-    registerId,
+    importFileConfig
 }: ImportModalProps) {
     const { execute } = useFetch();
 
@@ -42,7 +42,7 @@ export default function ImportModal({
     };
 
     const handleImport = async () => {
-        if (!selectedFile || !registerId) {
+        if (!selectedFile) {
             toast.warn('All fields are required');
             return;
         }
@@ -55,28 +55,27 @@ export default function ImportModal({
                 label: 'import_file',
             });
 
-            console.log(uploadedDoc,"*********************8")
+            if (!uploadedDoc?.document_store_id) {
+                toast.error('File upload failed');
+                return;
+            }
 
-            // if (!uploadedDoc) {
-            //     toast.error('File upload failed');
-            //     return;
-            // }
+            const result = await execute('/api/input-mechanism/enqueue-import', {
+                method: 'POST',
+                body: JSON.stringify({
+                    document_store_id: uploadedDoc.document_store_id,
+                    data_model_id: importFileConfig.data_model_id,
+                    register_id: importFileConfig.register_id,
+                    intake_form_id: importFileConfig.form_id,
+                }),
+            });
 
-            // const result = await execute('/api/intake/import', {
-            //     method: 'POST',
-            //     body: JSON.stringify({
-            //         intakeform_id: intakeFormId,
-            //         docstore_id: uploadedDoc.document_store_id,
-            //         register_id: registerId,
-            //     }),
-            // });
-
-            // if (result) {
-            //     toast.success('Import successful');
-            //     onClose();
-            // } else {
-            //     toast.error('Import failed');
-            // }
+            if (result) {
+                toast.success('Import successful');
+                onClose();
+            } else {
+                toast.error('Import failed');
+            }
         } catch (err) {
             toast.error('Something went wrong');
         } finally {
