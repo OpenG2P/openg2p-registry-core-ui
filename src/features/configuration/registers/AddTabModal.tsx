@@ -17,29 +17,29 @@ export default function AddTabModal({ isOpen, onClose, onSuccess }: AddTabModalP
     const { execute: createTab, loading } = useFetch();
 
     const [formData, setFormData] = useState({
-        tabName: '',
-        tabOrder: '',
+        tab_label: '',
+        tab_order: '',
     });
 
     const handleSubmit = async () => {
-        if (!formData.tabName) {
+        if (!formData.tab_label) {
             toast.warn('Tab Name is required');
             return;
         }
 
-        const result = await createTab('/api/configuration/registers/tabs/create', {
+        const result = await createTab('/api/configuration/registers/tab-metadata/create-tab', {
             method: 'POST',
             body: JSON.stringify({
                 register_id: registerId,
-                tab_label: formData.tabName,
-                tab_order: Number(formData.tabOrder) || 0,
-                used_for_new_intake_form: false
+                tab_label: formData.tab_label,
+                tab_order: Number(formData.tab_order) || 0,
+                is_active: true
             })
         });
 
         if (result?.tab_id) {
             toast.success('Tab created successfully');
-            setFormData({ tabName: '', tabOrder: '' });
+            setFormData({ tab_label: '', tab_order: '' });
             if (onSuccess) onSuccess();
             onClose();
         } else {
@@ -49,8 +49,8 @@ export default function AddTabModal({ isOpen, onClose, onSuccess }: AddTabModalP
 
     const handleCancel = () => {
         setFormData({
-            tabName: '',
-            tabOrder: '',
+            tab_label: '',
+            tab_order: '',
         });
         onClose();
     };
@@ -81,8 +81,8 @@ export default function AddTabModal({ isOpen, onClose, onSuccess }: AddTabModalP
                                 <input
                                     type="text"
                                     placeholder={t('enter_tab_label')}
-                                    value={formData.tabName}
-                                    onChange={(e) => setFormData({ ...formData, tabName: e.target.value })}
+                                    value={formData.tab_label}
+                                    onChange={(e) => setFormData({ ...formData, tab_label: e.target.value })}
                                     className="w-full px-4 py-2 border border-primary-second rounded-lg outline-none outline-1 outline-primary-second transition-all text-neutral-first/70 placeholder:text-secondary-third"
                                 />
                             </div>
@@ -95,8 +95,8 @@ export default function AddTabModal({ isOpen, onClose, onSuccess }: AddTabModalP
                             <input
                                 type="number"
                                 placeholder="e.g. 0, 1, 2, etc."
-                                value={formData.tabOrder}
-                                onChange={(e) => setFormData({ ...formData, tabOrder: e.target.value })}
+                                value={formData.tab_order}
+                                onChange={(e) => setFormData({ ...formData, tab_order: e.target.value })}
                                 className="w-full px-4 py-2 border border-primary-second rounded-lg outline-none outline-1 outline-primary-second transition-all text-neutral-first/70 placeholder:text-secondary-third"
                             />
                         </div>

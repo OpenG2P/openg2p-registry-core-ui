@@ -20,6 +20,7 @@ export default function EditTabModal({ isOpen, onClose, onSuccess, initialData, 
     const [formData, setFormData] = useState({
         tab_label: '',
         tab_order: '',
+        is_active: true
     });
 
     useEffect(() => {
@@ -27,6 +28,7 @@ export default function EditTabModal({ isOpen, onClose, onSuccess, initialData, 
             setFormData({
                 tab_label: initialData.tab_label || '',
                 tab_order: initialData.tab_order?.toString() || '0',
+                is_active: initialData.is_active || true
             });
         }
     }, [initialData, isOpen]);
@@ -37,13 +39,13 @@ export default function EditTabModal({ isOpen, onClose, onSuccess, initialData, 
             return;
         }
 
-        const result = await updateTab('/api/configuration/registers/tabs/edit', {
+        const result = await updateTab('/api/configuration/registers/tab-metadata/update-tab', {
             method: 'POST',
             body: JSON.stringify({
                 tab_id: initialData?.tab_id,
-                register_id: registerId,
                 tab_label: formData.tab_label,
                 tab_order: Number(formData.tab_order) || 0,
+                is_active: formData.is_active || true
             })
         });
 
@@ -102,6 +104,27 @@ export default function EditTabModal({ isOpen, onClose, onSuccess, initialData, 
                                 onChange={(e) => setFormData({ ...formData, tab_order: e.target.value })}
                                 className="w-full px-4 py-2 border border-primary-second rounded-lg outline-none outline-1 outline-primary-second transition-all text-neutral-first/70 placeholder:text-secondary-third"
                             />
+                        </div>
+
+                        <div className="flex items-center gap-3 mt-2">
+                            <input
+                                type="checkbox"
+                                id="is_active"
+                                checked={formData.is_active}
+                                onChange={(e) =>
+                                    setFormData((prev) => ({
+                                        ...prev,
+                                        is_active: e.target.checked
+                                    }))
+                                }
+                                className="h-4 w-4 rounded border-primary-second text-primary-second focus:ring-primary-second"
+                            />
+                            <label
+                                htmlFor="is_active"
+                                className="text-sm font-semibold text-neutral-first"
+                            >
+                                {t('is_active')}
+                            </label>
                         </div>
 
                         <div className="flex gap-4 pt-6">

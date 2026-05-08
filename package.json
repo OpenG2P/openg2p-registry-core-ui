@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@novu/js": "^3.11.0",
-    "@openg2p/registry-widgets": "^1.1.0-dev.2",
+    "@openg2p/registry-widgets": "^1.1.0",
     "@reduxjs/toolkit": "^2.11.2",
     "@sd-jwt/crypto-browser": "^0.15.0",
     "@sd-jwt/decode": "^0.15.0",
@@ -38,7 +38,7 @@
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "babel-plugin-react-compiler": "1.0.0",
-    "baseline-browser-mapping": "^2.9.19",
+    "baseline-browser-mapping": "^2.10.23",
     "eslint": "^9",
     "eslint-config-next": "16.0.6",
     "tailwindcss": "^4",

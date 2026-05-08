@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BreadcrumbBar, TopBar } from '@/components/shared';
 import { useParams } from 'next/navigation';
 import { useBreadcrumb } from '@/shared/hooks/useBreadcrumb';
@@ -22,6 +22,7 @@ import { useRbac } from '@/context/RbacContext';
 import { CONFIGURATION_TABS_ACTIONS } from '@/features/configuration/shared/utils/configurationTabs.actions';
 import { CONFIGURATION_REGISTERS_ACTIONS } from '@/features/configuration/shared/utils/configurationRegisters.actions';
 import { useTranslations } from 'next-intl';
+import RegisterSectionConfigView from '@/features/configuration/registers/RegisterSectionConfigView';
 
 
 const RegisterConfigurationPage = () => {
@@ -29,8 +30,20 @@ const RegisterConfigurationPage = () => {
     const { registerId } = useParams<{ registerId: string }>();
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isViewModalOpen, setIsViewModalOpen] = useState(false);
-    const [activeTab, setActiveTab] = useState<'tabs' | 'filter' | 'search' | 'deduplication'>('tabs');
+    const [activeTab, setActiveTab] = useState<'tabs' | 'sections' | 'filter' | 'search' | 'deduplication'>('tabs');
     const [isIntakeModalOpen, setIsIntakeModalOpen] = useState(false);
+    const [tabPage, setTabPage] = useState(1);
+    const [sectionPage, setSectionPage] = useState(1);
+
+    const [isTabModalOpen, setIsTabModalOpen] = useState(false);
+    const [isSectionModalOpen, setIsSectionModalOpen] = useState(false);
+
+    const [tabPagination, setTabPagination] = useState({ totalItems: 0, currentCount: 0 });
+    const [sectionPagination, setSectionPagination] = useState({ totalItems: 0, currentCount: 0 });
+
+    const currentPage = activeTab === 'tabs' ? tabPage : sectionPage;
+
+    const paginationInfo = activeTab === 'tabs' ? tabPagination : sectionPagination;
 
     const { can } = useRbac();
     const canEdit = can(CONFIGURATION_REGISTERS_ACTIONS.edit);
@@ -41,6 +54,7 @@ const RegisterConfigurationPage = () => {
 
     const tabLabels: Record<string, string> = {
         tabs: t('tabs'),
+        sections: t('sections'),
         filter: t('filter_schema'),
         search: t('search_schema'),
         deduplication: t('deduplication_schema'),
@@ -53,11 +67,19 @@ const RegisterConfigurationPage = () => {
         ]
     });
 
+    useEffect(() => {
+        if (activeTab === 'tabs') setTabPage(1);
+        if (activeTab === 'sections') setSectionPage(1);
+    }, [activeTab]);
+
+    useEffect(() => {
+        setIsTabModalOpen(false);
+        setIsSectionModalOpen(false);
+    }, [activeTab]);
+
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [currentPage, setCurrentPage] = useState(1);
     const { config } = useRuntimeConfig();
     const PAGE_SIZE = config.pageSize || 10;
-    const [paginationInfo, setPaginationInfo] = useState({ totalItems: 0, currentCount: 0 });
 
     const pagination = usePagination({
         currentPage,
@@ -67,11 +89,23 @@ const RegisterConfigurationPage = () => {
     });
 
     const handlePrev = () => {
-        setCurrentPage(prev => Math.max(1, prev - 1));
+        if (activeTab === 'tabs') {
+            setTabPage(prev => Math.max(1, prev - 1));
+        } else if (activeTab === 'sections') {
+            setSectionPage(prev => Math.max(1, prev - 1));
+        }
     };
 
     const handleNext = () => {
-        setCurrentPage(prev => prev + 1);
+        if (activeTab === 'tabs') {
+            if (tabPage * PAGE_SIZE < tabPagination.totalItems) {
+                setTabPage(prev => prev + 1);
+            }
+        } else if (activeTab === 'sections') {
+            if (sectionPage * PAGE_SIZE < sectionPagination.totalItems) {
+                setSectionPage(prev => prev + 1);
+            }
+        }
     };
 
     if (loading || !registerDetails.register_id) {
@@ -116,13 +150,26 @@ const RegisterConfigurationPage = () => {
                         <TopBar
                             breadcrumb={[]}
                             showFilters={false}
-                            showPagination={activeTab === 'tabs'}
-                            showAddNewButton={canCreate && activeTab === 'tabs'}
-                            addNewButtonText={t('add_new_tab')}
-                            onAddNewButton={() => setIsModalOpen(true)}
-                            showSecondaryButton={canCreate && activeTab === 'tabs'}
-                            secondaryButtonText={t('add_intake_form')}
-                            onSecondaryButton={() => setIsIntakeModalOpen(true)}
+                            showPagination={activeTab === 'tabs' || activeTab === 'sections'}
+
+                            showAddNewButton={
+                                canCreate && (activeTab === 'tabs' || activeTab === 'sections')
+                            }
+
+                            addNewButtonText={
+                                activeTab === 'tabs'
+                                    ? t('add_new_tab')
+                                    : t('add_new_section')
+                            }
+
+                            onAddNewButton={() => {
+                                if (activeTab === 'tabs') {
+                                    setIsTabModalOpen(true);
+                                } else if (activeTab === 'sections') {
+                                    setIsSectionModalOpen(true);
+                                }
+                            }}
+                            showSecondaryButton={false}
                             pageStart={pagination.pageStart}
                             pageEnd={pagination.pageEnd}
                             total={pagination.total}
@@ -135,22 +182,35 @@ const RegisterConfigurationPage = () => {
             </div>
 
 
-            {/* Tab Content */}
             <div className="mt-0">
-                {activeTab === 'tabs' ? (
-                    (
-                        <RegisterTabConfigView
-                            onAddNewRegister={() => setIsModalOpen(true)}
-                            isModalOpen={isModalOpen}
-                            onCloseModal={() => setIsModalOpen(false)}
-                            isIntakeModalOpen={isIntakeModalOpen}
-                            onCloseIntakeModal={() => setIsIntakeModalOpen(false)}
-                            page={currentPage}
-                            pageSize={PAGE_SIZE}
-                            onDataLoaded={(totalItems, currentCount) => setPaginationInfo({ totalItems, currentCount })}
-                        />
-                    )
-                ) : (
+                {activeTab === 'tabs' && (
+                    <RegisterTabConfigView
+                        onAddNewRegister={() => setIsModalOpen(true)}
+                        isModalOpen={isTabModalOpen}
+                        onCloseModal={() => setIsTabModalOpen(false)}
+                        isIntakeModalOpen={false}
+                        onCloseIntakeModal={() => setIsIntakeModalOpen(false)}
+                        page={tabPage}
+                        pageSize={PAGE_SIZE}
+                        onDataLoaded={(totalItems, currentCount) =>
+                            setTabPagination({ totalItems, currentCount })
+                        }
+                    />
+                )}
+
+                {activeTab === 'sections' && (
+                    <RegisterSectionConfigView
+                        isModalOpen={isSectionModalOpen}
+                        onCloseModal={() => setIsSectionModalOpen(false)}
+                        page={sectionPage}
+                        pageSize={PAGE_SIZE}
+                        onDataLoaded={(totalItems, currentCount) =>
+                            setSectionPagination({ totalItems, currentCount })
+                        }
+                    />
+                )}
+
+                {['filter', 'search', 'deduplication'].includes(activeTab) && (
                     <RegisterSchemaView
                         registerId={registerId}
                         activeTab={activeTab as 'filter' | 'search' | 'deduplication'}

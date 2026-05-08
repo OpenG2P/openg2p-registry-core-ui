@@ -1,10 +1,9 @@
 'use client';
 
 import { useEffect } from 'react';
-import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 
-import { Link } from '@/i18n/navigation';
+import { useRouter } from '@/i18n/navigation';
 import { AddTabModal, IntakeFormModal } from '@/features/configuration/registers';
 import { useParams } from 'next/navigation';
 import { useConfigTabs } from '../shared/hooks/useConfigTabs';
@@ -12,6 +11,7 @@ import { useFetch } from '@/shared/hooks';
 import { toast } from 'react-toastify';
 import { CONFIGURATION_TABS_ACTIONS } from '../shared/utils/configurationTabs.actions';
 import Can from '@/components/shared/Can';
+import { DataTable, DeleteButton } from '../shared/components';
 
 interface RegisterTabConfigViewProps {
 	onAddNewRegister: () => void;
@@ -35,6 +35,7 @@ export default function RegisterTabConfigView({
 	onDataLoaded,
 }: RegisterTabConfigViewProps) {
 	const t = useTranslations();
+	const router = useRouter();
 	const { registerId } = useParams<{ registerId: string }>();
 	const { tabs, loading, refresh, pagination } = useConfigTabs(registerId, page, pageSize);
 
@@ -50,7 +51,7 @@ export default function RegisterTabConfigView({
 	const { execute: deleteTab } = useFetch();
 
 	const proceedDelete = async (tabId: string) => {
-		const result = await deleteTab('/api/configuration/registers/tabs/delete', {
+		const result = await deleteTab('/api/configuration/registers/tab-metadata/delete-tab', {
 			method: 'POST',
 			body: JSON.stringify({ tab_id: tabId })
 		});
@@ -63,10 +64,7 @@ export default function RegisterTabConfigView({
 		}
 	};
 
-	const handleDelete = (e: React.MouseEvent, tabId: string) => {
-		e.preventDefault();
-		e.stopPropagation();
-
+	const handleDelete = (tabId: string) => {
 		toast.info(
 			({ closeToast }) => (
 				<div className="p-1">
@@ -101,86 +99,42 @@ export default function RegisterTabConfigView({
 		);
 	};
 
-	if (loading) {
-		return (
-			<div className="flex items-center justify-center p-8 bg-neutral-second rounded-[10px] mx-7.5">
-				<div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-second"></div>
-			</div>
-		);
-	}
+	const columns = [
+		{
+			key: 'tab_label',
+			label: t('tab_label'),
+		},
+		{
+			key: 'tab_order',
+			label: t('tab_order'),
+		},
+		{
+			key: 'is_active',
+			label: 'Status',
+			render: (item: any) =>
+				item.is_active ? t('active') : t('inactive'),
+		},
+	];
 
 	return (
 		<>
-			<div className="mx-7.5 bg-neutral-second rounded-[10px] p-8 overflow-x-visible">
-				<div>
-					{/* Header */}
-					<div className="grid grid-cols-5 gap-4 pb-2 px-4">
-						<div className="py-3 text-left text-base font-semibold text-primary-second tracking-wider">
-							{t('tab_label')}
-						</div>
-						<div className="py-3 text-left text-base font-semibold text-primary-second tracking-wider">
-							{t('tab_order')}
-						</div>
-						<div className="py-3 text-left text-base font-semibold text-primary-second tracking-wider">
-							{t('used_for_intake')}
-						</div>
-						<div className="py-3 text-left text-base font-semibold text-primary-second tracking-wider">
-							Status
-						</div>
-
-						<div className="py-3 text-left text-base font-semibold text-primary-second tracking-wider">
-							{t('actions')}
-						</div>
-
-					</div>
-
-					{/* Data Rows */}
-					{tabs.map((tab, index) => (
-						<Link
-							key={tab.tab_id}
-							href={`/configuration/registers/${registerId}/tabs/${tab.tab_id}`}
-							className="block -mx-8"
-						>
-							<div
-								className={`grid grid-cols-5 h-15 gap-4 items-center px-12 py-4 transition-colors ${index % 2 === 0 ? 'bg-secondary-second/25' : 'bg-neutral-second'
-									} cursor-pointer`}
-							>
-
-								<div className="text-base font-medium">
-									{tab.tab_label || tab.intake_form_name}
-								</div>
-								<div className="text-base font-medium text-neutral-first/50">
-									{tab.tab_order}
-								</div>
-								<div className="text-base font-medium text-neutral-first/50">
-									{tab.used_for_new_intake_form ? t('true') : t('false')}
-								</div>
-								<div className="text-base font-medium text-neutral-first/50">
-									{tab.is_active ? t('active') : t('inactive')}
-								</div>
-
-								<div className="text-base font-medium">
-									<Can action={CONFIGURATION_TABS_ACTIONS.delete}>
-										<span
-											onClick={(e) => handleDelete(e, tab.tab_id)}
-											className="flex items-center text-neutral-first/50"
-										>
-											{t('remove')}
-											<Image
-												src="/images/common/false_sign.png"
-												alt={t('remove')}
-												width={18}
-												height={18}
-												className="ml-4"
-											/>
-										</span>
-									</Can>
-								</div>
-							</div>
-						</Link>
-					))}
-				</div>
-			</div>
+			<DataTable
+				columns={columns}
+				data={tabs}
+				loading={loading}
+				rowKey={(item) => item.tab_id}
+				onRowClick={(item) =>
+					router.push(`/configuration/registers/${registerId}/tabs/${item.tab_id}`)
+				}
+				actions={(item) => (
+					<Can action={CONFIGURATION_TABS_ACTIONS.delete}>
+						<DeleteButton
+							label={t('remove')}
+							onClick={() => handleDelete(item.tab_id)}
+						/>
+					</Can>
+				)}
+			/>
 
 			<AddTabModal
 				isOpen={isModalOpen}

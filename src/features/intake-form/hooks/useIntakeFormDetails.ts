@@ -1,21 +1,24 @@
 import { useFetch } from "@/shared/hooks/useFetch";
-import { IntakeFormSection } from "../types/intake-form";
+import { RenderedIntakeForm } from "../types/intake-form";
 
-export const useIntakeFormDetails = (registerId?: string, intakeFormId?: string) => {
-    const { data, loading, error } = useFetch<IntakeFormSection[]>({
-        url:"/api/intake-form/new/get",
+export const useIntakeFormDetails = (intakeFormId?: string) => {
+    const { data, loading, error } = useFetch<RenderedIntakeForm>({
+        url: "/api/intake-form/render-intake-form",
         options: {
             method: "POST",
             body: JSON.stringify({
-                register_id: registerId,
-                intake_form_id: intakeFormId
+                form_id: intakeFormId
             }),
         },
-        enabled: !!(registerId && intakeFormId),
+        enabled: !!(intakeFormId),
     });
 
+
     return {
-        sections: data,
+        sections: data?.tabs[0].sections?.slice().sort((a, b) => a.section_order - b.section_order),
+        // TODO: Assuming only one tab for now, may need to be updated later
+        form_name: data?.form_mnemonic,
+        form_description: data?.form_description,
         loading,
         error,
     };

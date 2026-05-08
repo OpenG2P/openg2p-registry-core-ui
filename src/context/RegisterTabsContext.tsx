@@ -56,7 +56,7 @@ export function RegisterTabsProvider({ children }: { children: ReactNode }) {
     }), [currentRegister?.register_id]);
 
     const { data } = useFetch<TabConfig[]>({
-        url: `/api/register/tabs`,
+        url: `/api/register/get-all-tabs`,
         options: fetchOptions,
         enabled: !!currentRegister?.register_id,
     });

@@ -16,6 +16,7 @@ const ThemePage = () => {
         themes,
         themesLoading,
         selectedThemeId,
+        themeAttributes,
         attributesLoading,
         selectTheme,
         updateThemeColors,
@@ -50,10 +51,21 @@ const ThemePage = () => {
 
     const handleSave = async () => {
         if (!selectedThemeId) return;
-        const updates = Object.entries(draftColors).map(([attribute_name, attribute_value]) => ({
-            attribute_name,
-            attribute_value,
+
+        const updates = themeAttributes.map((attr) => ({
+            attribute_name: attr.attribute_name,
+            attribute_value: draftColors[attr.attribute_name] !== undefined ? draftColors[attr.attribute_name] : attr.attribute_value,
         }));
+
+        Object.keys(draftColors).forEach((key) => {
+            if (!themeAttributes.some((a) => a.attribute_name === key)) {
+                updates.push({
+                    attribute_name: key,
+                    attribute_value: draftColors[key],
+                });
+            }
+        });
+
         const result = await updateThemeColors(selectedThemeId, updates);
         if (result !== null) {
             toast.success(t('theme_config_update_success'));

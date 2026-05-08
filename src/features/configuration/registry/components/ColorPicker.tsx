@@ -66,7 +66,7 @@ export default function ColorPicker({ value, onChange, label, id, disabled = fal
                     className={`flex items-center gap-2.5 px-4 py-2 bg-neutral-second border border-primary-second rounded-[10px] cursor-pointer truncate ${isOpen ? 'border-b-transparent rounded-b-none' : ''} ${disabled ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''}`}
                 >
                     <span
-                        className="w-5 h-5 rounded-[4px] border border-secondary-second shrink-0 shadow-inner"
+                        className="w-5 h-5 rounded-sm border border-secondary-second shrink-0 shadow-inner"
                         style={{ backgroundColor: hex }}
                     />
                     <span className="text-[16px] font-mono text-neutral-first uppercase flex-1 text-left">{hex}</span>
@@ -84,7 +84,7 @@ export default function ColorPicker({ value, onChange, label, id, disabled = fal
 
                 {/* Dropdown panel */}
                 {isOpen && (
-                    <div className="absolute z-50 top-full left-0 bg-neutral-second rounded-b-[10px] shadow-xl border border-primary-second border-t-0 p-4 min-w-full w-max max-w-[280px]">
+                    <div className="absolute z-50 top-full left-0 bg-neutral-second rounded-b-[10px] shadow-xl border border-primary-second border-t-0 p-4 min-w-full w-max max-w-70">
                         {/* Native colour input */}
                         <div className="flex items-center gap-2 mb-4">
                             <label className="text-xs text-secondary-third shrink-0">{t('theme_config_custom')}</label>
@@ -93,14 +93,14 @@ export default function ColorPicker({ value, onChange, label, id, disabled = fal
                                     type="color"
                                     value={hex}
                                     onChange={handleNativeColorChange}
-                                    className="w-7 h-7 rounded-[4px] border border-secondary-second cursor-pointer p-0 bg-transparent overflow-hidden [&::-webkit-color-swatch-wrapper]:p-0 [&::-webkit-color-swatch]:border-none [&::-webkit-color-swatch]:rounded-[4px]"
+                                    className="w-7 h-7 rounded-sm border border-secondary-second cursor-pointer p-0 bg-transparent overflow-hidden [&::-webkit-color-swatch-wrapper]:p-0 [&::-webkit-color-swatch]:border-none [&::-webkit-color-swatch]:rounded-sm"
                                 />
                                 <input
                                     type="text"
                                     value={hex}
                                     onChange={handleHexInput}
                                     maxLength={7}
-                                    className="w-full text-sm font-mono px-2 h-7 rounded-[6px] bg-secondary-first border border-secondary-second outline-none text-neutral-first uppercase"
+                                    className="w-full text-sm font-mono px-2 h-7 rounded-md bg-secondary-first border border-secondary-second outline-none text-neutral-first uppercase"
                                 />
                             </div>
                         </div>
@@ -112,7 +112,7 @@ export default function ColorPicker({ value, onChange, label, id, disabled = fal
                                     key={color}
                                     type="button"
                                     onClick={() => handlePreset(color)}
-                                    className="relative w-8 h-8 rounded-[6px] border border-secondary-second hover:scale-110 transition-transform shrink-0 flex items-center justify-center"
+                                    className="relative w-8 h-8 rounded-md border border-secondary-second hover:scale-110 transition-transform shrink-0 flex items-center justify-center"
                                     style={{ backgroundColor: color }}
                                     title={color}
                                 >

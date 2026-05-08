@@ -4,9 +4,8 @@ import { useState } from 'react';
 import { TopBar, BreadcrumbBar } from '@/components/shared';
 import { useParams } from 'next/navigation';
 import {
-    RegisterSectionConfigView,
     EditTabModal,
-    EditIntakeFormModal
+    RegisterTabSectionConfigView,
 } from '@/features/configuration/registers';
 import {
     ConfigDetailsSummary,
@@ -28,7 +27,6 @@ const TabConfigurationPage = () => {
     const { registerId, tabId } = useParams<{ registerId: string; tabId: string }>();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditTabModalOpen, setIsEditTabModalOpen] = useState(false);
-    const [isEditIntakeModalOpen, setIsEditIntakeModalOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const { config } = useRuntimeConfig();
     const PAGE_SIZE = config.pageSize || 10;
@@ -93,13 +91,7 @@ const TabConfigurationPage = () => {
                 extraInfo2={String(tabDetails.tab_order ?? 0)}
                 onEdit={
                     canEdit
-                        ? () => {
-                            if (tabDetails.used_for_new_intake_form) {
-                                setIsEditIntakeModalOpen(true);
-                            } else {
-                                setIsEditTabModalOpen(true);
-                            }
-                        }
+                        ? () => setIsEditTabModalOpen(true)
                         : undefined
                 }
             />
@@ -120,7 +112,7 @@ const TabConfigurationPage = () => {
                 onNext={handleNext}
             />
 
-            <RegisterSectionConfigView
+            <RegisterTabSectionConfigView
                 isModalOpen={isModalOpen}
                 onCloseModal={() => setIsModalOpen(false)}
                 page={currentPage}
@@ -133,13 +125,6 @@ const TabConfigurationPage = () => {
                 initialData={tabDetails as any}
                 registerId={registerId}
                 onClose={() => setIsEditTabModalOpen(false)}
-                onSuccess={refreshTabs}
-            />
-            <EditIntakeFormModal
-                isOpen={isEditIntakeModalOpen}
-                initialData={tabDetails as any}
-                registerId={registerId}
-                onClose={() => setIsEditIntakeModalOpen(false)}
                 onSuccess={refreshTabs}
             />
         </>

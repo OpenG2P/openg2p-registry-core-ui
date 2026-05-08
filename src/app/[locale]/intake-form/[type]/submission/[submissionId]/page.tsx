@@ -2,15 +2,17 @@
 
 import { TopBar } from '@/components/shared';
 import { useParams } from 'next/navigation';
-import { useIntakeSubmissionDetails } from '@/features/intake-form/hooks/useIntakeSubmissionDetails';
+import { useIntakeSubmissions } from '@/features/intake-form/hooks/useIntakeSubmissions';
 import { useIntakeFormDetails } from '@/features/intake-form/hooks/useIntakeFormDetails';
+import { useIntakeFormTabs } from '@/features/intake-form/hooks/useIntakeFormTabs';
+import { useIntakeFormTabRecords } from '@/features/intake-form/hooks/useIntakeFormTabRecords';
 import MultiSectionAccordionForms from '@/features/intake-form/components/MultiSectionAccordionForms';
 import SubmissionHeader from '@/features/intake-form/components/SubmissionHeader';
 import IntakeVerificationCard from '@/features/intake-form/components/IntakeVerificationCard';
-import SubmissionChangeRequestCard from '@/features/intake-form/components/SubmissionChangeRequestCard';
 import { useTranslations } from 'next-intl';
-import { useMemo, useState } from 'react';
-import { useIntakeFormAction } from '@/features/intake-form/hooks/useIntakeFormAction';
+import { useMemo } from 'react';
+import { useIntakeFormSectionAction } from '@/features/intake-form/hooks/useIntakeFormSectionAction';
+
 import { RegisterFlattenedRecord } from '@/features/register/types';
 import { useRegister } from '@/context/RegisterContext';
 import { useRbac } from '@/context/RbacContext';
@@ -27,37 +29,41 @@ export default function IntakeFormSubmissionPage() {
     const { can } = useRbac();
     const canCreate = can(INTAKE_FORM_ACTIONS.create);
 
+    const registerId = currentRegister?.register_id;
+    const { submissions, loading: loadingSubmissions } = useIntakeSubmissions(registerId);
 
-    const { submission, loading: loadingSubmission, refetch } = useIntakeSubmissionDetails(submissionId);
-    const registerId = submission?.register_id;
-    const intakeFormId = submission?.tab_id;
-    const { sections, loading: loadingSections } = useIntakeFormDetails(registerId, intakeFormId);
-    const loading = loadingSubmission || loadingSections;
-    const isDraft = submission?.intake_form_status === 'DRAFT';
+    const submission = useMemo(() => {
+        return submissions?.find((s: any) => s.submission_id === submissionId);
+    }, [submissions, submissionId]);
 
-    const [changeRequestCount, setChangeRequestCount] = useState<number | undefined>(undefined);
+    const intakeFormId = submission?.form_id;
+    const { sections, form_name, form_description, loading: loadingSections } = useIntakeFormDetails(intakeFormId);
 
-    const { handleAction, FormActionModals } = useIntakeFormAction({
-        registerId,
-        tabId: intakeFormId || '',
+    const { tabs, loading: loadingTabs } = useIntakeFormTabs(intakeFormId);
+    const tabId = tabs[0]?.tab_id;
+
+    const { section_payloads, loading: loadingRecords } = useIntakeFormTabRecords(submissionId, tabId);
+
+    const loading = loadingSubmissions || loadingSections || loadingTabs || loadingRecords;
+    const isDraft = submission?.draft_status === 'DRAFT';
+
+    const { handleAction, FormActionModals } = useIntakeFormSectionAction({
+        registerId: submission?.register_id || '',
+        formId: intakeFormId || '',
         registerType,
-        sections,
         submissionId,
-        onSuccess: () => {
-            if (refetch) refetch();
-        }
+        onSuccess: () => { }
     });
-    // TODO: Recheck the data structure for submission
-    // Also check the response of get_submission api.
+
     const sectionDataMap = useMemo(() => {
-        if (!submission?.section_payloads) return {};
+        if (!section_payloads) return {};
 
         const map: Record<
             string,
             RegisterFlattenedRecord | { records: RegisterFlattenedRecord[] }
         > = {};
 
-        for (const section of submission.section_payloads) {
+        for (const section of section_payloads) {
             if (!section.records?.length) continue;
 
             const existing = map[section.section_register_id];
@@ -79,67 +85,55 @@ export default function IntakeFormSubmissionPage() {
         }
 
         return map;
-    }, [submission?.section_payloads]);
-
-    // console.log(sectionDataMap, "sectionsDataMap")
+    }, [section_payloads]);
 
     return (
         <div className="min-h-screen mx-auto bg-secondary-first">
             <TopBar
                 breadcrumb={[
-                    { 
-                        label: t("register_intake_form", { subject: currentRegister?.register_subject || t("register") }), 
-                        href: `/intake-form/${registerType}` 
+                    {
+                        label: t("register_intake_form", { subject: currentRegister?.register_subject || t("register") }),
+                        href: `/intake-form/${registerType}`
                     },
-                    { label: submission?.submission_reference ? t("ref") + String(submission.submission_reference) : "" }
+                    { label: isDraft ? (form_name || "") : (submission?.submission_id ? t("id") + "-" + String(submission.submission_id) : "") }
                 ]}
-
-
-
                 showFilters={false}
                 showPagination={false}
                 showCapsule={false}
             />
 
-            <div className="mx-7.5 py-6 space-y-6">
+            <div className={`mx-7.5 ${isDraft ? '' : 'py-6 space-y-6'}`}>
                 {loading ? (
                     <div className="flex items-center justify-center py-20">
                         <span className="text-neutral-first/50">{t('loading')}</span>
                     </div>
                 ) : (
-                    <div className="flex flex-col lg:flex-row gap-7.5">
-                        <div className="w-full lg:w-[75%] space-y-6">
+                    <div className="flex flex-col lg:flex-row gap-6">
+                        <div className={`w-full ${isDraft ? '' : 'lg:w-[75%]'} space-y-6`}>
                             {!isDraft && (
-                                <SubmissionHeader submission={submission} onActionComplete={refetch} />
+                                <SubmissionHeader submission={submission} section_payloads={section_payloads} onActionComplete={() => window.location.reload()} />
                             )}
 
-                            <div className=" bg-neutral-second rounded-[10px] p-6 border border-secondary-first/30 space-y-2">
-                                <MultiSectionAccordionForms
-                                    sections={sections || []}
-                                    schemaData={sectionDataMap}
-                                    showActions={isDraft && canCreate}
-                                    onAction={handleAction}
-                                />
-                            </div>
+                            <MultiSectionAccordionForms
+                                form_name={form_name}
+                                form_description={form_description}
+                                sections={sections || []}
+                                schemaData={sectionDataMap}
+                                showActions={isDraft && canCreate}
+                                onAction={handleAction}
+                                submissionId={submissionId}
+                                registerType={registerType}
+                            />
                         </div>
 
-                        <div className="w-full lg:w-[25%] space-y-6">
-                            {submission?.submission_id && (
-                                <SubmissionChangeRequestCard
-                                    type={registerType}
-                                    submissionId={submission.submission_id}
-                                    count={changeRequestCount}
-                                    onCountLoaded={setChangeRequestCount}
-                                />
-                            )}
-
-                            <div className={isDraft ? 'opacity-50 pointer-events-none' : ''}>
+                        {!isDraft && (
+                            <div className="w-full lg:w-[25%] space-y-6">
                                 <IntakeVerificationCard
-                                    submission={submission}
+                                    submission_id={submissionId}
                                     isPending={!isDraft && submission?.approval_status === "PENDING"}
                                 />
                             </div>
-                        </div>
+                        )}
                     </div>
                 )}
             </div>

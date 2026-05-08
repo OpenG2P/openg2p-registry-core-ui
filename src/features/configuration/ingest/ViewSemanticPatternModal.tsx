@@ -28,7 +28,7 @@ export default function ViewSemanticPatternModal({
 
                 <Field label={t('register')} value={data?.register_mnemonic} />
 
-                <Field label={t('section')} value={data?.section_mnemonic} />
+                <Field label={t('intake_form_mnemonic')} value={data?.intake_form_mnemonic} />
 
                 <Field
                     label={t('pattern_for_register')}
@@ -37,8 +37,8 @@ export default function ViewSemanticPatternModal({
                 />
 
                 <Field
-                    label={t('pattern_for_section')}
-                    value={data?.pattern_for_section}
+                    label={t('pattern_for_intake_form')}
+                    value={data?.pattern_for_intake_form}
                     layout="column"
                 />
 

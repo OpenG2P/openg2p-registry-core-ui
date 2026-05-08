@@ -13,7 +13,7 @@ export const useVCConfigs = () => {
     const registerId = currentRegister?.register_id;
 
     const { data, loading } = useFetch<VCConfig[]>({
-        url: '/api/vc/get-for-register',
+        url: '/api/input-mechanism/vc',
         enabled: !!registerId,
         options: {
             method: 'POST',

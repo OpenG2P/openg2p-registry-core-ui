@@ -5,8 +5,8 @@ import { TopBar } from '@/components/shared';
 import MultiSectionAccordionForms from '@/features/intake-form/components/MultiSectionAccordionForms';
 import { useRegister } from '@/context/RegisterContext';
 import { useIntakeFormDetails } from '@/features/intake-form/hooks/useIntakeFormDetails';
-import { useIntakeFormAction } from '@/features/intake-form/hooks/useIntakeFormAction';
 import { useTranslations } from 'next-intl';
+import { useIntakeFormSectionAction } from '@/features/intake-form/hooks/useIntakeFormSectionAction';
 
 export default function NewIntakeFormSubmissionPage() {
     const t = useTranslations();
@@ -18,12 +18,12 @@ export default function NewIntakeFormSubmissionPage() {
     const { currentRegister } = useRegister();
     const registerId = currentRegister?.register_id;
 
-    const { sections, loading } = useIntakeFormDetails(registerId, intake_form_id);
-    const { handleAction, FormActionModals } = useIntakeFormAction({
+    const { sections, form_name, form_description, loading } = useIntakeFormDetails(intake_form_id);
+
+    const { handleAction, FormActionModals } = useIntakeFormSectionAction({
         registerId,
-        tabId: intake_form_id,
+        formId: intake_form_id,
         registerType,
-        sections,
         submissionId: null
     });
 
@@ -31,11 +31,11 @@ export default function NewIntakeFormSubmissionPage() {
         <div className="min-h-screen mx-auto bg-secondary-first">
             <TopBar
                 breadcrumb={[
-                    { 
-                        label: t("register_intake_form", { subject: currentRegister?.register_subject || t("register") }), 
-                        href: `/intake-form/${registerType}` 
+                    {
+                        label: t("register_intake_form", { subject: currentRegister?.register_subject || t("register") }),
+                        href: `/intake-form/${registerType}`
                     },
-                    { label: sections?.[0]?.intake_form_name || "" }
+                    { label: form_name || "" }
                 ]}
 
                 showFilters={false}
@@ -52,8 +52,11 @@ export default function NewIntakeFormSubmissionPage() {
                     <MultiSectionAccordionForms
                         formDetailsCard={true}
                         sections={sections || []}
+                        form_name={form_name}
+                        form_description={form_description}
                         onAction={handleAction}
                         onCancel={() => router.push(`/intake-form/${registerType}`)}
+                        registerType={registerType}
                     />
 
                 )}

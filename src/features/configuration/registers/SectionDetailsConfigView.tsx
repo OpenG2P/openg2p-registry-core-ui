@@ -39,7 +39,7 @@ export default function SectionDetailsConfigView({
             return;
         }
 
-        const result = await updateUISchema('/api/configuration/registers/tabs/sections/update-uischema', {
+        const result = await updateUISchema('/api/configuration/registers/section-metadata/update-section-ui-schema', {
             method: 'POST',
             body: JSON.stringify({
                 section_id: sectionId,

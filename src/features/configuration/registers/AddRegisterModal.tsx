@@ -181,6 +181,7 @@ export default function AddRegisterModal({ isOpen, onClose, onSuccess }: AddRegi
                                         <option value="REGISTER">REGISTER</option>
                                         <option value="PROGRAM_APPLICATION">PROGRAM_APPLICATION</option>
                                         <option value="TABLE">TABLE</option>
+                                        <option value="TABLE">CORE_TABLE</option>
                                     </select>
                                     <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-secondary-third pointer-events-none" size={20} />
                                 </div>

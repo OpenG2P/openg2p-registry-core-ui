@@ -103,8 +103,8 @@ const SemanticPatternsPage = () => {
             label: t('register_mnemonic'),
         },
         {
-            key: 'section_mnemonic',
-            label: t('section_mnemonic'),
+            key: 'intake_form_mnemonic',
+            label: t('intake_form_mnemonic'),
         },
     ];
 
