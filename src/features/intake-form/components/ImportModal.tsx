@@ -5,6 +5,7 @@ import { useFetch } from '@/shared/hooks';
 import { toast } from 'react-toastify';
 import { BaseModal, FileUploadField } from '@/features/configuration/shared';
 import { useDocumentUpload } from '@/features/register/hooks/useDocumentUpload';
+import { useTranslations } from 'next-intl';
 
 interface ImportModalProps {
     onClose: () => void;
@@ -15,6 +16,8 @@ export default function ImportModal({
     onClose,
     importFileConfig
 }: ImportModalProps) {
+    const t = useTranslations();
+
     const { execute } = useFetch();
 
     const { uploadDocument } = useDocumentUpload((url, options) =>
@@ -43,7 +46,7 @@ export default function ImportModal({
 
     const handleImport = async () => {
         if (!selectedFile) {
-            toast.warn('All fields are required');
+            toast.warn(t('all_fields_are_required'));
             return;
         }
 
@@ -56,7 +59,7 @@ export default function ImportModal({
             });
 
             if (!uploadedDoc?.document_store_id) {
-                toast.error('File upload failed');
+                toast.error(t('file_upload_failed'));
                 return;
             }
 
@@ -71,13 +74,13 @@ export default function ImportModal({
             });
 
             if (result) {
-                toast.success('Import successful');
+                toast.success(t('import_successful'));
                 onClose();
             } else {
-                toast.error('Import failed');
+                toast.error(t('import_failed'));
             }
         } catch (err) {
-            toast.error('Something went wrong');
+            toast.error(t('something_went_wrong'));
         } finally {
             setUploading(false);
         }
@@ -85,14 +88,14 @@ export default function ImportModal({
 
     return (
         <BaseModal
-            title="Import File"
+            title={t('import_file')}
             onClose={onClose}
-            primaryActionLabel="Import"
+            primaryActionLabel={t('import')}
             onPrimaryAction={handleImport}
             maxWidth="max-w-150"
         >
             <FileUploadField
-                label="Upload File"
+                label={t('upload_file')}
                 fileInputRef={fileInputRef}
                 uploading={uploading}
                 fileName={uploadedFileName}

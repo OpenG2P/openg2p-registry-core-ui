@@ -84,11 +84,19 @@ export default function AddNewDropdown({
         switch (mechanism.mechanism_type) {
             case 'INTAKE_FORM':
                 if (formsLoading) {
-                    return <div className="px-4 py-1 text-[16px] text-black/50">Loading...</div>;
+                    return (
+                        <div className="px-4 py-1 text-[16px] text-black/50">
+                            {t('loading')}
+                        </div>
+                    );
                 }
 
                 if (!forms?.length) {
-                    return <div className="px-4 py-1 text-[16px] text-black/50">No forms available</div>;
+                    return (
+                        <div className="px-4 py-1 text-[16px] text-black/50">
+                            {t('no_options_available')}
+                        </div>
+                    );
                 }
 
                 return forms.map((form: any) => (
@@ -106,7 +114,7 @@ export default function AddNewDropdown({
                 if (isLoadingImportFiles) {
                     return (
                         <div className="px-4 py-1 text-[16px] text-black/50">
-                            Loading...
+                            {t('loading')}
                         </div>
                     );
                 }
@@ -114,7 +122,7 @@ export default function AddNewDropdown({
                 if (!importFileOptions?.length) {
                     return (
                         <div className="px-4 py-1 text-[16px] text-black/50">
-                            No import file configs
+                            {t('no_options_available')}
                         </div>
                     );
                 }
@@ -132,11 +140,19 @@ export default function AddNewDropdown({
 
             case 'VERIFIABLE_CREDENTIAL':
                 if (isLoadingVCs) {
-                    return <div className="px-4 py-1 text-[16px] text-black/50">Loading...</div>;
+                    return (
+                        <div className="px-4 py-1 text-[16px] text-black/50">
+                            {t('loading')}
+                        </div>
+                    );
                 }
 
                 if (!vcOptions?.length) {
-                    return <div className="px-4 py-1 text-[16px] text-black/50">No VC configs</div>;
+                    return (
+                        <div className="px-4 py-1 text-[16px] text-black/50">
+                            {t('no_options_available')}
+                        </div>
+                    );
                 }
 
                 return vcOptions.map((vc: any) => (
@@ -188,11 +204,11 @@ export default function AddNewDropdown({
                     <div className="absolute left-0 top-full w-full bg-neutral-second border border-primary-second border-t-0 rounded-b-[10px] overflow-hidden z-50">
                         {loading ? (
                             <div className="px-4 py-1 text-[16px] text-neutral-first">
-                                Loading...
+                                {t('loading')}
                             </div>
                         ) : !mechanisms.length ? (
                             <div className="px-4 py-1 text-[16px] text-neutral-first truncate">
-                                No options
+                                {t('no_options_available')}
                             </div>
                         ) : (
                             mechanisms.map((mechanism, index) => (

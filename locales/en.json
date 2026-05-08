@@ -1144,5 +1144,11 @@
     "Kebele": "Kebele",
     "Locality / EA Code": "Locality / EA Code",
     "intake_form_mnemonic": "Intake Form",
-    "pattern_for_intake_form": "Pattern for Intake Form"
+    "pattern_for_intake_form": "Pattern for Intake Form",
+    "import_file": "Import File",
+    "upload_file": "Upload File",
+    "all_fields_are_required": "All fields are required",
+    "file_upload_failed": "File upload failed",
+    "import_failed": "Import failed",
+    "something_went_wrong": "Something went wrong"
 }
