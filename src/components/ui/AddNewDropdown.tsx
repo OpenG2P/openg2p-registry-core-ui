@@ -103,7 +103,7 @@ export default function AddNewDropdown({
                     <div
                         key={form.form_id}
                         onClick={() => handleNavigateForm(form.form_id)}
-                        className="px-4 py-1 hover:bg-secondary-second cursor-pointer truncate text-[16px]"
+                        className="px-4 py-1 font-medium hover:bg-secondary-second cursor-pointer truncate text-[16px]"
                         title={form.form_mnemonic}
                     >
                         {form.form_mnemonic}
@@ -131,7 +131,7 @@ export default function AddNewDropdown({
                     <div
                         key={file.import_file_configuration_id}
                         onClick={() => handleImport(file)}
-                        className="px-4 py-1 hover:bg-secondary-second cursor-pointer text-[16px] truncate"
+                        className="px-4 py-1 font-medium hover:bg-secondary-second cursor-pointer text-[16px] truncate"
                         title={file.import_file_template_mnemonic}
                     >
                         {file.import_file_template_mnemonic}
@@ -159,7 +159,7 @@ export default function AddNewDropdown({
                     <div
                         key={vc.vc_config_id}
                         onClick={() => handleVCSelect(vc)}
-                        className="px-4 py-1 hover:bg-secondary-second cursor-pointer text-[16px] truncate"
+                        className="px-4 py-1 font-medium hover:bg-secondary-second cursor-pointer text-[16px] truncate"
                         title={vc.vc_mnemonic}
                     >
                         {vc.vc_mnemonic}
@@ -213,11 +213,11 @@ export default function AddNewDropdown({
                         ) : (
                             mechanisms.map((mechanism, index) => (
                                 <div key={mechanism.mechanism_id} className="w-full">
-                                    <div className="px-4 py-1 text-black font-medium">
+                                    <div className="px-4 py-1 text-black/50 font-medium">
                                         {mechanism.display_key}
                                     </div>
 
-                                    <div className="text-black/50">
+                                    <div className="text-black">
                                         {renderSubMenu(mechanism)}
                                     </div>
 
