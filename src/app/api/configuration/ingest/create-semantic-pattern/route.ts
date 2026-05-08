@@ -16,9 +16,9 @@ export async function POST(request: NextRequest) {
             request_payload: {
                 data_model_id: body.data_model_id,
                 register_id: body.register_id,
-                section_id: body.section_id,
+                intake_form_id: body.intake_form_id,
                 pattern_for_register: body.pattern_for_register,
-                pattern_for_section: body.pattern_for_section,
+                pattern_for_intake_form: body.pattern_for_intake_form,
                 key_path_for_business_payload: body.key_path_for_business_payload,
                 raw_payload_enricher_class: body.raw_payload_enricher_class,
             }

@@ -1,10 +1,10 @@
-import { NextRequest } from "next/server";
-import { proxyToBackend } from "@/app/api/_lib/backend-proxy";
+import { NextRequest } from 'next/server';
+import { proxyToBackend } from '@/app/api/_lib/backend-proxy';
 
-export async function POST(request: NextRequest) {
+export async function POST(req: NextRequest) {
     return proxyToBackend({
-        req: request,
-        targetEndpoint: "/vc-config/get_vc_configuration_for_register",
+        req,
+        targetEndpoint: '/input-mechanism-metadata/get_all_input_mechanisms',
 
         buildPayload: (body) => ({
             pagination_request: {
@@ -16,11 +16,7 @@ export async function POST(request: NextRequest) {
             },
             request_payload: {
                 register_id: body.register_id,
-                vc_config_id: body.vc_config_id,
-                vc_mnemonic: body.vc_mnemonic,
-                descriptor_schema: body.descriptor_schema,
             },
-        }),
-
+        })
     });
 }

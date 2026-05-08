@@ -5,6 +5,7 @@ import {
   createWidgetStore,
 } from '@openg2p/registry-widgets';
 import type { SectionChanges } from '@openg2p/registry-widgets';
+import type { SectionsFormHandle } from '@openg2p/registry-widgets';
 import { IntakeFormSection } from '../types/intake-form';
 import FormDetailsCard from './FormDetailsCard';
 import { useIntakeDeduplication } from '../hooks/useIntakeDeduplication';
@@ -45,7 +46,7 @@ export default function MultiSectionAccordionForms({
   const router = useRouter();
   const widgetStore = useMemo(() => createWidgetStore(), []);
 
-  const [formSubmit, setFormSubmit] = useState<(() => void) | null>(null);
+  const [formHandle, setFormHandle] = useState<SectionsFormHandle | null>(null);
   const [savedSections, setSavedSections] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState<"intake_forms" | "intake_possible_duplicates" | "register_possible_duplicates">("intake_forms");
 
@@ -55,11 +56,11 @@ export default function MultiSectionAccordionForms({
   useEffect(() => {
     if (schemaData) {
       const alreadySaved = sections
-        .filter((s) => schemaData[s.section_register_id])
+        .filter((s) => schemaData[s.section_register_id] || submissionId)
         .map((s) => s.section_id);
       setSavedSections((prev) => Array.from(new Set([...prev, ...alreadySaved])));
     }
-  }, [schemaData, sections]);
+  }, [schemaData, sections, submissionId]);
 
   const allSectionsSaved = useMemo(() => {
     return sections.every(
@@ -93,11 +94,13 @@ export default function MultiSectionAccordionForms({
   )
 
   const handleSubmit = async () => {
-    if (formSubmit) {
-      formSubmit();
-    } else {
-      onAction?.(undefined, 'submit');
+    if (formHandle) {
+      const isValid = await formHandle.validate();
+      if (!isValid) {
+        return;
+      }
     }
+    onAction?.(undefined, 'submit');
   };
 
   const handleCancel = () => {
@@ -145,11 +148,11 @@ export default function MultiSectionAccordionForms({
                 schemaData={schemaData}
                 showActions={showActions}
                 onSectionSave={handleSectionSave}
-                onFormReady={(handle: any) => setFormSubmit(() => handle.submit)}
+                onFormReady={(handle: SectionsFormHandle) => setFormHandle(handle)}
                 onCancel={handleCancel}
                 onSubmit={handleSubmit}
                 onDraftSave={handleDraftSave}
-                isSubmitDisabled={formSubmit === null || !allSectionsSaved}
+                isSubmitDisabled={formHandle === null || !allSectionsSaved}
                 widgetStore={widgetStore}
               />
             </div>

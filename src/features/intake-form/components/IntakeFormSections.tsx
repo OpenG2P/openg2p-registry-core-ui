@@ -59,12 +59,12 @@ export default function IntakeFormSections({
             >
               {t('cancel')}
             </button>
-            <button
+            {/* <button
               onClick={onDraftSave}
               className="px-8 py-2.5 rounded-full bg-secondary-second text-neutral-first font-bold text-[14px] hover:bg-secondary-third transition-colors"
             >
               {t('save_draft')}
-            </button>
+            </button> */}
 
             <button
               onClick={onSubmit}
