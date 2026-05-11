@@ -13,6 +13,8 @@ import { Link, useRouter } from '@/i18n/navigation';
 import { useAllRegisterSections } from '../shared/hooks/useAllRegisterSections';
 import AddRegisterSectionModal from './AddRegisterSectionModal';
 import { DataTable, DeleteButton } from '../shared/components';
+import ConfirmRemovePopup from '../shared/components/ConfirmRemovePopup';
+import { useState } from 'react';
 
 interface RegisterSectionConfigViewProps {
 	page?: number;
@@ -32,6 +34,8 @@ export default function RegisterSectionConfigView({
 	const t = useTranslations();
 	const router = useRouter();
 	const { registerId } = useParams<{ registerId: string }>();
+	const [showDeletePopup, setShowDeletePopup] = useState(false);
+	const [selectedSectionId, setSelectedSectionId] = useState<string | null>(null);
 
 	const { sections, loading, pagination, refresh } = useAllRegisterSections(registerId, page, pageSize);
 
@@ -61,38 +65,15 @@ export default function RegisterSectionConfigView({
 	};
 
 	const handleDelete = (sectionId: string) => {
-		toast.info(
-			({ closeToast }) => (
-				<div className="p-1">
-					<p className="font-bold mb-3">
-						{t('confirm_remove_section')}
-					</p>
+		setSelectedSectionId(sectionId);
+		setShowDeletePopup(true);
+	};
 
-					<div className="flex gap-3">
-						<button
-							onClick={async () => {
-								closeToast();
-								await proceedDelete(sectionId);
-							}}
-							className="bg-primary-second text-neutral-second px-4 py-1.5 rounded-full text-sm font-semibold"
-						>
-							{t('remove')}
-						</button>
-
-						<button
-							onClick={closeToast}
-							className="bg-secondary-first px-4 py-1.5 rounded-full text-sm font-semibold"
-						>
-							{t('cancel')}
-						</button>
-					</div>
-				</div>
-			),
-			{
-				autoClose: false,
-				closeButton: false,
-			}
-		);
+	const handleConfirmDelete = async () => {
+		if (!selectedSectionId) return;
+		await proceedDelete(selectedSectionId);
+		setShowDeletePopup(false);
+		setSelectedSectionId(null);
 	};
 
 	const columns = [
@@ -129,6 +110,16 @@ export default function RegisterSectionConfigView({
 				<AddRegisterSectionModal
 					onClose={onCloseModal}
 					onSuccess={refresh}
+				/>
+			)}
+			{showDeletePopup && (
+				<ConfirmRemovePopup
+					onClose={() => {
+						setShowDeletePopup(false);
+						setSelectedSectionId(null);
+					}}
+					onConfirm={handleConfirmDelete}
+					messageKey='confirm_remove_section'
 				/>
 			)}
 		</>
