@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useFetch } from '@/shared/hooks';
 import { toast } from 'react-toastify';
 import { Tab } from '../shared/types';
+import { BaseModal, InputField } from '../shared/components';
+import CheckboxField from '../shared/components/CheckboxField';
 
 interface EditTabModalProps {
     isOpen: boolean;
@@ -65,85 +66,37 @@ export default function EditTabModal({ isOpen, onClose, onSuccess, initialData, 
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 bg-neutral-first/80 z-50 flex items-center justify-center p-4">
-            <div className="relative w-full max-w-200 max-h-150 bg-primary-first rounded-[10px] overflow-hidden flex p-1">
-                <div className="flex-1 w-full bg-neutral-second p-10 relative rounded-[10px] overflow-y-auto">
-                    <button
-                        onClick={handleCancel}
-                        className="absolute top-6 right-6 text-secondary-third hover:text-neutral-first/70 transition-colors"
-                    >
-                        <X size={40} strokeWidth={2} />
-                    </button>
-
-                    <h2 className="text-2xl font-bold text-primary-second mb-4">{t('edit_tab')}</h2>
-
-                    <div className="space-y-4">
-                        <div>
-                            <label className="block text-sm font-semibold text-neutral-first mb-2">
-                                {t('tab_label')}
-                            </label>
-                            <div className="relative">
-                                <input
-                                    type="text"
-                                    placeholder={t('enter_tab_label')}
-                                    value={formData.tab_label}
-                                    onChange={(e) => setFormData({ ...formData, tab_label: e.target.value })}
-                                    className="w-full px-4 py-2 border border-primary-second rounded-lg outline-none outline-1 outline-primary-second transition-all text-neutral-first/70 placeholder:text-secondary-third"
-                                />
-                            </div>
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-semibold text-neutral-first mb-2">
-                                {t('tab_order')}
-                            </label>
-                            <input
-                                type="number"
-                                placeholder="e.g. 0"
-                                value={formData.tab_order}
-                                onChange={(e) => setFormData({ ...formData, tab_order: e.target.value })}
-                                className="w-full px-4 py-2 border border-primary-second rounded-lg outline-none outline-1 outline-primary-second transition-all text-neutral-first/70 placeholder:text-secondary-third"
-                            />
-                        </div>
-
-                        <div className="flex items-center gap-3 mt-2">
-                            <input
-                                type="checkbox"
-                                id="is_active"
-                                checked={formData.is_active}
-                                onChange={(e) =>
-                                    setFormData((prev) => ({
-                                        ...prev,
-                                        is_active: e.target.checked
-                                    }))
-                                }
-                                className="h-4 w-4 rounded border-primary-second text-primary-second focus:ring-primary-second"
-                            />
-                            <label
-                                htmlFor="is_active"
-                                className="text-sm font-semibold text-neutral-first"
-                            >
-                                {t('is_active')}
-                            </label>
-                        </div>
-
-                        <div className="flex gap-4 pt-6">
-                            <button
-                                onClick={handleCancel}
-                                className="px-12 py-2.5 bg-secondary-third text-neutral-first rounded-[10px] hover:bg-secondary-third transition-colors"
-                            >
-                                {t('cancel')}
-                            </button>
-                            <button
-                                onClick={handleSubmit}
-                                className="px-12 py-2.5 bg-neutral-first text-neutral-second rounded-[10px] hover:bg-secondary-second-800 transition-colors disabled:opacity-50"
-                            >
-                                {t('update')}
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <BaseModal
+            title={t('edit_tab')}
+            onClose={handleCancel}
+            primaryActionLabel={t('update')}
+            onPrimaryAction={handleSubmit}
+            maxWidth="max-w-200"
+        >
+            <InputField
+                label={t('tab_label')}
+                placeholder={t('enter_tab_label')}
+                value={formData.tab_label}
+                onChange={(value) =>
+                    setFormData(prev => ({ ...prev, tab_label: value }))
+                }
+            />
+            <InputField
+                label={t('tab_order')}
+                type="number"
+                placeholder="e.g. 0"
+                value={formData.tab_order}
+                onChange={(value) =>
+                    setFormData(prev => ({ ...prev, tab_order: value }))
+                }
+            />
+            <CheckboxField
+                label={t('is_active')}
+                checked={formData.is_active}
+                onChange={(value) =>
+                    setFormData(prev => ({ ...prev, is_active: value }))
+                }
+            />
+        </BaseModal>
     );
 }
