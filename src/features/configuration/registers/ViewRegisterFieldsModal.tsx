@@ -6,19 +6,17 @@ import { Register } from '../shared/types';
 import { BaseModal, Field } from '../shared/components';
 
 interface ViewRegisterFieldsModalProps {
-    isOpen: boolean;
     onClose: () => void;
     data?: Register;
 }
 
 export default function ViewRegisterFieldsModal({
-    isOpen,
     onClose,
     data,
 }: ViewRegisterFieldsModalProps) {
     const t = useTranslations();
 
-    if (!isOpen || !data) return null;
+    if (!data) return null;
 
     return (
         <BaseModal

@@ -8,14 +8,12 @@ import { BaseModal, CustomDropdown, InputField } from '../shared/components';
 
 
 interface EditTabSectionModalProps {
-    isOpen: boolean;
     onClose: () => void;
     onSuccess?: () => void;
     initialData?: any;
 }
 
 export default function EditTabSectionModal({
-    isOpen,
     onClose,
     onSuccess,
     initialData
@@ -76,8 +74,6 @@ export default function EditTabSectionModal({
     const handleCancel = () => {
         onClose();
     };
-
-    if (!isOpen) return null;
 
     return (
         <BaseModal

@@ -11,14 +11,12 @@ import { Section } from '../shared/types';
 import { useAllRegister } from '../shared/hooks/useAllRegister';
 
 interface EditRegisterSectionModalProps {
-    isOpen: boolean;
     onClose: () => void;
     onSuccess?: () => void;
     initialData?: Section;
 }
 
 export default function EditRegisterSectionModal({
-    isOpen,
     onClose,
     onSuccess,
     initialData
@@ -49,7 +47,7 @@ export default function EditRegisterSectionModal({
     });
 
     useEffect(() => {
-        if (initialData && isOpen) {
+        if (initialData) {
             setFormData({
                 section_register_id: initialData.section_register_id || '',
                 section_mnemonic: initialData.section_mnemonic || '',
@@ -65,7 +63,7 @@ export default function EditRegisterSectionModal({
                 is_core_section: !!initialData.is_core_section,
             });
         }
-    }, [initialData, isOpen]);
+    }, [initialData]);
 
     const handleSubmit = async () => {
         if (!formData.section_mnemonic) {
@@ -92,8 +90,6 @@ export default function EditRegisterSectionModal({
             toast.error(t('section_update_failed'));
         }
     };
-
-    if (!isOpen) return null;
 
     return (
         <BaseModal

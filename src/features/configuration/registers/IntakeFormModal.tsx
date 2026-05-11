@@ -8,12 +8,11 @@ import { BaseModal, InputField, TextAreaField } from '../shared/components';
 import CheckboxField from '../shared/components/CheckboxField';
 
 interface Props {
-    isOpen: boolean;
     onClose: () => void;
     onSuccess?: () => void;
 }
 
-export default function IntakeFormModal({ isOpen, onClose, onSuccess }: Props) {
+export default function IntakeFormModal({ onClose, onSuccess }: Props) {
     const t = useTranslations();
     const { registerId } = useParams<{ registerId: string }>();
     const { execute: createIntakeForm, loading } = useFetch();
@@ -70,8 +69,6 @@ export default function IntakeFormModal({ isOpen, onClose, onSuccess }: Props) {
         });
         onClose();
     };
-
-    if (!isOpen) return null;
 
     return (
         <BaseModal

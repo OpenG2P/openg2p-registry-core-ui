@@ -125,11 +125,12 @@ export default function RegisterSectionConfigView({
 					</Can>
 				)}
 			/>
-			<AddRegisterSectionModal
-				isOpen={isModalOpen}
-				onClose={onCloseModal}
-				onSuccess={refresh}
-			/>
+			{isModalOpen && (
+				<AddRegisterSectionModal
+					onClose={onCloseModal}
+					onSuccess={refresh}
+				/>
+			)}
 		</>
 	);
 }

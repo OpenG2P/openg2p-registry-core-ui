@@ -6,12 +6,11 @@ import { toast } from 'react-toastify';
 import { BaseModal, InputField } from '../shared/components';
 
 interface AddTabModalProps {
-    isOpen: boolean;
     onClose: () => void;
     onSuccess?: () => void;
 }
 
-export default function AddTabModal({ isOpen, onClose, onSuccess }: AddTabModalProps) {
+export default function AddTabModal({ onClose, onSuccess }: AddTabModalProps) {
     const t = useTranslations();
     const { registerId } = useParams<{ registerId: string }>();
     const { execute: createTab, loading } = useFetch();
@@ -55,8 +54,6 @@ export default function AddTabModal({ isOpen, onClose, onSuccess }: AddTabModalP
         onClose();
     };
 
-
-    if (!isOpen) return null;
 
     return (
         <BaseModal

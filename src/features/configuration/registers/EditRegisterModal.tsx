@@ -11,13 +11,12 @@ import { convertImageToBase64 } from '../shared/utils/convertImageToBase64';
 import { BaseModal, InputField, TextAreaField, CustomDropdown } from '../shared/components';
 
 interface EditRegisterModalProps {
-    isOpen: boolean;
     onClose: () => void;
     onSuccess?: () => void;
     initialData?: Register;
 }
 
-export default function EditRegisterModal({ isOpen, onClose, onSuccess, initialData }: EditRegisterModalProps) {
+export default function EditRegisterModal({ onClose, onSuccess, initialData }: EditRegisterModalProps) {
     const t = useTranslations();
     const { registers } = useAllRegister(1, 100);
     const { execute: updateRegister } = useFetch();
@@ -38,7 +37,7 @@ export default function EditRegisterModal({ isOpen, onClose, onSuccess, initialD
 
 
     useEffect(() => {
-        if (initialData && isOpen) {
+        if (initialData) {
             setFormData({
                 register_mnemonic: initialData.register_mnemonic || '',
                 register_description: initialData.register_description || '',
@@ -53,7 +52,7 @@ export default function EditRegisterModal({ isOpen, onClose, onSuccess, initialD
             });
 
         }
-    }, [initialData, isOpen]);
+    }, [initialData]);
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -109,8 +108,6 @@ export default function EditRegisterModal({ isOpen, onClose, onSuccess, initialD
     const handleCancel = () => {
         onClose();
     };
-
-    if (!isOpen) return null;
 
     return (
         <BaseModal

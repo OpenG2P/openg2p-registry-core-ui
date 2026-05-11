@@ -10,12 +10,11 @@ import { BaseModal, CustomDropdown, InputField } from '../shared/components';
 
 
 interface AddTabSectionModalProps {
-    isOpen: boolean;
     onClose: () => void;
     onSuccess?: () => void;
 }
 
-export default function AddTabSectionModal({ isOpen, onClose, onSuccess }: AddTabSectionModalProps) {
+export default function AddTabSectionModal({ onClose, onSuccess }: AddTabSectionModalProps) {
     const t = useTranslations();
     const { registerId, tabId } = useParams<{ registerId: string; tabId: string }>();
     const { execute: createSection } = useFetch();
@@ -74,8 +73,6 @@ export default function AddTabSectionModal({ isOpen, onClose, onSuccess }: AddTa
         onClose();
     };
 
-
-    if (!isOpen) return null;
 
     return (
         <BaseModal

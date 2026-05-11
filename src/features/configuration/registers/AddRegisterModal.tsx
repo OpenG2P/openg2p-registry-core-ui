@@ -13,12 +13,11 @@ import { BaseModal, InputField, TextAreaField, CustomDropdown } from '../shared/
 
 
 interface AddRegisterModalProps {
-    isOpen: boolean;
     onClose: () => void;
     onSuccess?: () => void;
 }
 
-export default function AddRegisterModal({ isOpen, onClose, onSuccess }: AddRegisterModalProps) {
+export default function AddRegisterModal({ onClose, onSuccess }: AddRegisterModalProps) {
     const t = useTranslations();
     const { registers } = useAllRegister(1, 100);
     const { execute: createRegister } = useFetch();
@@ -124,8 +123,6 @@ export default function AddRegisterModal({ isOpen, onClose, onSuccess }: AddRegi
         onClose();
     };
 
-
-    if (!isOpen) return null;
 
     return (
         <BaseModal

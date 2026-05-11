@@ -137,17 +137,19 @@ export default function RegisterTabSectionConfigView({
                 )}
             />
 
-            <AddTabSectionModal
-                isOpen={isModalOpen}
-                onClose={onCloseModal}
-                onSuccess={refresh}
-            />
-            <EditTabSectionModal
-                isOpen={editModalOpen}
-                onClose={() => setEditModalOpen(false)}
-                onSuccess={refresh}
-                initialData={selectedSection}
-            />
+            {isModalOpen && (
+                <AddTabSectionModal
+                    onClose={onCloseModal}
+                    onSuccess={refresh}
+                />
+            )}
+            {editModalOpen && (
+                <EditTabSectionModal
+                    onClose={() => setEditModalOpen(false)}
+                    onSuccess={refresh}
+                    initialData={selectedSection}
+                />
+            )}
         </>
     );
 }

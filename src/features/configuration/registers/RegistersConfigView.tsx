@@ -170,12 +170,15 @@ export default function RegistersConfigView({
                 )}
             />
 
-            <AddRegisterModal isOpen={isModalOpen} onClose={onCloseModal} onSuccess={refresh} />
-            <ViewRegisterFieldsModal
-                isOpen={isViewModalOpen}
-                onClose={() => setIsViewModalOpen(false)}
-                data={viewData}
-            />
+            {isModalOpen && (
+                <AddRegisterModal onClose={onCloseModal} onSuccess={refresh} />
+            )}
+            {isViewModalOpen && (
+                <ViewRegisterFieldsModal
+                    onClose={() => setIsViewModalOpen(false)}
+                    data={viewData}
+                />
+            )}
         </>
     );
 }

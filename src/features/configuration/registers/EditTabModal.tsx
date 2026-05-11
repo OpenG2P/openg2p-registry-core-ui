@@ -7,14 +7,13 @@ import { BaseModal, InputField } from '../shared/components';
 import CheckboxField from '../shared/components/CheckboxField';
 
 interface EditTabModalProps {
-    isOpen: boolean;
     onClose: () => void;
     onSuccess?: () => void;
     initialData?: Tab;
     registerId: string;
 }
 
-export default function EditTabModal({ isOpen, onClose, onSuccess, initialData, registerId }: EditTabModalProps) {
+export default function EditTabModal({ onClose, onSuccess, initialData, registerId }: EditTabModalProps) {
     const t = useTranslations();
     const { execute: updateTab, loading } = useFetch();
 
@@ -25,14 +24,14 @@ export default function EditTabModal({ isOpen, onClose, onSuccess, initialData, 
     });
 
     useEffect(() => {
-        if (initialData && isOpen) {
+        if (initialData) {
             setFormData({
                 tab_label: initialData.tab_label || '',
                 tab_order: initialData.tab_order?.toString() || '0',
                 is_active: initialData.is_active || true
             });
         }
-    }, [initialData, isOpen]);
+    }, [initialData]);
 
     const handleSubmit = async () => {
         if (!formData.tab_label) {
@@ -62,8 +61,6 @@ export default function EditTabModal({ isOpen, onClose, onSuccess, initialData, 
     const handleCancel = () => {
         onClose();
     };
-
-    if (!isOpen) return null;
 
     return (
         <BaseModal

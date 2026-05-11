@@ -136,16 +136,18 @@ export default function RegisterTabConfigView({
 				)}
 			/>
 
-			<AddTabModal
-				isOpen={isModalOpen}
-				onClose={onCloseModal}
-				onSuccess={refresh}
-			/>
-			<IntakeFormModal
-				isOpen={isIntakeModalOpen}
-				onClose={onCloseIntakeModal}
-				onSuccess={refresh}
-			/>
+			{isModalOpen && (
+				<AddTabModal
+					onClose={onCloseModal}
+					onSuccess={refresh}
+				/>
+			)}
+			{isIntakeModalOpen && (
+				<IntakeFormModal
+					onClose={onCloseIntakeModal}
+					onSuccess={refresh}
+				/>
+			)}
 		</>
 	);
 }
