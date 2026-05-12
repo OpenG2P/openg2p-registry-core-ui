@@ -23,7 +23,10 @@ export default function TextAreaField({
 }: Props) {
     return (
         <div className={`flex flex-col ${className}`}>
-            <label className="text-[16px] font-medium text-neutral-first">
+            <label
+                className="block text-[16px] font-medium text-neutral-first truncate"
+                title={label}
+            >
                 {label}
             </label>
             <textarea

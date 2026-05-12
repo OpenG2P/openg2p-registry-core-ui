@@ -2,17 +2,17 @@
 import { useFetch } from '@/shared/hooks';
 import { useParams } from 'next/navigation';
 import { useState } from "react";
-import { X } from "lucide-react";
 import { toast } from 'react-toastify';
 import { useTranslations } from "next-intl";
+import { BaseModal, InputField, TextAreaField } from '../shared/components';
+import CheckboxField from '../shared/components/CheckboxField';
 
 interface Props {
-    isOpen: boolean;
     onClose: () => void;
     onSuccess?: () => void;
 }
 
-export default function IntakeFormModal({ isOpen, onClose, onSuccess }: Props) {
+export default function IntakeFormModal({ onClose, onSuccess }: Props) {
     const t = useTranslations();
     const { registerId } = useParams<{ registerId: string }>();
     const { execute: createIntakeForm, loading } = useFetch();
@@ -70,125 +70,60 @@ export default function IntakeFormModal({ isOpen, onClose, onSuccess }: Props) {
         onClose();
     };
 
-    if (!isOpen) return null;
-
     return (
-        <div className="fixed inset-0 bg-neutral-first/80 z-50 flex items-center justify-center p-4">
-            <div className="relative w-full max-w-200 max-h-150 bg-primary-first rounded-[10px] overflow-hidden flex p-1">
-                <div className="flex-1 w-full bg-neutral-second relative rounded-[10px] overflow-y-hidden p-10">
-                    <button
-                        onClick={handleCancel}
-                        className="absolute top-6 right-6 text-secondary-third hover:text-neutral-first/70 transition-colors"
-                    >
-                        <X size={40} strokeWidth={2} />
-                    </button>
-
-                    <h2 className="text-2xl font-bold text-primary-second mb-4">
-                        {t('add_intake_form')}
-                    </h2>
-
-                    <div className="space-y-4">
-                        <div>
-                            <label className="block text-sm font-semibold text-neutral-first mb-1">
-                                {t('intake_form_name')}
-                            </label>
-                            <input
-                                type="text"
-                                placeholder={t('enter_intake_form_name') || "Enter Intake Form Name"}
-                                value={formData.intake_form_name}
-                                onChange={(e) =>
-                                    setFormData({ ...formData, intake_form_name: e.target.value })
-                                }
-                                className="w-full px-4 py-2 border border-primary-second rounded-lg outline-none outline-1 outline-primary-second text-neutral-first/70 placeholder:text-secondary-third"
-                            />
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-semibold text-neutral-first mb-2">
-                                {t('intake_form_description')}
-                            </label>
-                            <textarea
-                                placeholder={t('enter_description') || "Enter description"}
-                                value={formData.intake_form_description}
-                                onChange={(e) =>
-                                    setFormData({ ...formData, intake_form_description: e.target.value })
-                                }
-                                className="w-full px-4 py-2 border border-primary-second rounded-lg outline-none outline-1 outline-primary-second text-neutral-first/70 placeholder:text-secondary-third"
-                            />
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-semibold text-neutral-first mb-2">
-                                {t('no_of_verifications_required_label')}
-                            </label>
-                            <input
-                                type="number"
-                                placeholder="0"
-                                value={formData.no_of_verifications_required}
-                                onChange={(e) =>
-                                    setFormData({
-                                        ...formData,
-                                        no_of_verifications_required: Number(e.target.value)
-                                    })
-                                }
-                                className="w-full px-4 py-2 border border-primary-second rounded-lg outline-none outline-1 outline-primary-second text-neutral-first/70 placeholder:text-secondary-third"
-                            />
-                        </div>
-
-                        <div className="flex w-full gap-4 pt-2">
-                            <label className="flex flex-1 items-center gap-2">
-                                <input
-                                    type="checkbox"
-                                    checked={formData.intake_form_auto_approve}
-                                    onChange={(e) =>
-                                        setFormData({
-                                            ...formData,
-                                            intake_form_auto_approve: e.target.checked
-                                        })
-                                    }
-                                    className="h-4 w-4"
-                                />
-                                <span className="text-sm font-medium text-neutral-first">
-                                    {t('auto_approve')}
-                                </span>
-                            </label>
-
-                            <label className="flex flex-1 items-center gap-2">
-                                <input
-                                    type="checkbox"
-                                    checked={formData.is_active}
-                                    onChange={(e) =>
-                                        setFormData({
-                                            ...formData,
-                                            is_active: e.target.checked
-                                        })
-                                    }
-                                    className="h-4 w-4"
-                                />
-                                <span className="text-sm font-medium text-neutral-first">
-                                    {t('active')}
-                                </span>
-                            </label>
-                        </div>
-
-                        <div className="flex gap-4 pt-6">
-                            <button
-                                onClick={handleCancel}
-                                className="px-12 py-2.5 bg-secondary-third text-neutral-first rounded-[10px]"
-                            >
-                                {t('cancel')}
-                            </button>
-
-                            <button
-                                onClick={handleSubmit}
-                                className="px-12 py-2.5 bg-neutral-first text-neutral-second rounded-[10px]"
-                            >
-                                {t('save')}
-                            </button>
-                        </div>
-                    </div>
-                </div>
+        <BaseModal
+            title={t('add_intake_form')}
+            onClose={handleCancel}
+            primaryActionLabel={t('save')}
+            onPrimaryAction={handleSubmit}
+        >
+            <InputField
+                label={t('intake_form_name')}
+                placeholder={t('enter_intake_form_name') || "Enter Intake Form Name"}
+                value={formData.intake_form_name}
+                onChange={(value) =>
+                    setFormData(prev => ({ ...prev, intake_form_name: value }))
+                }
+            />
+            <TextAreaField
+                label={t('intake_form_description')}
+                placeholder={t('enter_description') || "Enter description"}
+                value={formData.intake_form_description}
+                onChange={(value) =>
+                    setFormData(prev => ({ ...prev, intake_form_description: value }))
+                }
+            />
+            <InputField
+                label={t('no_of_verifications_required_label')}
+                type="number"
+                placeholder="0"
+                value={formData.no_of_verifications_required}
+                onChange={(value) =>
+                    setFormData(prev => ({
+                        ...prev,
+                        no_of_verifications_required: Number(value) || 0
+                    }))
+                }
+            />
+            <div className="grid grid-cols-2 gap-4 pt-2">
+                <CheckboxField
+                    label={t('auto_approve')}
+                    checked={formData.intake_form_auto_approve}
+                    onChange={(value) =>
+                        setFormData(prev => ({
+                            ...prev,
+                            intake_form_auto_approve: value
+                        }))
+                    }
+                />
+                <CheckboxField
+                    label={t('active')}
+                    checked={formData.is_active}
+                    onChange={(value) =>
+                        setFormData(prev => ({ ...prev, is_active: value }))
+                    }
+                />
             </div>
-        </div>
+        </BaseModal>
     );
 }

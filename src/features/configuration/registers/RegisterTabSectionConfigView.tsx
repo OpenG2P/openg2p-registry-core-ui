@@ -13,6 +13,7 @@ import AddTabSectionModal from './AddTabSectionModal';
 import EditTabSectionModal from './EditTabSectionModal';
 import EditButton from '../shared/components/EditButton';
 import { DataTable, DeleteButton } from '../shared/components';
+import ConfirmRemovePopup from '../shared/components/ConfirmRemovePopup';
 
 interface RegisterTabSectionConfigViewProps {
     isModalOpen: boolean;
@@ -35,6 +36,8 @@ export default function RegisterTabSectionConfigView({
 
     const [editModalOpen, setEditModalOpen] = useState(false);
     const [selectedSection, setSelectedSection] = useState<any>(null);
+    const [showDeletePopup, setShowDeletePopup] = useState(false);
+    const [selectedTabSectionId, setSelectedTabSectionId] = useState<string | null>(null);
 
     const handleEdit = (section: any) => {
         setSelectedSection(section);
@@ -65,39 +68,15 @@ export default function RegisterTabSectionConfigView({
     };
 
     const handleDelete = (section: any) => {
-        const tab_section_id = section.tab_section_id;
-        toast.info(
-            ({ closeToast }) => (
-                <div className="p-1">
-                    <p className="font-bold text-neutral-first mb-3">{t('confirm_remove_section')}</p>
-                    <div className="flex gap-3">
-                        <button
-                            onClick={async () => {
-                                closeToast();
-                                await proceedDelete(tab_section_id);
-                            }}
-                            className="bg-primary-second text-neutral-second px-4 py-1.5 rounded-full text-sm font-semibold hover:bg-primary-second transition-colors shadow-sm"
-                        >
-                            {t('remove')}
-                        </button>
-                        <button
-                            onClick={closeToast}
-                            className="bg-secondary-first text-neutral-first/70 px-4 py-1.5 rounded-full text-sm font-semibold hover:bg-secondary-second transition-colors"
-                        >
-                            {t('cancel')}
-                        </button>
-                    </div>
-                </div>
-            ),
-            {
-                position: "top-right",
-                autoClose: false,
-                closeOnClick: false,
-                draggable: false,
-                closeButton: false,
-                className: 'rounded-[15px] shadow-xl border border-secondary-first',
-            }
-        );
+        setSelectedTabSectionId(section.tab_section_id);
+        setShowDeletePopup(true);
+    };
+
+    const handleConfirmDelete = async () => {
+        if (!selectedTabSectionId) return;
+        await proceedDelete(selectedTabSectionId);
+        setShowDeletePopup(false);
+        setSelectedTabSectionId(null);
     };
 
     const columns = [
@@ -137,17 +116,29 @@ export default function RegisterTabSectionConfigView({
                 )}
             />
 
-            <AddTabSectionModal
-                isOpen={isModalOpen}
-                onClose={onCloseModal}
-                onSuccess={refresh}
-            />
-            <EditTabSectionModal
-                isOpen={editModalOpen}
-                onClose={() => setEditModalOpen(false)}
-                onSuccess={refresh}
-                initialData={selectedSection}
-            />
+            {isModalOpen && (
+                <AddTabSectionModal
+                    onClose={onCloseModal}
+                    onSuccess={refresh}
+                />
+            )}
+            {editModalOpen && (
+                <EditTabSectionModal
+                    onClose={() => setEditModalOpen(false)}
+                    onSuccess={refresh}
+                    initialData={selectedSection}
+                />
+            )}
+            {showDeletePopup && (
+                <ConfirmRemovePopup
+                    onClose={() => {
+                        setShowDeletePopup(false);
+                        setSelectedTabSectionId(null);
+                    }}
+                    onConfirm={handleConfirmDelete}
+                    messageKey='confirm_remove_section'
+                />
+            )}
         </>
     );
 }

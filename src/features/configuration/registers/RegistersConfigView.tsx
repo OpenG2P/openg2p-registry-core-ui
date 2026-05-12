@@ -15,6 +15,7 @@ import { toast } from 'react-toastify';
 import { CONFIGURATION_REGISTERS_ACTIONS } from '../shared/utils/configurationRegisters.actions';
 import Can from '@/components/shared/Can';
 import { DataTable, DeleteButton, ViewButton } from '../shared/components';
+import ConfirmRemovePopup from '../shared/components/ConfirmRemovePopup';
 
 interface RegistersConfigViewProps {
     registers: Register[];
@@ -38,6 +39,8 @@ export default function RegistersConfigView({
     const { execute: deleteRegister } = useFetch();
     const [isViewModalOpen, setIsViewModalOpen] = useState(false);
     const [viewData, setViewData] = useState<Register | undefined>(undefined);
+    const [showDeletePopup, setShowDeletePopup] = useState(false);
+    const [selectedRegister, setSelectedRegister] = useState<Register | null>(null);
 
     const proceedDelete = async (id: string, name: string) => {
         try {
@@ -62,41 +65,15 @@ export default function RegistersConfigView({
             toast.error(t('toast_register_delete_has_data'));
             return;
         }
+        setSelectedRegister(register);
+        setShowDeletePopup(true);
+    };
 
-        const { register_id: id, register_mnemonic: name } = register;
-
-        toast.info(
-            ({ closeToast }) => (
-                <div className="p-1">
-                    <p className="font-bold text-neutral-first mb-3">{t('confirm_delete_register', { name })}</p>
-                    <div className="flex gap-3">
-                        <button
-                            onClick={async () => {
-                                closeToast();
-                                await proceedDelete(id, name);
-                            }}
-                            className="bg-primary-second text-neutral-second px-4 py-1.5 rounded-full text-sm font-semibold hover:bg-primary-second transition-colors shadow-sm"
-                        >
-                            {t('remove')}
-                        </button>
-                        <button
-                            onClick={closeToast}
-                            className="bg-secondary-first text-neutral-first/70 px-4 py-1.5 rounded-full text-sm font-semibold hover:bg-secondary-second transition-colors"
-                        >
-                            {t('cancel')}
-                        </button>
-                    </div>
-                </div>
-            ),
-            {
-                position: "top-right",
-                autoClose: false,
-                closeOnClick: false,
-                draggable: false,
-                closeButton: false,
-                className: 'rounded-[15px] shadow-xl border border-secondary-first',
-            }
-        );
+    const handleConfirmDelete = async () => {
+        if (!selectedRegister) return;
+        await proceedDelete(selectedRegister.register_id, selectedRegister.register_mnemonic);
+        setShowDeletePopup(false);
+        setSelectedRegister(null);
     };
 
     const handleView = (register: Register) => {
@@ -170,12 +147,25 @@ export default function RegistersConfigView({
                 )}
             />
 
-            <AddRegisterModal isOpen={isModalOpen} onClose={onCloseModal} onSuccess={refresh} />
-            <ViewRegisterFieldsModal
-                isOpen={isViewModalOpen}
-                onClose={() => setIsViewModalOpen(false)}
-                data={viewData}
-            />
+            {isModalOpen && (
+                <AddRegisterModal onClose={onCloseModal} onSuccess={refresh} />
+            )}
+            {isViewModalOpen && (
+                <ViewRegisterFieldsModal
+                    onClose={() => setIsViewModalOpen(false)}
+                    data={viewData}
+                />
+            )}
+            {showDeletePopup && (
+                <ConfirmRemovePopup
+                    onClose={() => {
+                        setShowDeletePopup(false);
+                        setSelectedRegister(null);
+                    }}
+                    onConfirm={handleConfirmDelete}
+                    messageKey='confirm_delete_register'
+                />
+            )}
         </>
     );
 }
