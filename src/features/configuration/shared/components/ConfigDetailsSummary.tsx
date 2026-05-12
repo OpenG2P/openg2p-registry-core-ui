@@ -20,7 +20,6 @@ export default function ConfigDetailsSummary({
     onView
 }: ConfigDetailsSummaryProps) {
     const t = useTranslations();
-    const [isEditing, setIsEditing] = React.useState(false);
 
     return (
         <div className="mx-8 mb-0">

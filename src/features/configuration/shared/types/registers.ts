@@ -16,3 +16,18 @@ export interface Register {
     functional_id_generation_required?: boolean;
     completion_score_required?: boolean;
 }
+
+export interface ScoreDefinition {
+    score_definition_id: string;
+    register_mnemonic?: string;
+    score_type: string;
+    is_enabled: boolean;
+}
+
+export interface ScoreContributingAttribute {
+    contributing_attribute_id: string;
+    attribute_name: string;
+    attribute_computation_required: boolean;
+    attribute_computation_value: Record<string, unknown>;
+    attribute_weight: number;
+}

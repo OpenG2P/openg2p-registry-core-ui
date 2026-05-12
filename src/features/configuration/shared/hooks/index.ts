@@ -2,6 +2,8 @@ export * from './useAllRegister';
 export * from './useConfigSections';
 export * from './useRegisterSections';
 export * from './useConfigTabs';
+export * from './useScoreDefinitions';
+export * from './useScoreContributingAttributes';
 export * from './useRegisterSchema';
 export * from './useAllIncomingKeyPaths';
 export * from './useIncomingKeyPath';

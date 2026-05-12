@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 
 import { useRouter } from '@/i18n/navigation';
-import { AddTabModal, IntakeFormModal } from '@/features/configuration/registers';
+import { AddTabModal} from '@/features/configuration/registers';
 import { useParams } from 'next/navigation';
 import { useConfigTabs } from '../shared/hooks/useConfigTabs';
 import { useFetch } from '@/shared/hooks';
@@ -18,7 +18,6 @@ interface RegisterTabConfigViewProps {
 	isModalOpen: boolean;
 	onCloseModal: () => void;
 	isIntakeModalOpen: boolean;
-	onCloseIntakeModal: () => void;
 	registerTabId?: string;
 	page?: number;
 	pageSize?: number;
@@ -29,7 +28,6 @@ export default function RegisterTabConfigView({
 	isModalOpen,
 	onCloseModal,
 	isIntakeModalOpen,
-	onCloseIntakeModal,
 	page = 1,
 	pageSize = 10,
 	onDataLoaded,
@@ -139,11 +137,6 @@ export default function RegisterTabConfigView({
 			<AddTabModal
 				isOpen={isModalOpen}
 				onClose={onCloseModal}
-				onSuccess={refresh}
-			/>
-			<IntakeFormModal
-				isOpen={isIntakeModalOpen}
-				onClose={onCloseIntakeModal}
 				onSuccess={refresh}
 			/>
 		</>

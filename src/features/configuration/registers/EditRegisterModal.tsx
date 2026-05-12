@@ -10,13 +10,12 @@ import { Register } from '../shared/types';
 import { convertImageToBase64 } from '../shared/utils/convertImageToBase64';
 
 interface EditRegisterModalProps {
-    isOpen: boolean;
     onClose: () => void;
     onSuccess?: () => void;
-    initialData?: Register;
+    initialData: Register;
 }
 
-export default function EditRegisterModal({ isOpen, onClose, onSuccess, initialData }: EditRegisterModalProps) {
+export default function EditRegisterModal({ onClose, onSuccess, initialData }: EditRegisterModalProps) {
     const t = useTranslations();
     const { registers } = useAllRegister(1, 100);
     const { execute: updateRegister } = useFetch();
@@ -37,22 +36,19 @@ export default function EditRegisterModal({ isOpen, onClose, onSuccess, initialD
 
 
     useEffect(() => {
-        if (initialData && isOpen) {
-            setFormData({
-                register_mnemonic: initialData.register_mnemonic || '',
-                register_description: initialData.register_description || '',
-                master_register_id: initialData.master_register_id || '',
-                dedup_is_enabled: initialData.dedup_is_enabled || false,
-                dedup_threshold_score: initialData.dedup_threshold_score?.toString() || '0',
-                register_icon: initialData.register_icon || '',
-                register_rank: initialData.register_rank?.toString() || '0',
-                register_purpose: initialData.register_purpose || 'REGISTER',
-                functional_id_generation_required: initialData.functional_id_generation_required || false,
-                completion_score_required: initialData.completion_score_required || false,
-            });
-
-        }
-    }, [initialData, isOpen]);
+        setFormData({
+            register_mnemonic: initialData.register_mnemonic || '',
+            register_description: initialData.register_description || '',
+            master_register_id: initialData.master_register_id || '',
+            dedup_is_enabled: initialData.dedup_is_enabled || false,
+            dedup_threshold_score: initialData.dedup_threshold_score?.toString() || '0',
+            register_icon: initialData.register_icon || '',
+            register_rank: initialData.register_rank?.toString() || '0',
+            register_purpose: initialData.register_purpose || 'REGISTER',
+            functional_id_generation_required: initialData.functional_id_generation_required || false,
+            completion_score_required: initialData.completion_score_required || false,
+        });
+    }, [initialData]);
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -80,7 +76,7 @@ export default function EditRegisterModal({ isOpen, onClose, onSuccess, initialD
         const result = await updateRegister('/api/configuration/registers/edit', {
             method: 'POST',
             body: JSON.stringify({
-                register_id: initialData?.register_id,
+                register_id: initialData.register_id,
                 register_mnemonic: formData.register_mnemonic,
                 register_description: formData.register_description,
                 master_register_id: formData.master_register_id || null,
@@ -108,8 +104,6 @@ export default function EditRegisterModal({ isOpen, onClose, onSuccess, initialD
     const handleCancel = () => {
         onClose();
     };
-
-    if (!isOpen) return null;
 
     return (
         <div className="fixed inset-0 bg-neutral-first/80 z-50 flex items-center justify-center p-4">
