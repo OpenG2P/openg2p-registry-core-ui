@@ -8,12 +8,14 @@ import {
     useAllRegister,
     ConfigDetailsSummary,
     getRegisterDetails,
-    ConfigurationTabs
+    ConfigurationTabs,
+    type Register,
 } from '@/features/configuration/shared';
 import {
     EditRegisterModal,
     ViewRegisterFieldsModal,
     RegisterTabConfigView,
+    RegisterScoreConfigView,
     RegisterSchemaView
 } from '@/features/configuration/registers';
 import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
@@ -30,20 +32,38 @@ const RegisterConfigurationPage = () => {
     const { registerId } = useParams<{ registerId: string }>();
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isViewModalOpen, setIsViewModalOpen] = useState(false);
-    const [activeTab, setActiveTab] = useState<'tabs' | 'sections' | 'filter' | 'search' | 'deduplication'>('tabs');
-    const [isIntakeModalOpen, setIsIntakeModalOpen] = useState(false);
+    const [activeTab, setActiveTab] = useState<
+        'tabs' | 'sections' | 'scores' | 'filter' | 'search' | 'deduplication'
+    >('tabs');
     const [tabPage, setTabPage] = useState(1);
     const [sectionPage, setSectionPage] = useState(1);
+    const [scorePage, setScorePage] = useState(1);
 
     const [isTabModalOpen, setIsTabModalOpen] = useState(false);
     const [isSectionModalOpen, setIsSectionModalOpen] = useState(false);
+    const [isScoreModalOpen, setIsScoreModalOpen] = useState(false);
 
     const [tabPagination, setTabPagination] = useState({ totalItems: 0, currentCount: 0 });
     const [sectionPagination, setSectionPagination] = useState({ totalItems: 0, currentCount: 0 });
+    const [scorePagination, setScorePagination] = useState({ totalItems: 0, currentCount: 0 });
 
-    const currentPage = activeTab === 'tabs' ? tabPage : sectionPage;
+    const currentPage =
+        activeTab === 'tabs'
+            ? tabPage
+            : activeTab === 'sections'
+              ? sectionPage
+              : activeTab === 'scores'
+                ? scorePage
+                : 1;
 
-    const paginationInfo = activeTab === 'tabs' ? tabPagination : sectionPagination;
+    const paginationInfo =
+        activeTab === 'tabs'
+            ? tabPagination
+            : activeTab === 'sections'
+              ? sectionPagination
+              : activeTab === 'scores'
+                ? scorePagination
+                : { totalItems: 0, currentCount: 0 };
 
     const { can } = useRbac();
     const canEdit = can(CONFIGURATION_REGISTERS_ACTIONS.edit);
@@ -55,6 +75,7 @@ const RegisterConfigurationPage = () => {
     const tabLabels: Record<string, string> = {
         tabs: t('tabs'),
         sections: t('sections'),
+        scores: t('scores'),
         filter: t('filter_schema'),
         search: t('search_schema'),
         deduplication: t('deduplication_schema'),
@@ -70,11 +91,13 @@ const RegisterConfigurationPage = () => {
     useEffect(() => {
         if (activeTab === 'tabs') setTabPage(1);
         if (activeTab === 'sections') setSectionPage(1);
+        if (activeTab === 'scores') setScorePage(1);
     }, [activeTab]);
 
     useEffect(() => {
         setIsTabModalOpen(false);
         setIsSectionModalOpen(false);
+        setIsScoreModalOpen(false);
     }, [activeTab]);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -93,6 +116,8 @@ const RegisterConfigurationPage = () => {
             setTabPage(prev => Math.max(1, prev - 1));
         } else if (activeTab === 'sections') {
             setSectionPage(prev => Math.max(1, prev - 1));
+        } else if (activeTab === 'scores') {
+            setScorePage(prev => Math.max(1, prev - 1));
         }
     };
 
@@ -104,6 +129,10 @@ const RegisterConfigurationPage = () => {
         } else if (activeTab === 'sections') {
             if (sectionPage * PAGE_SIZE < sectionPagination.totalItems) {
                 setSectionPage(prev => prev + 1);
+            }
+        } else if (activeTab === 'scores') {
+            if (scorePage * PAGE_SIZE < scorePagination.totalItems) {
+                setScorePage(prev => prev + 1);
             }
         }
     };
@@ -150,16 +179,25 @@ const RegisterConfigurationPage = () => {
                         <TopBar
                             breadcrumb={[]}
                             showFilters={false}
-                            showPagination={activeTab === 'tabs' || activeTab === 'sections'}
+                            showPagination={
+                                activeTab === 'tabs' ||
+                                activeTab === 'sections' ||
+                                activeTab === 'scores'
+                            }
 
                             showAddNewButton={
-                                canCreate && (activeTab === 'tabs' || activeTab === 'sections')
+                                canCreate &&
+                                (activeTab === 'tabs' ||
+                                    activeTab === 'sections' ||
+                                    activeTab === 'scores')
                             }
 
                             addNewButtonText={
                                 activeTab === 'tabs'
                                     ? t('add_new_tab')
-                                    : t('add_new_section')
+                                    : activeTab === 'scores'
+                                      ? t('add_new_score_type')
+                                      : t('add_new_section')
                             }
 
                             onAddNewButton={() => {
@@ -167,6 +205,8 @@ const RegisterConfigurationPage = () => {
                                     setIsTabModalOpen(true);
                                 } else if (activeTab === 'sections') {
                                     setIsSectionModalOpen(true);
+                                } else if (activeTab === 'scores') {
+                                    setIsScoreModalOpen(true);
                                 }
                             }}
                             showSecondaryButton={false}
@@ -189,7 +229,6 @@ const RegisterConfigurationPage = () => {
                         isModalOpen={isTabModalOpen}
                         onCloseModal={() => setIsTabModalOpen(false)}
                         isIntakeModalOpen={false}
-                        onCloseIntakeModal={() => setIsIntakeModalOpen(false)}
                         page={tabPage}
                         pageSize={PAGE_SIZE}
                         onDataLoaded={(totalItems, currentCount) =>
@@ -210,6 +249,18 @@ const RegisterConfigurationPage = () => {
                     />
                 )}
 
+                {activeTab === 'scores' && (
+                    <RegisterScoreConfigView
+                        isModalOpen={isScoreModalOpen}
+                        onCloseModal={() => setIsScoreModalOpen(false)}
+                        currentPage={scorePage}
+                        pageSize={PAGE_SIZE}
+                        onDataLoaded={(totalItems, currentCount) =>
+                            setScorePagination({ totalItems, currentCount })
+                        }
+                    />
+                )}
+
                 {['filter', 'search', 'deduplication'].includes(activeTab) && (
                     <RegisterSchemaView
                         registerId={registerId}
@@ -218,18 +269,20 @@ const RegisterConfigurationPage = () => {
                 )}
             </div>
 
-            <EditRegisterModal
-                isOpen={isEditModalOpen}
-                initialData={registerDetails as any}
-                onClose={() => setIsEditModalOpen(false)}
-                onSuccess={refresh}
-            />
+            {isEditModalOpen && (
+                <EditRegisterModal
+                    initialData={registerDetails as Register}
+                    onClose={() => setIsEditModalOpen(false)}
+                    onSuccess={refresh}
+                />
+            )}
 
-            <ViewRegisterFieldsModal
-                isOpen={isViewModalOpen}
-                data={registerDetails as any}
-                onClose={() => setIsViewModalOpen(false)}
-            />
+            {isViewModalOpen && (
+                <ViewRegisterFieldsModal
+                    data={registerDetails as Register}
+                    onClose={() => setIsViewModalOpen(false)}
+                />
+            )}
         </>
     );
 };

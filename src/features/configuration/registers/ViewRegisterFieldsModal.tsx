@@ -6,19 +6,15 @@ import { useTranslations } from 'next-intl';
 import { Register } from '../shared/types';
 
 interface ViewRegisterFieldsModalProps {
-    isOpen: boolean;
     onClose: () => void;
-    data?: Register;
+    data: Register;
 }
 
 export default function ViewRegisterFieldsModal({
-    isOpen,
     onClose,
     data,
 }: ViewRegisterFieldsModalProps) {
     const t = useTranslations();
-
-    if (!isOpen || !data) return null;
 
     return (
         <div className="fixed inset-0 bg-neutral-first/80 z-50 flex items-center justify-center p-4 ">
