@@ -49,7 +49,7 @@ const TabConfigurationPage = () => {
     const registerDetails = getRegisterDetails(registerId, registers);
     const tabDetails = getTabDetails(tabId, tabs);
 
-    const rawLabel = tabDetails.tab_label || tabDetails.intake_form_name || '';
+    const rawLabel = tabDetails.tab_label || '';
     const label_name = rawLabel.charAt(0).toUpperCase() + rawLabel.slice(1);
 
     const breadcrumb = useBreadcrumb({
