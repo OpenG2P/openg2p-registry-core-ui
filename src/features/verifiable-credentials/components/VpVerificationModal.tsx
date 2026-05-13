@@ -9,12 +9,12 @@ import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
 import { useTranslations } from 'next-intl';
 
 interface Props {
-    descriptorSchema: any;
+    vc: any;
     onClose: () => void;
 }
 
 export default function VpVerificationModal({
-    descriptorSchema,
+    vc,
     onClose,
 }: Props) {
     const t = useTranslations();
@@ -37,9 +37,9 @@ export default function VpVerificationModal({
                     proof_type: ["Ed25519Signature2020", "EdDSA", "ES256"],
                 },
             },
-            input_descriptors: [descriptorSchema],
+            input_descriptors: [vc.descriptorSchema],
         };
-    }, [descriptorSchema]);
+    }, [vc.descriptorSchema]);
 
     const [activeTab, setActiveTab] = useState<'status' | 'payload'>('status');
 
@@ -117,12 +117,17 @@ export default function VpVerificationModal({
             setIsImporting(true);
             setError(null);
 
-            const res = await fetch('/api/partner-ingest', {
+            const res = await fetch('/api/input-mechanism/ingest-data', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ vc: vcPayload }),
+                body: JSON.stringify({ 
+                    vc_payload: vcPayload,
+                    register_id: vc.regregister_id,
+                    intake_form_id: vc.intake_form_id,
+                    data_model_id: vc.data_model_id,
+                }),
             });
 
             if (!res.ok) {
@@ -145,7 +150,7 @@ export default function VpVerificationModal({
     return (
         <div className="fixed inset-0 bg-neutral-first/80 flex justify-center items-center z-50">
             <div
-                className={`relative bg-neutral-second rounded-[40px] p-10 border-10 border-primary-first flex flex-col transition-all duration-300 ${verificationStatus === 'success' ? 'w-200 h-160' : 'w-150 h-120'}`}
+                className={`relative bg-neutral-second rounded-[10px] p-10 border-10 border-primary-first flex flex-col transition-all duration-300 ${verificationStatus === 'success' ? 'w-200 h-160' : 'w-150 h-120'}`}
             >
                 <div
                     className={`flex items-center mb-3 transition-all ${verificationComplete ? 'justify-between' : 'justify-center relative'}`}
