@@ -17,7 +17,6 @@ interface RegisterTabConfigViewProps {
 	onAddNewRegister: () => void;
 	isModalOpen: boolean;
 	onCloseModal: () => void;
-	isIntakeModalOpen: boolean;
 	registerTabId?: string;
 	page?: number;
 	pageSize?: number;
@@ -27,7 +26,6 @@ interface RegisterTabConfigViewProps {
 export default function RegisterTabConfigView({
 	isModalOpen,
 	onCloseModal,
-	isIntakeModalOpen,
 	page = 1,
 	pageSize = 10,
 	onDataLoaded,

@@ -75,7 +75,7 @@ const RegisterConfigurationPage = () => {
     const tabLabels: Record<string, string> = {
         tabs: t('tabs'),
         sections: t('sections'),
-        scores: t('scores'),
+        scores: t('score_definition_tab'),
         filter: t('filter_schema'),
         search: t('search_schema'),
         deduplication: t('deduplication_schema'),
@@ -228,7 +228,6 @@ const RegisterConfigurationPage = () => {
                         onAddNewRegister={() => setIsModalOpen(true)}
                         isModalOpen={isTabModalOpen}
                         onCloseModal={() => setIsTabModalOpen(false)}
-                        isIntakeModalOpen={false}
                         page={tabPage}
                         pageSize={PAGE_SIZE}
                         onDataLoaded={(totalItems, currentCount) =>

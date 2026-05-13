@@ -109,10 +109,6 @@ export default function RegisterScoreConfigView({
             label: t('score_type'),
         },
         {
-            key: 'register_mnemonic',
-            label: t('mnemonic'),
-        },
-        {
             key: 'is_enabled',
             label: t('status'),
             render: (item: ScoreDefinition) => (item.is_enabled ? t('active') : t('inactive')),
