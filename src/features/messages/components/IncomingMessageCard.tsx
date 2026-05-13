@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { IncomingMessage } from '@/features/messages/types';
+import { KeyValue } from '@/components/ui/KeyValue';
 import { useState } from 'react';
 import MessagePopup from './MessagePopup';
 import Link from 'next/link';
@@ -48,10 +49,10 @@ export default function IncomingMessageCard({ message }: Props) {
                     </h3>
 
                     <div className="space-y-2">
-                        <KeyValue label={t('id') || 'ID'} value={message.ingest_id} />
-                        <KeyValue label={t('partner') || 'Partner'} value={message?.partner_mnemonic} />
-                        <KeyValue label={t('data_model') || 'Data Model'} value={message?.data_model_mnemonic} />
-                        <KeyValue label={t('date_and_time') || 'Date & Time'} value={formatDateTime(message.receipt_date_time)} />
+                        <KeyValue variant="message" label={t('id') || 'ID'} value={message.ingest_id} />
+                        <KeyValue variant="message" label={t('partner') || 'Partner'} value={message?.partner_mnemonic} />
+                        <KeyValue variant="message" label={t('data_model') || 'Data Model'} value={message?.data_model_mnemonic} />
+                        <KeyValue variant="message" label={t('date_and_time') || 'Date & Time'} value={formatDateTime(message.receipt_date_time)} />
                     </div>
                 </div>
 
@@ -59,9 +60,9 @@ export default function IncomingMessageCard({ message }: Props) {
                 <div className="border-l-2 space-y-4 border-secondary-second pl-6">
                     <h3 className="text-[18px] font-semibold text-primary-second">{t('classification') || 'Classification'}</h3>
                     <div className="space-y-2">
-                        <KeyValue label={t('status') || 'Status'} value={message.classification_status} />
-                        <KeyValue label={t('date_and_time') || 'Date & Time'} value={formatDateTime(message.classification_date_time)} />
-                        <KeyValue label={t('target_register') || 'Target Register'} value={message.register_mnemonic ?? '-- -- --'} />
+                        <KeyValue variant="message" label={t('status') || 'Status'} value={message.classification_status} />
+                        <KeyValue variant="message" label={t('date_and_time') || 'Date & Time'} value={formatDateTime(message.classification_date_time)} />
+                        <KeyValue variant="message" label={t('target_register') || 'Target Register'} value={message.register_mnemonic ?? '-- -- --'} />
 
                     </div>
 
@@ -86,9 +87,9 @@ export default function IncomingMessageCard({ message }: Props) {
                     </h3>
 
                     <div className="space-y-2">
-                        <KeyValue label={t('status') || 'Status'} value={message.transformation_status ?? t('n_a') ?? 'N/A'} />
-                        <KeyValue label={t('date_and_time') || 'Date & Time'} value={formatDateTime(message.transformation_date_time)} />
-                        <KeyValue label={t('template') || 'Template'} value={message.template_file_id ?? t('n_a') ?? 'N/A'} />
+                        <KeyValue variant="message" label={t('status') || 'Status'} value={message.transformation_status ?? t('n_a') ?? 'N/A'} />
+                        <KeyValue variant="message" label={t('date_and_time') || 'Date & Time'} value={formatDateTime(message.transformation_date_time)} />
+                        <KeyValue variant="message" label={t('template') || 'Template'} value={message.template_file_id ?? t('n_a') ?? 'N/A'} />
                     </div>
 
 
@@ -98,8 +99,8 @@ export default function IncomingMessageCard({ message }: Props) {
                 <div className="border-l-2 space-y-4 border-secondary-second pl-6">
                     <h3 className="text-[18px] font-semibold text-primary-second">{t('ingestion') || 'Ingestion'}</h3>
                     <div className="space-y-2">
-                        <KeyValue label={t('status') || 'Status'} value={message.ingestion_status ?? t('n_a') ?? 'N/A'} />
-                        <KeyValue label={t('date_and_time') || 'Date & Time'} value={formatDateTime(message.ingestion_date_time)} />
+                        <KeyValue variant="message" label={t('status') || 'Status'} value={message.ingestion_status ?? t('n_a') ?? 'N/A'} />
+                        <KeyValue variant="message" label={t('date_and_time') || 'Date & Time'} value={formatDateTime(message.ingestion_date_time)} />
                     </div>
 
                     <div className="space-y-2">
@@ -135,16 +136,6 @@ export default function IncomingMessageCard({ message }: Props) {
                     loading={loading}
                 />
             )}
-        </div>
-    );
-}
-
-function KeyValue({ label, value }: { label: string; value: string }) {
-    return (
-        <div className="text-neutral-first">
-            <span className="text-neutral-first/50 text-[16px]">{label}: </span>
-            {/* <span className="text-neutral-first/50 mx-1">:</span> */}
-            <span className="font-medium text-[14px]">{value}</span>
         </div>
     );
 }
