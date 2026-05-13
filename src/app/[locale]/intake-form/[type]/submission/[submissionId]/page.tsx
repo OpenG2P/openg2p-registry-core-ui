@@ -27,7 +27,7 @@ export default function IntakeFormSubmissionPage() {
 
     const { currentRegister } = useRegister();
     const { can } = useRbac();
-    const canCreate = can(INTAKE_FORM_ACTIONS.create);
+    const canCreate = can(INTAKE_FORM_ACTIONS.edit);
 
     const registerId = currentRegister?.register_id;
     const { submissions, loading: loadingSubmissions } = useIntakeSubmissions(registerId);

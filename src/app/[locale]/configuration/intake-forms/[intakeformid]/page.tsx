@@ -13,8 +13,6 @@ import {
 import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
 import { useFetch, usePagination } from '@/shared/hooks';
 import { useRbac } from '@/context/RbacContext';
-import { CONFIGURATION_TABS_ACTIONS } from '@/features/configuration/shared/utils/configurationTabs.actions';
-import { CONFIGURATION_REGISTERS_ACTIONS } from '@/features/configuration/shared/utils/configurationRegisters.actions';
 import { useTranslations } from 'next-intl';
 import { useIntakeFormById } from '@/features/configuration/shared/hooks/useIntakeFormById';
 import { useAllIntakeFormTabs } from '@/features/configuration/shared/hooks/useAllIntakeFormTabs';
@@ -23,6 +21,8 @@ import { toast } from 'react-toastify';
 import { EditIntakeFormModal, ViewIntakeFormModal } from '@/features/configuration/intake-forms';
 import AddIntakeFormTabModal from '@/features/configuration/intake-forms/AddIntakeFormTabModal ';
 import ConfirmRemovePopup from '@/features/configuration/shared/components/ConfirmRemovePopup';
+import { CONFIGURATION_INTAKE_FORM_ACTIONS } from '@/features/configuration/shared/utils/configurationIntakeForm.actions';
+import Can from '@/components/shared/Can';
 
 
 const IntakeFormIdPage = () => {
@@ -42,8 +42,8 @@ const IntakeFormIdPage = () => {
 
 
     const { can } = useRbac();
-    const canEdit = can(CONFIGURATION_REGISTERS_ACTIONS.edit);
-    const canCreate = can(CONFIGURATION_TABS_ACTIONS.create);
+    const canEdit = can(CONFIGURATION_INTAKE_FORM_ACTIONS.edit);
+    const canCreate = can(CONFIGURATION_INTAKE_FORM_ACTIONS.edit);
 
 
     const breadcrumb = useBreadcrumb({
@@ -170,10 +170,12 @@ const IntakeFormIdPage = () => {
                     router.push(`/configuration/intake-forms/${intakeformid}/tabs/${item.tab_id}`)
                 }
                 actions={(item) => (
-                    <DeleteButton
-                        label={t('remove')}
-                        onClick={() => handleDelete(item)}
-                    />
+                    <Can action={CONFIGURATION_INTAKE_FORM_ACTIONS.edit}>
+                        <DeleteButton
+                            label={t('remove')}
+                            onClick={() => handleDelete(item)}
+                        />
+                    </Can>
                 )}
             />
 

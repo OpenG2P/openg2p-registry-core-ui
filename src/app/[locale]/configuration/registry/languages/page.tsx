@@ -5,12 +5,16 @@ import { useTranslations } from 'next-intl';
 import { TopBar } from '@/components/shared';
 import LanguagesConfigView from '@/features/configuration/registry/components/LanguagesConfigView';
 import { useLang } from '@/features/configuration/registry/hooks/useLang';
+import { CONFIGURATION_REGISTRY_ACTIONS } from '@/features/configuration/shared/utils/configurationRegistry.actions';
+import { useRbac } from '@/context/RbacContext';
 
 const LanguagesConfigurationPage = () => {
     const t = useTranslations();
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const { languages, setLanguages, languagesLoading, fetchLanguages } = useLang();
+    const { can } = useRbac();
+    const canCreate = can(CONFIGURATION_REGISTRY_ACTIONS.edit);
 
     return (
         <>
@@ -18,7 +22,7 @@ const LanguagesConfigurationPage = () => {
                 breadcrumb={[{ label: t('registry') }, { label: t('languages') }]}
                 showFilters={false}
                 showPagination={false}
-                showAddNewButton={true}
+                showAddNewButton={canCreate}
                 addNewButtonText={t('add_new_language')}
                 onAddNewButton={() => setIsModalOpen(true)}
             />

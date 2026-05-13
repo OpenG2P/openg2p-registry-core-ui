@@ -66,7 +66,7 @@ export default function IntakeFormPage() {
                 showPagination
                 showCapsule={true}
                 capsule={
-                    <Can action={INTAKE_FORM_ACTIONS.create}>
+                    <Can action={INTAKE_FORM_ACTIONS.edit}>
                         <AddNewDropdown
                             mechanisms={mechanisms || []}
                             loading={isLoadingMechanisms}
