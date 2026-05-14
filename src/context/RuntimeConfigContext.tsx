@@ -8,7 +8,6 @@ export interface RuntimeConfig {
     verifyServiceUrl: string;
     vpClientId: string;
     pageSize: number;
-    partnerIngestUrl: string;
     registryName: string;
     registryLogo: string;
     registry_theme_id: string;

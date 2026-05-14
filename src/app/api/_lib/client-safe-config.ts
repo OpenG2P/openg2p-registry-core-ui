@@ -13,7 +13,6 @@ class ClientSafeConfig {
             partnerImportExportEnable: process.env.PARTNER_IMPORT_EXPORT_ENABLE === "true",
             verifyServiceUrl: process.env.VERIFY_SERVICE_URL ?? "",
             vpClientId: process.env.VP_CLIENT_ID ?? "",
-            partnerIngestUrl: process.env.PARTNER_INGEST_URL ?? "",
             pageSize: parseInt(process.env.PAGE_SIZE ?? "10"),
             registryName: "",
             registryLogo: "",

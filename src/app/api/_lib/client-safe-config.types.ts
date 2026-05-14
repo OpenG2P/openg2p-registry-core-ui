@@ -28,7 +28,6 @@ export type ClientSafeConfigShape = {
     partnerImportExportEnable: boolean;
     verifyServiceUrl: string;
     vpClientId: string;
-    partnerIngestUrl: string;
     pageSize: number;
     registryName: string;
     registryLogo: string;
