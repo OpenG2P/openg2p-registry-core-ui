@@ -37,9 +37,9 @@ export default function VpVerificationModal({
                     proof_type: ["Ed25519Signature2020", "EdDSA", "ES256"],
                 },
             },
-            input_descriptors: [vc.descriptorSchema],
+            input_descriptors: [vc.descriptor_schema],
         };
-    }, [vc.descriptorSchema]);
+    }, [vc.descriptor_schema]);
 
     const [activeTab, setActiveTab] = useState<'status' | 'payload'>('status');
 
@@ -124,7 +124,7 @@ export default function VpVerificationModal({
                 },
                 body: JSON.stringify({ 
                     vc_payload: vcPayload,
-                    register_id: vc.regregister_id,
+                    register_id: vc.register_id,
                     intake_form_id: vc.intake_form_id,
                     data_model_id: vc.data_model_id,
                 }),
