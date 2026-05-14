@@ -1,9 +1,8 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { useFilterConfig } from "@/features/filter/utils";
+import { useFilterConfig, normalizeNumericFilter } from "@/features/filter/utils";
 import { AppliedFilters, FilterRule } from "@/features/filter/types";
-import { ur } from "zod/v4/locales";
 
 export function useFilters(url: string) {
     const [appliedFilters, setAppliedFilters] = useState<AppliedFilters>([]);
@@ -34,19 +33,28 @@ export function useFilters(url: string) {
             return aKey.localeCompare(bKey);
         });
 
+        const configByField = Object.fromEntries(
+            filterConfig.map(c => [c.field_name, c])
+        );
+
         const result: Record<string, Record<string, unknown>> = {};
 
         for (const rule of stableFilters) {
             const field = rule.field_name;
             const operator = rule.operator;
-            const value = rule.value;
+            const cfg = configByField[field];
+            const value = normalizeNumericFilter(
+                cfg?.filter_type,
+                operator,
+                rule.value
+            );
 
             if (!result[field]) result[field] = {};
             result[field][operator] = value;
         }
 
         return result;
-    }, [appliedFilters]);
+    }, [appliedFilters, filterConfig]);
 
 
     const removeFilter = (index: number) => {
