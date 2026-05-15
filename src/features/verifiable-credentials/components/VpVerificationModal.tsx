@@ -7,6 +7,7 @@ import { buildPayloadFromDecodedJWT, decodeSdJwtToken } from '@/features/verifia
 import { PayloadView, StatusView } from '@/features/verifiable-credentials/components';
 import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
 import { useTranslations } from 'next-intl';
+import { useFetch } from '@/shared/hooks';
 
 interface Props {
     vc: any;
@@ -22,6 +23,7 @@ export default function VpVerificationModal({
 
     const [verificationComplete, setVerificationComplete] = useState(false);
     const [verificationStatus, setVerificationStatus] = useState<'idle' | 'verifying' | 'success' | 'error'>('idle');
+    const { execute: importVC } = useFetch();
 
     const [verificationResult, setVerificationResult] = useState<any>(null);
 
@@ -117,24 +119,18 @@ export default function VpVerificationModal({
             setIsImporting(true);
             setError(null);
 
-            const res = await fetch('/api/input-mechanism/ingest-data', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ 
-                    vc_payload: vcPayload,
-                    register_id: vc.register_id,
-                    intake_form_id: vc.intake_form_id,
-                    data_model_id: vc.data_model_id,
-                }),
-            });
-
-            if (!res.ok) {
-                throw new Error('Import failed');
-            }
-
-            const result = await res.json();
+            const result = await importVC(
+                '/api/input-mechanism/ingest-data',
+                {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        vc_payload: vcPayload,
+                        register_id: vc.register_id,
+                        intake_form_id: vc.intake_form_id,
+                        data_model_id: vc.data_model_id,
+                    }),
+                }
+            );
 
             setImportResult(result);
             setVerificationComplete(true);
@@ -144,7 +140,12 @@ export default function VpVerificationModal({
         } finally {
             setIsImporting(false);
         }
-    }, []);
+    }, [
+        importVC,
+        vc.register_id,
+        vc.intake_form_id,
+        vc.data_model_id,
+    ]);
 
 
     return (
