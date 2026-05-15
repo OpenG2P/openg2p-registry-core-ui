@@ -19,6 +19,8 @@ interface TopBarProps {
     showCapsule?: boolean;
     capsule?: React.ReactNode;
 
+    actions?: React.ReactNode;
+
     subHeading?: string | React.ReactNode;
     showSubHeading?: boolean;
 
@@ -59,6 +61,7 @@ export default function TopBar({
     showSubHeading = false,
     subHeading,
     capsule,
+    actions,
     pageStart,
     pageEnd,
     total,
@@ -144,6 +147,8 @@ export default function TopBar({
 
                         </button>
                     )}
+
+                    {actions}
 
                     {showPagination && onPrev && onNext && (
                         <PaginationBar

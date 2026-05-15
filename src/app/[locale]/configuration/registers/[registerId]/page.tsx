@@ -16,7 +16,8 @@ import {
     ViewRegisterFieldsModal,
     RegisterTabConfigView,
     RegisterScoreConfigView,
-    RegisterSchemaView
+    RegisterInputMechanismConfigView,
+    RegisterSchemaView,
 } from '@/features/configuration/registers';
 import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
 import { usePagination } from '@/shared/hooks';
@@ -26,6 +27,10 @@ import { CONFIGURATION_REGISTERS_ACTIONS } from '@/features/configuration/shared
 import { useTranslations } from 'next-intl';
 import RegisterSectionConfigView from '@/features/configuration/registers/RegisterSectionConfigView';
 
+type PaginatedTab = 'tabs' | 'sections' | 'scores' | 'input-mechanisms';
+type PaginationState = { totalItems: number; currentCount: number };
+
+const EMPTY_PAGINATION: PaginationState = { totalItems: 0, currentCount: 0 };
 
 const RegisterConfigurationPage = () => {
     const t = useTranslations();
@@ -33,37 +38,46 @@ const RegisterConfigurationPage = () => {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isViewModalOpen, setIsViewModalOpen] = useState(false);
     const [activeTab, setActiveTab] = useState<
-        'tabs' | 'sections' | 'scores' | 'filter' | 'search' | 'deduplication'
+        'tabs' | 'sections' | 'scores' | 'input-mechanisms' | 'filter' | 'search' | 'deduplication'
     >('tabs');
     const [tabPage, setTabPage] = useState(1);
     const [sectionPage, setSectionPage] = useState(1);
     const [scorePage, setScorePage] = useState(1);
+    const [inputMechanismPage, setInputMechanismPage] = useState(1);
 
     const [isTabModalOpen, setIsTabModalOpen] = useState(false);
     const [isSectionModalOpen, setIsSectionModalOpen] = useState(false);
     const [isScoreModalOpen, setIsScoreModalOpen] = useState(false);
+    const [isInputMechanismModalOpen, setIsInputMechanismModalOpen] = useState(false);
 
     const [tabPagination, setTabPagination] = useState({ totalItems: 0, currentCount: 0 });
     const [sectionPagination, setSectionPagination] = useState({ totalItems: 0, currentCount: 0 });
     const [scorePagination, setScorePagination] = useState({ totalItems: 0, currentCount: 0 });
+    const [inputMechanismPagination, setInputMechanismPagination] = useState(EMPTY_PAGINATION);
 
-    const currentPage =
-        activeTab === 'tabs'
-            ? tabPage
-            : activeTab === 'sections'
-              ? sectionPage
-              : activeTab === 'scores'
-                ? scorePage
-                : 1;
+    const paginatedTabs: Record<
+        PaginatedTab,
+        {
+            page: number;
+            setPage: React.Dispatch<React.SetStateAction<number>>;
+            pagination: PaginationState;
+            setPagination: React.Dispatch<React.SetStateAction<PaginationState>>;
+        }
+    > = {
+        tabs: { page: tabPage, setPage: setTabPage, pagination: tabPagination, setPagination: setTabPagination },
+        sections: { page: sectionPage, setPage: setSectionPage, pagination: sectionPagination, setPagination: setSectionPagination },
+        scores: { page: scorePage, setPage: setScorePage, pagination: scorePagination, setPagination: setScorePagination },
+        'input-mechanisms': {
+            page: inputMechanismPage,
+            setPage: setInputMechanismPage,
+            pagination: inputMechanismPagination,
+            setPagination: setInputMechanismPagination,
+        },
+    };
 
-    const paginationInfo =
-        activeTab === 'tabs'
-            ? tabPagination
-            : activeTab === 'sections'
-              ? sectionPagination
-              : activeTab === 'scores'
-                ? scorePagination
-                : { totalItems: 0, currentCount: 0 };
+    const activePaginatedTab = paginatedTabs[activeTab as PaginatedTab];
+    const currentPage = activePaginatedTab?.page ?? 1;
+    const paginationInfo = activePaginatedTab?.pagination ?? EMPTY_PAGINATION;
 
     const { can } = useRbac();
     const canEdit = can(CONFIGURATION_REGISTERS_ACTIONS.edit);
@@ -75,7 +89,8 @@ const RegisterConfigurationPage = () => {
     const tabLabels: Record<string, string> = {
         tabs: t('tabs'),
         sections: t('sections'),
-        scores: t('score_definition_tab'),
+        scores: t('score_definition'),
+        'input-mechanisms': t('input_mechanisms'),
         filter: t('filter_schema'),
         search: t('search_schema'),
         deduplication: t('deduplication_schema'),
@@ -89,18 +104,16 @@ const RegisterConfigurationPage = () => {
     });
 
     useEffect(() => {
-        if (activeTab === 'tabs') setTabPage(1);
-        if (activeTab === 'sections') setSectionPage(1);
-        if (activeTab === 'scores') setScorePage(1);
+        paginatedTabs[activeTab as PaginatedTab]?.setPage(1);
     }, [activeTab]);
 
     useEffect(() => {
         setIsTabModalOpen(false);
         setIsSectionModalOpen(false);
         setIsScoreModalOpen(false);
+        setIsInputMechanismModalOpen(false);
     }, [activeTab]);
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
     const { config } = useRuntimeConfig();
     const PAGE_SIZE = config.pageSize || 10;
 
@@ -112,28 +125,14 @@ const RegisterConfigurationPage = () => {
     });
 
     const handlePrev = () => {
-        if (activeTab === 'tabs') {
-            setTabPage(prev => Math.max(1, prev - 1));
-        } else if (activeTab === 'sections') {
-            setSectionPage(prev => Math.max(1, prev - 1));
-        } else if (activeTab === 'scores') {
-            setScorePage(prev => Math.max(1, prev - 1));
-        }
+        activePaginatedTab?.setPage((prev) => Math.max(1, prev - 1));
     };
 
     const handleNext = () => {
-        if (activeTab === 'tabs') {
-            if (tabPage * PAGE_SIZE < tabPagination.totalItems) {
-                setTabPage(prev => prev + 1);
-            }
-        } else if (activeTab === 'sections') {
-            if (sectionPage * PAGE_SIZE < sectionPagination.totalItems) {
-                setSectionPage(prev => prev + 1);
-            }
-        } else if (activeTab === 'scores') {
-            if (scorePage * PAGE_SIZE < scorePagination.totalItems) {
-                setScorePage(prev => prev + 1);
-            }
+        if (!activePaginatedTab) return;
+        const { page, pagination, setPage } = activePaginatedTab;
+        if (page * PAGE_SIZE < pagination.totalItems) {
+            setPage((prev) => prev + 1);
         }
     };
 
@@ -179,17 +178,14 @@ const RegisterConfigurationPage = () => {
                         <TopBar
                             breadcrumb={[]}
                             showFilters={false}
-                            showPagination={
-                                activeTab === 'tabs' ||
-                                activeTab === 'sections' ||
-                                activeTab === 'scores'
-                            }
+                            showPagination={!!activePaginatedTab}
 
                             showAddNewButton={
                                 canCreate &&
                                 (activeTab === 'tabs' ||
                                     activeTab === 'sections' ||
-                                    activeTab === 'scores')
+                                    activeTab === 'scores' ||
+                                    activeTab === 'input-mechanisms')
                             }
 
                             addNewButtonText={
@@ -197,7 +193,9 @@ const RegisterConfigurationPage = () => {
                                     ? t('add_new_tab')
                                     : activeTab === 'scores'
                                       ? t('add_new_score_type')
-                                      : t('add_new_section')
+                                      : activeTab === 'input-mechanisms'
+                                        ? t('add_new_input_mechanism')
+                                        : t('add_new_section')
                             }
 
                             onAddNewButton={() => {
@@ -207,6 +205,8 @@ const RegisterConfigurationPage = () => {
                                     setIsSectionModalOpen(true);
                                 } else if (activeTab === 'scores') {
                                     setIsScoreModalOpen(true);
+                                } else if (activeTab === 'input-mechanisms') {
+                                    setIsInputMechanismModalOpen(true);
                                 }
                             }}
                             showSecondaryButton={false}
@@ -225,7 +225,6 @@ const RegisterConfigurationPage = () => {
             <div className="mt-0">
                 {activeTab === 'tabs' && (
                     <RegisterTabConfigView
-                        onAddNewRegister={() => setIsModalOpen(true)}
                         isModalOpen={isTabModalOpen}
                         onCloseModal={() => setIsTabModalOpen(false)}
                         page={tabPage}
@@ -256,6 +255,18 @@ const RegisterConfigurationPage = () => {
                         pageSize={PAGE_SIZE}
                         onDataLoaded={(totalItems, currentCount) =>
                             setScorePagination({ totalItems, currentCount })
+                        }
+                    />
+                )}
+
+                {activeTab === 'input-mechanisms' && (
+                    <RegisterInputMechanismConfigView
+                        isModalOpen={isInputMechanismModalOpen}
+                        onCloseModal={() => setIsInputMechanismModalOpen(false)}
+                        currentPage={inputMechanismPage}
+                        pageSize={PAGE_SIZE}
+                        onDataLoaded={(totalItems, currentCount) =>
+                            setInputMechanismPagination({ totalItems, currentCount })
                         }
                     />
                 )}
