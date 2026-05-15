@@ -12,3 +12,4 @@ export * from './useIncomingSemanticPattern';
 export * from './useAllSubscriptionActivityLogs';
 export * from './useSubscriptionActivityLog';
 export * from './useAllDataModels';
+export * from './useAllAwePolicyConfigurations';
