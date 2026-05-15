@@ -15,42 +15,35 @@ export default getRequestConfig(async ({ requestLocale }) => {
     await clientSafeConfig.fetchRegistryConfig(origin);
     const config = clientSafeConfig.getAll();
 
-    let messages = {};
+    const staticMessagesMap: Record<string, () => Promise<any>> = {
+        en: () => import('../../locales/en.json'),
+        es: () => import('../../locales/es.json'),
+        fr: () => import('../../locales/fr.json'),
+    };
+
+    let staticMessages: Record<string, string> = {};
+    if (staticMessagesMap[locale as string]) {
+        try {
+            staticMessages = (await staticMessagesMap[locale as string]()).default;
+        } catch {
+            // If static file is missing, continue with dynamic translations only
+        }
+    }
+
+    let dynamicMessages: Record<string, string> = {};
     if (config.language_config?.language_code === locale) {
-        messages = config.language_config?.language_translation || {};
+        dynamicMessages = config.language_config?.language_translation || {};
     } else {
         const dynamicLang = await clientSafeConfig.fetchLanguageConfigByCode(locale as string, origin);
         if (dynamicLang) {
-            messages = dynamicLang.language_translation || {};
+            dynamicMessages = dynamicLang.language_translation || {};
         }
     }
 
-
-    if (Object.keys(messages).length > 0) {
-        return {
-            locale,
-            messages
-        };
-    }
-
-    const staticMessagesMap: Record<string, () => Promise<any>> = {
-        'en': () => import('../../locales/en.json'),
-        'es': () => import('../../locales/es.json'),
-        'fr': () => import('../../locales/fr.json'),
-    };
-
-    if (staticMessagesMap[locale as string]) {
-        try {
-            const staticMessages = (await staticMessagesMap[locale as string]()).default;
-            messages = { ...staticMessages};
-        } catch (error) {
-            // If static file is missing, we just stick with the DB translations
-        }
-    }
-
+    const messages = { ...staticMessages, ...dynamicMessages };
 
     return {
         locale,
-        messages
+        messages,
     };
 });

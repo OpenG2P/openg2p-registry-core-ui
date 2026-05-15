@@ -1,25 +1,27 @@
 import { useFetch } from '@/shared/hooks';
 
-export interface InputMechanism {
-    mechanism_id: string;
+export interface ImportFileConfiguration {
+    import_file_configuration_id: string;
     register_id: string;
-    mechanism_type: string;
-    display_key: string;
+    form_id: string;
+    data_model_id: string;
+    import_file_template_mnemonic: string;
+    import_file_template_description: string;
 }
 
-export function useAllInputMechanisms(
+export function useAllImportFileConfigurations(
     registerId: string,
     currentPage: number = 1,
     pageSize: number = 10,
 ) {
     const { data, loading, error, execute } = useFetch<{
-        input_mechanisms: InputMechanism[];
+        import_file_configurations: ImportFileConfiguration[];
         pagination?: {
             number_of_items: number;
             number_of_pages: number;
         };
     }>({
-        url: '/api/configuration/registers/input-mechanism/get-all-input-mechanisms',
+        url: '/api/configuration/registers/input-mechanism/get-import-file-configuration',
         enabled: !!registerId,
         options: {
             method: 'POST',
@@ -32,7 +34,7 @@ export function useAllInputMechanisms(
     });
 
     return {
-        inputMechanisms: data?.input_mechanisms || [],
+        importFileConfigurations: data?.import_file_configurations || [],
         pagination: data?.pagination,
         loading,
         error,
