@@ -1,6 +1,7 @@
 "use client";
 
 import { ValueInputProps } from "@/features/filter/types";
+import { parseOptionalNumber } from "@/features/filter/utils";
 
 export default function NumberFilterInput({
     value,
@@ -15,16 +16,20 @@ export default function NumberFilterInput({
                     type="number"
                     className="border border-secondary-second rounded-[10px] px-3 text-[16px] font-normal w-1/2 outline-0 h-[36px] text-neutral-first/50"
                     placeholder="Min"
-                    value={min || ""}
-                    onChange={e => onChange([e.target.value, max])}
+                    value={min === "" || min === null || min === undefined ? "" : min}
+                    onChange={e =>
+                        onChange([parseOptionalNumber(e.target.value), parseOptionalNumber(max)])
+                    }
                 />
                 <span className="text-secondary-third">-</span>
                 <input
                     type="number"
                     className="border border-secondary-second rounded-[10px] px-3 text-[16px] font-normal w-1/2 outline-0 h-[36px] text-neutral-first/50"
                     placeholder="Max"
-                    value={max || ""}
-                    onChange={e => onChange([min, e.target.value])}
+                    value={max === "" || max === null || max === undefined ? "" : max}
+                    onChange={e =>
+                        onChange([parseOptionalNumber(min), parseOptionalNumber(e.target.value)])
+                    }
                 />
             </div>
         );
@@ -34,8 +39,8 @@ export default function NumberFilterInput({
         <input
             type="number"
             className="border border-secondary-second rounded-[10px] px-3 text-[16px] font-normal w-full outline-0 h-[36px] text-neutral-first/50 font-['Roboto']"
-            value={value || ""}
-            onChange={e => onChange(e.target.value)}
+            value={value === "" || value === null || value === undefined ? "" : value}
+            onChange={e => onChange(parseOptionalNumber(e.target.value))}
         />
     );
 }
