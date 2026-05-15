@@ -12,4 +12,6 @@ export * from './useIncomingSemanticPattern';
 export * from './useAllSubscriptionActivityLogs';
 export * from './useSubscriptionActivityLog';
 export * from './useAllDataModels';
+export * from './useAllIntakeForms';
 export * from './useAllInputMechanisms';
+export * from './useAllImportFileConfigurations';

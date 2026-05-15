@@ -57,7 +57,7 @@ export default function EditInputMechanismModal({
             return;
         }
 
-        const result = await updateMechanism('/api/configuration/ingest/update-input-mechanism', {
+        const result = await updateMechanism('/api/configuration/registers/input-mechanism/update-input-mechanism', {
             method: 'POST',
             body: JSON.stringify({
                 mechanism_id: initialData.mechanism_id,

@@ -56,7 +56,7 @@ export default function AddInputMechanismModal({
             return;
         }
 
-        const result = await createMechanism('/api/configuration/ingest/create-input-mechanism', {
+        const result = await createMechanism('/api/configuration/registers/input-mechanism/create-input-mechanism', {
             method: 'POST',
             body: JSON.stringify({
                 register_id: registerId,

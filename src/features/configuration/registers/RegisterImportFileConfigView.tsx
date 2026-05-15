@@ -8,12 +8,15 @@ import { toast } from 'react-toastify';
 import Can from '@/components/shared/Can';
 import { CONFIGURATION_TABS_ACTIONS } from '../shared/utils/configurationTabs.actions';
 import { DataTable, DeleteButton, EditButton, ViewButton } from '../shared/components';
-import { InputMechanism, useAllInputMechanisms } from '../shared';
-import AddInputMechanismModal from './AddInputMechanismModal';
-import EditInputMechanismModal from './EditInputMechanismModal';
-import ViewInputMechanismModal from './ViewInputMechanismModal';
+import {
+    ImportFileConfiguration,
+    useAllImportFileConfigurations,
+} from '@/features/configuration/shared/hooks/useAllImportFileConfigurations';
+import AddImportFileConfigModal from './AddImportFileConfigModal';
+import EditImportFileConfigModal from './EditImportFileConfigModal';
+import ViewImportFileConfigModal from './ViewImportFileConfigModal';
 
-interface RegisterInputMechanismConfigViewProps {
+interface RegisterImportFileConfigViewProps {
     isModalOpen: boolean;
     onCloseModal: () => void;
     currentPage?: number;
@@ -21,56 +24,61 @@ interface RegisterInputMechanismConfigViewProps {
     onDataLoaded?: (totalItems: number, currentCount: number) => void;
 }
 
-export default function RegisterInputMechanismConfigView({
+export default function RegisterImportFileConfigView({
     isModalOpen,
     onCloseModal,
     currentPage = 1,
     pageSize = 10,
     onDataLoaded,
-}: RegisterInputMechanismConfigViewProps) {
+}: RegisterImportFileConfigViewProps) {
     const t = useTranslations();
     const { registerId } = useParams<{ registerId: string }>();
-    const { inputMechanisms, loading, pagination, refresh } = useAllInputMechanisms(
+    const { importFileConfigurations, loading, pagination, refresh } = useAllImportFileConfigurations(
         registerId,
         currentPage,
         pageSize,
     );
-    const { execute: deleteMechanism } = useFetch();
+    const { execute: deleteConfig } = useFetch();
 
     const [viewModalOpen, setViewModalOpen] = useState(false);
     const [editModalOpen, setEditModalOpen] = useState(false);
-    const [selectedMechanism, setSelectedMechanism] = useState<InputMechanism | null>(null);
+    const [selectedConfig, setSelectedConfig] = useState<ImportFileConfiguration | null>(null);
 
     useEffect(() => {
         if (pagination && onDataLoaded) {
-            onDataLoaded(pagination.number_of_items, inputMechanisms.length);
+            onDataLoaded(pagination.number_of_items, importFileConfigurations.length);
         }
-    }, [pagination, inputMechanisms.length, onDataLoaded]);
+    }, [pagination, importFileConfigurations.length, onDataLoaded]);
 
-    const proceedDelete = async (mechanismId: string) => {
-        const result = await deleteMechanism('/api/configuration/registers/input-mechanism/delete-input-mechanism', {
-            method: 'POST',
-            body: JSON.stringify({ mechanism_id: mechanismId }),
-        });
+    const proceedDelete = async (configId: string) => {
+        const result = await deleteConfig(
+            '/api/configuration/registers/input-mechanism/delete-import-file-configuration',
+            {
+                method: 'POST',
+                body: JSON.stringify({ import_file_configuration_id: configId }),
+            },
+        );
 
-        if (result?.mechanism_id) {
-            toast.success(t('toast_input_mechanism_removed'));
+        if (result?.import_file_configuration_id) {
+            toast.success(t('toast_import_file_config_removed'));
             refresh();
         } else {
-            toast.error(t('toast_input_mechanism_remove_failed'));
+            toast.error(t('toast_import_file_config_remove_failed'));
         }
     };
 
-    const handleDelete = (mechanismId: string) => {
+    const handleDelete = (configId: string) => {
         toast.info(
             ({ closeToast }) => (
                 <div className="p-1">
-                    <p className="font-bold text-neutral-first mb-3">{t('confirm_remove_input_mechanism')}</p>
+                    <p className="font-bold text-neutral-first mb-3">
+                        {t('confirm_remove_import_file_config')}
+                    </p>
                     <div className="flex gap-3">
                         <button
                             onClick={async () => {
                                 closeToast();
-                                await proceedDelete(mechanismId);
+                                await proceedDelete(configId);
                             }}
                             className="bg-primary-second text-neutral-second px-4 py-1.5 rounded-full text-sm font-semibold hover:bg-primary-second transition-colors shadow-sm"
                         >
@@ -98,16 +106,16 @@ export default function RegisterInputMechanismConfigView({
 
     const columns = [
         {
-            key: 'display_key',
-            label: t('display_key'),
+            key: 'import_file_template_mnemonic',
+            label: t('template_mnemonic'),
         },
         {
-            key: 'mechanism_type',
-            label: t('mechanism_type'),
+            key: 'import_file_template_description',
+            label: t('template_description'),
         },
         {
-            key: 'mechanism_id',
-            label: t('mechanism_id'),
+            key: 'form_id',
+            label: t('form_id'),
         },
     ];
 
@@ -115,17 +123,17 @@ export default function RegisterInputMechanismConfigView({
         <>
             <DataTable
                 columns={columns}
-                data={inputMechanisms}
+                data={importFileConfigurations}
                 loading={loading}
-                rowKey={(item: InputMechanism) => item.mechanism_id}
+                rowKey={(item: ImportFileConfiguration) => item.import_file_configuration_id}
                 actions={(item) => (
                     <div className="flex gap-4">
-                   
+                
                         <Can action={CONFIGURATION_TABS_ACTIONS.edit}>
                             <EditButton
                                 label={t('common.edit')}
                                 onClick={() => {
-                                    setSelectedMechanism(item);
+                                    setSelectedConfig(item);
                                     setEditModalOpen(true);
                                 }}
                             />
@@ -133,36 +141,36 @@ export default function RegisterInputMechanismConfigView({
                         <Can action={CONFIGURATION_TABS_ACTIONS.delete}>
                             <DeleteButton
                                 label={t('remove')}
-                                onClick={() => handleDelete(item.mechanism_id)}
+                                onClick={() => handleDelete(item.import_file_configuration_id)}
                             />
                         </Can>
                     </div>
                 )}
             />
 
-            <AddInputMechanismModal
+            <AddImportFileConfigModal
                 isOpen={isModalOpen}
                 onClose={onCloseModal}
                 onSuccess={refresh}
             />
 
-            <ViewInputMechanismModal
+            <ViewImportFileConfigModal
                 isOpen={viewModalOpen}
                 onClose={() => {
                     setViewModalOpen(false);
-                    setSelectedMechanism(null);
+                    setSelectedConfig(null);
                 }}
-                data={selectedMechanism}
+                data={selectedConfig}
             />
 
-            <EditInputMechanismModal
+            <EditImportFileConfigModal
                 isOpen={editModalOpen}
                 onClose={() => {
                     setEditModalOpen(false);
-                    setSelectedMechanism(null);
+                    setSelectedConfig(null);
                 }}
                 onSuccess={refresh}
-                initialData={selectedMechanism}
+                initialData={selectedConfig}
             />
         </>
     );
