@@ -1,3 +1,5 @@
+export { KeyValue } from './KeyValue';
+export type { KeyValueProps, KeyValueVariant } from './KeyValue';
 export { default as StatsCardLarge } from './StatsCardLarge';
 export { default as StatsCardSmall } from './StatsCardSmall';
 export { default as SearchBarDropdown } from './SearchBarDropdown';

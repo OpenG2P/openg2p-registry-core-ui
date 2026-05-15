@@ -8,6 +8,8 @@ import { useFetch } from '@/shared/hooks';
 import AddLanguageModal from './AddLanguageModal';
 import EditLanguageModal from './EditLanguageModal';
 import { Language } from '../types';
+import { CONFIGURATION_REGISTRY_ACTIONS } from '../../shared/utils/configurationRegistry.actions';
+import Can from '@/components/shared/Can';
 
 interface LanguagesConfigViewProps {
     languages: Language[];
@@ -127,20 +129,22 @@ export default function LanguagesConfigView({
                                         {lang.is_default == true ? 'True' : 'False'}
                                     </div>
                                     <div className="flex items-center gap-6">
-                                        <button
-                                            onClick={() => handleEdit(lang)}
-                                            className="flex items-center hover:opacity-80 transition-opacity"
-                                        >
-                                            <span className="text-sm font-medium text-neutral-first/50">{t('common.edit')}</span>
-                                            <Image src="/images/common/edit.png" alt="edit" width={18} height={18} className="ml-2 opacity-60" />
-                                        </button>
-                                        <button
-                                            onClick={() => handleDelete(lang)}
-                                            className="flex items-center hover:opacity-80 transition-opacity text-toast-failed-color"
-                                        >
-                                            <span className="text-sm font-medium text-neutral-first/50">{t('remove')}</span>
-                                            <Image src="/images/common/false_sign.png" alt="remove" width={18} height={18} className="ml-2 opacity-60" />
-                                        </button>
+                                        <Can action={CONFIGURATION_REGISTRY_ACTIONS.edit}>
+                                            <button
+                                                onClick={() => handleEdit(lang)}
+                                                className="flex items-center hover:opacity-80 transition-opacity"
+                                            >
+                                                <span className="text-sm font-medium text-neutral-first/50">{t('common.edit')}</span>
+                                                <Image src="/images/common/edit.png" alt="edit" width={18} height={18} className="ml-2 opacity-60" />
+                                            </button>
+                                            <button
+                                                onClick={() => handleDelete(lang)}
+                                                className="flex items-center hover:opacity-80 transition-opacity text-toast-failed-color"
+                                            >
+                                                <span className="text-sm font-medium text-neutral-first/50">{t('remove')}</span>
+                                                <Image src="/images/common/false_sign.png" alt="remove" width={18} height={18} className="ml-2 opacity-60" />
+                                            </button>
+                                        </Can>
                                     </div>
                                 </div>
                             </div>

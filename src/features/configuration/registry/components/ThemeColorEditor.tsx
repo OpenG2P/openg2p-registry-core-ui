@@ -7,6 +7,8 @@ import { Palette, Trash2, Upload, Image as ImageIcon } from 'lucide-react';
 import ColorPicker from './ColorPicker';
 import ConfirmRemovePopup from '@/features/configuration/shared/components/ConfirmRemovePopup';
 import { Theme, COLOR_ATTRIBUTES, IMAGE_ATTRIBUTES } from '../types';
+import { CONFIGURATION_REGISTRY_ACTIONS } from '../../shared/utils/configurationRegistry.actions';
+import Can from '@/components/shared/Can';
 
 interface ThemeColorEditorProps {
     selectedThemeId: string | null;
@@ -68,23 +70,25 @@ export default function ThemeColorEditor({
 
                 {selectedThemeId !== 'NEW' && (
                     <div className="flex items-center gap-3">
-                        <button
-                            id="reset-theme-btn"
-                            onClick={onReset}
-                            disabled={isFactoryTheme}
-                            className="h-8.5 px-4 rounded-[10px] bg-neutral-first text-neutral-second text-sm font-semibold transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-                        >
-                            {t("reset")}
-                        </button>
+                        <Can action={CONFIGURATION_REGISTRY_ACTIONS.edit}>
+                            <button
+                                id="reset-theme-btn"
+                                onClick={onReset}
+                                disabled={isFactoryTheme}
+                                className="h-8.5 px-4 rounded-[10px] bg-neutral-first text-neutral-second text-sm font-semibold transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                            >
+                                {t("reset")}
+                            </button>
 
-                        <button
-                            id="delete-theme-btn"
-                            onClick={() => setShowDeleteConfirm(true)}
-                            disabled={isFactoryTheme}
-                            className="h-8.5 px-4 rounded-[10px] bg-neutral-first text-neutral-second text-sm font-semibold transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-                        >
-                            {t("remove")}
-                        </button>
+                            <button
+                                id="delete-theme-btn"
+                                onClick={() => setShowDeleteConfirm(true)}
+                                disabled={isFactoryTheme}
+                                className="h-8.5 px-4 rounded-[10px] bg-neutral-first text-neutral-second text-sm font-semibold transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                            >
+                                {t("remove")}
+                            </button>
+                        </Can>
                     </div>
                 )}
             </div>

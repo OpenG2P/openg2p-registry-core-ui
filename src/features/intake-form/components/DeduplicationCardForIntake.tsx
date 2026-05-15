@@ -2,21 +2,13 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { KeyValue } from "@/components/ui/KeyValue";
 
 interface Props {
     results: any[];
     loading: boolean;
     type: "intake-form" | "register";
     t: (key: string) => string;
-}
-
-function KeyValue({ label, value }: { label: string; value: string }) {
-    return (
-        <div className="flex w-full overflow-hidden text-neutral-first font-normal leading-[26px]">
-            <span className="w-1/2 text-neutral-first/50 text-[16px] truncate" title={label}>{label} : </span>
-            <span className="w-1/2 pl-4 text-neutral-first font-normal text-[16px] truncate" title={value}>{value}</span>
-        </div>
-    );
 }
 
 export default function DeduplicationCardForIntake({ results, loading, type, t }: Props) {
@@ -81,13 +73,13 @@ export default function DeduplicationCardForIntake({ results, loading, type, t }
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                             <div className="space-y-0">
                                 {leftMeta.map((item) => (
-                                    <KeyValue key={item.label} label={item.label} value={item.value} />
+                                    <KeyValue variant="deduplication" key={item.label} label={item.label} value={item.value} />
                                 ))}
                             </div>
                             {rightMeta.length > 0 && (
                                 <div className="space-y-0">
                                     {rightMeta.map((item) => (
-                                        <KeyValue key={item.label} label={item.label} value={item.value} />
+                                        <KeyValue variant="deduplication" key={item.label} label={item.label} value={item.value} />
                                     ))}
                                 </div>
                             )}
@@ -118,9 +110,10 @@ export default function DeduplicationCardForIntake({ results, loading, type, t }
                                                 </h4>
                                             </div>
                                             <div className={`space-y-0 ${i > 0 ? " border-l border-primary-first pl-6" : ""}`}>
-                                                <KeyValue label={t("incoming")} value={match.incoming} />
-                                                <KeyValue label={t("candidate")} value={match.candidate} />
+                                                <KeyValue variant="deduplication" label={t("incoming")} value={match.incoming} />
+                                                <KeyValue variant="deduplication" label={t("candidate")} value={match.candidate} />
                                                 <KeyValue
+                                                    variant="deduplication"
                                                     label={t("similarity")}
                                                     value={`${(match.similarity * 100).toFixed(0)}% (${match.match_type})`}
                                                 />
