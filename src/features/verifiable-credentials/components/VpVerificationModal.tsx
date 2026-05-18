@@ -127,7 +127,7 @@ export default function VpVerificationModal({
                         vc_payload: vcPayload,
                         register_id: vc.register_id,
                         intake_form_id: vc.intake_form_id,
-                        data_model_id: vc.data_model_id,
+                        data_model_id: vc.data_model_mnemonic,
                     }),
                 }
             );
