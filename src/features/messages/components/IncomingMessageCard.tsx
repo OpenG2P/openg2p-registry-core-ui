@@ -131,7 +131,7 @@ export default function IncomingMessageCard({ message }: Props) {
 function KeyValue({ label, value, href }: { label: string; value: string; href?: string }) {
     return (
         <div className="flex w-full text-neutral-first leading-relaxed overflow-hidden">
-            <span className="w-1/2 shrink-0 font-normal text-neutral-first/50 text-[16px]">{label}: </span>
+            <span className="w-1/2 min-w-0 font-normal text-neutral-first/50 text-[16px] truncate" title={label}>{label}: </span>
             <span className="w-1/2 min-w-0 font-medium text-[14px] truncate">
                 {href ? (
                     <Link
