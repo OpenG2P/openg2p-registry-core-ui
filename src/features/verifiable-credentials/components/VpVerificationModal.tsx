@@ -184,15 +184,15 @@ export default function VpVerificationModal({
                             </p>
 
                             <div className="mt-6 w-full bg-secondary-first rounded-[20px] p-4 text-center text-sm">
-                                <p>
+                                {/* <p>
                                     <span className="font-medium">{t('status') || 'Status'}:</span>{' '}
                                     <span className="text-toast-success">
                                         {importResult.message.ack_status}
                                     </span>
-                                </p>
+                                </p> */}
                                 <p>
                                     <span className="font-medium">{t('correlation_id') || 'Correlation ID'}:</span>{' '}
-                                    {importResult.message.correlation_id}
+                                    {importResult.correlation_id}
                                 </p>
                             </div>
 
