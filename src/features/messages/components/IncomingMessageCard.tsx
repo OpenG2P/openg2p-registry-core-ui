@@ -2,7 +2,6 @@
 
 import Image from 'next/image';
 import { IncomingMessage } from '@/features/messages/types';
-import { KeyValue } from '@/components/ui/KeyValue';
 import { useState } from 'react';
 import MessagePopup from './MessagePopup';
 import Link from 'next/link';
@@ -49,10 +48,10 @@ export default function IncomingMessageCard({ message }: Props) {
                     </h3>
 
                     <div className="space-y-2">
-                        <KeyValue variant="message" label={t('id') || 'ID'} value={message.ingest_id} />
-                        <KeyValue variant="message" label={t('partner') || 'Partner'} value={message?.partner_mnemonic} />
-                        <KeyValue variant="message" label={t('data_model') || 'Data Model'} value={message?.data_model_mnemonic} />
-                        <KeyValue variant="message" label={t('date_and_time') || 'Date & Time'} value={formatDateTime(message.receipt_date_time)} />
+                        <KeyValue label={t('ingest_id') || 'Ingest ID'} value={message.ingest_id} />
+                        <KeyValue label={t('partner') || 'Partner'} value={message?.partner_mnemonic} />
+                        <KeyValue label={t('data_model') || 'Data Model'} value={message?.data_model_mnemonic} />
+                        <KeyValue label={t('date_and_time') || 'Date & Time'} value={formatDateTime(message.receipt_date_time)} />
                     </div>
                 </div>
 
@@ -60,13 +59,12 @@ export default function IncomingMessageCard({ message }: Props) {
                 <div className="border-l-2 space-y-4 border-secondary-second pl-6">
                     <h3 className="text-[18px] font-semibold text-primary-second">{t('classification') || 'Classification'}</h3>
                     <div className="space-y-2">
-                        <KeyValue variant="message" label={t('status') || 'Status'} value={message.classification_status} />
-                        <KeyValue variant="message" label={t('date_and_time') || 'Date & Time'} value={formatDateTime(message.classification_date_time)} />
-                        <KeyValue variant="message" label={t('target_register') || 'Target Register'} value={message.register_mnemonic ?? '-- -- --'} />
-
+                        <KeyValue label={t('status') || 'Status'} value={message.classification_status} />
+                        <KeyValue label={t('date_and_time') || 'Date & Time'} value={formatDateTime(message.classification_date_time)} />
+                        <KeyValue label={t('target_register') || 'Target Register'} value={message.register_mnemonic ?? '-- -- --'} />
+                        <KeyValue label={t('target_section') || 'Target Section'} value={message.section_mnemonic ?? t('n_a') ?? 'N/A'} />
+                        <KeyValue label={t('target_form') || 'Target Form'} value={message.intake_form_mnemonic ?? t('n_a') ?? 'N/A'} />
                     </div>
-
-
                 </div>
 
                 {/* Column 3: Transformation */}
@@ -87,43 +85,33 @@ export default function IncomingMessageCard({ message }: Props) {
                     </h3>
 
                     <div className="space-y-2">
-                        <KeyValue variant="message" label={t('status') || 'Status'} value={message.transformation_status ?? t('n_a') ?? 'N/A'} />
-                        <KeyValue variant="message" label={t('date_and_time') || 'Date & Time'} value={formatDateTime(message.transformation_date_time)} />
-                        <KeyValue variant="message" label={t('template') || 'Template'} value={message.template_file_id ?? t('n_a') ?? 'N/A'} />
+                        <KeyValue label={t('status') || 'Status'} value={message.transformation_status ?? t('n_a') ?? 'N/A'} />
+                        <KeyValue label={t('date_and_time') || 'Date & Time'} value={formatDateTime(message.transformation_date_time)} />
+                        <KeyValue label={t('template') || 'Template'} value={message.template_file_id ?? t('n_a') ?? 'N/A'} />
+                        <KeyValue label={t('pipeline_action') || 'Pipeline Action'} value={message.pipeline_action ?? t('n_a') ?? 'N/A'} />
                     </div>
-
-
                 </div>
 
                 {/* Column 4: Ingestion */}
                 <div className="border-l-2 space-y-4 border-secondary-second pl-6">
                     <h3 className="text-[18px] font-semibold text-primary-second">{t('ingestion') || 'Ingestion'}</h3>
                     <div className="space-y-2">
-                        <KeyValue variant="message" label={t('status') || 'Status'} value={message.ingestion_status ?? t('n_a') ?? 'N/A'} />
-                        <KeyValue variant="message" label={t('date_and_time') || 'Date & Time'} value={formatDateTime(message.ingestion_date_time)} />
-                    </div>
-
-                    <div className="space-y-2">
-                        <div className="text-neutral-first">
-                            <span className="text-neutral-first/50 text-[16px]">{t('cr') || 'CR'}: </span>
-                            {message.change_request_id ? (
-                                <Link
-                                    href={`/${locale}/incoming-messages/change-request/${message.change_request_id}`}
-                                    className="font-medium text-[14px] text-neutral-first break-all"
-                                >
-                                    {message.change_request_id}
-                                    <Image
-                                        src="/images/common/arrow_next_01.png"
-                                        alt="Arrow"
-                                        width={14}
-                                        height={14}
-                                        className="inline-block ml-1"
-                                    />
-                                </Link>
-                            ) : (
-                                <span className="font-semibold">{t('n_a') || 'N/A'}</span>
-                            )}
-                        </div>
+                        <KeyValue label={t('status') || 'Status'} value={message.ingestion_status ?? t('n_a') ?? 'N/A'} />
+                        <KeyValue label={t('date_and_time') || 'Date & Time'} value={formatDateTime(message.ingestion_date_time)} />
+                        <KeyValue
+                            label={t('form_submission_id') || 'Form Submission ID'}
+                            value={message.intake_form_submission_id ?? t('n_a') ?? 'N/A'}
+                            href={
+                                message.intake_form_submission_id && message.register_mnemonic
+                                    ? `/${locale}/intake-form/${message.register_mnemonic}/submission/${message.intake_form_submission_id}`
+                                    : undefined
+                            }
+                        />
+                        <KeyValue
+                            label={t('cr') || 'CR'}
+                            value={message.change_request_id ?? t('n_a') ?? 'N/A'}
+                            href={message.change_request_id ? `/${locale}/incoming-messages/change-request/${message.change_request_id}` : undefined}
+                        />
                     </div>
                 </div>
             </div>
@@ -136,6 +124,34 @@ export default function IncomingMessageCard({ message }: Props) {
                     loading={loading}
                 />
             )}
+        </div>
+    );
+}
+
+function KeyValue({ label, value, href }: { label: string; value: string; href?: string }) {
+    return (
+        <div className="flex w-full text-neutral-first leading-relaxed overflow-hidden">
+            <span className="w-1/2 min-w-0 font-normal text-neutral-first/50 text-[16px] truncate" title={label}>{label}: </span>
+            <span className="w-1/2 min-w-0 font-medium text-[14px] truncate">
+                {href ? (
+                    <Link
+                        href={href}
+                        className="text-neutral-first truncate inline-flex items-center max-w-full"
+                        title={value}
+                    >
+                        <span className="truncate">{value}</span>
+                        <Image
+                            src="/images/common/arrow_next_01.png"
+                            alt="Arrow"
+                            width={14}
+                            height={14}
+                            className="inline-block ml-1 shrink-0"
+                        />
+                    </Link>
+                ) : (
+                    <span className="truncate" title={value}>{value}</span>
+                )}
+            </span>
         </div>
     );
 }

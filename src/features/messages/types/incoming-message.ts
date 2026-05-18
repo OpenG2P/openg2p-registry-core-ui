@@ -25,11 +25,16 @@ export interface IncomingMessage {
     section_id?: string;
     section_mnemonic?: string;
 
+    intake_form_mnemonic?: string;
+    intake_form_submission_id?: string | null;
+
     tab_id?: string;
 
     semantic_pattern_id?: string;
     template_id?: string;
     template_file_id?: string;
+
+    pipeline_action?: string | null;
 
     transformation_status?: string | null;
     transformation_date_time?: string | null;

@@ -625,6 +625,8 @@
     "template": "Template",
     "ingestion": "Ingestion",
     "cr": "CR",
+    "pipeline_action": "Pipeline Action",
+    "intake_form_submission_id": "Intake Form Submission ID",
     "n_a": "N/A",
     "partner": "Partner",
     "data_model": "Data Model",
@@ -1237,6 +1239,9 @@
     "add_score":"Add Score",
     "Farmer Registry":"Farmer Registry",
     "save":"Save",
-    "cancel":"Cancel"
+    "cancel":"Cancel",
+    "target_form": "Target Form",
+    "target_section": "Target Section",
+    "form_submission_id": "Form Submission ID"
     
 }
