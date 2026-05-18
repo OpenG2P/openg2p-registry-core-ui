@@ -1,8 +1,14 @@
+'use client';
+
+import Image from 'next/image';
+import Link from 'next/link';
+
 export type KeyValueVariant = 'split' | 'deduplication' | 'message';
 
 export interface KeyValueProps {
     label: string;
     value: string;
+    href?: string;
     valueClassName?: string;
     variant?: KeyValueVariant;
     className?: string;
@@ -14,6 +20,7 @@ export interface KeyValueProps {
 export function KeyValue({
     label,
     value,
+    href,
     valueClassName,
     variant = 'split',
     className = '',
@@ -51,14 +58,33 @@ export function KeyValue({
         <div
             className={`flex w-full overflow-hidden leading-relaxed text-neutral-first${root ? ` ${root}` : ''}`}
         >
-            <span className="w-1/2 truncate text-[16px] font-normal text-neutral-first/50" title={label}>
+            <span
+                className="w-1/2 min-w-0 truncate text-[16px] font-normal text-neutral-first/50"
+                title={label}
+            >
                 {label}:{' '}
             </span>
-            <span
-                className={`w-1/2 truncate text-[14px] font-medium ${valueClassName ?? 'text-neutral-first'}`}
-                title={value}
-            >
-                {value}
+            <span className={`w-1/2 min-w-0 truncate text-[14px] font-medium ${valueClassName ?? ''}`}>
+                {href ? (
+                    <Link
+                        href={href}
+                        className="inline-flex max-w-full items-center truncate text-neutral-first"
+                        title={value}
+                    >
+                        <span className="truncate">{value}</span>
+                        <Image
+                            src="/images/common/arrow_next_01.png"
+                            alt=""
+                            width={14}
+                            height={14}
+                            className="ml-1 inline-block shrink-0"
+                        />
+                    </Link>
+                ) : (
+                    <span className="truncate text-neutral-first" title={value}>
+                        {value}
+                    </span>
+                )}
             </span>
         </div>
     );
