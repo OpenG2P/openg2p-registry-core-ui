@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useFetch } from '@/shared/hooks';
@@ -28,6 +28,10 @@ function parseComputationJson(raw: string): Record<string, unknown> | null {
     }
 }
 
+function getWeightage(data: ScoreContributingAttribute): string {
+    return String(data.attribute_weightage ?? data.attribute_weight ?? 0);
+}
+
 export default function EditScoreContributingAttributeModal({
     isOpen,
     onClose,
@@ -37,16 +41,20 @@ export default function EditScoreContributingAttributeModal({
     const t = useTranslations();
     const { execute: updateAttr } = useFetch();
 
-    const [attributeName, setAttributeName] = useState(() => initialData?.attribute_name ?? '');
-    const [attributeWeight, setAttributeWeight] = useState(() =>
-        String(initialData?.attribute_weight ?? 0),
-    );
-    const [computationRequired, setComputationRequired] = useState(
-        () => initialData?.attribute_computation_required ?? false,
-    );
-    const [computationValueJson, setComputationValueJson] = useState(() =>
-        JSON.stringify(initialData?.attribute_computation_value ?? {}, null, 2),
-    );
+    const [attributeName, setAttributeName] = useState('');
+    const [attributeWeightage, setAttributeWeightage] = useState('0');
+    const [computationRequired, setComputationRequired] = useState(false);
+    const [computationValueJson, setComputationValueJson] = useState('{}');
+
+    useEffect(() => {
+        if (!isOpen || !initialData) return;
+        setAttributeName(initialData.attribute_name ?? '');
+        setAttributeWeightage(getWeightage(initialData));
+        setComputationRequired(initialData.attribute_computation_required ?? false);
+        setComputationValueJson(
+            JSON.stringify(initialData.attribute_computation_value ?? {}, null, 2),
+        );
+    }, [isOpen, initialData]);
 
     const handleSubmit = async () => {
         if (!initialData) return;
@@ -54,14 +62,18 @@ export default function EditScoreContributingAttributeModal({
             toast.warn(t('attribute_name_required'));
             return;
         }
-        const value = parseComputationJson(computationValueJson);
-        if (value === null) {
-            toast.error(t('invalid_json_computation_value'));
-            return;
+        let value: Record<string, unknown> = {};
+        if (computationRequired) {
+            const parsed = parseComputationJson(computationValueJson);
+            if (parsed === null) {
+                toast.error(t('invalid_json_computation_value'));
+                return;
+            }
+            value = parsed;
         }
-        const weight = Number(attributeWeight);
-        if (Number.isNaN(weight)) {
-            toast.warn(t('attribute_weight_invalid'));
+        const weightage = Number(attributeWeightage);
+        if (Number.isNaN(weightage)) {
+            toast.warn(t('attribute_weightage_invalid'));
             return;
         }
 
@@ -74,7 +86,7 @@ export default function EditScoreContributingAttributeModal({
                     attribute_name: attributeName.trim(),
                     attribute_computation_required: computationRequired,
                     attribute_computation_value: value,
-                    attribute_weight: weight,
+                    attribute_weightage: attributeWeightage,
                 }),
             },
         );
@@ -119,19 +131,6 @@ export default function EditScoreContributingAttributeModal({
                             />
                         </div>
 
-                        <div>
-                            <label className="block text-sm font-semibold text-neutral-first mb-1">
-                                {t('attribute_weight')}
-                            </label>
-                            <input
-                                type="number"
-                                step="any"
-                                value={attributeWeight}
-                                onChange={(e) => setAttributeWeight(e.target.value)}
-                                className="w-full px-4 py-2 border border-primary-second rounded-lg outline-none outline-1 outline-primary-second transition-all text-neutral-first/70"
-                            />
-                        </div>
-
                         <div className="flex items-center gap-3">
                             <input
                                 type="checkbox"
@@ -145,15 +144,30 @@ export default function EditScoreContributingAttributeModal({
                             </label>
                         </div>
 
+                        {computationRequired && (
+                            <div>
+                                <label className="block text-sm font-semibold text-neutral-first mb-1">
+                                    {t('attribute_computation_value_json')}
+                                </label>
+                                <textarea
+                                    value={computationValueJson}
+                                    onChange={(e) => setComputationValueJson(e.target.value)}
+                                    rows={5}
+                                    className="w-full px-4 py-2 border border-primary-second rounded-lg font-mono text-sm outline-none outline-1 outline-primary-second text-neutral-first/70"
+                                />
+                            </div>
+                        )}
+
                         <div>
                             <label className="block text-sm font-semibold text-neutral-first mb-1">
-                                {t('attribute_computation_value_json')}
+                                {t('attribute_weightage')}
                             </label>
-                            <textarea
-                                value={computationValueJson}
-                                onChange={(e) => setComputationValueJson(e.target.value)}
-                                rows={5}
-                                className="w-full px-4 py-2 border border-primary-second rounded-lg font-mono text-sm outline-none outline-1 outline-primary-second text-neutral-first/70"
+                            <input
+                                type="number"
+                                step="any"
+                                value={attributeWeightage}
+                                onChange={(e) => setAttributeWeightage(e.target.value)}
+                                className="w-full px-4 py-2 border border-primary-second rounded-lg outline-none outline-1 outline-primary-second transition-all text-neutral-first/70"
                             />
                         </div>
 

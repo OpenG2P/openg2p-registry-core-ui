@@ -14,7 +14,8 @@ export async function POST(request: NextRequest) {
                     body.attribute_computation_required ?? false,
                 attribute_computation_value:
                     body.attribute_computation_value ?? {},
-                attribute_weight: body.attribute_weight ?? 0,
+                attribute_weight:
+                    body.attribute_weight ?? body.attribute_weightage ?? 0,
             },
         }),
         transformResponse: (responseBody) =>

@@ -30,4 +30,5 @@ export interface ScoreContributingAttribute {
     attribute_computation_required: boolean;
     attribute_computation_value: Record<string, unknown>;
     attribute_weight: number;
+    attribute_weightage?: number;
 }

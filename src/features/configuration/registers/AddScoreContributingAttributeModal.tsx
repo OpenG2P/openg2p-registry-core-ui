@@ -37,7 +37,7 @@ export default function AddScoreContributingAttributeModal({
     const { execute: createAttr } = useFetch();
 
     const [attributeName, setAttributeName] = useState('');
-    const [attributeWeight, setAttributeWeight] = useState('0');
+    const [attributeWeightage, setAttributeWeightage] = useState('0');
     const [computationRequired, setComputationRequired] = useState(false);
     const [computationValueJson, setComputationValueJson] = useState('{}');
 
@@ -46,14 +46,18 @@ export default function AddScoreContributingAttributeModal({
             toast.warn(t('attribute_name_required'));
             return;
         }
-        const value = parseComputationJson(computationValueJson);
-        if (value === null) {
-            toast.error(t('invalid_json_computation_value'));
-            return;
+        let value: Record<string, unknown> = {};
+        if (computationRequired) {
+            const parsed = parseComputationJson(computationValueJson);
+            if (parsed === null) {
+                toast.error(t('invalid_json_computation_value'));
+                return;
+            }
+            value = parsed;
         }
-        const weight = Number(attributeWeight);
-        if (Number.isNaN(weight)) {
-            toast.warn(t('attribute_weight_invalid'));
+        const weightage = Number(attributeWeightage);
+        if (Number.isNaN(weightage)) {
+            toast.warn(t('attribute_weightage_invalid'));
             return;
         }
 
@@ -66,7 +70,7 @@ export default function AddScoreContributingAttributeModal({
                     attribute_name: attributeName.trim(),
                     attribute_computation_required: computationRequired,
                     attribute_computation_value: value,
-                    attribute_weight: weight,
+                    attribute_weightage: attributeWeightage,
                 }),
             },
         );
@@ -75,7 +79,7 @@ export default function AddScoreContributingAttributeModal({
         if (created?.contributing_attribute_id && !created.error) {
             toast.success(t('toast_contributing_attribute_created'));
             setAttributeName('');
-            setAttributeWeight('0');
+            setAttributeWeightage('0');
             setComputationRequired(false);
             setComputationValueJson('{}');
             onSuccess?.();
@@ -87,7 +91,7 @@ export default function AddScoreContributingAttributeModal({
 
     const handleCancel = () => {
         setAttributeName('');
-        setAttributeWeight('0');
+        setAttributeWeightage('0');
         setComputationRequired(false);
         setComputationValueJson('{}');
         onClose();
@@ -123,19 +127,6 @@ export default function AddScoreContributingAttributeModal({
                             />
                         </div>
 
-                        <div>
-                            <label className="block text-sm font-semibold text-neutral-first mb-1">
-                                {t('attribute_weight')}
-                            </label>
-                            <input
-                                type="number"
-                                step="any"
-                                value={attributeWeight}
-                                onChange={(e) => setAttributeWeight(e.target.value)}
-                                className="w-full px-4 py-2 border border-primary-second rounded-lg outline-none outline-1 outline-primary-second transition-all text-neutral-first/70"
-                            />
-                        </div>
-
                         <div className="flex items-center gap-3">
                             <input
                                 type="checkbox"
@@ -149,15 +140,30 @@ export default function AddScoreContributingAttributeModal({
                             </label>
                         </div>
 
+                        {computationRequired && (
+                            <div>
+                                <label className="block text-sm font-semibold text-neutral-first mb-1">
+                                    {t('attribute_computation_value_json')}
+                                </label>
+                                <textarea
+                                    value={computationValueJson}
+                                    onChange={(e) => setComputationValueJson(e.target.value)}
+                                    rows={5}
+                                    className="w-full px-4 py-2 border border-primary-second rounded-lg font-mono text-sm outline-none outline-1 outline-primary-second text-neutral-first/70"
+                                />
+                            </div>
+                        )}
+
                         <div>
                             <label className="block text-sm font-semibold text-neutral-first mb-1">
-                                {t('attribute_computation_value_json')}
+                                {t('attribute_weightage')}
                             </label>
-                            <textarea
-                                value={computationValueJson}
-                                onChange={(e) => setComputationValueJson(e.target.value)}
-                                rows={5}
-                                className="w-full px-4 py-2 border border-primary-second rounded-lg font-mono text-sm outline-none outline-1 outline-primary-second text-neutral-first/70"
+                            <input
+                                type="number"
+                                step="any"
+                                value={attributeWeightage}
+                                onChange={(e) => setAttributeWeightage(e.target.value)}
+                                className="w-full px-4 py-2 border border-primary-second rounded-lg outline-none outline-1 outline-primary-second transition-all text-neutral-first/70"
                             />
                         </div>
 
