@@ -260,6 +260,7 @@
     "mechanism_type_verifiable_credential": "Justificatif vérifiable",
     "input_mechanisms": "Mécanismes d'entrée",
     "file_import": "Import de fichier",
+    "vc": "VC",
     "add_new_import_file_config": "Ajouter config import",
     "add_import_file_config": "Ajouter config import",
     "edit_import_file_config": "Modifier config import",

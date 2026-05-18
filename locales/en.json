@@ -259,6 +259,7 @@
     "mechanism_type_verifiable_credential": "Verifiable Credential",
     "input_mechanisms": "Input Mechanisms",
     "file_import": "File Import",
+    "vc": "VC",
     "add_new_import_file_config": "Add Import Config",
     "add_import_file_config": "Add Import Config",
     "edit_import_file_config": "Edit Import Config",

@@ -42,6 +42,9 @@ export default function EditImportFileConfigModal({
         [intake_forms],
     );
 
+    console.log('formOptions', formOptions);
+    console.log('intake_forms', intake_forms);
+
     const dataModelOptions = useMemo(
         () =>
             (dataModels || []).map((model) => ({
@@ -68,7 +71,7 @@ export default function EditImportFileConfigModal({
         }
 
         const result = await updateConfig(
-            '/api/configuration/registers/input-mechanism/update-import-file-configuration',
+            '/api/input-mechanism/update-import-file-configuration',
             {
                 method: 'POST',
                 body: JSON.stringify({

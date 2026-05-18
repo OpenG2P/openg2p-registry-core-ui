@@ -8,7 +8,6 @@ export { default as RegisterSchemaView } from './RegisterSchemaView';
 export { default as RegisterTabSectionConfigView } from './RegisterTabSectionConfigView';
 export { default as RegisterTabConfigView } from './RegisterTabConfigView';
 export { default as RegisterScoreConfigView } from './RegisterScoreConfigView';
-export { default as RegisterInputMechanismConfigView } from './RegisterInputMechanismConfigView';
 export { default as RegisterImportFileConfigView } from './RegisterImportFileConfigView';
 export { default as ScoreContributingAttributesView } from './ScoreContributingAttributesView';
 export { default as RegistersConfigView } from './RegistersConfigView';

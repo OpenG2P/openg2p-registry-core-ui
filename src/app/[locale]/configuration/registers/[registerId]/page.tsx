@@ -16,7 +16,6 @@ import {
     ViewRegisterFieldsModal,
     RegisterTabConfigView,
     RegisterScoreConfigView,
-    RegisterInputMechanismConfigView,
     RegisterImportFileConfigView,
     RegisterSchemaView,
 } from '@/features/configuration/registers';
@@ -28,7 +27,7 @@ import { CONFIGURATION_REGISTERS_ACTIONS } from '@/features/configuration/shared
 import { useTranslations } from 'next-intl';
 import RegisterSectionConfigView from '@/features/configuration/registers/RegisterSectionConfigView';
 
-type PaginatedTab = 'tabs' | 'sections' | 'scores' | 'input-mechanisms' | 'file-import';
+type PaginatedTab = 'tabs' | 'sections' | 'scores' | 'file-import';
 type PaginationState = { totalItems: number; currentCount: number };
 
 const EMPTY_PAGINATION: PaginationState = { totalItems: 0, currentCount: 0 };
@@ -39,24 +38,21 @@ const RegisterConfigurationPage = () => {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isViewModalOpen, setIsViewModalOpen] = useState(false);
     const [activeTab, setActiveTab] = useState<
-        'tabs' | 'sections' | 'scores' | 'input-mechanisms' | 'file-import' | 'filter' | 'search' | 'deduplication'
+        'tabs' | 'sections' | 'scores' | 'file-import' | 'filter' | 'search' | 'deduplication'
     >('tabs');
     const [tabPage, setTabPage] = useState(1);
     const [sectionPage, setSectionPage] = useState(1);
     const [scorePage, setScorePage] = useState(1);
-    const [inputMechanismPage, setInputMechanismPage] = useState(1);
     const [fileImportPage, setFileImportPage] = useState(1);
 
     const [isTabModalOpen, setIsTabModalOpen] = useState(false);
     const [isSectionModalOpen, setIsSectionModalOpen] = useState(false);
     const [isScoreModalOpen, setIsScoreModalOpen] = useState(false);
-    const [isInputMechanismModalOpen, setIsInputMechanismModalOpen] = useState(false);
     const [isFileImportModalOpen, setIsFileImportModalOpen] = useState(false);
 
     const [tabPagination, setTabPagination] = useState({ totalItems: 0, currentCount: 0 });
     const [sectionPagination, setSectionPagination] = useState({ totalItems: 0, currentCount: 0 });
     const [scorePagination, setScorePagination] = useState({ totalItems: 0, currentCount: 0 });
-    const [inputMechanismPagination, setInputMechanismPagination] = useState(EMPTY_PAGINATION);
     const [fileImportPagination, setFileImportPagination] = useState(EMPTY_PAGINATION);
 
     const paginatedTabs: Record<
@@ -71,12 +67,6 @@ const RegisterConfigurationPage = () => {
         tabs: { page: tabPage, setPage: setTabPage, pagination: tabPagination, setPagination: setTabPagination },
         sections: { page: sectionPage, setPage: setSectionPage, pagination: sectionPagination, setPagination: setSectionPagination },
         scores: { page: scorePage, setPage: setScorePage, pagination: scorePagination, setPagination: setScorePagination },
-        'input-mechanisms': {
-            page: inputMechanismPage,
-            setPage: setInputMechanismPage,
-            pagination: inputMechanismPagination,
-            setPagination: setInputMechanismPagination,
-        },
         'file-import': {
             page: fileImportPage,
             setPage: setFileImportPage,
@@ -100,7 +90,6 @@ const RegisterConfigurationPage = () => {
         tabs: t('tabs'),
         sections: t('sections'),
         scores: t('score_definition'),
-        'input-mechanisms': t('input_mechanisms'),
         'file-import': t('file_import'),
         filter: t('filter_schema'),
         search: t('search_schema'),
@@ -122,7 +111,6 @@ const RegisterConfigurationPage = () => {
         setIsTabModalOpen(false);
         setIsSectionModalOpen(false);
         setIsScoreModalOpen(false);
-        setIsInputMechanismModalOpen(false);
         setIsFileImportModalOpen(false);
     }, [activeTab]);
 
@@ -197,7 +185,6 @@ const RegisterConfigurationPage = () => {
                                 (activeTab === 'tabs' ||
                                     activeTab === 'sections' ||
                                     activeTab === 'scores' ||
-                                    activeTab === 'input-mechanisms' ||
                                     activeTab === 'file-import')
                             }
 
@@ -206,11 +193,9 @@ const RegisterConfigurationPage = () => {
                                     ? t('add_new_tab')
                                     : activeTab === 'scores'
                                       ? t('add_new_score_type')
-                                      : activeTab === 'input-mechanisms'
-                                        ? t('add_new_input_mechanism')
-                                        : activeTab === 'file-import'
-                                          ? t('add_new_import_file_config')
-                                          : t('add_new_section')
+                                      : activeTab === 'file-import'
+                                        ? t('add_new_import_file_config')
+                                        : t('add_new_section')
                             }
 
                             onAddNewButton={() => {
@@ -220,8 +205,6 @@ const RegisterConfigurationPage = () => {
                                     setIsSectionModalOpen(true);
                                 } else if (activeTab === 'scores') {
                                     setIsScoreModalOpen(true);
-                                } else if (activeTab === 'input-mechanisms') {
-                                    setIsInputMechanismModalOpen(true);
                                 } else if (activeTab === 'file-import') {
                                     setIsFileImportModalOpen(true);
                                 }
@@ -272,18 +255,6 @@ const RegisterConfigurationPage = () => {
                         pageSize={PAGE_SIZE}
                         onDataLoaded={(totalItems, currentCount) =>
                             setScorePagination({ totalItems, currentCount })
-                        }
-                    />
-                )}
-
-                {activeTab === 'input-mechanisms' && (
-                    <RegisterInputMechanismConfigView
-                        isModalOpen={isInputMechanismModalOpen}
-                        onCloseModal={() => setIsInputMechanismModalOpen(false)}
-                        currentPage={inputMechanismPage}
-                        pageSize={PAGE_SIZE}
-                        onDataLoaded={(totalItems, currentCount) =>
-                            setInputMechanismPagination({ totalItems, currentCount })
                         }
                     />
                 )}

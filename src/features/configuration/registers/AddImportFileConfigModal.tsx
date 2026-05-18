@@ -75,7 +75,7 @@ export default function AddImportFileConfigModal({
         }
 
         const result = await createConfig(
-            '/api/configuration/registers/input-mechanism/create-import-file-configuration',
+            '/api/input-mechanism/create-import-file-configuration',
             {
                 method: 'POST',
                 body: JSON.stringify({

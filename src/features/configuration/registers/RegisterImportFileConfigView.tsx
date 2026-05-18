@@ -7,7 +7,7 @@ import { useFetch } from '@/shared/hooks';
 import { toast } from 'react-toastify';
 import Can from '@/components/shared/Can';
 import { CONFIGURATION_TABS_ACTIONS } from '../shared/utils/configurationTabs.actions';
-import { DataTable, DeleteButton, EditButton, ViewButton } from '../shared/components';
+import { DataTable, DeleteButton, EditButton } from '../shared/components';
 import {
     ImportFileConfiguration,
     useAllImportFileConfigurations,
@@ -50,12 +50,19 @@ export default function RegisterImportFileConfigView({
         }
     }, [pagination, importFileConfigurations.length, onDataLoaded]);
 
-    const proceedDelete = async (configId: string) => {
+    const proceedDelete = async (config: ImportFileConfiguration) => {
         const result = await deleteConfig(
-            '/api/configuration/registers/input-mechanism/delete-import-file-configuration',
+            '/api/input-mechanism/delete-import-file-configuration',
             {
                 method: 'POST',
-                body: JSON.stringify({ import_file_configuration_id: configId }),
+                body: JSON.stringify({
+                    import_file_configuration_id: config.import_file_configuration_id,
+                    register_id: config.register_id,
+                    form_id: config.form_id,
+                    data_model_id: config.data_model_id,
+                    import_file_template_mnemonic: config.import_file_template_mnemonic,
+                    import_file_template_description: config.import_file_template_description ?? '',
+                }),
             },
         );
 
@@ -67,7 +74,7 @@ export default function RegisterImportFileConfigView({
         }
     };
 
-    const handleDelete = (configId: string) => {
+    const handleDelete = (config: ImportFileConfiguration) => {
         toast.info(
             ({ closeToast }) => (
                 <div className="p-1">
@@ -78,7 +85,7 @@ export default function RegisterImportFileConfigView({
                         <button
                             onClick={async () => {
                                 closeToast();
-                                await proceedDelete(configId);
+                                await proceedDelete(config);
                             }}
                             className="bg-primary-second text-neutral-second px-4 py-1.5 rounded-full text-sm font-semibold hover:bg-primary-second transition-colors shadow-sm"
                         >
@@ -141,7 +148,7 @@ export default function RegisterImportFileConfigView({
                         <Can action={CONFIGURATION_TABS_ACTIONS.delete}>
                             <DeleteButton
                                 label={t('remove')}
-                                onClick={() => handleDelete(item.import_file_configuration_id)}
+                                onClick={() => handleDelete(item)}
                             />
                         </Can>
                     </div>
