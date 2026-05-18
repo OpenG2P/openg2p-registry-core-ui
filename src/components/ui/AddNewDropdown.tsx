@@ -233,7 +233,7 @@ export default function AddNewDropdown({
 
             {openVC && selectedVC && (
                 <VpVerificationModal
-                    descriptorSchema={selectedVC.descriptor_schema}
+                    vc={selectedVC}
                     onClose={() => {
                         setOpenVC(false);
                         setSelectedVC(null);

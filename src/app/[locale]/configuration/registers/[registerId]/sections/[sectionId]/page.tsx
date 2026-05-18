@@ -71,7 +71,7 @@ const SectionConfigurationPage = () => {
 
             <SectionDetailsConfigView
                 sectionUISchema={section?.section_ui_schema}
-                registerId={section?.section_register_id || ''}
+                registerId={registerId || ''}
                 sectionId={section?.section_id || ''}
                 isCoreSection={section?.is_core_section}
             />

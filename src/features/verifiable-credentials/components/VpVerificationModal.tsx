@@ -7,14 +7,15 @@ import { buildPayloadFromDecodedJWT, decodeSdJwtToken } from '@/features/verifia
 import { PayloadView, StatusView } from '@/features/verifiable-credentials/components';
 import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
 import { useTranslations } from 'next-intl';
+import { useFetch } from '@/shared/hooks';
 
 interface Props {
-    descriptorSchema: any;
+    vc: any;
     onClose: () => void;
 }
 
 export default function VpVerificationModal({
-    descriptorSchema,
+    vc,
     onClose,
 }: Props) {
     const t = useTranslations();
@@ -22,6 +23,7 @@ export default function VpVerificationModal({
 
     const [verificationComplete, setVerificationComplete] = useState(false);
     const [verificationStatus, setVerificationStatus] = useState<'idle' | 'verifying' | 'success' | 'error'>('idle');
+    const { execute: importVC } = useFetch();
 
     const [verificationResult, setVerificationResult] = useState<any>(null);
 
@@ -37,9 +39,9 @@ export default function VpVerificationModal({
                     proof_type: ["Ed25519Signature2020", "EdDSA", "ES256"],
                 },
             },
-            input_descriptors: [descriptorSchema],
+            input_descriptors: [vc.descriptor_schema],
         };
-    }, [descriptorSchema]);
+    }, [vc.descriptor_schema]);
 
     const [activeTab, setActiveTab] = useState<'status' | 'payload'>('status');
 
@@ -117,19 +119,18 @@ export default function VpVerificationModal({
             setIsImporting(true);
             setError(null);
 
-            const res = await fetch('/api/partner-ingest', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ vc: vcPayload }),
-            });
-
-            if (!res.ok) {
-                throw new Error('Import failed');
-            }
-
-            const result = await res.json();
+            const result = await importVC(
+                '/api/input-mechanism/ingest-data',
+                {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        vc_payload: vcPayload,
+                        register_id: vc.register_id,
+                        intake_form_id: vc.intake_form_id,
+                        data_model_id: vc.data_model_id,
+                    }),
+                }
+            );
 
             setImportResult(result);
             setVerificationComplete(true);
@@ -139,13 +140,18 @@ export default function VpVerificationModal({
         } finally {
             setIsImporting(false);
         }
-    }, []);
+    }, [
+        importVC,
+        vc.register_id,
+        vc.intake_form_id,
+        vc.data_model_id,
+    ]);
 
 
     return (
         <div className="fixed inset-0 bg-neutral-first/80 flex justify-center items-center z-50">
             <div
-                className={`relative bg-neutral-second rounded-[40px] p-10 border-10 border-primary-first flex flex-col transition-all duration-300 ${verificationStatus === 'success' ? 'w-200 h-160' : 'w-150 h-120'}`}
+                className={`relative bg-neutral-second rounded-[10px] p-10 border-10 border-primary-first flex flex-col transition-all duration-300 ${verificationStatus === 'success' ? 'w-200 h-160' : 'w-150 h-120'}`}
             >
                 <div
                     className={`flex items-center mb-3 transition-all ${verificationComplete ? 'justify-between' : 'justify-center relative'}`}
