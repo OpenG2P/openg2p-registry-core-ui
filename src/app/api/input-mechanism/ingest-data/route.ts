@@ -1,21 +1,52 @@
-import { NextRequest } from 'next/server';
-import { proxyToBackend } from '@/app/api/_lib/backend-proxy';
+import { NextRequest, NextResponse } from 'next/server';
+import { getBackendConfig } from '@/app/api/_lib/backend-config';
+import { requireAuth } from '@/app/api/_lib/requireAuth';
 
-export async function POST(request: NextRequest) {
-    return proxyToBackend({
-        req: request,
-        targetEndpoint: '/input-mechanism-data/ingest-data',
-        buildPayload: (body) => ({
-            pagination_request: {
-                current_page: body.current_page ?? 1,
-                page_size: body.page_size ?? 20,
-                sort_by: body.sort_by ?? '',
-                filter_by: body.filter_by ?? '',
-                search_text: body.search_text ?? '',
+export async function POST(req: NextRequest) {
+    const auth = requireAuth(req);
+
+    if (auth instanceof NextResponse) {
+        return auth;
+    }
+
+    try {
+        const body = await req.json();
+
+        const backendConfig = getBackendConfig();
+
+        const queryParams = new URLSearchParams({
+            register_id: body.register_id,
+            intake_form_id: body.intake_form_id,
+            data_model: body.data_model_id,
+        });
+
+        const response = await fetch(
+            `${backendConfig.backendApiUrl}/input-mechanism-data/ingest-data?${queryParams.toString()}`,
+            {
+                method: 'POST',
+                headers: {
+                    ...auth.backendHeaders,
+                    'Content-Type': 'application/json',
+                    accept: 'application/json',
+                },
+                body: JSON.stringify(body.vc_payload),
+            }
+        );
+
+        const result = await response.json();
+
+        return NextResponse.json(result, {
+            status: response.status,
+        });
+    } catch (e) {
+        return NextResponse.json(
+            {
+                error:
+                    e instanceof Error
+                        ? e.message
+                        : 'Internal Server Error',
             },
-            request_payload: {
-                register_id: body.register_id,
-            },
-        }),
-    });
+            { status: 500 }
+        );
+    }
 }
