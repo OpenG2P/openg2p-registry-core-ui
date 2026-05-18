@@ -8,7 +8,7 @@ import { useIntakeFormTabs } from '@/features/intake-form/hooks/useIntakeFormTab
 import { useIntakeFormTabRecords } from '@/features/intake-form/hooks/useIntakeFormTabRecords';
 import MultiSectionAccordionForms from '@/features/intake-form/components/MultiSectionAccordionForms';
 import SubmissionHeader from '@/features/intake-form/components/SubmissionHeader';
-import IntakeVerificationCard from '@/features/intake-form/components/IntakeVerificationCard';
+import { IntakeApprovalCard } from '@/features/approval/components';
 import { useTranslations } from 'next-intl';
 import { useMemo } from 'react';
 import { useIntakeFormSectionAction } from '@/features/intake-form/hooks/useIntakeFormSectionAction';
@@ -128,8 +128,8 @@ export default function IntakeFormSubmissionPage() {
 
                         {!isDraft && (
                             <div className="w-full lg:w-[25%] space-y-6">
-                                <IntakeVerificationCard
-                                    submission_id={submissionId}
+                                <IntakeApprovalCard
+                                    awe_request_id={submission?.awe_request_id}
                                     isPending={!isDraft && submission?.approval_status === "PENDING"}
                                 />
                             </div>
