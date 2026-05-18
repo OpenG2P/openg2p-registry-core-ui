@@ -14,7 +14,6 @@ import Can from '@/components/shared/Can';
 import { DataTable, DeleteButton } from '../shared/components';
 
 interface RegisterTabConfigViewProps {
-	onAddNewRegister: () => void;
 	isModalOpen: boolean;
 	onCloseModal: () => void;
 	registerTabId?: string;

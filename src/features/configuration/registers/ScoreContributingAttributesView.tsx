@@ -106,15 +106,16 @@ export default function ScoreContributingAttributesView({
             key: 'attribute_name',
             label: t('attribute_name'),
         },
-        {
-            key: 'attribute_weight',
-            label: t('attribute_weight'),
-        },
+       
         {
             key: 'attribute_computation_required',
             label: t('attribute_computation_required'),
             render: (item: ScoreContributingAttribute) =>
                 item.attribute_computation_required ? t('true') : t('false'),
+        },
+        {
+            key: 'attribute_weight',
+            label: t('attribute_weight'),
         },
     ];
 
