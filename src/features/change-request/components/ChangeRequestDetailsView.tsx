@@ -1,14 +1,13 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 
 import { TabsLayout, ActionModal } from "@/components/shared";
 import {
     ChangeRequestHeader,
     RejectReasonPopup,
-    VerificationForm,
-    VerificationList,
 } from "@/features/change-request/components";
+import { ApprovalList, ApprovalListSkeleton } from "@/features/approval/components";
 
 
 import {
@@ -16,11 +15,11 @@ import {
 } from "@openg2p/registry-widgets";
 import { useTranslations } from "next-intl";
 import { RegisterFlattenedRecord } from "@/features/register/types";
-import { useChangeRequestManager, useRegisterSectionsFromCR, useVerifications } from "@/features/change-request/hooks";
+import { useChangeRequestManager, useRegisterSectionsFromCR } from "@/features/change-request/hooks";
+import { useApprovals } from "@/features/approval/hooks/useApprovals";
 import { ChangeRequestValuesTabs } from "./ChangeRequestValuesTabs";
 import CRHeaderSkeleton from "./CRHeaderSkeleton";
 import SectionSchemaSkeleton from "./SectionSchemaSkeleton";
-import VerificationListSkeleton from "./VerificationListSkeleton";
 
 interface Props {
     changeId: string;
@@ -29,8 +28,6 @@ interface Props {
 
 export default function ChangeRequestDetailsView({ changeId, breadcrumb }: Props) {
     const t = useTranslations();
-    const [showAddVerification, setShowAddVerification] = useState(false);
-
     const {
         details,
         documents,
@@ -45,9 +42,7 @@ export default function ChangeRequestDetailsView({ changeId, breadcrumb }: Props
         submitReject,
     } = useChangeRequestManager(changeId);
 
-    const { verifications, loadingVerifications, addVerification } = useVerifications(changeId, undefined);
-
-    const verificationCount = verifications.length;
+    const { tasks, loadingTasks, submitDecision } = useApprovals(details?.awe_request_id);
 
     const widgetStoreOld = useMemo(() => createWidgetStore(), []);
     const widgetStoreNew = useMemo(() => createWidgetStore(), []);
@@ -105,7 +100,7 @@ export default function ChangeRequestDetailsView({ changeId, breadcrumb }: Props
                         details && (
                             <ChangeRequestHeader
                                 details={details}
-                                verificationCount={verificationCount}
+                                verificationCount={details.no_of_verifications_done ?? 0}
                                 documents={documents}
                                 onApprove={handleApprove}
                                 onReject={handleReject}
@@ -132,20 +127,13 @@ export default function ChangeRequestDetailsView({ changeId, breadcrumb }: Props
                 </div>
 
                 <div className="w-full lg:w-[25%]">
-                    {loadingVerifications ? (
-                        <VerificationListSkeleton />
+                    {loadingDetails || (!!details?.awe_request_id && loadingTasks) ? (
+                        <ApprovalListSkeleton />
                     ) : (
-                        <VerificationList
-                            verifications={verifications}
-                            showForm={showAddVerification}
-                            onToggleForm={() => setShowAddVerification(v => !v)}
-                            renderForm={() => (
-                                <VerificationForm
-                                    onSubmit={addVerification}
-                                    onClose={() => setShowAddVerification(false)}
-                                />
-                            )}
+                        <ApprovalList
+                            tasks={tasks}
                             isPending={details?.approval_status === "PENDING"}
+                            onSubmitDecision={submitDecision}
                         />
                     )}
                 </div>
