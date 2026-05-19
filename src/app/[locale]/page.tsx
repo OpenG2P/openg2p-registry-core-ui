@@ -38,8 +38,8 @@ const ALL_CARDS: ActiveStatsCard[] = [
     'registers',
     'intake-form',
     'change-request',
-    'messages',
     'tasks',
+    'messages',
 ];
 
 const LIMITED_CARDS: ActiveStatsCard[] = [

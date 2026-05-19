@@ -27,8 +27,7 @@ export default function ApprovalCard({ task, isPending, onSubmit, intakeForm = f
             : VERIFICATION_CHANGE_REQUEST_ACTIONS.create,
     );
     const [comment, setComment] = useState('');
-    const [isApproved, setIsApproved] = useState(true);
-    const [submitting, setSubmitting] = useState(false);
+    const [submittingAction, setSubmittingAction] = useState<'approve' | 'reject' | null>(null);
 
     const isCurrentUser = Boolean(user?.sub && task.assignee === user.sub);
     const assigneeDisplay = isCurrentUser ? user.name : task.assignee;
@@ -40,15 +39,13 @@ export default function ApprovalCard({ task, isPending, onSubmit, intakeForm = f
     const decisionApproved = task.decision_action === 'approve';
     const displayDate = task.completed_at || task.created_at;
 
-    const handleSubmit = async () => {
-        setSubmitting(true);
-        const action = isApproved ? 'approve' : 'reject';
+    const handleAction = async (action: 'approve' | 'reject') => {
+        setSubmittingAction(action);
         const success = await onSubmit(task.id, action, comment);
         if (success) {
             setComment('');
-            setIsApproved(true);
         }
-        setSubmitting(false);
+        setSubmittingAction(null);
     };
 
     return (
@@ -100,31 +97,27 @@ export default function ApprovalCard({ task, isPending, onSubmit, intakeForm = f
                             onChange={(e) => setComment(e.target.value)}
                             rows={2}
                             placeholder={t('type_your_message')}
-                            className="w-full border border-black/25 rounded-[10px] p-2 text-sm resize-none focus:outline-none"
+                            disabled={submittingAction !== null}
+                            className="w-full border border-black/25 rounded-[10px] p-2 text-sm resize-none focus:outline-none disabled:opacity-50"
                         />
                     </div>
 
-                    <div className="flex items-center justify-between pt-2">
-                        <div className="flex items-center gap-6">
-                            <StatusOption
-                                label={t('ok')}
-                                isActive={isApproved}
-                                onClick={() => setIsApproved(true)}
-                            />
-                            <StatusOption
-                                label={t('not_ok')}
-                                isActive={!isApproved}
-                                onClick={() => setIsApproved(false)}
-                            />
-                        </div>
-
+                    <div className="flex items-center gap-4 pt-2">
                         <button
                             type="button"
-                            disabled={submitting}
-                            onClick={handleSubmit}
-                            className="px-4 py-1.5 text-sm rounded-xl bg-neutral-first text-neutral-second disabled:opacity-50"
+                            disabled={submittingAction !== null}
+                            onClick={() => handleAction('reject')}
+                            className="px-4 py-1.5 text-[14px] font-medium rounded-[10px] bg-neutral-second text-neutral-first/50 disabled:opacity-50"
                         >
-                            {t('submit')}
+                            {submittingAction === 'reject' ? t('loading') : t('reject')}
+                        </button>
+                        <button
+                            type="button"
+                            disabled={submittingAction !== null}
+                            onClick={() => handleAction('approve')}
+                            className="px-4 py-1.5 text-[14px] font-medium rounded-[10px] bg-neutral-first text-neutral-second disabled:opacity-50"
+                        >
+                            {submittingAction === 'approve' ? t('loading') : t('approve')}
                         </button>
                     </div>
                 </>
@@ -142,9 +135,17 @@ export default function ApprovalCard({ task, isPending, onSubmit, intakeForm = f
                     )}
 
                     {hasDecision && (
-                        <div className="flex items-center gap-6 pt-2">
-                            <StatusIndicator label={t('ok')} isActive={decisionApproved} />
-                            <StatusIndicator label={t('not_ok')} isActive={!decisionApproved} />
+                        <div>
+                            <div className="text-[14px] font-normal text-neutral-first/50 mb-1">
+                                {t('action')}
+                            </div>
+                            <div
+                                className={`text-[16px] font-medium ${
+                                    decisionApproved ? 'text-toast-success' : 'text-toast-failed'
+                                }`}
+                            >
+                                {decisionApproved ? t('approve') : t('reject')}
+                            </div>
                         </div>
                     )}
                 </>
@@ -152,37 +153,3 @@ export default function ApprovalCard({ task, isPending, onSubmit, intakeForm = f
         </div>
     );
 }
-
-const StatusOption = ({
-    label,
-    isActive,
-    onClick,
-}: {
-    label: string;
-    isActive: boolean;
-    onClick: () => void;
-}) => (
-    <button type="button" className="flex items-center gap-2 text-neutral-first" onClick={onClick}>
-        <div
-            className={`w-6 h-6 border rounded flex items-center justify-center ${
-                isActive ? 'border-primary-second bg-neutral-second' : 'border-secondary-third bg-neutral-second'
-            }`}
-        >
-            {isActive && <Image src="/images/common/tick.png" alt="tick" width={16} height={16} />}
-        </div>
-        <span className="text-[14px] font-medium">{label}</span>
-    </button>
-);
-
-const StatusIndicator = ({ label, isActive }: { label: string; isActive: boolean }) => (
-    <div className="flex items-center gap-2 text-neutral-first">
-        <div
-            className={`w-6 h-6 border rounded flex items-center justify-center ${
-                isActive ? 'border-primary-second bg-neutral-second' : 'border-secondary-third bg-neutral-second'
-            }`}
-        >
-            {isActive && <Image src="/images/common/tick.png" alt="tick" width={16} height={16} />}
-        </div>
-        <span className="text-[14px] font-medium">{label}</span>
-    </div>
-);

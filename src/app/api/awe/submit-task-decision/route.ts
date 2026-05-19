@@ -11,6 +11,9 @@ export async function POST(request: NextRequest) {
                 action: body.action,
                 comment: body.comment ?? null,
                 attachments_ref: body.attachments_ref ?? null,
+                artifact_id: body.artifact_id,
+                artifact_type: body.artifact_type,
+                current_stage: body.current_stage,
             },
         }),
         transformResponse: (responseBody) => ({

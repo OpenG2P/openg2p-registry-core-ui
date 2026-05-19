@@ -77,6 +77,8 @@
     "user": "Utilisateur",
     "notification": "Notification",
     "change_request_fallback": "Demande de modification {index}",
+    "approve": "Approuver",
+    "reject": "Rejeter",
     "approve_change": "Approuver la modification",
     "reject_change": "Rejeter la modification",
     "change_id_breadcrumb": "ID de modification - {id}",

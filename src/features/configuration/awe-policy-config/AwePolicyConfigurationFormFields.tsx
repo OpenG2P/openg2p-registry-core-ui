@@ -1,5 +1,6 @@
 'use client';
 
+import { useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import { CustomDropdown, InputField, TextAreaField } from '../shared/components';
 import { useAllRegister } from '../shared/hooks/useAllRegister';
@@ -42,6 +43,26 @@ export default function AwePolicyConfigurationFormFields({ formData, setFormData
     const showIntakeForm = formData.policy_scope === 'INTAKE_FORM';
     const showSection = formData.policy_scope === 'SECTION';
 
+    const registerOptions = useMemo(() => {
+        const purposeRegisters = registers.filter(
+            (r) => r.register_purpose === 'REGISTER',
+        );
+        const selectedId = formData.register_id;
+        if (
+            selectedId &&
+            !purposeRegisters.some((r) => r.register_id === selectedId)
+        ) {
+            const selected = registers.find((r) => r.register_id === selectedId);
+            if (selected) {
+                purposeRegisters.push(selected);
+            }
+        }
+        return purposeRegisters.map((r) => ({
+            label: r.register_mnemonic,
+            value: r.register_id,
+        }));
+    }, [registers, formData.register_id]);
+
     return (
         <>
             <CustomDropdown
@@ -61,10 +82,7 @@ export default function AwePolicyConfigurationFormFields({ formData, setFormData
 
             <CustomDropdown
                 label={t('register_mnemonic')}
-                options={registers.map((r) => ({
-                    label: r.register_mnemonic,
-                    value: r.register_id,
-                }))}
+                options={registerOptions}
                 loading={loadingRegisters}
                 value={formData.register_id}
                 onChange={(value) =>

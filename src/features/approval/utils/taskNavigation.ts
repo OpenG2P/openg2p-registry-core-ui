@@ -16,6 +16,10 @@ export function getTaskDetailHref(
     }
 
     if (task.artifact_type === REGISTRY_INTAKE_FORM_ARTIFACT) {
+        const contextMnemonic = task.context?.register_mnemonic;
+        if (typeof contextMnemonic === 'string' && contextMnemonic.trim()) {
+            return `/tasks/intake-form/${contextMnemonic.toLowerCase()}/${artifactId}`;
+        }
         const registerId = task.context?.register_id;
         if (typeof registerId === 'string') {
             const mnemonic = registerMnemonicById.get(registerId);

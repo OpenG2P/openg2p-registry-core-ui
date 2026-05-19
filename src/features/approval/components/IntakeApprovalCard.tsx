@@ -2,19 +2,30 @@
 
 import { useTranslations } from 'next-intl';
 import ApprovalCard from '@/features/approval/components/ApprovalCard';
-import { useApprovals } from '@/features/approval/hooks/useApprovals';
+import { useApprovals, ApprovalArtifactContext } from '@/features/approval/hooks/useApprovals';
 import { VERIFICATION_INTAKE_FORM_ACTIONS } from '@/features/intake-form/utils/verificationIntakeForm.actions';
 import Can from '@/components/shared/Can';
 import ApprovalListSkeleton from '@/features/approval/components/ApprovalListSkeleton';
 
 interface Props {
     awe_request_id?: string | null;
+    artifactContext?: ApprovalArtifactContext | null;
     isPending: boolean;
+    onRefresh?: () => void | Promise<void>;
 }
 
-export default function IntakeApprovalCard({ awe_request_id, isPending }: Props) {
+export default function IntakeApprovalCard({
+    awe_request_id,
+    artifactContext,
+    isPending,
+    onRefresh,
+}: Props) {
     const t = useTranslations();
-    const { tasks, loadingTasks, submitDecision } = useApprovals(awe_request_id);
+    const { tasks, loadingTasks, submitDecision } = useApprovals(
+        awe_request_id,
+        artifactContext,
+        onRefresh,
+    );
 
     if (awe_request_id && loadingTasks) {
         return <ApprovalListSkeleton />;
