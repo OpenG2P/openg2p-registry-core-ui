@@ -17,6 +17,7 @@ import {
     RegisterTabConfigView,
     RegisterScoreConfigView,
     RegisterImportFileConfigView,
+    RegisterVCConfigView,
     RegisterSchemaView,
 } from '@/features/configuration/registers';
 import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
@@ -27,7 +28,7 @@ import { CONFIGURATION_REGISTERS_ACTIONS } from '@/features/configuration/shared
 import { useTranslations } from 'next-intl';
 import RegisterSectionConfigView from '@/features/configuration/registers/RegisterSectionConfigView';
 
-type PaginatedTab = 'tabs' | 'sections' | 'scores' | 'file-import';
+type PaginatedTab = 'tabs' | 'sections' | 'scores' | 'file-import' | 'vc-config';
 type PaginationState = { totalItems: number; currentCount: number };
 
 const EMPTY_PAGINATION: PaginationState = { totalItems: 0, currentCount: 0 };
@@ -38,22 +39,25 @@ const RegisterConfigurationPage = () => {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isViewModalOpen, setIsViewModalOpen] = useState(false);
     const [activeTab, setActiveTab] = useState<
-        'tabs' | 'sections' | 'scores' | 'file-import' | 'filter' | 'search' | 'deduplication'
+        'tabs' | 'sections' | 'scores' | 'file-import' | 'vc-config' | 'filter' | 'search' | 'deduplication'
     >('tabs');
     const [tabPage, setTabPage] = useState(1);
     const [sectionPage, setSectionPage] = useState(1);
     const [scorePage, setScorePage] = useState(1);
     const [fileImportPage, setFileImportPage] = useState(1);
+    const [vcConfigPage, setVcConfigPage] = useState(1);
 
     const [isTabModalOpen, setIsTabModalOpen] = useState(false);
     const [isSectionModalOpen, setIsSectionModalOpen] = useState(false);
     const [isScoreModalOpen, setIsScoreModalOpen] = useState(false);
     const [isFileImportModalOpen, setIsFileImportModalOpen] = useState(false);
+    const [isVcConfigModalOpen, setIsVcConfigModalOpen] = useState(false);
 
     const [tabPagination, setTabPagination] = useState({ totalItems: 0, currentCount: 0 });
     const [sectionPagination, setSectionPagination] = useState({ totalItems: 0, currentCount: 0 });
     const [scorePagination, setScorePagination] = useState({ totalItems: 0, currentCount: 0 });
     const [fileImportPagination, setFileImportPagination] = useState(EMPTY_PAGINATION);
+    const [vcConfigPagination, setVcConfigPagination] = useState(EMPTY_PAGINATION);
 
     const paginatedTabs: Record<
         PaginatedTab,
@@ -73,6 +77,12 @@ const RegisterConfigurationPage = () => {
             pagination: fileImportPagination,
             setPagination: setFileImportPagination,
         },
+        'vc-config': {
+            page: vcConfigPage,
+            setPage: setVcConfigPage,
+            pagination: vcConfigPagination,
+            setPagination: setVcConfigPagination,
+        },
     };
 
     const activePaginatedTab = paginatedTabs[activeTab as PaginatedTab];
@@ -91,6 +101,7 @@ const RegisterConfigurationPage = () => {
         sections: t('sections'),
         scores: t('score_definition'),
         'file-import': t('file_import'),
+        'vc-config': t('vc_config'),
         filter: t('filter_schema'),
         search: t('search_schema'),
         deduplication: t('deduplication_schema'),
@@ -112,6 +123,7 @@ const RegisterConfigurationPage = () => {
         setIsSectionModalOpen(false);
         setIsScoreModalOpen(false);
         setIsFileImportModalOpen(false);
+        setIsVcConfigModalOpen(false);
     }, [activeTab]);
 
     const { config } = useRuntimeConfig();
@@ -143,8 +155,6 @@ const RegisterConfigurationPage = () => {
             </div>
         );
     }
-
-
 
     return (
         <>
@@ -185,18 +195,17 @@ const RegisterConfigurationPage = () => {
                                 (activeTab === 'tabs' ||
                                     activeTab === 'sections' ||
                                     activeTab === 'scores' ||
-                                    activeTab === 'file-import')
+                                    activeTab === 'file-import' ||
+                                    activeTab === 'vc-config')
                             }
 
-                            addNewButtonText={
-                                activeTab === 'tabs'
-                                    ? t('add_new_tab')
-                                    : activeTab === 'scores'
-                                      ? t('add_new_score_type')
-                                      : activeTab === 'file-import'
-                                        ? t('add_new_import_file_config')
-                                        : t('add_new_section')
-                            }
+                            addNewButtonText={(() => {
+                                if (activeTab === 'tabs') return t('add_new_tab');
+                                if (activeTab === 'scores') return t('add_new_score_type');
+                                if (activeTab === 'file-import') return t('add_new_import_file_config');
+                                if (activeTab === 'vc-config') return t('add_new_vc_config');
+                                return t('add_new_section');
+                            })()}
 
                             onAddNewButton={() => {
                                 if (activeTab === 'tabs') {
@@ -207,6 +216,8 @@ const RegisterConfigurationPage = () => {
                                     setIsScoreModalOpen(true);
                                 } else if (activeTab === 'file-import') {
                                     setIsFileImportModalOpen(true);
+                                } else if (activeTab === 'vc-config') {
+                                    setIsVcConfigModalOpen(true);
                                 }
                             }}
                             showSecondaryButton={false}
@@ -267,6 +278,18 @@ const RegisterConfigurationPage = () => {
                         pageSize={PAGE_SIZE}
                         onDataLoaded={(totalItems, currentCount) =>
                             setFileImportPagination({ totalItems, currentCount })
+                        }
+                    />
+                )}
+
+                {activeTab === 'vc-config' && (
+                    <RegisterVCConfigView
+                        isModalOpen={isVcConfigModalOpen}
+                        onCloseModal={() => setIsVcConfigModalOpen(false)}
+                        currentPage={vcConfigPage}
+                        pageSize={PAGE_SIZE}
+                        onDataLoaded={(totalItems, currentCount) =>
+                            setVcConfigPagination({ totalItems, currentCount })
                         }
                     />
                 )}

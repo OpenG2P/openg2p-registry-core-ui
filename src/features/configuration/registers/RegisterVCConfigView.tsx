@@ -7,15 +7,15 @@ import { useFetch } from '@/shared/hooks';
 import { toast } from 'react-toastify';
 import Can from '@/components/shared/Can';
 import { CONFIGURATION_TABS_ACTIONS } from '../shared/utils/configurationTabs.actions';
-import { DataTable, DeleteButton, EditButton } from '../shared/components';
+import { DataTable, DeleteButton, EditButton, ViewButton } from '../shared/components';
 import {
-    ImportFileConfiguration,
-    useAllImportFileConfigurations,
-} from '@/features/configuration/shared/hooks/useAllImportFileConfigurations';
-import AddImportFileConfigModal from './AddImportFileConfigModal';
-import EditImportFileConfigModal from './EditImportFileConfigModal';
+    VCConfiguration,
+    useAllVCConfigurations,
+} from '@/features/configuration/shared/hooks/useAllVCConfigurations';
+import AddVCConfigModal from './AddVCConfigModal';
+import EditVCConfigModal from './EditVCConfigModal';
 
-interface RegisterImportFileConfigViewProps {
+interface RegisterVCConfigViewProps {
     isModalOpen: boolean;
     onCloseModal: () => void;
     currentPage?: number;
@@ -23,16 +23,16 @@ interface RegisterImportFileConfigViewProps {
     onDataLoaded?: (totalItems: number, currentCount: number) => void;
 }
 
-export default function RegisterImportFileConfigView({
+export default function RegisterVCConfigView({
     isModalOpen,
     onCloseModal,
     currentPage = 1,
     pageSize = 10,
     onDataLoaded,
-}: RegisterImportFileConfigViewProps) {
+}: RegisterVCConfigViewProps) {
     const t = useTranslations();
     const { registerId } = useParams<{ registerId: string }>();
-    const { importFileConfigurations, loading, pagination, refresh } = useAllImportFileConfigurations(
+    const { vcConfigurations, loading, pagination, refresh } = useAllVCConfigurations(
         registerId,
         currentPage,
         pageSize,
@@ -40,44 +40,41 @@ export default function RegisterImportFileConfigView({
     const { execute: deleteConfig } = useFetch();
 
     const [editModalOpen, setEditModalOpen] = useState(false);
-    const [selectedConfig, setSelectedConfig] = useState<ImportFileConfiguration | null>(null);
+    const [selectedConfig, setSelectedConfig] = useState<VCConfiguration | null>(null);
 
     useEffect(() => {
         if (pagination && onDataLoaded) {
-            onDataLoaded(pagination.number_of_items, importFileConfigurations.length);
+            onDataLoaded(pagination.number_of_items, vcConfigurations.length);
         }
-    }, [pagination, importFileConfigurations.length, onDataLoaded]);
+    }, [pagination, vcConfigurations.length, onDataLoaded]);
 
-    const proceedDelete = async (config: ImportFileConfiguration) => {
-        const result = await deleteConfig(
-            '/api/input-mechanism/delete-import-file-configuration',
-            {
-                method: 'POST',
-                body: JSON.stringify({
-                    import_file_configuration_id: config.import_file_configuration_id,
-                    register_id: config.register_id,
-                    form_id: config.form_id,
-                    data_model_id: config.data_model_id,
-                    import_file_template_mnemonic: config.import_file_template_mnemonic,
-                    import_file_template_description: config.import_file_template_description ?? '',
-                }),
-            },
-        );
+    const proceedDelete = async (config: VCConfiguration) => {
+        const result = await deleteConfig('/api/input-mechanism/delete-vc-configuration', {
+            method: 'POST',
+            body: JSON.stringify({
+                vc_config_id: config.vc_config_id,
+                register_id: config.register_id,
+                intake_form_id: config.intake_form_id,
+                data_model_id: config.data_model_id,
+                vc_mnemonic: config.vc_mnemonic,
+                descriptor_schema: config.descriptor_schema ?? {},
+            }),
+        });
 
-        if (result?.import_file_configuration_id) {
-            toast.success(t('toast_import_file_config_removed'));
+        if (result?.vc_config_id) {
+            toast.success(t('toast_vc_config_removed'));
             refresh();
         } else {
-            toast.error(t('toast_import_file_config_remove_failed'));
+            toast.error(t('toast_vc_config_remove_failed'));
         }
     };
 
-    const handleDelete = (config: ImportFileConfiguration) => {
+    const handleDelete = (config: VCConfiguration) => {
         toast.info(
             ({ closeToast }) => (
                 <div className="p-1">
                     <p className="font-bold text-neutral-first mb-3">
-                        {t('confirm_remove_import_file_config')}
+                        {t('confirm_remove_vc_config')}
                     </p>
                     <div className="flex gap-3">
                         <button
@@ -111,16 +108,16 @@ export default function RegisterImportFileConfigView({
 
     const columns = [
         {
-            key: 'import_file_template_mnemonic',
-            label: t('template_mnemonic'),
+            key: 'vc_mnemonic',
+            label: t('vc_mnemonic'),
         },
         {
-            key: 'import_file_template_description',
-            label: t('template_description'),
-        },
-        {
-            key: 'form_id',
+            key: 'intake_form_id',
             label: t('form_id'),
+        },
+        {
+            key: 'data_model_id',
+            label: t('data_model_id'),
         },
     ];
 
@@ -128,12 +125,12 @@ export default function RegisterImportFileConfigView({
         <>
             <DataTable
                 columns={columns}
-                data={importFileConfigurations}
+                data={vcConfigurations}
                 loading={loading}
-                rowKey={(item: ImportFileConfiguration) => item.import_file_configuration_id}
+                rowKey={(item: VCConfiguration) => item.vc_config_id}
                 actions={(item) => (
                     <div className="flex gap-4">
-                
+                       
                         <Can action={CONFIGURATION_TABS_ACTIONS.edit}>
                             <EditButton
                                 label={t('common.edit')}
@@ -153,14 +150,14 @@ export default function RegisterImportFileConfigView({
                 )}
             />
 
-            <AddImportFileConfigModal
+            <AddVCConfigModal
                 isOpen={isModalOpen}
                 onClose={onCloseModal}
                 onSuccess={refresh}
             />
 
-         
-            <EditImportFileConfigModal
+
+            <EditVCConfigModal
                 isOpen={editModalOpen}
                 onClose={() => {
                     setEditModalOpen(false);

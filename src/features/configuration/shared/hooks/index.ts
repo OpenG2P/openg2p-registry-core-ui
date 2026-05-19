@@ -14,3 +14,4 @@ export * from './useSubscriptionActivityLog';
 export * from './useAllDataModels';
 export * from './useAllIntakeForms';
 export * from './useAllImportFileConfigurations';
+export * from './useAllVCConfigurations';
