@@ -160,9 +160,9 @@ export default function AddNewDropdown({
                         key={vc.vc_config_id}
                         onClick={() => handleVCSelect(vc)}
                         className="px-4 py-1 font-medium hover:bg-secondary-second cursor-pointer text-[16px] truncate"
-                        title={vc.vc_mnemonic}
+                        title={`${vc.vc_mnemonic} - ${vc.data_model_mnemonic} - ${vc.intake_form_mnemonic}`}
                     >
-                        {vc.vc_mnemonic}
+                        {vc.vc_mnemonic} - {vc.data_model_mnemonic} - {vc.intake_form_mnemonic}
                     </div>
                 ));
 
@@ -173,7 +173,7 @@ export default function AddNewDropdown({
 
     return (
         <>
-            <div ref={ref} className="relative mt-2 w-50 z-10">
+            <div ref={ref} className="relative mt-2 w-100 z-10">
                 <button
                     onClick={() => {
                         setOpen(prev => {

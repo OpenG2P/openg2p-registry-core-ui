@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
         const queryParams = new URLSearchParams({
             register_id: body.register_id,
             intake_form_id: body.intake_form_id,
-            data_model: body.data_model_id,
+            data_model: body.data_model_mnemonic,
         });
 
         const response = await fetch(
