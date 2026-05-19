@@ -47,14 +47,14 @@ export function IntakeFormSubmissionCard({ submission, registerType }: IntakeFor
 
                     <div className="space-y-4">
                         <div className="space-y-1 border-l-2 border-secondary-second pl-6">
-                            <KeyValue
+                            {/* <KeyValue
                                 label={t('no_of_verifications_required') || "No of Verifications Required"}
                                 value={String(submission.number_of_verifications_required)}
                             />
                             <KeyValue
                                 label={t('no_of_verifications_done') || "No of Verifications Done"}
                                 value={String(submission.number_of_verifications_done)}
-                            />
+                            /> */}
                             <KeyValue
                                 label={t('created_by') || "Created By"}
                                 value={submission.created_by}

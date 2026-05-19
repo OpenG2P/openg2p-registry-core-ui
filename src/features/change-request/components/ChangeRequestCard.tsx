@@ -82,6 +82,7 @@ export default function ChangeRequestCard({
                         Verification
                     </h3>
                     <div className="border-l space-y-2 border-secondary-second pl-6">
+                        {/* Verifications required / done hidden from view
                         <div className="flex w-full overflow-hidden">
                             <span className="w-1/2 truncate" title={t('verifications_required')}>{t('verifications_required')}:</span>
                             <span className="w-1/2 pl-4 text-neutral-first font-medium truncate" title={changeRequest.no_of_verifications_required?.toString()}>
@@ -94,6 +95,7 @@ export default function ChangeRequestCard({
                                 {changeRequest.no_of_verifications_done}
                             </span>
                         </div>
+                        */}
                         <div className="flex w-full overflow-hidden">
                             <span className="w-1/2 truncate" title={t('documents_attached')}>{t('documents_attached')}:</span>
                             <span className="w-1/2 pl-4 text-neutral-first font-medium truncate" title={documents.length.toString()}>{documents.length}</span>

@@ -71,7 +71,7 @@ const sidebarOptions: SidebarOption[] = [
     {
         id: 'awe-policy-config',
         label: 'awe_policy_configurations',
-        iconUrl: '/images/config/menu_outgest_config_05.png',
+        iconUrl: '/images/config/menu_policy_configuration_08.png',
         path: '/configuration/awe-policy-config',
     },
 ];

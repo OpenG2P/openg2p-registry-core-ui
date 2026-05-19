@@ -1,6 +1,13 @@
 "use client";
 
-import { useEffect, useState, type ComponentType } from "react";
+import {
+    useCallback,
+    useEffect,
+    useLayoutEffect,
+    useRef,
+    useState,
+    type ComponentType,
+} from "react";
 import Image from "next/image";
 
 const VISIBLE_COUNT = 4;
@@ -25,10 +32,38 @@ export default function StatsCardsCarousel<T extends string>({
 }: StatsCardsCarouselProps<T>) {
     const maxOffset = Math.max(0, cards.length - VISIBLE_COUNT);
     const [offset, setOffset] = useState(0);
+    const viewportRef = useRef<HTMLDivElement>(null);
+    const trackRef = useRef<HTMLDivElement>(null);
+    const [cardWidth, setCardWidth] = useState(0);
+    const [slideStep, setSlideStep] = useState(0);
 
     const activeIndex = cards.indexOf(activeCard);
 
-    // Only adjust the window when the user selects a card — not when arrows change offset.
+    const measureLayout = useCallback(() => {
+        const viewport = viewportRef.current;
+        const track = trackRef.current;
+        if (!viewport || !track || cards.length === 0) return;
+
+        const gap = parseFloat(getComputedStyle(track).columnGap || "0") || 0;
+        const width =
+            (viewport.clientWidth - gap * (VISIBLE_COUNT - 1)) / VISIBLE_COUNT;
+        setCardWidth(width);
+        setSlideStep(width + gap);
+    }, [cards.length]);
+
+    useLayoutEffect(() => {
+        measureLayout();
+    }, [measureLayout]);
+
+    useEffect(() => {
+        const viewport = viewportRef.current;
+        if (!viewport) return;
+
+        const observer = new ResizeObserver(() => measureLayout());
+        observer.observe(viewport);
+        return () => observer.disconnect();
+    }, [measureLayout]);
+
     useEffect(() => {
         if (activeIndex < 0) return;
         setOffset((current) => {
@@ -40,7 +75,6 @@ export default function StatsCardsCarousel<T extends string>({
         });
     }, [activeIndex]);
 
-    const visibleCards = cards.slice(offset, offset + VISIBLE_COUNT);
     const canScrollBack = offset > 0;
     const canScrollForward = offset < maxOffset;
 
@@ -85,20 +119,37 @@ export default function StatsCardsCarousel<T extends string>({
                 </button>
             )}
 
-            <div className="flex flex-1 min-w-0 overflow-hidden gap-4 sm:gap-5 lg:gap-6">
-                {visibleCards.map((type) => (
-                    <button
-                        key={type}
-                        type="button"
-                        onClick={() => onSelectCard(type)}
-                        className="bg-transparent p-0 text-left flex-1 min-w-0"
-                    >
-                        <StatsCardComponent
-                            stats_endpoint={statsEndpointFor(type)}
-                            active={activeCard === type}
-                        />
-                    </button>
-                ))}
+            <div
+                ref={viewportRef}
+                className="flex flex-1 min-w-0 overflow-hidden"
+            >
+                <div
+                    ref={trackRef}
+                    className="flex gap-4 sm:gap-5 lg:gap-6 will-change-transform motion-reduce:transition-none"
+                    style={{
+                        transform:
+                            slideStep > 0
+                                ? `translateX(-${offset * slideStep}px)`
+                                : undefined,
+                        transition:
+                            'transform 500ms cubic-bezier(0.4, 0, 0.2, 1) 75ms',
+                    }}
+                >
+                    {cards.map((type) => (
+                        <button
+                            key={type}
+                            type="button"
+                            onClick={() => onSelectCard(type)}
+                            className="bg-transparent p-0 text-left shrink-0 min-w-0"
+                            style={cardWidth > 0 ? { width: cardWidth } : undefined}
+                        >
+                            <StatsCardComponent
+                                stats_endpoint={statsEndpointFor(type)}
+                                active={activeCard === type}
+                            />
+                        </button>
+                    ))}
+                </div>
             </div>
 
             {canScrollForward && (
@@ -122,4 +173,3 @@ export default function StatsCardsCarousel<T extends string>({
         </div>
     );
 }
-

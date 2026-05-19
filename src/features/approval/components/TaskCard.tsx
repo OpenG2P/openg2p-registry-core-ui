@@ -53,11 +53,11 @@ export default function TaskCard({ task, index, href, onNavigate }: Props) {
 
     const recordName = getContextString(context, 'record_name');
     const registerMnemonic = getContextString(context, 'register_mnemonic');
-    const sectionMnemonicRaw = getContextString(context, 'section_mnemonic');
-    const sectionMnemonic =
-        sectionMnemonicRaw === '—'
-            ? sectionMnemonicRaw
-            : t(sectionMnemonicRaw, { default: sectionMnemonicRaw });
+    const mnemonicKey = isIntake ? 'intake_form_mnemonic' : 'section_mnemonic';
+    const mnemonicLabel = isIntake ? t('intake_form_mnemonic') : t('section_mnemonic');
+    const mnemonicRaw = getContextString(context, mnemonicKey);
+    const mnemonicDisplay =
+        mnemonicRaw === '—' ? mnemonicRaw : t(mnemonicRaw, { default: mnemonicRaw });
 
     const displayName =
         recordName !== '—'
@@ -113,7 +113,7 @@ export default function TaskCard({ task, index, href, onNavigate }: Props) {
                 </div>
 
                 <div className="space-y-2 px-6 text-[16px] text-neutral-first/50">
-                    <KeyValue label={t('section_mnemonic')} value={sectionMnemonic} />
+                    <KeyValue label={mnemonicLabel} value={mnemonicDisplay} />
                     <KeyValue label={t('stage')} value={String(task.stage_order)} />
                     {task.kind && (
                         <KeyValue label={t('kind', { default: 'Kind' })} value={task.kind} />
