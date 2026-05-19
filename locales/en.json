@@ -32,7 +32,8 @@
     },
     "table": {
         "addRecord": "Add Record",
-        "clickToAdd": "Click To Add Record"
+        "clickToAdd": "Click To Add Record",
+        "addRecordDialog": "Add Record"
     },
     "search_registers": "Search Records In Register",
     "search_change_requests": "Search Change Requests",
@@ -1249,15 +1250,14 @@
     "file_upload_failed": "File upload failed",
     "import_failed": "Import failed",
     "something_went_wrong": "Something went wrong",
-    "add_new_score_type":"Add New Score Type",
-    "edit":"Edit",
-    "remove":"Remove",
-    "add_score":"Add Score",
-    "Farmer Registry":"Farmer Registry",
-    "save":"Save",
-    "cancel":"Cancel",
+    "add_new_score_type": "Add New Score Type",
+    "edit": "Edit",
+    "remove": "Remove",
+    "add_score": "Add Score",
+    "Farmer Registry": "Farmer Registry",
+    "save": "Save",
+    "cancel": "Cancel",
     "target_form": "Target Form",
     "target_section": "Target Section",
     "form_submission_id": "Form Submission ID"
-    
 }

@@ -81,13 +81,13 @@ const StatsCardSmall = ({
                     {
                         id: "incomingMessages",
                         label: t('incoming_messages'),
-                        value: data.incoming,
+                        value: data.no_of_messages|| "0",
                         imageUrl: "/images/messages/message_icon.png",
                     },
                     {
                         id: "outgoingMessages",
                         label: t('outgoing_messages'),
-                        value: data.outgoing,
+                        value: data.outgoing || "0",
                         imageUrl: "/images/messages/message_icon.png",
                     },
                 ],
@@ -109,7 +109,7 @@ const StatsCardSmall = ({
             return data?.total_submissions || 0;
         }
         if (stats_endpoint.includes("messages")) {
-            return data?.total || 0;
+            return data?.no_of_messages || 0;
         }
     }, [data, stats_endpoint]);
 
