@@ -94,6 +94,26 @@ const StatsCardSmall = ({
             };
         }
 
+        if (stats_endpoint.includes("/tasks")) {
+            return {
+                title: t('approval_tasks'),
+                rows: [
+                    {
+                        id: "change_request",
+                        label: t('change_requests'),
+                        value: data.change_request_count,
+                        imageUrl: "/images/register/statsIcon/pending.png",
+                    },
+                    {
+                        id: "intake_form",
+                        label: t('intake_submissions'),
+                        value: data.intake_form_count,
+                        imageUrl: "/images/register/statsIcon/topics.png",
+                    },
+                ],
+            };
+        }
+
         return { title: t('items'), rows: [] };
     }, [data, stats_endpoint, t]);
 
@@ -109,6 +129,9 @@ const StatsCardSmall = ({
             return data?.total_submissions || 0;
         }
         if (stats_endpoint.includes("messages")) {
+            return data?.total || 0;
+        }
+        if (stats_endpoint.includes("/tasks")) {
             return data?.total || 0;
         }
     }, [data, stats_endpoint]);

@@ -11,7 +11,10 @@ export interface ApprovalTask {
     due_at?: string | null;
     created_at: string;
     artifact_type?: string | null;
+    artifact_id?: string | null;
     policy_key?: string | null;
+    context?: Record<string, unknown> | null;
+    search_text?: string | null;
     decision_action?: string | null;
     decision_comment?: string | null;
 }
