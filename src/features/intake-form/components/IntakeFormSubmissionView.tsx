@@ -8,8 +8,10 @@ import { useIntakeFormTabRecords } from '@/features/intake-form/hooks/useIntakeF
 import MultiSectionAccordionForms from '@/features/intake-form/components/MultiSectionAccordionForms';
 import SubmissionHeader from '@/features/intake-form/components/SubmissionHeader';
 import { IntakeApprovalCard } from '@/features/approval/components';
+import { parseAweCurrentStage } from '@/features/approval/utils/aweStatusSummary';
+import { REGISTRY_INTAKE_FORM_ARTIFACT } from '@/features/approval/constants';
 import { useTranslations } from 'next-intl';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useIntakeFormSectionAction } from '@/features/intake-form/hooks/useIntakeFormSectionAction';
 import { RegisterFlattenedRecord } from '@/features/register/types';
 import { useRegister } from '@/context/RegisterContext';
@@ -38,11 +40,27 @@ export default function IntakeFormSubmissionView({
     const canCreate = can(INTAKE_FORM_ACTIONS.create);
 
     const registerId = currentRegister?.register_id;
-    const { submissions, loading: loadingSubmissions } = useIntakeSubmissions(registerId);
+    const { submissions, loading: loadingSubmissions, refetch: refetchSubmissions } =
+        useIntakeSubmissions(registerId);
+
+    const refreshSubmissionView = useCallback(async () => {
+        await refetchSubmissions();
+    }, [refetchSubmissions]);
 
     const submission = useMemo(() => {
         return submissions?.find((s: { submission_id: string }) => s.submission_id === submissionId);
     }, [submissions, submissionId]);
+
+    const intakeApprovalArtifactContext = useMemo(() => {
+        if (!submission?.submission_id) return null;
+        const currentStage =
+            parseAweCurrentStage(submission.awe_request_status_summary) ?? 1;
+        return {
+            artifactId: submission.submission_id,
+            artifactType: REGISTRY_INTAKE_FORM_ARTIFACT,
+            currentStage,
+        };
+    }, [submission?.submission_id, submission?.awe_request_status_summary]);
 
     const intakeFormId = submission?.form_id;
     const { sections, form_name, form_description, loading: loadingSections } =
@@ -140,9 +158,11 @@ export default function IntakeFormSubmissionView({
                             <div className="w-full lg:w-[25%] space-y-6">
                                 <IntakeApprovalCard
                                     awe_request_id={submission?.awe_request_id}
+                                    artifactContext={intakeApprovalArtifactContext}
                                     isPending={
                                         !isDraft && submission?.approval_status === 'PENDING'
                                     }
+                                    onRefresh={refreshSubmissionView}
                                 />
                             </div>
                         )}

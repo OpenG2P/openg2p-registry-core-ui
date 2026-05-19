@@ -17,6 +17,8 @@ import { useTranslations } from "next-intl";
 import { RegisterFlattenedRecord } from "@/features/register/types";
 import { useChangeRequestManager, useRegisterSectionsFromCR } from "@/features/change-request/hooks";
 import { useApprovals } from "@/features/approval/hooks/useApprovals";
+import { parseAweCurrentStage } from "@/features/approval/utils/aweStatusSummary";
+import { REGISTRY_CHANGE_REQUEST_ARTIFACT } from "@/features/approval/constants";
 import { ChangeRequestValuesTabs } from "./ChangeRequestValuesTabs";
 import CRHeaderSkeleton from "./CRHeaderSkeleton";
 import SectionSchemaSkeleton from "./SectionSchemaSkeleton";
@@ -40,9 +42,25 @@ export default function ChangeRequestDetailsView({ changeId, breadcrumb }: Props
         handleApprove,
         handleReject,
         submitReject,
+        refetchDetails,
     } = useChangeRequestManager(changeId);
 
-    const { tasks, loadingTasks, submitDecision } = useApprovals(details?.awe_request_id);
+    const approvalArtifactContext = useMemo(() => {
+        if (!details?.change_request_id) return null;
+        const currentStage =
+            parseAweCurrentStage(details.awe_request_status_summary) ?? 1;
+        return {
+            artifactId: details.change_request_id,
+            artifactType: REGISTRY_CHANGE_REQUEST_ARTIFACT,
+            currentStage,
+        };
+    }, [details?.change_request_id, details?.awe_request_status_summary]);
+
+    const { tasks, loadingTasks, submitDecision } = useApprovals(
+        details?.awe_request_id,
+        approvalArtifactContext,
+        refetchDetails,
+    );
 
     const widgetStoreOld = useMemo(() => createWidgetStore(), []);
     const widgetStoreNew = useMemo(() => createWidgetStore(), []);

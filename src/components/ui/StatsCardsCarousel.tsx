@@ -95,29 +95,28 @@ export default function StatsCardsCarousel<T extends string>({
     };
 
     const arrowButtonClass =
-        'relative z-10 shrink-0 self-center flex h-[30px] w-[30px] items-center justify-center rounded-[30px] bg-secondary-second cursor-pointer';
+        'relative z-10 shrink-0 self-center flex h-[30px] w-[30px] items-center justify-center rounded-[30px] bg-transparent cursor-pointer disabled:cursor-default';
 
     return (
         <div className="relative w-full flex items-stretch gap-2">
-            {canScrollBack && (
-                <button
-                    type="button"
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        scrollBack();
-                    }}
-                    className={arrowButtonClass}
-                    aria-label="Show previous stats cards"
-                >
-                    <Image
-                        src="/images/common/black_arrow.png"
-                        width={20}
-                        height={20}
-                        alt=""
-                        className="rotate-180"
-                    />
-                </button>
-            )}
+            <button
+                type="button"
+                disabled={!canScrollBack}
+                onClick={(e) => {
+                    e.stopPropagation();
+                    if (canScrollBack) scrollBack();
+                }}
+                className={arrowButtonClass}
+                aria-label="Show previous stats cards"
+            >
+                <Image
+                    src="/images/common/black_arrow.png"
+                    width={30}
+                    height={30}
+                    alt=""
+                    className="rotate-180"
+                />
+            </button>
 
             <div
                 ref={viewportRef}
@@ -152,24 +151,23 @@ export default function StatsCardsCarousel<T extends string>({
                 </div>
             </div>
 
-            {canScrollForward && (
-                <button
-                    type="button"
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        scrollForward();
-                    }}
-                    className={arrowButtonClass}
-                    aria-label="Show more stats cards"
-                >
-                    <Image
-                        src="/images/common/black_arrow.png"
-                        width={20}
-                        height={20}
-                        alt=""
-                    />
-                </button>
-            )}
+            <button
+                type="button"
+                disabled={!canScrollForward}
+                onClick={(e) => {
+                    e.stopPropagation();
+                    if (canScrollForward) scrollForward();
+                }}
+                className={arrowButtonClass}
+                aria-label="Show more stats cards"
+            >
+                <Image
+                    src="/images/common/black_arrow.png"
+                    width={30}
+                    height={30}
+                    alt=""
+                />
+            </button>
         </div>
     );
 }
