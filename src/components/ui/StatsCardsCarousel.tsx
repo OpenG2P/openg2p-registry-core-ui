@@ -79,19 +79,11 @@ export default function StatsCardsCarousel<T extends string>({
     const canScrollForward = offset < maxOffset;
 
     const scrollBack = () => {
-        const nextOffset = Math.max(0, offset - 1);
-        setOffset(nextOffset);
-        onSelectCard(cards[nextOffset]);
+        setOffset((current) => Math.max(0, current - 1));
     };
 
     const scrollForward = () => {
-        const nextOffset = Math.min(maxOffset, offset + 1);
-        setOffset(nextOffset);
-        const lastVisibleIndex = Math.min(
-            nextOffset + VISIBLE_COUNT - 1,
-            cards.length - 1,
-        );
-        onSelectCard(cards[lastVisibleIndex]);
+        setOffset((current) => Math.min(maxOffset, current + 1));
     };
 
     const arrowButtonClass =
