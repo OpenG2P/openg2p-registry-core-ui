@@ -134,26 +134,24 @@ const VerificationStats = ({
             </h3>
 
             <div className="border-l border-primary-first pl-6 space-y-2">
-                {/* Verifications required / done hidden from view
                 <div className="flex w-full overflow-hidden">
+                    <span className="w-1/2 truncate" title={t('documents_attached')}>{t('documents_attached')}:</span>
+                    <span className="w-1/2 pl-4 text-neutral-first font-medium truncate" title={documentsCount.toString()}>
+                        {documentsCount}
+                    </span>
+                </div>
+
+                <div className="invisible flex w-full overflow-hidden" aria-hidden>
                     <span className="w-1/2 truncate" title={t('verifications_required')}>{t('verifications_required')}:</span>
                     <span className="w-1/2 pl-4 text-neutral-first font-medium truncate" title={details.no_of_verifications_required?.toString()}>
                         {details.no_of_verifications_required}
                     </span>
                 </div>
 
-                <div className="flex w-full overflow-hidden">
+                <div className="invisible flex w-full overflow-hidden" aria-hidden>
                     <span className="w-1/2 truncate" title={t('verifications_done')}>{t('verifications_done')}:</span>
                     <span className="w-1/2 pl-4 text-neutral-first font-medium truncate" title={verificationCount.toString()}>
                         {verificationCount}
-                    </span>
-                </div>
-                */}
-
-                <div className="flex w-full overflow-hidden">
-                    <span className="w-1/2 truncate" title={t('documents_attached')}>{t('documents_attached')}:</span>
-                    <span className="w-1/2 pl-4 text-neutral-first font-medium truncate" title={documentsCount.toString()}>
-                        {documentsCount}
                     </span>
                 </div>
             </div>
