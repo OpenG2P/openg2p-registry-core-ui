@@ -15,3 +15,4 @@ export * from './useAllDataModels';
 export * from './useAllIntakeForms';
 export * from './useAllImportFileConfigurations';
 export * from './useAllVCConfigurations';
+export * from './useAllAwePolicyConfigurations';
