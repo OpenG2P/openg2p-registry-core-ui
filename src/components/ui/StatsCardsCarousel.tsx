@@ -32,10 +32,15 @@ export default function StatsCardsCarousel<T extends string>({
 }: StatsCardsCarouselProps<T>) {
     const maxOffset = Math.max(0, cards.length - VISIBLE_COUNT);
     const [offset, setOffset] = useState(0);
+    const containerRef = useRef<HTMLDivElement>(null);
     const viewportRef = useRef<HTMLDivElement>(null);
     const trackRef = useRef<HTMLDivElement>(null);
+    const offsetRef = useRef(offset);
+    const wheelLockRef = useRef(false);
     const [cardWidth, setCardWidth] = useState(0);
     const [slideStep, setSlideStep] = useState(0);
+
+    offsetRef.current = offset;
 
     const activeIndex = cards.indexOf(activeCard);
 
@@ -79,26 +84,69 @@ export default function StatsCardsCarousel<T extends string>({
     const canScrollForward = offset < maxOffset;
 
     const scrollBack = () => {
-        const nextOffset = Math.max(0, offset - 1);
-        setOffset(nextOffset);
-        onSelectCard(cards[nextOffset]);
+        setOffset((current) => Math.max(0, current - 1));
     };
 
     const scrollForward = () => {
-        const nextOffset = Math.min(maxOffset, offset + 1);
-        setOffset(nextOffset);
-        const lastVisibleIndex = Math.min(
-            nextOffset + VISIBLE_COUNT - 1,
-            cards.length - 1,
-        );
-        onSelectCard(cards[lastVisibleIndex]);
+        setOffset((current) => Math.min(maxOffset, current + 1));
     };
+
+    useEffect(() => {
+        const container = containerRef.current;
+        if (!container || maxOffset === 0) return;
+
+        const onWheel = (e: WheelEvent) => {
+            const delta =
+                Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+            if (delta === 0) return;
+
+            e.preventDefault();
+            e.stopPropagation();
+
+            const currentOffset = offsetRef.current;
+            const scrollingForward = delta > 0;
+            const scrollingBack = delta < 0;
+
+            if (scrollingForward && currentOffset >= maxOffset) return;
+            if (scrollingBack && currentOffset <= 0) return;
+
+            if (wheelLockRef.current) return;
+            wheelLockRef.current = true;
+            window.setTimeout(() => {
+                wheelLockRef.current = false;
+            }, 450);
+
+            if (scrollingForward) {
+                setOffset((current) => {
+                    const next = Math.min(maxOffset, current + 1);
+                    offsetRef.current = next;
+                    return next;
+                });
+            } else {
+                setOffset((current) => {
+                    const next = Math.max(0, current - 1);
+                    offsetRef.current = next;
+                    return next;
+                });
+            }
+        };
+
+        container.addEventListener("wheel", onWheel, {
+            passive: false,
+            capture: true,
+        });
+        return () =>
+            container.removeEventListener("wheel", onWheel, { capture: true });
+    }, [maxOffset]);
 
     const arrowButtonClass =
         'relative z-10 shrink-0 self-center flex h-[30px] w-[30px] items-center justify-center rounded-[30px] bg-transparent cursor-pointer disabled:cursor-default';
 
     return (
-        <div className="relative w-full flex items-stretch gap-2">
+        <div
+            ref={containerRef}
+            className="relative w-full flex items-stretch gap-2 overscroll-none"
+        >
             <button
                 type="button"
                 disabled={!canScrollBack}
