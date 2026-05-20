@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { IncomingMessage } from '@/features/messages/types';
 import { useState } from 'react';
 import MessagePopup from './MessagePopup';
-import Link from 'next/link';
+import { KeyValue } from '@/components/ui/KeyValue';
 import { useTranslations, useLocale } from 'next-intl';
 import { useIncomingMessagePayload } from '../hooks';
 import { formatDateTime } from '@/shared/utils/dateUtils';
@@ -124,34 +124,6 @@ export default function IncomingMessageCard({ message }: Props) {
                     loading={loading}
                 />
             )}
-        </div>
-    );
-}
-
-function KeyValue({ label, value, href }: { label: string; value: string; href?: string }) {
-    return (
-        <div className="flex w-full text-neutral-first leading-relaxed overflow-hidden">
-            <span className="w-1/2 shrink-0 font-normal text-neutral-first/50 text-[16px]">{label}: </span>
-            <span className="w-1/2 min-w-0 font-medium text-[14px] truncate">
-                {href ? (
-                    <Link
-                        href={href}
-                        className="text-neutral-first truncate inline-flex items-center max-w-full"
-                        title={value}
-                    >
-                        <span className="truncate">{value}</span>
-                        <Image
-                            src="/images/common/arrow_next_01.png"
-                            alt="Arrow"
-                            width={14}
-                            height={14}
-                            className="inline-block ml-1 shrink-0"
-                        />
-                    </Link>
-                ) : (
-                    <span className="truncate" title={value}>{value}</span>
-                )}
-            </span>
         </div>
     );
 }

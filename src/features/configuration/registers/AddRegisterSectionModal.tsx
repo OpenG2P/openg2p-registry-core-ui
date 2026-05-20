@@ -10,13 +10,11 @@ import CheckboxField from '../shared/components/CheckboxField';
 import { useAllRegister } from '../shared/hooks/useAllRegister';
 
 interface AddRegisterSectionModalProps {
-    isOpen: boolean;
     onClose: () => void;
     onSuccess?: () => void;
 }
 
 export default function AddRegisterSectionModal({
-    isOpen,
     onClose,
     onSuccess
 }: AddRegisterSectionModalProps) {
@@ -92,8 +90,6 @@ export default function AddRegisterSectionModal({
         resetForm();
         onClose();
     };
-
-    if (!isOpen) return null;
 
     return (
         <BaseModal

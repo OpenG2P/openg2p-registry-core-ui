@@ -1,6 +1,6 @@
 import { useFetch } from '@/shared/hooks';
 
-export function useAllIntakeForms(page?: number, pageSize?: number) {
+export function useAllIntakeForms(page?: number, pageSize?: number, registerId?: string) {
     const { data, loading, error, execute } = useFetch<{
         intake_forms: any[];
         pagination?: {
@@ -13,9 +13,10 @@ export function useAllIntakeForms(page?: number, pageSize?: number) {
             method: 'POST',
             body: JSON.stringify({
                 current_page: page,
-                page_size: pageSize
-            })
-        }
+                page_size: pageSize,
+                ...(registerId ? { register_id: registerId } : {}),
+            }),
+        },
     });
 
     return {

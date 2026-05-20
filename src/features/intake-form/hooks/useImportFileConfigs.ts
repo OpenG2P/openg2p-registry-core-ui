@@ -14,19 +14,23 @@ export const useImportFileConfigs = () => {
     const { currentRegister } = useRegister();
     const registerId = currentRegister?.register_id;
 
-    const { data, loading } = useFetch<any>({
-        url: '/api/input-mechanism/file-import',
+    const { data, loading } = useFetch<{
+        import_file_configurations: ImportFileConfig[];
+    }>({
+        url: '/api/input-mechanism/get-import-file-configuration',
         enabled: !!registerId,
         options: {
             method: 'POST',
             body: JSON.stringify({
                 register_id: registerId,
+                current_page: 1,
+                page_size: 100,
             }),
         },
     });
 
     return {
-        importFileOptions: data ?? [],
+        importFileOptions: data?.import_file_configurations ?? [],
         isLoadingImportFiles: loading,
     };
 };

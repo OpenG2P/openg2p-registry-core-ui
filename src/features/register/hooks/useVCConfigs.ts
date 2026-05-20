@@ -4,8 +4,10 @@ import { useRegister } from '@/context/RegisterContext';
 export interface VCConfig {
     vc_config_id: string;
     register_id: string;
+    intake_form_id: string;
+    data_model_id: string;
     vc_mnemonic: string;
-    descriptor_schema: any;
+    descriptor_schema: Record<string, unknown>;
 }
 
 export const useVCConfigs = () => {
@@ -13,12 +15,14 @@ export const useVCConfigs = () => {
     const registerId = currentRegister?.register_id;
 
     const { data, loading } = useFetch<VCConfig[]>({
-        url: '/api/input-mechanism/vc',
+        url: '/api/input-mechanism/get-vc-configuration',
         enabled: !!registerId,
         options: {
             method: 'POST',
             body: JSON.stringify({
                 register_id: registerId,
+                current_page: 1,
+                page_size: 100,
             }),
         },
     });

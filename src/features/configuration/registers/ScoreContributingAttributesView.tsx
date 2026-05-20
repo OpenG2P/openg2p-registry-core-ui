@@ -114,8 +114,8 @@ export default function ScoreContributingAttributesView({
                 item.attribute_computation_required ? t('true') : t('false'),
         },
         {
-            key: 'attribute_weight',
-            label: t('attribute_weight'),
+            key: 'attribute_weightage',
+            label: t('attribute_weightage_list_label'),
         },
     ];
 

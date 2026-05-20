@@ -21,7 +21,7 @@ export function useAllImportFileConfigurations(
             number_of_pages: number;
         };
     }>({
-        url: '/api/configuration/registers/input-mechanism/get-import-file-configuration',
+        url: '/api/input-mechanism/get-import-file-configuration',
         enabled: !!registerId,
         options: {
             method: 'POST',

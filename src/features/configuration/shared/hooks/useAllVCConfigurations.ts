@@ -1,25 +1,27 @@
 import { useFetch } from '@/shared/hooks';
 
-export interface InputMechanism {
-    mechanism_id: string;
+export interface VCConfiguration {
+    vc_config_id: string;
     register_id: string;
-    mechanism_type: string;
-    display_key: string;
+    intake_form_id: string;
+    data_model_id: string;
+    vc_mnemonic: string;
+    descriptor_schema: Record<string, unknown>;
 }
 
-export function useAllInputMechanisms(
+export function useAllVCConfigurations(
     registerId: string,
     currentPage: number = 1,
     pageSize: number = 10,
 ) {
     const { data, loading, error, execute } = useFetch<{
-        input_mechanisms: InputMechanism[];
+        vc_configurations: VCConfiguration[];
         pagination?: {
             number_of_items: number;
             number_of_pages: number;
         };
     }>({
-        url: '/api/configuration/registers/input-mechanism/get-all-input-mechanisms',
+        url: '/api/input-mechanism/get-all-vc-configuration',
         enabled: !!registerId,
         options: {
             method: 'POST',
@@ -32,7 +34,7 @@ export function useAllInputMechanisms(
     });
 
     return {
-        inputMechanisms: data?.input_mechanisms || [],
+        vcConfigurations: data?.vc_configurations || [],
         pagination: data?.pagination,
         loading,
         error,

@@ -7,7 +7,8 @@ import { useParams, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 
 import IntakeFormSubmissionList from '@/features/intake-form/components/SubmissionList';
-import { useInputMechanisms, usePagination } from '@/shared/hooks';
+import { usePagination } from '@/shared/hooks';
+import { STATIC_INPUT_MECHANISMS } from '@/features/intake-form/constants/inputMechanisms';
 import { useIntakeSubmissions } from '@/features/intake-form/hooks/useIntakeSubmissions';
 import { INTAKE_FORM_ACTIONS } from '@/features/intake-form/utils/intakeForm.actions';
 import Can from '@/components/shared/Can';
@@ -29,7 +30,10 @@ export default function IntakeFormPage() {
     const { currentRegister } = useRegister();
     const registerId = currentRegister?.register_id;
 
-    const { mechanisms, isLoadingMechanisms } = useInputMechanisms();
+    const mechanisms = STATIC_INPUT_MECHANISMS.map(({ labelKey, ...mechanism }) => ({
+        ...mechanism,
+        display_key: t(labelKey),
+    }));
 
     const { submissions, paginationInfo, loading: submissionsLoading } = useIntakeSubmissions(registerId,
         {
@@ -66,11 +70,8 @@ export default function IntakeFormPage() {
                 showPagination
                 showCapsule={true}
                 capsule={
-                    <Can action={INTAKE_FORM_ACTIONS.create}>
-                        <AddNewDropdown
-                            mechanisms={mechanisms || []}
-                            loading={isLoadingMechanisms}
-                        />
+                    <Can action={INTAKE_FORM_ACTIONS.edit}>
+                        <AddNewDropdown mechanisms={mechanisms} />
                     </Can>
                 }
                 pageStart={pagination.pageStart}

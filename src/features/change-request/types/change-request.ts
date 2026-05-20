@@ -6,8 +6,11 @@ export interface ChangeDocument {
 
 export interface ChangeRequest {
     change_request_id: string;
+    record_name?: string | null;
     register_id: string;
+    register_mnemonic?: string | null;
     tab_id: string;
+    tab_label?: string | null;
     internal_record_id: string;
     section_id: string;
     section_mnemonic?: string;

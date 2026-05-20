@@ -22,7 +22,7 @@ export default function AddImportFileConfigModal({
     const t = useTranslations();
     const { registerId } = useParams<{ registerId: string }>();
     const { execute: createConfig } = useFetch();
-    const { intake_forms, loading: intakeFormsLoading } = useAllIntakeForms(1, 100);
+    const { intake_forms, loading: intakeFormsLoading } = useAllIntakeForms(1, 100, registerId);
     const { dataModels, loading: dataModelsLoading } = useAllDataModels(1, 100);
 
     const [formId, setFormId] = useState('');
@@ -33,8 +33,8 @@ export default function AddImportFileConfigModal({
     const formOptions = useMemo(
         () =>
             (intake_forms || []).map((form) => ({
-                label: form.intake_form_mnemonic || form.intake_form_name || form.intake_form_id,
-                value: form.intake_form_id,
+                label: form.form_mnemonic || form.form_description || form.form_id,
+                value: form.form_id,
             })),
         [intake_forms],
     );
@@ -75,7 +75,7 @@ export default function AddImportFileConfigModal({
         }
 
         const result = await createConfig(
-            '/api/configuration/registers/input-mechanism/create-import-file-configuration',
+            '/api/input-mechanism/create-import-file-configuration',
             {
                 method: 'POST',
                 body: JSON.stringify({

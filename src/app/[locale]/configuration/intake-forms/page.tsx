@@ -5,7 +5,6 @@ import { TopBar } from '@/components/shared';
 import { useFetch, usePagination } from '@/shared/hooks';
 import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
 import { useRbac } from '@/context/RbacContext';
-import { CONFIGURATION_REGISTERS_ACTIONS } from '@/features/configuration/shared/utils/configurationRegisters.actions';
 import { useTranslations } from 'next-intl';
 import { useAllIntakeForms } from '@/features/configuration/shared/hooks/useAllIntakeForms';
 import { AddIntakeFormModal } from '@/features/configuration/intake-forms';
@@ -13,6 +12,8 @@ import { DataTable, DeleteButton } from '@/features/configuration/shared/compone
 import { toast } from 'react-toastify';
 import ConfirmRemovePopup from '@/features/configuration/shared/components/ConfirmRemovePopup';
 import { useRouter } from '@/i18n/navigation';
+import { CONFIGURATION_INTAKE_FORM_ACTIONS } from '@/features/configuration/shared/utils/configurationIntakeForm.actions';
+import Can from '@/components/shared/Can';
 
 const IntakeFormPage = () => {
     const t = useTranslations();
@@ -26,7 +27,7 @@ const IntakeFormPage = () => {
     const { config } = useRuntimeConfig();
 
     const { can } = useRbac();
-    const canCreate = can(CONFIGURATION_REGISTERS_ACTIONS.create);
+    const canCreate = can(CONFIGURATION_INTAKE_FORM_ACTIONS.edit);
 
     const { intake_forms, pagination, loading, refresh } = useAllIntakeForms(currentPage, config.pageSize);
 
@@ -121,10 +122,12 @@ const IntakeFormPage = () => {
                     router.push(`/configuration/intake-forms/${item.form_id}`)
                 }
                 actions={(item) => (
-                    <DeleteButton
-                        label={t('remove')}
-                        onClick={() => handleDelete(item)}
-                    />
+                    <Can action={CONFIGURATION_INTAKE_FORM_ACTIONS.edit}>
+                        <DeleteButton
+                            label={t('remove')}
+                            onClick={() => handleDelete(item)}
+                        />
+                    </Can>
                 )}
             />
 

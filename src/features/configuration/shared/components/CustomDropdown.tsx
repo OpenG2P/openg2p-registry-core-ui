@@ -49,7 +49,10 @@ export default function CustomDropdown({
     return (
         <div className="w-full">
             {label && (
-                <label className="text-[16px] font-medium text-neutral-first">
+                <label
+                    className="block text-[16px] font-medium text-neutral-first truncate"
+                    title={label}
+                >
                     {label}
                 </label>
             )}
@@ -59,7 +62,14 @@ export default function CustomDropdown({
                     onClick={() => !disabled && setOpen((prev) => !prev)}
                     className={`flex items-center justify-between gap-2.5 px-4 py-2 bg-neutral-second border border-primary-second rounded-[10px] truncate ${open ? 'border-b-transparent rounded-b-none' : ''}`}
                 >
-                    <span className="text-[16px] truncate">
+                    <span
+                        className="text-[16px] truncate"
+                        title={
+                            loading
+                                ? 'Loading...'
+                                : selectedItem?.label || placeholder
+                        }
+                    >
                         {loading
                             ? 'Loading...'
                             : selectedItem?.label || placeholder}
@@ -88,6 +98,7 @@ export default function CustomDropdown({
                                     key={opt.value}
                                     onClick={() => handleSelect(opt.value)}
                                     className="px-4 py-1 text-[16px] cursor-pointer hover:bg-secondary-first truncate"
+                                    title={opt.label}
                                 >
                                     {opt.label}
                                 </div>

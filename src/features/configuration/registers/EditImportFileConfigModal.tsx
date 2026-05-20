@@ -25,7 +25,7 @@ export default function EditImportFileConfigModal({
     const t = useTranslations();
     const { registerId } = useParams<{ registerId: string }>();
     const { execute: updateConfig } = useFetch();
-    const { intake_forms, loading: intakeFormsLoading } = useAllIntakeForms(1, 100);
+    const { intake_forms, loading: intakeFormsLoading } = useAllIntakeForms(1, 100, registerId);
     const { dataModels, loading: dataModelsLoading } = useAllDataModels(1, 100);
 
     const [formId, setFormId] = useState('');
@@ -36,8 +36,8 @@ export default function EditImportFileConfigModal({
     const formOptions = useMemo(
         () =>
             (intake_forms || []).map((form) => ({
-                label: form.intake_form_mnemonic || form.intake_form_name || form.intake_form_id,
-                value: form.intake_form_id,
+                label: form.form_mnemonic || form.form_description || form.form_id,
+                value: form.form_id,
             })),
         [intake_forms],
     );
@@ -68,7 +68,7 @@ export default function EditImportFileConfigModal({
         }
 
         const result = await updateConfig(
-            '/api/configuration/registers/input-mechanism/update-import-file-configuration',
+            '/api/input-mechanism/update-import-file-configuration',
             {
                 method: 'POST',
                 body: JSON.stringify({

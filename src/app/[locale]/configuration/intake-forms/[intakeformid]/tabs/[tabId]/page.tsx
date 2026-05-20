@@ -15,8 +15,6 @@ import {
 import { useRuntimeConfig } from '@/context/RuntimeConfigContext';
 import { useFetch, usePagination } from '@/shared/hooks';
 import { useRbac } from '@/context/RbacContext';
-import { CONFIGURATION_TABS_ACTIONS } from '@/features/configuration/shared/utils/configurationTabs.actions';
-import { CONFIGURATION_REGISTERS_ACTIONS } from '@/features/configuration/shared/utils/configurationRegisters.actions';
 import { useTranslations } from 'next-intl';
 import { toast } from 'react-toastify';
 import { useIntakeFormTabById } from '@/features/configuration/shared/hooks/useIntakeFormTabById';
@@ -28,6 +26,8 @@ import AddIntakeFormTabSectionModal from '@/features/configuration/intake-forms/
 import ViewIntakeFormTabSectionModal from '@/features/configuration/intake-forms/ViewIntakeFormTabSectionModal';
 import EditIntakeFormTabSectionModal from '@/features/configuration/intake-forms/EditIntakeFormTabSectionModal';
 import ConfirmRemovePopup from '@/features/configuration/shared/components/ConfirmRemovePopup';
+import { CONFIGURATION_INTAKE_FORM_ACTIONS } from '@/features/configuration/shared/utils/configurationIntakeForm.actions';
+import Can from '@/components/shared/Can';
 
 
 const IntakeFormTabIdPage = () => {
@@ -55,8 +55,8 @@ const IntakeFormTabIdPage = () => {
 
 
     const { can } = useRbac();
-    const canEdit = can(CONFIGURATION_REGISTERS_ACTIONS.edit);
-    const canCreate = can(CONFIGURATION_TABS_ACTIONS.create);
+    const canEdit = can(CONFIGURATION_INTAKE_FORM_ACTIONS.edit);
+    const canCreate = can(CONFIGURATION_INTAKE_FORM_ACTIONS.edit);
 
 
     const breadcrumb = useBreadcrumb({
@@ -191,17 +191,19 @@ const IntakeFormTabIdPage = () => {
                                 setSectionModal('view');
                             }}
                         />
-                        <EditButton
-                            label={t('common.edit')}
-                            onClick={() => {
-                                setSelectedSection(item);
-                                setSectionModal('edit');
-                            }}
-                        />
-                        <DeleteButton
-                            label={t('remove')}
-                            onClick={() => handleDelete(item)}
-                        />
+                        <Can action={CONFIGURATION_INTAKE_FORM_ACTIONS.edit}>
+                            <EditButton
+                                label={t('common.edit')}
+                                onClick={() => {
+                                    setSelectedSection(item);
+                                    setSectionModal('edit');
+                                }}
+                            />
+                            <DeleteButton
+                                label={t('remove')}
+                                onClick={() => handleDelete(item)}
+                            />
+                        </Can>
                     </>
                 )}
             />

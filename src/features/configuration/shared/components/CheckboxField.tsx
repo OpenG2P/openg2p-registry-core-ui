@@ -31,7 +31,8 @@ export default function CheckboxField({
             </div>
             <label 
                 onClick={() => !disabled && onChange(!checked)}
-                className={`text-sm font-semibold cursor-pointer ${disabled ? 'text-neutral-first/30' : 'text-neutral-first/70'}`}
+                className={`block truncate text-sm font-semibold cursor-pointer ${disabled ? 'text-neutral-first/30' : 'text-neutral-first/70'}`}
+                title={label}
             >
                 {label}
             </label>

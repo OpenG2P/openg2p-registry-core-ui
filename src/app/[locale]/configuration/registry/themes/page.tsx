@@ -10,6 +10,8 @@ import ThemeSelector from '@/features/configuration/registry/components/ThemeSel
 import ThemeColorEditor from '@/features/configuration/registry/components/ThemeColorEditor';
 import { useTheme } from '@/features/configuration/registry/hooks/useTheme';
 import { COLOR_ATTRIBUTES } from '@/features/configuration/registry/types';
+import { CONFIGURATION_REGISTRY_ACTIONS } from '@/features/configuration/shared/utils/configurationRegistry.actions';
+import Can from '@/components/shared/Can';
 
 const ThemePage = () => {
     const {
@@ -130,15 +132,16 @@ const ThemePage = () => {
                                 onSelectTheme={handleSelectTheme}
                             />
                         </div>
-
-                        <button
-                            id="create-theme-btn"
-                            onClick={() => router.push('/configuration/registry/themes/create')}
-                            className="h-10 px-5 bg-neutral-first text-neutral-second rounded-[10px] flex items-center justify-center gap-2 hover:bg-neutral-first/90 transition-all active:scale-95 shadow-lg shadow-neutral-first/10"
-                        >
-                            <Plus size={16} strokeWidth={3} />
-                            <span className="text-sm font-bold">{t('theme_config_new_theme')}</span>
-                        </button>
+                        <Can action={CONFIGURATION_REGISTRY_ACTIONS.edit}>
+                            <button
+                                id="create-theme-btn"
+                                onClick={() => router.push('/configuration/registry/themes/create')}
+                                className="h-10 px-5 bg-neutral-first text-neutral-second rounded-[10px] flex items-center justify-center gap-2 hover:bg-neutral-first/90 transition-all active:scale-95 shadow-lg shadow-neutral-first/10"
+                            >
+                                <Plus size={16} strokeWidth={3} />
+                                <span className="text-sm font-bold">{t('theme_config_new_theme')}</span>
+                            </button>
+                        </Can>
                     </div>
                 </div>
 

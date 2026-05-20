@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { useState } from 'react';
+import { KeyValue } from '@/components/ui/KeyValue';
 import { OutgoingMessage } from '../types';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
@@ -34,22 +35,22 @@ export default function OutgoingMessageCard({ message }: Props) {
                             className="cursor-pointer"
                         />
                     </h3>
-                    <KeyValue label={t('outgest_id') || 'Outgest ID'} value={message.outgest_id} />
-                    <KeyValue label={t('queued_date_time') || 'Queued Date & Time'} value={formatDateTime(message.queued_datetime)} />
-                    <KeyValue label={t('source_register') || 'Source Register'} value={message.source_register} />
-                    <KeyValue label={t('record_id') || 'Record ID'} value={message.record_id} />
-                    <KeyValue label={t('source_change_request_id') || 'Source Change Request ID'} value={message.source_change_request_id} />
+                    <KeyValue variant="message" label={t('outgest_id') || 'Outgest ID'} value={message.outgest_id} />
+                    <KeyValue variant="message" label={t('queued_date_time') || 'Queued Date & Time'} value={formatDateTime(message.queued_datetime)} />
+                    <KeyValue variant="message" label={t('source_register') || 'Source Register'} value={message.source_register} />
+                    <KeyValue variant="message" label={t('record_id') || 'Record ID'} value={message.record_id} />
+                    <KeyValue variant="message" label={t('source_change_request_id') || 'Source Change Request ID'} value={message.source_change_request_id} />
                 </div>
 
                 <div className="border-l-2 border-secondary-second pl-6 flex flex-col justify-between">
                     <div className='space-y-2'>
                         <h3 className="text-[16px] font-medium text-primary-second">{t('topic_resolution_status') || 'Topic Resolution Status'}</h3>
-                        <KeyValue label={t('topic_resolution') || 'Topic Resolution'} value={message.topic_resolution} />
-                        <KeyValue label={t('date_and_time') || 'Date & Time'} value={formatDateTime(message.topic_resolution_datetime)} />
+                        <KeyValue variant="message" label={t('topic_resolution') || 'Topic Resolution'} value={message.topic_resolution} />
+                        <KeyValue variant="message" label={t('date_and_time') || 'Date & Time'} value={formatDateTime(message.topic_resolution_datetime)} />
                     </div>
                     <div className='space-y-2'>
                         <h3 className="text-[16px] font-medium text-primary-second">{t('topics') || 'Topics'}</h3>
-                        <KeyValue label={t('number_of_topics_resolved') || 'Number of Topics Resolved'} value={message.number_of_topics_resolved.toString()} />
+                        <KeyValue variant="message" label={t('number_of_topics_resolved') || 'Number of Topics Resolved'} value={message.number_of_topics_resolved.toString()} />
                     </div>
                 </div>
 
@@ -57,7 +58,7 @@ export default function OutgoingMessageCard({ message }: Props) {
                 <div className="border-l-2 border-secondary-second pl-6 space-y-2">
                     <h3 className="text-[16px] font-medium text-primary-second">{t('topic_names') || 'Topic Names'}</h3>
                     {topicsToShow.map((topic, idx) => (
-                        <KeyValue key={idx} label={`${t('topic') || 'Topic'} ${idx + 1}`} value={topic} />
+                        <KeyValue variant="message" key={idx} label={`${t('topic') || 'Topic'} ${idx + 1}`} value={topic} />
                     ))}
                     {message.topic_names.length > 4 && !showAllTopics && (
                         <Link
@@ -76,16 +77,6 @@ export default function OutgoingMessageCard({ message }: Props) {
                     )}
                 </div>
             </div>
-        </div>
-    );
-}
-
-function KeyValue({ label, value }: { label: string; value: string }) {
-    return (
-        <div className="text-neutral-first text-[16px]">
-            <span className="text-neutral-first/50">{label}</span>
-            <span className="text-neutral-first/50 mx-1">:</span>
-            <span className="font-semibold">{value}</span>
         </div>
     );
 }
