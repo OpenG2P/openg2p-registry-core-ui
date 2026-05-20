@@ -61,44 +61,24 @@ export default function ChangeRequestCard({
                     </div>
                 </div>
 
-                <div className="space-y-2 text-[16px] text-neutral-first/50">
-                    <h3 className="text-lg font-semibold text-neutral-first invisible">
-                        Verification
-                    </h3>
-                    <div className="border-l space-y-2 border-secondary-second pl-6">
-                        {/* Verifications required / done hidden from view
-                        <div className="flex w-full overflow-hidden">
-                            <span className="w-1/2 truncate" title={t('verifications_required')}>{t('verifications_required')}:</span>
-                            <span className="w-1/2 pl-4 text-neutral-first font-medium truncate" title={changeRequest.no_of_verifications_required?.toString()}>
-                                {changeRequest.no_of_verifications_required}
-                            </span>
-                        </div>
-                        <div className="flex w-full overflow-hidden">
-                            <span className="w-1/2 truncate" title={t('verifications_done')}>{t('verifications_done')}:</span>
-                            <span className="w-1/2 pl-4 text-neutral-first font-medium truncate" title={changeRequest.no_of_verifications_done?.toString()}>
-                                {changeRequest.no_of_verifications_done}
-                            </span>
-                        </div>
-                        */}
-                        <div className="flex w-full overflow-hidden">
-                            <span className="w-1/2 truncate" title={t('documents_attached')}>{t('documents_attached')}:</span>
-                            <span className="w-1/2 pl-4 text-neutral-first font-medium truncate" title={documents.length.toString()}>{documents.length}</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="space-y-2 text-[16px] text-neutral-first/50">
-                    <div className="pl-6 flex items-center gap-0 leading-none mt-2">
-                        <span className="text-[16px] font-medium text-neutral-first">
-                            {t('attached_documents')}
-                        </span>
-                        <Image
-                            src="/images/changerequest/attached_doc_icon.png"
-                            alt="Attached documents"
-                            width={14}
-                            height={14}
-                            className="ml-1 mb-1"
+                <div className="flex h-full min-h-0 flex-col">
+                    <div className="flex flex-1 flex-col space-y-2 border-l-2 border-secondary-second pl-6">
+                        <KeyValue
+                            label={t('documents_attached')}
+                            value={documents.length.toString()}
                         />
+                        <div className="invisible" aria-hidden>
+                            <KeyValue
+                                label={t('verifications_required')}
+                                value="—"
+                            />
+                        </div>
+                        <div className="invisible" aria-hidden>
+                            <KeyValue
+                                label={t('verifications_done')}
+                                value="—"
+                            />
+                        </div>
                     </div>
                 </div>
 
@@ -170,7 +150,9 @@ export default function ChangeRequestCard({
                 </div>
             </div>
 
-            <div className="pt-4 flex items-center justify-between">
+            <div className="my-4 border-t border-secondary-second" />
+
+            <div className="flex items-center justify-between">
                 <button
                     type="button"
                     onClick={onViewDetails}
