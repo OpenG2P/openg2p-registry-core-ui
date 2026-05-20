@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useFetch } from '@/shared/hooks';
 import { Register } from '../types';
 

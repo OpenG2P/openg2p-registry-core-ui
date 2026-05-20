@@ -19,6 +19,7 @@ export type ConfigActiveOption =
     | "ingest-templates"
     | "outgest-topics"
     | "outgest-templates"
+    | "data-policies"
 
 interface ConfigLayoutProps {
     children: ReactNode;
