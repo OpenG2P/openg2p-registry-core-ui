@@ -105,7 +105,7 @@ export function getOperatorsForFieldType(dataType: string): ConditionOperator[] 
     }
 
     if (normalized === 'json') {
-        return ['eq', 'is_null', 'is_not_null'];
+        return ['eq', 'contains','is_null', 'is_not_null'];
     }
 
     return [
