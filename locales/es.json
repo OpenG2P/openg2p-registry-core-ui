@@ -68,6 +68,7 @@
     "verifications": "Verificaciones",
     "approvals": "Aprobaciones",
     "no_approval_tasks": "No tiene tareas de aprobación asignadas para este registro.",
+    "earlier_pending_cr_approval_blocked": "La aprobación está bloqueada porque existen solicitudes de cambio pendientes anteriores para este registro.",
     "assigned_to": "Asignado a",
     "stage": "Etapa",
     "toast_approval_submitted": "Decisión de aprobación enviada correctamente",

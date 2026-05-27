@@ -75,6 +75,7 @@
     "verifications": "Verifications",
     "approvals": "Approvals",
     "no_approval_tasks": "No approval tasks assigned to you for this record.",
+    "earlier_pending_cr_approval_blocked": "Approval is blocked because there are earlier pending change requests for this record.",
     "assigned_to": "Assigned to",
     "stage": "Stage",
     "toast_approval_submitted": "Approval decision submitted successfully",
