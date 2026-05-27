@@ -49,6 +49,11 @@ export default function LanguageSelector({
                             />
                         </div>
                     )}
+                    {!selectedLanguage?.language_flag_base64 && (
+                        <div className="w-6 h-4 rounded-sm shrink-0 border  flex items-center justify-center">
+                            <span className="text-[7px] text-neutral-first/40 leading-none">--</span>
+                        </div>
+                    )}
                     <span className="text-[16px] font-medium text-neutral-first truncate">
                         {languagesLoading ? 'Loading...' : selectedLanguage?.language_label || t('select_language')}
                     </span>
@@ -84,6 +89,11 @@ export default function LanguageSelector({
                                             fill
                                             className="object-cover"
                                         />
+                                    </div>
+                                )}
+                                {!lang.language_flag_base64 && (
+                                    <div className="w-6 h-4 rounded-sm shrink-0 border  flex items-center justify-center">
+                                        <span className="text-[7px] text-neutral-first/40 leading-none">--</span>
                                     </div>
                                 )}
                                 <span className="truncate">{lang.language_label}</span>
