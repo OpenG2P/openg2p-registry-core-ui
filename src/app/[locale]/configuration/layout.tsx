@@ -9,7 +9,7 @@ const SIDEBAR_OPTIONS: ConfigActiveOption[] = [
     'registry', 'registry-details', 'registry-themes', 'registry-languages', 'registers',
     'intake-forms', 'data-models', 'ingest-configurations', 'outgest-configurations',
     'ingest-key-paths', 'ingest-semantic-patterns', 'ingest-manage-subscription',
-    'ingest-templates', 'outgest-topics', 'outgest-templates', 'data-policies'
+    'ingest-templates', 'outgest-topics', 'outgest-templates', 'data-policies', 'awe-policy-config'
 ];
 
 function getActiveOptionFromPathname(pathname: string | null): ConfigActiveOption {

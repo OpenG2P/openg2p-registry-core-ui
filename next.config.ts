@@ -19,7 +19,7 @@ const cspHeader = `
     frame-src 'self' https://esignet.nsr.openg2p.org;
 
     frame-ancestors 'none';
-    ${isDev ? '' : 'upgrade-insecure-requests;'}
+    // ${isDev ? '' : 'upgrade-insecure-requests;'}
 `;
 
 const nextConfig: NextConfig = {
