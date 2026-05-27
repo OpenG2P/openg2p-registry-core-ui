@@ -998,6 +998,8 @@
     "theme_config_theme_name": "Enter Theme Name",
     "registry_language": "Language",
     "registry_languages": "Languages",
+    "registry_themes": "Themes",
+    "edit_registry_details": "Update Registry details",
     "languages": "Languages",
     "add_new_language": "Add New Language",
     "edit_language": "Edit Language",

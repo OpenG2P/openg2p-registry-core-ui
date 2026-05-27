@@ -995,6 +995,8 @@
     "theme_config_theme_name": "Entrez le nom du thème",
     "registry_language": "Language",
     "registry_languages": "Languages",
+    "registry_themes": "Themes",
+    "edit_registry_details": "Update registry details",
     "languages": "Languages",
     "add_new_language": "Add New Language",
     "edit_language": "Edit Language",
