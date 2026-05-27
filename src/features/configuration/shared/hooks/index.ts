@@ -17,3 +17,4 @@ export * from './useAllImportFileConfigurations';
 export * from './useAllVcImports';
 export * from './usePolicies';
 export * from './useRegisterRecordFields';
+export * from './useAllAwePolicyConfigurations';

@@ -73,7 +73,12 @@ const sidebarOptions: SidebarOption[] = [
         label: 'data_policies',
         iconUrl: "/images/config/menu_data_policies.png",
         path: '/configuration/data-policies'
-    }
+    },
+    {   id: 'awe-policy-config',
+        label: 'awe_policy_configurations',
+        iconUrl: '/images/config/menu_policy_configuration_08.png',
+        path: '/configuration/awe-policy-config',
+    },
 ];
 
 export default function ConfigSidebar({ activeOption }: { activeOption: string }) {

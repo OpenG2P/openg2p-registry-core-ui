@@ -20,6 +20,7 @@ export type ConfigActiveOption =
     | "outgest-topics"
     | "outgest-templates"
     | "data-policies"
+    | "awe-policy-config"
 
 interface ConfigLayoutProps {
     children: ReactNode;
