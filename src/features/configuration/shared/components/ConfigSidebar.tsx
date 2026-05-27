@@ -67,6 +67,12 @@ const sidebarOptions: SidebarOption[] = [
             { id: 'outgest-topics', label: 'outgest_topics', path: '/configuration/outgest-configurations/topics' },
             { id: 'outgest-templates', label: 'outgest_templates', path: '/configuration/outgest-configurations/templates' },
         ]
+    },
+    {
+        id: 'data-policies',
+        label: 'data_policies',
+        iconUrl: "/images/config/menu_data_policies.png",
+        path: '/configuration/data-policies'
     }
 ];
 
