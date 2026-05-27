@@ -68,6 +68,7 @@
     "verifications": "Vérifications",
     "approvals": "Approbations",
     "no_approval_tasks": "Aucune tâche d'approbation ne vous est assignée pour cet enregistrement.",
+    "earlier_pending_cr_approval_blocked": "L'approbation est bloquée car il existe des demandes de modification en attente antérieures pour cet enregistrement.",
     "assigned_to": "Assigné à",
     "stage": "Étape",
     "toast_approval_submitted": "Décision d'approbation soumise avec succès",
