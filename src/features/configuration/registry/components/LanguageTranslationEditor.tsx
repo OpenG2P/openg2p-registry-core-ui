@@ -40,6 +40,7 @@ export default function LanguageTranslationEditor({
     const [language_label, setLanguageLabel] = useState('');
     const [language_flag_base64, setLanguageFlagBase64] = useState('');
     const [flagFileName, setFlagFileName] = useState('');
+    const isDefaultLanguage = language?.is_default === true;
 
     useEffect(() => {
         if (!language) {
@@ -59,6 +60,7 @@ export default function LanguageTranslationEditor({
     }, [language?.language_id]);
 
     const handleFlagUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (isDefaultLanguage) return;
         const file = e.target.files?.[0];
         if (!file) return;
         setFlagFileName(file.name);
@@ -234,43 +236,45 @@ export default function LanguageTranslationEditor({
                 </div>
             ) : (
                 <div className="p-8 flex flex-col gap-8">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <InputField
                             label={t('language_code')}
                             value={language_code}
                             onChange={setLanguageCode}
+                            disabled={isDefaultLanguage}
                         />
                         <InputField
                             label={t('language_label')}
                             value={language_label}
                             onChange={setLanguageLabel}
+                            disabled={isDefaultLanguage}
                         />
-                    </div>
-
-                    <div className="flex flex-wrap gap-4">
-                        <div className="flex items-end gap-3">
-                            <div className="h-10 w-52 px-4 rounded-[10px] border border-primary-second flex items-center gap-3">
-                                {language_flag_base64 && (
-                                    <div className="w-10 h-6 relative rounded-[6px] border border-secondary-second overflow-hidden shrink-0 bg-neutral-second">
-                                        <Image src={language_flag_base64} alt={t('flag_image')} fill className="object-cover" />
-                                    </div>
-                                )}
-                                <span className="text-sm text-neutral-first/50 truncate">
-                                    {flagFileName || (language_flag_base64 ? t('flag_image') : t('no_file_selected'))}
-                                </span>
+                        <div className="flex flex-col gap-2">
+                            <label className="text-sm font-semibold text-neutral-first">{t('language_flag')}</label>
+                            <div className="flex items-end gap-3">
+                                <div className="h-10 w-52 px-4 rounded-[10px] border border-primary-second flex items-center gap-3">
+                                    {language_flag_base64 && (
+                                        <div className="w-10 h-6 relative rounded-[6px] border border-secondary-second overflow-hidden shrink-0 bg-neutral-second">
+                                            <Image src={language_flag_base64} alt={t('flag_image')} fill className="object-cover" />
+                                        </div>
+                                    )}
+                                    <span className="text-sm text-neutral-first/50 truncate">
+                                        {flagFileName || (language_flag_base64 ? t('flag_image') : t('no_file_selected'))}
+                                    </span>
+                                </div>
+                                <label className="h-10 w-52 px-4 rounded-[10px] border border-primary-second text-primary-second text-sm font-bold hover:bg-primary-second/5 transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
+                                    <Upload size={16} />
+                                    {t('upload_flag')}
+                                    <input
+                                        type="file"
+                                        onChange={handleFlagUpload}
+                                        className="hidden"
+                                        accept="image/*"
+                                        disabled={isDefaultLanguage}
+                                    />
+                                </label>
                             </div>
-                            <label className="h-10 w-52 px-4 rounded-[10px] border border-primary-second text-primary-second text-sm font-bold hover:bg-primary-second/5 transition-colors flex items-center justify-center gap-2 cursor-pointer">
-                                <Upload size={16} />
-                                {t('upload_flag')}
-                                <input
-                                    type="file"
-                                    onChange={handleFlagUpload}
-                                    className="hidden"
-                                    accept="image/*"
-                                />
-                            </label>
                         </div>
-                       
                     </div>
 
                     <div className="rounded-[10px] border border-secondary-second p-4 flex flex-col gap-4">
