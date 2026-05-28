@@ -6,12 +6,10 @@ import Image from 'next/image';
 import { toast } from 'react-toastify';
 import { useFetch } from '@/shared/hooks';
 import { Upload } from 'lucide-react';
-import { JsonEditor } from 'json-edit-react';
-import { CustomDropdown, InputField } from '../../shared/components';
+import { InputField } from '../../shared/components';
 import { Language } from '../types';
+import TranslationJsonEditorPanel from './TranslationJsonEditorPanel';
 
-import { CONFIGURATION_REGISTRY_ACTIONS } from '../../shared/utils/configurationRegistry.actions';
-import Can from '@/components/shared/Can';
 import { TranslationMap } from '../utils/language.helpers';
 
 type TranslationTab = 'core' | 'domain';
@@ -40,7 +38,6 @@ export default function LanguageTranslationEditor({
 
     const [language_code, setLanguageCode] = useState('');
     const [language_label, setLanguageLabel] = useState('');
-    const [isDefault, setIsDefault] = useState(false);
     const [language_flag_base64, setLanguageFlagBase64] = useState('');
     const [flagFileName, setFlagFileName] = useState('');
 
@@ -55,7 +52,6 @@ export default function LanguageTranslationEditor({
         setDraftDomain(language?.domain_translation as TranslationMap || {});
         setLanguageCode(language.language_code || '');
         setLanguageLabel(language.language_label || '');
-        setIsDefault(language.is_default || false);
         setLanguageFlagBase64(language.language_flag_base64 || '');
         setFlagFileName('');
         setActiveTab('core');
@@ -73,6 +69,35 @@ export default function LanguageTranslationEditor({
         reader.readAsDataURL(file);
     };
 
+    const handleTranslationUpload = (
+        event: React.ChangeEvent<HTMLInputElement>,
+        tab: TranslationTab
+    ) => {
+        const file = event.target.files?.[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = loadEvent => {
+            try {
+                const parsed = JSON.parse((loadEvent.target?.result as string) || '{}');
+                if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+                    throw new Error('Invalid translation JSON');
+                }
+
+                if (tab === 'core') {
+                    setDraftCore(parsed as TranslationMap);
+                } else {
+                    setDraftDomain(parsed as TranslationMap);
+                }
+            } catch {
+                toast.error(t('invalid_translation_file'));
+            } finally {
+                event.target.value = '';
+            }
+        };
+        reader.readAsText(file);
+    };
+
     const handleSave = async () => {
         if (!language_code || !language_label) {
             toast.warn(t('fill_required_fields'));
@@ -83,7 +108,6 @@ export default function LanguageTranslationEditor({
             language_code,
             language_label,
             language_flag_base64,
-            is_default: isDefault,
             core_translation: draftCore,
             domain_translation: draftDomain,
         };
@@ -223,19 +247,7 @@ export default function LanguageTranslationEditor({
                         />
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="flex flex-col gap-2">
-                            <CustomDropdown
-                                label={t('is_default_language')}
-                                options={[
-                                    { label: 'False', value: 'false' },
-                                    { label: 'True', value: 'true' },
-                                ]}
-                                value={isDefault ? 'true' : 'false'}
-                                onChange={value => setIsDefault(value === 'true')}
-                                placeholder="False"
-                            />
-                        </div>
+                    <div className="flex flex-wrap gap-4">
                         <div className="flex items-end gap-3">
                             <div className="h-10 w-52 px-4 rounded-[10px] border border-primary-second flex items-center gap-3">
                                 {language_flag_base64 && (
@@ -272,7 +284,7 @@ export default function LanguageTranslationEditor({
                                         : 'bg-secondary-second text-neutral-first/70'
                                 }`}
                             >
-                                Core-translation
+                                {t('core_translation')}
                             </button>
                             <button
                                 type="button"
@@ -283,62 +295,67 @@ export default function LanguageTranslationEditor({
                                         : 'bg-secondary-second text-neutral-first/70'
                                 }`}
                             >
-                                Domain-translation
+                                {t('domain_translation')}
                             </button>
                         </div>
                         {activeTab === 'core' ? (
                             <div className="flex flex-col gap-4 p-3">
-                                <div className="flex items-center gap-3 w-full lg:w-[520px] p-3">
-                                    <label className="text-[16px] font-semibold text-neutral-first whitespace-nowrap">
-                                        {t('search_by_key_or_label')}:
-                                    </label>
-                                    <input
-                                        value={searchQuery}
-                                        onChange={e => setSearchQuery(e.target.value)}
-                                        placeholder={t('enter_key_or_label')}
-                                        className="h-12 w-full px-3 rounded-[10px] border border-primary-second outline-none text-sm"
-                                    />
-                                </div>
-                                <div className="p-3">
-                                    <JsonEditor
-                                        key={`core-${language.language_id}`}
-                                        data={draftCore}
-                                        setData={next => setDraftCore(next as TranslationMap)}
+                                {Object.keys(draftCore).length === 0 && (
+                                    <div className="px-3">
+                                        <label className="h-10 w-60 px-4 rounded-[10px] border border-primary-second text-primary-second text-sm font-bold hover:bg-primary-second/5 transition-colors flex items-center justify-center gap-2 cursor-pointer">
+                                            <Upload size={16} />
+                                            {t('upload_translation')}
+                                            <input
+                                                type="file"
+                                                onChange={event => handleTranslationUpload(event, 'core')}
+                                                className="hidden"
+                                                accept=".json,application/json"
+                                            />
+                                        </label>
+                                    </div>
+                                )}
+                                {Object.keys(draftCore).length > 0 && (
+                                    <TranslationJsonEditorPanel
+                                        editorKey={`core-${language.language_id}`}
                                         rootName="Core-translation"
-                                        collapse={false}
-                                        indent={2}
-                                        maxWidth="100%"
-                                        searchText={searchQuery}
-                                        searchFilter="all"
+                                        data={draftCore}
+                                        setData={setDraftCore}
+                                        searchQuery={searchQuery}
+                                        onSearchChange={setSearchQuery}
+                                        searchLabel={t('search_by_key_or_label')}
+                                        searchPlaceholder={t('enter_key_or_label')}
+                                        searchInputHeightClass="h-12"
                                     />
-                                </div>
+                                )}
                             </div>
                         ) : (
                             <div className="flex flex-col gap-4 p-3">
-                                <div className="flex items-center gap-3 w-full lg:w-[520px] p-3">
-                                    <label className="text-[16px] font-semibold text-neutral-first whitespace-nowrap">
-                                        {t('search_by_key_or_label')}:
-                                    </label>
-                                    <input
-                                        value={searchQuery}
-                                        onChange={e => setSearchQuery(e.target.value)}
-                                        placeholder={t('enter_key_or_label')}
-                                        className="h-10 w-full px-3 rounded-[10px] border border-primary-second outline-none text-sm"
-                                    />
-                                </div>
-                                <div className="p-3">
-                                    <JsonEditor
-                                        key={`domain-${language.language_id}`}
-                                        data={draftDomain}
-                                        setData={next => setDraftDomain(next as TranslationMap)}
+                                {Object.keys(draftDomain).length === 0 && (
+                                    <div className="px-3">
+                                        <label className="h-10 w-60 px-4 rounded-[10px] border border-primary-second text-primary-second text-sm font-bold hover:bg-primary-second/5 transition-colors flex items-center justify-center gap-2 cursor-pointer">
+                                            <Upload size={16} />
+                                            {t('upload_translation')}
+                                            <input
+                                                type="file"
+                                                onChange={event => handleTranslationUpload(event, 'domain')}
+                                                className="hidden"
+                                                accept=".json,application/json"
+                                            />
+                                        </label>
+                                    </div>
+                                )}
+                                {Object.keys(draftDomain).length > 0 && (
+                                    <TranslationJsonEditorPanel
+                                        editorKey={`domain-${language.language_id}`}
                                         rootName="Domain-translation"
-                                        collapse={false}
-                                        indent={2}
-                                        maxWidth="100%"
-                                        searchText={searchQuery}
-                                        searchFilter="all"
+                                        data={draftDomain}
+                                        setData={setDraftDomain}
+                                        searchQuery={searchQuery}
+                                        onSearchChange={setSearchQuery}
+                                        searchLabel={t('search_by_key_or_label')}
+                                        searchPlaceholder={t('enter_key_or_label')}
                                     />
-                                </div>
+                                )}
                             </div>
                         )}
                     </div>

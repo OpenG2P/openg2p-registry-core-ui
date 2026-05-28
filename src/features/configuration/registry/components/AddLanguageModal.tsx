@@ -6,7 +6,7 @@ import { Upload } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'react-toastify';
 import { useFetch } from '@/shared/hooks';
-import { BaseModal, CustomDropdown, InputField } from '../../shared/components';
+import { BaseModal, InputField } from '../../shared/components';
 import { readAndValidateJson, type TranslationMap } from '../utils/language.helpers';
 
 interface AddLanguageModalProps {
@@ -20,7 +20,6 @@ export default function AddLanguageModal({ onClose, onSuccess }: AddLanguageModa
 
     const [language_code, setLanguageCode] = useState('');
     const [language_label, setLanguageLabel] = useState('');
-    const [isDefault, setIsDefault] = useState(false);
     const [language_flag_base64, setLanguageFlagBase64] = useState('');
     const [flagFileName, setFlagFileName] = useState('');
     const [core_translation, setCoreTranslation] = useState<TranslationMap>({});
@@ -80,7 +79,6 @@ export default function AddLanguageModal({ onClose, onSuccess }: AddLanguageModa
                     language_code,
                     language_label,
                     language_flag_base64,
-                    is_default: isDefault,
                     core_translation,
                     domain_translation,
                 }),
@@ -120,19 +118,7 @@ export default function AddLanguageModal({ onClose, onSuccess }: AddLanguageModa
                     />
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="flex flex-col gap-2">
-                        <CustomDropdown
-                            label={t('set_as_default_language')}
-                            options={[
-                                { label: 'False', value: 'false' },
-                                { label: 'True', value: 'true' },
-                            ]}
-                            value={isDefault ? 'true' : 'false'}
-                            onChange={value => setIsDefault(value === 'true')}
-                            placeholder="False"
-                        />
-                    </div>
+                <div className="flex flex-wrap gap-4">
                     <div className="flex items-end gap-3">
                         <div className="h-10 w-52 px-4 rounded-[10px] border border-primary-second flex items-center gap-3">
                             {language_flag_base64 && (
